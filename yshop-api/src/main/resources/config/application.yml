@@ -1,0 +1,71 @@
+server:
+  port: 8009
+  servlet:
+    context-path: /api
+
+spring:
+  freemarker:
+    check-template-location: false
+  profiles:
+    active: dev
+  jackson:
+    time-zone: GMT+8
+  data:
+    redis:
+      repositories:
+        enabled: false
+
+  #配置 Jpa
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    open-in-view: true
+
+
+
+#七牛云
+qiniu:
+  # 文件大小 /M
+  max-size: 15
+
+#邮箱验证码有效时间/分钟
+code:
+  expiration: 5
+
+#登录图形验证码有效时间/分钟
+loginCode:
+  expiration: 2
+
+mybatis-plus:
+  check-config-location: true
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: id_worker
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+  mapper-locations: classpath*:mapper/**/*Mapper.xml
+
+# 公众号配置(必填)
+wx:
+  mp:
+    configs:
+    - appId: wx41db1daef9040a9e
+      secret: a21b79510e45c76d6d543ef3ec020817
+      token: dayouqiantu
+      aesKey: 6wYzx9DyWXHwKSCOBjf8hHQu15d4JI5fVzDDNphaKqM
+  pay:
+    appId: wx41db1daef9040a9e
+    mchId: 1531087341
+    mchKey: dayouqiantuhupeng8638004yixiangt
+    subAppId:
+    subMchId:
+    keyPath:
+logging:
+  level:
+    org.springframework.web: INFO
+    com.github.binarywang.demo.wx.mp: DEBUG
+    me.chanjar.weixin: DEBUG
+
