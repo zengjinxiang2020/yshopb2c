@@ -28,7 +28,7 @@ public class YxWechatUser extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "微信用户id")
-    @TableId(value = "uid", type = IdType.AUTO)
+    @TableId(value = "uid", type = IdType.INPUT)
     private Integer uid;
 
     @ApiModelProperty(value = "只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段")

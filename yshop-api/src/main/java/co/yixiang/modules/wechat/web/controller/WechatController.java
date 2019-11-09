@@ -11,6 +11,7 @@ import co.yixiang.modules.security.security.JwtUser;
 import co.yixiang.modules.security.utils.JwtTokenUtil;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxWechatUser;
+import co.yixiang.modules.user.mapper.YxUserMapper;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxWechatUserService;
 import co.yixiang.utils.EncryptUtils;
@@ -92,9 +93,30 @@ public class WechatController extends BaseController {
             if(ObjectUtil.isNotNull(wechatUser)){
                 jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getNickname());
             }else{
+
+
+                //用户保存
+                YxUser user = new YxUser();
+                user.setAccount(wxMpUser.getNickname());
+                user.setUsername(wxMpUser.getNickname());
+                user.setPassword(EncryptUtils.encryptPassword("123456"));
+                user.setPwd(EncryptUtils.encryptPassword("123456"));
+                user.setPhone("");
+                user.setUserType("wechat");
+                user.setAddTime(OrderUtil.getSecondTimestampTwo());
+                user.setLastTime(OrderUtil.getSecondTimestampTwo());
+                user.setNickname(wxMpUser.getNickname());
+                user.setAvatar(wxMpUser.getHeadImgUrl());
+                user.setNowMoney(BigDecimal.ZERO);
+                user.setBrokeragePrice(BigDecimal.ZERO);
+                user.setIntegral(BigDecimal.ZERO);
+
+                userService.save(user);
+
+
                 //保存微信用户
                 YxWechatUser yxWechatUser = new YxWechatUser();
-               // System.out.println("wxMpUser:"+wxMpUser);
+                // System.out.println("wxMpUser:"+wxMpUser);
                 yxWechatUser.setAddTime(OrderUtil.getSecondTimestampTwo());
                 yxWechatUser.setNickname(wxMpUser.getNickname());
                 yxWechatUser.setOpenid(wxMpUser.getOpenId());
@@ -119,27 +141,11 @@ public class WechatController extends BaseController {
                 if(ObjectUtil.isNotEmpty(wxMpUser.getGroupId())){
                     yxWechatUser.setGroupid(wxMpUser.getGroupId());
                 }
+                yxWechatUser.setUid(user.getUid());
 
                 wechatUserService.save(yxWechatUser);
 
 
-                //用户保存
-                YxUser user = new YxUser();
-                user.setAccount(wxMpUser.getNickname());
-                user.setUsername(wxMpUser.getNickname());
-                user.setPassword(EncryptUtils.encryptPassword("123456"));
-                user.setPwd(EncryptUtils.encryptPassword("123456"));
-                user.setPhone("");
-                user.setUserType("wechat");
-                user.setAddTime(OrderUtil.getSecondTimestampTwo());
-                user.setLastTime(OrderUtil.getSecondTimestampTwo());
-                user.setNickname(wxMpUser.getNickname());
-                user.setAvatar(wxMpUser.getHeadImgUrl());
-                user.setNowMoney(BigDecimal.ZERO);
-                user.setBrokeragePrice(BigDecimal.ZERO);
-                user.setIntegral(BigDecimal.ZERO);
-                user.setUid(yxWechatUser.getUid());
-                userService.save(user);
 
                 jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getNickname());
             }

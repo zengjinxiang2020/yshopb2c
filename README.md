@@ -1,83 +1,143 @@
-<h1 style="text-align: center">el-admin 后台管理系统</h1>
-<div style="text-align: center">
+<h1 style="text-align: center">yshop意象商城系统</h1>
 
-[![AUR](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg)](https://github.com/elunez/eladmin/blob/master/LICENSE)
-[![star](https://gitee.com/elunez/eladmin/badge/star.svg?theme=white)](https://gitee.com/elunez/eladmin)
-[![GitHub stars](https://img.shields.io/github/stars/elunez/eladmin.svg?style=social&label=Stars)](https://github.com/elunez/eladmin)
-[![GitHub forks](https://img.shields.io/github/forks/elunez/eladmin.svg?style=social&label=Fork)](https://github.com/elunez/eladmin)
-
-</div>
 
 #### 项目简介
-eladmin基于 Spring Boot 2.1.0 、 Jpa、 Spring Security、redis、Vue的前后端分离的后台管理系统， 权限控制的方式为RBAC，项目支持数据字典与数据权限管理，支持一键生成前后端代码，支持前端菜单动态路由
+yshop基于当前流行技术组合： SpringBoot2+Jpa+MybatisPlus+SpringSecurity+jwt+redis+Vue的前后端分离的商城系统， 包含商城、拼团、砍价、
+秒杀、优惠券、积分、分销等功能，更适合企业或个人二次开发；
 
-**开发文档**  [https://docs.auauz.net/](https://docs.auauz.net)
+**开发文档**  【[查看文档](https://gitee.com/guchengwuyue/yshopmall/wikis/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83?sort_id=1718722)】 
 
-**体验地址**  [https://auauz.net/](https://auauz.net/)
+#### 体验地址(手机体验最好用公众号，因为H5模式不支持微信支付，只有余额支付)
 
-**账号密码** ```admin/123456```(默认密码都是123456)
+|     |   后台系统  |   前端(公众号)及H5  |
+|---  |--- | --- |
+|   |  https://yshop.dayouqiantu.cn  | https://h5.dayouqiantu.cn  |
+|    |  后台体验账号/密码：admin/123456   |  公众号:![输入图片说明](https://images.gitee.com/uploads/images/2019/1107/193634_bd80bf04_477893.jpeg "175139_e07592c8_477893.jpeg")   |
+
 
 #### 项目源码
 
-|     |   后端源码  |   前端源码  |
+|     |  后台系统源码 |   后台系统前端源码  |
 |---  |--- | --- |
-|  github   |  https://github.com/elunez/eladmin   |  https://github.com/elunez/eladmin-qd   |
-|  码云   |  https://gitee.com/elunez/eladmin   |  https://gitee.com/elunez/eladmin-qt   |
+|   码云  |  https://gitee.com/guchengwuyue/yshopmall  | https://gitee.com/guchengwuyue/yshopmall_qd |
+|   github   |  https://github.com/guchengwuyue/yshopmall |https://github.com/guchengwuyue/yshopmall_qd  |
 
-####  系统功能
-- 用户管理：提供用户的相关配置，新增用户后，默认密码为123456
-- 角色管理：对权限与菜单进行分配，可根据部门设置角色的数据权限
-- 权限管理：权限细化到接口，可以理解成按钮权限
-- 菜单管理：已实现菜单动态路由，后端可配置化，支持多级菜单
-- 部门管理：可配置系统组织架构，树形表格展示
-- 岗位管理：配置各个部门的职位
-- 字典管理：应广大码友的要求加入字典管理，可维护常用一些固定的数据，如：状态，性别等
-- 操作日志：记录用户操作的日志
-- 异常日志：记录异常日志，方便开发人员定位错误
-- 系统缓存：使用jedis将缓存操作可视化，并提供对redis的基本操作，可根据需求自行扩展
-- SQL监控：采用druid 监控数据库访问性能，默认用户名admin，密码123456
-- 定时任务：整合Quartz做定时任务，加入任务日志，任务运行情况一目了然
-- 代码生成：高灵活度一键生成前后端代码，减少百分之80左右的工作任务
-- 邮件工具：配合富文本，发送html格式的邮件
-- 免费图床：使用sm.ms图床，用作公共图片上传使用
-- 七牛云存储：可同步七牛云存储的数据到系统，无需登录七牛云直接操作云数据
-- 支付宝支付：整合了支付宝支付并且提供了测试账号，可自行测试
+#### 开源版本与VIP版本说明
+
+
+###  开源版
+1.包括整个商城系统后台、数据库、api(只是简单的配置好模块);
+
+2.本版本本身属于独立后台商城管理系统、可独立作为cms、商城等等后台使用;
+
+3.可以个人、企业直接使用。
+
+### VIP版
+1.包括整个商城系统后台、数据库、API、H5;
+
+2.本版本是演示的所有功能代码;
+
+3.加入VIP、享有后续所有功能免费升级及其技术支持等。
+
+4、VIP为终身，【[详情请查看](https://gitee.com/guchengwuyue/yshopmall/wikis/pages?sort_id=1715823&doc_id=441578)】 
+
+
+## 商城功能
+
+* 一：商品模块：商品添加、规格设置，商品上下架等
+* 二：订单模块：下单、购物车、支付，发货、收货、评价、退款等
+* 三：营销模块：积分、优惠券、分销、砍价、拼团、秒杀(、到店核销等
+* 四：微信模块：自定义菜单、自动回复、微信授权、图文管理、模板消息推送
+* 五：配置模块：各种配置
+* 六：用户模块：登陆、注册、会员卡等
+* 七：其他等
+        
+
+####  已经完成功能
+- 可以具体查看演示地址查看当前版本已经完成的功能，不再絮叨啦
+
+
 
 #### 项目结构
-项目采用分模块开发方式，将通用的配置放在公共模块，```system```模块为系统核心模块也是项目入口模块，```logging``` 模块为系统的日志模块，```tools``` 为第三方工具模块，包含了图床、邮件、七牛云、支付宝，```generator``` 为系统的代码生成模块
-- eladmin-common 公共模块
-    - exception 项目统一异常的处理
-    - mapper mapstruct的通用mapper
-    - redis redis缓存相关配置
-    - swagger2 接口文档配置
-    - utils 系统通用工具类
-- eladmin-system 系统核心模块（系统启动入口）
-	- config 配置跨域与静态资源，与数据权限
-	- modules 系统相关模块(登录授权、定时任务等)
-- eladmin-logging 系统日志模块
-- eladmin-tools 系统第三方工具模块
-- eladmin-generator 系统代码生成模块
+项目采用分模块开发方式
+- yshop-api       公众号(H5)API模块
+- yshop-mp        微信相关模块
+- yshop-common    公共模块
+- yshop-system    商城系统模块
+- yshop-logging   日志模块
+- yshop-tools     第三方工具模块
+- yshop-generator 代码生成模块
 
 #### 系统预览
 <table>
     <tr>
-        <td><img src="https://i.loli.net/2019/05/18/5cdf77fa8144d68788.png"/></td>
-        <td><img src="https://i.loli.net/2019/05/18/5cdf7763993e361778.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/194017_9207632f_477893.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/194030_70f5ce92_477893.png"/></td>
     </tr>
     <tr>
-        <td><img src="https://i.loli.net/2019/05/18/5cdf7763971d453615.png"/></td>
-        <td><img src="https://i.loli.net/2019/05/18/5cdf77632e85a60423.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/194114_cd0b06ce_477893.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/194130_abb4f788_477893.png"/></td>
     </tr>
     <tr>
-        <td><img src="https://i.loli.net/2019/05/18/5cdf77632b4b090165.png"/></td>
-        <td><img src="https://i.loli.net/2019/05/18/5cdf77639929277783.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/194147_63de73f4_477893.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/194207_7b3b1f53_477893.png"/></td>
     </tr>
     <tr>   
- <td><img src="https://i.loli.net/2019/05/18/5cdf78969adc389599.png"/></td>
+         <td><img src="https://images.gitee.com/uploads/images/2019/1107/194217_3f47214f_477893.png"/></td>
+         <td></td>
     </tr>
 </table>
 
-#### 项目捐赠
-项目的发展离不开你的支持，请作者喝杯咖啡吧 ☕！ [Donate](https://docs.auauz.net/#/jz)
+<table>
+    <tr>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/201443_df1cc3a6_477893.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/201540_ef6123a9_477893.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/201601_acd0ccd3_477893.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/201622_f913b59c_477893.png"/></td>
+    </tr>
+    <tr>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/201646_5bc6df48_477893.png"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1107/201706_32ee305c_477893.png"/></td>
+    </tr>
+</table>
+
+## 技术选型
+* 1 后端使用技术
+    * 1.1 SpringBoot
+    * 1.2 mybatis、MyBatis-Plus
+    * 1.3 SpringSecurity
+    * 1.4 JAP
+    * 1.5 Druid1
+    * 1.6 Slf4j
+    * 1.7 Fastjson
+    * 1.8 JWT
+    * 1.9 Redis
+    * 1.10 Quartz
+    * 1.11 Mysql
+    * 1.12 swagger
+    * 1.13 WxJava
+    * 1.14 Lombok
+    * 1.15 Hutool
+    * 1.16 Mapstruct
+        
+* 前端使用技术
+    * 2.1 Vue 全家桶
+    * 2.2 Element
+
+
+#### 项目下步工作计划
+第一阶段：积分功能、优惠券功能、公众号功能
+第二阶段：分销、砍价、拼团
 #### 反馈交流
-- QQ交流群：891137268
+- QQ交流群：907721261
+- 喜欢这个商城后台的小伙伴留下你的小星星啦,star,star哦！
+
+####  特别鸣谢
+- eladmin:https://github.com/elunez/eladmin
+- mybaitsplus:https://github.com/baomidou/mybatis-plus
+- hutool:https://github.com/looly/hutool
+- wxjava:https://github.com/Wechat-Group/WxJava
+- vue:https://github.com/vuejs/vue
+- element:https://github.com/ElemeFE/element

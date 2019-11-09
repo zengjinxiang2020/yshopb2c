@@ -14,6 +14,7 @@ import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.service.YxStoreOrderStatusService;
 import co.yixiang.modules.order.web.dto.*;
 import co.yixiang.modules.order.web.param.OrderParam;
+import co.yixiang.modules.order.web.param.PayParam;
 import co.yixiang.modules.order.web.param.RefundParam;
 import co.yixiang.modules.order.web.param.YxStoreOrderQueryParam;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
@@ -150,6 +151,9 @@ public class StoreOrderController extends BaseController {
         if(StrUtil.isNotEmpty(orderId)){
             switch (param.getPayType()){
                 case "weixin":
+                    if(param.getFrom().equals("weixinh5")){
+                        throw new ErrorRequestException("H5模式不支持微信支付，请用公众号演示");
+                    }
                      try {
                          map.put("status","WECHAT_PAY");
                          WxPayMpOrderResult wxPayMpOrderResult = storeOrderService
@@ -177,6 +181,69 @@ public class StoreOrderController extends BaseController {
 
         return ApiResult.fail("订单生成失败");
     }
+
+
+    /**
+     *  订单支付
+     */
+    @PostMapping("/order/pay")
+    @ApiOperation(value = "订单支付",notes = "订单支付")
+    public ApiResult<ConfirmOrderDTO> pay(@Valid @RequestBody PayParam param){
+
+        Map<String,Object> map = new LinkedHashMap<>();
+        int uid = SecurityUtils.getUserId().intValue();
+        if(StrUtil.isEmpty(param.getUni())) return ApiResult.fail("参数错误");
+
+        YxStoreOrderQueryVo storeOrder = storeOrderService
+                .getOrderInfo(param.getUni(),uid);
+        if(ObjectUtil.isNull(storeOrder)) return ApiResult.fail("订单不存在");
+
+        if(storeOrder.getPaid() == 1) return ApiResult.fail("该订单已支付");
+
+        //todo 砍价
+        //todo 拼团
+
+        String orderId = storeOrder.getOrderId();
+
+        OrderExtendDTO orderDTO = new OrderExtendDTO();
+        orderDTO.setOrderId(orderId);
+        map.put("status","SUCCESS");
+        map.put("result",orderDTO);
+        //开始处理支付
+        if(StrUtil.isNotEmpty(orderId)){
+            switch (param.getPaytype()){
+                case "weixin":
+                    if(param.getFrom().equals("weixinh5")){
+                        throw new ErrorRequestException("H5模式不支持微信支付，请用公众号演示");
+                    }
+                    try {
+                        map.put("status","WECHAT_PAY");
+                        WxPayMpOrderResult wxPayMpOrderResult = storeOrderService
+                                .wxPay(orderId);
+                        //重新组装
+                        Map<String,String> jsConfig = new HashMap<>();
+                        jsConfig.put("appId",wxPayMpOrderResult.getAppId());
+                        jsConfig.put("timestamp",wxPayMpOrderResult.getTimeStamp());
+                        jsConfig.put("nonceStr",wxPayMpOrderResult.getNonceStr());
+                        jsConfig.put("package",wxPayMpOrderResult.getPackageValue());
+                        jsConfig.put("signType",wxPayMpOrderResult.getSignType());
+                        jsConfig.put("paySign",wxPayMpOrderResult.getPaySign());
+                        orderDTO.setJsConfig(jsConfig);
+                        map.put("result",orderDTO);
+                        return ApiResult.ok(map);
+                    } catch (WxPayException e) {
+                        return ApiResult.fail(e.getMessage());
+                    }
+                case "yue":
+                    storeOrderService.yuePay(orderId,uid);
+                    return ApiResult.ok(map,"余额支付成功");
+            }
+        }
+
+
+        return ApiResult.fail("订单生成失败");
+    }
+
 
     /**
      * 订单详情
