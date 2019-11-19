@@ -52,13 +52,13 @@ mybatis-plus:
 wx:
   mp:
     configs:
-    - appId: wx41db1daef9040a9e
-      secret: a21b79510e45c76d6d543ef3ec020817
-      token: dayouqiantu
-      aesKey: 6wYzx9DyWXHwKSCOBjf8hHQu15d4JI5fVzDDNphaKqM
+    - appId: wxc061dee8806ff712
+      secret: 1dc5b2871d0d5ebd0f1ec7ddb856f805
+      token: yshop
+      aesKey: yYuBUkC8BXImCXyu7O6hkzLj4TC5nxsWPfL4CQAZPNY
   pay:
-    appId: wx41db1daef9040a9e
-    mchId: 1531087341
+    appId: wxc061dee8806ff712
+    mchId: 1493624002
     mchKey: dayouqiantuhupeng8638004yixiangt
     subAppId:
     subMchId:
@@ -68,4 +68,9 @@ logging:
     org.springframework.web: INFO
     com.github.binarywang.demo.wx.mp: DEBUG
     me.chanjar.weixin: DEBUG
+
+
+#订单未付款订单时间(单位秒)
+job:
+  unpayorder: 10
 

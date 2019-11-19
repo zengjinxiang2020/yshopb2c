@@ -49,6 +49,10 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<YxStoreProduc
     @Autowired
     private ProductAttrMap productAttrMap;
 
+    @Override
+    public void incProductAttrStock(int num, int productId, String unique) {
+        yxStoreProductAttrValueMapper.incStockDecSales(num,productId,unique);
+    }
 
     @Override
     public void decProductAttrStock(int num, int productId, String unique) {

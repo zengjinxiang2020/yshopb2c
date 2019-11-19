@@ -7,6 +7,7 @@ import co.yixiang.modules.shop.web.vo.YxStoreCouponIssueQueryVo;
 import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -17,6 +18,12 @@ import java.io.Serializable;
  * @since 2019-10-27
  */
 public interface YxStoreCouponIssueService extends BaseService<YxStoreCouponIssue> {
+
+    int couponCount(int id,int uid);
+
+    void issueUserCoupon(int id,int uid);
+
+    List<YxStoreCouponIssueQueryVo> getCouponList(int page, int limit, int uid);
 
     /**
      * 根据ID获取查询对象

@@ -57,8 +57,8 @@ public class SwaggerConfig2 {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("eladmin 接口文档2")
-                .version("2.1")
+                .title("yshop 接口文档")
+                .version("1.0")
                 .build();
     }
 

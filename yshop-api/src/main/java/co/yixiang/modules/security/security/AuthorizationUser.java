@@ -23,6 +23,8 @@ public class AuthorizationUser {
 
     private String uuid = "";
 
+    private String spread;
+
     @Override
     public String toString() {
         return "{username=" + account  + ", password= ******}";

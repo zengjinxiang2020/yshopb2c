@@ -20,6 +20,8 @@ import java.util.Map;
  */
 public interface YxStoreProductAttrService extends BaseService<YxStoreProductAttr> {
 
+    void incProductAttrStock(int num, int productId, String unique);
+
     void decProductAttrStock(int num, int productId, String unique);
 
     Map<String,Object> getProductAttrDetail(int productId,int uid,int type);

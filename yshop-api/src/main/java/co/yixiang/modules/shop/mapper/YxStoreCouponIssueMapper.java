@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.mapper;
 
+import co.yixiang.modules.shop.web.vo.YxStoreProductRelationQueryVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -7,9 +8,12 @@ import co.yixiang.modules.shop.entity.YxStoreCouponIssue;
 import co.yixiang.modules.shop.web.param.YxStoreCouponIssueQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreCouponIssueQueryVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +25,36 @@ import java.io.Serializable;
  */
 @Repository
 public interface YxStoreCouponIssueMapper extends BaseMapper<YxStoreCouponIssue> {
+
+    @Select("select A.cid,A.end_time as endTime,A.start_time as startTime," +
+            "A.is_permanent as isPermanent,A.remain_count as remainCount," +
+            "A.total_count as totalCount,A.id,B.coupon_price as couponPrice," +
+            "B.use_min_price as useMinPrice" +
+            " from yx_store_coupon_issue A left join yx_store_coupon B " +
+            "on A.cid = B.id " +
+            "where A.status =1 " +
+            "AND (  (  A.start_time < unix_timestamp(now())  AND A.end_time > unix_timestamp(now()) ) " +
+            "OR (  A.start_time = 0  AND A.end_time = 0 ) )" +
+            " AND A.is_del = 0  AND " +
+            "( A.remain_count > 0 OR A.is_permanent = 1 ) ORDER BY B.sort DESC")
+    List<YxStoreCouponIssueQueryVo> selectList(Page page);
+
+    @Select("select A.cid,A.end_time as endTime,A.start_time as startTime," +
+            "A.is_permanent as isPermanent,A.remain_count as remainCount," +
+            "A.total_count as totalCount,A.id" +
+            " from yx_store_coupon_issue A" +
+            " where A.status =1 and A.id=#{id}" +
+            " AND (  (  A.start_time < unix_timestamp(now())  AND A.end_time > unix_timestamp(now()) ) " +
+            "OR (  A.start_time = 0  AND A.end_time = 0 ) )" +
+            " AND A.is_del = 0  AND " +
+            "( A.remain_count > 0 OR A.is_permanent = 1 )")
+    YxStoreCouponIssueQueryVo selectOne(int id);
+
+    @Update("update yx_store_coupon_issue set remain_count=remain_count-1" +
+            " where id=#{id}")
+    int decCount(@Param("id") int id);
+
+
 
     /**
      * 根据ID获取查询对象

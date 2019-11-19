@@ -101,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/products/**").anonymous()
                 .antMatchers("/product/hot").anonymous()
                 .antMatchers("/category").anonymous()
-                .antMatchers("/coupons/**").anonymous()
+                //.antMatchers("/coupons/**").anonymous()
                 .antMatchers("/image_base64").anonymous()
                 .antMatchers("/register/verify").anonymous()
                 .antMatchers("/register").anonymous()
@@ -111,6 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/wechat/auth").anonymous()
                 .antMatchers("/share").anonymous()
                 .antMatchers("/wechat/notify").anonymous()
+                .antMatchers("/wechat/serve").anonymous()
                 // 支付宝回调
                 .antMatchers("/api/aliPay/return").anonymous()
                 .antMatchers("/api/aliPay/notify").anonymous()

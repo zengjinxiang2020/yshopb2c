@@ -4,7 +4,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, cid, title, author, image_input, synopsis, share_title, share_synopsis, visit, sort, url, status, add_time, hide, admin_id, mer_id, product_id, is_hot, is_banner
+        id, cid, title, author, image_input, synopsis, share_title, share_synopsis, visit, sort, url, status, add_time, hide, admin_id, mer_id, product_id, is_hot, is_banner,content
     </sql>
 
     <select id="getYxArticleById" resultType="co.yixiang.modules.shop.web.vo.YxArticleQueryVo">

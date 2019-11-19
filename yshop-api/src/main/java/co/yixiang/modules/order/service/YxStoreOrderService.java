@@ -26,6 +26,16 @@ import java.util.List;
  */
 public interface YxStoreOrderService extends BaseService<YxStoreOrder> {
 
+    void regressionCoupon(YxStoreOrderQueryVo order);
+
+    void regressionStock(YxStoreOrderQueryVo order);
+
+    void regressionIntegral(YxStoreOrderQueryVo order);
+
+    void cancelOrder(String orderId,int uid);
+
+    void cancelOrderByTask(int id);
+
     void orderApplyRefund(RefundParam param,int uid);
 
     void removeOrder(String orderId,int uid);

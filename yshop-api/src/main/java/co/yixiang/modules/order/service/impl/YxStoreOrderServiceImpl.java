@@ -1,9 +1,7 @@
 package co.yixiang.modules.order.service.impl;
 
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.*;
+import co.yixiang.common.constant.CacheKey;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.monitor.service.RedisService;
 import co.yixiang.modules.order.entity.YxStoreOrder;
@@ -21,15 +19,20 @@ import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.entity.YxStoreCart;
+import co.yixiang.modules.shop.entity.YxStoreCouponUser;
 import co.yixiang.modules.shop.mapper.YxStoreCartMapper;
+import co.yixiang.modules.shop.mapper.YxStoreCouponUserMapper;
+import co.yixiang.modules.shop.service.YxStoreCouponUserService;
 import co.yixiang.modules.shop.service.YxStoreProductReplyService;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
+//import co.yixiang.modules.task.CancelOrderService;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserAddress;
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.entity.YxWechatUser;
+import co.yixiang.modules.user.mapper.YxUserMapper;
 import co.yixiang.modules.user.service.YxUserAddressService;
 import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserService;
@@ -38,14 +41,22 @@ import co.yixiang.modules.user.web.controller.UserAddressController;
 import co.yixiang.modules.user.web.vo.YxUserAddressQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
+//import co.yixiang.redisson.DelayJob;
+//import co.yixiang.redisson.DelayJobService;
 import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
+//import org.redisson.RedissonDelayedQueue;
+//import org.redisson.api.RDelayedQueue;
+//import org.redisson.api.RQueue;
+//import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +65,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -114,6 +128,161 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Autowired
     private YxWechatUserService wechatUserService;
 
+    @Autowired
+    private YxStoreCouponUserService couponUserService;
+
+    @Autowired
+    private YxStoreCouponUserMapper yxStoreCouponUserMapper;
+
+//    @Autowired
+//    private DelayJobService delayJobService;
+
+
+    @Value("${job.unpayorder}")
+    private String overtime;
+
+    /**
+     * 退回优惠券
+     * @param order
+     */
+    @Override
+    public void regressionCoupon(YxStoreOrderQueryVo order) {
+        if(order.getPaid() > 0 || order.getStatus() == -2 || order.getIsDel() ==1){
+            return;
+        }
+
+        QueryWrapper<YxStoreCouponUser> wrapper= new QueryWrapper<>();
+        if(order.getCouponId() > 0){
+            wrapper.eq("id",order.getCouponId()).eq("status",1).eq("uid",order.getUid());
+            YxStoreCouponUser couponUser = yxStoreCouponUserMapper.selectOne(wrapper);
+
+            if(ObjectUtil.isNotNull(couponUser)){
+                YxStoreCouponUser storeCouponUser = new YxStoreCouponUser();
+                QueryWrapper<YxStoreCouponUser> wrapperT= new QueryWrapper<>();
+                wrapperT.eq("id",order.getCouponId()).eq("uid",order.getUid());
+                storeCouponUser.setStatus(0);
+                storeCouponUser.setUseTime(0);
+                yxStoreCouponUserMapper.update(storeCouponUser,wrapperT);
+            }
+        }
+
+    }
+
+    /**
+     * 退回库存
+     * @param order
+     */
+    @Override
+    public void regressionStock(YxStoreOrderQueryVo order) {
+        if(order.getPaid() > 0 || order.getStatus() == -2 || order.getIsDel() ==1){
+            return;
+        }
+        QueryWrapper<YxStoreOrderCartInfo> wrapper= new QueryWrapper<>();
+        wrapper.in("cart_id", Arrays.asList(order.getCartId().split(",")));
+
+        List<YxStoreOrderCartInfo> cartInfoList =  orderCartInfoService.list(wrapper);
+        for (YxStoreOrderCartInfo cartInfo : cartInfoList) {
+            YxStoreCartQueryVo cart = JSONObject.parseObject(cartInfo.getCartInfo()
+                    ,YxStoreCartQueryVo.class);
+            productService.incProductStock(cart.getCartNum(),cart.getProductId()
+                    ,cart.getProductAttrUnique());
+        }
+    }
+
+    /**
+     * 退回积分
+     * @param order
+     */
+    @Override
+    public void regressionIntegral(YxStoreOrderQueryVo order) {
+        if(order.getPaid() > 0 || order.getStatus() == -2 || order.getIsDel() ==1){
+            return;
+        }
+        if(order.getUseIntegral().doubleValue() <= 0) return;
+
+        if(order.getStatus() != -2 && order.getRefundStatus() != 2
+                && ObjectUtil.isNotNull(order.getBackIntegral())
+                && order.getBackIntegral().doubleValue() >= order.getUseIntegral().doubleValue()){
+            return;
+        }
+
+        YxUserQueryVo userQueryVo = userService
+                .getYxUserById(order.getUid());
+
+        //增加积分
+        userService.incIntegral(order.getUid(),order.getUseIntegral().doubleValue());
+
+        //增加流水
+        YxUserBill userBill = new YxUserBill();
+        userBill.setUid(order.getUid());
+        userBill.setTitle("积分回退");
+        userBill.setLinkId(order.getId().toString());
+        userBill.setCategory("integral");
+        userBill.setType("deduction");
+        userBill.setNumber(order.getUseIntegral());
+        userBill.setBalance(userQueryVo.getIntegral());
+        userBill.setMark("购买商品失败,回退积分");
+        userBill.setStatus(1);
+        userBill.setPm(1);
+        userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
+        billService.save(userBill);
+
+        //更新回退积分
+        YxStoreOrder storeOrder = new YxStoreOrder();
+        storeOrder.setBackIntegral(order.getUseIntegral());
+        storeOrder.setId(order.getId());
+        yxStoreOrderMapper.updateById(storeOrder);
+    }
+
+    /**
+     * 未付款取消订单
+     * @param orderId
+     * @param uid
+     */
+    @Override
+    public void cancelOrder(String orderId, int uid) {
+        YxStoreOrderQueryVo order = getOrderInfo(orderId,uid);
+        if(ObjectUtil.isNull(order)) throw new ErrorRequestException("订单不存在");
+
+        regressionIntegral(order);
+
+        regressionStock(order);
+
+        regressionCoupon(order);
+
+        YxStoreOrder storeOrder = new YxStoreOrder();
+        storeOrder.setIsDel(1);
+        storeOrder.setId(order.getId());
+        yxStoreOrderMapper.updateById(storeOrder);
+    }
+
+    /**
+     * 系统自动主动取消未付款取消订单
+     * @param orderId
+     */
+    @Override
+    public void cancelOrderByTask(int orderId) {
+        YxStoreOrderQueryVo order = null;
+        try {
+            order = getYxStoreOrderById(orderId);
+
+            if(ObjectUtil.isNull(order)) throw new ErrorRequestException("订单不存在");
+
+            regressionIntegral(order);
+
+            regressionStock(order);
+
+            regressionCoupon(order);
+
+            YxStoreOrder storeOrder = new YxStoreOrder();
+            storeOrder.setIsDel(1);
+            storeOrder.setId(order.getId());
+            yxStoreOrderMapper.updateById(storeOrder);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     /**
      * 奖励积分
@@ -198,7 +367,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //奖励积分
         gainUserIntegral(order);
 
-        //todo 分销计算
+        //分销计算
+        userService.backOrderBrokerage(order);
 
     }
 
@@ -267,7 +437,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
                 break;
             case -3://退款
                 String[] strs = {"1","2"};
-                wrapper.eq("paid",1).in("refund_status",strs);
+                wrapper.eq("paid",1).in("refund_status",Arrays.asList(strs));
                 break;
         }
 
@@ -335,7 +505,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         QueryWrapper<YxStoreOrder> wrapperSeven= new QueryWrapper<>();
         String[] strArr = {"1","2"};
         wrapperSeven.eq("is_del",0).eq("paid",1)
-                .eq("uid",uid).in("refund_status",strArr);
+                .eq("uid",uid).in("refund_status",Arrays.asList(strArr));
         countDTO.setRefundCount(yxStoreOrderMapper.selectCount(wrapperSeven));
 
 
@@ -438,6 +608,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //增加状态
         orderStatusService.create(orderInfo.getId(),"pay_success","用户付款成功");
 
+
         //todo 拼团
         //todo 模板消息推送
     }
@@ -448,6 +619,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
      */
     @Override
     public WxPayMpOrderResult wxPay(String orderId) throws WxPayException {
+        String apiUrl = systemConfigService.getData("api_url");
+        if(StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
         if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
         if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
@@ -463,7 +636,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         orderRequest.setTotalFee(bigDecimal.multiply(orderInfo.getPayPrice()).intValue());//元转成分
         orderRequest.setOpenid(wechatUser.getOpenid());
         orderRequest.setSpbillCreateIp("127.0.0.1");
-        orderRequest.setNotifyUrl("https://h5api.dayouqiantu.cn/api/wechat/notify");
+        orderRequest.setNotifyUrl(apiUrl+"/api/wechat/notify");
         orderRequest.setTradeType("JSAPI");
 
         WxPayMpOrderResult orderResult = wxPayService.createOrder(orderRequest);
@@ -556,21 +729,82 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             gainIntegral = NumberUtil.add(gainIntegral,cartInfoGainIntegral).intValue();
         }
 
-        //todo 优惠券
-        int couponId = 0;
-        Double couponPrice = 0d;
-        if(ObjectUtil.isNotEmpty(param.getCouponId())){
-            //todo
-        }
+
         //todo 门店等二期
 
         if(param.getShippingType() == 1){
             payPrice = NumberUtil.add(payPrice,payPostage);
         }
 
-        //todo 积分抵扣
+        //优惠券
+        int couponId = 0;
+        if(ObjectUtil.isNotEmpty(param.getCouponId())){
+            couponId = param.getCouponId().intValue();
+        }
+
+        int useIntegral = param.getUseIntegral().intValue();
+
+        boolean deduction = false;//todo 拼团等
+        if(deduction){
+            couponId = 0;
+            useIntegral = 0;
+        }
+        double couponPrice = 0; //优惠券金额
+        if(couponId > 0){//使用优惠券
+            YxStoreCouponUser couponUser = couponUserService.getCoupon(couponId,uid);
+            if(ObjectUtil.isNull(couponUser)) throw new ErrorRequestException("使用优惠劵失败");
+
+            if(couponUser.getUseMinPrice().doubleValue() > payPrice){
+                throw new ErrorRequestException("不满足优惠劵的使用条件");
+            }
+            payPrice = NumberUtil.sub(payPrice,couponUser.getCouponPrice()).doubleValue();
+
+            couponUserService.useCoupon(couponId);//更新优惠券状态
+
+            couponPrice = couponUser.getCouponPrice().doubleValue();
+
+        }
+        // 积分抵扣
+        double deductionPrice = 0; //抵扣金额
+        double usedIntegral = 0; //使用的积分
+        if(useIntegral > 0 && userInfo.getIntegral().doubleValue() > 0){
+            deductionPrice = NumberUtil.mul(userInfo.getIntegral(),
+                    Double.valueOf(cacheDTO.getOther().getIntegralRatio())).doubleValue();
+            if(deductionPrice < payPrice){
+                payPrice = NumberUtil.sub(payPrice.doubleValue(),deductionPrice);
+                usedIntegral = userInfo.getIntegral().doubleValue();
+                YxUser yxUser = new YxUser();
+                yxUser.setIntegral(BigDecimal.ZERO);
+                yxUser.setUid(uid);
+                userService.updateById(yxUser);
+            }else{
+                deductionPrice = payPrice;
+                usedIntegral = NumberUtil.div(payPrice,
+                        Double.valueOf(cacheDTO.getOther().getIntegralRatio()));
+                userService.decIntegral(uid,usedIntegral);
+                payPrice = 0d;
+
+            }
+
+            //积分流水
+            YxUserBill userBill = new YxUserBill();
+            userBill.setUid(uid);
+            userBill.setTitle("积分抵扣");
+            userBill.setLinkId(key);
+            userBill.setCategory("integral");
+            userBill.setType("deduction");
+            userBill.setNumber(BigDecimal.valueOf(usedIntegral));
+            userBill.setBalance(userInfo.getIntegral());
+            userBill.setMark("购买商品使用");
+            userBill.setStatus(1);
+            userBill.setPm(0);
+            userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
+            billService.save(userBill);
+
+        }
 
         if(payPrice <= 0) payPrice = 0d;
+
 
         //组合数据
         YxStoreOrder storeOrder = new YxStoreOrder();
@@ -588,10 +822,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         storeOrder.setCouponPrice(BigDecimal.valueOf(couponPrice));
         storeOrder.setPayPrice(BigDecimal.valueOf(payPrice));
         storeOrder.setPayPostage(BigDecimal.valueOf(payPostage));
-        storeOrder.setDeductionPrice(BigDecimal.ZERO);
+        storeOrder.setDeductionPrice(BigDecimal.valueOf(deductionPrice));
         storeOrder.setPaid(0);
         storeOrder.setPayType(param.getPayType());
-        storeOrder.setUseIntegral(BigDecimal.valueOf(param.getUseIntegral()));
+        storeOrder.setUseIntegral(BigDecimal.valueOf(usedIntegral));
         storeOrder.setGainIntegral(BigDecimal.valueOf(gainIntegral));
         storeOrder.setMark(param.getMark());
         storeOrder.setCombinationId(0);
@@ -629,7 +863,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //增加状态
         orderStatusService.create(storeOrder.getId(),"cache_key_create_order","订单生成");
 
+        // 订单支付超期任务
 
+        //String overtimeStr = systemConfigService.getData("order_cancel_job_time");
+        //没有配置不加入
+//        if(StrUtil.isNotBlank(overtimeStr)){
+//            // 订单支付超期任务
+//            DelayJob delayJob = new DelayJob();
+//            delayJob.setOrderId(storeOrder.getId());
+//            delayJob.setAClass(CancelOrderService.class);
+//            delayJobService.submitJob(delayJob,Long.valueOf(overtimeStr));
+//        }
 
         return storeOrder;
     }
@@ -645,6 +889,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Override
     public ComputeDTO computedOrder(int uid, String key, int couponId,
                                     int useIntegral, int shippingType) {
+        YxUserQueryVo userInfo = userService.getYxUserById(uid);
+        if(ObjectUtil.isNull(userInfo)) throw new ErrorRequestException("用户不存在");
         CacheDTO cacheDTO = getCacheOrderInfo(uid,key);
         if(ObjectUtil.isNull(cacheDTO)){
             throw new ErrorRequestException("订单已过期,请刷新当前页面");
@@ -653,13 +899,46 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         computeDTO.setTotalPrice(cacheDTO.getPriceGroup().getTotalPrice());
         Double payPrice = cacheDTO.getPriceGroup().getTotalPrice();
         Double payPostage = cacheDTO.getPriceGroup().getStorePostage();
-        //todo 优惠券
 
-        //todo 积分抵扣
+        boolean deduction = false;//todo 拼团等
+        if(deduction){
+            couponId = 0;
+            useIntegral = 0;
+        }
+        double couponPrice = 0;
+        if(couponId > 0){//使用优惠券
+            YxStoreCouponUser couponUser = couponUserService.getCoupon(couponId,uid);
+            if(ObjectUtil.isNull(couponUser)) throw new ErrorRequestException("使用优惠劵失败");
+
+            if(couponUser.getUseMinPrice().doubleValue() > payPrice){
+                throw new ErrorRequestException("不满足优惠劵的使用条件");
+            }
+            payPrice = NumberUtil.sub(payPrice,couponUser.getCouponPrice()).doubleValue();
+
+            couponPrice = couponUser.getCouponPrice().doubleValue();
+
+        }
+
+        // 积分抵扣
+        double deductionPrice = 0;
+        if(useIntegral > 0 && userInfo.getIntegral().doubleValue() > 0){
+            deductionPrice = NumberUtil.mul(userInfo.getIntegral(),
+                    Double.valueOf(cacheDTO.getOther().getIntegralRatio())).doubleValue();
+            if(deductionPrice < payPrice){
+                payPrice = NumberUtil.sub(payPrice.doubleValue(),deductionPrice);
+            }else{
+                deductionPrice = payPrice;
+                payPrice = 0d;
+            }
+
+        }
+
+        if(payPrice <= 0) payPrice = 0d;
+
         computeDTO.setPayPrice(payPrice);
         computeDTO.setPayPostage(payPostage);
-        computeDTO.setCouponPrice(0d);
-        computeDTO.setDeductionPrice(0d);
+        computeDTO.setCouponPrice(couponPrice);
+        computeDTO.setDeductionPrice(deductionPrice);
 
         return computeDTO;
     }

@@ -63,6 +63,59 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
     @Autowired
     private CartMap cartMap;
 
+    /**
+     * 删除购物车
+     * @param uid
+     * @param ids
+     */
+    @Override
+    public void removeUserCart(int uid, List<String> ids) {
+        QueryWrapper<YxStoreCart> wrapper = new QueryWrapper<>();
+        wrapper.eq("uid",uid).in("id",ids);
+
+        YxStoreCart storeCart = new YxStoreCart();
+        storeCart.setIsDel(1);
+
+        yxStoreCartMapper.update(storeCart,wrapper);
+    }
+
+    /**
+     * 改购物车数量
+     * @param cartId
+     * @param cartNum
+     * @param uid
+     */
+    @Override
+    public void changeUserCartNum(int cartId, int cartNum, int uid) {
+        QueryWrapper<YxStoreCart> wrapper = new QueryWrapper<>();
+        wrapper.eq("uid",uid).eq("id",cartId);
+
+        YxStoreCart cart = getOne(wrapper);
+        if(ObjectUtil.isNull(cart)){
+            throw new ErrorRequestException("购物车不存在");
+        }
+
+        if(cartNum <= 0){
+            throw new ErrorRequestException("库存错误");
+        }
+
+        //todo 普通商品库存
+        int stock = productService.getProductStock(cart.getProductId()
+                ,cart.getProductAttrUnique());
+        if(stock < cartNum){
+            throw new ErrorRequestException("该产品库存不足"+cartNum);
+        }
+
+        if(cartNum == cart.getCartNum()) return;
+
+        YxStoreCart storeCart = new YxStoreCart();
+        storeCart.setCartNum(cartNum);
+        storeCart.setId(Long.valueOf(cartId));
+
+        yxStoreCartMapper.updateById(storeCart);
+
+
+    }
 
     /**
      * 购物车列表

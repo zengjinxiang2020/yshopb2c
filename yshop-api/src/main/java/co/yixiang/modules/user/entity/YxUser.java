@@ -110,7 +110,7 @@ public class YxUser extends BaseEntity {
     private String userType;
 
     @ApiModelProperty(value = "是否为推广员")
-    private Boolean isPromoter;
+    private Integer isPromoter;
 
     @ApiModelProperty(value = "用户购买次数")
     private Integer payCount;

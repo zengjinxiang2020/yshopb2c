@@ -2,11 +2,15 @@ package co.yixiang.modules.user.service;
 
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.modules.user.web.dto.BillDTO;
 import co.yixiang.modules.user.web.param.YxUserBillQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserBillQueryVo;
 import co.yixiang.common.web.vo.Paging;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -17,6 +21,16 @@ import java.io.Serializable;
  * @since 2019-10-27
  */
 public interface YxUserBillService extends BaseService<YxUserBill> {
+
+    Map<String,Object> spreadOrder(int uid,int page,int limit);
+
+    List<BillDTO> getUserBillList(int page, int limit, int uid, int type);
+
+    double getBrokerage(int uid);
+
+    double yesterdayCommissionSum(int uid);
+
+    List<YxUserBillQueryVo> userBillList(int uid, int page, int limit, String category);
 
     /**
      * 根据ID获取查询对象

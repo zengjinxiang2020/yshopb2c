@@ -19,4 +19,5 @@ import co.yixiang.common.web.param.QueryParam;
 @ApiModel(value="YxUserBillQueryParam对象", description="用户账单表查询参数")
 public class YxUserBillQueryParam extends QueryParam {
     private static final long serialVersionUID = 1L;
+
 }

@@ -20,6 +20,8 @@ import java.util.List;
  */
 public interface YxStoreProductService extends BaseService<YxStoreProduct> {
 
+    void incProductStock(int num,int productId,String unique);
+
     void decProductStock(int num,int productId,String unique);
 
     int getProductStock(int productId,String unique);

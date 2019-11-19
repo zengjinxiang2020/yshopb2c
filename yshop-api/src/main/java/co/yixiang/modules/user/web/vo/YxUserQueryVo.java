@@ -37,6 +37,8 @@ public class YxUserQueryVo implements Serializable {
 
     private OrderCountDTO orderStatusNum;
 
+    private Integer statu;
+
 
 
 //    @ApiModelProperty(value = "用户密码（跟pwd）")
@@ -117,7 +119,7 @@ public class YxUserQueryVo implements Serializable {
     private String userType;
 
     @ApiModelProperty(value = "是否为推广员")
-    private Boolean isPromoter;
+    private Integer isPromoter;
 
     @ApiModelProperty(value = "用户购买次数")
     private Integer payCount;

@@ -88,19 +88,10 @@ public class IndexController {
     @ApiOperation(value = "获取图片base64",notes = "获取图片base64")
     public ApiResult<List<String>> imageBase64(){
 
-        Map<String,Object> map = new LinkedHashMap<>();
-        return ApiResult.ok(map);
+        //Map<String,Object> map = new LinkedHashMap<>();
+        return ApiResult.ok(null);
     }
 
-    @GetMapping("/share")
-    @ApiOperation(value = "分享参数",notes = "分享参数")
-    public ApiResult<Object> share(){
 
-        Map<String,Object> map = new LinkedHashMap<>();
-        map.put("img","");
-        map.put("title","");
-        map.put("synopsis","");
-        return ApiResult.ok(map);
-    }
 
 }

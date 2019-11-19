@@ -28,6 +28,11 @@ public interface YxStoreProductAttrValueMapper extends BaseMapper<YxStoreProduct
     int decStockIncSales(@Param("num") int num,@Param("productId") int productId,
                  @Param("unique")  String unique);
 
+    @Update("update yx_store_product_attr_value set stock=stock+#{num}, sales=sales-#{num}" +
+            " where product_id=#{productId} and `unique`=#{unique}")
+    int incStockDecSales(@Param("num") int num,@Param("productId") int productId,
+                         @Param("unique")  String unique);
+
 
 
     /**

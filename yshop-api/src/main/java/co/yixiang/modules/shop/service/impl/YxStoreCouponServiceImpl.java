@@ -35,7 +35,7 @@ public class YxStoreCouponServiceImpl extends BaseServiceImpl<YxStoreCouponMappe
     private YxStoreCouponMapper yxStoreCouponMapper;
 
     @Override
-    public YxStoreCouponQueryVo getYxStoreCouponById(Serializable id) throws Exception{
+    public YxStoreCouponQueryVo getYxStoreCouponById(Serializable id){
         return yxStoreCouponMapper.getYxStoreCouponById(id);
     }
 

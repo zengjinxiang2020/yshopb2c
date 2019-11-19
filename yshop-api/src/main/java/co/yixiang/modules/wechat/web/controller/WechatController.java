@@ -9,6 +9,7 @@ import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.security.security.JwtUser;
 import co.yixiang.modules.security.utils.JwtTokenUtil;
+import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxWechatUser;
 import co.yixiang.modules.user.mapper.YxUserMapper;
@@ -26,7 +27,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
+import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +59,8 @@ public class WechatController extends BaseController {
     private final YxUserService userService;
     private final WxPayService wxPayService;
     private final YxStoreOrderService orderService;
+    private final WxMpMessageRouter messageRouter;
+    private final YxSystemConfigService systemConfigService;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -63,6 +69,21 @@ public class WechatController extends BaseController {
     @Autowired
     @Qualifier("jwtUserDetailsService")
     private UserDetailsService userDetailsService;
+
+    /**
+     * 微信分享配置
+     */
+    @GetMapping("/share")
+    @ApiOperation(value = "微信分享配置",notes = "微信分享配置")
+    public ApiResult<Object> share() {
+        Map<String,Object> map = new LinkedHashMap<>();
+        map.put("img",systemConfigService.getData("wechat_share_img"));
+        map.put("title",systemConfigService.getData("wechat_share_title"));
+        map.put("synopsis",systemConfigService.getData("wechat_share_synopsis"));
+        Map<String,Object> mapt = new LinkedHashMap<>();
+        mapt.put("data",map);
+        return ApiResult.ok(mapt);
+    }
 
     /**
      * jssdk配置
@@ -78,7 +99,8 @@ public class WechatController extends BaseController {
      */
     @GetMapping("/wechat/auth")
     @ApiOperation(value = "微信授权",notes = "微信授权")
-    public ApiResult<Object> authLogin(@RequestParam(value = "code") String code) {
+    public ApiResult<Object> authLogin(@RequestParam(value = "code") String code,
+                                       @RequestParam(value = "spread") String spread) {
         //todo 分销人
         //String url = "https://h5.dayouqiantu.cn/";
         //wxService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
@@ -88,17 +110,15 @@ public class WechatController extends BaseController {
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
             WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
             String openid = wxMpUser.getOpenId();
-            YxWechatUser wechatUser = wechatUserService.getUserInfo(openid);
+            YxWechatUser wechatUser = wechatUserService.getUserInfo(openid);;
             JwtUser jwtUser = null;
             if(ObjectUtil.isNotNull(wechatUser)){
-                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getNickname());
+                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getOpenid());
             }else{
-
-
                 //用户保存
                 YxUser user = new YxUser();
                 user.setAccount(wxMpUser.getNickname());
-                user.setUsername(wxMpUser.getNickname());
+                user.setUsername(wxMpUser.getOpenId());
                 user.setPassword(EncryptUtils.encryptPassword("123456"));
                 user.setPwd(EncryptUtils.encryptPassword("123456"));
                 user.setPhone("");
@@ -147,10 +167,16 @@ public class WechatController extends BaseController {
 
 
 
-                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getNickname());
+                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getOpenId());
             }
 
-            //System.out.println("jwtUser:"+jwtUser);
+
+            //设置推广关系
+            if(StrUtil.isNotEmpty(spread) && !spread.equals("NaN")){
+                //System.out.println("spread:"+spread);
+                userService.setSpread(Integer.valueOf(spread),
+                        jwtUser.getId().intValue());
+            }
 
             // 生成令牌
             final String token = jwtTokenUtil.generateToken(jwtUser);
@@ -192,6 +218,74 @@ public class WechatController extends BaseController {
             return WxPayNotifyResponse.fail(e.getMessage());
         }
 
+    }
+
+
+    /**
+     * 微信验证消息
+     */
+    @GetMapping("/wechat/serve")
+    @ApiOperation(value = "微信验证消息",notes = "微信验证消息")
+    public String authGet(@RequestParam(name = "signature", required = false) String signature,
+                          @RequestParam(name = "timestamp", required = false) String timestamp,
+                          @RequestParam(name = "nonce", required = false) String nonce,
+                          @RequestParam(name = "echostr", required = false) String echostr){
+
+        if (wxService.checkSignature(timestamp, nonce, signature)) {
+            return echostr;
+        }
+
+        return "fail";
+    }
+
+    @PostMapping("/wechat/serve")
+    public String post(@RequestBody String requestBody,
+                       @RequestParam("signature") String signature,
+                       @RequestParam("timestamp") String timestamp,
+                       @RequestParam("nonce") String nonce,
+                       @RequestParam("openid") String openid,
+                       @RequestParam(name = "encrypt_type", required = false) String encType,
+                       @RequestParam(name = "msg_signature", required = false) String msgSignature) {
+
+
+        if (!wxService.checkSignature(timestamp, nonce, signature)) {
+            throw new IllegalArgumentException("非法请求，可能属于伪造的请求！");
+        }
+
+        String out = null;
+        if (encType == null) {
+            // 明文传输的消息
+            WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
+            WxMpXmlOutMessage outMessage = this.route(inMessage);
+            if (outMessage == null) {
+                return "";
+            }
+
+            out = outMessage.toXml();
+        } else if ("aes".equalsIgnoreCase(encType)) {
+            // aes加密的消息
+            WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
+                    timestamp, nonce, msgSignature);
+            WxMpXmlOutMessage outMessage = this.route(inMessage);
+            if (outMessage == null) {
+                return "";
+            }
+
+            out = outMessage.toEncryptedXml(wxService.getWxMpConfigStorage());
+        }
+
+
+        return out;
+    }
+
+    private WxMpXmlOutMessage route(WxMpXmlMessage message) {
+        try {
+            return this.messageRouter.route(message);
+        } catch (Exception e) {
+            log.error("路由消息时出现异常！", e);
+        }
+
+        return null;
     }
 
 

@@ -23,7 +23,7 @@ public interface YxStoreCouponService extends BaseService<YxStoreCoupon> {
      * @param id
      * @return
      */
-    YxStoreCouponQueryVo getYxStoreCouponById(Serializable id) throws Exception;
+    YxStoreCouponQueryVo getYxStoreCouponById(Serializable id);
 
     /**
      * 获取分页对象

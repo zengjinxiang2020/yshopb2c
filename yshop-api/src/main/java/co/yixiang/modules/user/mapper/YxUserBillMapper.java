@@ -1,15 +1,23 @@
 package co.yixiang.modules.user.mapper;
 
+import co.yixiang.modules.user.web.dto.BillDTO;
+import co.yixiang.modules.user.web.dto.BillOrderRecordDTO;
+import co.yixiang.modules.user.web.dto.PromUserDTO;
+import co.yixiang.modules.user.web.dto.UserBillDTO;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.web.param.YxUserBillQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserBillQueryVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +29,38 @@ import java.io.Serializable;
  */
 @Repository
 public interface YxUserBillMapper extends BaseMapper<YxUserBill> {
+
+    @Select("SELECT o.order_id as orderId,FROM_UNIXTIME(b.add_time, '%Y-%m-%d %H:%i') as time," +
+            "b.number,u.avatar,u.nickname FROM yx_user_bill b " +
+            "INNER JOIN yx_store_order o ON o.id=b.link_id " +
+            "RIGHT JOIN yx_user u ON u.uid=o.uid" +
+            " WHERE b.uid = #{uid} AND ( FROM_UNIXTIME(b.add_time, '%Y-%m')= #{time} ) AND " +
+            "b.category = 'now_money' AND b.type = 'brokerage' ORDER BY time DESC")
+    List<BillOrderRecordDTO> getBillOrderRList(@Param("time") String time, @Param("uid") int uid);
+
+    @Select("SELECT FROM_UNIXTIME(add_time,'%Y-%m') as time " +
+            " FROM yx_user_bill ${ew.customSqlSegment}")
+    List<String> getBillOrderList(@Param(Constants.WRAPPER) Wrapper<YxUserBill> userWrapper,Page page);
+
+    @Select("SELECT FROM_UNIXTIME(add_time,'%Y-%m') as time,group_concat(id SEPARATOR ',') ids " +
+            " FROM yx_user_bill ${ew.customSqlSegment}")
+    List<BillDTO> getBillList(@Param(Constants.WRAPPER) Wrapper<YxUserBill> userWrapper,Page page);
+
+    @Select("SELECT FROM_UNIXTIME(add_time,'%Y-%m-%d %H:%i') as add_time,title,number,pm " +
+            " FROM yx_user_bill ${ew.customSqlSegment}")
+    List<UserBillDTO> getUserBillList(@Param(Constants.WRAPPER) Wrapper<YxUserBill> userWrapper);
+
+    @Select("select IFNULL(sum(number),0) from yx_user_bill " +
+            "where status=1 and type='brokerage' and pm=1 and category='now_money' " +
+            "and uid=#{uid}")
+    double sumPrice(@Param("uid") int uid);
+
+
+    @Select("select IFNULL(sum(number),0) from yx_user_bill " +
+            "where status=1 and type='brokerage' and pm=1 and category='now_money' " +
+            "and uid=#{uid} and TO_DAYS(NOW()) - TO_DAYS(add_time) <= 1")
+    double sumYesterdayPrice(@Param("uid") int uid);
+
 
     /**
      * 根据ID获取查询对象

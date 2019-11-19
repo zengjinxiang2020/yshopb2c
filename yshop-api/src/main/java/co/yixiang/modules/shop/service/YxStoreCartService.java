@@ -7,6 +7,7 @@ import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,6 +19,10 @@ import java.util.Map;
  * @since 2019-10-25
  */
 public interface YxStoreCartService extends BaseService<YxStoreCart> {
+
+    void removeUserCart(int uid, List<String> ids);
+
+    void changeUserCartNum(int cartId,int cartNum,int uid);
 
     Map<String,Object> getUserProductCartList(int uid,String cartIds,int status);
 

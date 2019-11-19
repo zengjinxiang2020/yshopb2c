@@ -1,5 +1,6 @@
 package co.yixiang.modules.order.web.dto;
 
+import co.yixiang.modules.shop.entity.YxStoreCouponUser;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.user.entity.YxUserAddress;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
@@ -26,7 +27,7 @@ public class ConfirmOrderDTO implements Serializable {
     private Integer combinationId = 0;
 
     //优惠券减
-    private Boolean deduction = true;
+    private Boolean deduction = false;
 
     //积分抵扣
     private Integer integralRatio = 0;
@@ -43,7 +44,7 @@ public class ConfirmOrderDTO implements Serializable {
     //店铺信息
     private List systemStore;
 
-    private String usableCoupon;
+    private YxStoreCouponUser usableCoupon;
 
     private YxUserQueryVo userInfo;
 

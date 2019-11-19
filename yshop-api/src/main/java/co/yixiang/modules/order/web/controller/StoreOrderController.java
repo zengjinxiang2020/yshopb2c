@@ -20,7 +20,9 @@ import co.yixiang.modules.order.web.param.YxStoreOrderQueryParam;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.shop.entity.YxStoreProductReply;
 import co.yixiang.modules.shop.service.YxStoreCartService;
+import co.yixiang.modules.shop.service.YxStoreCouponUserService;
 import co.yixiang.modules.shop.service.YxStoreProductReplyService;
+import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.user.service.YxUserAddressService;
 import co.yixiang.modules.user.service.YxUserService;
@@ -62,6 +64,8 @@ public class StoreOrderController extends BaseController {
     private final YxStoreOrderCartInfoService orderCartInfoService;
     private final YxStoreProductReplyService productReplyService;
     private final YxStoreOrderStatusService orderStatusService;
+    private final YxStoreCouponUserService couponUserService;
+    private final YxSystemConfigService systemConfigService;
 
 
     /**
@@ -88,19 +92,20 @@ public class StoreOrderController extends BaseController {
 
         ConfirmOrderDTO confirmOrderDTO = new ConfirmOrderDTO();
 
-        //todo 积分抵扣下个版本
-
-        //todo 优惠券抵扣下个版本
+        confirmOrderDTO.setUsableCoupon(couponUserService
+                .beUsableCoupon(uid,priceGroup.getTotalPrice()));
+        //todo 积分抵扣下个版本 已经do
+        OtherDTO other = new OtherDTO();
+        other.setIntegralRatio(systemConfigService.getData("integral_ratio"));
 
         //todo 拼团 砍价 秒杀
 
-        //todo 地址信息
         confirmOrderDTO.setAddressInfo(addressService.getUserDefaultAddress(uid));
 
         confirmOrderDTO.setCartInfo(cartInfo);
         confirmOrderDTO.setPriceGroup(priceGroup);
         confirmOrderDTO.setOrderKey(storeOrderService.cacheOrderInfo(uid,cartInfo,
-                                    priceGroup,new OtherDTO()));
+                                    priceGroup,other));
         //todo VIP会员
 
         confirmOrderDTO.setUserInfo(userService.getYxUserById(uid));
@@ -304,10 +309,13 @@ public class StoreOrderController extends BaseController {
         String useIntegral = jsonObject.getString("useIntegral");
         //todo 砍价
         //todo 拼团
-        ComputeDTO computeDTO = storeOrderService.computedOrder(uid,key,Integer.valueOf(couponId),
-                    Integer.valueOf(useIntegral),Integer.valueOf(shippingType));
+        ComputeDTO computeDTO = storeOrderService.computedOrder(uid,key,
+                Integer.valueOf(couponId),
+                Integer.valueOf(useIntegral),
+                Integer.valueOf(shippingType));
 
         map.put("result",computeDTO);
+        map.put("status","NONE");
         return ApiResult.ok(map);
     }
 
@@ -451,6 +459,22 @@ public class StoreOrderController extends BaseController {
     public ApiResult<Object> refundVerify(@RequestBody RefundParam param){
         int uid = SecurityUtils.getUserId().intValue();
         storeOrderService.orderApplyRefund(param,uid);
+        return ApiResult.ok("ok");
+    }
+
+    /**
+     * 订单取消   未支付的订单回退积分,回退优惠券,回退库存
+     */
+    @PostMapping("/order/cancel")
+    @ApiOperation(value = "订单取消",notes = "订单取消")
+    public ApiResult<Object> cancelOrder(@RequestBody String jsonStr){
+        int uid = SecurityUtils.getUserId().intValue();
+        JSONObject jsonObject = JSON.parseObject(jsonStr);
+        String orderId = jsonObject.getString("id");
+        if(StrUtil.isEmpty(orderId)) return ApiResult.fail("参数错误");
+
+        storeOrderService.cancelOrder(orderId,uid);
+
         return ApiResult.ok("ok");
     }
 

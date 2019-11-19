@@ -24,12 +24,20 @@ import java.io.Serializable;
 public interface YxStoreProductMapper extends BaseMapper<YxStoreProduct> {
 
     @Update("update yx_store_product set stock=stock-#{num}, sales=sales+#{num}" +
-            " where product_id=#{productId}")
+            " where id=#{productId}")
     int decStockIncSales(@Param("num") int num,@Param("productId") int productId);
+
+    @Update("update yx_store_product set stock=stock+#{num}, sales=sales-#{num}" +
+            " where id=#{productId}")
+    int incStockDecSales(@Param("num") int num,@Param("productId") int productId);
 
     @Update("update yx_store_product set sales=sales+#{num}" +
             " where id=#{productId}")
     int incSales(@Param("num") int num,@Param("productId") int productId);
+
+    @Update("update yx_store_product set sales=sales-#{num}" +
+            " where id=#{productId}")
+    int decSales(@Param("num") int num,@Param("productId") int productId);
 
     /**
      * 根据ID获取查询对象

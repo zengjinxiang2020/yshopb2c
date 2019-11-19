@@ -15,4 +15,5 @@
         select <include refid="Base_Column_List"/> from yx_user
     </select>
 
+
 </mapper>

@@ -50,10 +50,6 @@ public class YxStoreProductController {
         resources.setAddTime(OrderUtil.getSecondTimestampTwo());
         if(ObjectUtil.isEmpty(resources.getGiveIntegral())) resources.setGiveIntegral(BigDecimal.ZERO);
         if(ObjectUtil.isEmpty(resources.getCost())) resources.setCost(BigDecimal.ZERO);
-        //resources.setIsBargain(0);
-        //resources.setIsSeckill(0);
-        //resources.setIsDel(0);
-        //resources.setIsShow(1);
         return new ResponseEntity(yxStoreProductService.create(resources),HttpStatus.CREATED);
     }
 

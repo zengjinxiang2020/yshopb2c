@@ -51,6 +51,8 @@ public class UserController extends BaseController {
     @ApiOperation(value = "获取用户信息",notes = "获取用户信息",response = YxUserQueryVo.class)
     public ApiResult<Object> userInfo(){
         int uid = SecurityUtils.getUserId().intValue();
+        //update count
+        yxUserService.setUserSpreadCount(uid);
         return ApiResult.ok(yxUserService.getYxUserById(uid));
     }
 
@@ -72,7 +74,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "个人中心",notes = "个人中心")
     public ApiResult<Object> user(){
         int uid = SecurityUtils.getUserId().intValue();
-        return ApiResult.ok(yxUserService.getYxUserById(uid));
+        return ApiResult.ok(yxUserService.getNewYxUserById(uid));
     }
 
     /**
@@ -129,8 +131,10 @@ public class UserController extends BaseController {
     @PostMapping("/sign/user")
     @ApiOperation(value = "获取活动状态",notes = "获取活动状态")
     public ApiResult<Object> sign(){
-        return ApiResult.fail("开发中");
+        int uid = SecurityUtils.getUserId().intValue();
+        return ApiResult.ok(yxUserService.getYxUserById(uid));
     }
+
 
 
 

@@ -2,11 +2,16 @@ package co.yixiang.modules.user.service.impl;
 
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.mapper.YxUserBillMapper;
+import co.yixiang.modules.user.mapping.BiillMap;
 import co.yixiang.modules.user.service.YxUserBillService;
+import co.yixiang.modules.user.web.dto.BillDTO;
+import co.yixiang.modules.user.web.dto.BillOrderDTO;
+import co.yixiang.modules.user.web.dto.BillOrderRecordDTO;
 import co.yixiang.modules.user.web.param.YxUserBillQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserBillQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +21,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -34,6 +43,100 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<YxUserBillMapper, YxU
     @Autowired
     private YxUserBillMapper yxUserBillMapper;
 
+    @Autowired
+    private BiillMap biillMap;
+
+    @Override
+    public Map<String, Object> spreadOrder(int uid, int page, int limit) {
+        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
+        wrapper.in("uid",uid).eq("type","brokerage")
+                .eq("category","now_money").orderByDesc("time")
+                .groupBy("time");
+        Page<YxUserBill> pageModel = new Page<>(page, limit);
+        List<String> list = yxUserBillMapper.getBillOrderList(wrapper,pageModel);
+
+
+//        QueryWrapper<YxUserBill> wrapperT = new QueryWrapper<>();
+//        wrapperT.in("uid",uid).eq("type","brokerage")
+//                .eq("category","now_money");
+
+        int count = (int)pageModel.getTotal();
+        List<BillOrderDTO> listT = new ArrayList<>();
+        for (String str : list) {
+            BillOrderDTO billOrderDTO = new BillOrderDTO();
+            List<BillOrderRecordDTO> orderRecordDTOS = yxUserBillMapper
+                    .getBillOrderRList(str,uid);
+            billOrderDTO.setChild(orderRecordDTOS);
+            billOrderDTO.setCount(orderRecordDTOS.size());
+            billOrderDTO.setTime(str);
+
+            listT.add(billOrderDTO);
+        }
+
+        Map<String,Object> map = new LinkedHashMap<>();
+        map.put("list",listT);
+        map.put("count",count);
+
+        return map;
+    }
+
+    @Override
+    public List<BillDTO> getUserBillList(int page, int limit, int uid, int type) {
+        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
+        wrapper.eq("category","now_money").eq("uid",uid).
+                orderByDesc("add_time").groupBy("time");
+        switch (type){
+            case 0:
+                String str = "recharge,brokerage,pay_product,system_add,pay_product_refund,system_sub";
+                wrapper.in("type",str.split(","));
+                break;
+            case 1:
+                wrapper.eq("type","pay_product");
+                break;
+            case 2:
+                wrapper.eq("type","recharge");
+                break;
+            case 3:
+                wrapper.eq("type","brokerage");
+                break;
+            case 4:
+                wrapper.eq("type","extract");
+                break;
+        }
+        Page<YxUserBill> pageModel = new Page<>(page, limit);
+        List<BillDTO> billDTOList = yxUserBillMapper.getBillList(wrapper,pageModel);
+        for (BillDTO billDTO : billDTOList) {
+            QueryWrapper<YxUserBill> wrapperT = new QueryWrapper<>();
+            wrapperT.in("id",billDTO.getIds().split(","));
+            billDTO.setList(yxUserBillMapper.getUserBillList(wrapperT));
+
+        }
+
+        return billDTOList;
+    }
+
+    @Override
+    public double getBrokerage(int uid) {
+        return yxUserBillMapper.sumPrice(uid);
+    }
+
+    @Override
+    public double yesterdayCommissionSum(int uid) {
+        return yxUserBillMapper.sumYesterdayPrice(uid);
+    }
+
+    @Override
+    public List<YxUserBillQueryVo> userBillList(int uid, int page,
+                                                int limit, String category) {
+        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
+        wrapper.eq("status",1).eq("uid",uid)
+                .eq("category",category).orderByDesc("add_time");
+        Page<YxUserBill> pageModel = new Page<>(page, limit);
+
+        IPage<YxUserBill> pageList = yxUserBillMapper.selectPage(pageModel,wrapper);
+        return biillMap.toDto(pageList.getRecords());
+    }
+
     @Override
     public YxUserBillQueryVo getYxUserBillById(Serializable id) throws Exception{
         return yxUserBillMapper.getYxUserBillById(id);
@@ -41,7 +144,7 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<YxUserBillMapper, YxU
 
     @Override
     public Paging<YxUserBillQueryVo> getYxUserBillPageList(YxUserBillQueryParam yxUserBillQueryParam) throws Exception{
-        Page page = setPageParam(yxUserBillQueryParam,OrderItem.desc("create_time"));
+        Page page = setPageParam(yxUserBillQueryParam,OrderItem.desc("add_time"));
         IPage<YxUserBillQueryVo> iPage = yxUserBillMapper.getYxUserBillPageList(page,yxUserBillQueryParam);
         return new Paging(iPage);
     }

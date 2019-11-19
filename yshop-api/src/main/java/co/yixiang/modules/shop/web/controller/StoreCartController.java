@@ -1,25 +1,31 @@
 package co.yixiang.modules.shop.web.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.param.IdParam;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.entity.YxStoreCart;
 import co.yixiang.modules.shop.service.YxStoreCartService;
+import co.yixiang.modules.shop.web.param.CartIdsParm;
 import co.yixiang.modules.shop.web.param.YxStoreCartQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.JsonArray;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,6 +90,38 @@ public class StoreCartController extends BaseController {
     public ApiResult<Map<String,Object>> getList(){
         int uid = SecurityUtils.getUserId().intValue();
         return ApiResult.ok(storeCartService.getUserProductCartList(uid,"",0));
+    }
+
+    /**
+     * 修改产品数量
+     */
+    @PostMapping("/cart/num")
+    @ApiOperation(value = "修改产品数量",notes = "修改产品数量")
+    public ApiResult<Object> cartNum(@RequestBody String jsonStr){
+        int uid = SecurityUtils.getUserId().intValue();
+        JSONObject jsonObject = JSON.parseObject(jsonStr);
+        if(ObjectUtil.isNull(jsonObject.get("id")) || ObjectUtil.isNull(jsonObject.get("number"))){
+            ApiResult.fail("参数错误");
+        }
+        storeCartService.changeUserCartNum(jsonObject.getInteger("id"),
+                jsonObject.getInteger("number"),uid);
+        return ApiResult.ok("ok");
+    }
+
+    /**
+     * 购物车删除产品
+     */
+    @PostMapping("/cart/del")
+    @ApiOperation(value = "购物车删除产品",notes = "购物车删除产品")
+    public ApiResult<Object> cartDel(@Validated @RequestBody CartIdsParm parm){
+        int uid = SecurityUtils.getUserId().intValue();
+//        JSONObject jsonObject = JSON.parseObject(jsonStr);
+//        if(ObjectUtil.isNull(jsonObject.get("ids"))){
+//            ApiResult.fail("参数错误");
+//        }
+        storeCartService.removeUserCart(uid, parm.getIds());
+
+        return ApiResult.ok("ok");
     }
 
 

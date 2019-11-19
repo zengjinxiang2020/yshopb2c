@@ -18,6 +18,9 @@ import java.io.Serializable;
  */
 public interface YxStoreCouponIssueUserService extends BaseService<YxStoreCouponIssueUser> {
 
+
+    void addUserIssue(int uid,int id);
+
     /**
      * 根据ID获取查询对象
      * @param id

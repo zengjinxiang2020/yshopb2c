@@ -30,7 +30,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username){
-
+        System.out.println("username:"+username);
         YxUser user = yxUserService.findByName(username);
         if (user == null) {
             throw new BadRequestException("账号不存在");

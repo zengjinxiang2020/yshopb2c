@@ -20,21 +20,21 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value="YxStoreCouponIssueUser对象", description="优惠券前台用户领取记录表")
+@ApiModel(value = "YxStoreCouponIssueUser对象", description = "优惠券前台用户领取记录表")
 public class YxStoreCouponIssueUser extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
-@TableId(value = "id", type = IdType.AUTO)
-private Integer id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
-@ApiModelProperty(value = "领取优惠券用户ID")
-private Integer uid;
+    @ApiModelProperty(value = "领取优惠券用户ID")
+    private Integer uid;
 
-@ApiModelProperty(value = "优惠券前台领取ID")
-private Integer issueCouponId;
+    @ApiModelProperty(value = "优惠券前台领取ID")
+    private Integer issueCouponId;
 
-@ApiModelProperty(value = "领取时间")
-private Integer addTime;
+    @ApiModelProperty(value = "领取时间")
+    private Integer addTime;
 
 }

@@ -82,6 +82,14 @@ public class AuthenticationController extends BaseController {
             throw new AccountExpiredException("账号已停用，请联系管理员");
         }
 
+        //设置推广关系
+        if(StrUtil.isNotEmpty(authorizationUser.getSpread()) &&
+                !authorizationUser.getSpread().equals("NaN")){
+            userService.setSpread(Integer.valueOf(authorizationUser.getSpread()),
+                    jwtUser.getId().intValue());
+        }
+
+
         // 生成令牌
         final String token = jwtTokenUtil.generateToken(jwtUser);
 

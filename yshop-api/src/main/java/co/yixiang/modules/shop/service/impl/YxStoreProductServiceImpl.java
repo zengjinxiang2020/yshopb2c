@@ -61,6 +61,22 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
     private YxStoreProductReplyService replyService;
 
     /**
+     * 增加库存 减少销量
+     * @param num
+     * @param productId
+     * @param unique
+     */
+    @Override
+    public void incProductStock(int num, int productId, String unique) {
+        if(StrUtil.isNotEmpty(unique)){
+            storeProductAttrService.incProductAttrStock(num,productId,unique);
+            yxStoreProductMapper.decSales(num,productId);
+        }else{
+            yxStoreProductMapper.incStockDecSales(num,productId);
+        }
+    }
+
+    /**
      * 库存与销量
      * @param num
      * @param productId

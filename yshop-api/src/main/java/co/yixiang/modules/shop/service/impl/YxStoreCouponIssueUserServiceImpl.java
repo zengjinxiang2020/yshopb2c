@@ -7,6 +7,7 @@ import co.yixiang.modules.shop.web.param.YxStoreCouponIssueUserQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreCouponIssueUserQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.utils.OrderUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,16 @@ public class YxStoreCouponIssueUserServiceImpl extends BaseServiceImpl<YxStoreCo
 
     @Autowired
     private YxStoreCouponIssueUserMapper yxStoreCouponIssueUserMapper;
+
+
+    @Override
+    public void addUserIssue(int uid, int id) {
+        YxStoreCouponIssueUser couponIssueUser = new YxStoreCouponIssueUser();
+        couponIssueUser.setAddTime(OrderUtil.getSecondTimestampTwo());
+        couponIssueUser.setIssueCouponId(id);
+        couponIssueUser.setUid(uid);
+        save(couponIssueUser);
+    }
 
     @Override
     public YxStoreCouponIssueUserQueryVo getYxStoreCouponIssueUserById(Serializable id) throws Exception{

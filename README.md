@@ -7,12 +7,12 @@ yshop基于当前流行技术组合： SpringBoot2+Jpa+MybatisPlus+SpringSecurit
 
 **开发文档**  【[查看文档](https://gitee.com/guchengwuyue/yshopmall/wikis/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83?sort_id=1718722)】 
 
-#### 体验地址(手机体验最好用公众号，因为H5模式不支持微信支付，只有余额支付)
+#### 体验地址
 
-|     |   后台系统  |   前端(公众号)及H5  |
+|     |   后台系统  |   前端(公众号)  |
 |---  |--- | --- |
-|   |  https://yshop.dayouqiantu.cn  | https://h5.dayouqiantu.cn  |
-|    |  后台体验账号/密码：admin/123456   |  公众号:![输入图片说明](https://images.gitee.com/uploads/images/2019/1107/193634_bd80bf04_477893.jpeg "175139_e07592c8_477893.jpeg")   |
+|   |  https://yshop.dayouqiantu.cn  |g公众号：YshopMall  |
+|    |  后台体验账号/密码：admin/123456   |  公众号:![输入图片说明](https://images.gitee.com/uploads/images/2019/1116/060936_fd73496c_477893.jpeg "qrcode_for_gh_95df5a2881cc_258.jpg")   |
 
 
 #### 项目源码
