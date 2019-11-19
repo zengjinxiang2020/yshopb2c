@@ -87,7 +87,6 @@ yshop基于当前流行技术组合： SpringBoot2+Jpa+MybatisPlus+SpringSecurit
          <td></td>
     </tr>
 </table>
-
 <table>
     <tr>
         <td><img src="https://images.gitee.com/uploads/images/2019/1107/201443_df1cc3a6_477893.png"/></td>
@@ -127,9 +126,12 @@ yshop基于当前流行技术组合： SpringBoot2+Jpa+MybatisPlus+SpringSecurit
     * 2.2 Element
 
 
-#### 项目下步工作计划
-第一阶段：积分功能、优惠券功能、公众号功能
-第二阶段：分销、砍价、拼团
+#### 项目发布明细
+	1.0版本
+	1.1版本新增积分与优惠券抵扣
+    1.2版本分销功能已经发布
+	1.2.1增加了未付款订单取消功能库存销量退出、优惠券、积分功能，个人中心增加了积分流水
+	
 #### 反馈交流
 - QQ交流群：907721261
 - 喜欢这个商城后台的小伙伴留下你的小星星啦,star,star哦！
