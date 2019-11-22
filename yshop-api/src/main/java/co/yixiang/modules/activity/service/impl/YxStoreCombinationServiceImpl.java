@@ -56,6 +56,7 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
      * @param combinationId
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void decStockIncSales(int num, int combinationId) {
         yxStoreCombinationMapper.decStockIncSales(num,combinationId);
     }

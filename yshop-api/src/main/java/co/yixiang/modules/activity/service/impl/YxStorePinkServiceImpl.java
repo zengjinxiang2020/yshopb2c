@@ -95,12 +95,41 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
 
             throw new ErrorRequestException("拼团已完成，无法取消");
         }
+        //如果团长取消拼团，团队还有人，就把后面的人作为下一任团长
+        YxStorePink nextPinkT = pinkAll.get(0);
 
+        //先退团长的money
         RefundParam param = new RefundParam();
         param.setUni(pinkT.getOrderId());
         param.setText("拼团取消开团");
         storeOrderService.orderApplyRefund(param,pinkT.getUid());
         orderPinkFailAfter(pinkT.getUid(),pinkT.getId());
+
+        if(ObjectUtil.isNotNull(nextPinkT)){
+            QueryWrapper<YxStorePink> wrapperO = new QueryWrapper<>();
+            YxStorePink storePinkO = new YxStorePink();
+            storePinkO.setKId(0);
+            storePinkO.setStatus(1);
+            storePinkO.setStopTime(OrderUtil.getSecondTimestampTwo()+"");
+            storePinkO.setId(nextPinkT.getId());
+            yxStorePinkMapper.updateById(storePinkO);
+
+            //原有团长的数据变更成新团长下面
+            wrapperO.eq("k_id",pinkT.getId());
+            YxStorePink storePinkT = new YxStorePink();
+            storePinkT.setKId(nextPinkT.getId());
+            yxStorePinkMapper.update(storePinkT,wrapperO);
+
+            //update order
+
+            YxStoreOrder storeOrder = new YxStoreOrder();
+            storeOrder.setPinkId(nextPinkT.getId());
+            storeOrder.setId(nextPinkT.getId());
+
+            storeOrderService.updateById(storeOrder);
+
+
+        }
     }
 
     /**

@@ -137,6 +137,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
     @Autowired
     private DelayJobService delayJobService;
+
+    @Autowired
     private YxStoreCombinationService combinationService;
 
     @Autowired
