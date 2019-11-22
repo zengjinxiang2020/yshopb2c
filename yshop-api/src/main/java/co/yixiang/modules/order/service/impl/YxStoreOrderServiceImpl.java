@@ -2,6 +2,7 @@ package co.yixiang.modules.order.service.impl;
 
 import cn.hutool.core.util.*;
 import co.yixiang.common.constant.CacheKey;
+import co.yixiang.common.constant.CommonConstant;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
@@ -30,21 +31,18 @@ import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 //import co.yixiang.modules.task.CancelOrderService;
-import co.yixiang.modules.user.entity.YxUser;
-import co.yixiang.modules.user.entity.YxUserAddress;
-import co.yixiang.modules.user.entity.YxUserBill;
-import co.yixiang.modules.user.entity.YxWechatUser;
+import co.yixiang.modules.task.CancelOrderService;
+import co.yixiang.modules.user.entity.*;
 import co.yixiang.modules.user.mapper.YxUserMapper;
-import co.yixiang.modules.user.service.YxUserAddressService;
-import co.yixiang.modules.user.service.YxUserBillService;
-import co.yixiang.modules.user.service.YxUserService;
-import co.yixiang.modules.user.service.YxWechatUserService;
+import co.yixiang.modules.user.service.*;
 import co.yixiang.modules.user.web.controller.UserAddressController;
 import co.yixiang.modules.user.web.vo.YxUserAddressQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 //import co.yixiang.redisson.DelayJob;
 //import co.yixiang.redisson.DelayJobService;
+import co.yixiang.redisson.DelayJob;
+import co.yixiang.redisson.DelayJobService;
 import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -69,6 +67,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -137,14 +136,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     private YxStoreCouponUserMapper yxStoreCouponUserMapper;
 
     @Autowired
+    private DelayJobService delayJobService;
     private YxStoreCombinationService combinationService;
 
     @Autowired
     private YxStorePinkService pinkService;
-
-//    @Autowired
-//    private DelayJobService delayJobService;
-
 
 //    @Value("${job.unpayorder}")
 //    private String overtime;
@@ -259,7 +255,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     public void cancelOrder(String orderId, int uid) {
         YxStoreOrderQueryVo order = getOrderInfo(orderId,uid);
         if(ObjectUtil.isNull(order)) throw new ErrorRequestException("订单不存在");
-
+        if(order.getIsDel() == 1)throw new ErrorRequestException("订单已取消");
         regressionIntegral(order);
 
         regressionStock(order);
@@ -283,6 +279,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             order = getYxStoreOrderById(orderId);
 
             if(ObjectUtil.isNull(order)) throw new ErrorRequestException("订单不存在");
+
+            if(order.getIsDel() == 1)throw new ErrorRequestException("订单已取消");
 
             regressionIntegral(order);
 
@@ -638,11 +636,13 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         userService.incPayCount(orderInfo.getUid());
         //增加状态
         orderStatusService.create(orderInfo.getId(),"pay_success","用户付款成功");
-
-
+        //支付成功后取消延时队列
+        DelayJob delayJob = new DelayJob();
+        delayJob.setOderId(storeOrder.getId());
+        delayJob.setAClass(CancelOrderService.class);
+        delayJobService.cancelJob(delayJob);
         //todo 拼团
         pinkService.createPink(orderInfo);
-
         //todo 模板消息推送
     }
 
@@ -909,18 +909,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //增加状态
         orderStatusService.create(storeOrder.getId(),"cache_key_create_order","订单生成");
 
-        // 订单支付超期任务
 
-        //String overtimeStr = systemConfigService.getData("order_cancel_job_time");
-        //没有配置不加入
-//        if(StrUtil.isNotBlank(overtimeStr)){
-//            // 订单支付超期任务
-//            DelayJob delayJob = new DelayJob();
-//            delayJob.setOrderId(storeOrder.getId());
-//            delayJob.setAClass(CancelOrderService.class);
-//            delayJobService.submitJob(delayJob,Long.valueOf(overtimeStr));
-//        }
-
+        // 添加订单支付超期延时任务
+        DelayJob delayJob = new DelayJob();
+        delayJob.setOderId(storeOrder.getId());
+        delayJob.setAClass(CancelOrderService.class);
+        delayJobService.submitJob(delayJob, CommonConstant.ORDER_OUTTIME_UNPAY);
         return storeOrder;
     }
 
