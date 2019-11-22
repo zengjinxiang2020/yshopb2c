@@ -3,6 +3,9 @@ package co.yixiang.modules.shop.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.exception.ErrorRequestException;
+import co.yixiang.modules.activity.entity.YxStoreCombination;
+import co.yixiang.modules.activity.mapper.YxStoreCombinationMapper;
+import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.shop.entity.YxStoreCart;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
 import co.yixiang.modules.shop.mapper.YxStoreCartMapper;
@@ -59,6 +62,12 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
 
     @Autowired
     private YxStoreProductAttrService productAttrService;
+
+    @Autowired
+    private YxStoreCombinationService storeCombinationService;
+
+    @Autowired
+    private YxStoreCombinationMapper storeCombinationMapper;
 
     @Autowired
     private CartMap cartMap;
@@ -137,10 +146,15 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
         List<YxStoreCartQueryVo> invalid = new ArrayList<>();
 
         for (YxStoreCart storeCart : carts) {
-            YxStoreProductQueryVo storeProduct = productService
-                    .getYxStoreProductById(storeCart.getProductId());
+            YxStoreProductQueryVo storeProduct = null;
+            if(storeCart.getCombinationId() > 0){
+                storeProduct = storeCombinationMapper.combinatiionInfo(storeCart.getCombinationId());
+            }else{
+                storeProduct = productService
+                        .getYxStoreProductById(storeCart.getProductId());
+            }
+
             YxStoreCartQueryVo storeCartQueryVo = cartMap.toDto(storeCart);
-            //System.out.println(storeProduct);
             storeCartQueryVo.setProductInfo(storeProduct);
             if(ObjectUtil.isNull(storeProduct)){
                 YxStoreCart yxStoreCart = new YxStoreCart();
@@ -158,7 +172,6 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                         invalid.add(storeCartQueryVo);
                     }else{
                         storeProduct.setAttrInfo(productAttrValue);
-                        //todo 秒杀 砍价 拼团
 
                         //todo 设置真实价格
                         storeCartQueryVo.setTruePrice(productAttrValue.getPrice()
@@ -173,6 +186,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                         valid.add(storeCartQueryVo);
                     }
                 }else{
+
                     storeCartQueryVo.setTruePrice(storeProduct.getPrice()
                             .doubleValue());
                     //todo 设置会员价
@@ -207,16 +221,27 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
     @Override
     public int addCart(int uid, int productId, int cartNum, String productAttrUnique,
                        String type, int isNew, int combinationId, int seckillId, int bargainId) {
-        YxStoreProductQueryVo productQueryVo = productService
-                .getYxStoreProductById(productId);
-        if(ObjectUtil.isNull(productQueryVo)){
-            throw new ErrorRequestException("该产品已下架或删除");
+        //todo 拼团
+        if(combinationId > 0){
+            boolean isStock = storeCombinationService.judgeCombinationStock(combinationId
+                    ,cartNum);
+            if(!isStock) throw new ErrorRequestException("该产品库存不足");
+
+            YxStoreCombination storeCombination = storeCombinationService.getCombination(combinationId);
+            if(ObjectUtil.isNull(storeCombination)) throw new ErrorRequestException("该产品已下架或删除");
+        }else{
+            YxStoreProductQueryVo productQueryVo = productService
+                    .getYxStoreProductById(productId);
+            if(ObjectUtil.isNull(productQueryVo)){
+                throw new ErrorRequestException("该产品已下架或删除");
+            }
+
+            int stock = productService.getProductStock(productId,productAttrUnique);
+            if(stock < cartNum){
+                throw new ErrorRequestException("该产品库存不足"+cartNum);
+            }
         }
 
-        int stock = productService.getProductStock(productId,productAttrUnique);
-        if(stock < cartNum){
-            throw new ErrorRequestException("该产品库存不足"+cartNum);
-        }
 
         QueryWrapper<YxStoreCart> wrapper = new QueryWrapper<>();
         wrapper.eq("uid",uid).eq("type",type).eq("is_pay",0).eq("is_del",0)
@@ -265,7 +290,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
     }
 
     @Override
-    public YxStoreCartQueryVo getYxStoreCartById(Serializable id) throws Exception{
+    public YxStoreCartQueryVo getYxStoreCartById(Serializable id){
         return yxStoreCartMapper.getYxStoreCartById(id);
     }
 

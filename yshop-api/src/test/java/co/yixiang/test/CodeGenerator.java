@@ -41,13 +41,13 @@ public class CodeGenerator {
 
     // ############################ 配置部分 start ############################
     // 模块名称
-    private static final String MODULE_NAME = "user";
+    private static final String MODULE_NAME = "activity";
     // 作者
     private static final String AUTHOR = "hupeng";
     // 生成的表名称
-    private static final String TABLE_NAME = "yx_system_attachment";
+    private static final String TABLE_NAME = "yx_store_pink";
     // 主键数据库列名称
-    private static final String PK_ID_COLUMN_NAME = "att_id";
+    private static final String PK_ID_COLUMN_NAME = "id";
     // 代码生成策略 true：All/false:SIMPLE
     private static final boolean GENERATOR_STRATEGY = true;
     // 分页列表查询是否排序 true：有排序参数/false：无

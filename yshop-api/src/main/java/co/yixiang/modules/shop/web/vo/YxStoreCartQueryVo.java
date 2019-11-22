@@ -54,6 +54,7 @@ public class YxStoreCartQueryVo implements Serializable {
 
     private YxStoreProductQueryVo productInfo;
 
+
     private Double costPrice;
 
     private Double truePrice;

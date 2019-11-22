@@ -7,6 +7,7 @@ import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.param.IdParam;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.exception.ErrorRequestException;
+import co.yixiang.modules.activity.service.YxStorePinkService;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.entity.YxStoreOrderCartInfo;
 import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
@@ -66,6 +67,7 @@ public class StoreOrderController extends BaseController {
     private final YxStoreOrderStatusService orderStatusService;
     private final YxStoreCouponUserService couponUserService;
     private final YxSystemConfigService systemConfigService;
+    private final YxStorePinkService storePinkService;
 
 
     /**
@@ -99,6 +101,15 @@ public class StoreOrderController extends BaseController {
         other.setIntegralRatio(systemConfigService.getData("integral_ratio"));
 
         //todo 拼团 砍价 秒杀
+        int combinationId = 0;
+        if(cartId.split(",").length == 1){
+            YxStoreCartQueryVo cartQueryVo = cartService.getYxStoreCartById(Integer
+                    .valueOf(cartId));
+            combinationId = cartQueryVo.getCombinationId();
+        }
+
+        //拼团砍价类产品不参与抵扣
+        if(combinationId > 0) confirmOrderDTO.setDeduction(true);
 
         confirmOrderDTO.setAddressInfo(addressService.getUserDefaultAddress(uid));
 
@@ -309,10 +320,31 @@ public class StoreOrderController extends BaseController {
         String useIntegral = jsonObject.getString("useIntegral");
         //todo 砍价
         //todo 拼团
+        if(ObjectUtil.isNotNull(jsonObject.getInteger("pinkId"))){
+            int pinkId = jsonObject.getInteger("pinkId");
+            YxStoreOrder yxStoreOrder = storeOrderService.getOrderPink(pinkId,uid,1);
+            if(storePinkService.getIsPinkUid(pinkId,uid) > 0){
+                map.put("status","ORDER_EXIST");
+                OrderExtendDTO orderExtendDTO = new OrderExtendDTO();
+                orderExtendDTO.setOrderId(yxStoreOrder.getOrderId());
+                map.put("result",orderExtendDTO);
+                return ApiResult.ok(map,"订单生成失败，你已经在该团内不能再参加了");
+            }
+            YxStoreOrder yxStoreOrderT = storeOrderService.getOrderPink(pinkId,uid,0);
+            if(ObjectUtil.isNotNull(yxStoreOrderT)){
+                map.put("status","ORDER_EXIST");
+                OrderExtendDTO orderExtendDTO = new OrderExtendDTO();
+                orderExtendDTO.setOrderId(yxStoreOrder.getOrderId());
+                map.put("result",orderExtendDTO);
+                return ApiResult.ok(map,"订单生成失败，你已经参加该团了，请先支付订单");
+            }
+
+        }
         ComputeDTO computeDTO = storeOrderService.computedOrder(uid,key,
                 Integer.valueOf(couponId),
                 Integer.valueOf(useIntegral),
                 Integer.valueOf(shippingType));
+
 
         map.put("result",computeDTO);
         map.put("status","NONE");

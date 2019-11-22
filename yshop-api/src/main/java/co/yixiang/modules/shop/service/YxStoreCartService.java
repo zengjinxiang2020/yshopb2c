@@ -36,7 +36,7 @@ public interface YxStoreCartService extends BaseService<YxStoreCart> {
      * @param id
      * @return
      */
-    YxStoreCartQueryVo getYxStoreCartById(Serializable id) throws Exception;
+    YxStoreCartQueryVo getYxStoreCartById(Serializable id);
 
 
 }

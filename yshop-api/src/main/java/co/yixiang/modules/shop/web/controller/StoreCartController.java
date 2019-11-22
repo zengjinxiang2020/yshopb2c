@@ -65,19 +65,31 @@ public class StoreCartController extends BaseController {
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         Map<String,Object> map = new LinkedHashMap<>();
         int uid = SecurityUtils.getUserId().intValue();
-        int cartNum = Integer.valueOf(jsonObject.get("cartNum").toString());
+        if(ObjectUtil.isNull(jsonObject.get("cartNum")) || ObjectUtil.isNull(jsonObject.get("productId"))){
+            ApiResult.fail("参数有误");
+        }
+        int cartNum = jsonObject.getInteger("cartNum");
         if(cartNum <= 0){
             ApiResult.fail("购物车数量必须大于0");
         }
-        int isNew = Integer.valueOf(jsonObject.get("new").toString());
-        int productId = Integer.valueOf(jsonObject.get("productId").toString());
+        int isNew = 1;
+        if(ObjectUtil.isNotNull(jsonObject.get("new"))){
+            isNew = jsonObject.getInteger("new");
+        }
+        int productId = jsonObject.getInteger("productId");
         if(productId <= 0){
             ApiResult.fail("产品参数有误");
         }
         String uniqueId = jsonObject.get("uniqueId").toString();
 
+        //拼团
+        int combinationId = 0;
+        if(ObjectUtil.isNotNull(jsonObject.get("combinationId"))){
+            combinationId = jsonObject.getInteger("combinationId");
+        }
+
         map.put("cartId",storeCartService.addCart(uid,productId,cartNum,uniqueId
-                ,"product",isNew,0,0,0));
+                ,"product",isNew,combinationId,0,0));
         return ApiResult.ok(map);
     }
 

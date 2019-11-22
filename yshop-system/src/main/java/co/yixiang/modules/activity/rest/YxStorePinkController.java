@@ -17,7 +17,7 @@ import io.swagger.annotations.*;
 * @author hupeng
 * @date 2019-11-18
 */
-@Api(tags = "YxStorePink管理")
+@Api(tags = "拼团记录管理")
 @RestController
 @RequestMapping("api")
 public class YxStorePinkController {
@@ -25,8 +25,8 @@ public class YxStorePinkController {
     @Autowired
     private YxStorePinkService yxStorePinkService;
 
-    @Log("查询YxStorePink")
-    @ApiOperation(value = "查询YxStorePink")
+    @Log("查询记录")
+    @ApiOperation(value = "查询记录")
     @GetMapping(value = "/yxStorePink")
     @PreAuthorize("hasAnyRole('ADMIN','YXSTOREPINK_ALL','YXSTOREPINK_SELECT')")
     public ResponseEntity getYxStorePinks(YxStorePinkQueryCriteria criteria, Pageable pageable){

@@ -22,7 +22,7 @@ public class OrderParam implements Serializable {
     @NotBlank(message="请选择支付方式")
     private String payType;
     private String phone;
-    private Integer pinkId;
+    private Integer pinkId = 0;
     private String realName;
     private Integer seckillId;
     private Integer shippingType;

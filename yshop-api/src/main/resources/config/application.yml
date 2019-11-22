@@ -53,13 +53,13 @@ wx:
   mp:
     configs:
     - appId: wxc061dee8806ff712
-      secret: 1dc5b2871d0d5ebd0f1ec7ddb856f805
+      secret:
       token: yshop
       aesKey: yYuBUkC8BXImCXyu7O6hkzLj4TC5nxsWPfL4CQAZPNY
   pay:
     appId: wxc061dee8806ff712
-    mchId: 1493624002
-    mchKey: dayouqiantuhupeng8638004yixiangt
+    mchId:
+    mchKey:
     subAppId:
     subMchId:
     keyPath:

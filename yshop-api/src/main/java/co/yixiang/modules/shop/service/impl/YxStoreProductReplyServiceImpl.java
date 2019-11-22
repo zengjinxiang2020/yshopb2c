@@ -91,9 +91,14 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<YxStoreProdu
     public YxStoreProductReplyQueryVo handleReply(YxStoreProductReplyQueryVo replyQueryVo) {
         YxStoreCartQueryVo cartInfo = JSONObject.parseObject(replyQueryVo.getCartInfo()
                 ,YxStoreCartQueryVo.class);
-        if(ObjectUtil.isNotEmpty(cartInfo.getProductInfo().getAttrInfo())){
-            replyQueryVo.setSuk(cartInfo.getProductInfo().getAttrInfo().getSuk());
+        if(ObjectUtil.isNotNull(cartInfo)){
+            if(ObjectUtil.isNotNull(cartInfo.getProductInfo())){
+                if(ObjectUtil.isNotNull(cartInfo.getProductInfo().getAttrInfo())){
+                    replyQueryVo.setSuk(cartInfo.getProductInfo().getAttrInfo().getSuk());
+                }
+            }
         }
+
         BigDecimal star = NumberUtil.add(replyQueryVo.getProductScore(),
                 replyQueryVo.getServiceScore());
 

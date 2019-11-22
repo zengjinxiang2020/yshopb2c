@@ -106,6 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/register/verify").anonymous()
                 .antMatchers("/register").anonymous()
                 .antMatchers("/user/activity").anonymous()
+                .antMatchers("/combination/list").anonymous()
                 //微信相关
                 .antMatchers("/wechat/config").anonymous()
                 .antMatchers("/wechat/auth").anonymous()

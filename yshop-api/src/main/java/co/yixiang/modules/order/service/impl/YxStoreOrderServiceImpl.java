@@ -3,6 +3,8 @@ package co.yixiang.modules.order.service.impl;
 import cn.hutool.core.util.*;
 import co.yixiang.common.constant.CacheKey;
 import co.yixiang.exception.ErrorRequestException;
+import co.yixiang.modules.activity.service.YxStoreCombinationService;
+import co.yixiang.modules.activity.service.YxStorePinkService;
 import co.yixiang.modules.monitor.service.RedisService;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.entity.YxStoreOrderCartInfo;
@@ -134,12 +136,26 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Autowired
     private YxStoreCouponUserMapper yxStoreCouponUserMapper;
 
+    @Autowired
+    private YxStoreCombinationService combinationService;
+
+    @Autowired
+    private YxStorePinkService pinkService;
+
 //    @Autowired
 //    private DelayJobService delayJobService;
 
 
-    @Value("${job.unpayorder}")
-    private String overtime;
+//    @Value("${job.unpayorder}")
+//    private String overtime;
+
+    @Override
+    public YxStoreOrder getOrderPink(int pid, int uid,int type) {
+        QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq("is_del",0).eq("uid",uid).eq("pink_id",pid);
+        if(type == 0) wrapper.eq("refund_status",0);
+        return yxStoreOrderMapper.selectOne(wrapper);
+    }
 
     /**
      * 退回优惠券
@@ -551,10 +567,25 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         }else if(order.getStatus() == 0){
             //todo 拼团
             //todo 店铺核销
-            statusDTO.set_class("state-nfh");
-            statusDTO.set_msg("商家未发货,请耐心等待");
-            statusDTO.set_type("1");
-            statusDTO.set_title("未发货");
+            if(order.getPinkId() > 0){
+                if(pinkService.pinkIngCount(order.getPinkId()) > 0){
+                    statusDTO.set_class("state-nfh");
+                    statusDTO.set_msg("待其他人参加拼团");
+                    statusDTO.set_type("1");
+                    statusDTO.set_title("拼团中");
+                }else{
+                    statusDTO.set_class("state-nfh");
+                    statusDTO.set_msg("商家未发货,请耐心等待");
+                    statusDTO.set_type("1");
+                    statusDTO.set_title("未发货");
+                }
+            }else{
+                statusDTO.set_class("state-nfh");
+                statusDTO.set_msg("商家未发货,请耐心等待");
+                statusDTO.set_type("1");
+                statusDTO.set_title("未发货");
+            }
+
         }else if(order.getStatus() == 1){
             statusDTO.set_class("state-ysh");
             statusDTO.set_msg("服务商已发货");
@@ -610,6 +641,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
 
         //todo 拼团
+        pinkService.createPink(orderInfo);
+
         //todo 模板消息推送
     }
 
@@ -692,6 +725,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public YxStoreOrder createOrder(int uid, String key, OrderParam param) {
         YxUserQueryVo userInfo = userService.getYxUserById(uid);
         if(ObjectUtil.isNull(userInfo)) throw new ErrorRequestException("用户不存在");
@@ -716,17 +750,22 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         Integer totalNum = 0;
         Integer gainIntegral = 0;
         List<String> cartIds = new ArrayList<>();
+        int combinationId = 0;
 
         for (YxStoreCartQueryVo cart : cartInfo) {
+            combinationId = cart.getCombinationId();
             cartIds.add(cart.getId().toString());
             totalNum += cart.getCartNum();
             //计算积分
             BigDecimal cartInfoGainIntegral = BigDecimal.ZERO;
-            if(cart.getProductInfo().getGiveIntegral().intValue() > 0){
-                cartInfoGainIntegral = NumberUtil.mul(cart.getCartNum(),cart.
-                        getProductInfo().getGiveIntegral());
+            if(combinationId == 0 ){//拼团等活动不参与积分
+                if(cart.getProductInfo().getGiveIntegral().intValue() > 0){
+                    cartInfoGainIntegral = NumberUtil.mul(cart.getCartNum(),cart.
+                            getProductInfo().getGiveIntegral());
+                }
+                gainIntegral = NumberUtil.add(gainIntegral,cartInfoGainIntegral).intValue();
             }
-            gainIntegral = NumberUtil.add(gainIntegral,cartInfoGainIntegral).intValue();
+
         }
 
 
@@ -745,6 +784,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         int useIntegral = param.getUseIntegral().intValue();
 
         boolean deduction = false;//todo 拼团等
+        //拼团等不参与抵扣
+        if(combinationId > 0) deduction = true;
         if(deduction){
             couponId = 0;
             useIntegral = 0;
@@ -828,8 +869,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         storeOrder.setUseIntegral(BigDecimal.valueOf(usedIntegral));
         storeOrder.setGainIntegral(BigDecimal.valueOf(gainIntegral));
         storeOrder.setMark(param.getMark());
-        storeOrder.setCombinationId(0);
-        storeOrder.setPinkId(0);
+        storeOrder.setCombinationId(combinationId);
+        storeOrder.setPinkId(param.getPinkId());
         storeOrder.setSeckillId(0);
         storeOrder.setBargainId(0);
         storeOrder.setCost(BigDecimal.valueOf(cacheDTO.getPriceGroup().getCostPrice()));
@@ -843,8 +884,13 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         //减库存加销量
         for (YxStoreCartQueryVo cart : cartInfo) {
-            productService.decProductStock(cart.getCartNum(),cart.getProductId(),
-                    cart.getProductAttrUnique());
+            if(combinationId > 0){
+                combinationService.decStockIncSales(cart.getCartNum(),combinationId);
+            }else {
+                productService.decProductStock(cart.getCartNum(),cart.getProductId(),
+                        cart.getProductAttrUnique());
+            }
+
         }
 
         //保存购物车商品信息
@@ -901,6 +947,15 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         Double payPostage = cacheDTO.getPriceGroup().getStorePostage();
 
         boolean deduction = false;//todo 拼团等
+        int combinationId = 0;
+        List<YxStoreCartQueryVo> cartInfo = cacheDTO.getCartInfo();
+        for (YxStoreCartQueryVo cart : cartInfo) {
+            combinationId = cart.getCombinationId();
+        }
+        //拼团等不参与抵扣
+        if(combinationId > 0) deduction = true;
+
+
         if(deduction){
             couponId = 0;
             useIntegral = 0;

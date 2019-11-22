@@ -53,8 +53,8 @@ public class YxStoreCombination implements Serializable {
     private String attr;
 
     // 参团人数
-    @Column(name = "people",nullable = false,insertable = false)
-    @Min(value = 1,message = "拼团人数必须大于0")
+    @Column(name = "people",nullable = false)
+    @Min(value = 2,message = "拼团人数必须大于1")
     private Integer people;
 
     // 简介
@@ -63,16 +63,16 @@ public class YxStoreCombination implements Serializable {
     private String info;
 
     // 价格
-    @Column(name = "price",nullable = false,insertable = false)
+    @Column(name = "price",nullable = false)
     @Min(value = 0,message = "拼团价必须大于0")
     private BigDecimal price;
 
     // 排序
-    @Column(name = "sort",nullable = false,insertable = false)
+    @Column(name = "sort",nullable = false)
     private Integer sort;
 
     // 销量
-    @Column(name = "sales",nullable = false,insertable = false)
+    @Column(name = "sales",nullable = false)
     private Integer sales;
 
     // 库存
@@ -102,11 +102,11 @@ public class YxStoreCombination implements Serializable {
     private Integer merUse;
 
     // 是否包邮1是0否
-    @Column(name = "is_postage",nullable = false,insertable = false)
+    @Column(name = "is_postage",nullable = false)
     private Integer isPostage;
 
     // 邮费
-    @Column(name = "postage",nullable = false,insertable = false)
+    @Column(name = "postage",nullable = false)
     private BigDecimal postage;
 
     // 拼团内容

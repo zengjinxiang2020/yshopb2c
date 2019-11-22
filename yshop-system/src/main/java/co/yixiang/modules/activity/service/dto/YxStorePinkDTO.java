@@ -23,6 +23,14 @@ public class YxStorePinkDTO implements Serializable {
     // 订单id  数据库
     private Integer orderIdKey;
 
+    private String title;
+
+    private String nickname;
+
+    private String avatar;
+
+    private Integer countPeople;
+
     // 购买商品个数
     private Integer totalNum;
 

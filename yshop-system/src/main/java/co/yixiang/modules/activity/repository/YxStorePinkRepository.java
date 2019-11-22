@@ -12,4 +12,9 @@ public interface YxStorePinkRepository extends JpaRepository<YxStorePink, Intege
      int countByCid(int cid);
 
      int countByCidAndKId(int cid,int kid);
+
+     int countByKId(int kid);
+
+     YxStorePink findByOrderIdKey(int id);
+
 }

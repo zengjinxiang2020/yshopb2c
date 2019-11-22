@@ -9,6 +9,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +53,12 @@ public class YxStoreProductQueryVo implements Serializable {
 
     public List<String> getSliderImageArr() {
         //Arrays.asList(sliderImage.split(","));
-        return Arrays.asList(sliderImage.split(","));
+        if(StrUtil.isNotEmpty(sliderImage)){
+            return Arrays.asList(sliderImage.split(","));
+        }
+
+        return new ArrayList<>();
+
     }
 
     private YxStoreProductAttrValue attrInfo;

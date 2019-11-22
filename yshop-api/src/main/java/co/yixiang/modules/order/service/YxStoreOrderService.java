@@ -26,6 +26,8 @@ import java.util.List;
  */
 public interface YxStoreOrderService extends BaseService<YxStoreOrder> {
 
+    YxStoreOrder getOrderPink(int pid,int uid,int type);
+
     void regressionCoupon(YxStoreOrderQueryVo order);
 
     void regressionStock(YxStoreOrderQueryVo order);

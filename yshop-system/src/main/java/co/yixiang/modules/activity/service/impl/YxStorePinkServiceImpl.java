@@ -1,6 +1,10 @@
 package co.yixiang.modules.activity.service.impl;
 
 import co.yixiang.modules.activity.domain.YxStorePink;
+import co.yixiang.modules.activity.service.YxStoreCombinationService;
+import co.yixiang.modules.activity.service.dto.YxStoreCombinationDTO;
+import co.yixiang.modules.shop.service.YxUserService;
+import co.yixiang.modules.shop.service.dto.YxUserDTO;
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.modules.activity.repository.YxStorePinkRepository;
 import co.yixiang.modules.activity.service.YxStorePinkService;
@@ -11,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.LinkedHashMap;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,12 +37,46 @@ public class YxStorePinkServiceImpl implements YxStorePinkService {
     private YxStorePinkRepository yxStorePinkRepository;
 
     @Autowired
+    private YxStoreCombinationService combinationService;
+
+    @Autowired
+    private YxUserService userService;
+
+    @Autowired
     private YxStorePinkMapper yxStorePinkMapper;
+
+    /**
+     * 参与拼团的人
+     * @param id id
+     * @return
+     */
+    @Override
+    public int countPeople(int id) {
+        return yxStorePinkRepository.countByKId(id) + 1;
+    }
 
     @Override
     public Map<String,Object> queryAll(YxStorePinkQueryCriteria criteria, Pageable pageable){
-        Page<YxStorePink> page = yxStorePinkRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(yxStorePinkMapper::toDto));
+        criteria.setKId(0);
+        Page<YxStorePink> page = yxStorePinkRepository
+                .findAll((root, criteriaQuery, criteriaBuilder)
+                        -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        List<YxStorePinkDTO> storePinkDTOS = yxStorePinkMapper.toDto(page.getContent());
+        for (YxStorePinkDTO storePinkDTO : storePinkDTOS) {
+            YxStoreCombinationDTO combinationDTO = combinationService
+                    .findById(storePinkDTO.getCid());
+            YxUserDTO userDTO = userService.findById(storePinkDTO.getUid());
+
+            storePinkDTO.setAvatar(userDTO.getAvatar());
+            storePinkDTO.setNickname(userDTO.getNickname());
+            storePinkDTO.setTitle(combinationDTO.getTitle());
+            storePinkDTO.setCountPeople(countPeople(storePinkDTO.getId()));
+        }
+        Map<String,Object> map = new LinkedHashMap<>(2);
+        map.put("content",storePinkDTOS);
+        map.put("totalElements",page.getTotalElements());
+
+        return map;
     }
 
     @Override

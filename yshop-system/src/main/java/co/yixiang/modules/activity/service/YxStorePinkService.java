@@ -17,6 +17,8 @@ import java.util.List;
 //@CacheConfig(cacheNames = "yxStorePink")
 public interface YxStorePinkService {
 
+    int countPeople(int id);
+
     /**
     * 查询数据分页
     * @param criteria
