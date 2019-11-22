@@ -637,10 +637,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //增加状态
         orderStatusService.create(orderInfo.getId(),"pay_success","用户付款成功");
         //支付成功后取消延时队列
-        DelayJob delayJob = new DelayJob();
-        delayJob.setOderId(storeOrder.getId());
-        delayJob.setAClass(CancelOrderService.class);
-        delayJobService.cancelJob(delayJob);
+//        DelayJob delayJob = new DelayJob();
+//        delayJob.setOderId(storeOrder.getId());
+//        delayJob.setAClass(CancelOrderService.class);
+//        delayJobService.cancelJob(delayJob);
         //todo 拼团
         pinkService.createPink(orderInfo);
         //todo 模板消息推送
