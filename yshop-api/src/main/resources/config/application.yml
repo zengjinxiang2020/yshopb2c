@@ -63,6 +63,12 @@ wx:
     subAppId:
     subMchId:
     keyPath:
+  miniapp:
+    appid: wxa82b5b7fcb0ec161
+    secret:
+    token:
+    aesKey:
+    msgDataFormat: JSON
 logging:
   level:
     org.springframework.web: INFO

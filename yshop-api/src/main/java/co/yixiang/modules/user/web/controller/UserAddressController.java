@@ -98,7 +98,7 @@ public class UserAddressController extends BaseController {
     /**
     * 删除用户地址
     */
-    @PostMapping("/delete")
+    @PostMapping("/address/del")
     @ApiOperation(value = "删除用户地址",notes = "删除用户地址",response = ApiResult.class)
     public ApiResult<Boolean> deleteYxUserAddress(@Valid @RequestBody IdParam idParam){
         YxUserAddress userAddress = new YxUserAddress();

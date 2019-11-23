@@ -5,6 +5,7 @@ import co.yixiang.modules.security.security.JwtUser;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -30,10 +31,10 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username){
-        System.out.println("username:"+username);
+        System.out.println("username2:"+username);
         YxUser user = yxUserService.findByName(username);
         if (user == null) {
-            throw new BadRequestException("账号不存在");
+            throw new BadRequestException(HttpStatus.UNAUTHORIZED,"账号不存在");
         } else {
             return createJwtUser(user);
         }

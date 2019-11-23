@@ -15,6 +15,7 @@ import co.yixiang.modules.user.entity.YxWechatUser;
 import co.yixiang.modules.user.mapper.YxUserMapper;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxWechatUserService;
+import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.EncryptUtils;
 import co.yixiang.utils.OrderUtil;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
@@ -105,16 +106,22 @@ public class WechatController extends BaseController {
         //String url = "https://h5.dayouqiantu.cn/";
         //wxService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
 
-
         try {
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
             WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
             String openid = wxMpUser.getOpenId();
             YxWechatUser wechatUser = wechatUserService.getUserInfo(openid);;
+            YxUserQueryVo yxUserQueryVo = userService.getYxUserById(wechatUser.getUid());
             JwtUser jwtUser = null;
-            if(ObjectUtil.isNotNull(wechatUser)){
+            if(ObjectUtil.isNotNull(wechatUser) && ObjectUtil.isNotNull(yxUserQueryVo)){
                 jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getOpenid());
             }else{
+                if(ObjectUtil.isNotNull(wechatUser)){
+                    wechatUserService.removeById(wechatUser.getUid());
+                }
+                if(ObjectUtil.isNotNull(yxUserQueryVo)){
+                    userService.removeById(yxUserQueryVo.getUid());
+                }
                 //用户保存
                 YxUser user = new YxUser();
                 user.setAccount(wxMpUser.getNickname());
