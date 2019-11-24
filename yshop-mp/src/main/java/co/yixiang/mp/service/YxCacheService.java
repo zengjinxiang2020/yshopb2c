@@ -1,11 +1,13 @@
-package co.yixiang.modules.wechat.service;
+package co.yixiang.mp.service;
 
-import co.yixiang.modules.wechat.service.dto.YxCacheDTO;
-import co.yixiang.modules.wechat.service.dto.YxCacheQueryCriteria;
-import co.yixiang.modules.wechat.domain.YxCache;
+
+import co.yixiang.mp.domain.YxCache;
+import co.yixiang.mp.service.dto.YxCacheDTO;
+import co.yixiang.mp.service.dto.YxCacheQueryCriteria;
 import org.springframework.data.domain.Pageable;
-import java.util.Map;
+
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author hupeng

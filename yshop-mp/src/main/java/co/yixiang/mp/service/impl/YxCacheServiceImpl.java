@@ -1,24 +1,25 @@
-package co.yixiang.modules.wechat.service.impl;
+package co.yixiang.mp.service.impl;
 
-import co.yixiang.modules.wechat.service.dto.YxCacheDTO;
-import co.yixiang.modules.wechat.service.dto.YxCacheQueryCriteria;
-import co.yixiang.modules.wechat.domain.YxCache;
+
+import co.yixiang.mp.domain.YxCache;
+import co.yixiang.mp.repository.YxCacheRepository;
+import co.yixiang.mp.service.YxCacheService;
+import co.yixiang.mp.service.dto.YxCacheDTO;
+import co.yixiang.mp.service.dto.YxCacheQueryCriteria;
+import co.yixiang.mp.service.mapper.YxCacheMapper;
+import co.yixiang.utils.PageUtil;
+import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;
-import co.yixiang.modules.wechat.repository.YxCacheRepository;
-import co.yixiang.modules.wechat.service.YxCacheService;
-import co.yixiang.modules.wechat.service.mapper.YxCacheMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
 * @author hupeng

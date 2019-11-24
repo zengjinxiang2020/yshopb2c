@@ -36,7 +36,6 @@ public class IndexController {
     private final YxSystemGroupDataService systemGroupDataService;
     private final YxSystemConfigService systemConfigService;
     private final YxStoreProductService storeProductService;
-    private final YxArticleService articleService;
 
     @GetMapping("/index")
     @ApiOperation(value = "首页数据",notes = "首页数据")

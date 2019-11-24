@@ -6,7 +6,7 @@ import co.yixiang.common.web.param.IdParam;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.entity.YxArticle;
-import co.yixiang.modules.shop.service.YxArticleService;
+import co.yixiang.modules.shop.service.ArticleService;
 import co.yixiang.modules.shop.web.param.YxArticleQueryParam;
 import co.yixiang.modules.shop.web.vo.YxArticleQueryVo;
 import io.swagger.annotations.Api;
@@ -32,7 +32,7 @@ import javax.validation.Valid;
 public class ArticleController extends BaseController {
 
     @Autowired
-    private YxArticleService yxArticleService;
+    private ArticleService articleService;
 
 
     /**
@@ -41,8 +41,8 @@ public class ArticleController extends BaseController {
     @GetMapping("/details/{id}")
     @ApiOperation(value = "文章详情",notes = "文章详情",response = YxArticleQueryVo.class)
     public ApiResult<YxArticleQueryVo> getYxArticle(@PathVariable Integer id) throws Exception{
-        YxArticleQueryVo yxArticleQueryVo = yxArticleService.getYxArticleById(id);
-        yxArticleService.incVisitNum(id);
+        YxArticleQueryVo yxArticleQueryVo = articleService.getYxArticleById(id);
+        articleService.incVisitNum(id);
         return ApiResult.ok(yxArticleQueryVo);
     }
 
@@ -59,7 +59,7 @@ public class ArticleController extends BaseController {
         YxArticleQueryParam yxArticleQueryParam = new YxArticleQueryParam();
         yxArticleQueryParam.setCurrent(page);
         yxArticleQueryParam.setSize(limit);
-        Paging<YxArticleQueryVo> paging = yxArticleService.getYxArticlePageList(yxArticleQueryParam);
+        Paging<YxArticleQueryVo> paging = articleService.getYxArticlePageList(yxArticleQueryParam);
         return ApiResult.ok(paging.getRecords());
     }
 

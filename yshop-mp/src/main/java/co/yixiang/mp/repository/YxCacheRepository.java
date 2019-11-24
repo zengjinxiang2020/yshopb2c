@@ -1,6 +1,7 @@
-package co.yixiang.modules.wechat.repository;
+package co.yixiang.mp.repository;
 
-import co.yixiang.modules.wechat.domain.YxCache;
+
+import co.yixiang.mp.domain.YxCache;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

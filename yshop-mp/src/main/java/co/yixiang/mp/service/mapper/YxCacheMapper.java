@@ -1,8 +1,8 @@
-package co.yixiang.modules.wechat.service.mapper;
+package co.yixiang.mp.service.mapper;
 
-import co.yixiang.modules.wechat.service.dto.YxCacheDTO;
 import co.yixiang.mapper.EntityMapper;
-import co.yixiang.modules.wechat.domain.YxCache;
+import co.yixiang.mp.domain.YxCache;
+import co.yixiang.mp.service.dto.YxCacheDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

@@ -1,18 +1,18 @@
-package co.yixiang.modules.wechat.rest;
+package co.yixiang.mp.controller;
 
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.mp.domain.YxWechatReply;
+import co.yixiang.mp.service.YxWechatReplyService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import co.yixiang.aop.log.Log;
-import co.yixiang.modules.wechat.domain.YxWechatReply;
-import co.yixiang.modules.wechat.service.YxWechatReplyService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
 
 /**
 * @author hupeng
@@ -26,7 +26,7 @@ public class YxWechatReplyController {
     @Autowired
     private YxWechatReplyService yxWechatReplyService;
 
-    @Log("查询")
+
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxWechatReply")
     @PreAuthorize("hasAnyRole('ADMIN','YXWECHATREPLY_ALL','YXWECHATREPLY_SELECT')")
@@ -34,7 +34,7 @@ public class YxWechatReplyController {
         return new ResponseEntity(yxWechatReplyService.isExist("subscribe"),HttpStatus.OK);
     }
 
-    @Log("新增自动回复")
+
     @ApiOperation(value = "新增自动回复")
     @PostMapping(value = "/yxWechatReply")
     @PreAuthorize("hasAnyRole('ADMIN','YXWECHATREPLY_ALL','YXWECHATREPLY_CREATE')")
@@ -56,21 +56,8 @@ public class YxWechatReplyController {
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
-    @Log("修改YxWechatReply")
-    @ApiOperation(value = "修改YxWechatReply")
-    @PutMapping(value = "/yxWechatReply")
-    @PreAuthorize("hasAnyRole('ADMIN','YXWECHATREPLY_ALL','YXWECHATREPLY_EDIT')")
-    public ResponseEntity update(@Validated @RequestBody YxWechatReply resources){
-        yxWechatReplyService.update(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
 
-    @Log("删除YxWechatReply")
-    @ApiOperation(value = "删除YxWechatReply")
-    @DeleteMapping(value = "/yxWechatReply/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','YXWECHATREPLY_ALL','YXWECHATREPLY_DELETE')")
-    public ResponseEntity delete(@PathVariable Integer id){
-        yxWechatReplyService.delete(id);
-        return new ResponseEntity(HttpStatus.OK);
-    }
+
+
+
 }

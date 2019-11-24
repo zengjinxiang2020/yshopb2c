@@ -1,11 +1,13 @@
-package co.yixiang.modules.wechat.service;
+package co.yixiang.mp.service;
 
-import co.yixiang.modules.wechat.domain.YxWechatReply;
-import co.yixiang.modules.wechat.service.dto.YxWechatReplyDTO;
-import co.yixiang.modules.wechat.service.dto.YxWechatReplyQueryCriteria;
+
+import co.yixiang.mp.domain.YxWechatReply;
+import co.yixiang.mp.service.dto.YxWechatReplyDTO;
+import co.yixiang.mp.service.dto.YxWechatReplyQueryCriteria;
 import org.springframework.data.domain.Pageable;
-import java.util.Map;
+
 import java.util.List;
+import java.util.Map;
 
 /**
 * @author hupeng
