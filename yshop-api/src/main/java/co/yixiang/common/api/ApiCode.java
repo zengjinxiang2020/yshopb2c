@@ -10,6 +10,7 @@ package co.yixiang.common.api;
  */
 public enum ApiCode {
 
+    FAIL_AUTH(410000, "没有权限"),
     SUCCESS(200, "操作成功"),
 
     UNAUTHORIZED(401, "非法访问"),

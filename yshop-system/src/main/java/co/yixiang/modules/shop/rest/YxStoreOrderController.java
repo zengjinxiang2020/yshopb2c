@@ -33,6 +33,19 @@ public class YxStoreOrderController {
     @Autowired
     private YxStoreOrderStatusService yxStoreOrderStatusService;
 
+    @GetMapping(value = "/data/count")
+    //@PreAuthorize("hasAnyRole('ADMIN','YXSTOREORDER_ALL','YXSTOREORDER_SELECT')")
+    public ResponseEntity getCount(){
+        return new ResponseEntity(yxStoreOrderService.getOrderTimeData(),HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/data/chart")
+    //@PreAuthorize("hasAnyRole('ADMIN','YXSTOREORDER_ALL','YXSTOREORDER_SELECT')")
+    public ResponseEntity getChart(){
+        return new ResponseEntity(yxStoreOrderService.chartCount(),HttpStatus.OK);
+    }
+
+
 
     @ApiOperation(value = "查询订单")
     @GetMapping(value = "/yxStoreOrder")

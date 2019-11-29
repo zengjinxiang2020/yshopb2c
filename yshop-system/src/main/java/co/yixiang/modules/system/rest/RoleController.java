@@ -102,7 +102,7 @@ public class RoleController {
     @PutMapping(value = "/roles/menu")
     @PreAuthorize("hasAnyRole('ADMIN','ROLES_ALL','ROLES_EDIT')")
     public ResponseEntity updateMenu(@RequestBody Role resources){
-        //if(ObjectUtil.isNotNull(resources)) throw new BadRequestException("演示环境禁止操作");
+        //
         roleService.updateMenu(resources,roleService.findById(resources.getId()));
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -111,7 +111,7 @@ public class RoleController {
     @DeleteMapping(value = "/roles/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','ROLES_ALL','ROLES_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
-        //if(id > 0) throw new BadRequestException("演示环境禁止操作");
+       // if(id > 0) throw new BadRequestException("演示环境禁止操作");
         try {
             roleService.delete(id);
         }catch (Throwable e){

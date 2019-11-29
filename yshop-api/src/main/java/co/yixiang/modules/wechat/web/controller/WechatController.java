@@ -3,6 +3,7 @@ package co.yixiang.modules.wechat.web.controller;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.common.api.ApiCode;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.order.service.YxStoreOrderService;
@@ -39,6 +40,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -110,18 +116,27 @@ public class WechatController extends BaseController {
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
             WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
             String openid = wxMpUser.getOpenId();
-            YxWechatUser wechatUser = wechatUserService.getUserInfo(openid);;
-            YxUserQueryVo yxUserQueryVo = userService.getYxUserById(wechatUser.getUid());
+            YxWechatUser wechatUser = wechatUserService.getUserInfo(openid);
+
+
             JwtUser jwtUser = null;
-            if(ObjectUtil.isNotNull(wechatUser) && ObjectUtil.isNotNull(yxUserQueryVo)){
-                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getOpenid());
-            }else{
-                if(ObjectUtil.isNotNull(wechatUser)){
-                    wechatUserService.removeById(wechatUser.getUid());
-                }
+            if(ObjectUtil.isNotNull(wechatUser)){
+                YxUserQueryVo yxUserQueryVo = userService.getYxUserById(wechatUser.getUid());
                 if(ObjectUtil.isNotNull(yxUserQueryVo)){
-                    userService.removeById(yxUserQueryVo.getUid());
+                    jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getOpenid());
+                }else{
+                    if(ObjectUtil.isNotNull(wechatUser)){
+                        wechatUserService.removeById(wechatUser.getUid());
+                    }
+                    if(ObjectUtil.isNotNull(yxUserQueryVo)){
+                        userService.removeById(yxUserQueryVo.getUid());
+                    }
+                    return ApiResult.fail(ApiCode.FAIL_AUTH,"授权失败");
                 }
+
+
+            }else{
+
                 //用户保存
                 YxUser user = new YxUser();
                 user.setAccount(wxMpUser.getNickname());
@@ -245,14 +260,17 @@ public class WechatController extends BaseController {
         return "fail";
     }
 
+
     @PostMapping("/wechat/serve")
-    public String post(@RequestBody String requestBody,
+    public void post(@RequestBody String requestBody,
                        @RequestParam("signature") String signature,
                        @RequestParam("timestamp") String timestamp,
                        @RequestParam("nonce") String nonce,
                        @RequestParam("openid") String openid,
                        @RequestParam(name = "encrypt_type", required = false) String encType,
-                       @RequestParam(name = "msg_signature", required = false) String msgSignature) {
+                       @RequestParam(name = "msg_signature", required = false) String msgSignature,
+                       HttpServletRequest request,
+                       HttpServletResponse response) throws IOException {
 
 
         if (!wxService.checkSignature(timestamp, nonce, signature)) {
@@ -264,25 +282,21 @@ public class WechatController extends BaseController {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
             WxMpXmlOutMessage outMessage = this.route(inMessage);
-            if (outMessage == null) {
-                return "";
-            }
-
             out = outMessage.toXml();
+            System.out.println("xml:"+out);
         } else if ("aes".equalsIgnoreCase(encType)) {
             // aes加密的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
                     timestamp, nonce, msgSignature);
             WxMpXmlOutMessage outMessage = this.route(inMessage);
-            if (outMessage == null) {
-                return "";
-            }
 
             out = outMessage.toEncryptedXml(wxService.getWxMpConfigStorage());
         }
 
-
-        return out;
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter writer = response.getWriter();
+        writer.print(out);
+        writer.close();
     }
 
     private WxMpXmlOutMessage route(WxMpXmlMessage message) {

@@ -62,6 +62,16 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
     private YxUserBillService billService;
 
 
+    /**
+     * 更新用户余额
+     * @param uid
+     * @param price
+     */
+    @Override
+    public void incMoney(int uid, double price) {
+        yxUserMapper.incMoney(uid,price);
+    }
+
     @Override
     public void incIntegral(int uid, double integral) {
         yxUserMapper.incIntegral(integral,uid);

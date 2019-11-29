@@ -23,6 +23,8 @@ import java.util.List;
  */
 public interface YxUserService extends BaseService<YxUser> {
 
+    void incMoney(int uid,double price);
+
     void incIntegral(int uid,double integral);
 
     YxUserQueryVo getNewYxUserById(Serializable id);

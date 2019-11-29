@@ -56,6 +56,10 @@ public interface YxUserMapper extends BaseMapper<YxUser> {
             " where uid=#{uid}")
     int incPayCount(@Param("uid") int uid);
 
+    @Update("update yx_user set now_money=now_money+#{price}" +
+            " where uid=#{uid}")
+    int incMoney(@Param("uid") int uid,double price);
+
     @Update("update yx_user set integral=integral-#{integral}" +
             " where uid=#{uid}")
     int decIntegral(@Param("integral") double integral,@Param("uid") int uid);

@@ -2,8 +2,16 @@ server:
   port: 8009
   servlet:
     context-path: /api
+  tomcat:
+    uri-encoding: UTF-8
+
 
 spring:
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
   freemarker:
     check-template-location: false
   profiles:
@@ -48,27 +56,6 @@ mybatis-plus:
       logic-not-delete-value: 1
   mapper-locations: classpath*:mapper/**/*Mapper.xml
 
-# 公众号配置(必填)
-wx:
-  mp:
-    configs:
-    - appId: wxc061dee8806ff712
-      secret:
-      token: yshop
-      aesKey: yYuBUkC8BXImCXyu7O6hkzLj4TC5nxsWPfL4CQAZPNY
-  pay:
-    appId: wxc061dee8806ff712
-    mchId:
-    mchKey: dayouqiantuhupeng8638004yixiangt
-    subAppId:
-    subMchId:
-    keyPath:
-  miniapp:
-    appid: wxa82b5b7fcb0ec161
-    secret:
-    token:
-    aesKey:
-    msgDataFormat: JSON
 logging:
   level:
     org.springframework.web: INFO

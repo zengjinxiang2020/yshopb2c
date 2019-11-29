@@ -262,10 +262,10 @@ public class StoreOrderController extends BaseController {
 
 
     /**
-     * 订单详情
+     * 订单列表
      */
     @GetMapping("/order/list")
-    @ApiOperation(value = "订单详情",notes = "订单详情")
+    @ApiOperation(value = "订单列表",notes = "订单列表")
     public ApiResult<List<YxStoreOrderQueryVo>> orderList(@RequestParam(value = "type",defaultValue = "0") int type,
                                                     @RequestParam(value = "page",defaultValue = "1") int page,
                                                     @RequestParam(value = "limit",defaultValue = "10") int limit){

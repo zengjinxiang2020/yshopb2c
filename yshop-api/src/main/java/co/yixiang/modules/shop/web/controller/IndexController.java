@@ -48,8 +48,7 @@ public class IndexController {
         map.put("menus",systemGroupDataService.getDatas("routine_home_menus"));
         //首页活动区域图片
         map.put("activity",systemGroupDataService.getDatas("routine_home_activity"));
-        //logo
-        map.put("logoUrl",systemConfigService.getData("wechat_logo"));
+
 
         //精品推荐
         map.put("bastList",storeProductService.getList(1,6,1));
@@ -63,9 +62,7 @@ public class IndexController {
         //滚动
         map.put("roll",systemGroupDataService.getDatas("routine_home_roll_news"));
 
-        //todo 优惠券
-        List list = new ArrayList();
-        map.put("couponList",list);
+
 
 
         return ApiResult.ok(map);

@@ -162,6 +162,7 @@ public class UserController {
      */
     @PostMapping(value = "/users/updateAvatar")
     public ResponseEntity updateAvatar(@RequestParam MultipartFile file){
+        //if(ObjectUtil.isNotNull(file)) throw new BadRequestException("演示环境禁止操作");
         userService.updateAvatar(file);
         return new ResponseEntity(HttpStatus.OK);
     }

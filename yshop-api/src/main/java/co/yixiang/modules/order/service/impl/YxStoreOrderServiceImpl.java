@@ -1,11 +1,20 @@
 package co.yixiang.modules.order.service.impl;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.*;
 import co.yixiang.common.constant.CacheKey;
 import co.yixiang.common.constant.CommonConstant;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
+import co.yixiang.modules.manage.web.dto.ChartDataDTO;
+import co.yixiang.modules.manage.web.dto.OrderDataDTO;
+import co.yixiang.modules.manage.web.dto.OrderTimeDataDTO;
+import co.yixiang.modules.manage.web.param.OrderDeliveryParam;
+import co.yixiang.modules.manage.web.param.OrderPriceParam;
+import co.yixiang.modules.manage.web.param.OrderRefundParam;
 import co.yixiang.modules.monitor.service.RedisService;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.entity.YxStoreOrderCartInfo;
@@ -44,11 +53,13 @@ import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 import co.yixiang.redisson.DelayJob;
 import co.yixiang.redisson.DelayJobService;
 import co.yixiang.utils.OrderUtil;
+import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
+import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +67,9 @@ import lombok.extern.slf4j.Slf4j;
 //import org.redisson.api.RDelayedQueue;
 //import org.redisson.api.RQueue;
 //import org.redisson.api.RedissonClient;
+//import org.apache.webservice.config.annotation.Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,13 +77,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import javax.jws.WebService;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -82,6 +95,7 @@ import java.util.concurrent.TimeUnit;
  * @author hupeng
  * @since 2019-10-27
  */
+
 @Slf4j
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -147,6 +161,111 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 //    @Value("${job.unpayorder}")
 //    private String overtime;
 
+
+    /**
+     * 订单退款
+     * @param param
+     */
+    @Override
+    public void orderRefund(OrderRefundParam param) {
+
+        YxStoreOrderQueryVo orderQueryVo = getOrderInfo(param.getOrderId(),0);
+        if(ObjectUtil.isNull(orderQueryVo)) throw new ErrorRequestException("订单不存在");
+
+        YxUserQueryVo userQueryVo = userService.getYxUserById(orderQueryVo.getUid());
+        if(ObjectUtil.isNull(userQueryVo)) throw new ErrorRequestException("用户不存在");
+
+        if(param.getPrice() > orderQueryVo.getPayPrice().doubleValue()) throw new ErrorRequestException("退款金额不正确");
+
+        YxStoreOrder storeOrder = new YxStoreOrder();
+        //修改状态
+        storeOrder.setId(orderQueryVo.getId());
+        storeOrder.setRefundStatus(2);
+        storeOrder.setRefundPrice(BigDecimal.valueOf(param.getPrice()));
+        yxStoreOrderMapper.updateById(storeOrder);
+
+        //退款到余额
+        userService.incMoney(orderQueryVo.getUid(),param.getPrice());
+
+        //增加流水
+        YxUserBill userBill = new YxUserBill();
+        userBill.setUid(orderQueryVo.getUid());
+        userBill.setLinkId(orderQueryVo.getId().toString());
+        userBill.setPm(1);
+        userBill.setTitle("商品退款");
+        userBill.setCategory("now_money");
+        userBill.setType("pay_product_refund");
+        userBill.setNumber(BigDecimal.valueOf(param.getPrice()));
+        userBill.setBalance(NumberUtil.add(param.getPrice(),userQueryVo.getNowMoney()));
+        userBill.setMark("订单退款到余额");
+        userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
+        userBill.setStatus(1);
+        billService.save(userBill);
+
+
+        orderStatusService.create(orderQueryVo.getId(),"order_edit","退款给用户："+param.getPrice() +"元");
+
+    }
+
+    /**
+     * 订单发货
+     * @param param
+     */
+    @Override
+    public void orderDelivery(OrderDeliveryParam param) {
+        YxStoreOrderQueryVo orderQueryVo = getOrderInfo(param.getOrderId(),0);
+        if(ObjectUtil.isNull(orderQueryVo)) throw new ErrorRequestException("订单不存在");
+
+        if(orderQueryVo.getStatus() != 0 || orderQueryVo.getPaid() == 0) throw new ErrorRequestException("订单状态错误");
+
+        YxStoreOrder storeOrder = new YxStoreOrder();
+        storeOrder.setId(orderQueryVo.getId());
+        storeOrder.setStatus(1);
+        storeOrder.setDeliveryId(param.getDeliveryId());
+        storeOrder.setDeliveryName(param.getDeliveryName());
+        storeOrder.setDeliveryType(param.getDeliveryType());
+
+        yxStoreOrderMapper.updateById(storeOrder);
+
+        //增加状态
+        orderStatusService.create(storeOrder.getId(),"delivery_goods",
+                "已发货 快递公司："+param.getDeliveryName()+"快递单号：" +param.getDeliveryId());
+
+    }
+
+    /**
+     * 修改订单价格
+     * @param param
+     */
+    @Override
+    public void editOrderPrice(OrderPriceParam param) {
+        YxStoreOrderQueryVo orderQueryVo = getOrderInfo(param.getOrderId(),0);
+        if(ObjectUtil.isNull(orderQueryVo)) throw new ErrorRequestException("订单不存在");
+
+        if(orderQueryVo.getPayPrice().doubleValue() == param.getPrice()) return;
+
+        if(orderQueryVo.getPaid() > 0) throw new ErrorRequestException("订单状态错误");
+
+
+        YxStoreOrder storeOrder = new YxStoreOrder();
+        storeOrder.setId(orderQueryVo.getId());
+        storeOrder.setPayPrice(BigDecimal.valueOf(param.getPrice()));
+
+        yxStoreOrderMapper.updateById(storeOrder);
+
+        //增加状态
+        orderStatusService.create(storeOrder.getId(),"order_edit","修改实际支付金额");
+
+
+    }
+
+    /**
+     * 获取拼团订单
+     * @param pid
+     * @param uid
+     * @param type
+     * @return
+     */
     @Override
     public YxStoreOrder getOrderPink(int pid, int uid,int type) {
         QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
@@ -427,7 +546,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Override
     public List<YxStoreOrderQueryVo> orderList(int uid, int type, int page, int limit) {
         QueryWrapper<YxStoreOrder> wrapper= new QueryWrapper<>();
-        wrapper.eq("is_del",0).eq("uid",uid).orderByDesc("add_time");
+        if(uid > 0) wrapper.eq("uid",uid);
+        wrapper.eq("is_del",0).orderByDesc("add_time");
 
         switch (type){
             case 0://未支付
@@ -471,7 +591,109 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     }
 
     /**
+     * chart图标统计
+     * @param cate
+     * @param type
+     * @return
+     */
+    @Override
+    public Map<String,Object> chartCount(int cate,int type) {
+        int today = OrderUtil.dateToTimestampT(DateUtil.beginOfDay(new Date()));
+        int yesterday = OrderUtil.dateToTimestampT(DateUtil.beginOfDay(DateUtil.
+                yesterday()));
+        int lastWeek = OrderUtil.dateToTimestampT(DateUtil.beginOfDay(DateUtil.lastWeek()));
+        int nowMonth = OrderUtil.dateToTimestampT(DateUtil
+                .beginOfMonth(new Date()));
+        double price = 0d;
+        List<ChartDataDTO> list = null;
+        QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq("paid",1).eq("refund_status",0).eq("is_del",0);
+
+        switch (cate){
+            case 1: //今天
+                wrapper.ge("pay_time",today);
+                break;
+            case 2: //昨天
+                wrapper.lt("pay_time",today).ge("pay_time",yesterday);
+                break;
+            case 3: //上周
+                wrapper.ge("pay_time",lastWeek);
+                break;
+            case 4: //本月
+                wrapper.ge("pay_time",nowMonth);
+                break;
+        }
+        if(type == 1){
+            list = yxStoreOrderMapper.chartList(wrapper);
+            price = yxStoreOrderMapper.todayPrice(wrapper);
+        }else{
+            list = yxStoreOrderMapper.chartListT(wrapper);
+            price = yxStoreOrderMapper.selectCount(wrapper).doubleValue();
+        }
+
+        Map<String,Object> map = new LinkedHashMap<>();
+        map.put("chart",list);
+        map.put("time",price);
+        return map;
+    }
+
+    /**
+     * 获取 今日 昨日 本月 订单金额
+     * @return
+     */
+    @Override
+    public OrderTimeDataDTO getOrderTimeData() {
+
+        int today = OrderUtil.dateToTimestampT(DateUtil.beginOfDay(new Date()));
+        int yesterday = OrderUtil.dateToTimestampT(DateUtil.beginOfDay(DateUtil.
+                yesterday()));
+        int nowMonth = OrderUtil.dateToTimestampT(DateUtil
+                .beginOfMonth(new Date()));
+        OrderTimeDataDTO orderTimeDataDTO = new OrderTimeDataDTO();
+
+        //今日成交额
+        QueryWrapper<YxStoreOrder> wrapperOne = new QueryWrapper<>();
+        wrapperOne.ge("pay_time",today).eq("paid",1)
+                .eq("refund_status",0).eq("is_del",0);
+        orderTimeDataDTO.setTodayPrice(yxStoreOrderMapper.todayPrice(wrapperOne));
+        //今日订单数
+        orderTimeDataDTO.setTodayCount(yxStoreOrderMapper.selectCount(wrapperOne));
+
+        //昨日成交额
+        QueryWrapper<YxStoreOrder> wrapperTwo = new QueryWrapper<>();
+        wrapperTwo.lt("pay_time",today).ge("pay_time",yesterday).eq("paid",1)
+                .eq("refund_status",0).eq("is_del",0);
+        orderTimeDataDTO.setProPrice(yxStoreOrderMapper.todayPrice(wrapperTwo));
+        //昨日订单数
+        orderTimeDataDTO.setProCount(yxStoreOrderMapper.selectCount(wrapperTwo));
+
+        //本月成交额
+        QueryWrapper<YxStoreOrder> wrapperThree = new QueryWrapper<>();
+        wrapperThree.ge("pay_time",nowMonth).eq("paid",1)
+                .eq("refund_status",0).eq("is_del",0);
+        orderTimeDataDTO.setMonthPrice(yxStoreOrderMapper.todayPrice(wrapperThree));
+        //本月订单数
+        orderTimeDataDTO.setMonthCount(yxStoreOrderMapper.selectCount(wrapperThree));
+
+
+        return orderTimeDataDTO;
+    }
+
+    /**
+     * 订单每月统计数据
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public List<OrderDataDTO> getOrderDataPriceCount(int page, int limit) {
+        Page<YxStoreOrder> pageModel = new Page<>(page, limit);
+        return yxStoreOrderMapper.getOrderDataPriceList(pageModel);
+    }
+
+    /**
      * 获取某个用户的订单统计数据
+     * @param uid uid>0 取用户 否则取所有
      * @return
      */
     @Override
@@ -480,8 +702,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         OrderCountDTO countDTO = new OrderCountDTO();
         //订单支付没有退款 数量
         QueryWrapper<YxStoreOrder> wrapperOne = new QueryWrapper<>();
-        wrapperOne.eq("is_del",0).eq("paid",1)
-                .eq("uid",uid).eq("refund_status",0);
+        if(uid > 0 ) wrapperOne.eq("uid",uid);
+        wrapperOne.eq("is_del",0).eq("paid",1).eq("refund_status",0);
         countDTO.setOrderCount(yxStoreOrderMapper.selectCount(wrapperOne));
 
         //订单支付没有退款 支付总金额
@@ -489,39 +711,45 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         //订单待支付 数量
         QueryWrapper<YxStoreOrder> wrapperTwo = new QueryWrapper<>();
+        if(uid > 0 ) wrapperTwo.eq("uid",uid);
         wrapperTwo.eq("is_del",0).eq("paid",0)
-                .eq("uid",uid).eq("refund_status",0).eq("status",0);
+                .eq("refund_status",0).eq("status",0);
         countDTO.setUnpaidCount(yxStoreOrderMapper.selectCount(wrapperTwo));
 
         //订单待发货 数量
         QueryWrapper<YxStoreOrder> wrapperThree = new QueryWrapper<>();
+        if(uid > 0 ) wrapperThree.eq("uid",uid);
         wrapperThree.eq("is_del",0).eq("paid",1)
-                .eq("uid",uid).eq("refund_status",0).eq("status",0);
+                .eq("refund_status",0).eq("status",0);
         countDTO.setUnshippedCount(yxStoreOrderMapper.selectCount(wrapperThree));
 
         //订单待收货 数量
         QueryWrapper<YxStoreOrder> wrapperFour = new QueryWrapper<>();
+        if(uid > 0 ) wrapperFour.eq("uid",uid);
         wrapperFour.eq("is_del",0).eq("paid",1)
-                .eq("uid",uid).eq("refund_status",0).eq("status",1);
+                .eq("refund_status",0).eq("status",1);
         countDTO.setReceivedCount(yxStoreOrderMapper.selectCount(wrapperFour));
 
         //订单待评价 数量
         QueryWrapper<YxStoreOrder> wrapperFive = new QueryWrapper<>();
+        if(uid > 0 ) wrapperFive.eq("uid",uid);
         wrapperFive.eq("is_del",0).eq("paid",1)
-                .eq("uid",uid).eq("refund_status",0).eq("status",2);
+                .eq("refund_status",0).eq("status",2);
         countDTO.setEvaluatedCount(yxStoreOrderMapper.selectCount(wrapperFive));
 
         //订单已完成 数量
         QueryWrapper<YxStoreOrder> wrapperSix= new QueryWrapper<>();
+        if(uid > 0 ) wrapperSix.eq("uid",uid);
         wrapperSix.eq("is_del",0).eq("paid",1)
-                .eq("uid",uid).eq("refund_status",0).eq("status",3);
+                .eq("refund_status",0).eq("status",3);
         countDTO.setCompleteCount(yxStoreOrderMapper.selectCount(wrapperSix));
 
         //订单退款
         QueryWrapper<YxStoreOrder> wrapperSeven= new QueryWrapper<>();
+        if(uid > 0 ) wrapperSeven.eq("uid",uid);
         String[] strArr = {"1","2"};
         wrapperSeven.eq("is_del",0).eq("paid",1)
-                .eq("uid",uid).in("refund_status",Arrays.asList(strArr));
+                .in("refund_status",Arrays.asList(strArr));
         countDTO.setRefundCount(yxStoreOrderMapper.selectCount(wrapperSeven));
 
 
@@ -656,6 +884,20 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     public WxPayMpOrderResult wxPay(String orderId) throws WxPayException {
         String apiUrl = systemConfigService.getData("api_url");
         if(StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
+
+        //读取redis配置
+        String appId = RedisUtil.get("wxpay_appId");
+        String mchId = RedisUtil.get("wxpay_mchId");
+        String mchKey = RedisUtil.get("wxpay_mchKey");
+        if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId) || StrUtil.isBlank(mchKey)){
+            throw new ErrorRequestException("请配置微信支付");
+        }
+        WxPayConfig wxPayConfig = new WxPayConfig();
+        wxPayConfig.setAppId(appId);
+        wxPayConfig.setMchId(mchId);
+        wxPayConfig.setMchKey(mchKey);
+        wxPayService.setConfig(wxPayConfig);
+
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
         if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
         if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
