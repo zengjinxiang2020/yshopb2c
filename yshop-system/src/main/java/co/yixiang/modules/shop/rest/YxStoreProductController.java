@@ -46,7 +46,7 @@ public class YxStoreProductController {
     @PostMapping(value = "/yxStoreProduct")
     @PreAuthorize("hasAnyRole('ADMIN','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxStoreProduct resources){
-        if(ObjectUtil.isNotNull(resources)) throw new BadRequestException("演示环境禁止操作");
+        //if(ObjectUtil.isNotNull(resources)) throw new BadRequestException("演示环境禁止操作");
         resources.setAddTime(OrderUtil.getSecondTimestampTwo());
         if(ObjectUtil.isEmpty(resources.getGiveIntegral())) resources.setGiveIntegral(BigDecimal.ZERO);
         if(ObjectUtil.isEmpty(resources.getCost())) resources.setCost(BigDecimal.ZERO);
@@ -58,7 +58,7 @@ public class YxStoreProductController {
     @PutMapping(value = "/yxStoreProduct")
     @PreAuthorize("hasAnyRole('ADMIN','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreProduct resources){
-        if(ObjectUtil.isNotNull(resources)) throw new BadRequestException("演示环境禁止操作");
+        //if(ObjectUtil.isNotNull(resources)) throw new BadRequestException("演示环境禁止操作");
         yxStoreProductService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -68,7 +68,7 @@ public class YxStoreProductController {
     @DeleteMapping(value = "/yxStoreProduct/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
-        if(id > 0) throw new BadRequestException("演示环境禁止操作");
+        //if(id > 0) throw new BadRequestException("演示环境禁止操作");
         yxStoreProductService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
