@@ -3,7 +3,6 @@ package co.yixiang.modules.task;
 import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
-import co.yixiang.redisson.ExecuteJob;
 import co.yixiang.utils.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;

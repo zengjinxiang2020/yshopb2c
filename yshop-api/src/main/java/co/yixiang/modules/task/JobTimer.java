@@ -1,4 +1,4 @@
-package co.yixiang.redisson;
+package co.yixiang.modules.task;
 
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;

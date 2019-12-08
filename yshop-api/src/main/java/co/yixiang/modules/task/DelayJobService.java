@@ -1,6 +1,5 @@
-package co.yixiang.redisson;
+package co.yixiang.modules.task;
 
-import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
 import org.redisson.api.RQueue;
 import org.redisson.api.RedissonClient;
