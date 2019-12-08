@@ -18,6 +18,7 @@ import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
+import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.Builder;
@@ -68,6 +69,9 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
 
     @Autowired
     private YxStoreCombinationMapper storeCombinationMapper;
+
+    @Autowired
+    private YxUserService userService;
 
     @Autowired
     private CartMap cartMap;
@@ -174,8 +178,10 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                         storeProduct.setAttrInfo(productAttrValue);
 
                         //todo 设置真实价格
-                        storeCartQueryVo.setTruePrice(productAttrValue.getPrice()
-                                .doubleValue());
+                        //设置VIP价格
+                        double vipPrice = userService.setLevelPrice(
+                                productAttrValue.getPrice().doubleValue(),uid);
+                        storeCartQueryVo.setTruePrice(vipPrice);
                         //todo 设置会员价
                         storeCartQueryVo.setVipTruePrice(productAttrValue.getPrice()
                                 .doubleValue());
@@ -186,9 +192,10 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                         valid.add(storeCartQueryVo);
                     }
                 }else{
-
-                    storeCartQueryVo.setTruePrice(storeProduct.getPrice()
-                            .doubleValue());
+                    //设置VIP价格
+                    double vipPrice = userService.setLevelPrice(
+                            storeProduct.getPrice().doubleValue(),uid);
+                    storeCartQueryVo.setTruePrice(vipPrice);
                     //todo 设置会员价
                     storeCartQueryVo.setVipTruePrice(0d);
                     storeCartQueryVo.setCostPrice(storeProduct.getCost()
@@ -245,6 +252,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
 
         QueryWrapper<YxStoreCart> wrapper = new QueryWrapper<>();
         wrapper.eq("uid",uid).eq("type",type).eq("is_pay",0).eq("is_del",0)
+                .eq("product_id",productId)
                 .eq("is_new",isNew).eq("product_attr_unique",productAttrUnique)
                 .eq("combination_id",combinationId).eq("bargain_id",bargainId)
                 .eq("seckill_id",seckillId);

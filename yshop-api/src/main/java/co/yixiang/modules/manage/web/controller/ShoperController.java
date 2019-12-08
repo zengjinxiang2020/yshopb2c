@@ -12,6 +12,8 @@ import co.yixiang.modules.manage.web.param.OrderRemarkParam;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.dto.OrderCountDTO;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
+import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +38,7 @@ import java.util.Map;
 public class ShoperController extends BaseController {
 
     private final YxStoreOrderService storeOrderService;
+    //private final YxUserService yxUserService;
 
     /**
      * 订单数据统计
@@ -43,7 +46,8 @@ public class ShoperController extends BaseController {
     @GetMapping("/admin/order/statistics")
     @ApiOperation(value = "订单数据统计",notes = "订单数据统计")
     public ApiResult<Object> statistics(){
-        int uid = SecurityUtils.getUserId().intValue();
+        //int uid = SecurityUtils.getUserId().intValue();
+
         OrderCountDTO orderCountDTO  = storeOrderService.orderData(0);
         OrderTimeDataDTO orderTimeDataDTO = storeOrderService.getOrderTimeData();
 

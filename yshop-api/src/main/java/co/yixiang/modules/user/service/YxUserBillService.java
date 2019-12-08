@@ -22,6 +22,8 @@ import java.util.Map;
  */
 public interface YxUserBillService extends BaseService<YxUserBill> {
 
+    int cumulativeAttendance(int uid);
+
     Map<String,Object> spreadOrder(int uid,int page,int limit);
 
     List<BillDTO> getUserBillList(int page, int limit, int uid, int type);

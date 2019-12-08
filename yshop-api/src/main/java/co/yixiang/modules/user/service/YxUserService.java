@@ -23,6 +23,8 @@ import java.util.List;
  */
 public interface YxUserService extends BaseService<YxUser> {
 
+    double setLevelPrice(double price, int uid);
+
     void incMoney(int uid,double price);
 
     void incIntegral(int uid,double integral);

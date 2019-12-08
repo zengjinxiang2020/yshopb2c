@@ -50,7 +50,6 @@ import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 //import co.yixiang.redisson.DelayJob;
 //import co.yixiang.redisson.DelayJobService;
-import co.yixiang.redisson.DelayJob;
 import co.yixiang.redisson.DelayJobService;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
@@ -1155,10 +1154,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
 
         // 添加订单支付超期延时任务
-        DelayJob delayJob = new DelayJob();
-        delayJob.setOderId(storeOrder.getId());
-        delayJob.setAClass(CancelOrderService.class);
+        // 添加订单支付超期延时任务
+        Map<String,Object> delayJob = new HashMap<>();
+        delayJob.put("delayJobName","CANCEL_ORVERTIME_ORDER");
+        delayJob.put("orderId",storeOrder.getId());
         delayJobService.submitJob(delayJob, CommonConstant.ORDER_OUTTIME_UNPAY);
+        log.info("添加定时任务成功 订单id： [{}]：", storeOrder.getId());
         return storeOrder;
     }
 

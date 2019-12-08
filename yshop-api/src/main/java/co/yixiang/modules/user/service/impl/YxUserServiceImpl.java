@@ -9,8 +9,11 @@ import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserBill;
+import co.yixiang.modules.user.entity.YxUserLevel;
 import co.yixiang.modules.user.mapper.YxUserMapper;
+import co.yixiang.modules.user.service.YxSystemUserLevelService;
 import co.yixiang.modules.user.service.YxUserBillService;
+import co.yixiang.modules.user.service.YxUserLevelService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.web.dto.PromUserDTO;
 import co.yixiang.modules.user.web.dto.UserRankDTO;
@@ -60,6 +63,27 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
 
     @Autowired
     private YxUserBillService billService;
+
+    @Autowired
+    private YxUserLevelService userLevelService;
+
+    /**
+     * 返回会员价
+     * @param price
+     * @param uid
+     * @return
+     */
+    @Override
+    public double setLevelPrice(double price, int uid) {
+        QueryWrapper<YxUserLevel> wrapper = new QueryWrapper<>();
+        wrapper.eq("is_del",0).eq("status",1)
+                .eq("uid",uid).orderByDesc("grade").last("limit 1");
+        YxUserLevel userLevel = userLevelService.getOne(wrapper);
+        int discount = 100;
+        if(ObjectUtil.isNotNull(userLevel)) discount = userLevel.getDiscount();
+        return NumberUtil.mul(NumberUtil.div(discount,100),price);
+    }
+
 
 
     /**
@@ -399,6 +423,8 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
         }else{
             userQueryVo.setStatu(0);
         }
+        //todo 测试环境设置所有人是管理员,生成环境记得去掉
+        userQueryVo.setAdminid(1);
         return userQueryVo;
     }
 

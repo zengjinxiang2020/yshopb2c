@@ -39,6 +39,12 @@ public class YxUserQueryVo implements Serializable {
 
     private Integer statu;
 
+    private Integer sumSignDay;
+
+    private Boolean isDaySign;
+
+    private Boolean isYesterDaySign;
+
 
 
 //    @ApiModelProperty(value = "用户密码（跟pwd）")
@@ -138,5 +144,13 @@ public class YxUserQueryVo implements Serializable {
 
     @ApiModelProperty(value = "用户登陆类型，h5,wechat,routine")
     private String loginType;
+
+    private Boolean vip;
+
+    private Integer vipId;
+
+    private String vipIcon;
+
+    private String vipName;
 
 }

@@ -16,6 +16,7 @@ import co.yixiang.modules.shop.web.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.CateDTO;
 import co.yixiang.utils.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -28,6 +29,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +61,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
 
     @Autowired
     private YxStoreProductReplyService replyService;
+
+    @Autowired
+    private YxUserService userService;
+
 
     /**
      * 增加库存 减少销量
@@ -119,6 +125,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
         Map<String, Object> returnMap = storeProductAttrService.getProductAttrDetail(id,0,0);
         ProductDTO productDTO = new ProductDTO();
         YxStoreProductQueryVo storeProductQueryVo  = storeProductMap.toDto(storeProduct);
+        //设置VIP价格
+        double vipPrice = userService.setLevelPrice(
+                storeProductQueryVo.getPrice().doubleValue(),uid);
+        storeProductQueryVo.setVipPrice(BigDecimal.valueOf(vipPrice));
         storeProductQueryVo.setUserCollect(relationService
                 .isProductRelation(id,"product",uid,"collect"));
         productDTO.setStoreInfo(storeProductQueryVo);

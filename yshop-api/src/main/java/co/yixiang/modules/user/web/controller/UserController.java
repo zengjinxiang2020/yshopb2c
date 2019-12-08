@@ -8,14 +8,18 @@ import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.shop.service.YxStoreProductRelationService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.user.entity.YxUser;
-import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.modules.user.service.*;
 import co.yixiang.modules.user.web.param.YxUserQueryParam;
+import co.yixiang.modules.user.web.vo.YxSystemUserLevelQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.SecurityUtils;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +45,9 @@ public class UserController extends BaseController {
     private final YxSystemGroupDataService systemGroupDataService;
     private final YxStoreOrderService orderService;
     private final YxStoreProductRelationService relationService;
+    private final YxUserSignService userSignService;
+    private final YxUserBillService userBillService;
+    private final YxSystemUserLevelService systemUserLevelService;
 
 
 
@@ -74,7 +81,18 @@ public class UserController extends BaseController {
     @ApiOperation(value = "个人中心",notes = "个人中心")
     public ApiResult<Object> user(){
         int uid = SecurityUtils.getUserId().intValue();
-        return ApiResult.ok(yxUserService.getNewYxUserById(uid));
+        YxUserQueryVo yxUserQueryVo = yxUserService.getNewYxUserById(uid);
+
+
+        if(yxUserQueryVo.getLevel() > 0) {
+            yxUserQueryVo.setVip(true);
+            YxSystemUserLevelQueryVo systemUserLevelQueryVo = systemUserLevelService
+                    .getYxSystemUserLevelById(yxUserQueryVo.getLevel());
+            yxUserQueryVo.setVipIcon(systemUserLevelQueryVo.getIcon());
+            yxUserQueryVo.setVipId(yxUserQueryVo.getLevel());
+            yxUserQueryVo.setVipName(systemUserLevelQueryVo.getName());
+        }
+        return ApiResult.ok(yxUserQueryVo);
     }
 
     /**
@@ -126,13 +144,68 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 获取活动状态
+     * 签到用户信息
      */
     @PostMapping("/sign/user")
-    @ApiOperation(value = "获取活动状态",notes = "获取活动状态")
-    public ApiResult<Object> sign(){
+    @ApiOperation(value = "签到用户信息",notes = "签到用户信息")
+    public ApiResult<Object> sign(@RequestBody String jsonStr){
+        JSONObject jsonObject = JSON.parseObject(jsonStr);
         int uid = SecurityUtils.getUserId().intValue();
-        return ApiResult.ok(yxUserService.getYxUserById(uid));
+        YxUserQueryVo userQueryVo = yxUserService.getYxUserById(uid);
+        int sumSignDay = userSignService.getSignSumDay(uid);
+        boolean isDaySign = userSignService.getToDayIsSign(uid);
+        boolean isYesterDaySign = userSignService.getYesterDayIsSign(uid);
+        userQueryVo.setSumSignDay(sumSignDay);
+        userQueryVo.setIsDaySign(isDaySign);
+        userQueryVo.setIsYesterDaySign(isYesterDaySign);
+        if(!isDaySign && !isYesterDaySign) userQueryVo.setSignNum(0);
+        return ApiResult.ok(userQueryVo);
+    }
+
+    /**
+     * 签到配置
+     */
+    @GetMapping("/sign/config")
+    @ApiOperation(value = "签到配置",notes = "签到配置")
+    public ApiResult<Object> signConfig(){
+        return ApiResult.ok(systemGroupDataService.getDatas("sign_day_num"));
+    }
+
+    /**
+     * 签到列表
+     */
+    @GetMapping("/sign/list")
+    @ApiOperation(value = "签到列表",notes = "签到列表")
+    public ApiResult<Object> signList(@RequestParam(value = "page",defaultValue = "1") int page,
+                                      @RequestParam(value = "limit",defaultValue = "10") int limit){
+        int uid = SecurityUtils.getUserId().intValue();
+        return ApiResult.ok(userSignService.getSignList(uid,page,limit));
+    }
+
+    /**
+     * 签到列表（年月）
+     */
+    @GetMapping("/sign/month")
+    @ApiOperation(value = "签到列表（年月）",notes = "签到列表（年月）")
+    public ApiResult<Object> signMonthList(@RequestParam(value = "page",defaultValue = "1") int page,
+                                      @RequestParam(value = "limit",defaultValue = "10") int limit){
+        int uid = SecurityUtils.getUserId().intValue();
+        return ApiResult.ok(userBillService.getUserBillList(page,limit,uid,5));
+    }
+
+    /**
+     * 开始签到
+     */
+    @PostMapping("/sign/integral")
+    @ApiOperation(value = "开始签到",notes = "开始签到")
+    public ApiResult<Object> signIntegral(){
+        int uid = SecurityUtils.getUserId().intValue();
+        boolean isDaySign = userSignService.getToDayIsSign(uid);
+        if(isDaySign) return ApiResult.fail("已签到");
+        int integral = userSignService.sign(uid);
+        Map<String,Object> map = new LinkedHashMap<>();
+        map.put("integral",integral);
+        return ApiResult.ok(map,"签到获得" + integral + "积分");
     }
 
 

@@ -24,10 +24,10 @@ public class CodeGenerator {
 
     private static final String USER_NAME = "root";
 
-    private static final String PASSWORD = "Admin@123";
+    private static final String PASSWORD = "root";
     private static final String DRIVER_NAME = "com.mysql.cj.jdbc.Driver";
 
-    private static final String DRIVER_URL = "jdbc:mysql://106.12.82.39:3306/yxshop?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8";
+    private static final String DRIVER_URL = "jdbc:mysql://localhost:3306/yxshop?autoReconnect=true&useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8";
 
     private static final String PARENT_PACKAGE = "co.yixiang";
     private static final String SUPER_ENTITY = PARENT_PACKAGE + ".common.entity.BaseEntity";
@@ -43,11 +43,11 @@ public class CodeGenerator {
 
     // ############################ 配置部分 start ############################
     // 模块名称
-    private static final String MODULE_NAME = "activity";
+    private static final String MODULE_NAME = "user";
     // 作者
     private static final String AUTHOR = "hupeng";
     // 生成的表名称
-    private static final String TABLE_NAME = "yx_system_attachment";    // 主键数据库列名称
+    private static final String TABLE_NAME = "yx_user_task_finish";    // 主键数据库列名称
     private static final String PK_ID_COLUMN_NAME = "id";
     // 代码生成策略 true：All/false:SIMPLE
     private static final boolean GENERATOR_STRATEGY = true;

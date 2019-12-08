@@ -1,9 +1,6 @@
 package co.yixiang.modules.user.mapper;
 
-import co.yixiang.modules.user.web.dto.BillDTO;
-import co.yixiang.modules.user.web.dto.BillOrderRecordDTO;
-import co.yixiang.modules.user.web.dto.PromUserDTO;
-import co.yixiang.modules.user.web.dto.UserBillDTO;
+import co.yixiang.modules.user.web.dto.*;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
@@ -29,6 +26,17 @@ import java.util.List;
  */
 @Repository
 public interface YxUserBillMapper extends BaseMapper<YxUserBill> {
+
+    @Select("select IFNULL(sum(number),0) from yx_user_bill " +
+            "where status=1 and type='sign' and pm=1 and category='integral' " +
+            "and uid=#{uid}")
+    double sumIntegral(@Param("uid") int uid);
+
+    @Select("SELECT FROM_UNIXTIME(a.add_time,'%Y-%m-%d') as addTime,a.title,a.number " +
+            "FROM yx_user_bill a INNER JOIN yx_user u ON u.uid=a.uid WHERE a.category = 'integral'" +
+            " AND a.type = 'sign' AND a.status = 1 AND a.uid = #{uid} " +
+            "ORDER BY a.add_time DESC")
+    List<SignDTO> getSignList(@Param("uid") int uid, Page page);
 
     @Select("SELECT o.order_id as orderId,FROM_UNIXTIME(b.add_time, '%Y-%m-%d %H:%i') as time," +
             "b.number,u.avatar,u.nickname FROM yx_user_bill b " +

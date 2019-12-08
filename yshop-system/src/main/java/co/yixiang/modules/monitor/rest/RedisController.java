@@ -35,7 +35,7 @@ public class RedisController {
     @DeleteMapping(value = "/redis")
     @PreAuthorize("hasAnyRole('ADMIN','REDIS_ALL','REDIS_DELETE')")
     public ResponseEntity delete(@RequestBody RedisVo resources){
-        //if(ObjectUtil.isNotNull(resources)) throw new BadRequestException("演示环境禁止操作");
+        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         redisService.delete(resources.getKey());
         return new ResponseEntity(HttpStatus.OK);
     }

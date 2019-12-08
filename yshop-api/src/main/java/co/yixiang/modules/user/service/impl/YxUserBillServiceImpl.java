@@ -46,6 +46,20 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<YxUserBillMapper, YxU
     @Autowired
     private BiillMap biillMap;
 
+
+    /**
+     * 签到了多少次
+     * @param uid
+     * @return
+     */
+    @Override
+    public int cumulativeAttendance(int uid) {
+        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
+        wrapper.eq("uid",uid).eq("category","integral")
+                .eq("type","sign").eq("pm",1);
+        return yxUserBillMapper.selectCount(wrapper);
+    }
+
     @Override
     public Map<String, Object> spreadOrder(int uid, int page, int limit) {
         QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
@@ -83,24 +97,32 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<YxUserBillMapper, YxU
     @Override
     public List<BillDTO> getUserBillList(int page, int limit, int uid, int type) {
         QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
-        wrapper.eq("category","now_money").eq("uid",uid).
-                orderByDesc("add_time").groupBy("time");
+        wrapper.eq("uid",uid).orderByDesc("add_time").groupBy("time");
         switch (type){
             case 0:
+                wrapper.eq("category","now_money");
                 String str = "recharge,brokerage,pay_product,system_add,pay_product_refund,system_sub";
                 wrapper.in("type",str.split(","));
                 break;
             case 1:
+                wrapper.eq("category","now_money");
                 wrapper.eq("type","pay_product");
                 break;
             case 2:
+                wrapper.eq("category","now_money");
                 wrapper.eq("type","recharge");
                 break;
             case 3:
+                wrapper.eq("category","now_money");
                 wrapper.eq("type","brokerage");
                 break;
             case 4:
+                wrapper.eq("category","now_money");
                 wrapper.eq("type","extract");
+                break;
+            case 5:
+                wrapper.eq("category","integral");
+                wrapper.eq("type","sign");
                 break;
         }
         Page<YxUserBill> pageModel = new Page<>(page, limit);

@@ -70,7 +70,7 @@ yshop基于当前流行技术组合的前后端分离商城系统： SpringBoot2
         <td><img src="https://images.gitee.com/uploads/images/2019/1121/230257_5844f5f1_477893.png"/></td>
     </tr>
     <tr>
-        <td><img src="https://images.gitee.com/uploads/images/2019/1121/230051_971db503_477893.png "/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1121/230051_971db503_477893.png"/></td>
         <td><img src="https://images.gitee.com/uploads/images/2019/1121/230342_f379583e_477893.png"/></td>
     </tr>
     <tr>
@@ -84,7 +84,7 @@ yshop基于当前流行技术组合的前后端分离商城系统： SpringBoot2
 </table>
 <table>
     <tr>
-        <td><img src="https://images.gitee.com/uploads/images/2019/1129/234509_744765f9_477893.jpeg"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1130/114819_99540fd3_477893.jpeg"/></td>
         <td><img src="https://images.gitee.com/uploads/images/2019/1129/234538_62ba99b7_477893.jpeg"/></td>
     </tr>
     <tr>
@@ -92,7 +92,7 @@ yshop基于当前流行技术组合的前后端分离商城系统： SpringBoot2
         <td><img src="https://images.gitee.com/uploads/images/2019/1129/234622_6f593729_477893.jpeg"/></td>
     </tr>
     <tr>
-        <td><img src="https://images.gitee.com/uploads/images/2019/1129/234644_242668a1_477893.jpeg"/></td>
+        <td><img src="https://images.gitee.com/uploads/images/2019/1130/114845_9ed3c82c_477893.jpeg"/></td>
         <td><img src="https://images.gitee.com/uploads/images/2019/1129/234703_49e8fe4f_477893.jpeg"/></td>
     </tr>
 </table>
@@ -131,7 +131,15 @@ yshop基于当前流行技术组合的前后端分离商城系统： SpringBoot2
 - 1.3.1版本手机端新增商户管理、后台新增统计
 - 1.3.2新增后台微信相关及其支付配置，新增自动回复配置
 - 1.3.3新增 后台微信图文发送功能，小程序配置，增加小程序授权等,修复一些bug等
-- 1.4版本规划：补充公众号功能、发布mpvue小程序
+- yshop1.4版本发布，更新如下：
+  - 1.1、新增积分签到
+  - 1.2、新增会员等级、任务等功能，新增会员价格等
+  - 1.3、修复Redisson linux系统启动报错问题
+  - 1.4、修复商户简单权限功能
+  - 1.5、修复加入购物车覆盖问题
+  - 1.6、修复拼团出现undefined
+  - 1.7、会员后台新增余额调整
+  - 1.8、修复新增配置数据有时候不成功问题等
 
 	
 #### 反馈交流
