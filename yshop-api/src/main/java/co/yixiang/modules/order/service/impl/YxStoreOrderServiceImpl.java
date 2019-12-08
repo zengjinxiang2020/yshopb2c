@@ -1,10 +1,7 @@
 package co.yixiang.modules.order.service.impl;
 
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.*;
-import co.yixiang.common.constant.CacheKey;
 import co.yixiang.common.constant.CommonConstant;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
@@ -40,17 +37,13 @@ import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 //import co.yixiang.modules.task.CancelOrderService;
-import co.yixiang.modules.task.CancelOrderService;
 import co.yixiang.modules.user.entity.*;
-import co.yixiang.modules.user.mapper.YxUserMapper;
 import co.yixiang.modules.user.service.*;
-import co.yixiang.modules.user.web.controller.UserAddressController;
 import co.yixiang.modules.user.web.vo.YxUserAddressQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
-import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 //import co.yixiang.redisson.DelayJob;
 //import co.yixiang.redisson.DelayJobService;
-import co.yixiang.redisson.DelayJobService;
+import co.yixiang.modules.task.DelayJobService;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
@@ -67,8 +60,6 @@ import lombok.extern.slf4j.Slf4j;
 //import org.redisson.api.RQueue;
 //import org.redisson.api.RedissonClient;
 //import org.apache.webservice.config.annotation.Service;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,13 +68,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
-import javax.jws.WebService;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 
 /**
