@@ -42,7 +42,7 @@ public class YxStoreProductReplyQueryVo implements Serializable {
     private String comment;
 
     @ApiModelProperty(value = "评论图片")
-    private String pics;
+    private String[] pics;
 
     @ApiModelProperty(value = "评论时间")
     private Integer addTime;
@@ -61,6 +61,9 @@ public class YxStoreProductReplyQueryVo implements Serializable {
     private String avatar;
 
     private String suk;
+
+
+    private String pictures;
 
     @JsonIgnore
     private String cartInfo;

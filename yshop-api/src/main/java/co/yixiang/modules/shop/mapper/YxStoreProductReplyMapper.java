@@ -36,7 +36,7 @@ public interface YxStoreProductReplyMapper extends BaseMapper<YxStoreProductRepl
 
     @Select("select A.product_score as productScore,A.service_score as serviceScore," +
             "A.comment,A.merchant_reply_content as merchantReplyContent," +
-            "A.merchant_reply_time as merchantReplyTime,A.pics,A.add_time as addTime," +
+            "A.merchant_reply_time as merchantReplyTime,A.pics as pictures,A.add_time as addTime," +
             "B.nickname,B.avatar,C.cart_info as cartInfo" +
             " from yx_store_product_reply A left join yx_user B " +
             "on A.uid = B.uid left join yx_store_order_cart_info C on A.unique = C.unique" +
