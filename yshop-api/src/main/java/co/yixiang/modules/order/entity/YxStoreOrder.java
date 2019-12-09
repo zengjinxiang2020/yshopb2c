@@ -116,6 +116,8 @@ public class YxStoreOrder extends BaseEntity {
     @ApiModelProperty(value = "快递名称/送货人姓名")
     private String deliveryName;
 
+    private String deliverySn;
+
     @ApiModelProperty(value = "发货类型")
     private String deliveryType;
 

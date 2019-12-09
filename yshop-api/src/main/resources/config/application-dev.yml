@@ -133,9 +133,9 @@ yshop:
 
   # 快鸟物流查询配置
   express:
-    enable: false
-    appId: "XXXXXXXXX"
-    appKey: "XXXXXXXXXXXXXXXXXXXXXXXXX"
+    enable: true
+    appId:
+    appKey:
     vendors:
       - code: "ZTO"
         name: "中通快递"

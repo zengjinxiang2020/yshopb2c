@@ -7,6 +7,8 @@ import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.param.IdParam;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.exception.ErrorRequestException;
+import co.yixiang.express.ExpressService;
+import co.yixiang.express.dao.ExpressInfo;
 import co.yixiang.modules.activity.service.YxStorePinkService;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.entity.YxStoreOrderCartInfo;
@@ -14,10 +16,7 @@ import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.service.YxStoreOrderStatusService;
 import co.yixiang.modules.order.web.dto.*;
-import co.yixiang.modules.order.web.param.OrderParam;
-import co.yixiang.modules.order.web.param.PayParam;
-import co.yixiang.modules.order.web.param.RefundParam;
-import co.yixiang.modules.order.web.param.YxStoreOrderQueryParam;
+import co.yixiang.modules.order.web.param.*;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.shop.entity.YxStoreProductReply;
 import co.yixiang.modules.shop.service.YxStoreCartService;
@@ -68,6 +67,7 @@ public class StoreOrderController extends BaseController {
     private final YxStoreCouponUserService couponUserService;
     private final YxSystemConfigService systemConfigService;
     private final YxStorePinkService storePinkService;
+    private final ExpressService expressService;
 
 
     /**
@@ -509,6 +509,20 @@ public class StoreOrderController extends BaseController {
 
         return ApiResult.ok("ok");
     }
+
+
+    /**@Valid
+     * 获取物流信息,根据传的订单编号 ShipperCode快递公司编号 和物流单号,
+     */
+    @PostMapping("/order/express")
+    @ApiOperation(value = "获取物流信息",notes = "获取物流信息",response = ExpressParam.class)
+    public ApiResult<Object> express( @RequestBody ExpressParam expressInfoDo){
+        ExpressInfo expressInfo = expressService.getExpressInfo(expressInfoDo.getOrderCode(),
+                expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode());
+        if(!expressInfo.isSuccess()) return ApiResult.fail(expressInfo.getReason());
+        return ApiResult.ok(expressInfo);
+    }
+
 
 }
 

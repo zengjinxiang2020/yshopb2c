@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.web.vo;
 
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,6 +8,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -44,6 +46,19 @@ public class YxStoreProductReplyQueryVo implements Serializable {
     @ApiModelProperty(value = "评论图片")
     private String[] pics;
 
+    private String pictures;
+
+    private String[] picturesArr;
+
+    public String[] getPicturesArr() {
+        if(StrUtil.isNotEmpty(pictures)){
+            return pictures.split(",");
+        }else{
+            return new String[]{};
+        }
+
+    }
+
     @ApiModelProperty(value = "评论时间")
     private Integer addTime;
 
@@ -63,7 +78,6 @@ public class YxStoreProductReplyQueryVo implements Serializable {
     private String suk;
 
 
-    private String pictures;
 
     @JsonIgnore
     private String cartInfo;
