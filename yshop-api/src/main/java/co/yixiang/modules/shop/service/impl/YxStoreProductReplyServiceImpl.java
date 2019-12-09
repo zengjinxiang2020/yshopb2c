@@ -15,6 +15,7 @@ import co.yixiang.common.web.vo.Paging;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 
 /**
@@ -128,7 +132,15 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<YxStoreProdu
         Page<YxStoreProductReply> pageModel = new Page<>(page, limit);
         List<YxStoreProductReplyQueryVo> list = yxStoreProductReplyMapper
                 .selectReplyList(pageModel,productId);
-        for (YxStoreProductReplyQueryVo queryVo : list) {
+        List<YxStoreProductReplyQueryVo> list1 = list.stream().map(i ->{
+            YxStoreProductReplyQueryVo vo = new YxStoreProductReplyQueryVo();
+            BeanUtils.copyProperties(i,vo);
+            if(i.getPictures().contains(",")){
+                vo.setPics(i.getPictures().split(","));
+            }
+            return vo;
+        }).collect(Collectors.toList());
+        for (YxStoreProductReplyQueryVo queryVo : list1) {
             newList.add(handleReply(queryVo));
         }
         return newList;
