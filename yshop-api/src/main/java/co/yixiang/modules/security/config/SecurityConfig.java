@@ -114,6 +114,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/share").anonymous()
                 .antMatchers("/wechat/notify").anonymous()
                 .antMatchers("/wechat/serve").anonymous()
+                .antMatchers("/logistics").anonymous()
                 // 支付宝回调
                 .antMatchers("/api/aliPay/return").anonymous()
                 .antMatchers("/api/aliPay/notify").anonymous()

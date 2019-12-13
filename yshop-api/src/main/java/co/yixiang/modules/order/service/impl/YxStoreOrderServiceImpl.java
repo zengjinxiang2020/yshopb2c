@@ -6,12 +6,14 @@ import co.yixiang.common.constant.CommonConstant;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
+import co.yixiang.modules.manage.service.YxExpressService;
 import co.yixiang.modules.manage.web.dto.ChartDataDTO;
 import co.yixiang.modules.manage.web.dto.OrderDataDTO;
 import co.yixiang.modules.manage.web.dto.OrderTimeDataDTO;
 import co.yixiang.modules.manage.web.param.OrderDeliveryParam;
 import co.yixiang.modules.manage.web.param.OrderPriceParam;
 import co.yixiang.modules.manage.web.param.OrderRefundParam;
+import co.yixiang.modules.manage.web.vo.YxExpressQueryVo;
 import co.yixiang.modules.monitor.service.RedisService;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.entity.YxStoreOrderCartInfo;
@@ -44,6 +46,10 @@ import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 //import co.yixiang.redisson.DelayJob;
 //import co.yixiang.redisson.DelayJobService;
 import co.yixiang.modules.task.DelayJobService;
+import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
+import co.yixiang.modules.wechat.entity.YxWechatTemplate;
+import co.yixiang.mp.service.WxMpTemplateMessageService;
+import co.yixiang.modules.wechat.service.YxWechatTemplateService;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
@@ -144,8 +150,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Autowired
     private YxStorePinkService pinkService;
 
-//    @Value("${job.unpayorder}")
-//    private String overtime;
+    @Autowired
+    private WxMpTemplateMessageService templateMessageService;
+
+    @Autowired
+    private YxWechatTemplateService yxWechatTemplateService;
+
+    @Autowired
+    private YxExpressService expressService;
 
 
     /**
@@ -204,18 +216,41 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         if(orderQueryVo.getStatus() != 0 || orderQueryVo.getPaid() == 0) throw new ErrorRequestException("订单状态错误");
 
+        YxExpressQueryVo expressQueryVo = expressService
+                .getYxExpressById(Integer.valueOf(param.getDeliveryName()));
+        if(ObjectUtil.isNull(expressQueryVo)) throw new ErrorRequestException("请后台先添加快递公司");
+
         YxStoreOrder storeOrder = new YxStoreOrder();
         storeOrder.setId(orderQueryVo.getId());
         storeOrder.setStatus(1);
         storeOrder.setDeliveryId(param.getDeliveryId());
-        storeOrder.setDeliveryName(param.getDeliveryName());
+        storeOrder.setDeliveryName(expressQueryVo.getName());
         storeOrder.setDeliveryType(param.getDeliveryType());
+        storeOrder.setDeliverySn(expressQueryVo.getCode());
 
         yxStoreOrderMapper.updateById(storeOrder);
 
         //增加状态
         orderStatusService.create(storeOrder.getId(),"delivery_goods",
-                "已发货 快递公司："+param.getDeliveryName()+"快递单号：" +param.getDeliveryId());
+                "已发货 快递公司："+expressQueryVo.getName()+"快递单号：" +param.getDeliveryId());
+
+        //模板消息通知
+        String siteUrl = RedisUtil.get("site_url");
+        YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(orderQueryVo.getUid());
+        if(ObjectUtil.isNotNull(wechatUser)){
+            YxWechatTemplate WechatTemplate = yxWechatTemplateService.getOne(
+                    new QueryWrapper<YxWechatTemplate>().eq("tempkey","OPENTM200565259"));
+            //付款成功微信模板通知用户
+            Map<String,String> map = new HashMap<>();
+            map.put("first","亲，宝贝已经启程了，好想快点来到你身边。");
+            map.put("keyword1",storeOrder.getOrderId());//订单号
+            map.put("keyword2",expressQueryVo.getName());
+            map.put("keyword3",param.getDeliveryId());
+            map.put("remark","yshop电商系统为你服务！");
+            templateMessageService.sendWxMpTemplateMessage( wechatUser.getOpenid()
+                    ,WechatTemplate.getTempid(),
+                    siteUrl+"/order/detail/"+orderQueryVo.getOrderId(),map);
+        }
 
     }
 
@@ -837,7 +872,6 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Override
     public void paySuccess(String orderId, String payType) {
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
-        //System.out.println("orderInfo:"+orderInfo);
 
         //更新订单状态
         QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
@@ -853,13 +887,26 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //增加状态
         orderStatusService.create(orderInfo.getId(),"pay_success","用户付款成功");
         //支付成功后取消延时队列
-//        DelayJob delayJob = new DelayJob();
-//        delayJob.setOderId(storeOrder.getId());
-//        delayJob.setAClass(CancelOrderService.class);
-//        delayJobService.cancelJob(delayJob);
         //todo 拼团
         pinkService.createPink(orderInfo);
-        //todo 模板消息推送
+        //模板消息推送
+        //读取redis配置
+        String siteUrl = RedisUtil.get("site_url");
+        YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(orderInfo.getUid());
+        if(ObjectUtil.isNotNull(wechatUser)){
+            YxWechatTemplate WechatTemplate = yxWechatTemplateService.getOne(
+                    new QueryWrapper<YxWechatTemplate>().eq("tempkey","OPENTM207791277"));
+            //付款成功微信模板通知用户
+            Map<String,String> map = new HashMap<>();
+            map.put("first","您的订单已支付成功，我们会尽快为您发货。");
+            map.put("keyword1",orderInfo.getOrderId());//订单号
+            map.put("keyword2",orderInfo.getPayPrice().toString());
+            map.put("remark","yshop电商系统为你服务！");
+            templateMessageService.sendWxMpTemplateMessage( wechatUser.getOpenid()
+                    ,WechatTemplate.getTempid(),
+                    siteUrl+"/order/detail/"+orderInfo.getOrderId(),map);
+        }
+
     }
 
     /**

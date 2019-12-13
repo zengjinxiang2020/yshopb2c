@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.modules.manage.service.YxExpressService;
 import co.yixiang.modules.manage.web.dto.OrderTimeDataDTO;
 import co.yixiang.modules.manage.web.param.OrderDeliveryParam;
 import co.yixiang.modules.manage.web.param.OrderPriceParam;
@@ -39,6 +40,7 @@ public class ShoperController extends BaseController {
 
     private final YxStoreOrderService storeOrderService;
     //private final YxUserService yxUserService;
+    private final YxExpressService expressService;
 
     /**
      * 订单数据统计
@@ -46,7 +48,6 @@ public class ShoperController extends BaseController {
     @GetMapping("/admin/order/statistics")
     @ApiOperation(value = "订单数据统计",notes = "订单数据统计")
     public ApiResult<Object> statistics(){
-        //int uid = SecurityUtils.getUserId().intValue();
 
         OrderCountDTO orderCountDTO  = storeOrderService.orderData(0);
         OrderTimeDataDTO orderTimeDataDTO = storeOrderService.getOrderTimeData();
@@ -89,7 +90,6 @@ public class ShoperController extends BaseController {
     @GetMapping("/admin/order/detail/{key}")
     @ApiOperation(value = "订单详情",notes = "订单详情")
     public ApiResult<Object> orderDetail(@PathVariable String key){
-        int uid = SecurityUtils.getUserId().intValue();
 
         if(StrUtil.isEmpty(key)) return ApiResult.fail("参数错误");
         YxStoreOrderQueryVo storeOrder = storeOrderService.getOrderInfo(key,0);
@@ -107,13 +107,21 @@ public class ShoperController extends BaseController {
     @ApiOperation(value = "订单改价",notes = "订单改价")
     public ApiResult<Object> orderPrice(@Validated @RequestBody OrderPriceParam param){
 
-        //if(ObjectUtil.isNotNull(param)) return ApiResult.fail("演示环境禁止操作");
-        int uid = SecurityUtils.getUserId().intValue();
-
         storeOrderService.editOrderPrice(param);
 
         return ApiResult.ok("ok");
     }
+
+    /**
+     * 快递公司
+     */
+    @GetMapping("/logistics")
+    @ApiOperation(value = "快递公司",notes = "快递公司")
+    public ApiResult<Object> express(){
+
+        return ApiResult.ok(expressService.list());
+    }
+
 
     /**
      * 订单发货
@@ -121,9 +129,6 @@ public class ShoperController extends BaseController {
     @PostMapping("/admin/order/delivery/keep")
     @ApiOperation(value = "订单发货",notes = "订单发货")
     public ApiResult<Object> orderDelivery(@Validated @RequestBody OrderDeliveryParam param){
-        //if(ObjectUtil.isNotNull(param)) return ApiResult.fail("演示环境禁止操作");
-
-        int uid = SecurityUtils.getUserId().intValue();
 
         storeOrderService.orderDelivery(param);
 
