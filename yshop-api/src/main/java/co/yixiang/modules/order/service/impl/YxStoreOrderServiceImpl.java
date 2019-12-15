@@ -3,6 +3,8 @@ package co.yixiang.modules.order.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.*;
 import co.yixiang.common.constant.CommonConstant;
+import co.yixiang.domain.AlipayConfig;
+import co.yixiang.domain.vo.TradeVo;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
@@ -50,6 +52,7 @@ import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 import co.yixiang.modules.wechat.entity.YxWechatTemplate;
 import co.yixiang.mp.service.WxMpTemplateMessageService;
 import co.yixiang.modules.wechat.service.YxWechatTemplateService;
+import co.yixiang.service.AlipayService;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
@@ -158,6 +161,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
     @Autowired
     private YxExpressService expressService;
+
+    @Autowired
+    private AlipayService alipayService;
 
 
     /**
@@ -907,6 +913,27 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
                     siteUrl+"/order/detail/"+orderInfo.getOrderId(),map);
         }
 
+    }
+
+
+    /**
+     * 支付宝支付
+     * @param orderId,支付宝支付 本系统已经集成，请自行根据下面找到代码整合下即可
+     * @return
+     */
+    @Override
+    public String aliPay(String orderId) throws Exception {
+        AlipayConfig alipay = alipayService.find();
+        if(ObjectUtil.isNull(alipay)) throw new ErrorRequestException("请先配置支付宝");
+        YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
+        if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
+        if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
+
+        if(orderInfo.getPayPrice().doubleValue() <= 0) throw new ErrorRequestException("该支付无需支付");
+        TradeVo trade = new TradeVo();
+        trade.setOutTradeNo(orderId);
+        String payUrl = alipayService.toPayAsWeb(alipay,trade);
+        return payUrl;
     }
 
     /**

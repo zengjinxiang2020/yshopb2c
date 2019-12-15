@@ -167,7 +167,8 @@ public class StoreOrderController extends BaseController {
         if(StrUtil.isNotEmpty(orderId)){
             switch (param.getPayType()){
                 case "weixin":
-                    if(param.getFrom().equals("weixinh5")){
+                    if(param.getFrom().equals("weixinh5")){//此此为支付宝支付
+
                         throw new ErrorRequestException("H5模式不支持微信支付，请用公众号演示");
                     }
                      try {

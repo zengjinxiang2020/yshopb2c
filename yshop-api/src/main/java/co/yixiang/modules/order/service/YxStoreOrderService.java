@@ -81,6 +81,8 @@ public interface YxStoreOrderService extends BaseService<YxStoreOrder> {
 
     WxPayMpOrderResult wxPay(String orderId) throws WxPayException;
 
+    String aliPay(String orderId) throws Exception;
+
     void delCacheOrderInfo(int uid, String key);
 
     YxStoreOrder createOrder(int uid, String key, OrderParam param);
