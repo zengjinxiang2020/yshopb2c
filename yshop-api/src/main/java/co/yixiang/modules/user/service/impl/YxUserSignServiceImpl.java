@@ -104,7 +104,7 @@ public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxU
         }
         userSign.setTitle(title);
         userSign.setNumber(signNumber);
-        userSign.setBalance(userQueryVo.getIntegral().intValueExact());
+        userSign.setBalance(userQueryVo.getIntegral().intValue());
         userSign.setAddTime(OrderUtil.getSecondTimestampTwo());
         yxUserSignMapper.insert(userSign);
 
