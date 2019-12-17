@@ -4,8 +4,13 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.entity.YxStoreCombination;
+import co.yixiang.modules.activity.entity.YxStoreSeckill;
 import co.yixiang.modules.activity.mapper.YxStoreCombinationMapper;
+import co.yixiang.modules.activity.mapper.YxStoreSeckillMapper;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
+import co.yixiang.modules.activity.service.YxStoreSeckillService;
+import co.yixiang.modules.order.entity.YxStoreOrder;
+import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.shop.entity.YxStoreCart;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
 import co.yixiang.modules.shop.mapper.YxStoreCartMapper;
@@ -69,6 +74,15 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
 
     @Autowired
     private YxStoreCombinationMapper storeCombinationMapper;
+
+    @Autowired
+    private YxStoreSeckillService storeSeckillService;
+
+    @Autowired
+    private YxStoreOrderService storeOrderService;
+
+    @Autowired
+    private YxStoreSeckillMapper storeSeckillMapper;
 
     @Autowired
     private YxUserService userService;
@@ -153,6 +167,8 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
             YxStoreProductQueryVo storeProduct = null;
             if(storeCart.getCombinationId() > 0){
                 storeProduct = storeCombinationMapper.combinatiionInfo(storeCart.getCombinationId());
+            }else if(storeCart.getSeckillId() > 0){
+                storeProduct = storeSeckillMapper.seckillInfo(storeCart.getSeckillId());
             }else{
                 storeProduct = productService
                         .getYxStoreProductById(storeCart.getProductId());
@@ -177,12 +193,17 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                     }else{
                         storeProduct.setAttrInfo(productAttrValue);
 
-                        //todo 设置真实价格
+                        //设置真实价格
                         //设置VIP价格
-                        double vipPrice = userService.setLevelPrice(
-                                productAttrValue.getPrice().doubleValue(),uid);
+                        double vipPrice = 0d;
+                        if(storeCart.getCombinationId() > 0 || storeCart.getSeckillId() > 0){
+                            vipPrice = productAttrValue.getPrice().doubleValue();
+                        }else{
+                            vipPrice = userService.setLevelPrice(
+                                    productAttrValue.getPrice().doubleValue(),uid);
+                        }
                         storeCartQueryVo.setTruePrice(vipPrice);
-                        //todo 设置会员价
+                        //设置会员价
                         storeCartQueryVo.setVipTruePrice(productAttrValue.getPrice()
                                 .doubleValue());
                         storeCartQueryVo.setCostPrice(productAttrValue.getCost()
@@ -193,8 +214,15 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                     }
                 }else{
                     //设置VIP价格
-                    double vipPrice = userService.setLevelPrice(
-                            storeProduct.getPrice().doubleValue(),uid);
+                    //设置VIP价格
+                    double vipPrice = 0d;
+                    if(storeCart.getCombinationId() > 0 || storeCart.getSeckillId() > 0){
+                        vipPrice = storeProduct.getPrice().doubleValue();
+                    }else{
+                        vipPrice = userService.setLevelPrice(
+                                storeProduct.getPrice().doubleValue(),uid);
+                    }
+
                     storeCartQueryVo.setTruePrice(vipPrice);
                     //todo 设置会员价
                     storeCartQueryVo.setVipTruePrice(0d);
@@ -236,6 +264,20 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
 
             YxStoreCombination storeCombination = storeCombinationService.getCombination(combinationId);
             if(ObjectUtil.isNull(storeCombination)) throw new ErrorRequestException("该产品已下架或删除");
+        }else if(seckillId > 0){//秒杀
+            YxStoreSeckill yxStoreSeckill = storeSeckillService.getSeckill(seckillId);
+            if(ObjectUtil.isNull(yxStoreSeckill)){
+                throw new ErrorRequestException("该产品已下架或删除");
+            }
+            if(yxStoreSeckill.getStock() < cartNum){
+                throw new ErrorRequestException("该产品库存不足");
+            }
+            int  seckillOrderCount = storeOrderService.count(new QueryWrapper<YxStoreOrder>()
+                            .eq("uid", uid).eq("paid",1).eq("seckill_id",seckillId));
+            if(yxStoreSeckill.getNum() <= seckillOrderCount || yxStoreSeckill.getNum() < cartNum){
+                throw new ErrorRequestException("每人限购:"+yxStoreSeckill.getNum()+"件");
+            }
+
         }else{
             YxStoreProductQueryVo productQueryVo = productService
                     .getYxStoreProductById(productId);
@@ -263,7 +305,6 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
         storeCart.setBargainId(bargainId);
         storeCart.setCartNum(cartNum);
         storeCart.setCombinationId(combinationId);
-        storeCart.setIsNew(0);
         storeCart.setProductAttrUnique(productAttrUnique);
         storeCart.setProductId(productId);
         storeCart.setSeckillId(seckillId);

@@ -88,8 +88,14 @@ public class StoreCartController extends BaseController {
             combinationId = jsonObject.getInteger("combinationId");
         }
 
+        //秒杀
+        int seckillId = 0;
+        if(ObjectUtil.isNotNull(jsonObject.get("secKillId"))){
+            seckillId = jsonObject.getInteger("secKillId");
+        }
+
         map.put("cartId",storeCartService.addCart(uid,productId,cartNum,uniqueId
-                ,"product",isNew,combinationId,0,0));
+                ,"product",isNew,combinationId,seckillId,0));
         return ApiResult.ok(map);
     }
 

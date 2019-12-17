@@ -31,6 +31,7 @@ import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -96,7 +97,7 @@ public class StoreOrderController extends BaseController {
 
         confirmOrderDTO.setUsableCoupon(couponUserService
                 .beUsableCoupon(uid,priceGroup.getTotalPrice()));
-        //todo 积分抵扣下个版本 已经do
+        //积分抵扣
         OtherDTO other = new OtherDTO();
         other.setIntegralRatio(systemConfigService.getData("integral_ratio"));
 
@@ -108,8 +109,15 @@ public class StoreOrderController extends BaseController {
             combinationId = cartQueryVo.getCombinationId();
         }
 
-        //拼团砍价类产品不参与抵扣
-        if(combinationId > 0) confirmOrderDTO.setDeduction(true);
+        int secKillId = 0;
+        if(cartId.split(",").length == 1){
+            YxStoreCartQueryVo cartQueryVo = cartService.getYxStoreCartById(Integer
+                    .valueOf(cartId));
+            secKillId = cartQueryVo.getSeckillId();
+        }
+
+        //拼团砍价秒杀类产品不参与抵扣
+        if(combinationId > 0 || secKillId > 0) confirmOrderDTO.setDeduction(true);
 
         confirmOrderDTO.setAddressInfo(addressService.getUserDefaultAddress(uid));
 
@@ -117,7 +125,7 @@ public class StoreOrderController extends BaseController {
         confirmOrderDTO.setPriceGroup(priceGroup);
         confirmOrderDTO.setOrderKey(storeOrderService.cacheOrderInfo(uid,cartInfo,
                                     priceGroup,other));
-        //todo VIP会员
+
 
         confirmOrderDTO.setUserInfo(userService.getYxUserById(uid));
 
@@ -167,25 +175,32 @@ public class StoreOrderController extends BaseController {
         if(StrUtil.isNotEmpty(orderId)){
             switch (param.getPayType()){
                 case "weixin":
-                    if(param.getFrom().equals("weixinh5")){//此此为支付宝支付
-
-                        throw new ErrorRequestException("H5模式不支持微信支付，请用公众号演示");
-                    }
                      try {
-                         map.put("status","WECHAT_PAY");
-                         WxPayMpOrderResult wxPayMpOrderResult = storeOrderService
-                                 .wxPay(orderId);
-                         //重新组装
                          Map<String,String> jsConfig = new HashMap<>();
-                         jsConfig.put("appId",wxPayMpOrderResult.getAppId());
-                         jsConfig.put("timestamp",wxPayMpOrderResult.getTimeStamp());
-                         jsConfig.put("nonceStr",wxPayMpOrderResult.getNonceStr());
-                         jsConfig.put("package",wxPayMpOrderResult.getPackageValue());
-                         jsConfig.put("signType",wxPayMpOrderResult.getSignType());
-                         jsConfig.put("paySign",wxPayMpOrderResult.getPaySign());
-                         orderDTO.setJsConfig(jsConfig);
-                         map.put("result",orderDTO);
-                         return ApiResult.ok(map,"订单创建成功");
+                         if(param.getFrom().equals("weixinh5")){
+                             WxPayMwebOrderResult wxPayMwebOrderResult = storeOrderService
+                                     .wxH5Pay(orderId);
+                             log.info("wxPayMwebOrderResult:{}",wxPayMwebOrderResult);
+                             jsConfig.put("mweb_url",wxPayMwebOrderResult.getMwebUrl());
+                             orderDTO.setJsConfig(jsConfig);
+                             map.put("result",orderDTO);
+                             map.put("status","WECHAT_H5_PAY");
+                             return ApiResult.ok(map);
+                         }else{
+                             map.put("status","WECHAT_PAY");
+                             WxPayMpOrderResult wxPayMpOrderResult = storeOrderService
+                                     .wxPay(orderId);
+                             jsConfig.put("appId",wxPayMpOrderResult.getAppId());
+                             jsConfig.put("timestamp",wxPayMpOrderResult.getTimeStamp());
+                             jsConfig.put("nonceStr",wxPayMpOrderResult.getNonceStr());
+                             jsConfig.put("package",wxPayMpOrderResult.getPackageValue());
+                             jsConfig.put("signType",wxPayMpOrderResult.getSignType());
+                             jsConfig.put("paySign",wxPayMpOrderResult.getPaySign());
+                             orderDTO.setJsConfig(jsConfig);
+                             map.put("result",orderDTO);
+                             return ApiResult.ok(map,"订单创建成功");
+                         }
+
                      } catch (WxPayException e) {
                         return ApiResult.fail(e.getMessage());
                     }
@@ -230,24 +245,33 @@ public class StoreOrderController extends BaseController {
         if(StrUtil.isNotEmpty(orderId)){
             switch (param.getPaytype()){
                 case "weixin":
-                    if(param.getFrom().equals("weixinh5")){
-                        throw new ErrorRequestException("H5模式不支持微信支付，请用公众号演示");
-                    }
                     try {
-                        map.put("status","WECHAT_PAY");
-                        WxPayMpOrderResult wxPayMpOrderResult = storeOrderService
-                                .wxPay(orderId);
-                        //重新组装
                         Map<String,String> jsConfig = new HashMap<>();
-                        jsConfig.put("appId",wxPayMpOrderResult.getAppId());
-                        jsConfig.put("timestamp",wxPayMpOrderResult.getTimeStamp());
-                        jsConfig.put("nonceStr",wxPayMpOrderResult.getNonceStr());
-                        jsConfig.put("package",wxPayMpOrderResult.getPackageValue());
-                        jsConfig.put("signType",wxPayMpOrderResult.getSignType());
-                        jsConfig.put("paySign",wxPayMpOrderResult.getPaySign());
-                        orderDTO.setJsConfig(jsConfig);
-                        map.put("result",orderDTO);
-                        return ApiResult.ok(map);
+                        if(param.getFrom().equals("weixinh5")){
+                            WxPayMwebOrderResult wxPayMwebOrderResult = storeOrderService
+                                    .wxH5Pay(orderId);
+                            log.info("wxPayMwebOrderResult:{}",wxPayMwebOrderResult);
+                            jsConfig.put("mweb_url",wxPayMwebOrderResult.getMwebUrl());
+                            orderDTO.setJsConfig(jsConfig);
+                            map.put("result",orderDTO);
+                            map.put("status","WECHAT_H5_PAY");
+                            return ApiResult.ok(map);
+                        }else{
+                            map.put("status","WECHAT_PAY");
+                            WxPayMpOrderResult wxPayMpOrderResult = storeOrderService
+                                    .wxPay(orderId);
+                            //重新组装
+                            jsConfig.put("appId",wxPayMpOrderResult.getAppId());
+                            jsConfig.put("timestamp",wxPayMpOrderResult.getTimeStamp());
+                            jsConfig.put("nonceStr",wxPayMpOrderResult.getNonceStr());
+                            jsConfig.put("package",wxPayMpOrderResult.getPackageValue());
+                            jsConfig.put("signType",wxPayMpOrderResult.getSignType());
+                            jsConfig.put("paySign",wxPayMpOrderResult.getPaySign());
+                            orderDTO.setJsConfig(jsConfig);
+                            map.put("result",orderDTO);
+                            return ApiResult.ok(map);
+                        }
+
                     } catch (WxPayException e) {
                         return ApiResult.fail(e.getMessage());
                     }

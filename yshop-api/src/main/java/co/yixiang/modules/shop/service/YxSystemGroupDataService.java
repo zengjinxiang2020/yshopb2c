@@ -22,4 +22,6 @@ public interface YxSystemGroupDataService extends BaseService<YxSystemGroupData>
 
     List<Map<String,Object>> getDatas(String name);
 
+    YxSystemGroupData findData(Integer id);
+
 }

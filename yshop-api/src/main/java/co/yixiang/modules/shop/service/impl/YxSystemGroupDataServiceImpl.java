@@ -60,7 +60,13 @@ public class YxSystemGroupDataServiceImpl extends BaseServiceImpl<YxSystemGroupD
         return list;
     }
 
-
-
-
+    /**
+     * 获取单条数据
+     * @param id
+     * @return
+     */
+    @Override
+    public YxSystemGroupData findData(Integer id) {
+        return baseMapper.selectById(id);
+    }
 }
