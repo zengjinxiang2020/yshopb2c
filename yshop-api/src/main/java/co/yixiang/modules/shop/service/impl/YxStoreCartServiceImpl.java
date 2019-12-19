@@ -166,16 +166,17 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
         for (YxStoreCart storeCart : carts) {
             YxStoreProductQueryVo storeProduct = null;
             if(storeCart.getCombinationId() > 0){
-                storeProduct = storeCombinationMapper.combinatiionInfo(storeCart.getCombinationId());
+                storeProduct = ObjectUtil.clone(storeCombinationMapper.combinatiionInfo(storeCart.getCombinationId()));
             }else if(storeCart.getSeckillId() > 0){
-                storeProduct = storeSeckillMapper.seckillInfo(storeCart.getSeckillId());
+                storeProduct = ObjectUtil.clone(storeSeckillMapper.seckillInfo(storeCart.getSeckillId()));
             }else{
-                storeProduct = productService
-                        .getYxStoreProductById(storeCart.getProductId());
+                //必须得重新克隆创建一个新对象
+                storeProduct = ObjectUtil.clone(productService
+                        .getYxStoreProductById(storeCart.getProductId()));
             }
 
             YxStoreCartQueryVo storeCartQueryVo = cartMap.toDto(storeCart);
-            storeCartQueryVo.setProductInfo(storeProduct);
+
             if(ObjectUtil.isNull(storeProduct)){
                 YxStoreCart yxStoreCart = new YxStoreCart();
                 yxStoreCart.setIsDel(1);
@@ -192,6 +193,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                         invalid.add(storeCartQueryVo);
                     }else{
                         storeProduct.setAttrInfo(productAttrValue);
+                        storeCartQueryVo.setProductInfo(storeProduct);
 
                         //设置真实价格
                         //设置VIP价格
@@ -211,6 +213,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                         storeCartQueryVo.setTrueStock(productAttrValue.getStock());
 
                         valid.add(storeCartQueryVo);
+
                     }
                 }else{
                     //设置VIP价格
@@ -229,11 +232,14 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                     storeCartQueryVo.setCostPrice(storeProduct.getCost()
                             .doubleValue());
                     storeCartQueryVo.setTrueStock(storeProduct.getStock());
+                    storeCartQueryVo.setProductInfo(storeProduct);
 
                     valid.add(storeCartQueryVo);
                 }
             }
+
         }
+
         Map<String,Object> map = new LinkedHashMap<>();
         map.put("valid",valid);
         map.put("invalid",invalid);
@@ -313,7 +319,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
         storeCart.setIsNew(isNew);
         if(ObjectUtil.isNotNull(cart)){
             if(isNew == 0){
-                storeCart.setCartNum(cartNum + storeCart.getCartNum());
+                storeCart.setCartNum(cartNum + cart.getCartNum());
             }
             storeCart.setId(cart.getId());
             yxStoreCartMapper.updateById(storeCart);

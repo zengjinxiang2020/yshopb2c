@@ -4,10 +4,7 @@ import cn.hutool.core.util.IdUtil;
 import co.yixiang.modules.order.entity.YxStoreOrderCartInfo;
 import co.yixiang.modules.order.mapper.YxStoreOrderCartInfoMapper;
 import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
-import co.yixiang.modules.order.web.param.YxStoreOrderCartInfoQueryParam;
-import co.yixiang.modules.order.web.vo.YxStoreOrderCartInfoQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -16,10 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import java.io.Serializable;
+
 import java.util.ArrayList;
 import java.util.List;
 
