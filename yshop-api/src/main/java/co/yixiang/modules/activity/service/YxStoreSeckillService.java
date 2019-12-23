@@ -20,6 +20,8 @@ import java.util.List;
  */
 public interface YxStoreSeckillService extends BaseService<YxStoreSeckill> {
 
+    void incStockDecSales(int num,int seckillId);
+
     void decStockIncSales(int num,int seckillId);
 
     YxStoreSeckill getSeckill(int id);

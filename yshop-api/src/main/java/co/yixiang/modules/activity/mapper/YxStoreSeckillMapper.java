@@ -26,6 +26,10 @@ import java.util.List;
 @Repository
 public interface YxStoreSeckillMapper extends BaseMapper<YxStoreSeckill> {
 
+    @Update("update yx_store_seckill set stock=stock+#{num}, sales=sales-#{num}" +
+            " where id=#{seckillId}")
+    int incStockDecSales(@Param("num") int num,@Param("seckillId") int seckillId);
+
     @Update("update yx_store_seckill set stock=stock-#{num}, sales=sales+#{num}" +
             " where id=#{seckillId}")
     int decStockIncSales(@Param("num") int num,@Param("seckillId") int seckillId);

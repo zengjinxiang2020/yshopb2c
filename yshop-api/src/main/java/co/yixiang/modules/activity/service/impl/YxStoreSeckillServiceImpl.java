@@ -51,6 +51,17 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
     private YxStoreProductReplyService replyService;
 
     /**
+     * 退回库存减少销量
+     * @param num
+     * @param seckillId
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void incStockDecSales(int num, int seckillId) {
+        yxStoreSeckillMapper.incStockDecSales(num,seckillId);
+    }
+
+    /**
      * 减库存增加销量
      * @param num
      * @param seckillId

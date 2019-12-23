@@ -119,6 +119,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/seckill/list/**").anonymous()
                 .antMatchers("/seckill/list/**").anonymous()
                 .antMatchers("/seckill/detail/*").anonymous()
+                .antMatchers("/bargain/list/**").anonymous()
                 // 支付宝回调
                 .antMatchers("/api/aliPay/return").anonymous()
                 .antMatchers("/api/aliPay/notify").anonymous()

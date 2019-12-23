@@ -26,6 +26,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * <p>
@@ -49,7 +51,7 @@ public class UserController extends BaseController {
     private final YxUserBillService userBillService;
     private final YxSystemUserLevelService systemUserLevelService;
 
-
+    private static Lock lock = new ReentrantLock(false);
 
     /**
      * 用户资料
@@ -202,7 +204,14 @@ public class UserController extends BaseController {
         int uid = SecurityUtils.getUserId().intValue();
         boolean isDaySign = userSignService.getToDayIsSign(uid);
         if(isDaySign) return ApiResult.fail("已签到");
-        int integral = userSignService.sign(uid);
+        int integral = 0;
+        try {
+            lock.lock();
+            integral = userSignService.sign(uid);
+        }finally {
+            lock.unlock();
+        }
+
         Map<String,Object> map = new LinkedHashMap<>();
         map.put("integral",integral);
         return ApiResult.ok(map,"签到获得" + integral + "积分");

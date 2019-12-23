@@ -66,19 +66,22 @@ public class StoreCartController extends BaseController {
         Map<String,Object> map = new LinkedHashMap<>();
         int uid = SecurityUtils.getUserId().intValue();
         if(ObjectUtil.isNull(jsonObject.get("cartNum")) || ObjectUtil.isNull(jsonObject.get("productId"))){
-            ApiResult.fail("参数有误");
+            return ApiResult.fail("参数有误");
         }
-        int cartNum = jsonObject.getInteger("cartNum");
+        Integer cartNum = jsonObject.getInteger("cartNum");
+        if(ObjectUtil.isNull(cartNum)){
+            return ApiResult.fail("购物车数量参数有误");
+        }
         if(cartNum <= 0){
-            ApiResult.fail("购物车数量必须大于0");
+            return ApiResult.fail("购物车数量必须大于0");
         }
         int isNew = 1;
         if(ObjectUtil.isNotNull(jsonObject.get("new"))){
             isNew = jsonObject.getInteger("new");
         }
-        int productId = jsonObject.getInteger("productId");
-        if(productId <= 0){
-            ApiResult.fail("产品参数有误");
+        Integer productId = jsonObject.getInteger("productId");
+        if(ObjectUtil.isNull(productId)){
+            return ApiResult.fail("产品参数有误");
         }
         String uniqueId = jsonObject.get("uniqueId").toString();
 
@@ -94,8 +97,14 @@ public class StoreCartController extends BaseController {
             seckillId = jsonObject.getInteger("secKillId");
         }
 
+        //秒杀
+        int bargainId = 0;
+        if(ObjectUtil.isNotNull(jsonObject.get("bargainId"))){
+            bargainId = jsonObject.getInteger("bargainId");
+        }
+
         map.put("cartId",storeCartService.addCart(uid,productId,cartNum,uniqueId
-                ,"product",isNew,combinationId,seckillId,0));
+                ,"product",isNew,combinationId,seckillId,bargainId));
         return ApiResult.ok(map);
     }
 

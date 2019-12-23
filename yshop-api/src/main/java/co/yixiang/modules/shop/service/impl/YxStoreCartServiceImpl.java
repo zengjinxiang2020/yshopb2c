@@ -3,10 +3,13 @@ package co.yixiang.modules.shop.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.exception.ErrorRequestException;
+import co.yixiang.modules.activity.entity.YxStoreBargain;
 import co.yixiang.modules.activity.entity.YxStoreCombination;
 import co.yixiang.modules.activity.entity.YxStoreSeckill;
+import co.yixiang.modules.activity.mapper.YxStoreBargainMapper;
 import co.yixiang.modules.activity.mapper.YxStoreCombinationMapper;
 import co.yixiang.modules.activity.mapper.YxStoreSeckillMapper;
+import co.yixiang.modules.activity.service.YxStoreBargainService;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.order.entity.YxStoreOrder;
@@ -79,10 +82,16 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
     private YxStoreSeckillService storeSeckillService;
 
     @Autowired
+    private YxStoreBargainService storeBargainService;
+
+    @Autowired
     private YxStoreOrderService storeOrderService;
 
     @Autowired
     private YxStoreSeckillMapper storeSeckillMapper;
+
+    @Autowired
+    private YxStoreBargainMapper yxStoreBargainMapper;
 
     @Autowired
     private YxUserService userService;
@@ -169,6 +178,8 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                 storeProduct = ObjectUtil.clone(storeCombinationMapper.combinatiionInfo(storeCart.getCombinationId()));
             }else if(storeCart.getSeckillId() > 0){
                 storeProduct = ObjectUtil.clone(storeSeckillMapper.seckillInfo(storeCart.getSeckillId()));
+            }else if(storeCart.getBargainId() > 0){
+                storeProduct = ObjectUtil.clone(yxStoreBargainMapper.bargainInfo(storeCart.getBargainId()));
             }else{
                 //必须得重新克隆创建一个新对象
                 storeProduct = ObjectUtil.clone(productService
@@ -198,7 +209,8 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                         //设置真实价格
                         //设置VIP价格
                         double vipPrice = 0d;
-                        if(storeCart.getCombinationId() > 0 || storeCart.getSeckillId() > 0){
+                        if(storeCart.getCombinationId() > 0 || storeCart.getSeckillId() > 0
+                                || storeCart.getBargainId() > 0){
                             vipPrice = productAttrValue.getPrice().doubleValue();
                         }else{
                             vipPrice = userService.setLevelPrice(
@@ -219,7 +231,8 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                     //设置VIP价格
                     //设置VIP价格
                     double vipPrice = 0d;
-                    if(storeCart.getCombinationId() > 0 || storeCart.getSeckillId() > 0){
+                    if(storeCart.getCombinationId() > 0 || storeCart.getSeckillId() > 0
+                            || storeCart.getBargainId() > 0){
                         vipPrice = storeProduct.getPrice().doubleValue();
                     }else{
                         vipPrice = userService.setLevelPrice(
@@ -282,6 +295,15 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                             .eq("uid", uid).eq("paid",1).eq("seckill_id",seckillId));
             if(yxStoreSeckill.getNum() <= seckillOrderCount || yxStoreSeckill.getNum() < cartNum){
                 throw new ErrorRequestException("每人限购:"+yxStoreSeckill.getNum()+"件");
+            }
+
+        }else if(bargainId > 0){//砍价
+            YxStoreBargain yxStoreBargain = storeBargainService.getBargain(bargainId);
+            if(ObjectUtil.isNull(yxStoreBargain)){
+                throw new ErrorRequestException("该产品已下架或删除");
+            }
+            if(yxStoreBargain.getStock() < cartNum){
+                throw new ErrorRequestException("该产品库存不足");
             }
 
         }else{

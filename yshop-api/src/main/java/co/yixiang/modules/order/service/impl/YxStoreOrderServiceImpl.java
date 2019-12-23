@@ -6,9 +6,8 @@ import co.yixiang.common.constant.CommonConstant;
 import co.yixiang.domain.AlipayConfig;
 import co.yixiang.domain.vo.TradeVo;
 import co.yixiang.exception.ErrorRequestException;
-import co.yixiang.modules.activity.service.YxStoreCombinationService;
-import co.yixiang.modules.activity.service.YxStorePinkService;
-import co.yixiang.modules.activity.service.YxStoreSeckillService;
+import co.yixiang.modules.activity.mapper.YxStoreBargainMapper;
+import co.yixiang.modules.activity.service.*;
 import co.yixiang.modules.manage.service.YxExpressService;
 import co.yixiang.modules.manage.web.dto.ChartDataDTO;
 import co.yixiang.modules.manage.web.dto.OrderDataDTO;
@@ -148,6 +147,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     private YxStoreSeckillService storeSeckillService;
 
     @Autowired
+    private YxStoreBargainService storeBargainService;
+
+    @Autowired
+    private YxStoreBargainUserService storeBargainUserService;
+
+    @Autowired
     private YxStorePinkService pinkService;
 
     @Autowired
@@ -161,6 +166,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
     @Autowired
     private AlipayService alipayService;
+
+
 
 
     /**
@@ -341,8 +348,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         for (YxStoreOrderCartInfo cartInfo : cartInfoList) {
             YxStoreCartQueryVo cart = JSONObject.parseObject(cartInfo.getCartInfo()
                     ,YxStoreCartQueryVo.class);
-            productService.incProductStock(cart.getCartNum(),cart.getProductId()
-                    ,cart.getProductAttrUnique());
+            if(order.getCombinationId() > 0){//拼团
+                combinationService.incStockDecSales(cart.getCartNum(),order.getCombinationId());
+            }else if(order.getSeckillId() > 0){//秒杀
+                storeSeckillService.incStockDecSales(cart.getCartNum(),order.getSeckillId());
+            }else if(order.getBargainId() > 0){//砍价
+                storeBargainService.incStockDecSales(cart.getCartNum(),order.getBargainId());
+            }else{
+                productService.incProductStock(cart.getCartNum(),cart.getProductId()
+                        ,cart.getProductAttrUnique());
+            }
+
         }
     }
 
@@ -889,9 +905,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         userService.incPayCount(orderInfo.getUid());
         //增加状态
         orderStatusService.create(orderInfo.getId(),"pay_success","用户付款成功");
-        //支付成功后取消延时队列
-        //todo 拼团
-        pinkService.createPink(orderInfo);
+        //拼团
+        if(orderInfo.getCombinationId() > 0) pinkService.createPink(orderInfo);
+
+        //砍价
+        if(orderInfo.getBargainId() > 0) {
+            storeBargainUserService.setBargainUserStatus(orderInfo.getBargainId(),
+                    orderInfo.getUid());
+        }
         //模板消息推送
         //读取redis配置
         String siteUrl = RedisUtil.get("site_url");
@@ -1096,15 +1117,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         List<String> cartIds = new ArrayList<>();
         int combinationId = 0;
         int seckillId = 0;
+        int bargainId = 0;
 
         for (YxStoreCartQueryVo cart : cartInfo) {
             combinationId = cart.getCombinationId();
             seckillId = cart.getSeckillId();
+            bargainId = cart.getBargainId();
             cartIds.add(cart.getId().toString());
             totalNum += cart.getCartNum();
             //计算积分
             BigDecimal cartInfoGainIntegral = BigDecimal.ZERO;
-            if(combinationId == 0 && seckillId == 0){//拼团等活动不参与积分
+            if(combinationId == 0 && seckillId == 0 && bargainId == 0){//拼团等活动不参与积分
                 if(cart.getProductInfo().getGiveIntegral().intValue() > 0){
                     cartInfoGainIntegral = NumberUtil.mul(cart.getCartNum(),cart.
                             getProductInfo().getGiveIntegral());
@@ -1131,7 +1154,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         boolean deduction = false;//todo 拼团等
         //拼团等不参与抵扣
-        if(combinationId > 0 || seckillId > 0) deduction = true;
+        if(combinationId > 0 || seckillId > 0 || bargainId > 0) deduction = true;
         if(deduction){
             couponId = 0;
             useIntegral = 0;
@@ -1218,7 +1241,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         storeOrder.setCombinationId(combinationId);
         storeOrder.setPinkId(param.getPinkId());
         storeOrder.setSeckillId(seckillId);
-        storeOrder.setBargainId(0);
+        storeOrder.setBargainId(bargainId);
         storeOrder.setCost(BigDecimal.valueOf(cacheDTO.getPriceGroup().getCostPrice()));
         storeOrder.setIsChannel(param.getIsChannel());
         storeOrder.setAddTime(OrderUtil.getSecondTimestampTwo());
@@ -1234,6 +1257,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
                 combinationService.decStockIncSales(cart.getCartNum(),combinationId);
             }else if(seckillId > 0){
                 storeSeckillService.decStockIncSales(cart.getCartNum(),seckillId);
+            }else if(bargainId > 0){
+                storeBargainService.decStockIncSales(cart.getCartNum(),bargainId);
             } else {
                 productService.decProductStock(cart.getCartNum(),cart.getProductId(),
                         cart.getProductAttrUnique());
