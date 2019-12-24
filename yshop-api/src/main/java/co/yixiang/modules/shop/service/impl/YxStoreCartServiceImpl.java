@@ -201,6 +201,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                     YxStoreProductAttrValue productAttrValue = productAttrService
                             .uniqueByAttrInfo(storeCart.getProductAttrUnique());
                     if(ObjectUtil.isNull(productAttrValue) || productAttrValue.getStock() == 0){
+                        storeCartQueryVo.setProductInfo(storeProduct);
                         invalid.add(storeCartQueryVo);
                     }else{
                         storeProduct.setAttrInfo(productAttrValue);
