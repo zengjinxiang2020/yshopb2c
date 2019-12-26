@@ -1,6 +1,7 @@
 package co.yixiang.modules.shop.web.controller;
 
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.vo.Paging;
@@ -43,6 +44,7 @@ public class CouponController extends BaseController {
     /**
      * 可领取优惠券列表
      */
+    @Log(value = "查看优惠券",type = 1)
     @GetMapping("/coupons")
     @ApiOperation(value = "可领取优惠券列表",notes = "可领取优惠券列表")
     public ApiResult<Object> getList(
@@ -57,6 +59,7 @@ public class CouponController extends BaseController {
     /**
      * 领取优惠券
      */
+    @Log(value = "领取优惠券",type = 1)
     @PostMapping("/coupon/receive")
     @ApiOperation(value = "领取优惠券",notes = "领取优惠券")
     public ApiResult<Object> receive(@RequestBody String jsonStr){

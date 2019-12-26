@@ -2,6 +2,7 @@ package co.yixiang.modules.order.web.controller;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.param.IdParam;
@@ -45,6 +46,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * <p>
@@ -72,6 +75,8 @@ public class StoreOrderController extends BaseController {
     private final YxStorePinkService storePinkService;
     private final ExpressService expressService;
     private final YxStoreBargainUserService storeBargainUserService;
+
+    private static Lock lock = new ReentrantLock(false);
 
 
     /**
@@ -204,7 +209,14 @@ public class StoreOrderController extends BaseController {
 
         if(param.getFrom().equals("weixin"))  param.setIsChannel(0);
         //创建订单
-        YxStoreOrder order = storeOrderService.createOrder(uid,key,param);
+        YxStoreOrder order = null;
+        try{
+             lock.lock();
+             order = storeOrderService.createOrder(uid,key,param);
+        }finally {
+             lock.unlock();
+        }
+
 
         if(ObjectUtil.isNull(order)) throw new ErrorRequestException("订单生成失败");
 
@@ -262,6 +274,7 @@ public class StoreOrderController extends BaseController {
     /**
      *  订单支付
      */
+    @Log(value = "订单支付",type = 1)
     @PostMapping("/order/pay")
     @ApiOperation(value = "订单支付",notes = "订单支付")
     public ApiResult<ConfirmOrderDTO> pay(@Valid @RequestBody PayParam param){
@@ -333,6 +346,7 @@ public class StoreOrderController extends BaseController {
     /**
      * 订单列表
      */
+    @Log(value = "查看订单列表",type = 1)
     @GetMapping("/order/list")
     @ApiOperation(value = "订单列表",notes = "订单列表")
     public ApiResult<List<YxStoreOrderQueryVo>> orderList(@RequestParam(value = "type",defaultValue = "0") int type,
@@ -347,6 +361,7 @@ public class StoreOrderController extends BaseController {
     /**
      * 订单详情
      */
+    @Log(value = "查看订单详情",type = 1)
     @GetMapping("/order/detail/{key}")
     @ApiOperation(value = "订单详情",notes = "订单详情")
     public ApiResult<YxStoreOrderQueryVo> detail(@PathVariable String key){
@@ -430,6 +445,7 @@ public class StoreOrderController extends BaseController {
     /**
      * 订单收货
      */
+    @Log(value = "订单收货",type = 1)
     @PostMapping("/order/take")
     @ApiOperation(value = "订单收货",notes = "订单收货")
     public ApiResult<Object> orderTake(@RequestBody String jsonStr){
@@ -490,6 +506,7 @@ public class StoreOrderController extends BaseController {
     /**
      * 订单评价
      */
+    @Log(value = "评价商品",type = 1)
     @PostMapping("/order/comment")
     @ApiOperation(value = "订单评价",notes = "订单评价")
     public ApiResult<Object> comment(@Valid @RequestBody YxStoreProductReply productReply){
@@ -561,6 +578,7 @@ public class StoreOrderController extends BaseController {
     /**
      * 订单退款审核
      */
+    @Log(value = "提交订单退款",type = 1)
     @PostMapping("/order/refund/verify")
     @ApiOperation(value = "订单退款审核",notes = "订单退款审核")
     public ApiResult<Object> refundVerify(@RequestBody RefundParam param){
@@ -572,6 +590,7 @@ public class StoreOrderController extends BaseController {
     /**
      * 订单取消   未支付的订单回退积分,回退优惠券,回退库存
      */
+    @Log(value = "取消订单",type = 1)
     @PostMapping("/order/cancel")
     @ApiOperation(value = "订单取消",notes = "订单取消")
     public ApiResult<Object> cancelOrder(@RequestBody String jsonStr){

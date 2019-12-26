@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.web.controller;
 
+import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.param.IdParam;
@@ -37,7 +38,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@Api("商品表 API")
+@Api(value = "产品模块", tags = "产品模块", description = "产品模块")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StoreProductController extends BaseController {
 
@@ -92,6 +93,7 @@ public class StoreProductController extends BaseController {
     /**
      * 普通商品详情
      */
+    @Log(value = "查看商品详情",type = 1)
     @GetMapping("/product/detail/{id}")
     @ApiOperation(value = "普通商品详情",notes = "普通商品详情")
     public ApiResult<ProductDTO> detail(@PathVariable Integer id){
@@ -102,6 +104,7 @@ public class StoreProductController extends BaseController {
     /**
      * 添加收藏
      */
+    @Log(value = "添加收藏",type = 1)
     @PostMapping("/collect/add")
     @ApiOperation(value = "添加收藏",notes = "添加收藏")
     public ApiResult<Object> collectAdd(@Validated @RequestBody YxStoreProductRelationQueryParam param){
@@ -113,6 +116,7 @@ public class StoreProductController extends BaseController {
     /**
      * 取消收藏
      */
+    @Log(value = "取消收藏",type = 1)
     @PostMapping("/collect/del")
     @ApiOperation(value = "取消收藏",notes = "取消收藏")
     public ApiResult<Object> collectDel(@Validated @RequestBody YxStoreProductRelationQueryParam param){

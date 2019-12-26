@@ -1,6 +1,7 @@
 package co.yixiang.modules.user.web.controller;
 
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.param.IdParam;
@@ -44,6 +45,7 @@ public class UserAddressController extends BaseController {
     /**
     * 添加或修改地址
     */
+    @Log(value = "编辑地址",type = 1)
     @PostMapping("/address/edit")
     @ApiOperation(value = "添加或修改地址",notes = "添加或修改地址",response = ApiResult.class)
     public ApiResult<Map<String,Object>> addYxUserAddress(@Valid @RequestBody AddressParam param){
@@ -98,6 +100,7 @@ public class UserAddressController extends BaseController {
     /**
     * 删除用户地址
     */
+    @Log(value = "删除地址",type = 1)
     @PostMapping("/address/del")
     @ApiOperation(value = "删除用户地址",notes = "删除用户地址",response = ApiResult.class)
     public ApiResult<Boolean> deleteYxUserAddress(@Valid @RequestBody IdParam idParam){
@@ -112,6 +115,7 @@ public class UserAddressController extends BaseController {
     /**
      * 用户地址列表
      */
+    @Log(value = "查看地址",type = 1)
     @GetMapping("/address/list")
     @ApiOperation(value = "用户地址列表",notes = "用户地址列表",response = YxUserAddressQueryVo.class)
     public ApiResult<Paging<YxUserAddressQueryVo>> getYxUserAddressPageList(

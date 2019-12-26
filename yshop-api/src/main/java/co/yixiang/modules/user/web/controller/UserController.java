@@ -1,5 +1,6 @@
 package co.yixiang.modules.user.web.controller;
 
+import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.param.IdParam;
@@ -68,6 +69,7 @@ public class UserController extends BaseController {
     /**
      * 获取个人中心菜单
      */
+    @Log(value = "进入用户中心",type = 1)
     @GetMapping("/menu/user")
     @ApiOperation(value = "获取个人中心菜单",notes = "获取个人中心菜单")
     public ApiResult<Map<String,Object>> userMenu(){

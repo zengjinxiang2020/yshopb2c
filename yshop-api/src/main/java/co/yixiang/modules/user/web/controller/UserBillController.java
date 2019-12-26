@@ -5,6 +5,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
+import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
@@ -100,6 +101,7 @@ public class UserBillController extends BaseController {
     /**
      * 积分记录
      */
+    @Log(value = "查看积分流水",type = 1)
     @GetMapping("/integral/list")
     @ApiOperation(value = "积分记录",notes = "积分记录")
     public ApiResult<Object> userInfo(@RequestParam(value = "page",defaultValue = "1") int page,
@@ -224,6 +226,7 @@ public class UserBillController extends BaseController {
      * sort  childCount ASC/DESC  团队排序   numberCount ASC/DESC
      * 金额排序  orderCount  ASC/DESC  订单排序
      */
+    @Log(value = "查看分销人",type = 1)
     @PostMapping("/spread/people")
     @ApiOperation(value = "推荐用户",notes = "推荐用户")
     public ApiResult<Object> spreadPeople(@Valid @RequestBody PromParam param){
@@ -242,6 +245,7 @@ public class UserBillController extends BaseController {
      * type  0 全部  1 消费  2 充值  3 返佣  4 提现
      * @return mixed
      */
+    @Log(value = "查看佣金",type = 1)
     @GetMapping("/spread/commission/{type}")
     @ApiOperation(value = "推广佣金明细",notes = "推广佣金明细")
     public ApiResult<Object> spreadCommission(@RequestParam(value = "page",defaultValue = "1") int page,

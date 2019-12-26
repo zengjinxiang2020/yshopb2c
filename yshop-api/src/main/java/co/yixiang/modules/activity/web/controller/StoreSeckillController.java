@@ -3,6 +3,7 @@ package co.yixiang.modules.activity.web.controller;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.aop.log.Log;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.web.dto.SeckillConfigDTO;
 import co.yixiang.modules.activity.web.dto.SeckillTimeDTO;

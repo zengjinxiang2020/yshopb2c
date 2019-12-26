@@ -6,6 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.http.HttpUtil;
+import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.param.IdParam;
@@ -81,6 +82,7 @@ public class StoreCombinationController extends BaseController {
     /**
      * 拼团产品详情
      */
+    @Log(value = "查看拼团产品",type = 1)
     @GetMapping("/combination/detail/{id}")
     @ApiOperation(value = "拼团产品详情",notes = "拼团产品详情",response = YxStoreCombinationQueryVo.class)
     public ApiResult<Object> detail(@PathVariable Integer id){
@@ -268,6 +270,7 @@ public class StoreCombinationController extends BaseController {
     /**
      * 取消开团
      */
+    @Log(value = "取消开团",type = 1)
     @PostMapping("/combination/remove")
     @ApiOperation(value = "取消开团",notes = "取消开团")
     public ApiResult<Object> remove(@RequestBody String jsonStr){

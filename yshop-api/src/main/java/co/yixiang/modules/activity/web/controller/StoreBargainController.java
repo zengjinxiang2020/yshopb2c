@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.http.HttpUtil;
+import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.param.IdParam;
@@ -93,6 +94,7 @@ public class StoreBargainController extends BaseController {
     /**
     * 砍价详情
     */
+    @Log(value = "查看砍价产品",type = 1)
     @GetMapping("/bargain/detail/{id}")
     @ApiOperation(value = "砍价详情",notes = "砍价详情",response = YxStoreBargainQueryVo.class)
     public ApiResult<YxStoreBargainQueryVo> getYxStoreBargain(@PathVariable Integer id){
@@ -326,7 +328,7 @@ public class StoreBargainController extends BaseController {
 
                 //第一步标题
                 Font font =  Font.createFont(Font.TRUETYPE_FONT, newFileT);
-                Font f= font.deriveFont(Font.PLAIN,40);
+                Font f= font.deriveFont(Font.PLAIN,30);
                 //font.
                 ImgUtil.pressText(//
                         newFile,
@@ -444,6 +446,7 @@ public class StoreBargainController extends BaseController {
     /**
      * 砍价取消
      */
+    @Log(value = "取消砍价产品",type = 1)
     @PostMapping("/bargain/user/cancel")
     @ApiOperation(value = "砍价取消",notes = "砍价取消")
     public ApiResult<Object> bargainCancel(@RequestBody String jsonStr){
