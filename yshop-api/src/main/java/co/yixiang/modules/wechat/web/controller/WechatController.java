@@ -23,6 +23,7 @@ import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
+import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -137,9 +138,12 @@ public class WechatController extends BaseController {
 
             }else{
 
+                //过滤掉表情
+                String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickname());
+                log.info("昵称：{}",nickname);
                 //用户保存
                 YxUser user = new YxUser();
-                user.setAccount(wxMpUser.getNickname());
+                user.setAccount(nickname);
                 user.setUsername(wxMpUser.getOpenId());
                 user.setPassword(EncryptUtils.encryptPassword("123456"));
                 user.setPwd(EncryptUtils.encryptPassword("123456"));
@@ -147,7 +151,7 @@ public class WechatController extends BaseController {
                 user.setUserType("wechat");
                 user.setAddTime(OrderUtil.getSecondTimestampTwo());
                 user.setLastTime(OrderUtil.getSecondTimestampTwo());
-                user.setNickname(wxMpUser.getNickname());
+                user.setNickname(nickname);
                 user.setAvatar(wxMpUser.getHeadImgUrl());
                 user.setNowMoney(BigDecimal.ZERO);
                 user.setBrokeragePrice(BigDecimal.ZERO);
@@ -158,9 +162,8 @@ public class WechatController extends BaseController {
 
                 //保存微信用户
                 YxWechatUser yxWechatUser = new YxWechatUser();
-                // System.out.println("wxMpUser:"+wxMpUser);
                 yxWechatUser.setAddTime(OrderUtil.getSecondTimestampTwo());
-                yxWechatUser.setNickname(wxMpUser.getNickname());
+                yxWechatUser.setNickname(nickname);
                 yxWechatUser.setOpenid(wxMpUser.getOpenId());
                 int sub = 0;
                 if(ObjectUtil.isNotNull(wxMpUser.getSubscribe()) && wxMpUser.getSubscribe()) sub =1;

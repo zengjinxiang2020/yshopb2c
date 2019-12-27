@@ -1152,7 +1152,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         int useIntegral = param.getUseIntegral().intValue();
 
-        boolean deduction = false;//todo 拼团等
+        boolean deduction = false;//拼团等
         //拼团等不参与抵扣
         if(combinationId > 0 || seckillId > 0 || bargainId > 0) deduction = true;
         if(deduction){

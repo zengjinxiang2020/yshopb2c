@@ -16,6 +16,7 @@ import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.EncryptUtils;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.SecurityUtils;
+import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import co.yixiang.aop.log.Log;
@@ -81,6 +82,7 @@ public class AuthenticationController extends BaseController {
         if(!jwtUser.isEnabled()){
             throw new AccountExpiredException("账号已停用，请联系管理员");
         }
+
 
         //设置推广关系
         if(StrUtil.isNotEmpty(authorizationUser.getSpread()) &&

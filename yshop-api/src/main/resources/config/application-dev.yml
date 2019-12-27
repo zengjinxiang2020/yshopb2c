@@ -36,6 +36,7 @@ spring:
       web-stat-filter:
         url-pattern: /*
         exclusions: "*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*"
+      connection-init-sqls: set names utf8mb4
 
   #配置 Jpa
   jpa:

@@ -229,6 +229,12 @@ public class StoreOrderController extends BaseController {
         map.put("result",orderDTO);
         //开始处理支付
         if(StrUtil.isNotEmpty(orderId)){
+            //处理金额为0的情况
+            if(order.getPayPrice().doubleValue() <= 0){
+                storeOrderService.yuePay(orderId,uid);
+                return ApiResult.ok(map,"支付成功");
+            }
+
             switch (param.getPayType()){
                 case "weixin":
                      try {
