@@ -141,8 +141,6 @@ public class ShoperController extends BaseController {
     @PostMapping("/admin/order/refund")
     @ApiOperation(value = "订单退款",notes = "订单退款")
     public ApiResult<Object> orderRefund(@Validated @RequestBody OrderRefundParam param){
-        //if(ObjectUtil.isNotNull(param)) return ApiResult.fail("演示环境禁止操作");
-        int uid = SecurityUtils.getUserId().intValue();
 
         storeOrderService.orderRefund(param);
 
@@ -157,7 +155,6 @@ public class ShoperController extends BaseController {
     @ApiOperation(value = "chart统计",notes = "chart统计")
     public ApiResult<Object> chartCount(@RequestParam(value = "cate",defaultValue = "1") int cate,
                                         @RequestParam(value = "type",defaultValue = "1") int type){
-        int uid = SecurityUtils.getUserId().intValue();
 
         return ApiResult.ok(storeOrderService.chartCount(cate,type));
     }

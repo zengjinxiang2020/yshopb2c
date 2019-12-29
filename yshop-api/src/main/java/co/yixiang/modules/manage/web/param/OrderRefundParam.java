@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * @ClassName OrderPriceParam
+ * @ClassName OrderRefundParam
  * @Author hupeng <610796224@qq.com>
  * @Date 2019/11/26
  **/

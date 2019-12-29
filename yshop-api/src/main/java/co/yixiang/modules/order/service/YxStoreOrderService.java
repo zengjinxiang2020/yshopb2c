@@ -32,9 +32,6 @@ import java.util.Map;
  * @author hupeng
  * @since 2019-10-27
  */
-//@WebService(serviceName = "YxStoreOrderService",
-//        targetNamespace = "http://service.order.modules.yixiang.co"
-//)
 public interface YxStoreOrderService extends BaseService<YxStoreOrder> {
 
     Map<String,Object> chartCount(int cate,int type);

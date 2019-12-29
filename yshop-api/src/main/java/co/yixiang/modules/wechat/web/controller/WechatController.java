@@ -6,6 +6,8 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.api.ApiCode;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.modules.manage.web.param.OrderRefundParam;
+import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.security.security.JwtUser;
@@ -21,6 +23,7 @@ import co.yixiang.utils.EncryptUtils;
 import co.yixiang.utils.OrderUtil;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
+import com.github.binarywang.wxpay.bean.notify.WxPayRefundNotifyResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import com.vdurmont.emoji.EmojiParser;
@@ -243,6 +246,36 @@ public class WechatController extends BaseController {
             return WxPayNotifyResponse.fail(e.getMessage());
         }
 
+    }
+
+    /**
+     * 微信退款回调
+     * @param xmlData
+     * @return
+     * @throws WxPayException
+     */
+    @ApiOperation(value = "退款回调通知处理",notes = "退款回调通知处理")
+    @PostMapping("/notify/refund")
+    public String parseRefundNotifyResult(@RequestBody String xmlData) {
+        try {
+            WxPayRefundNotifyResult result = wxPayService.parseRefundNotifyResult(xmlData);
+            String orderId = result.getReqInfo().getOutTradeNo();
+            Integer refundFee = result.getReqInfo().getRefundFee()/100;
+            YxStoreOrderQueryVo orderInfo = orderService.getOrderInfo(orderId,0);
+            if(orderInfo.getRefundStatus() == 2){
+                return WxPayNotifyResponse.success("处理成功!");
+            }
+            YxStoreOrder storeOrder = new YxStoreOrder();
+            //修改状态
+            storeOrder.setId(orderInfo.getId());
+            storeOrder.setRefundStatus(2);
+            storeOrder.setRefundPrice(BigDecimal.valueOf(refundFee));
+            orderService.updateById(storeOrder);
+            return WxPayNotifyResponse.success("处理成功!");
+        } catch (WxPayException e) {
+            log.error(e.getMessage());
+            return WxPayNotifyResponse.fail(e.getMessage());
+        }
     }
 
 

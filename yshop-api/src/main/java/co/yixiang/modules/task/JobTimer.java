@@ -34,7 +34,9 @@ public class JobTimer {
             while (true) {
                 try {
                     Map<String,Object> job = blockingQueue.take();
-                    executorService.execute(new ExecutorTask(job));
+                    if(job != null){
+                        executorService.execute(new ExecutorTask(job));
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                     try {

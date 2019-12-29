@@ -57,6 +57,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
+import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -168,8 +169,6 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     private AlipayService alipayService;
 
 
-
-
     /**
      * 订单退款
      * @param param
@@ -188,30 +187,92 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         YxStoreOrder storeOrder = new YxStoreOrder();
         //修改状态
         storeOrder.setId(orderQueryVo.getId());
-        storeOrder.setRefundStatus(2);
-        storeOrder.setRefundPrice(BigDecimal.valueOf(param.getPrice()));
-        yxStoreOrderMapper.updateById(storeOrder);
 
-        //退款到余额
-        userService.incMoney(orderQueryVo.getUid(),param.getPrice());
+        if(param.getType() == 2){
+            storeOrder.setRefundStatus(0);
+            yxStoreOrderMapper.updateById(storeOrder);
+            return;
+        }
 
-        //增加流水
-        YxUserBill userBill = new YxUserBill();
-        userBill.setUid(orderQueryVo.getUid());
-        userBill.setLinkId(orderQueryVo.getId().toString());
-        userBill.setPm(1);
-        userBill.setTitle("商品退款");
-        userBill.setCategory("now_money");
-        userBill.setType("pay_product_refund");
-        userBill.setNumber(BigDecimal.valueOf(param.getPrice()));
-        userBill.setBalance(NumberUtil.add(param.getPrice(),userQueryVo.getNowMoney()));
-        userBill.setMark("订单退款到余额");
-        userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
-        userBill.setStatus(1);
-        billService.save(userBill);
+        //根据支付类型不同退款不同
+        if(orderQueryVo.getPayType().equals("yue")){
+            storeOrder.setRefundStatus(2);
+            storeOrder.setRefundPrice(BigDecimal.valueOf(param.getPrice()));
+            yxStoreOrderMapper.updateById(storeOrder);
+            //退款到余额
+            userService.incMoney(orderQueryVo.getUid(),param.getPrice());
+
+            //增加流水
+            YxUserBill userBill = new YxUserBill();
+            userBill.setUid(orderQueryVo.getUid());
+            userBill.setLinkId(orderQueryVo.getId().toString());
+            userBill.setPm(1);
+            userBill.setTitle("商品退款");
+            userBill.setCategory("now_money");
+            userBill.setType("pay_product_refund");
+            userBill.setNumber(BigDecimal.valueOf(param.getPrice()));
+            userBill.setBalance(NumberUtil.add(param.getPrice(),userQueryVo.getNowMoney()));
+            userBill.setMark("订单退款到余额");
+            userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
+            userBill.setStatus(1);
+            billService.save(userBill);
 
 
-        orderStatusService.create(orderQueryVo.getId(),"order_edit","退款给用户："+param.getPrice() +"元");
+            orderStatusService.create(orderQueryVo.getId(),"order_edit","退款给用户："+param.getPrice() +"元");
+        }else{
+            String apiUrl = RedisUtil.get("api_url");
+            if(StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
+            //读取redis配置
+            String appId = RedisUtil.get("wxpay_appId");
+            String mchId = RedisUtil.get("wxpay_mchId");
+            String mchKey = RedisUtil.get("wxpay_mchKey");
+            String keyPath = RedisUtil.get("wxpay_keyPath");
+
+            if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId) || StrUtil.isBlank(mchKey)){
+                throw new ErrorRequestException("请配置微信支付");
+            }
+            if(StrUtil.isBlank(keyPath)){
+                throw new ErrorRequestException("请配置微信支付证书");
+            }
+            WxPayRefundRequest wxPayRefundRequest = new WxPayRefundRequest();
+            BigDecimal bigDecimal = new BigDecimal("100");
+            wxPayRefundRequest.setTotalFee(bigDecimal.multiply(orderQueryVo.getPayPrice()).intValue());//订单总金额
+            wxPayRefundRequest.setOutTradeNo(param.getOrderId());
+            wxPayRefundRequest.setOutRefundNo(param.getOrderId());
+            wxPayRefundRequest.setRefundFee(bigDecimal.multiply(orderQueryVo.getPayPrice()).intValue());//退款金额
+            wxPayRefundRequest.setOpUserId(mchId); //操作人默认商户号当前
+            wxPayRefundRequest.setNotifyUrl(apiUrl+"/api/notify/refund");
+
+            WxPayConfig wxPayConfig = new WxPayConfig();
+            wxPayConfig.setAppId(appId);
+            wxPayConfig.setMchId(mchId);
+            wxPayConfig.setMchKey(mchKey);
+            wxPayConfig.setKeyPath(keyPath);
+            wxPayService.setConfig(wxPayConfig);
+            try {
+                wxPayService.refund(wxPayRefundRequest);
+            } catch (WxPayException e) {
+                log.info("refund-error:{}",e.getMessage());
+            }
+        }
+
+        //模板消息通知
+        String siteUrl = RedisUtil.get("site_url");
+        YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(orderQueryVo.getUid());
+        if(ObjectUtil.isNotNull(wechatUser)){
+            YxWechatTemplate WechatTemplate = yxWechatTemplateService.getOne(
+                    new QueryWrapper<YxWechatTemplate>().eq("tempkey","OPENTM410119152"));
+            Map<String,String> map = new HashMap<>();
+            map.put("first","您在yshop的订单退款申请被通过，钱款将很快还至您的支付账户。");
+            map.put("keyword1",orderQueryVo.getOrderId());//订单号
+            map.put("keyword2",orderQueryVo.getPayPrice().toString());
+            map.put("keyword3",OrderUtil.stampToDate(orderQueryVo.getAddTime().toString()));
+            map.put("remark","yshop电商系统为你服务！");
+            templateMessageService.sendWxMpTemplateMessage( wechatUser.getOpenid()
+                    ,WechatTemplate.getTempid(),
+                    siteUrl+"/order/detail/"+orderQueryVo.getOrderId(),map);
+        }
+
 
     }
 
