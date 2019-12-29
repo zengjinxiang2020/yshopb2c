@@ -314,8 +314,8 @@ public class WechatController extends BaseController {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
             WxMpXmlOutMessage outMessage = this.route(inMessage);
-            out = outMessage.toXml();
-            System.out.println("xml:"+out);
+            if(outMessage == null) return;
+            out = outMessage.toXml();;
         } else if ("aes".equalsIgnoreCase(encType)) {
             // aes加密的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
