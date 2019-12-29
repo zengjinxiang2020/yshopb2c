@@ -373,9 +373,12 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
         if(userInfoT.getSpreadUid() == uid) return true;
 
         //1-指定分销 2-人人分销
-        //int storeBrokerageStatus = Integer.valueOf(systemConfigService
-            //    .getData("store_brokerage_statu"));
-        //storeBrokerageStatus
+        int storeBrokerageStatus = Integer.valueOf(systemConfigService
+                .getData("store_brokerage_statu"));
+        //如果是指定分销，如果 推广人不是分销员不能形成关系
+        if(storeBrokerageStatus == 1 && userInfoT.getIsPromoter() == 0){
+            return true;
+        }
         YxUser yxUser = new YxUser();
 
         yxUser.setSpreadUid(spread);
