@@ -4,18 +4,11 @@ import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
-import co.yixiang.common.web.param.IdParam;
-import co.yixiang.common.web.vo.Paging;
-import co.yixiang.modules.shop.entity.YxStoreCart;
 import co.yixiang.modules.shop.service.YxStoreCartService;
 import co.yixiang.modules.shop.web.param.CartIdsParm;
-import co.yixiang.modules.shop.web.param.YxStoreCartQueryParam;
-import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonArray;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

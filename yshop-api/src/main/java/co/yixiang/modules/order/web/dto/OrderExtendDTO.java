@@ -1,6 +1,5 @@
 package co.yixiang.modules.order.web.dto;
 
-import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import lombok.Data;
 
 import java.io.Serializable;

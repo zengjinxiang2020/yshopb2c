@@ -1,8 +1,5 @@
 package co.yixiang.modules.order.web.dto;
 
-import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;

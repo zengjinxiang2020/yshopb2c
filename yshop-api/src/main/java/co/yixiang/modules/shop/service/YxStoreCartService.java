@@ -1,10 +1,8 @@
 package co.yixiang.modules.shop.service;
 
-import co.yixiang.modules.shop.entity.YxStoreCart;
 import co.yixiang.common.service.BaseService;
-import co.yixiang.modules.shop.web.param.YxStoreCartQueryParam;
+import co.yixiang.modules.shop.entity.YxStoreCart;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 import java.util.List;

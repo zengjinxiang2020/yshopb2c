@@ -1,13 +1,9 @@
 package co.yixiang.modules.shop.service;
 
-import co.yixiang.modules.shop.entity.YxStoreProductAttr;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.modules.shop.entity.YxStoreProductAttr;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
-import co.yixiang.modules.shop.web.param.YxStoreProductAttrQueryParam;
-import co.yixiang.modules.shop.web.vo.YxStoreProductAttrQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
-import java.io.Serializable;
 import java.util.Map;
 
 /**

@@ -2,14 +2,9 @@ package co.yixiang.modules.activity.web.dto;
 
 import co.yixiang.modules.activity.web.vo.YxStoreCombinationQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductReplyQueryVo;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

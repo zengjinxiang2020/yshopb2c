@@ -9,13 +9,9 @@ import cn.hutool.http.HttpUtil;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
-import co.yixiang.common.web.param.IdParam;
-import co.yixiang.common.web.vo.Paging;
-import co.yixiang.modules.activity.entity.YxStoreCombination;
 import co.yixiang.modules.activity.entity.YxStorePink;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
-import co.yixiang.modules.activity.web.param.YxStoreCombinationQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreCombinationQueryVo;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.entity.YxSystemAttachment;
@@ -34,14 +30,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

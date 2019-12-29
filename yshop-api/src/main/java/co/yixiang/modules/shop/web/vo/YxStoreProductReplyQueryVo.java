@@ -8,9 +8,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-import java.util.ArrayList;
-import java.util.Date;
-
 /**
  * <p>
  * 评论表 查询结果对象

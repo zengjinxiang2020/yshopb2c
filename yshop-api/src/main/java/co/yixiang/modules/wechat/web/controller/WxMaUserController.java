@@ -3,7 +3,6 @@ package co.yixiang.modules.wechat.web.controller;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
-import cn.binarywang.wx.miniapp.config.WxMaConfig;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -11,7 +10,6 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.api.ApiCode;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.exception.ErrorRequestException;
-import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.security.security.JwtUser;
 import co.yixiang.modules.security.utils.JwtTokenUtil;
 import co.yixiang.modules.user.entity.YxUser;
@@ -19,31 +17,27 @@ import co.yixiang.modules.user.entity.YxWechatUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxWechatUserService;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
-import co.yixiang.mp.utils.JsonUtils;
 import co.yixiang.utils.EncryptUtils;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import me.chanjar.weixin.common.bean.WxAccessToken;
-import me.chanjar.weixin.common.util.http.apache.ApacheHttpClientBuilder;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.*;
-
-
-import me.chanjar.weixin.common.error.WxErrorException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
 
 /**
  * 微信小程序用户接口

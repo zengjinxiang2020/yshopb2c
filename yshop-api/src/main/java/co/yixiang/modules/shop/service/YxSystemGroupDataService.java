@@ -1,12 +1,8 @@
 package co.yixiang.modules.shop.service;
 
-import co.yixiang.modules.shop.entity.YxSystemGroupData;
 import co.yixiang.common.service.BaseService;
-import co.yixiang.modules.shop.web.param.YxSystemGroupDataQueryParam;
-import co.yixiang.modules.shop.web.vo.YxSystemGroupDataQueryVo;
-import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.shop.entity.YxSystemGroupData;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 

@@ -3,13 +3,12 @@ package co.yixiang.modules.activity.web.controller;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
+import co.yixiang.common.api.ApiResult;
+import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.web.dto.SeckillConfigDTO;
 import co.yixiang.modules.activity.web.dto.SeckillTimeDTO;
 import co.yixiang.modules.activity.web.vo.YxStoreSeckillQueryVo;
-import co.yixiang.common.web.controller.BaseController;
-import co.yixiang.common.api.ApiResult;
 import co.yixiang.modules.shop.entity.YxSystemGroupData;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.utils.OrderUtil;
@@ -24,9 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -55,17 +55,17 @@ public class StoreSeckillController extends BaseController {
     public ApiResult<Object> getYxStoreSeckillPageList(@PathVariable String time,
                                                        @RequestParam(value = "page", defaultValue = "1") int page,
                                                        @RequestParam(value = "limit", defaultValue = "10") int limit) throws Exception {
-        if(StrUtil.isBlank(time)) return ApiResult.fail("参数错误");
+        if (StrUtil.isBlank(time)) return ApiResult.fail("参数错误");
         YxSystemGroupData systemGroupData = yxSystemGroupDataService
                 .findData(Integer.valueOf(time));
-        if(ObjectUtil.isNull(systemGroupData)) return ApiResult.fail("参数错误");
+        if (ObjectUtil.isNull(systemGroupData)) return ApiResult.fail("参数错误");
         int today = OrderUtil.dateToTimestampT(DateUtil.beginOfDay(new Date()));//今天开始的时间戳
         JSONObject jsonObject = JSONObject.parseObject(systemGroupData.getValue());
         int startTime = today + (jsonObject.getInteger("time") * 3600);
-        int endTime = today + ((jsonObject.getInteger("time")+jsonObject.getInteger("continued")) * 3600);
+        int endTime = today + ((jsonObject.getInteger("time") + jsonObject.getInteger("continued")) * 3600);
 
 
-        return ApiResult.ok(yxStoreSeckillService.getList(page,limit,startTime,endTime));
+        return ApiResult.ok(yxStoreSeckillService.getList(page, limit, startTime, endTime));
     }
 
 

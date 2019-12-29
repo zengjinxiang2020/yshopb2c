@@ -1,6 +1,5 @@
 package co.yixiang.modules.activity.web.dto;
 
-import co.yixiang.modules.activity.entity.YxStorePink;
 import co.yixiang.modules.activity.web.vo.YxStoreCombinationQueryVo;
 import co.yixiang.modules.activity.web.vo.YxStorePinkQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;

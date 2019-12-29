@@ -6,8 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-import java.util.Date;
-
 /**
  * <p>
  * 优惠券前台领取表 查询结果对象

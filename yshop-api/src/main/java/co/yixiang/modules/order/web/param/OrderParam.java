@@ -1,6 +1,5 @@
 package co.yixiang.modules.order.web.param;
 
-import io.swagger.models.auth.In;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;

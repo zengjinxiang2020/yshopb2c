@@ -2,8 +2,6 @@ package co.yixiang.modules.shop.mapping;
 
 import co.yixiang.mapper.EntityMapper;
 import co.yixiang.modules.shop.entity.YxStoreCategory;
-import co.yixiang.modules.shop.entity.YxStoreProduct;
-import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
 import co.yixiang.utils.CateDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

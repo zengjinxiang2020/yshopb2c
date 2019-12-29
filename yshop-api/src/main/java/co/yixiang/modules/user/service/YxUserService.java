@@ -1,14 +1,13 @@
 package co.yixiang.modules.user.service;
 
+import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.user.entity.YxUser;
-import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.user.web.dto.PromUserDTO;
-import co.yixiang.modules.user.web.dto.UserRankDTO;
 import co.yixiang.modules.user.web.param.PromParam;
 import co.yixiang.modules.user.web.param.YxUserQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 import java.util.List;

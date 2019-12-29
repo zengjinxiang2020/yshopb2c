@@ -1,14 +1,12 @@
 package co.yixiang.modules.activity.mapper;
 
-import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import co.yixiang.modules.activity.entity.YxStoreCombination;
 import co.yixiang.modules.activity.web.param.YxStoreCombinationQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreCombinationQueryVo;
+import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;

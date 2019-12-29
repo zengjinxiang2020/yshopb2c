@@ -1,14 +1,11 @@
 package co.yixiang.modules.activity.web.vo;
 
-import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * <p>

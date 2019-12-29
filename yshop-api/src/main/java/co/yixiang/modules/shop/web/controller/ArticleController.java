@@ -2,10 +2,7 @@ package co.yixiang.modules.shop.web.controller;
 
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
-import co.yixiang.common.web.param.IdParam;
 import co.yixiang.common.web.vo.Paging;
-import co.yixiang.exception.ErrorRequestException;
-import co.yixiang.modules.shop.entity.YxArticle;
 import co.yixiang.modules.shop.service.ArticleService;
 import co.yixiang.modules.shop.web.param.YxArticleQueryParam;
 import co.yixiang.modules.shop.web.vo.YxArticleQueryVo;
@@ -14,8 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 /**
  * <p>

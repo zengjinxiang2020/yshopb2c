@@ -2,8 +2,9 @@ package co.yixiang.modules.activity.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.exception.ErrorRequestException;
-import co.yixiang.modules.activity.entity.YxStoreCombination;
 import co.yixiang.modules.activity.entity.YxStoreSeckill;
 import co.yixiang.modules.activity.mapper.YxStoreSeckillMapper;
 import co.yixiang.modules.activity.mapping.StoreSeckillMap;
@@ -11,19 +12,17 @@ import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.web.dto.StoreSeckillDTO;
 import co.yixiang.modules.activity.web.param.YxStoreSeckillQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreSeckillQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.service.YxStoreProductReplyService;
 import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.util.List;
 

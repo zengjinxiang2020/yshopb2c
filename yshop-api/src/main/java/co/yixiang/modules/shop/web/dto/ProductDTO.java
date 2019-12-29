@@ -5,11 +5,13 @@ import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
 import co.yixiang.modules.shop.web.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductReplyQueryVo;
-import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>

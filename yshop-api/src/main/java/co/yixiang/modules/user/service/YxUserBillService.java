@@ -1,12 +1,11 @@
 package co.yixiang.modules.user.service;
 
-import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.web.dto.BillDTO;
 import co.yixiang.modules.user.web.param.YxUserBillQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserBillQueryVo;
-import co.yixiang.common.web.vo.Paging;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.io.Serializable;
 import java.util.List;

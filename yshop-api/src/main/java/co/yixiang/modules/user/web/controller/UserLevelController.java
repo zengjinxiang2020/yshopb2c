@@ -3,23 +3,18 @@ package co.yixiang.modules.user.web.controller;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
-import co.yixiang.common.web.param.IdParam;
-import co.yixiang.common.web.vo.Paging;
-import co.yixiang.modules.user.entity.YxUserLevel;
 import co.yixiang.modules.user.service.YxSystemUserLevelService;
 import co.yixiang.modules.user.service.YxSystemUserTaskService;
 import co.yixiang.modules.user.service.YxUserLevelService;
-import co.yixiang.modules.user.web.param.YxUserLevelQueryParam;
-import co.yixiang.modules.user.web.vo.YxUserLevelQueryVo;
 import co.yixiang.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>

@@ -2,7 +2,6 @@ package co.yixiang.modules.order.web.param;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**

@@ -4,12 +4,8 @@ import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
-import co.yixiang.common.web.vo.Paging;
-import co.yixiang.modules.shop.service.YxArticleService;
 import co.yixiang.modules.shop.service.YxStoreCouponIssueService;
 import co.yixiang.modules.shop.service.YxStoreCouponUserService;
-import co.yixiang.modules.shop.web.param.YxArticleQueryParam;
-import co.yixiang.modules.shop.web.vo.YxArticleQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreCouponUserQueryVo;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
@@ -21,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

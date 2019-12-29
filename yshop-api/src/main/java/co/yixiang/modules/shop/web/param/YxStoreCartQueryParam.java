@@ -2,9 +2,6 @@ package co.yixiang.modules.shop.web.param;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import co.yixiang.common.web.param.QueryParam;
 
 /**
  * <p>
