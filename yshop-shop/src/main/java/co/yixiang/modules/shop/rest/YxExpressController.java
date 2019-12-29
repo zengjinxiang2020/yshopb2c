@@ -19,7 +19,7 @@ import io.swagger.annotations.*;
 * @author hupeng
 * @date 2019-12-12
 */
-@Api(tags = "YxExpress管理")
+@Api(tags = "快递管理")
 @RestController
 @RequestMapping("api")
 public class YxExpressController {
@@ -27,16 +27,16 @@ public class YxExpressController {
     @Autowired
     private YxExpressService yxExpressService;
 
-    @Log("查询YxExpress")
-    @ApiOperation(value = "查询YxExpress")
+    @Log("查询快递")
+    @ApiOperation(value = "查询快递")
     @GetMapping(value = "/yxExpress")
     @PreAuthorize("hasAnyRole('ADMIN','YXEXPRESS_ALL','YXEXPRESS_SELECT')")
     public ResponseEntity getYxExpresss(YxExpressQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(yxExpressService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增YxExpress")
-    @ApiOperation(value = "新增YxExpress")
+    @Log("新增快递")
+    @ApiOperation(value = "新增快递")
     @PostMapping(value = "/yxExpress")
     @PreAuthorize("hasAnyRole('ADMIN','YXEXPRESS_ALL','YXEXPRESS_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxExpress resources){
@@ -44,8 +44,8 @@ public class YxExpressController {
         return new ResponseEntity(yxExpressService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改YxExpress")
-    @ApiOperation(value = "修改YxExpress")
+    @Log("修改快递")
+    @ApiOperation(value = "修改快递")
     @PutMapping(value = "/yxExpress")
     @PreAuthorize("hasAnyRole('ADMIN','YXEXPRESS_ALL','YXEXPRESS_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxExpress resources){
@@ -54,8 +54,8 @@ public class YxExpressController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除YxExpress")
-    @ApiOperation(value = "删除YxExpress")
+    @Log("删除快递")
+    @ApiOperation(value = "删除快递")
     @DeleteMapping(value = "/yxExpress/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','YXEXPRESS_ALL','YXEXPRESS_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){

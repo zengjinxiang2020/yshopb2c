@@ -26,7 +26,7 @@ import io.swagger.annotations.*;
 * @author hupeng
 * @date 2019-11-14
 */
-@Api(tags = "YxUserExtract管理")
+@Api(tags = "提现管理")
 @RestController
 @RequestMapping("api")
 public class YxUserExtractController {
@@ -40,8 +40,8 @@ public class YxUserExtractController {
     @Autowired
     private YxUserBillService yxUserBillService;
 
-    @Log("查询YxUserExtract")
-    @ApiOperation(value = "查询YxUserExtract")
+    @Log("查询")
+    @ApiOperation(value = "查询")
     @GetMapping(value = "/yxUserExtract")
     @PreAuthorize("hasAnyRole('ADMIN','YXUSEREXTRACT_ALL','YXUSEREXTRACT_SELECT')")
     public ResponseEntity getYxUserExtracts(YxUserExtractQueryCriteria criteria, Pageable pageable){
@@ -51,7 +51,7 @@ public class YxUserExtractController {
 
 
     @Log("修改")
-    @ApiOperation(value = "修改")
+    @ApiOperation(value = "修改审核")
     @PutMapping(value = "/yxUserExtract")
     @PreAuthorize("hasAnyRole('ADMIN','YXUSEREXTRACT_ALL','YXUSEREXTRACT_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxUserExtract resources){

@@ -20,7 +20,7 @@ import io.swagger.annotations.*;
 * @author hupeng
 * @date 2019-12-04
 */
-@Api(tags = "YxSystemUserLevel管理")
+@Api(tags = "用户等级管理")
 @RestController
 @RequestMapping("api")
 public class YxSystemUserLevelController {
@@ -46,8 +46,8 @@ public class YxSystemUserLevelController {
         return new ResponseEntity(yxSystemUserLevelService.create(resources),HttpStatus.CREATED);
     }
 
-    @Log("修改YxSystemUserLevel")
-    @ApiOperation(value = "修改YxSystemUserLevel")
+    @Log("修改")
+    @ApiOperation(value = "修改")
     @PutMapping(value = "/yxSystemUserLevel")
     @PreAuthorize("hasAnyRole('ADMIN','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxSystemUserLevel resources){
@@ -56,8 +56,8 @@ public class YxSystemUserLevelController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @Log("删除YxSystemUserLevel")
-    @ApiOperation(value = "删除YxSystemUserLevel")
+    @Log("删除")
+    @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxSystemUserLevel/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){

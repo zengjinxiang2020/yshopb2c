@@ -21,7 +21,7 @@ import io.swagger.annotations.*;
 * @author xuwenbo
 * @date 2019-12-22
 */
-@Api(tags = "YxStoreBargain管理")
+@Api(tags = "砍价管理")
 @RestController
 @RequestMapping("api")
 public class YxStoreBargainController {
@@ -29,8 +29,8 @@ public class YxStoreBargainController {
     @Autowired
     private YxStoreBargainService yxStoreBargainService;
 
-    @Log("查询YxStoreBargain")
-    @ApiOperation(value = "查询YxStoreBargain")
+    @Log("查询砍价")
+    @ApiOperation(value = "查询砍价")
     @GetMapping(value = "/yxStoreBargain")
     @PreAuthorize("hasAnyRole('ADMIN','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_SELECT')")
     public ResponseEntity getYxStoreBargains(YxStoreBargainQueryCriteria criteria, Pageable pageable){
@@ -39,8 +39,8 @@ public class YxStoreBargainController {
 
 
 
-    @Log("修改YxStoreBargain")
-    @ApiOperation(value = "修改YxStoreBargain")
+    @Log("修改砍价")
+    @ApiOperation(value = "修改砍价")
     @PutMapping(value = "/yxStoreBargain")
     @PreAuthorize("hasAnyRole('ADMIN','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreBargain resources){
@@ -62,8 +62,8 @@ public class YxStoreBargainController {
         }
     }
 
-    @Log("删除YxStoreBargain")
-    @ApiOperation(value = "删除YxStoreBargain")
+    @Log("删除砍价")
+    @ApiOperation(value = "删除砍价")
     @DeleteMapping(value = "/yxStoreBargain/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){

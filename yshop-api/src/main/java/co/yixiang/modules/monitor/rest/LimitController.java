@@ -1,6 +1,8 @@
 package co.yixiang.modules.monitor.rest;
 
 import co.yixiang.annotation.Limit;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @RestController
 @RequestMapping("api")
+@Api(value = "接口限流测试", tags = "接口限流测试", description = "接口限流测试")
 public class LimitController {
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger();
 
@@ -21,6 +24,7 @@ public class LimitController {
      */
     @Limit(key = "test", period = 60, count = 10, name = "testLimit", prefix = "limit")
     @GetMapping("/limit")
+    @ApiOperation(value = "测试示例",notes = "测试示例")
     public int testLimit() {
         return ATOMIC_INTEGER.incrementAndGet();
     }

@@ -17,7 +17,7 @@ import io.swagger.annotations.*;
 * @author hupeng
 * @date 2019-11-06
 */
-@Api(tags = "YxUserBill管理")
+@Api(tags = "用户账单管理")
 @RestController
 @RequestMapping("api")
 public class YxUserBillController {
@@ -25,8 +25,8 @@ public class YxUserBillController {
     @Autowired
     private YxUserBillService yxUserBillService;
 
-    @Log("查询YxUserBill")
-    @ApiOperation(value = "查询YxUserBill")
+    @Log("查询")
+    @ApiOperation(value = "查询")
     @GetMapping(value = "/yxUserBill")
     @PreAuthorize("hasAnyRole('ADMIN','YXUSERBILL_ALL','YXUSERBILL_SELECT')")
     public ResponseEntity getYxUserBills(YxUserBillQueryCriteria criteria, Pageable pageable){

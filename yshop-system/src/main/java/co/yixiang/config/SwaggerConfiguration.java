@@ -36,9 +36,9 @@ public class SwaggerConfiguration {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("yshop商城移动端API")
-                .description("yshop商城移动端API")
-                .termsOfServiceUrl("http://localhost:8009/api")
+                .title("yshop商城管理后台API")
+                .description("yshop商城管理后台API")
+                .termsOfServiceUrl("http://localhost:8000")
                 .contact("610796224@qq.com")
                 .version("1.6")
                 .build();

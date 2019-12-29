@@ -17,6 +17,7 @@ import co.yixiang.utils.EncryptUtils;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.SecurityUtils;
 import com.vdurmont.emoji.EmojiParser;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import co.yixiang.aop.log.Log;
@@ -45,6 +46,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
+@Api(value = "H5认证模块", tags = "H5认证模块", description = "H5认证模块")
 public class AuthenticationController extends BaseController {
 
     @Value("${jwt.header}")
@@ -71,6 +73,7 @@ public class AuthenticationController extends BaseController {
      */
     @Log("用户登录")
     @PostMapping(value = "${jwt.auth.path}")
+    @ApiOperation(value = "用户登录",notes = "用户登录")
     public ApiResult<Map<String,String>> login(@Validated @RequestBody AuthorizationUser authorizationUser){
 
         final JwtUser jwtUser = (JwtUser) userDetailsService.loadUserByUsername(authorizationUser.getAccount());
@@ -173,6 +176,7 @@ public class AuthenticationController extends BaseController {
      * @return
      */
     @PostMapping(value = "/auth/logout")
+    @ApiOperation(value = "退出登录",notes = "退出登录")
     public ApiResult logout(){
         return ApiResult.ok("退出成功");
     }

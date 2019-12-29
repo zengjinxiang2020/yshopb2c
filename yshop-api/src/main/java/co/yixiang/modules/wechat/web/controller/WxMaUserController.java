@@ -23,6 +23,8 @@ import co.yixiang.mp.utils.JsonUtils;
 import co.yixiang.utils.EncryptUtils;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.common.bean.WxAccessToken;
 import me.chanjar.weixin.common.util.http.apache.ApacheHttpClientBuilder;
@@ -50,6 +52,7 @@ import java.util.concurrent.locks.Lock;
  */
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Api(value = "微信小程序", tags = "微信小程序", description = "微信小程序")
 public class WxMaUserController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final WxMaService wxMaService;
@@ -66,6 +69,7 @@ public class WxMaUserController {
      * 小程序登陆接口
      */
     @PostMapping("/wechat/mp_auth")
+    @ApiOperation(value = "小程序登陆",notes = "小程序登陆")
     public ApiResult<Object> login(@RequestParam(value = "code") String code,
                                    @RequestParam(value = "spread") String spread,
                                    @RequestParam(value = "encryptedData") String encryptedData,

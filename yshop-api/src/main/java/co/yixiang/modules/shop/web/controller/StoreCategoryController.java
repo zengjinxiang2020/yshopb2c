@@ -26,7 +26,7 @@ import javax.validation.Valid;
  */
 @Slf4j
 @RestController
-@Api("商品分类表 API")
+@Api(value = "商品分类", tags = "商品分类", description = "商品分类")
 public class StoreCategoryController extends BaseController {
 
     @Autowired
