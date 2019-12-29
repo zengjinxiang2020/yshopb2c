@@ -1,12 +1,16 @@
 package co.yixiang.modules.order.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.*;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.constant.CommonConstant;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.domain.AlipayConfig;
 import co.yixiang.domain.vo.TradeVo;
 import co.yixiang.exception.ErrorRequestException;
-import co.yixiang.modules.activity.mapper.YxStoreBargainMapper;
 import co.yixiang.modules.activity.service.*;
 import co.yixiang.modules.manage.service.YxExpressService;
 import co.yixiang.modules.manage.web.dto.ChartDataDTO;
@@ -29,8 +33,6 @@ import co.yixiang.modules.order.web.param.OrderParam;
 import co.yixiang.modules.order.web.param.RefundParam;
 import co.yixiang.modules.order.web.param.YxStoreOrderQueryParam;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.entity.YxStoreCart;
 import co.yixiang.modules.shop.entity.YxStoreCouponUser;
 import co.yixiang.modules.shop.mapper.YxStoreCartMapper;
@@ -40,21 +42,29 @@ import co.yixiang.modules.shop.service.YxStoreProductReplyService;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
-import co.yixiang.modules.user.entity.*;
-import co.yixiang.modules.user.service.*;
+import co.yixiang.modules.task.DelayJobService;
+import co.yixiang.modules.user.entity.YxUser;
+import co.yixiang.modules.user.entity.YxUserBill;
+import co.yixiang.modules.user.entity.YxWechatUser;
+import co.yixiang.modules.user.service.YxUserAddressService;
+import co.yixiang.modules.user.service.YxUserBillService;
+import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.modules.user.service.YxWechatUserService;
 import co.yixiang.modules.user.web.vo.YxUserAddressQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
-import co.yixiang.modules.task.DelayJobService;
 import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 import co.yixiang.modules.wechat.entity.YxWechatTemplate;
-import co.yixiang.mp.service.WxMpTemplateMessageService;
 import co.yixiang.modules.wechat.service.YxWechatTemplateService;
+import co.yixiang.mp.service.WxMpTemplateMessageService;
 import co.yixiang.service.AlipayService;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
@@ -63,13 +73,10 @@ import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
+import org.n3r.idworker.Sid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -167,6 +174,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
     @Autowired
     private AlipayService alipayService;
+
+    @Autowired
+    private Sid sid;
 
 
     /**
@@ -1015,6 +1025,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         return payUrl;
     }
 
+    /**
+     * 微信H5支付
+     * @param orderId
+     * @return
+     * @throws WxPayException
+     */
     @Override
     public WxPayMwebOrderResult wxH5Pay(String orderId) throws WxPayException {
 
@@ -1276,11 +1292,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         if(payPrice <= 0) payPrice = 0d;
 
-
+        //生成分布式唯一值
+        String orderSn = sid.nextShort();
         //组合数据
         YxStoreOrder storeOrder = new YxStoreOrder();
         storeOrder.setUid(uid);
-        storeOrder.setOrderId(OrderUtil.orderSn());
+        storeOrder.setOrderId(orderSn);
         storeOrder.setRealName(userAddress.getRealName());
         storeOrder.setUserPhone(userAddress.getPhone());
         storeOrder.setUserAddress(userAddress.getProvince()+" "+userAddress.getCity()+
