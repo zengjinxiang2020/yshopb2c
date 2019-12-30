@@ -43,7 +43,7 @@ public class YxUserAddressServiceImpl extends BaseServiceImpl<YxUserAddressMappe
     @Override
     public YxUserAddress getUserDefaultAddress(int uid) {
         QueryWrapper<YxUserAddress> wrapper = new QueryWrapper<>();
-        wrapper.eq("is_default",1).eq("uid",uid);
+        wrapper.eq("is_default",1).eq("uid",uid).eq("is_del",0).last("limit 1");
         return getOne(wrapper);
     }
 
