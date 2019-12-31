@@ -1,5 +1,7 @@
 package co.yixiang.mp.controller;
 
+import cn.hutool.core.util.StrUtil;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.mp.domain.YxWechatTemplate;
 import co.yixiang.mp.service.YxWechatTemplateService;
 import co.yixiang.mp.service.dto.YxWechatTemplateQueryCriteria;
