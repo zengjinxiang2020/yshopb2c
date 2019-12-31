@@ -26,7 +26,7 @@ public interface YxStoreProductReplyService extends BaseService<YxStoreProductRe
 
     YxStoreProductReplyQueryVo getReply(int productId);
 
-    List<YxStoreProductReplyQueryVo> getReplyList(int productId,int page, int limit);
+    List<YxStoreProductReplyQueryVo> getReplyList(int productId,int type,int page, int limit);
 
     int getInfoCount(Integer oid,String unique);
 

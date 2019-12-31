@@ -3,6 +3,8 @@ package co.yixiang.modules.shop.service.impl;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.entity.YxStoreProductReply;
 import co.yixiang.modules.shop.mapper.YxStoreProductReplyMapper;
 import co.yixiang.modules.shop.service.YxStoreProductReplyService;
@@ -10,25 +12,21 @@ import co.yixiang.modules.shop.web.dto.ReplyCountDTO;
 import co.yixiang.modules.shop.web.param.YxStoreProductReplyQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductReplyQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 
@@ -91,6 +89,11 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<YxStoreProdu
         return replyCountDTO;
     }
 
+    /**
+     * 处理评价
+     * @param replyQueryVo
+     * @return
+     */
     @Override
     public YxStoreProductReplyQueryVo handleReply(YxStoreProductReplyQueryVo replyQueryVo) {
         YxStoreCartQueryVo cartInfo = JSONObject.parseObject(replyQueryVo.getCartInfo()
@@ -117,6 +120,11 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<YxStoreProdu
         return replyQueryVo;
     }
 
+    /**
+     * 获取单条评价
+     * @param productId
+     * @return
+     */
     @Override
     public YxStoreProductReplyQueryVo getReply(int productId) {
         YxStoreProductReplyQueryVo vo = yxStoreProductReplyMapper.getReply(productId);
@@ -126,12 +134,21 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<YxStoreProdu
         return null;
     }
 
+
+    /**
+     * 获取评价列表
+     * @param productId
+     * @param type
+     * @param page
+     * @param limit
+     * @return
+     */
     @Override
-    public List<YxStoreProductReplyQueryVo> getReplyList(int productId,int page, int limit) {
+    public List<YxStoreProductReplyQueryVo> getReplyList(int productId,int type,int page, int limit) {
         List<YxStoreProductReplyQueryVo> newList = new ArrayList<>();
         Page<YxStoreProductReply> pageModel = new Page<>(page, limit);
         List<YxStoreProductReplyQueryVo> list = yxStoreProductReplyMapper
-                .selectReplyList(pageModel,productId);
+                .selectReplyList(pageModel,productId,type);
         List<YxStoreProductReplyQueryVo> list1 = list.stream().map(i ->{
             YxStoreProductReplyQueryVo vo = new YxStoreProductReplyQueryVo();
             BeanUtils.copyProperties(i,vo);

@@ -129,7 +129,7 @@ public class StoreProductController extends BaseController {
                                        @RequestParam(value = "type",defaultValue = "0") int type,
                                        @RequestParam(value = "page",defaultValue = "1") int page,
                                        @RequestParam(value = "limit",defaultValue = "10") int limit){
-        return ApiResult.ok(replyService.getReplyList(id,page,limit));
+        return ApiResult.ok(replyService.getReplyList(id,type,page,limit));
     }
 
     /**
