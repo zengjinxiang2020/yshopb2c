@@ -32,9 +32,12 @@ public class IndexController {
     private final YxSystemConfigService systemConfigService;
     private final YxStoreProductService storeProductService;
 
+
+
     @GetMapping("/index")
     @ApiOperation(value = "首页数据",notes = "首页数据")
     public ApiResult<Map<String,Object>> index(){
+
 
         Map<String,Object> map = new LinkedHashMap<>();
         //banner

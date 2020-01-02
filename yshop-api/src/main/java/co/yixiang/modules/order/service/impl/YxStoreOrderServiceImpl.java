@@ -5,7 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.common.constant.CommonConstant;
+import co.yixiang.common.rocketmq.MqProducer;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.domain.AlipayConfig;
@@ -42,7 +42,6 @@ import co.yixiang.modules.shop.service.YxStoreProductReplyService;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
-import co.yixiang.modules.task.DelayJobService;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.entity.YxWechatUser;
@@ -145,8 +144,6 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Autowired
     private YxStoreCouponUserMapper yxStoreCouponUserMapper;
 
-    @Autowired
-    private DelayJobService delayJobService;
 
     @Autowired
     private YxStoreCombinationService combinationService;
@@ -177,6 +174,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
     @Autowired
     private Sid sid;
+
+    @Autowired
+    private MqProducer mqProducer;
 
 
     /**
@@ -1361,13 +1361,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         orderStatusService.create(storeOrder.getId(),"cache_key_create_order","订单生成");
 
 
-        // 添加订单支付超期延时任务
-        // 添加订单支付超期延时任务
-        Map<String,Object> delayJob = new HashMap<>();
-        delayJob.put("delayJobName","CANCEL_ORVERTIME_ORDER");
-        delayJob.put("orderId",storeOrder.getId());
-        delayJobService.submitJob(delayJob, CommonConstant.ORDER_OUTTIME_UNPAY);
-        log.info("添加定时任务成功 订单id： [{}]：", storeOrder.getId());
+        //使用MQ延时消息
+        mqProducer.sendMsg("yshop-topic",storeOrder.getId().toString());
+        log.info("投递延时订单id： [{}]：", storeOrder.getId());
+
         return storeOrder;
     }
 

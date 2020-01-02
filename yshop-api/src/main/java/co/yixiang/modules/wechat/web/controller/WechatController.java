@@ -321,6 +321,7 @@ public class WechatController extends BaseController {
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
                     timestamp, nonce, msgSignature);
             WxMpXmlOutMessage outMessage = this.route(inMessage);
+            if(outMessage == null) return;
 
             out = outMessage.toEncryptedXml(wxService.getWxMpConfigStorage());
         }

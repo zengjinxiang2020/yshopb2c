@@ -22,6 +22,12 @@ spring:
     redis:
       repositories:
         enabled: false
+#配置rocketmq
+rocketmq:
+  nameServer: localhost:9876
+  producer:
+    group: yshop-group
+    sendMessageTimeout: 300000
 
   #配置 Jpa
   jpa:

@@ -74,6 +74,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
         <!--Spring boot end-->
 
         <!--spring2.0集成redis所需common-pool2-->
@@ -209,21 +210,10 @@
             <version>3.11.2</version>
         </dependency>
 
-        <!--webservice-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-web-services</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.cxf</groupId>-->
-<!--            <artifactId>cxf-rt-frontend-jaxws</artifactId>-->
-<!--            <version>3.1.6</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.cxf</groupId>-->
-<!--            <artifactId>cxf-rt-transports-http</artifactId>-->
-<!--            <version>3.1.6</version>-->
-<!--        </dependency>-->
+
+
+
+
 
 
     </dependencies>
