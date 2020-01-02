@@ -424,7 +424,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
             userQueryVo.setStatu(0);
         }
         //todo 测试环境设置所有人是管理员,生成环境记得去掉
-        userQueryVo.setAdminid(1);
+        //userQueryVo.setAdminid(1);
         return userQueryVo;
     }
 
