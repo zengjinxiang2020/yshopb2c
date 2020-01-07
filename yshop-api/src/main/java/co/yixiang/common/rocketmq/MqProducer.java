@@ -1,5 +1,6 @@
 package co.yixiang.common.rocketmq;
 
+import co.yixiang.exception.ErrorRequestException;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -36,7 +37,7 @@ public class MqProducer {
         try {
             defaultMQProducer.send(message);
         } catch (MQClientException e) {
-            e.printStackTrace();
+            throw new ErrorRequestException("RocketMQ服务没启动哦");
         } catch (RemotingException e) {
             e.printStackTrace();
         } catch (MQBrokerException e) {

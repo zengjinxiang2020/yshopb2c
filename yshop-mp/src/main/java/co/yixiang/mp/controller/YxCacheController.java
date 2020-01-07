@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-10-06
 */
-@Api(tags = "YxCache管理")
+@Api(tags = "微信菜單")
 @RestController
 @RequestMapping("api")
 public class YxCacheController {
@@ -37,7 +37,7 @@ public class YxCacheController {
 
     @ApiOperation(value = "查询菜单")
     @GetMapping(value = "/yxCache")
-    @PreAuthorize("hasAnyRole('ADMIN','YXCACHE_ALL','YXCACHE_SELECT')")
+    @PreAuthorize("@el.check('admin','YXCACHE_ALL','YXCACHE_SELECT')")
     public ResponseEntity getYxCaches(){
         return new ResponseEntity(yxCacheService.findById("wechat_menus"),HttpStatus.OK);
     }
@@ -45,7 +45,7 @@ public class YxCacheController {
 
     @ApiOperation(value = "创建菜单")
     @PostMapping(value = "/yxCache")
-    @PreAuthorize("hasAnyRole('ADMIN','YXCACHE_ALL','YXCACHE_CREATE')")
+    @PreAuthorize("@el.check('admin','YXCACHE_ALL','YXCACHE_CREATE')")
     public ResponseEntity create( @RequestBody String jsonStr){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         JSONObject jsonObject = JSON.parseObject(jsonStr);
@@ -64,7 +64,6 @@ public class YxCacheController {
             yxCacheService.create(yxCache);
         }
 
-        System.out.println("menu:"+menu);
 
         //创建菜单
         try {

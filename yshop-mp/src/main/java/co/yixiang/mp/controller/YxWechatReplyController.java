@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-10-10
 */
-@Api(tags = "YxWechatReply管理")
+@Api(tags = "微信回復管理")
 @RestController
 @RequestMapping("api")
 public class YxWechatReplyController {
@@ -30,7 +30,7 @@ public class YxWechatReplyController {
 
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxWechatReply")
-    @PreAuthorize("hasAnyRole('ADMIN','YXWECHATREPLY_ALL','YXWECHATREPLY_SELECT')")
+    @PreAuthorize("@el.check('admin','YXWECHATREPLY_ALL','YXWECHATREPLY_SELECT')")
     public ResponseEntity getYxWechatReplys(){
         return new ResponseEntity(yxWechatReplyService.isExist("subscribe"),HttpStatus.OK);
     }
@@ -38,7 +38,7 @@ public class YxWechatReplyController {
 
     @ApiOperation(value = "新增自动回复")
     @PostMapping(value = "/yxWechatReply")
-    @PreAuthorize("hasAnyRole('ADMIN','YXWECHATREPLY_ALL','YXWECHATREPLY_CREATE')")
+    @PreAuthorize("@el.check('admin','YXWECHATREPLY_ALL','YXWECHATREPLY_CREATE')")
     public ResponseEntity create(@RequestBody String jsonStr){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         JSONObject jsonObject = JSON.parseObject(jsonStr);
