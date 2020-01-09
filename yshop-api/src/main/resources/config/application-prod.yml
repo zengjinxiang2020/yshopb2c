@@ -56,6 +56,8 @@ spring:
 jwt:
   header: Authorization
   secret: JBqNQX7HD9xhwHP7YSHOP
+  # 令牌前缀
+  token-start-with: Bearer
   # token 过期时间 2个小时
   expiration: 7200000
   # 在线用户key
@@ -79,7 +81,10 @@ generator:
 
 #是否开启 swagger-ui
 swagger:
-  enabled: false
+  enabled: true
+  title: yshop商城移动端API
+  serverUrl: http://localhost:8009
+  version: 1.7
 
 # 文件存储路径
 file:

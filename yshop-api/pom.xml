@@ -20,12 +20,6 @@
     <dependencies>
         <dependency>
             <groupId>co.yixiang</groupId>
-            <artifactId>yshop-common</artifactId>
-            <version>1.7</version>
-        </dependency>
-
-        <dependency>
-            <groupId>co.yixiang</groupId>
             <artifactId>yshop-tools</artifactId>
             <version>1.7</version>
         </dependency>

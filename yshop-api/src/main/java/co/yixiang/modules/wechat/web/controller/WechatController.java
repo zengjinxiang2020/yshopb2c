@@ -108,9 +108,6 @@ public class WechatController extends BaseController {
     @ApiOperation(value = "微信授权",notes = "微信授权")
     public ApiResult<Object> authLogin(@RequestParam(value = "code") String code,
                                        @RequestParam(value = "spread") String spread) {
-        //todo 分销人
-        //String url = "https://h5.dayouqiantu.cn/";
-        //wxService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
 
         try {
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);

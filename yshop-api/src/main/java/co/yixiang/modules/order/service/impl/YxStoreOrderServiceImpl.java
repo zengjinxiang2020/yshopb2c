@@ -1042,7 +1042,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         String mchId = RedisUtil.get("wxpay_mchId");
         String mchKey = RedisUtil.get("wxpay_mchKey");
         if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId) || StrUtil.isBlank(mchKey)){
-            throw new ErrorRequestException("请配置微信支付");
+            throw new ErrorRequestException("请配置微信支付与公众号appId");
         }
         WxPayConfig wxPayConfig = new WxPayConfig();
         wxPayConfig.setAppId(appId);
@@ -1074,6 +1074,54 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     }
 
     /**
+     * 小程序支付
+     * @param orderId
+     * @return
+     * @throws WxPayException
+     */
+    @Override
+    public WxPayMpOrderResult wxAppPay(String orderId) throws WxPayException {
+        String apiUrl = systemConfigService.getData("api_url");
+        if(StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
+
+        //读取redis配置
+        String appId = RedisUtil.get("wxapp_appId");
+        String mchId = RedisUtil.get("wxpay_mchId");
+        String mchKey = RedisUtil.get("wxpay_mchKey");
+        if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId) || StrUtil.isBlank(mchKey)){
+            throw new ErrorRequestException("请配置微信支付与小程序appId");
+        }
+        WxPayConfig wxPayConfig = new WxPayConfig();
+        wxPayConfig.setAppId(appId);
+        wxPayConfig.setMchId(mchId);
+        wxPayConfig.setMchKey(mchKey);
+        wxPayService.setConfig(wxPayConfig);
+
+        YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
+        if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
+        if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
+
+        if(orderInfo.getPayPrice().doubleValue() <= 0) throw new ErrorRequestException("该支付无需支付");
+
+        WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
+        YxWechatUser wechatUser = wechatUserService.getById(orderInfo.getUid());
+        if(ObjectUtil.isNull(wechatUser)) throw new ErrorRequestException("用户错误");
+        orderRequest.setTradeType("JSAPI");
+        orderRequest.setOpenid(wechatUser.getRoutineOpenid());
+        orderRequest.setBody("商品购买");
+        orderRequest.setOutTradeNo(orderId);
+        BigDecimal bigDecimal = new BigDecimal(100);
+        orderRequest.setTotalFee(bigDecimal.multiply(orderInfo.getPayPrice()).intValue());//元转成分
+        orderRequest.setSpbillCreateIp("127.0.0.1");
+        orderRequest.setNotifyUrl(apiUrl+"/api/wechat/notify");
+
+
+        WxPayMpOrderResult orderResult = wxPayService.createOrder(orderRequest);
+
+        return orderResult;
+    }
+
+    /**
      * 微信支付
      * @param orderId
      */
@@ -1087,7 +1135,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         String mchId = RedisUtil.get("wxpay_mchId");
         String mchKey = RedisUtil.get("wxpay_mchKey");
         if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId) || StrUtil.isBlank(mchKey)){
-            throw new ErrorRequestException("请配置微信支付");
+            throw new ErrorRequestException("请配置微信支付与公众号appId");
         }
         WxPayConfig wxPayConfig = new WxPayConfig();
         wxPayConfig.setAppId(appId);

@@ -20,6 +20,7 @@ import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.EncryptUtils;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
+import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -62,14 +63,14 @@ public class WxMaUserController {
     /**
      * 小程序登陆接口
      */
-    @PostMapping("/wechat/mp_auth")
+    @PostMapping("/wxapp/auth")
     @ApiOperation(value = "小程序登陆",notes = "小程序登陆")
     public ApiResult<Object> login(@RequestParam(value = "code") String code,
                                    @RequestParam(value = "spread") String spread,
                                    @RequestParam(value = "encryptedData") String encryptedData,
                                    @RequestParam(value = "iv") String iv ) {
         if (StringUtils.isBlank(code)) {
-            return ApiResult.fail("empty jscode");
+            return ApiResult.fail("请传code");
         }
         try {
             //读取redis配置
@@ -78,12 +79,12 @@ public class WxMaUserController {
             if(StrUtil.isBlank(appId) || StrUtil.isBlank(secret)){
                 throw new ErrorRequestException("请先配置小程序");
             }
-           WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
+            WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
             wxMaConfig.setAppid(appId);
             wxMaConfig.setSecret(secret);
 
 
-           wxMaService.setWxMaConfig(wxMaConfig);
+            wxMaService.setWxMaConfig(wxMaConfig);
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
             YxWechatUser wechatUser = wechatUserService.getUserInfo(session.getOpenid());;
             JwtUser jwtUser = null;
@@ -104,17 +105,19 @@ public class WxMaUserController {
             }else{
                 WxMaUserInfo wxMpUser = wxMaService.getUserService()
                         .getUserInfo(session.getSessionKey(), encryptedData, iv);
+                //过滤掉表情
+                String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickName());
                 //用户保存
                 YxUser user = new YxUser();
-                user.setAccount(wxMpUser.getNickName());
+                user.setAccount(nickname);
                 user.setUsername(wxMpUser.getOpenId());
                 user.setPassword(EncryptUtils.encryptPassword("123456"));
                 user.setPwd(EncryptUtils.encryptPassword("123456"));
                 user.setPhone("");
-                user.setUserType("wechat");
+                user.setUserType("routine");
                 user.setAddTime(OrderUtil.getSecondTimestampTwo());
                 user.setLastTime(OrderUtil.getSecondTimestampTwo());
-                user.setNickname(wxMpUser.getNickName());
+                user.setNickname(nickname);
                 user.setAvatar(wxMpUser.getAvatarUrl());
                 user.setNowMoney(BigDecimal.ZERO);
                 user.setBrokeragePrice(BigDecimal.ZERO);
@@ -127,8 +130,8 @@ public class WxMaUserController {
                 YxWechatUser yxWechatUser = new YxWechatUser();
                 // System.out.println("wxMpUser:"+wxMpUser);
                 yxWechatUser.setAddTime(OrderUtil.getSecondTimestampTwo());
-                yxWechatUser.setNickname(wxMpUser.getNickName());
-                yxWechatUser.setOpenid(wxMpUser.getOpenId());
+                yxWechatUser.setNickname(nickname);
+                yxWechatUser.setRoutineOpenid(wxMpUser.getOpenId());
                 int sub = 0;
                 yxWechatUser.setSubscribe(sub);
                 yxWechatUser.setSex(Integer.valueOf(wxMpUser.getGender()));
@@ -150,7 +153,7 @@ public class WxMaUserController {
 
 
             //设置推广关系
-            if(StrUtil.isNotEmpty(spread) && !spread.equals("NaN")){
+            if(StrUtil.isNotEmpty(spread)){
                 //System.out.println("spread:"+spread);
                 userService.setSpread(Integer.valueOf(spread),
                         jwtUser.getId().intValue());

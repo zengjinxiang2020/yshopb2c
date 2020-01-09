@@ -92,6 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 ).anonymous()
 
                 .antMatchers( HttpMethod.POST,"/"+loginPath).anonymous()
+                .antMatchers( HttpMethod.POST,"/wxapp/auth").anonymous()
                 //首页
                 .antMatchers("/index").anonymous()
                 .antMatchers("/article/**").anonymous()
