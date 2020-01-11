@@ -7,6 +7,7 @@ import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
 import co.yixiang.modules.shop.web.param.YxStoreProductAttrValueQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreProductAttrValueQueryVo;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,10 @@ import java.io.Serializable;
  */
 @Repository
 public interface YxStoreProductAttrValueMapper extends BaseMapper<YxStoreProductAttrValue> {
+
+    @Select("select sum(stock) from yx_store_product_attr_value " +
+            "where product_id = #{productId}")
+    Integer sumStock(Integer productId);
 
     @Update("update yx_store_product_attr_value set stock=stock-#{num}, sales=sales+#{num}" +
             " where product_id=#{productId} and `unique`=#{unique}")

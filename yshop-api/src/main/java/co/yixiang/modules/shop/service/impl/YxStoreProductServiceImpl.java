@@ -7,6 +7,7 @@ import co.yixiang.modules.shop.entity.YxStoreCategory;
 import co.yixiang.modules.shop.entity.YxStoreProduct;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
 import co.yixiang.modules.shop.mapper.YxStoreCategoryMapper;
+import co.yixiang.modules.shop.mapper.YxStoreProductAttrValueMapper;
 import co.yixiang.modules.shop.mapper.YxStoreProductMapper;
 import co.yixiang.modules.shop.mapping.YxStoreProductMap;
 import co.yixiang.modules.shop.service.*;
@@ -64,6 +65,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
 
     @Autowired
     private YxUserService userService;
+
+    @Autowired
+    private YxStoreProductAttrValueMapper storeProductAttrValueMapper;
 
 
     /**
@@ -125,6 +129,11 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
         Map<String, Object> returnMap = storeProductAttrService.getProductAttrDetail(id,0,0);
         ProductDTO productDTO = new ProductDTO();
         YxStoreProductQueryVo storeProductQueryVo  = storeProductMap.toDto(storeProduct);
+
+        //处理库存
+        Integer newStock = storeProductAttrValueMapper.sumStock(id);
+        if(newStock != null)  storeProductQueryVo.setStock(newStock);
+
         //设置VIP价格
         double vipPrice = userService.setLevelPrice(
                 storeProductQueryVo.getPrice().doubleValue(),uid);
