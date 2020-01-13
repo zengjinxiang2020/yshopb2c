@@ -3,13 +3,15 @@ package co.yixiang.modules.security.service;
 
 import co.yixiang.modules.user.entity.YxUser;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-//@CacheConfig(cacheNames = "role")
 public class JwtPermissionService {
 
 
@@ -18,13 +20,16 @@ public class JwtPermissionService {
      * @param user
      * @return
      */
-    //@Cacheable(key = "'loadPermissionByUser:' + #p0.username")
+
     public Collection<GrantedAuthority> mapToGrantedAuthorities(YxUser user) {
 
         System.out.println("--------------------loadPermissionByUser:" + user.getUsername() + "---------------------");
 
         //Set<Role> roles = roleRepository.findByUsers_Id(user.getId());
+        List<String> list = new ArrayList<>();
+        list.add("yshop");
 
-        return new ArrayList<>();
+        return list.stream().map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 }

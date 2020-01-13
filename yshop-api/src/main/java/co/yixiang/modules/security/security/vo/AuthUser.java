@@ -1,4 +1,4 @@
-package co.yixiang.modules.security.security;
+package co.yixiang.modules.security.security.vo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,15 +6,15 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 
 /**
- * @author Zheng Jie
- * @date 2018-11-30
+ * @author hupeng
+ * @date 2020/01/12
  */
 @Getter
 @Setter
-public class AuthorizationUser {
+public class AuthUser {
 
     @NotBlank
-    private String account;
+    private String username;
 
     @NotBlank
     private String password;
@@ -27,6 +27,6 @@ public class AuthorizationUser {
 
     @Override
     public String toString() {
-        return "{username=" + account  + ", password= ******}";
+        return "{username=" + username  + ", password= ******}";
     }
 }

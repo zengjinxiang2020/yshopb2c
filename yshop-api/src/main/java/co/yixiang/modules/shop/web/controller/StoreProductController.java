@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.web.controller;
 
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
@@ -45,6 +46,7 @@ public class StoreProductController extends BaseController {
     /**
      * 获取首页更多产品
      */
+    @AnonymousAccess
     @GetMapping("/groom/list/{type}")
     @ApiOperation(value = "获取首页更多产品",notes = "获取首页更多产品")
     public ApiResult<Map<String,Object>> moreGoodsList(@PathVariable Integer type){
@@ -66,6 +68,7 @@ public class StoreProductController extends BaseController {
     /**
      * 获取首页更多产品
      */
+    @AnonymousAccess
     @GetMapping("/products")
     @ApiOperation(value = "商品列表",notes = "商品列表")
     public ApiResult<List<YxStoreProductQueryVo>> goodsList(YxStoreProductQueryParam productQueryParam){
@@ -76,6 +79,7 @@ public class StoreProductController extends BaseController {
     /**
      * 为你推荐
      */
+    @AnonymousAccess
     @GetMapping("/product/hot")
     @ApiOperation(value = "为你推荐",notes = "为你推荐")
     public ApiResult<List<YxStoreProductQueryVo>> productRecommend(

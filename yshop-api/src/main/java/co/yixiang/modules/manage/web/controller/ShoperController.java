@@ -2,6 +2,7 @@ package co.yixiang.modules.manage.web.controller;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.manage.service.YxExpressService;
@@ -112,6 +113,7 @@ public class ShoperController extends BaseController {
     /**
      * 快递公司
      */
+    @AnonymousAccess
     @GetMapping("/logistics")
     @ApiOperation(value = "快递公司",notes = "快递公司")
     public ApiResult<Object> express(){

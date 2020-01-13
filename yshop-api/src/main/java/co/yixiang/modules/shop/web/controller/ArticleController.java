@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.web.controller;
 
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.vo.Paging;
@@ -33,6 +34,7 @@ public class ArticleController extends BaseController {
     /**
     * 获取文章文章详情
     */
+    @AnonymousAccess
     @GetMapping("/details/{id}")
     @ApiOperation(value = "文章详情",notes = "文章详情",response = YxArticleQueryVo.class)
     public ApiResult<YxArticleQueryVo> getYxArticle(@PathVariable Integer id) throws Exception{
@@ -44,6 +46,7 @@ public class ArticleController extends BaseController {
     /**
      * 文章列表
      */
+    @AnonymousAccess
     @GetMapping("/list")
     @ApiOperation(value = "文章列表",notes = "文章列表",response = YxArticleQueryVo.class)
     public ApiResult<Paging<YxArticleQueryVo>> getYxArticlePageList(

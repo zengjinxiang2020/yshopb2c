@@ -1,8 +1,9 @@
-package co.yixiang.modules.security.security;
+package co.yixiang.modules.security.security.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,16 +14,18 @@ import java.util.stream.Collectors;
 
 /**
  * @author hupeng
- * @since 2019-10-16
+ * @date 2020/01/12
  */
 @Getter
 @AllArgsConstructor
 public class JwtUser implements UserDetails {
 
-    @JsonIgnore
     private final Long id;
 
     private final String username;
+
+    private final String nickName;
+
 
     @JsonIgnore
     private final String password;
@@ -36,11 +39,10 @@ public class JwtUser implements UserDetails {
     @JsonIgnore
     private final Collection<GrantedAuthority> authorities;
 
+    private final boolean enabled;
 
-    private Boolean status;
+    private Integer createTime;
 
-
-    private Integer addTime;
 
 
     @JsonIgnore
@@ -69,8 +71,10 @@ public class JwtUser implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return status;
+        return enabled;
     }
 
-
+    public Collection getRoles() {
+        return authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+    }
 }

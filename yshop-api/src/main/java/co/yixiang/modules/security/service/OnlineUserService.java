@@ -1,21 +1,21 @@
 package co.yixiang.modules.security.service;
 
 import co.yixiang.modules.security.config.SecurityProperties;
-import co.yixiang.utils.*;
-import lombok.extern.slf4j.Slf4j;
 import co.yixiang.modules.security.security.vo.JwtUser;
 import co.yixiang.modules.security.security.vo.OnlineUser;
-
+import co.yixiang.utils.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
 /**
- * @author Zheng Jie
- * @Date 2019年10月26日21:56:27
+ * @author hupeng
+ * @Date 2020/01/12
  */
 @Service
 @Slf4j
@@ -36,47 +36,26 @@ public class OnlineUserService {
      * @param request /
      */
     public void save(JwtUser jwtUser, String token, HttpServletRequest request){
-        String job = jwtUser.getDept() + "/" + jwtUser.getJob();
         String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
         String address = StringUtils.getCityInfo(ip);
         OnlineUser onlineUser = null;
         try {
-            onlineUser = new OnlineUser(jwtUser.getUsername(), jwtUser.getNickName(), job, browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
+            onlineUser = new OnlineUser(jwtUser.getId(),jwtUser.getUsername(), jwtUser.getNickName(), browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
         } catch (Exception e) {
             e.printStackTrace();
         }
         redisUtils.set(properties.getOnlineKey() + token, onlineUser, properties.getTokenValidityInSeconds()/1000);
     }
 
-    /**
-     * 查询全部数据
-     * @param filter /
-     * @param pageable /
-     * @return /
-     */
-    public Map<String,Object> getAll(String filter, int type, Pageable pageable){
-        List<OnlineUser> onlineUsers = getAll(filter,type);
-        return PageUtil.toPage(
-                PageUtil.toPage(pageable.getPageNumber(),pageable.getPageSize(),onlineUsers),
-                onlineUsers.size()
-        );
-    }
 
     /**
      * 查询全部数据，不分页
      * @param filter /
      * @return /
      */
-    public List<OnlineUser> getAll(String filter,int type){
-        List<String> keys = null;
-        if(type == 1){
-            keys = redisUtils.scan("m-online-token*");
-        }else{
-            keys = redisUtils.scan(properties.getOnlineKey() + "*");
-        }
-
-
+    public List<OnlineUser> getAll(String filter){
+        List<String> keys = redisUtils.scan(properties.getOnlineKey() + "*");
         Collections.reverse(keys);
         List<OnlineUser> onlineUsers = new ArrayList<>();
         for (String key : keys) {
@@ -101,19 +80,6 @@ public class OnlineUserService {
     public void kickOut(String key) throws Exception {
         key = properties.getOnlineKey() + EncryptUtils.desDecrypt(key);
         redisUtils.del(key);
-
-    }
-
-    /**
-     * 踢出移动端用户
-     * @param key /
-     * @throws Exception /
-     */
-    public void kickOutT(String key) throws Exception {
-
-        String keyt = "m-online-token" + EncryptUtils.desDecrypt(key);
-        redisUtils.del(keyt);
-
     }
 
     /**
@@ -125,26 +91,6 @@ public class OnlineUserService {
         redisUtils.del(key);
     }
 
-    /**
-     * 导出
-     * @param all /
-     * @param response /
-     * @throws IOException /
-     */
-    public void download(List<OnlineUser> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (OnlineUser user : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
-            map.put("用户名", user.getUserName());
-            map.put("岗位", user.getJob());
-            map.put("登录IP", user.getIp());
-            map.put("登录地点", user.getAddress());
-            map.put("浏览器", user.getBrowser());
-            map.put("登录日期", user.getLoginTime());
-            list.add(map);
-        }
-        FileUtil.downloadExcel(list, response);
-    }
 
     /**
      * 查询用户
@@ -160,7 +106,7 @@ public class OnlineUserService {
      * @param userName 用户名
      */
     public void checkLoginOnUser(String userName, String igoreToken){
-        List<OnlineUser> onlineUsers = getAll(userName,0);
+        List<OnlineUser> onlineUsers = getAll(userName);
         if(onlineUsers ==null || onlineUsers.isEmpty()){
             return;
         }

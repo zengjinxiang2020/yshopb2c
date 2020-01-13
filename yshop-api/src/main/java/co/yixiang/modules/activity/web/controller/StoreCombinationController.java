@@ -6,6 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.http.HttpUtil;
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
@@ -64,6 +65,7 @@ public class StoreCombinationController extends BaseController {
     /**
      * 拼团产品列表
      */
+    @AnonymousAccess
     @GetMapping("/combination/list")
     @ApiOperation(value = "拼团产品列表",notes = "拼团产品列表",response = YxStoreCombinationQueryVo.class)
     public ApiResult<Object> getList(@RequestParam(value = "page",defaultValue = "1") int page,

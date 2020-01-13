@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.http.HttpUtil;
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
@@ -77,6 +78,7 @@ public class StoreBargainController extends BaseController {
     /**
      * 砍价产品列表
      */
+    @AnonymousAccess
     @GetMapping("/bargain/list")
     @ApiOperation(value = "砍价产品列表",notes = "砍价产品列表",response = YxStoreBargainQueryVo.class)
     public ApiResult<Object> getYxStoreBargainPageList(@RequestParam(value = "page", defaultValue = "1") int page,

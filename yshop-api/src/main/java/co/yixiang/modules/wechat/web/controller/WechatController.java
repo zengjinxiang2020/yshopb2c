@@ -3,14 +3,13 @@ package co.yixiang.modules.wechat.web.controller;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiCode;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
-import co.yixiang.modules.security.security.JwtUser;
-import co.yixiang.modules.security.utils.JwtTokenUtil;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxWechatUser;
@@ -69,17 +68,11 @@ public class WechatController extends BaseController {
     private final WxMpMessageRouter messageRouter;
     private final YxSystemConfigService systemConfigService;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-
-    @Autowired
-    @Qualifier("jwtUserDetailsService")
-    private UserDetailsService userDetailsService;
 
     /**
      * 微信分享配置
      */
+    @AnonymousAccess
     @GetMapping("/share")
     @ApiOperation(value = "微信分享配置",notes = "微信分享配置")
     public ApiResult<Object> share() {
@@ -95,131 +88,19 @@ public class WechatController extends BaseController {
     /**
      * jssdk配置
      */
+    @AnonymousAccess
     @GetMapping("/wechat/config")
     @ApiOperation(value = "jssdk配置",notes = "jssdk配置")
     public ApiResult<Object> jsConfig(@RequestParam(value = "url") String url) throws WxErrorException {
         return ApiResult.ok(wxService.createJsapiSignature(url));
     }
 
-    /**
-     * 微信授权
-     */
-    @GetMapping("/wechat/auth")
-    @ApiOperation(value = "微信授权",notes = "微信授权")
-    public ApiResult<Object> authLogin(@RequestParam(value = "code") String code,
-                                       @RequestParam(value = "spread") String spread) {
 
-        try {
-            WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
-            WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
-            String openid = wxMpUser.getOpenId();
-            YxWechatUser wechatUser = wechatUserService.getUserInfo(openid);
-
-
-            JwtUser jwtUser = null;
-            if(ObjectUtil.isNotNull(wechatUser)){
-                YxUserQueryVo yxUserQueryVo = userService.getYxUserById(wechatUser.getUid());
-                if(ObjectUtil.isNotNull(yxUserQueryVo)){
-                    jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getOpenid());
-                }else{
-                    if(ObjectUtil.isNotNull(wechatUser)){
-                        wechatUserService.removeById(wechatUser.getUid());
-                    }
-                    if(ObjectUtil.isNotNull(yxUserQueryVo)){
-                        userService.removeById(yxUserQueryVo.getUid());
-                    }
-                    return ApiResult.fail(ApiCode.FAIL_AUTH,"授权失败");
-                }
-
-
-            }else{
-
-                //过滤掉表情
-                String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickname());
-                log.info("昵称：{}",nickname);
-                //用户保存
-                YxUser user = new YxUser();
-                user.setAccount(nickname);
-                user.setUsername(wxMpUser.getOpenId());
-                user.setPassword(EncryptUtils.encryptPassword("123456"));
-                user.setPwd(EncryptUtils.encryptPassword("123456"));
-                user.setPhone("");
-                user.setUserType("wechat");
-                user.setAddTime(OrderUtil.getSecondTimestampTwo());
-                user.setLastTime(OrderUtil.getSecondTimestampTwo());
-                user.setNickname(nickname);
-                user.setAvatar(wxMpUser.getHeadImgUrl());
-                user.setNowMoney(BigDecimal.ZERO);
-                user.setBrokeragePrice(BigDecimal.ZERO);
-                user.setIntegral(BigDecimal.ZERO);
-
-                userService.save(user);
-
-
-                //保存微信用户
-                YxWechatUser yxWechatUser = new YxWechatUser();
-                yxWechatUser.setAddTime(OrderUtil.getSecondTimestampTwo());
-                yxWechatUser.setNickname(nickname);
-                yxWechatUser.setOpenid(wxMpUser.getOpenId());
-                int sub = 0;
-                if(ObjectUtil.isNotNull(wxMpUser.getSubscribe()) && wxMpUser.getSubscribe()) sub =1;
-                yxWechatUser.setSubscribe(sub);
-                yxWechatUser.setSex(wxMpUser.getSex());
-                yxWechatUser.setLanguage(wxMpUser.getLanguage());
-                yxWechatUser.setCity(wxMpUser.getCity());
-                yxWechatUser.setProvince(wxMpUser.getProvince());
-                yxWechatUser.setCountry(wxMpUser.getCountry());
-                yxWechatUser.setHeadimgurl(wxMpUser.getHeadImgUrl());
-                if(ObjectUtil.isNotNull(wxMpUser.getSubscribeTime())){
-                    yxWechatUser.setSubscribeTime(wxMpUser.getSubscribeTime().intValue());
-                }
-                if(StrUtil.isNotEmpty(wxMpUser.getUnionId())){
-                    yxWechatUser.setUnionid(wxMpUser.getUnionId());
-                }
-                if(StrUtil.isNotEmpty(wxMpUser.getRemark())){
-                    yxWechatUser.setUnionid(wxMpUser.getRemark());
-                }
-                if(ObjectUtil.isNotEmpty(wxMpUser.getGroupId())){
-                    yxWechatUser.setGroupid(wxMpUser.getGroupId());
-                }
-                yxWechatUser.setUid(user.getUid());
-
-                wechatUserService.save(yxWechatUser);
-
-
-
-                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getOpenId());
-            }
-
-
-            //设置推广关系
-            if(StrUtil.isNotEmpty(spread) && !spread.equals("NaN")){
-                //System.out.println("spread:"+spread);
-                userService.setSpread(Integer.valueOf(spread),
-                        jwtUser.getId().intValue());
-            }
-
-            // 生成令牌
-            final String token = jwtTokenUtil.generateToken(jwtUser);
-            Date expiresTime = jwtTokenUtil.getExpirationDateFromToken(token);
-            String expiresTimeStr = DateUtil.formatDateTime(expiresTime);
-            Map<String,String> map = new LinkedHashMap<>();
-            map.put("token",token);
-            map.put("expires_time",expiresTimeStr);
-
-            // 返回 token
-            return ApiResult.ok(map);
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-            return ApiResult.fail("授权失败");
-        }
-       // return ApiResult.ok(wxService.createJsapiSignature(url));
-    }
 
     /**
      * 微信支付回调
      */
+    @AnonymousAccess
     @PostMapping("/wechat/notify")
     @ApiOperation(value = "微信支付回调",notes = "微信支付回调")
     public String notify(@RequestBody String xmlData) {
@@ -247,6 +128,7 @@ public class WechatController extends BaseController {
      * @return
      * @throws WxPayException
      */
+    @AnonymousAccess
     @ApiOperation(value = "退款回调通知处理",notes = "退款回调通知处理")
     @PostMapping("/notify/refund")
     public String parseRefundNotifyResult(@RequestBody String xmlData) {
@@ -275,6 +157,7 @@ public class WechatController extends BaseController {
     /**
      * 微信验证消息
      */
+    @AnonymousAccess
     @GetMapping("/wechat/serve")
     @ApiOperation(value = "微信验证消息",notes = "微信验证消息")
     public String authGet(@RequestParam(name = "signature", required = false) String signature,
@@ -290,7 +173,9 @@ public class WechatController extends BaseController {
     }
 
 
+    @AnonymousAccess
     @PostMapping("/wechat/serve")
+    @ApiOperation(value = "微信获取消息",notes = "微信获取消息")
     public void post(@RequestBody String requestBody,
                        @RequestParam("signature") String signature,
                        @RequestParam("timestamp") String timestamp,

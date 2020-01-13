@@ -1,5 +1,6 @@
 package co.yixiang.modules.user.web.controller;
 
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
@@ -134,6 +135,7 @@ public class UserController extends BaseController {
     /**
      * 获取活动状态
      */
+    @AnonymousAccess
     @GetMapping("/user/activity")
     @ApiOperation(value = "获取活动状态",notes = "获取活动状态")
     public ApiResult<Object> activity(){

@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.web.controller;
 
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
@@ -34,6 +35,7 @@ public class IndexController {
 
 
 
+    @AnonymousAccess
     @GetMapping("/index")
     @ApiOperation(value = "首页数据",notes = "首页数据")
     public ApiResult<Map<String,Object>> index(){
@@ -66,6 +68,7 @@ public class IndexController {
         return ApiResult.ok(map);
     }
 
+    @AnonymousAccess
     @GetMapping("/search/keyword")
     @ApiOperation(value = "热门搜索关键字获取",notes = "热门搜索关键字获取")
     public ApiResult<List<String>> search(){
@@ -78,6 +81,7 @@ public class IndexController {
         return ApiResult.ok(stringList);
     }
 
+    @AnonymousAccess
     @PostMapping("/image_base64")
     @ApiOperation(value = "获取图片base64",notes = "获取图片base64")
     public ApiResult<List<String>> imageBase64(){

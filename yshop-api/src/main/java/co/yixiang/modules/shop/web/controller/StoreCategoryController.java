@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.web.controller;
 
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.vo.Paging;
@@ -32,6 +33,7 @@ public class StoreCategoryController extends BaseController {
     /**
      * 商品分类列表
      */
+    @AnonymousAccess
     @GetMapping("/category")
     @ApiOperation(value = "商品分类列表",notes = "商品分类列表")
     public ApiResult<Paging<YxStoreCategoryQueryVo>> getYxStoreCategoryPageList(){

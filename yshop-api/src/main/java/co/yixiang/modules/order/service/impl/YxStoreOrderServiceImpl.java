@@ -72,7 +72,6 @@ import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
-import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -172,8 +171,6 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Autowired
     private AlipayService alipayService;
 
-    @Autowired
-    private Sid sid;
 
     @Autowired
     private MqProducer mqProducer;
@@ -1341,7 +1338,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         if(payPrice <= 0) payPrice = 0d;
 
         //生成分布式唯一值
-        String orderSn = sid.nextShort();
+        String orderSn = IdUtil.getSnowflake(0,0).nextIdStr();
         //组合数据
         YxStoreOrder storeOrder = new YxStoreOrder();
         storeOrder.setUid(uid);
@@ -1410,8 +1407,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
 
         //使用MQ延时消息
-        mqProducer.sendMsg("yshop-topic",storeOrder.getId().toString());
-        log.info("投递延时订单id： [{}]：", storeOrder.getId());
+        //mqProducer.sendMsg("yshop-topic",storeOrder.getId().toString());
+        //log.info("投递延时订单id： [{}]：", storeOrder.getId());
 
         return storeOrder;
     }
