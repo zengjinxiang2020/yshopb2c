@@ -1407,8 +1407,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
 
         //使用MQ延时消息
-        //mqProducer.sendMsg("yshop-topic",storeOrder.getId().toString());
-        //log.info("投递延时订单id： [{}]：", storeOrder.getId());
+        mqProducer.sendMsg("yshop-topic",storeOrder.getId().toString());
+        log.info("投递延时订单id： [{}]：", storeOrder.getId());
 
         return storeOrder;
     }
