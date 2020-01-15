@@ -29,6 +29,9 @@ public class YxStoreOrderQueryVo implements Serializable {
     @ApiModelProperty(value = "订单号")
     private String orderId;
 
+
+    private String extendOrderId;
+
     @ApiModelProperty(value = "用户id")
     private Integer uid;
 

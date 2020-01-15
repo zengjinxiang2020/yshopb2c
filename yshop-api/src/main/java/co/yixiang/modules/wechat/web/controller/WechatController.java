@@ -112,7 +112,7 @@ public class WechatController extends BaseController {
                 return WxPayNotifyResponse.success("处理成功!");
             }
 
-            orderService.paySuccess(orderId,"weixin");
+            orderService.paySuccess(orderInfo.getOrderId(),"weixin");
 
             return WxPayNotifyResponse.success("处理成功!");
         } catch (WxPayException e) {

@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.persistence.Column;
 import java.math.BigDecimal;
 
 /**
@@ -32,6 +33,8 @@ public class YxStoreOrder extends BaseEntity {
 
     @ApiModelProperty(value = "订单号")
     private String orderId;
+
+    private String extendOrderId;
 
     @ApiModelProperty(value = "用户id")
     private Integer uid;

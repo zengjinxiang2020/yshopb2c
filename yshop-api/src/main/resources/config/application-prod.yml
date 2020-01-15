@@ -81,7 +81,7 @@ swagger:
   enabled: true
   title: yshop商城移动端API
   serverUrl: http://localhost:8009
-  version: 1.7
+  version: 1.8
 
 # 文件存储路径
 file:
@@ -92,37 +92,4 @@ file:
   avatarMaxSize: 5
   localUrl:
 
-yshop:
-  #通知相关配置
-  notify:
-    # 短消息模版通知配置
-    # 短信息用于通知客户，例如发货短信通知，注意配置格式；template-name，template-templateId 请参考 NotifyType 枚举值
-    sms:
-      enable: false
-      # 如果是腾讯云短信，则设置active的值tencent
-      # 如果是阿里云短信，则设置active的值aliyun
-      active: tencent
-      sign: yshop
-      template:
-        - name: paySucceed
-          templateId: 156349
-        - name: captcha
-          templateId: 156433
-        - name: ship
-          templateId: 158002
-        - name: refund
-          templateId: 159447
-      tencent:
-        appid: 111111111
-        appkey: xxxxxxxxxxxxxx
-      aliyun:
-        regionId: xxx
-        accessKeyId: xxx
-        accessKeySecret: xxx
 
-
-  # 快鸟物流查询配置
-  express:
-    enable: true
-    appId: 1607734
-    appKey: 81f43a2e-f504-45c4-9b54-2637d59f8190

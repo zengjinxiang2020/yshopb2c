@@ -13,7 +13,11 @@ import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiCode;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.exception.ErrorRequestException;
+import co.yixiang.modules.notify.NotifyService;
+import co.yixiang.modules.notify.NotifyType;
+import co.yixiang.modules.notify.SmsResult;
 import co.yixiang.modules.security.config.SecurityProperties;
+import co.yixiang.modules.security.rest.param.LoginParam;
 import co.yixiang.modules.security.rest.param.RegParam;
 import co.yixiang.modules.security.rest.param.VerityParam;
 import co.yixiang.modules.security.security.TokenProvider;
@@ -29,6 +33,9 @@ import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.SecurityUtils;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.CommonResponse;
 import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,6 +56,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.sound.midi.SoundbankResource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,6 +74,9 @@ public class AuthController {
 
     @Value("${single.login:false}")
     private Boolean singleLogin;
+    @Value("${yshop.notify.sms.enable}")
+    private Boolean enableSms;
+
     private final SecurityProperties properties;
     private final RedisUtils redisUtils;
     private final UserDetailsService userDetailsService;
@@ -77,6 +88,7 @@ public class AuthController {
     private final WxMpService wxService;
     private final YxWechatUserService wechatUserService;
     private final WxMaService wxMaService;
+    private final NotifyService notifyService;
 
     public AuthController(SecurityProperties properties, RedisUtils redisUtils,
                           UserDetailsService userDetailsService,
@@ -84,7 +96,7 @@ public class AuthController {
                           AuthenticationManagerBuilder authenticationManagerBuilder,
                           YxUserService userService, PasswordEncoder passwordEncoder,
                           WxMpService wxService, YxWechatUserService wechatUserService,
-                          WxMaService wxMaService) {
+                          WxMaService wxMaService,NotifyService notifyService) {
         this.properties = properties;
         this.redisUtils = redisUtils;
         this.userDetailsService = userDetailsService;
@@ -96,6 +108,7 @@ public class AuthController {
         this.wxService = wxService;
         this.wechatUserService = wechatUserService;
         this.wxMaService = wxMaService;
+        this.notifyService = notifyService;
     }
 
     @Log("H5用户登录")
@@ -265,14 +278,12 @@ public class AuthController {
     @AnonymousAccess
     @PostMapping("/wxapp/auth")
     @ApiOperation(value = "小程序登陆", notes = "小程序登陆")
-    public ApiResult<Object> login(@RequestParam(value = "code") String code,
-                                   @RequestParam(value = "spread") String spread,
-                                   @RequestParam(value = "encryptedData") String encryptedData,
-                                   @RequestParam(value = "iv") String iv,
+    public ApiResult<Object> login(@Validated @RequestBody LoginParam loginParam,
                                    HttpServletRequest request) {
-        if (StringUtils.isBlank(code)) {
-            return ApiResult.fail("请传code");
-        }
+        String code = loginParam.getCode();
+        String encryptedData = loginParam.getEncryptedData();
+        String iv = loginParam.getIv();
+        String spread = loginParam.getSpread();
         try {
             //读取redis配置
             String appId = RedisUtil.get("wxapp_appId");
@@ -401,15 +412,36 @@ public class AuthController {
         if (param.getType().equals("login") && ObjectUtil.isNull(yxUser)) {
             return ApiResult.fail("账号不存在");
         }
-        if (ObjectUtil.isNotNull(redisUtils.get("code_" + param.getPhone()))) {
-            return ApiResult.fail("10分钟内有效:" + redisUtils.get("code_" + param.getPhone()).toString());
+        String codeKey = "code_" + param.getPhone();
+        if (ObjectUtil.isNotNull(redisUtils.get(codeKey))) {
+            if(!enableSms){
+                return ApiResult.fail("10分钟内有效:" + redisUtils.get(codeKey).toString());
+            }
+            return ApiResult.fail("验证码10分钟内有效,请查看手机短信" );
+
         }
         String code = RandomUtil.randomNumbers(6);
-        redisUtils.set("code_" + param.getPhone(), code, 600L);
-        if (isTest) {
+
+        redisUtils.set(codeKey, code, 600L);
+        if (!enableSms) {
             return ApiResult.fail("测试阶段验证码:" + code);
         }
-        return ApiResult.ok("发送成功");
+        //发送阿里云短信
+        SmsResult smsResult = notifyService.notifySmsTemplateSync(param.getPhone(),
+                NotifyType.CAPTCHA,new String[]{code});
+        CommonResponse commonResponse = (CommonResponse)smsResult.getResult();
+        if(smsResult.isSuccessful()){
+            log.info("详情：{}",commonResponse.getData());
+            return ApiResult.ok("发送成功，请注意查收");
+        }else{
+            JSONObject jsonObject =  JSON.parseObject(commonResponse.getData());
+            log.info("错误详情：{}",commonResponse.getData());
+            //删除redis存储
+            redisUtils.del(codeKey);
+            return ApiResult.ok("发送失败："+jsonObject.getString("Message"));
+        }
+
+
     }
 
     @AnonymousAccess

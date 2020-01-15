@@ -308,8 +308,6 @@ public class StoreOrderController extends BaseController {
 
         if(storeOrder.getPaid() == 1) return ApiResult.fail("该订单已支付");
 
-        //todo 砍价
-        //todo 拼团
 
         String orderId = storeOrder.getOrderId();
 

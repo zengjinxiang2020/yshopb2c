@@ -350,6 +350,15 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         storeOrder.setId(orderQueryVo.getId());
         storeOrder.setPayPrice(BigDecimal.valueOf(param.getPrice()));
 
+        //判断金额是否有变动,生成一个额外订单号去支付
+
+        int res = NumberUtil.compare(orderQueryVo.getPayPrice().doubleValue(),param.getPrice());
+        if(res != 0){
+            String orderSn = IdUtil.getSnowflake(0,0).nextIdStr();
+            storeOrder.setExtendOrderId(orderSn);
+        }
+
+
         yxStoreOrderMapper.updateById(storeOrder);
 
         //增加状态
@@ -1058,6 +1067,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         if(ObjectUtil.isNull(wechatUser)) throw new ErrorRequestException("用户错误");
         orderRequest.setTradeType("MWEB");
         orderRequest.setBody("商品购买");
+        if(StrUtil.isNotEmpty(orderInfo.getExtendOrderId())){
+            orderId = orderInfo.getExtendOrderId();
+        }
         orderRequest.setOutTradeNo(orderId);
         BigDecimal bigDecimal = new BigDecimal(100);
         orderRequest.setTotalFee(bigDecimal.multiply(orderInfo.getPayPrice()).intValue());//元转成分
@@ -1106,6 +1118,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         orderRequest.setTradeType("JSAPI");
         orderRequest.setOpenid(wechatUser.getRoutineOpenid());
         orderRequest.setBody("商品购买");
+        if(StrUtil.isNotEmpty(orderInfo.getExtendOrderId())){
+            orderId = orderInfo.getExtendOrderId();
+        }
         orderRequest.setOutTradeNo(orderId);
         BigDecimal bigDecimal = new BigDecimal(100);
         orderRequest.setTotalFee(bigDecimal.multiply(orderInfo.getPayPrice()).intValue());//元转成分
@@ -1152,6 +1167,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         orderRequest.setTradeType("JSAPI");
         orderRequest.setOpenid(wechatUser.getOpenid());
         orderRequest.setBody("商品购买");
+        if(StrUtil.isNotEmpty(orderInfo.getExtendOrderId())){
+            orderId = orderInfo.getExtendOrderId();
+        }
         orderRequest.setOutTradeNo(orderId);
         BigDecimal bigDecimal = new BigDecimal(100);
         orderRequest.setTotalFee(bigDecimal.multiply(orderInfo.getPayPrice()).intValue());//元转成分
@@ -1407,8 +1425,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
 
         //使用MQ延时消息
-        mqProducer.sendMsg("yshop-topic",storeOrder.getId().toString());
-        log.info("投递延时订单id： [{}]：", storeOrder.getId());
+        //mqProducer.sendMsg("yshop-topic",storeOrder.getId().toString());
+        //log.info("投递延时订单id： [{}]：", storeOrder.getId());
 
         return storeOrder;
     }
@@ -1499,7 +1517,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     public YxStoreOrderQueryVo getOrderInfo(String unique,int uid) {
         QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
         wrapper.eq("is_del",0).and(
-                i->i.eq("order_id",unique).or().eq("`unique`",unique));
+                i->i.eq("order_id",unique).or().eq("`unique`",unique).or()
+                        .eq("extend_order_id",unique));
         if(uid > 0) wrapper.eq("uid",uid);
 
         return orderMap.toDto(yxStoreOrderMapper.selectOne(wrapper));

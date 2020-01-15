@@ -18,14 +18,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author hupeng
@@ -65,15 +64,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         // 搜寻匿名标记 url： @AnonymousAccess
-        Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = applicationContext.getBean(RequestMappingHandlerMapping.class).getHandlerMethods();
+        Map<RequestMappingInfo, HandlerMethod> handlerMethodMap = applicationContext
+                .getBean(RequestMappingHandlerMapping.class).getHandlerMethods();
+
         Set<String> anonymousUrls = new HashSet<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> infoEntry : handlerMethodMap.entrySet()) {
             HandlerMethod handlerMethod = infoEntry.getValue();
+            RequestMappingInfo requestMappingInfo = infoEntry.getKey();
+
             AnonymousAccess anonymousAccess = handlerMethod.getMethodAnnotation(AnonymousAccess.class);
             if (null != anonymousAccess) {
+                Set<String> strings = infoEntry.getKey()
+                        .getPatternsCondition().getPatterns();
+                if(strings.size() == 1){
+                    String[] arr = strings.toArray((new String[0]));
+                    if(requestMappingInfo.getMethodsCondition().getMethods().contains(RequestMethod.GET)){
+                        String newUrl = arr[0]+"/**";
+                        List<String> list = Arrays.asList(new String[]{newUrl});
+                        Set<String> sSet = new HashSet<>(list);
+                        anonymousUrls.addAll(sSet);
+                        continue;
+                    }
+                }
+
                 anonymousUrls.addAll(infoEntry.getKey().getPatternsCondition().getPatterns());
             }
         }
+
         httpSecurity
                 // 禁用 CSRF
                 .csrf().disable()
