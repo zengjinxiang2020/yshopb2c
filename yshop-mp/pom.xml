@@ -11,12 +11,15 @@
 
     <artifactId>yshop-mp</artifactId>
     <name>微信模块</name>
+    <properties>
+        <weixin-java.version>3.6.0</weixin-java.version>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.github.binarywang</groupId>
             <artifactId>weixin-java-mp</artifactId>
-            <version>3.5.0</version>
+            <version>${weixin-java.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.binarywang</groupId>
