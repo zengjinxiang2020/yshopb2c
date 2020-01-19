@@ -18,6 +18,8 @@ import java.io.Serializable;
  */
 public interface YxWechatUserService extends BaseService<YxWechatUser> {
 
+    YxWechatUser getUserAppInfo(String openid);
+
     YxWechatUser getUserInfo(String openid);
 
     /**

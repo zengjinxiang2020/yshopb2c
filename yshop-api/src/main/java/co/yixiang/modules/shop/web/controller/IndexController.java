@@ -1,10 +1,15 @@
 package co.yixiang.modules.shop.web.controller;
 
+import cn.hutool.core.io.file.FileReader;
+import cn.hutool.core.io.resource.ClassPathResource;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
+import co.yixiang.utils.FileUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -89,6 +95,29 @@ public class IndexController {
         //Map<String,Object> map = new LinkedHashMap<>();
         return ApiResult.ok(null);
     }
+
+    @AnonymousAccess
+    @GetMapping("/citys")
+    @ApiOperation(value = "获取城市json",notes = "获取城市json")
+    public ApiResult<String> cityJson(){
+        String path = "city.json";
+        String name = "city.json";
+        try {
+            File file = FileUtil.inputStreamToFile(new ClassPathResource(path).getStream(), name);
+            FileReader fileReader = new FileReader(file,"UTF-8");
+            String string = fileReader.readString();
+            System.out.println(string);
+            JSONObject jsonObject = JSON.parseObject(string);
+            return ApiResult.ok(jsonObject);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return ApiResult.fail("无数据");
+        }
+
+    }
+
+
 
 
 

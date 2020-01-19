@@ -298,13 +298,13 @@ public class AuthController {
 
             wxMaService.setWxMaConfig(wxMaConfig);
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-            YxWechatUser wechatUser = wechatUserService.getUserInfo(session.getOpenid());
+            YxWechatUser wechatUser = wechatUserService.getUserAppInfo(session.getOpenid());
             ;
             JwtUser jwtUser = null;
             if (ObjectUtil.isNotNull(wechatUser)) {
                 YxUserQueryVo yxUserQueryVo = userService.getYxUserById(wechatUser.getUid());
                 if (ObjectUtil.isNotNull(yxUserQueryVo)) {
-                    jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getOpenid());
+                    jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getRoutineOpenid());
                 } else {
                     if (ObjectUtil.isNotNull(wechatUser)) {
                         wechatUserService.removeById(wechatUser.getUid());

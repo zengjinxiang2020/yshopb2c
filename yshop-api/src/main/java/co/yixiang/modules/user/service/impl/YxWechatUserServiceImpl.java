@@ -36,6 +36,13 @@ public class YxWechatUserServiceImpl extends BaseServiceImpl<YxWechatUserMapper,
     private YxWechatUserMapper yxWechatUserMapper;
 
     @Override
+    public YxWechatUser getUserAppInfo(String openid) {
+        QueryWrapper<YxWechatUser> wrapper = new QueryWrapper<>();
+        wrapper.eq("routine_openid",openid);
+        return yxWechatUserMapper.selectOne(wrapper);
+    }
+
+    @Override
     public YxWechatUser getUserInfo(String openid) {
         QueryWrapper<YxWechatUser> wrapper = new QueryWrapper<>();
         wrapper.eq("openid",openid);

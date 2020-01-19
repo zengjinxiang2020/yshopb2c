@@ -330,6 +330,19 @@ public class StoreOrderController extends BaseController {
                             map.put("result",orderDTO);
                             map.put("status","WECHAT_H5_PAY");
                             return ApiResult.ok(map);
+                        }else if(param.getFrom().equals("routine")){
+                            map.put("status","WECHAT_PAY");
+                            WxPayMpOrderResult wxPayMpOrderResult = storeOrderService
+                                    .wxAppPay(orderId);
+                            jsConfig.put("appId",wxPayMpOrderResult.getAppId());
+                            jsConfig.put("timeStamp",wxPayMpOrderResult.getTimeStamp());
+                            jsConfig.put("nonceStr",wxPayMpOrderResult.getNonceStr());
+                            jsConfig.put("package",wxPayMpOrderResult.getPackageValue());
+                            jsConfig.put("signType",wxPayMpOrderResult.getSignType());
+                            jsConfig.put("paySign",wxPayMpOrderResult.getPaySign());
+                            orderDTO.setJsConfig(jsConfig);
+                            map.put("result",orderDTO);
+                            return ApiResult.ok(map,"订单创建成功");
                         }else{
                             map.put("status","WECHAT_PAY");
                             WxPayMpOrderResult wxPayMpOrderResult = storeOrderService
