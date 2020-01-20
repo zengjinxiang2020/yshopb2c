@@ -1,43 +1,29 @@
 package co.yixiang.modules.wechat.web.controller;
 
-import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
-import co.yixiang.common.api.ApiCode;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
-import co.yixiang.modules.user.entity.YxUser;
-import co.yixiang.modules.user.entity.YxWechatUser;
-import co.yixiang.modules.user.service.YxUserService;
-import co.yixiang.modules.user.service.YxWechatUserService;
-import co.yixiang.modules.user.web.vo.YxUserQueryVo;
-import co.yixiang.utils.EncryptUtils;
-import co.yixiang.utils.OrderUtil;
+import co.yixiang.mp.config.WxMpConfiguration;
+import co.yixiang.utils.RedisUtil;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.notify.WxPayRefundNotifyResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
-import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpMessageRouter;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlOutMessage;
-import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -60,12 +45,8 @@ import java.util.Map;
 @Api(value = "微信模块", tags = "微信模块", description = "微信模块")
 public class WechatController extends BaseController {
 
-    private final WxMpService wxService;
-    private final YxWechatUserService wechatUserService;
-    private final YxUserService userService;
     private final WxPayService wxPayService;
     private final YxStoreOrderService orderService;
-    private final WxMpMessageRouter messageRouter;
     private final YxSystemConfigService systemConfigService;
 
 
@@ -92,6 +73,9 @@ public class WechatController extends BaseController {
     @GetMapping("/wechat/config")
     @ApiOperation(value = "jssdk配置",notes = "jssdk配置")
     public ApiResult<Object> jsConfig(@RequestParam(value = "url") String url) throws WxErrorException {
+        String appId = RedisUtil.get("wechat_appid");
+        if(StrUtil.isBlank(appId)) return ApiResult.fail("请配置公众号");
+        WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
         return ApiResult.ok(wxService.createJsapiSignature(url));
     }
 
@@ -165,6 +149,9 @@ public class WechatController extends BaseController {
                           @RequestParam(name = "nonce", required = false) String nonce,
                           @RequestParam(name = "echostr", required = false) String echostr){
 
+        String appId = RedisUtil.get("wechat_appid");
+        if(StrUtil.isBlank(appId)) return "请配置公众号";
+        WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
         if (wxService.checkSignature(timestamp, nonce, signature)) {
             return echostr;
         }
@@ -186,6 +173,12 @@ public class WechatController extends BaseController {
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
 
+        String appId = RedisUtil.get("wechat_appid");
+        if(StrUtil.isBlank(appId)) {
+            log.error("请配置公众号！");
+            return;
+        }
+        WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
 
         if (!wxService.checkSignature(timestamp, nonce, signature)) {
             throw new IllegalArgumentException("非法请求，可能属于伪造的请求！");
@@ -195,14 +188,14 @@ public class WechatController extends BaseController {
         if (encType == null) {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
-            WxMpXmlOutMessage outMessage = this.route(inMessage);
+            WxMpXmlOutMessage outMessage = this.route(inMessage,appId);
             if(outMessage == null) return;
             out = outMessage.toXml();;
         } else if ("aes".equalsIgnoreCase(encType)) {
             // aes加密的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
                     timestamp, nonce, msgSignature);
-            WxMpXmlOutMessage outMessage = this.route(inMessage);
+            WxMpXmlOutMessage outMessage = this.route(inMessage,appId);
             if(outMessage == null) return;
 
             out = outMessage.toEncryptedXml(wxService.getWxMpConfigStorage());
@@ -214,9 +207,9 @@ public class WechatController extends BaseController {
         writer.close();
     }
 
-    private WxMpXmlOutMessage route(WxMpXmlMessage message) {
+    private WxMpXmlOutMessage route(WxMpXmlMessage message,String appId) {
         try {
-            return this.messageRouter.route(message);
+            return WxMpConfiguration.getWxMpMessageRouter(appId).route(message);
         } catch (Exception e) {
             log.error("路由消息时出现异常！", e);
         }

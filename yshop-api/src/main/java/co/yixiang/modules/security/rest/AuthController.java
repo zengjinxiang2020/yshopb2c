@@ -29,6 +29,7 @@ import co.yixiang.modules.user.entity.YxWechatUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxWechatUserService;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
+import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
@@ -85,7 +86,6 @@ public class AuthController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final YxUserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final WxMpService wxService;
     private final YxWechatUserService wechatUserService;
     private final WxMaService wxMaService;
     private final NotifyService notifyService;
@@ -95,7 +95,7 @@ public class AuthController {
                           OnlineUserService onlineUserService, TokenProvider tokenProvider,
                           AuthenticationManagerBuilder authenticationManagerBuilder,
                           YxUserService userService, PasswordEncoder passwordEncoder,
-                          WxMpService wxService, YxWechatUserService wechatUserService,
+                          YxWechatUserService wechatUserService,
                           WxMaService wxMaService,NotifyService notifyService) {
         this.properties = properties;
         this.redisUtils = redisUtils;
@@ -105,7 +105,6 @@ public class AuthController {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
-        this.wxService = wxService;
         this.wechatUserService = wechatUserService;
         this.wxMaService = wxMaService;
         this.notifyService = notifyService;
@@ -154,6 +153,11 @@ public class AuthController {
                                        HttpServletRequest request) {
 
         try {
+            String appId = RedisUtil.get("wechat_appid");
+            if(StrUtil.isBlank(appId)) {
+                return ApiResult.fail("请配置公众号");
+            }
+            WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
             WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
             String openid = wxMpUser.getOpenId();
