@@ -1,6 +1,7 @@
 package co.yixiang.modules.security.service;
 
 import co.yixiang.exception.BadRequestException;
+import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.security.security.vo.JwtUser;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
@@ -37,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new BadRequestException("账号不存在");
         } else {
             if (!user.getStatus()) {
-                throw new BadRequestException("账号未激活");
+                throw new ErrorRequestException("账号未激活");
             }
             return createJwtUser(user);
         }
