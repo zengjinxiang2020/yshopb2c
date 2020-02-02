@@ -195,6 +195,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                         new QueryWrapper<YxStoreCart>()
                                 .lambda().eq(YxStoreCart::getId,storeCart.getId()));
             }else if(storeProduct.getIsShow() == 0 || storeProduct.getIsDel() == 1 || storeProduct.getStock() == 0){
+                storeCartQueryVo.setProductInfo(storeProduct);
                 invalid.add(storeCartQueryVo);
             }else{
                 if(StrUtil.isNotEmpty(storeCart.getProductAttrUnique())){
