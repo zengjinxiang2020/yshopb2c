@@ -22,19 +22,19 @@ spring:
     redis:
       repositories:
         enabled: false
-#配置rocketmq
-rocketmq:
-  nameServer: localhost:9876
-  producer:
-    group: yshop-group
-    sendMessageTimeout: 300000
-
   #配置 Jpa
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: true
+
+#配置rocketmq
+rocketmq:
+  nameServer: localhost:9876
+  producer:
+    group: yshop-group
+    sendMessageTimeout: 300000
 
 
 
