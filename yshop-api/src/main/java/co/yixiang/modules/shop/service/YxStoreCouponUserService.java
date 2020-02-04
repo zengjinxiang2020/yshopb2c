@@ -19,6 +19,8 @@ import java.util.List;
  */
 public interface YxStoreCouponUserService extends BaseService<YxStoreCouponUser> {
 
+    int getUserValidCouponCount(int uid);
+
     void useCoupon(int id);
 
     YxStoreCouponUser getCoupon(int id,int uid);

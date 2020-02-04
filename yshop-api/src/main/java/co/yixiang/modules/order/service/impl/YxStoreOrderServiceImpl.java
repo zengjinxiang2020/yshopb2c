@@ -267,17 +267,22 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         String siteUrl = RedisUtil.get("site_url");
         YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(orderQueryVo.getUid());
         if(ObjectUtil.isNotNull(wechatUser)){
-            YxWechatTemplate WechatTemplate = yxWechatTemplateService.getOne(
-                    new QueryWrapper<YxWechatTemplate>().eq("tempkey","OPENTM410119152"));
-            Map<String,String> map = new HashMap<>();
-            map.put("first","您在yshop的订单退款申请被通过，钱款将很快还至您的支付账户。");
-            map.put("keyword1",orderQueryVo.getOrderId());//订单号
-            map.put("keyword2",orderQueryVo.getPayPrice().toString());
-            map.put("keyword3",OrderUtil.stampToDate(orderQueryVo.getAddTime().toString()));
-            map.put("remark","yshop电商系统为你服务！");
-            templateMessageService.sendWxMpTemplateMessage( wechatUser.getOpenid()
-                    ,WechatTemplate.getTempid(),
-                    siteUrl+"/order/detail/"+orderQueryVo.getOrderId(),map);
+            if(StrUtil.isNotBlank(wechatUser.getOpenid())){
+                YxWechatTemplate WechatTemplate = yxWechatTemplateService.getOne(
+                        new QueryWrapper<YxWechatTemplate>().eq("tempkey","OPENTM410119152"));
+                Map<String,String> map = new HashMap<>();
+                map.put("first","您在yshop的订单退款申请被通过，钱款将很快还至您的支付账户。");
+                map.put("keyword1",orderQueryVo.getOrderId());//订单号
+                map.put("keyword2",orderQueryVo.getPayPrice().toString());
+                map.put("keyword3",OrderUtil.stampToDate(orderQueryVo.getAddTime().toString()));
+                map.put("remark","yshop电商系统为你服务！");
+                templateMessageService.sendWxMpTemplateMessage( wechatUser.getOpenid()
+                        ,WechatTemplate.getTempid(),
+                        siteUrl+"/order/detail/"+orderQueryVo.getOrderId(),map);
+            }else if(StrUtil.isNotBlank(wechatUser.getRoutineOpenid())){
+                //todo 小程序通知
+            }
+
         }
 
 
@@ -316,18 +321,23 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         String siteUrl = RedisUtil.get("site_url");
         YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(orderQueryVo.getUid());
         if(ObjectUtil.isNotNull(wechatUser)){
-            YxWechatTemplate WechatTemplate = yxWechatTemplateService.getOne(
-                    new QueryWrapper<YxWechatTemplate>().eq("tempkey","OPENTM200565259"));
-            //付款成功微信模板通知用户
-            Map<String,String> map = new HashMap<>();
-            map.put("first","亲，宝贝已经启程了，好想快点来到你身边。");
-            map.put("keyword1",storeOrder.getOrderId());//订单号
-            map.put("keyword2",expressQueryVo.getName());
-            map.put("keyword3",param.getDeliveryId());
-            map.put("remark","yshop电商系统为你服务！");
-            templateMessageService.sendWxMpTemplateMessage( wechatUser.getOpenid()
-                    ,WechatTemplate.getTempid(),
-                    siteUrl+"/order/detail/"+orderQueryVo.getOrderId(),map);
+            if(StrUtil.isNotBlank(wechatUser.getOpenid())){
+                YxWechatTemplate WechatTemplate = yxWechatTemplateService.getOne(
+                        new QueryWrapper<YxWechatTemplate>().eq("tempkey","OPENTM200565259"));
+                //付款成功微信模板通知用户
+                Map<String,String> map = new HashMap<>();
+                map.put("first","亲，宝贝已经启程了，好想快点来到你身边。");
+                map.put("keyword1",storeOrder.getOrderId());//订单号
+                map.put("keyword2",expressQueryVo.getName());
+                map.put("keyword3",param.getDeliveryId());
+                map.put("remark","yshop电商系统为你服务！");
+                templateMessageService.sendWxMpTemplateMessage( wechatUser.getOpenid()
+                        ,WechatTemplate.getTempid(),
+                        siteUrl+"/order/detail/"+orderQueryVo.getOrderId(),map);
+            }else if(StrUtil.isNotBlank(wechatUser.getRoutineOpenid())){
+                //todo 小程序通知
+            }
+
         }
 
     }
@@ -995,17 +1005,23 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         String siteUrl = RedisUtil.get("site_url");
         YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(orderInfo.getUid());
         if(ObjectUtil.isNotNull(wechatUser)){
-            YxWechatTemplate WechatTemplate = yxWechatTemplateService.getOne(
-                    new QueryWrapper<YxWechatTemplate>().eq("tempkey","OPENTM207791277"));
-            //付款成功微信模板通知用户
-            Map<String,String> map = new HashMap<>();
-            map.put("first","您的订单已支付成功，我们会尽快为您发货。");
-            map.put("keyword1",orderInfo.getOrderId());//订单号
-            map.put("keyword2",orderInfo.getPayPrice().toString());
-            map.put("remark","yshop电商系统为你服务！");
-            templateMessageService.sendWxMpTemplateMessage( wechatUser.getOpenid()
-                    ,WechatTemplate.getTempid(),
-                    siteUrl+"/order/detail/"+orderInfo.getOrderId(),map);
+            //公众号模板通知
+            if(StrUtil.isNotBlank(wechatUser.getOpenid())){
+                YxWechatTemplate WechatTemplate = yxWechatTemplateService.getOne(
+                        new QueryWrapper<YxWechatTemplate>().eq("tempkey","OPENTM207791277"));
+                //付款成功微信模板通知用户
+                Map<String,String> map = new HashMap<>();
+                map.put("first","您的订单已支付成功，我们会尽快为您发货。");
+                map.put("keyword1",orderInfo.getOrderId());//订单号
+                map.put("keyword2",orderInfo.getPayPrice().toString());
+                map.put("remark","yshop电商系统为你服务！");
+                templateMessageService.sendWxMpTemplateMessage( wechatUser.getOpenid()
+                        ,WechatTemplate.getTempid(),
+                        siteUrl+"/order/detail/"+orderInfo.getOrderId(),map);
+            }else if(StrUtil.isNotBlank(wechatUser.getRoutineOpenid())){
+                //todo 小程序模板通知
+
+            }
         }
 
     }

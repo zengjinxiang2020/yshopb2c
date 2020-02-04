@@ -7,6 +7,7 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
+import co.yixiang.modules.shop.service.YxStoreCouponUserService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserBill;
@@ -63,6 +64,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
 
     @Autowired
     private YxUserLevelService userLevelService;
+
+    @Autowired
+    private YxStoreCouponUserService storeCouponUserService;
 
     /**
      * 返回会员价
@@ -416,6 +420,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
     public YxUserQueryVo getNewYxUserById(Serializable id) {
         YxUserQueryVo userQueryVo = yxUserMapper.getYxUserById(id);
         userQueryVo.setOrderStatusNum(orderService.orderData((int)id));
+        userQueryVo.setCouponCount(storeCouponUserService.getUserValidCouponCount((int)id));
         //判断分销类型
         String statu = systemConfigService.getData("store_brokerage_statu");
         if(StrUtil.isNotEmpty(statu)){

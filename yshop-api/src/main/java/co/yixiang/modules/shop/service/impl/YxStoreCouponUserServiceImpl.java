@@ -49,6 +49,13 @@ public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponU
     @Autowired
     private CouponMap couponMap;
 
+    @Override
+    public int getUserValidCouponCount(int uid) {
+        checkInvalidCoupon(uid);
+        QueryWrapper<YxStoreCouponUser> wrapper= new QueryWrapper<>();
+        wrapper.eq("status",0).eq("uid",uid);
+        return yxStoreCouponUserMapper.selectCount(wrapper);
+    }
 
     @Override
     public List<YxStoreCouponUser> beUsableCouponList(int uid, double price) {
