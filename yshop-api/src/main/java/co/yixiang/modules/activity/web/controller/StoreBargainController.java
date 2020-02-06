@@ -290,9 +290,17 @@ public class StoreBargainController extends BaseController {
         String qrcodeUrl = "";
         if(ObjectUtil.isNull(attachment)){
             //生成二维码
+            //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
             File file = FileUtil.mkdir(new File(fileDir));
-            QrCodeUtil.generate(siteUrl+"/activity/dargain_detail/"+bargainId+"/"+uid+"?spread="+uid, 180, 180,
-                    FileUtil.file(fileDir+name));
+            if(userInfo.getUserType().equals("routine")){
+                siteUrl = siteUrl+"/bargain/";
+                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+            }else{
+                QrCodeUtil.generate(siteUrl+"/activity/dargain_detail/"+bargainId+"/"+uid+"?spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+            }
+
 
             systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
                     fileDir+name,"qrcode/"+name);

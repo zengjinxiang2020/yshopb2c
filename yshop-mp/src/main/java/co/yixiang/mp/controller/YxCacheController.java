@@ -76,7 +76,8 @@ public class YxCacheController {
             wxService.getMenuService().menuDelete();
             wxService.getMenuService().menuCreate(menu);
         } catch (WxErrorException e) {
-            e.printStackTrace();
+            throw new BadRequestException(e.getMessage());
+           // e.printStackTrace();
         }
 
         return new ResponseEntity(HttpStatus.OK);

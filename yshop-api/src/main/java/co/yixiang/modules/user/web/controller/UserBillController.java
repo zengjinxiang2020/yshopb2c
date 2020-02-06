@@ -132,7 +132,10 @@ public class UserBillController extends BaseController {
         String qrcodeUrl = "";
         if(ObjectUtil.isNull(attachment)){
             //生成二维码
-            //String fileDir = path+"qrcode"+File.separator;
+            //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
+            if(userInfo.getUserType().equals("routine")){
+                siteUrl = siteUrl+"/distribution/";
+            }
             File file = FileUtil.mkdir(new File(fileDir));
             QrCodeUtil.generate(siteUrl+"?spread="+uid, 180, 180,
                     FileUtil.file(fileDir+name));
