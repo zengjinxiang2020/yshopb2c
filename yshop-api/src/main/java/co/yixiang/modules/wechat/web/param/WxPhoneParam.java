@@ -1,20 +1,21 @@
-package co.yixiang.modules.security.rest.param;
+package co.yixiang.modules.wechat.web.param;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
 /**
- * @ClassName LoginParam
+ * @ClassName WxPhoneParam
  * @Author hupeng <610796224@qq.com>
- * @Date 2020/01/15
+ * @Date 2020/02/07
  **/
-@Data
-public class LoginParam {
+@Getter
+@Setter
+public class WxPhoneParam {
     @NotBlank(message = "code参数缺失")
     private String code;
-
-    private String spread;
 
     private String encryptedData;
 

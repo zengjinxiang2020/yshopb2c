@@ -14,6 +14,5 @@ public class VerityParam {
     @NotBlank(message = "手机号必填")
     private String phone;
 
-    @NotBlank
     private String type;
 }

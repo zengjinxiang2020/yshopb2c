@@ -410,6 +410,7 @@ public class AuthController {
     public ApiResult<String> verify(@Validated @RequestBody VerityParam param) {
         Boolean isTest = true;
         YxUser yxUser = userService.findByName(param.getPhone());
+        if(param.getType() == null) param.setType("bind");
         if (param.getType().equals("register") && ObjectUtil.isNotNull(yxUser)) {
             return ApiResult.fail("手机号已注册");
         }
@@ -452,10 +453,12 @@ public class AuthController {
     @PostMapping("/register")
     @ApiOperation(value = "H5注册新用户", notes = "H5注册新用户")
     public ApiResult<String> register(@Validated @RequestBody RegParam param) {
-        String code = redisUtils.get("code_" + param.getAccount()).toString();
-        if (StrUtil.isEmpty(code)) {
+
+        Object codeObj = redisUtils.get("code_" + param.getAccount());
+        if(codeObj == null){
             return ApiResult.fail("请先获取验证码");
         }
+        String code = codeObj.toString();
 
         if (!StrUtil.equals(code, param.getCaptcha())) {
             return ApiResult.fail("验证码错误");

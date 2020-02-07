@@ -7,10 +7,12 @@ import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.shop.service.YxStoreProductRelationService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
+import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.service.YxSystemUserLevelService;
 import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxUserSignService;
+import co.yixiang.modules.user.web.param.UserEditParam;
 import co.yixiang.modules.user.web.vo.YxSystemUserLevelQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.SecurityUtils;
@@ -21,6 +23,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -216,6 +219,22 @@ public class UserController extends BaseController {
         Map<String,Object> map = new LinkedHashMap<>();
         map.put("integral",integral);
         return ApiResult.ok(map,"签到获得" + integral + "积分");
+    }
+
+
+    @PostMapping("/user/edit")
+    @ApiOperation(value = "用户修改信息",notes = "用修改信息")
+    public ApiResult<Object> edit(@Validated @RequestBody UserEditParam param){
+        int uid = SecurityUtils.getUserId().intValue();
+
+        YxUser yxUser = new YxUser();
+        yxUser.setAvatar(param.getAvatar());
+        yxUser.setNickname(param.getNickname());
+        yxUser.setUid(uid);
+
+        yxUserService.updateById(yxUser);
+
+        return ApiResult.ok("修改成功");
     }
 
 
