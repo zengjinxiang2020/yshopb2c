@@ -50,7 +50,7 @@ public class YxSystemGroupDataServiceImpl extends BaseServiceImpl<YxSystemGroupD
 
         List<Map<String,Object>> list = new ArrayList<>();
 
-        wrapper.eq("group_name",name).eq("status",1);
+        wrapper.eq("group_name",name).eq("status",1).orderByDesc("sort");
         List<YxSystemGroupData> systemGroupDatas = baseMapper.selectList(wrapper);
 
         for (YxSystemGroupData yxSystemGroupData : systemGroupDatas) {

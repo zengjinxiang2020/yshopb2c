@@ -83,16 +83,15 @@ public class IndexController {
         for (Map<String,Object> map : list) {
             stringList.add(map.get("title").toString());
         }
-        //System.out.println(stringList);
         return ApiResult.ok(stringList);
     }
 
     @AnonymousAccess
     @PostMapping("/image_base64")
     @ApiOperation(value = "获取图片base64",notes = "获取图片base64")
+    @Deprecated
     public ApiResult<List<String>> imageBase64(){
 
-        //Map<String,Object> map = new LinkedHashMap<>();
         return ApiResult.ok(null);
     }
 

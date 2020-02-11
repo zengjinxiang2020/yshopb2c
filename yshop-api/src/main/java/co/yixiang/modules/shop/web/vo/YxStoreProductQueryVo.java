@@ -36,6 +36,8 @@ public class YxStoreProductQueryVo implements Serializable {
 
     private String image_base;
 
+    private String codeBase;
+
     public String getImage_base() {
         return image;
     }

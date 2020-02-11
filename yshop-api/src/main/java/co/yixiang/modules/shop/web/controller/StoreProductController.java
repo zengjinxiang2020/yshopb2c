@@ -1,5 +1,10 @@
 package co.yixiang.modules.shop.web.controller;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.http.HttpUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
@@ -7,19 +12,26 @@ import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.shop.service.YxStoreProductRelationService;
 import co.yixiang.modules.shop.service.YxStoreProductReplyService;
 import co.yixiang.modules.shop.service.YxStoreProductService;
+import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.web.dto.ProductDTO;
 import co.yixiang.modules.shop.web.param.YxStoreProductQueryParam;
 import co.yixiang.modules.shop.web.param.YxStoreProductRelationQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
+import co.yixiang.modules.user.entity.YxSystemAttachment;
+import co.yixiang.modules.user.service.YxSystemAttachmentService;
+import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +53,12 @@ public class StoreProductController extends BaseController {
     private final YxStoreProductService storeProductService;
     private final YxStoreProductRelationService productRelationService;
     private final YxStoreProductReplyService replyService;
+    private final YxSystemConfigService systemConfigService;
+    private final YxSystemAttachmentService systemAttachmentService;
+    private final YxUserService yxUserService;
+
+    @Value("${file.path}")
+    private String path;
 
 
     /**
@@ -97,7 +115,53 @@ public class StoreProductController extends BaseController {
     @ApiOperation(value = "普通商品详情",notes = "普通商品详情")
     public ApiResult<ProductDTO> detail(@PathVariable Integer id){
         int uid = SecurityUtils.getUserId().intValue();
-        return ApiResult.ok(storeProductService.goodsDetail(id,0,uid));
+
+        ProductDTO productDTO = storeProductService.goodsDetail(id,0,uid);
+
+        // 海报
+        String siteUrl = systemConfigService.getData("site_url");
+        if(StrUtil.isEmpty(siteUrl)){
+            return ApiResult.fail("未配置h5地址");
+        }
+        String apiUrl = systemConfigService.getData("api_url");
+        if(StrUtil.isEmpty(apiUrl)){
+            return ApiResult.fail("未配置api地址");
+        }
+
+        YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
+        String name = id+"_"+uid + "_"+userInfo.getIsPromoter()+"_product_detail_wap.jpg";
+        YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
+        String fileDir = path+"qrcode"+ File.separator;
+        String qrcodeUrl = "";
+        if(ObjectUtil.isNull(attachment)){
+            //生成二维码
+            File file = FileUtil.mkdir(new File(fileDir));
+            if(userInfo.getUserType().equals("routine")){
+                siteUrl = siteUrl+"/product/";
+                QrCodeUtil.generate(siteUrl+"?productId="+id+"&spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+            }else{
+                QrCodeUtil.generate(siteUrl+"/detail/"+id+"?spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+            }
+
+
+            systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
+                    fileDir+name,"qrcode/"+name);
+
+            qrcodeUrl = fileDir+name;
+        }else{
+            qrcodeUrl = attachment.getAttDir();
+        }
+
+        try {
+            String base64CodeImg = co.yixiang.utils.FileUtil.fileToBase64(new File(qrcodeUrl));
+            productDTO.getStoreInfo().setCodeBase("data:image/jpeg;base64," + base64CodeImg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return ApiResult.ok(productDTO);
     }
 
     /**

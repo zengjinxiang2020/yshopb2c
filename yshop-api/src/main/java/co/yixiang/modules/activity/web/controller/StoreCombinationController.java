@@ -112,7 +112,7 @@ public class StoreCombinationController extends BaseController {
             return ApiResult.fail("未配置h5地址");
         }
         String apiUrl = systemConfigService.getData("api_url");
-        if(StrUtil.isEmpty(siteUrl)){
+        if(StrUtil.isEmpty(apiUrl)){
             return ApiResult.fail("未配置api地址");
         }
         YxStorePink storePink = storePinkService.getPinkUserOne(pinkId);
@@ -130,8 +130,15 @@ public class StoreCombinationController extends BaseController {
             //生成二维码
             //String fileDir = path+"qrcode"+File.separator;
             File file = FileUtil.mkdir(new File(fileDir));
-            QrCodeUtil.generate(siteUrl+"/activity/group_rule/"+pinkId+"?spread="+uid, 180, 180,
-                    FileUtil.file(fileDir+name));
+            if(userInfo.getUserType().equals("routine")){
+                siteUrl = siteUrl+"/pink/";
+                QrCodeUtil.generate(siteUrl+"?pinkId="+pinkId+"&spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+            }else{
+                QrCodeUtil.generate(siteUrl+"/activity/group_rule/"+pinkId+"?spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+            }
+
 
             systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
                     fileDir+name,"qrcode/"+name);
