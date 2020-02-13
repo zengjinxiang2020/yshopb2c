@@ -1469,6 +1469,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         Double payPrice = cacheDTO.getPriceGroup().getTotalPrice();
         Double payPostage = cacheDTO.getPriceGroup().getStorePostage();
 
+        if(shippingType == 1){
+            payPrice = NumberUtil.add(payPrice,payPostage);
+        }
+
         boolean deduction = false;//拼团秒杀砍价等
         int combinationId = 0;
         int seckillId = 0;
