@@ -138,6 +138,13 @@ public class AuthController {
             //踢掉之前已经登录的token
             onlineUserService.checkLoginOnUser(authUser.getUsername(), token);
         }
+
+        //设置推广关系
+        if (StrUtil.isNotEmpty(authUser.getSpread()) && !authUser.getSpread().equals("NaN")) {
+            userService.setSpread(Integer.valueOf(authUser.getSpread()),
+                    jwtUser.getId().intValue());
+        }
+
         // 返回 token
         return ApiResult.ok(authInfo);
     }
@@ -241,7 +248,6 @@ public class AuthController {
 
             //设置推广关系
             if (StrUtil.isNotEmpty(spread) && !spread.equals("NaN")) {
-                //System.out.println("spread:"+spread);
                 userService.setSpread(Integer.valueOf(spread),
                         jwtUser.getId().intValue());
             }
