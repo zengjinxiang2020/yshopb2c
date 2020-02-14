@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 13/02/2020 16:06:02
+ Date: 14/02/2020 10:19:01
 */
 
 SET NAMES utf8mb4;
@@ -319,7 +319,7 @@ CREATE TABLE `log`  (
   `type` int(1) NULL DEFAULT 0,
   `uid` bigint(20) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 413228 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 413234 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of log
@@ -2022,6 +2022,12 @@ INSERT INTO `log` VALUES (413224, '2020-02-13 15:42:27', '查看优惠券', NULL
 INSERT INTO `log` VALUES (413225, '2020-02-13 15:42:31', '查看优惠券', NULL, 'INFO', 'co.yixiang.modules.shop.web.controller.CouponController.getList()', '{ page: 1 limit: 20 }', '192.168.2.101', 5, 'hupeng', '内网IP', NULL, 1, 11);
 INSERT INTO `log` VALUES (413226, '2020-02-13 15:42:31', '查看商品详情', NULL, 'INFO', 'co.yixiang.modules.shop.web.controller.StoreProductController.detail()', '{ id: 19 }', '192.168.2.101', 98, 'hupeng', '内网IP', NULL, 1, 11);
 INSERT INTO `log` VALUES (413227, '2020-02-13 15:42:33', '添加购物车', NULL, 'INFO', 'co.yixiang.modules.shop.web.controller.StoreCartController.add()', '{ jsonStr: {\"productId\":\"19\",\"cartNum\":1,\"new\":1,\"uniqueId\":\"\"} }', '192.168.2.101', 69, 'hupeng', '内网IP', NULL, 1, 11);
+INSERT INTO `log` VALUES (413228, '2020-02-13 17:17:57', 'H5用户登录', NULL, 'INFO', 'co.yixiang.modules.security.rest.AuthController.login()', '{ authUser: {username=hupeng, password= ******} request: SecurityContextHolderAwareRequestWrapper[ FirewalledRequest[ org.apache.catalina.connector.RequestFacade@7702f8f2]] }', '192.168.2.101', 1086, 'hupeng', '内网IP', NULL, 0, 11);
+INSERT INTO `log` VALUES (413229, '2020-02-13 17:17:58', '进入用户中心', NULL, 'INFO', 'co.yixiang.modules.user.web.controller.UserController.userMenu()', '{ }', '192.168.2.101', 14, 'hupeng', '内网IP', NULL, 1, 11);
+INSERT INTO `log` VALUES (413230, '2020-02-13 17:18:02', '查看优惠券', NULL, 'INFO', 'co.yixiang.modules.shop.web.controller.CouponController.getList()', '{ page: 1 limit: 20 }', '192.168.2.101', 146, 'hupeng', '内网IP', NULL, 1, 11);
+INSERT INTO `log` VALUES (413231, '2020-02-13 17:18:02', '查看商品详情', NULL, 'INFO', 'co.yixiang.modules.shop.web.controller.StoreProductController.detail()', '{ id: 20 }', '192.168.2.101', 280, 'hupeng', '内网IP', NULL, 1, 11);
+INSERT INTO `log` VALUES (413232, '2020-02-13 17:18:07', '添加购物车', NULL, 'INFO', 'co.yixiang.modules.shop.web.controller.StoreCartController.add()', '{ jsonStr: {\"productId\":\"20\",\"cartNum\":1,\"new\":1,\"uniqueId\":\"2e51e5d2d86a44748f81cdd5bf7a51c0\"} }', '192.168.2.101', 62, 'hupeng', '内网IP', NULL, 1, 11);
+INSERT INTO `log` VALUES (413233, '2020-02-13 17:30:09', '查看订单详情', NULL, 'INFO', 'co.yixiang.modules.order.web.controller.StoreOrderController.detail()', '{ key: 1227887661717389312 }', '192.168.2.101', 55, 'hupeng', '内网IP', NULL, 1, 11);
 
 -- ----------------------------
 -- Table structure for menu
@@ -2774,23 +2780,6 @@ CREATE TABLE `yx_material`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '素材库' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of yx_material
--- ----------------------------
-INSERT INTO `yx_material` VALUES ('0cafd80061cd45f4bde0181228db3633', '0', '2020-01-10 12:08:38', 'admin', '1', '3e4ee0cdbb484aaeb5a40c337a47dba6', 'list_16.png', 'http://localhost:8000/file/pic/list_16-20200110120838173.png');
-INSERT INTO `yx_material` VALUES ('145427bb1b834fa2b9a31aaaf14ff198', '0', '2020-01-31 10:39:06', 'admin', '1', NULL, 'logo.png', 'http://localhost:8000/file/pic/logo-20200131103905417.png');
-INSERT INTO `yx_material` VALUES ('20f9ea738c104d7aab20ce2e0b5f7a95', '0', '2020-01-09 22:02:14', 'admin', '1', NULL, 'list_32.png', 'http://localhost:8000/file/pic/list_32-20200109100213309.png');
-INSERT INTO `yx_material` VALUES ('25fdb490bb90427583172f5ef17ebba3', '0', '2020-01-31 10:39:29', 'admin', '1', NULL, 'avatar.png', 'http://localhost:8000/file/pic/avatar-20200131103928688.png');
-INSERT INTO `yx_material` VALUES ('56ffba2691774ee6b90f2bd43b1f0081', '0', '2020-01-31 10:39:49', 'admin', '1', NULL, 'list_18.png', 'http://localhost:8000/file/pic/list_18-2020013110394988.png');
-INSERT INTO `yx_material` VALUES ('80c95c169c45463f89cc60239db24e18', '0', '2020-01-31 10:39:53', 'admin', '1', NULL, 'list_22.png', 'http://localhost:8000/file/pic/list_22-20200131103952926.png');
-INSERT INTO `yx_material` VALUES ('ab3de53e18f14ba0af81a64a3e627afb', '0', '2020-01-10 12:02:25', 'admin', '1', NULL, 'list_34.png', 'https://image.dayouqiantu.cn/list_34.png');
-INSERT INTO `yx_material` VALUES ('aeca254ee7184caa935fd3e1765a6a5f', '0', '2020-01-31 10:39:57', 'admin', '1', NULL, 'list_26.png', 'http://localhost:8000/file/pic/list_26-20200131103956836.png');
-INSERT INTO `yx_material` VALUES ('bebd3e08a9fc4ec3ad242f69ad00f928', '0', '2020-01-10 22:44:21', 'admin', '1', NULL, 'list_24.png', 'https://image.dayouqiantu.cn/list_24.png');
-INSERT INTO `yx_material` VALUES ('d526950a1eb04d86adc6d24caebfbfdf', '0', '2020-01-31 10:39:44', 'admin', '1', NULL, 'list_13.png', 'http://localhost:8000/file/pic/list_13-2020013110394473.png');
-INSERT INTO `yx_material` VALUES ('dad92e2460e241398eae8f542989e83b', '0', '2020-01-10 22:43:48', 'admin', '1', NULL, 'list_20.png', 'https://image.dayouqiantu.cn/list_20.png');
-INSERT INTO `yx_material` VALUES ('dea6df2722b54ecba1e68675a5617b27', '0', '2020-01-10 22:42:18', 'admin', '1', NULL, 'list_22.png', 'http://localhost:8000/file/pic/list_22-20200110104217508.png');
-INSERT INTO `yx_material` VALUES ('e33ed078fc5a4b4bb5073708d3b8590a', '0', '2020-01-31 10:40:02', 'admin', '1', NULL, 'list_28.png', 'http://localhost:8000/file/pic/list_28-20200131104001169.png');
-
--- ----------------------------
 -- Table structure for yx_material_group
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_material_group`;
@@ -3099,7 +3088,7 @@ INSERT INTO `yx_store_cart` VALUES (110, 12, 'product', 19, '00e86525a7af4dcf9e6
 INSERT INTO `yx_store_cart` VALUES (111, 12, 'product', 19, '', 1, 1580649957, 0, 0, 0, 0, 0, 0);
 INSERT INTO `yx_store_cart` VALUES (112, 12, 'product', 20, '2e51e5d2d86a44748f81cdd5bf7a51c0', 1, 1580649981, 0, 0, 0, 0, 0, 0);
 INSERT INTO `yx_store_cart` VALUES (113, 11, 'product', 19, '', 1, 1581578302, 0, 0, 1, 0, 0, 0);
-INSERT INTO `yx_store_cart` VALUES (114, 11, 'product', 20, '2e51e5d2d86a44748f81cdd5bf7a51c0', 1, 1581578722, 0, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (114, 11, 'product', 20, '2e51e5d2d86a44748f81cdd5bf7a51c0', 1, 1581578722, 1, 0, 1, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_category
@@ -3401,7 +3390,7 @@ CREATE TABLE `yx_store_order`  (
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_del`(`is_del`) USING BTREE,
   INDEX `coupon_id`(`coupon_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 112 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 113 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_order
@@ -3480,6 +3469,7 @@ INSERT INTO `yx_store_order` VALUES (107, '200101HASMPA74DP', NULL, 12, 'hu', '1
 INSERT INTO `yx_store_order` VALUES (108, '200107BWN84YTRD4', NULL, 12, 'hu', '15136175246', '上海 闸北区 城区 99999', '108', 0.00, 1, 118.80, 0.00, 118.80, 0.00, 0.00, 0, 0.00, 1, 1578386338, 'yue', 1578386333, 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 1.00, 0.00, NULL, '', 0, '605b02e1d9ea428392b4bad621a5f9b3', '222', 0, 0, 0, 0, 100.00, 0, 0, '', 0, 1, 1, 0, 0);
 INSERT INTO `yx_store_order` VALUES (110, '200108DRF9NZ69YW', NULL, 12, 'hu', '15136175246', '上海 闸北区 城区 99999', '109', 0.00, 1, 118.80, 0.00, 118.80, 0.00, 0.00, 0, 0.00, 1, 1578482250, 'yue', 1578482250, 1, 0, NULL, NULL, NULL, NULL, NULL, 0.00, 'STO', '申通快递', 'express', '111111', 1.00, 0.00, NULL, '', 0, 'e4cdf7d639fc45b98cf70fe5b510c5be', NULL, 0, 0, 0, 0, 100.00, 0, 0, '', 0, 1, 1, 0, 0);
 INSERT INTO `yx_store_order` VALUES (111, '1216367943290454016', NULL, 12, 'hu', '15136175246', '上海 闸北区 城区 99999', '110', 0.00, 1, 118.80, 0.00, 118.80, 0.00, 0.00, 0, 0.00, 1, 1578839691, 'yue', 1578839691, 1, 0, NULL, NULL, NULL, NULL, NULL, 0.00, 'STO', '申通快递', 'express', '333333', 1.00, 0.00, NULL, '', 0, 'f65e7f9bedcb4a878dfee7c42c3d4ccf', NULL, 0, 0, 0, 0, 100.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (112, '1227887661717389312', NULL, 11, '胡鹏', '15139175246', '重庆 荣昌县 广顺镇 999', '114', 0.00, 1, 0.50, 15.00, 15.50, 15.00, 0.00, 0, 0.00, 1, 1581586206, 'yue', 1581586206, 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '42f41bf32c9f476db443e3aab3ac5416', NULL, 0, 0, 0, 0, 0.50, 0, 0, '', 0, 1, 1, 0, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_order_cart_info
@@ -3496,7 +3486,7 @@ CREATE TABLE `yx_store_order_cart_info`  (
   UNIQUE INDEX `oid`(`oid`, `unique`) USING BTREE,
   INDEX `cart_id`(`cart_id`) USING BTREE,
   INDEX `product_id`(`product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 108 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单购物详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 109 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单购物详情表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_order_cart_info
@@ -3577,6 +3567,7 @@ INSERT INTO `yx_store_order_cart_info` VALUES (103, 107, 107, 19, '{\"addTime\":
 INSERT INTO `yx_store_order_cart_info` VALUES (104, 108, 108, 19, '{\"addTime\":1578386329,\"productId\":19,\"seckillId\":0,\"vipTruePrice\":120.0,\"combinationId\":0,\"costPrice\":100.0,\"trueStock\":988,\"truePrice\":118.8,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"otPrice\":0.50,\"userCollect\":false,\"description\":\"<p style=\\\"text-align: center;\\\"><strong>文件请传QQ2412733099，</strong></p><p style=\\\"text-align: center;\\\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\\\"text-align: center;\\\"><strong>手机/微信：13733990583</strong></p><p style=\\\"text-align: center;\\\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\\\"text-align: center;\\\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\\\"text-align: center;\\\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\\\"text-align: center;\\\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\\\"text-align: center;\\\"><strong>更大量请联系店主报价，</strong></p><p style=\\\"text-align: center;\\\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\\\"text-align: center;\\\"><strong>付款时直接抵扣</strong></p><p style=\\\"text-align: center;\\\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\\\"text-align: left;\\\"><strong><br></strong></p><p><br></p><p>&nbsp; &nbsp;&nbsp;<img src=\\\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\\\" style=\\\"max-width: 100%;\\\"><br></p>\",\"merUse\":0,\"isPostage\":1,\"image_base\":\"https://image.dayouqiantu.cn/5ca011a1cd487.jpg\",\"isBest\":1,\"sales\":22,\"price\":120.00,\"isBargain\":0,\"userLike\":false,\"vipPrice\":0.20,\"storeName\":\"70gA4黑白打印复印\",\"id\":19,\"keyword\":\"打印复印\",\"stock\":99,\"image\":\"https://image.dayouqiantu.cn/5ca011a1cd487.jpg\",\"cost\":0.20,\"isGood\":1,\"unitName\":\"张\",\"isBenefit\":1,\"giveIntegral\":1.00,\"isNew\":1,\"sort\":1,\"sliderImageArr\":[\"https://image.dayouqiantu.cn/5ca01c7fc9238.jpg\",\"https://image.dayouqiantu.cn/5ca01c7676042.jpg\"],\"sliderImage\":\"https://image.dayouqiantu.cn/5ca01c7fc9238.jpg,https://image.dayouqiantu.cn/5ca01c7676042.jpg\",\"barCode\":\"\",\"isShow\":1,\"postage\":0.00,\"codePath\":\"\",\"soureLink\":\"\",\"cateId\":\"24\",\"isSeckill\":0,\"storeInfo\":\"打印复印资料A4黑白彩色印刷画册书本装订图文数码快印服务\",\"isDel\":0,\"isHot\":1,\"attrInfo\":{\"image\":\"https://image.dayouqiantu.cn/5ca011a1cd487.jpg\",\"cost\":100.00,\"productId\":19,\"price\":120.00,\"unique\":\"00e86525a7af4dcf9e653ae0a2062369\",\"suk\":\"A1,白色\",\"id\":22,\"stock\":988}},\"uid\":12,\"productAttrUnique\":\"00e86525a7af4dcf9e653ae0a2062369\",\"bargainId\":0,\"id\":108}', 'd1e842796cc146d78140b3b2e907b26e');
 INSERT INTO `yx_store_order_cart_info` VALUES (106, 110, 109, 19, '{\"addTime\":1578387002,\"productId\":19,\"seckillId\":0,\"vipTruePrice\":120.0,\"combinationId\":0,\"costPrice\":100.0,\"trueStock\":987,\"truePrice\":118.8,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"otPrice\":0.50,\"userCollect\":false,\"description\":\"<p style=\\\"text-align: center;\\\"><strong>文件请传QQ2412733099，</strong></p><p style=\\\"text-align: center;\\\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\\\"text-align: center;\\\"><strong>手机/微信：13733990583</strong></p><p style=\\\"text-align: center;\\\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\\\"text-align: center;\\\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\\\"text-align: center;\\\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\\\"text-align: center;\\\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\\\"text-align: center;\\\"><strong>更大量请联系店主报价，</strong></p><p style=\\\"text-align: center;\\\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\\\"text-align: center;\\\"><strong>付款时直接抵扣</strong></p><p style=\\\"text-align: center;\\\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\\\"text-align: left;\\\"><strong><br></strong></p><p><br></p><p>&nbsp; &nbsp;&nbsp;<img src=\\\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\\\" style=\\\"max-width: 100%;\\\"><br></p>\",\"merUse\":0,\"isPostage\":1,\"image_base\":\"https://image.dayouqiantu.cn/5ca011a1cd487.jpg\",\"isBest\":1,\"sales\":23,\"price\":120.00,\"isBargain\":0,\"userLike\":false,\"vipPrice\":0.20,\"storeName\":\"70gA4黑白打印复印\",\"id\":19,\"keyword\":\"打印复印\",\"stock\":99,\"image\":\"https://image.dayouqiantu.cn/5ca011a1cd487.jpg\",\"cost\":0.20,\"isGood\":1,\"unitName\":\"张\",\"isBenefit\":1,\"giveIntegral\":1.00,\"isNew\":1,\"sort\":1,\"sliderImageArr\":[\"https://image.dayouqiantu.cn/5ca01c7fc9238.jpg\",\"https://image.dayouqiantu.cn/5ca01c7676042.jpg\"],\"sliderImage\":\"https://image.dayouqiantu.cn/5ca01c7fc9238.jpg,https://image.dayouqiantu.cn/5ca01c7676042.jpg\",\"barCode\":\"\",\"isShow\":1,\"postage\":0.00,\"codePath\":\"\",\"soureLink\":\"\",\"cateId\":\"24\",\"isSeckill\":0,\"storeInfo\":\"打印复印资料A4黑白彩色印刷画册书本装订图文数码快印服务\",\"isDel\":0,\"isHot\":1,\"attrInfo\":{\"image\":\"https://image.dayouqiantu.cn/5ca011a1cd487.jpg\",\"cost\":100.00,\"productId\":19,\"price\":120.00,\"unique\":\"00e86525a7af4dcf9e653ae0a2062369\",\"suk\":\"A1,白色\",\"id\":22,\"stock\":987}},\"uid\":12,\"productAttrUnique\":\"00e86525a7af4dcf9e653ae0a2062369\",\"bargainId\":0,\"id\":109}', '2f8409dbb81448d4b5ee3c2482b1e9e3');
 INSERT INTO `yx_store_order_cart_info` VALUES (107, 111, 110, 19, '{\"addTime\":1578839640,\"productId\":19,\"seckillId\":0,\"vipTruePrice\":120.0,\"combinationId\":0,\"costPrice\":100.0,\"trueStock\":986,\"truePrice\":118.8,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"otPrice\":0.50,\"userCollect\":false,\"description\":\"<p style=\\\"text-align: center;\\\"><strong>文件请传QQ2412733099，</strong></p><p style=\\\"text-align: center;\\\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\\\"text-align: center;\\\"><strong>手机/微信：13733990583</strong></p><p style=\\\"text-align: center;\\\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\\\"text-align: center;\\\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\\\"text-align: center;\\\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\\\"text-align: center;\\\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\\\"text-align: center;\\\"><strong>更大量请联系店主报价，</strong></p><p style=\\\"text-align: center;\\\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\\\"text-align: center;\\\"><strong>付款时直接抵扣</strong></p><p style=\\\"text-align: center;\\\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\\\"text-align: left;\\\"><strong><br></strong></p><p><br></p><p>&nbsp; &nbsp;&nbsp;<img src=\\\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\\\" style=\\\"max-width: 100%;\\\"><br></p>\",\"merUse\":0,\"isPostage\":1,\"image_base\":\"https://image.dayouqiantu.cn/5ca011a1cd487.jpg\",\"isBest\":1,\"sales\":24,\"price\":120.00,\"isBargain\":0,\"userLike\":false,\"vipPrice\":0.20,\"storeName\":\"70gA4黑白打印复印\",\"id\":19,\"keyword\":\"打印复印\",\"stock\":99,\"image\":\"https://image.dayouqiantu.cn/5ca011a1cd487.jpg\",\"cost\":0.20,\"isGood\":1,\"unitName\":\"张\",\"isBenefit\":1,\"giveIntegral\":1.00,\"isNew\":1,\"sort\":1,\"sliderImageArr\":[\"https://image.dayouqiantu.cn/5ca01c7fc9238.jpg\",\"https://image.dayouqiantu.cn/5ca01c7676042.jpg\"],\"sliderImage\":\"https://image.dayouqiantu.cn/5ca01c7fc9238.jpg,https://image.dayouqiantu.cn/5ca01c7676042.jpg\",\"barCode\":\"\",\"isShow\":1,\"postage\":0.00,\"codePath\":\"\",\"soureLink\":\"\",\"cateId\":\"24\",\"isSeckill\":0,\"storeInfo\":\"打印复印资料A4黑白彩色印刷画册书本装订图文数码快印服务\",\"isDel\":0,\"isHot\":1,\"attrInfo\":{\"image\":\"https://image.dayouqiantu.cn/5ca011a1cd487.jpg\",\"cost\":100.00,\"productId\":19,\"price\":120.00,\"unique\":\"00e86525a7af4dcf9e653ae0a2062369\",\"suk\":\"A1,白色\",\"id\":22,\"stock\":986}},\"uid\":12,\"productAttrUnique\":\"00e86525a7af4dcf9e653ae0a2062369\",\"bargainId\":0,\"id\":110}', '8e62a2af9bd345ec8687dc4ee3d2c6ff');
+INSERT INTO `yx_store_order_cart_info` VALUES (108, 112, 114, 20, '{\"addTime\":1581578722,\"productId\":20,\"seckillId\":0,\"vipTruePrice\":0.5,\"combinationId\":0,\"costPrice\":0.5,\"trueStock\":999,\"truePrice\":0.5,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"addTime\":1573108370,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p style=\\\"text-align: center;\\\">7<strong>文件请传QQ2412733099，</strong></p><p style=\\\"text-align: center;\\\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\\\"text-align: center;\\\"><strong>手机/微信：13733990583</strong></p><p style=\\\"text-align: center;\\\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\\\"text-align: center;\\\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\\\"text-align: center;\\\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\\\"text-align: center;\\\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\\\"text-align: center;\\\"><strong>更大量请联系店主报价，</strong></p><p style=\\\"text-align: center;\\\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\\\"text-align: center;\\\"><strong>付款时直接抵扣</strong></p><p style=\\\"text-align: center;\\\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\\\"text-align: center;\\\"><img src=\\\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\\\" style=\\\"max-width:100%;\\\"><strong><br></strong></p><p style=\\\"text-align: center;\\\"><br></p>\",\"merUse\":0,\"isPostage\":0,\"image_base\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"isBest\":1,\"sales\":2,\"price\":0.50,\"isBargain\":0,\"userLike\":false,\"vipPrice\":0.50,\"storeName\":\"70gA4彩色打印复印\",\"id\":20,\"keyword\":\"彩色打印复印\",\"stock\":3996,\"image\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"cost\":0.50,\"isGood\":1,\"unitName\":\"张\",\"isBenefit\":1,\"giveIntegral\":0.00,\"isNew\":1,\"sort\":0,\"sliderImageArr\":[\"https://image.dayouqiantu.cn/5ca05103ad634.jpg\",\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\"],\"sliderImage\":\"https://image.dayouqiantu.cn/5ca05103ad634.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"barCode\":\"\",\"isShow\":1,\"postage\":5.00,\"codePath\":\"\",\"soureLink\":\"\",\"cateId\":\"24\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"70gA4彩色打印复印\",\"isDel\":0,\"isHot\":1,\"attrInfo\":{\"image\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"cost\":0.50,\"productId\":20,\"price\":0.50,\"unique\":\"2e51e5d2d86a44748f81cdd5bf7a51c0\",\"suk\":\"A3,白色\",\"id\":26,\"stock\":999},\"browse\":0},\"uid\":11,\"productAttrUnique\":\"2e51e5d2d86a44748f81cdd5bf7a51c0\",\"bargainId\":0,\"id\":114}', 'dd01d4bebd5d4d668f58446318aba1f6');
 
 -- ----------------------------
 -- Table structure for yx_store_order_status
@@ -3591,7 +3582,7 @@ CREATE TABLE `yx_store_order_status`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `oid`(`oid`) USING BTREE,
   INDEX `change_type`(`change_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 182 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单操作记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 184 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单操作记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_order_status
@@ -3737,6 +3728,8 @@ INSERT INTO `yx_store_order_status` VALUES (178, 30, 'order_edit', '修改订单
 INSERT INTO `yx_store_order_status` VALUES (179, 30, 'order_edit', '修改实际支付金额', 1579003631);
 INSERT INTO `yx_store_order_status` VALUES (180, 104, 'refund_price', '退款给用户：0元', 1580440738);
 INSERT INTO `yx_store_order_status` VALUES (181, 104, 'refund_price', '退款给用户：0元', 1580440967);
+INSERT INTO `yx_store_order_status` VALUES (182, 112, 'cache_key_create_order', '订单生成', 1581586206);
+INSERT INTO `yx_store_order_status` VALUES (183, 112, 'pay_success', '用户付款成功', 1581586206);
 
 -- ----------------------------
 -- Table structure for yx_store_pink
@@ -3829,7 +3822,7 @@ CREATE TABLE `yx_store_product`  (
 -- Records of yx_store_product
 -- ----------------------------
 INSERT INTO `yx_store_product` VALUES (19, NULL, 'https://image.dayouqiantu.cn/5ca011a1cd487.jpg', 'https://image.dayouqiantu.cn/5ca01c7fc9238.jpg,https://image.dayouqiantu.cn/5ca01c7676042.jpg', '70gA4黑白打印复印', '打印复印资料A4黑白彩色印刷画册书本装订图文数码快印服务', '打印复印', '', '24', 120.00, 0.20, 0.50, 0.00, '张', 1, 25, 99, 1, 1, 1, 1, 1, '<p style=\"text-align: center;\"><strong>文件请传QQ2412733099，</strong></p><p style=\"text-align: center;\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\"text-align: center;\"><strong>手机/微信：13733990583</strong></p><p style=\"text-align: center;\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\"text-align: center;\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\"text-align: center;\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\"text-align: center;\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\"text-align: center;\"><strong>更大量请联系店主报价，</strong></p><p style=\"text-align: center;\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\"text-align: center;\"><strong>付款时直接抵扣</strong></p><p style=\"text-align: center;\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\"text-align: left;\"><strong><br></strong></p><p><br></p><p>&nbsp; &nbsp;&nbsp;<img src=\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\" style=\"max-width: 100%;\"><br></p>', NULL, 1, 0, 0, 1.00, 0.20, 0, 0, 1, NULL, NULL, '', '');
-INSERT INTO `yx_store_product` VALUES (20, 0, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca05103ad634.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '70gA4彩色打印复印', '70gA4彩色打印复印', '彩色打印复印', '', '24', 0.50, 0.50, 1.00, 5.00, '张', 0, 2, 3996, 1, 1, 1, 1, 1, '<p style=\"text-align: center;\">7<strong>文件请传QQ2412733099，</strong></p><p style=\"text-align: center;\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\"text-align: center;\"><strong>手机/微信：13733990583</strong></p><p style=\"text-align: center;\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\"text-align: center;\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\"text-align: center;\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\"text-align: center;\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\"text-align: center;\"><strong>更大量请联系店主报价，</strong></p><p style=\"text-align: center;\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\"text-align: center;\"><strong>付款时直接抵扣</strong></p><p style=\"text-align: center;\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\"text-align: center;\"><img src=\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\" style=\"max-width:100%;\"><strong><br></strong></p><p style=\"text-align: center;\"><br></p>', 1573108370, 0, 0, 0, 0.00, 0.50, 0, 0, 1, 0, 0, '', '');
+INSERT INTO `yx_store_product` VALUES (20, 0, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca05103ad634.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '70gA4彩色打印复印', '70gA4彩色打印复印', '彩色打印复印', '', '24', 0.50, 0.50, 1.00, 5.00, '张', 0, 3, 3996, 1, 1, 1, 1, 1, '<p style=\"text-align: center;\">7<strong>文件请传QQ2412733099，</strong></p><p style=\"text-align: center;\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\"text-align: center;\"><strong>手机/微信：13733990583</strong></p><p style=\"text-align: center;\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\"text-align: center;\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\"text-align: center;\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\"text-align: center;\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\"text-align: center;\"><strong>更大量请联系店主报价，</strong></p><p style=\"text-align: center;\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\"text-align: center;\"><strong>付款时直接抵扣</strong></p><p style=\"text-align: center;\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\"text-align: center;\"><img src=\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\" style=\"max-width:100%;\"><strong><br></strong></p><p style=\"text-align: center;\"><br></p>', 1573108370, 0, 0, 0, 0.00, 0.50, 0, 0, 1, 0, 0, '', '');
 INSERT INTO `yx_store_product` VALUES (21, 0, 'https://image.dayouqiantu.cn/list_32.png', 'https://image.dayouqiantu.cn/list_22.png', '4444', '44444', '444', '4', '28', 100.00, 0.00, 200.00, 0.00, '44', 0, 0, 999, 0, 1, 1, 1, 1, '<p>44444</p><p><img src=\"https://image.dayouqiantu.cn/list_32.png\" style=\"max-width:100%;\"><br></p>', 1578373770, 1, 0, 0, 10.00, 50.00, 0, 0, 1, 10, 0, '', '');
 INSERT INTO `yx_store_product` VALUES (22, 0, 'http://localhost:8000/file/pic/list_16-20200110120838173.png', 'http://localhost:8000/file/pic/list_16-20200110120838173.png,http://localhost:8000/file/pic/list_32-20200109100213309.png', '3333', '3333', '333', '', '1', 1.00, 0.00, 1.00, 0.00, '333', 0, 0, 11, 1, 0, 0, 0, 0, '<p>4444</p><p><img src=\"http://localhost:8000/file/pic/list_32-20200110064436937.png\" style=\"max-width:100%;\"><br></p>', 1578642740, 0, 1, 0, 0.00, 1.00, 0, 0, 0, 0, 0, '', '');
 INSERT INTO `yx_store_product` VALUES (23, 0, 'http://localhost:8000/file/pic/list_16-20200110120838173.png', 'http://localhost:8000/file/pic/list_32-20200109100213309.png', '111', '111', '1', '', '1', 0.00, 0.00, 0.00, 0.00, '1', 0, 0, 41, 1, 0, 0, 0, 0, '<p>1111</p>', 1578653221, 0, 1, 0, 0.00, 0.00, 0, 0, 0, 0, 0, '', '');
@@ -3893,7 +3886,7 @@ CREATE TABLE `yx_store_product_attr_value`  (
 -- ----------------------------
 -- Records of yx_store_product_attr_value
 -- ----------------------------
-INSERT INTO `yx_store_product_attr_value` VALUES (26, 20, 'A3,白色', 999, NULL, 0.50, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '2e51e5d2d86a44748f81cdd5bf7a51c0', 0.50);
+INSERT INTO `yx_store_product_attr_value` VALUES (26, 20, 'A3,白色', 998, NULL, 0.50, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '2e51e5d2d86a44748f81cdd5bf7a51c0', 0.50);
 INSERT INTO `yx_store_product_attr_value` VALUES (27, 20, 'A3,红色', 999, NULL, 0.50, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'fd545718bbdb4634aa54228ecca6febe', 0.50);
 INSERT INTO `yx_store_product_attr_value` VALUES (28, 20, 'A4,白色', 999, NULL, 0.20, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '5e0ae3241d8c4ea793368666f862dd3b', 0.50);
 INSERT INTO `yx_store_product_attr_value` VALUES (29, 20, 'A4,红色', 999, NULL, 0.20, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '4b4b306134434832885a52f3a85955ce', 0.50);
@@ -4146,20 +4139,6 @@ CREATE TABLE `yx_system_attachment`  (
   `module_type` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '图片上传模块类型 1 后台上传 2 用户生成',
   PRIMARY KEY (`att_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1256 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '附件管理表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of yx_system_attachment
--- ----------------------------
-INSERT INTO `yx_system_attachment` VALUES (1217, '11_0_user_wap.jpg', 'E:\\yshop\\file\\qrcode\\11_0_user_wap.jpg', 'qrcode/11_0_user_wap.jpg', '11128', 'image/jpeg', 1, 1573716532, 1, 2);
-INSERT INTO `yx_system_attachment` VALUES (1224, '11_0_user_spread.jpg', 'E:\\yshop\\file\\qrcode\\11_0_user_spread.jpg', 'qrcode/11_0_user_spread.jpg', '57949', 'image/jpeg', 1, 1573720469, 1, 2);
-INSERT INTO `yx_system_attachment` VALUES (1225, '1_12_0_pink_share_wap.jpg', 'E:\\yshop\\file\\qrcode\\1_12_0_pink_share_wap.jpg', 'qrcode/1_12_0_pink_share_wap.jpg', '76105', 'image/jpeg', 1, 1574310271, 1, 2);
-INSERT INTO `yx_system_attachment` VALUES (1249, '1_12_0_pink_user_spread.jpg', 'E:\\yshop\\file\\qrcode\\1_12_0_pink_user_spread.jpg', 'qrcode/1_12_0_pink_user_spread.jpg', '66223', 'image/jpeg', 1, 1574315903, 1, 2);
-INSERT INTO `yx_system_attachment` VALUES (1250, '12_0_user_wap.jpg', 'E:\\yshop\\file\\qrcode\\12_0_user_wap.jpg', 'qrcode/12_0_user_wap.jpg', '304900', 'image/jpeg', 1, 1575039046, 1, 2);
-INSERT INTO `yx_system_attachment` VALUES (1251, '12_0_user_spread.jpg', 'E:\\yshop\\file\\qrcode\\12_0_user_spread.jpg', 'qrcode/12_0_user_spread.jpg', '56818', 'image/jpeg', 1, 1575039047, 1, 2);
-INSERT INTO `yx_system_attachment` VALUES (1252, '1_12_0_bargain_share_wap.jpg', 'E:\\yshop\\file\\qrcode\\1_12_0_bargain_share_wap.jpg', 'qrcode/1_12_0_bargain_share_wap.jpg', '369077', 'image/jpeg', 1, 1577009608, 1, 2);
-INSERT INTO `yx_system_attachment` VALUES (1253, '1_12_0_bargain_user_spread.jpg', 'E:\\yshop\\file\\qrcode\\1_12_0_bargain_user_spread.jpg', 'qrcode/1_12_0_bargain_user_spread.jpg', '50869', 'image/jpeg', 1, 1577009609, 1, 2);
-INSERT INTO `yx_system_attachment` VALUES (1254, '19_11_0_product_detail_wap.jpg', 'E:\\yshop\\file\\qrcode\\19_11_0_product_detail_wap.jpg', 'qrcode/19_11_0_product_detail_wap.jpg', '445290', 'image/jpeg', 1, 1581233054, 1, 2);
-INSERT INTO `yx_system_attachment` VALUES (1255, '20_11_0_product_detail_wap.jpg', 'E:\\yshop\\file\\qrcode\\20_11_0_product_detail_wap.jpg', 'qrcode/20_11_0_product_detail_wap.jpg', '593138', 'image/jpeg', 1, 1581303085, 1, 2);
 
 -- ----------------------------
 -- Table structure for yx_system_attachment_category
@@ -4438,7 +4417,7 @@ CREATE TABLE `yx_user`  (
 -- ----------------------------
 -- Records of yx_user
 -- ----------------------------
-INSERT INTO `yx_user` VALUES (11, 'hupeng', 'hupeng', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵88', 'http://localhost:8009/api/file/pic/list_30-20200207062920744.png', '15136175246', 1573120584, '', 1573120584, '', 9999.00, 26.86, 0.00, 0, 1, 0, 0, 1573613651, 'h5', 0, 2, 1, 0, '', 0, '');
+INSERT INTO `yx_user` VALUES (11, 'hupeng', 'hupeng', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵88', 'http://localhost:8009/api/file/pic/list_30-20200207062920744.png', '15136175246', 1573120584, '', 1573120584, '', 9983.50, 26.86, 0.00, 0, 1, 0, 0, 1573613651, 'h5', 0, 3, 1, 0, '', 0, '');
 INSERT INTO `yx_user` VALUES (12, '15136175246', 'hupeng2', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵2', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175246', 1573120881, '', 1573120881, '', 8766.20, 28.00, 70.51, 2, 1, 1, 11, 1573527758, 'h5', 0, 20, 1, 0, '', 1, '');
 INSERT INTO `yx_user` VALUES (14, '15136175247', '15136175247', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175247', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175247', 1573612696, '', 1573612696, '', 9200.00, 0.00, 2.00, 0, 1, 0, 12, 1573612702, 'h5', 0, 5, 0, 0, '', 0, '');
 INSERT INTO `yx_user` VALUES (15, '15136175249', '15136175249', '$2a$10$fP.426qKaTmix50Oln8L.uav55gELhAd0Eg66Av4oG86u8km7D/Ky', '$2a$10$IG/fc8idkW35ezw7VtiM.OjUU1fvS2d/Bw7TmU76UUTbd5/4eCd9a', '', 0, '', '', 0, 0, '15136175249', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175249', 1578839477, '', 1578839477, '', 0.00, 0.00, 0.00, 0, 1, 0, 0, 0, 'h5', 0, 0, 0, 0, '', 0, '');
@@ -4499,7 +4478,7 @@ CREATE TABLE `yx_user_bill`  (
   INDEX `add_time`(`add_time`) USING BTREE,
   INDEX `pm`(`pm`) USING BTREE,
   INDEX `type`(`category`, `type`, `link_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 74 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户账单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 75 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户账单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_user_bill
@@ -4572,6 +4551,7 @@ INSERT INTO `yx_user_bill` VALUES (70, 14, '0', 0, '系统减少余额', 'now_mo
 INSERT INTO `yx_user_bill` VALUES (71, 14, '0', 0, '系统减少余额', 'now_money', 'system_sub', 100.00, 9200.00, '系统扣除了100.0余额', 1580440702, 1);
 INSERT INTO `yx_user_bill` VALUES (72, 12, '104', 1, '商品退款', 'now_money', 'pay_product_refund', 0.00, 8766.20, '订单退款到余额', 1580440738, 1);
 INSERT INTO `yx_user_bill` VALUES (73, 12, '104', 1, '商品退款', 'now_money', 'pay_product_refund', 0.00, 8766.20, '订单退款到余额', 1580440967, 1);
+INSERT INTO `yx_user_bill` VALUES (74, 11, '112', 0, '购买商品', 'now_money', 'pay_product', 15.50, 9999.00, '余额支付', 1581586206, 1);
 
 -- ----------------------------
 -- Table structure for yx_user_enter
