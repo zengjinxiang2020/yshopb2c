@@ -159,7 +159,12 @@ public class WechatController extends BaseController {
 
         String appId = RedisUtil.get("wechat_appid");
         if(StrUtil.isBlank(appId)) return "请配置公众号";
-        WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
+
+        final WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
+        if (wxService == null) {
+            throw new IllegalArgumentException(String.format("未找到对应appid=[%d]的配置，请核实！", appId));
+        }
+
         if (wxService.checkSignature(timestamp, nonce, signature)) {
             return echostr;
         }

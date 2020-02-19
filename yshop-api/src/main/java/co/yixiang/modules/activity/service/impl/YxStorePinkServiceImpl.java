@@ -91,6 +91,8 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
                 .eq("status",1).gt("stop_time",OrderUtil.getSecondTimestampTwo());
         YxStorePink pink = yxStorePinkMapper.selectOne(wrapper);
 
+        if(pink == null) throw new ErrorRequestException("拼团不存在或已经取消");
+
         Map<String, Object> map = getPinkMemberAndPinK(pink);
         List<YxStorePink> pinkAll = (List<YxStorePink>)map.get("pinkAll");
         YxStorePink pinkT = (YxStorePink)map.get("pinkT");
@@ -103,7 +105,10 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
             throw new ErrorRequestException("拼团已完成，无法取消");
         }
         //如果团长取消拼团，团队还有人，就把后面的人作为下一任团长
-        YxStorePink nextPinkT = pinkAll.get(0);
+        YxStorePink nextPinkT = null;
+        if(pinkAll.size() > 0){
+            nextPinkT = pinkAll.get(0);
+        }
 
         //先退团长的money
         RefundParam param = new RefundParam();
