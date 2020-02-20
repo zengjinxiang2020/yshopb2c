@@ -133,7 +133,11 @@ public class UserBillController extends BaseController {
         if(StrUtil.isEmpty(siteUrl)){
             return ApiResult.fail("未配置api地址");
         }
-        String name = uid + "_"+userInfo.getIsPromoter()+"_user_wap.jpg";
+
+        String userType = userInfo.getUserType();
+        if(!userType.equals("routine")) userType = "H5";
+
+        String name = uid + "_"+userType+"_user_wap.jpg";
 
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
         String fileDir = path+"qrcode"+File.separator;
@@ -141,7 +145,7 @@ public class UserBillController extends BaseController {
         if(ObjectUtil.isNull(attachment)){
             //生成二维码
             //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
-            if(userInfo.getUserType().equals("routine")){
+            if(userType.equals("routine")){
                 siteUrl = siteUrl+"/distribution/";
             }
             File file = FileUtil.mkdir(new File(fileDir));
@@ -157,7 +161,7 @@ public class UserBillController extends BaseController {
         }
 
 
-        String spreadPicName = uid + "_"+userInfo.getIsPromoter()+"_user_spread.jpg";
+        String spreadPicName = uid + "_"+userType+"_user_spread.jpg";
         String spreadPicPath = fileDir+spreadPicName;
 
         YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);

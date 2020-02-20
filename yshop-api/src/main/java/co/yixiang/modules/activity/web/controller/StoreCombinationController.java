@@ -130,7 +130,9 @@ public class StoreCombinationController extends BaseController {
 
         int uid = SecurityUtils.getUserId().intValue();
         YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
-        String name = pinkId+"_"+uid + "_"+userInfo.getIsPromoter()+"_pink_share_wap.jpg";
+        String userType = userInfo.getUserType();
+        if(!userType.equals("routine")) userType = "H5";
+        String name = pinkId+"_"+uid + "_"+userType+"_pink_share_wap.jpg";
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
         String fileDir = path+"qrcode"+ File.separator;
         String qrcodeUrl = "";
@@ -138,7 +140,7 @@ public class StoreCombinationController extends BaseController {
             //生成二维码
             //String fileDir = path+"qrcode"+File.separator;
             File file = FileUtil.mkdir(new File(fileDir));
-            if(userInfo.getUserType().equals("routine")){
+            if(userType.equals("routine")){
                 siteUrl = siteUrl+"/pink/";
                 QrCodeUtil.generate(siteUrl+"?pinkId="+pinkId+"&spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
@@ -156,7 +158,7 @@ public class StoreCombinationController extends BaseController {
             qrcodeUrl = attachment.getAttDir();
         }
 
-        String spreadPicName = pinkId+"_"+uid + "_"+userInfo.getIsPromoter()+"_pink_user_spread.jpg";
+        String spreadPicName = pinkId+"_"+uid + "_"+userType+"_pink_user_spread.jpg";
         String spreadPicPath = fileDir+spreadPicName;
 
         YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);

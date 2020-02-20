@@ -45,6 +45,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * @author hupeng
  * @date 2020/02/07
@@ -113,6 +116,7 @@ public class WxMaUserController {
         wxMaConfig.setAppid(appId);
         wxMaConfig.setSecret(secret);
         wxMaService.setWxMaConfig(wxMaConfig);
+        String phone = "";
         try {
             WxMaJscode2SessionResult session = wxMaService.getUserService()
                     .getSessionInfo(param.getCode());
@@ -121,16 +125,19 @@ public class WxMaUserController {
             WxMaPhoneNumberInfo phoneNoInfo = wxMaService.getUserService()
                     .getPhoneNoInfo(session.getSessionKey(), param.getEncryptedData(), param.getIv());
 
+            phone = phoneNoInfo.getPhoneNumber();
             YxUser yxUser = new YxUser();
-            yxUser.setPhone(phoneNoInfo.getPhoneNumber());
+            yxUser.setPhone(phone);
             yxUser.setUid(uid);
             userService.updateById(yxUser);
         } catch (WxErrorException e) {
-            e.printStackTrace();
+            return ApiResult.fail(e.getMessage());
+            //e.printStackTrace();
         }
+        Map<String,Object> map = new LinkedHashMap<>();
+        map.put("phone",phone);
 
-
-        return ApiResult.ok("绑定成功");
+        return ApiResult.ok(map,"绑定成功");
     }
 
 

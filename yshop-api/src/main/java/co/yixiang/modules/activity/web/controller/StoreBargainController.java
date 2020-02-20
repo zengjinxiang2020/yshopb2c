@@ -292,7 +292,9 @@ public class StoreBargainController extends BaseController {
                 storeBargainUser.getPrice()).doubleValue();
 
         YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
-        String name = bargainId+"_"+uid + "_"+userInfo.getIsPromoter()+"_bargain_share_wap.jpg";
+        String userType = userInfo.getUserType();
+        if(!userType.equals("routine")) userType = "H5";
+        String name = bargainId+"_"+uid + "_"+userType+"_bargain_share_wap.jpg";
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
         String fileDir = path+"qrcode"+ File.separator;
         String qrcodeUrl = "";
@@ -300,7 +302,7 @@ public class StoreBargainController extends BaseController {
             //生成二维码
             //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
             File file = FileUtil.mkdir(new File(fileDir));
-            if(userInfo.getUserType().equals("routine")){
+            if(userType.equals("routine")){
                 siteUrl = siteUrl+"/bargain/";
                 QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
@@ -318,7 +320,7 @@ public class StoreBargainController extends BaseController {
             qrcodeUrl = attachment.getAttDir();
         }
 
-        String spreadPicName = bargainId+"_"+uid + "_"+userInfo.getIsPromoter()+"_bargain_user_spread.jpg";
+        String spreadPicName = bargainId+"_"+uid + "_"+userType+"_bargain_user_spread.jpg";
         String spreadPicPath = fileDir+spreadPicName;
 
         YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
