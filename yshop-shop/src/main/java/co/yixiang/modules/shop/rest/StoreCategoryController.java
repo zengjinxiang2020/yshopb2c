@@ -10,7 +10,6 @@ import co.yixiang.modules.shop.service.dto.YxStoreCategoryQueryCriteria;
 import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,16 +25,18 @@ import java.util.List;
 * @author hupeng
 * @date 2019-10-03
 */
-@Api(tags = "商品分类管理")
+@Api(tags = "商城:商品分类管理")
 @RestController
 @RequestMapping("api")
-public class YxStoreCategoryController {
-
-    @Autowired
-    private YxStoreCategoryService yxStoreCategoryService;
+public class StoreCategoryController {
 
 
+    private final YxStoreCategoryService yxStoreCategoryService;
 
+
+    public StoreCategoryController(YxStoreCategoryService yxStoreCategoryService) {
+        this.yxStoreCategoryService = yxStoreCategoryService;
+    }
 
     @Log("导出数据")
     @ApiOperation("导出数据")
@@ -51,7 +52,6 @@ public class YxStoreCategoryController {
     @GetMapping(value = "/yxStoreCategory")
     @PreAuthorize("@el.check('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_SELECT')")
     public ResponseEntity getYxStoreCategorys(YxStoreCategoryQueryCriteria criteria, Pageable pageable){
-        
 
         List<YxStoreCategoryDTO> categoryDTOList = yxStoreCategoryService.queryAll(criteria);
         return new ResponseEntity(yxStoreCategoryService.buildTree(categoryDTOList),HttpStatus.OK);

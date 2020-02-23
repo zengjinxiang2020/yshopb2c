@@ -25,13 +25,16 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-10-18
 */
-@Api(tags = "数据配置管理")
+@Api(tags = "商城:数据配置管理")
 @RestController
 @RequestMapping("api")
-public class YxSystemGroupDataController {
+public class SystemGroupDataController {
 
-    @Autowired
-    private YxSystemGroupDataService yxSystemGroupDataService;
+    private final YxSystemGroupDataService yxSystemGroupDataService;
+
+    public SystemGroupDataController(YxSystemGroupDataService yxSystemGroupDataService) {
+        this.yxSystemGroupDataService = yxSystemGroupDataService;
+    }
 
     @Log("查询数据配置")
     @ApiOperation(value = "查询数据配置")
@@ -40,7 +43,7 @@ public class YxSystemGroupDataController {
     public ResponseEntity getYxSystemGroupDatas(YxSystemGroupDataQueryCriteria criteria,
                                                 Pageable pageable){
         Sort sort = new Sort(Sort.Direction.DESC, "sort");
-        Pageable pageableT = new PageRequest(pageable.getPageNumber(),
+        Pageable pageableT = PageRequest.of(pageable.getPageNumber(),
                 pageable.getPageSize(),
                 sort);
         return new ResponseEntity(yxSystemGroupDataService.queryAll(criteria,pageableT),HttpStatus.OK);

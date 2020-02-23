@@ -1,8 +1,6 @@
 package co.yixiang.modules.shop.rest;
 
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxSystemUserTask;
 import co.yixiang.modules.shop.service.YxSystemUserTaskService;
 import co.yixiang.modules.shop.service.dto.YxSystemUserTaskQueryCriteria;
@@ -22,13 +20,16 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-12-04
 */
-@Api(tags = "用户任务管理")
+@Api(tags = "商城:用户任务管理")
 @RestController
 @RequestMapping("api")
-public class YxSystemUserTaskController {
+public class SystemUserTaskController {
 
-    @Autowired
-    private YxSystemUserTaskService yxSystemUserTaskService;
+    private final YxSystemUserTaskService yxSystemUserTaskService;
+
+    public SystemUserTaskController(YxSystemUserTaskService yxSystemUserTaskService) {
+        this.yxSystemUserTaskService = yxSystemUserTaskService;
+    }
 
     @Log("查询")
     @ApiOperation(value = "查询")
@@ -37,7 +38,7 @@ public class YxSystemUserTaskController {
     public ResponseEntity getYxSystemUserTasks(YxSystemUserTaskQueryCriteria criteria,
                                                Pageable pageable){
         Sort sort = new Sort(Sort.Direction.ASC, "levelId");
-        Pageable pageableT = new PageRequest(pageable.getPageNumber(),
+        Pageable pageableT = PageRequest.of(pageable.getPageNumber(),
                 pageable.getPageSize(),
                 sort);
         return new ResponseEntity(yxSystemUserTaskService.queryAll(criteria,pageableT),

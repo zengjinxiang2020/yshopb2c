@@ -3,7 +3,6 @@ package co.yixiang.modules.shop.rest;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxStoreProduct;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.dto.YxStoreProductQueryCriteria;
@@ -12,7 +11,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +24,16 @@ import java.math.BigDecimal;
 * @author hupeng
 * @date 2019-10-04
 */
-@Api(tags = "商品管理")
+@Api(tags = "商城:商品管理")
 @RestController
 @RequestMapping("api")
-public class YxStoreProductController {
+public class StoreProductController {
 
-    @Autowired
-    private YxStoreProductService yxStoreProductService;
+    private final YxStoreProductService yxStoreProductService;
+
+    public StoreProductController(YxStoreProductService yxStoreProductService) {
+        this.yxStoreProductService = yxStoreProductService;
+    }
 
     @Log("查询商品")
     @ApiOperation(value = "查询商品")
@@ -82,7 +83,7 @@ public class YxStoreProductController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @ApiOperation(value = "商品上架下架")
+    @ApiOperation(value = "商品上架/下架")
     @PostMapping(value = "/yxStoreProduct/onsale/{id}")
     public ResponseEntity onSale(@PathVariable Integer id,@RequestBody String jsonStr){
         JSONObject jsonObject = JSON.parseObject(jsonStr);

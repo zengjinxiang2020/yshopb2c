@@ -6,30 +6,26 @@ import co.yixiang.modules.shop.domain.YxMaterial;
 import co.yixiang.modules.shop.service.YxMaterialService;
 import co.yixiang.modules.shop.service.dto.YxMaterialQueryCriteria;
 import co.yixiang.utils.SecurityUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
 
 /**
 * @author hupeng
 * @date 2020-01-09
 */
-@Api(tags = "素材管理管理")
+@Api(tags = "商城:素材管理管理")
 @RestController
 @RequestMapping("/api/material")
-public class YxMaterialController {
+public class MaterialController {
 
     private final YxMaterialService yxMaterialService;
 
-    public YxMaterialController(YxMaterialService yxMaterialService) {
+    public MaterialController(YxMaterialService yxMaterialService) {
         this.yxMaterialService = yxMaterialService;
     }
 

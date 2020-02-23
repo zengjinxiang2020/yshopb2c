@@ -1,11 +1,11 @@
-package co.yixiang.modules.wechat.service.impl;
+package co.yixiang.modules.shop.service.impl;
 
-import co.yixiang.modules.wechat.domain.YxSystemConfig;
-import co.yixiang.modules.wechat.repository.YxSystemConfigRepository;
-import co.yixiang.modules.wechat.service.YxSystemConfigService;
-import co.yixiang.modules.wechat.service.dto.YxSystemConfigDTO;
-import co.yixiang.modules.wechat.service.dto.YxSystemConfigQueryCriteria;
-import co.yixiang.modules.wechat.service.mapper.YxSystemConfigMapper;
+import co.yixiang.modules.shop.domain.YxSystemConfig;
+import co.yixiang.modules.shop.repository.YxSystemConfigRepository;
+import co.yixiang.modules.shop.service.YxSystemConfigService;
+import co.yixiang.modules.shop.service.dto.YxSystemConfigDTO;
+import co.yixiang.modules.shop.service.dto.YxSystemConfigQueryCriteria;
+import co.yixiang.modules.shop.service.mapper.YxSystemConfigMapper;
 import co.yixiang.utils.PageUtil;
 import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;

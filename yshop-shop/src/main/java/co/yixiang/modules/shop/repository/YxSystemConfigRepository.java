@@ -1,6 +1,6 @@
-package co.yixiang.modules.wechat.repository;
+package co.yixiang.modules.shop.repository;
 
-import co.yixiang.modules.wechat.domain.YxSystemConfig;
+import co.yixiang.modules.shop.domain.YxSystemConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

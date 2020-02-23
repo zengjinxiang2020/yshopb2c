@@ -1,14 +1,11 @@
 package co.yixiang.modules.shop.rest;
 
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxStoreProductReply;
 import co.yixiang.modules.shop.service.YxStoreProductReplyService;
 import co.yixiang.modules.shop.service.dto.YxStoreProductReplyQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +17,17 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-11-03
 */
-@Api(tags = "评论管理")
+@Api(tags = "商城:评论管理")
 @RestController
 @RequestMapping("api")
-public class YxStoreProductReplyController {
+public class StoreProductReplyController {
 
-    @Autowired
-    private YxStoreProductReplyService yxStoreProductReplyService;
+
+    private final YxStoreProductReplyService yxStoreProductReplyService;
+
+    public StoreProductReplyController(YxStoreProductReplyService yxStoreProductReplyService) {
+        this.yxStoreProductReplyService = yxStoreProductReplyService;
+    }
 
     @Log("查询")
     @ApiOperation(value = "查询")

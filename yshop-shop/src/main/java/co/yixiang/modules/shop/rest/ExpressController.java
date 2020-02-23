@@ -1,14 +1,11 @@
 package co.yixiang.modules.shop.rest;
 
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxExpress;
 import co.yixiang.modules.shop.service.YxExpressService;
 import co.yixiang.modules.shop.service.dto.YxExpressQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +17,17 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-12-12
 */
-@Api(tags = "快递管理")
+@Api(tags = "商城:快递管理")
 @RestController
 @RequestMapping("api")
-public class YxExpressController {
+public class ExpressController {
 
-    @Autowired
-    private YxExpressService yxExpressService;
+
+    private final YxExpressService yxExpressService;
+
+    public ExpressController(YxExpressService yxExpressService) {
+        this.yxExpressService = yxExpressService;
+    }
 
     @Log("查询快递")
     @ApiOperation(value = "查询快递")

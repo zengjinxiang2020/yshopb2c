@@ -1,4 +1,4 @@
-package co.yixiang.modules.wechat.domain;
+package co.yixiang.modules.shop.domain;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;

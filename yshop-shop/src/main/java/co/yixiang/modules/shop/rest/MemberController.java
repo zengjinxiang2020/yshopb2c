@@ -1,19 +1,16 @@
 package co.yixiang.modules.shop.rest;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxUser;
+import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.YxUserService;
 import co.yixiang.modules.shop.service.dto.UserMoneyDTO;
 import co.yixiang.modules.shop.service.dto.YxUserQueryCriteria;
-import co.yixiang.modules.wechat.service.YxSystemConfigService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +22,18 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-10-06
 */
-@Api(tags = "用户管理")
+@Api(tags = "商城:会员管理")
 @RestController
 @RequestMapping("api")
-public class YxUserController {
+public class MemberController {
 
-    @Autowired
-    private YxUserService yxUserService;
+    private final YxUserService yxUserService;
+    private final YxSystemConfigService yxSystemConfigService;
 
-    @Autowired
-    private YxSystemConfigService yxSystemConfigService;
+    public MemberController(YxUserService yxUserService, YxSystemConfigService yxSystemConfigService) {
+        this.yxUserService = yxUserService;
+        this.yxSystemConfigService = yxSystemConfigService;
+    }
 
     @Log("查询用户")
     @ApiOperation(value = "查询用户")
@@ -86,7 +85,6 @@ public class YxUserController {
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         int status = Integer.valueOf(jsonObject.get("status").toString());
-        //System.out.println(status);
         yxUserService.onStatus(id,status);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -95,7 +93,6 @@ public class YxUserController {
     @PostMapping(value = "/yxUser/money")
     @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_EDIT')")
     public ResponseEntity updatePrice(@Validated @RequestBody UserMoneyDTO param){
-
         yxUserService.updateMoney(param);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

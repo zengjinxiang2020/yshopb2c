@@ -5,7 +5,6 @@ import co.yixiang.modules.shop.service.YxUserBillService;
 import co.yixiang.modules.shop.service.dto.YxUserBillQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 * @author hupeng
 * @date 2019-11-06
 */
-@Api(tags = "用户账单管理")
+@Api(tags = "商城:用户账单管理")
 @RestController
 @RequestMapping("api")
-public class YxUserBillController {
+public class UserBillController {
 
-    @Autowired
-    private YxUserBillService yxUserBillService;
+    private final YxUserBillService yxUserBillService;
+
+    public UserBillController(YxUserBillService yxUserBillService) {
+        this.yxUserBillService = yxUserBillService;
+    }
 
     @Log("查询")
     @ApiOperation(value = "查询")

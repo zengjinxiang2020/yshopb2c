@@ -1,8 +1,8 @@
-package co.yixiang.modules.wechat.service;
+package co.yixiang.modules.shop.service;
 
-import co.yixiang.modules.wechat.domain.YxWechatUser;
-import co.yixiang.modules.wechat.service.dto.YxWechatUserDTO;
-import co.yixiang.modules.wechat.service.dto.YxWechatUserQueryCriteria;
+import co.yixiang.modules.shop.domain.YxWechatUser;
+import co.yixiang.modules.shop.service.dto.YxWechatUserDTO;
+import co.yixiang.modules.shop.service.dto.YxWechatUserQueryCriteria;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

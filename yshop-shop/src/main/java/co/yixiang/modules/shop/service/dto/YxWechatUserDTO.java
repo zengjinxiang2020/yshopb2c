@@ -1,4 +1,4 @@
-package co.yixiang.modules.wechat.service.dto;
+package co.yixiang.modules.shop.service.dto;
 
 import lombok.Data;
 

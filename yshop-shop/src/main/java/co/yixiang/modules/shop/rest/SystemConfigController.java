@@ -1,19 +1,16 @@
-package co.yixiang.modules.wechat.rest;
+package co.yixiang.modules.shop.rest;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
-import co.yixiang.modules.wechat.domain.YxSystemConfig;
-import co.yixiang.modules.wechat.service.YxSystemConfigService;
-import co.yixiang.modules.wechat.service.dto.YxSystemConfigQueryCriteria;
+import co.yixiang.modules.shop.domain.YxSystemConfig;
+import co.yixiang.modules.shop.service.YxSystemConfigService;
+import co.yixiang.modules.shop.service.dto.YxSystemConfigQueryCriteria;
 import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +21,16 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-10-10
 */
-@Api(tags = "配置管理")
+@Api(tags = "商城:配置管理")
 @RestController
 @RequestMapping("api")
-public class YxSystemConfigController {
+public class SystemConfigController {
 
-    @Autowired
-    private YxSystemConfigService yxSystemConfigService;
+    private final YxSystemConfigService yxSystemConfigService;
+
+    public SystemConfigController(YxSystemConfigService yxSystemConfigService) {
+        this.yxSystemConfigService = yxSystemConfigService;
+    }
 
     @Log("查询")
     @ApiOperation(value = "查询")
