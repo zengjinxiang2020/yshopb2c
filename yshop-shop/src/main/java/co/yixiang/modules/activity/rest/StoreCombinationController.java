@@ -1,9 +1,7 @@
 package co.yixiang.modules.activity.rest;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.activity.domain.YxStoreCombination;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.dto.YxStoreCombinationQueryCriteria;
@@ -12,7 +10,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +21,16 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-11-18
 */
-@Api(tags = "拼团管理")
+@Api(tags = "商城:拼团管理")
 @RestController
 @RequestMapping("api")
-public class YxStoreCombinationController {
+public class StoreCombinationController {
 
-    @Autowired
-    private YxStoreCombinationService yxStoreCombinationService;
+    private final YxStoreCombinationService yxStoreCombinationService;
+
+    public StoreCombinationController(YxStoreCombinationService yxStoreCombinationService) {
+        this.yxStoreCombinationService = yxStoreCombinationService;
+    }
 
     @Log("查询拼团")
     @ApiOperation(value = "查询拼团")

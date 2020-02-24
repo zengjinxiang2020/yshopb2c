@@ -1,15 +1,12 @@
 package co.yixiang.modules.activity.rest;
 
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.activity.domain.YxStoreCoupon;
 import co.yixiang.modules.activity.service.YxStoreCouponService;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponQueryCriteria;
 import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +18,16 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-11-09
 */
-@Api(tags = "优惠券管理")
+@Api(tags = "商城:优惠券管理")
 @RestController
 @RequestMapping("api")
-public class YxStoreCouponController {
+public class StoreCouponController {
 
-    @Autowired
-    private YxStoreCouponService yxStoreCouponService;
+    private final YxStoreCouponService yxStoreCouponService;
+
+    public StoreCouponController(YxStoreCouponService yxStoreCouponService) {
+        this.yxStoreCouponService = yxStoreCouponService;
+    }
 
     @Log("查询")
     @ApiOperation(value = "查询")

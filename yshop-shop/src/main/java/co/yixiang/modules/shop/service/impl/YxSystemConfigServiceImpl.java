@@ -9,7 +9,6 @@ import co.yixiang.modules.shop.service.mapper.YxSystemConfigMapper;
 import co.yixiang.utils.PageUtil;
 import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,11 +27,14 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class YxSystemConfigServiceImpl implements YxSystemConfigService {
 
-    @Autowired
-    private YxSystemConfigRepository yxSystemConfigRepository;
+    private final YxSystemConfigRepository yxSystemConfigRepository;
 
-    @Autowired
-    private YxSystemConfigMapper yxSystemConfigMapper;
+    private final YxSystemConfigMapper yxSystemConfigMapper;
+
+    public YxSystemConfigServiceImpl(YxSystemConfigRepository yxSystemConfigRepository, YxSystemConfigMapper yxSystemConfigMapper) {
+        this.yxSystemConfigRepository = yxSystemConfigRepository;
+        this.yxSystemConfigMapper = yxSystemConfigMapper;
+    }
 
     @Override
     public Map<String,Object> queryAll(YxSystemConfigQueryCriteria criteria, Pageable pageable){

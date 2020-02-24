@@ -1,15 +1,12 @@
 package co.yixiang.mp.controller;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.StrUtil;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.mp.domain.YxArticle;
 import co.yixiang.mp.service.YxArticleService;
 import co.yixiang.mp.service.dto.YxArticleDTO;
 import co.yixiang.mp.service.dto.YxArticleQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,14 +20,16 @@ import java.util.Date;
 * @author hupeng
 * @date 2019-10-07
 */
-@Api(tags = "图文管理")
+@Api(tags = "商城:微信图文管理")
 @RestController
 @RequestMapping("api")
-public class YxArticleController {
+public class WechatArticleController {
 
-    @Autowired
-    private YxArticleService yxArticleService;
+    private final YxArticleService yxArticleService;
 
+    public WechatArticleController(YxArticleService yxArticleService) {
+        this.yxArticleService = yxArticleService;
+    }
 
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxArticle")

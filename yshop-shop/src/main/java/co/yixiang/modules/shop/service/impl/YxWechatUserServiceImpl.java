@@ -9,7 +9,6 @@ import co.yixiang.modules.shop.service.mapper.YxWechatUserMapper;
 import co.yixiang.utils.PageUtil;
 import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -28,11 +27,14 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class YxWechatUserServiceImpl implements YxWechatUserService {
 
-    @Autowired
-    private YxWechatUserRepository yxWechatUserRepository;
+    private final YxWechatUserRepository yxWechatUserRepository;
 
-    @Autowired
-    private YxWechatUserMapper yxWechatUserMapper;
+    private final YxWechatUserMapper yxWechatUserMapper;
+
+    public YxWechatUserServiceImpl(YxWechatUserRepository yxWechatUserRepository, YxWechatUserMapper yxWechatUserMapper) {
+        this.yxWechatUserRepository = yxWechatUserRepository;
+        this.yxWechatUserMapper = yxWechatUserMapper;
+    }
 
     @Override
     public Map<String,Object> queryAll(YxWechatUserQueryCriteria criteria, Pageable pageable){

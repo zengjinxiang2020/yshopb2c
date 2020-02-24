@@ -1,8 +1,6 @@
 package co.yixiang.mp.controller;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.mp.domain.YxWechatReply;
 import co.yixiang.mp.service.YxWechatReplyService;
 import com.alibaba.fastjson.JSON;
@@ -19,14 +17,16 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-10-10
 */
-@Api(tags = "微信回復管理")
+@Api(tags = "商城:微信回復管理")
 @RestController
 @RequestMapping("api")
-public class YxWechatReplyController {
+public class WechatReplyController {
 
-    @Autowired
-    private YxWechatReplyService yxWechatReplyService;
+    private final YxWechatReplyService yxWechatReplyService;
 
+    public WechatReplyController(YxWechatReplyService yxWechatReplyService) {
+        this.yxWechatReplyService = yxWechatReplyService;
+    }
 
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxWechatReply")

@@ -25,15 +25,16 @@ import org.springframework.web.bind.annotation.*;
 * @author hupeng
 * @date 2019-10-06
 */
-@Api(tags = "微信菜單")
+@Api(tags = "商城:微信菜單")
 @RestController
 @RequestMapping("api")
-public class YxCacheController {
+public class WechatMenuController {
 
-    @Autowired
-    private YxCacheService yxCacheService;
+    private final YxCacheService yxCacheService;
 
-
+    public WechatMenuController(YxCacheService yxCacheService) {
+        this.yxCacheService = yxCacheService;
+    }
 
     @ApiOperation(value = "查询菜单")
     @GetMapping(value = "/yxCache")

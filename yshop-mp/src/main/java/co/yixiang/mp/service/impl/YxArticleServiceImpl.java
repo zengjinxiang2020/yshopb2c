@@ -28,7 +28,6 @@ import me.chanjar.weixin.mp.bean.material.WxMpMaterialNews;
 import me.chanjar.weixin.mp.bean.material.WxMpMaterialUploadResult;
 import me.chanjar.weixin.mp.bean.result.WxMpMassSendResult;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,12 +49,14 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class YxArticleServiceImpl implements YxArticleService {
 
-    @Autowired
-    private YxArticleRepository yxArticleRepository;
+    private final YxArticleRepository yxArticleRepository;
 
-    @Autowired
-    private YxArticleMapper yxArticleMapper;
+    private final YxArticleMapper yxArticleMapper;
 
+    public YxArticleServiceImpl(YxArticleRepository yxArticleRepository, YxArticleMapper yxArticleMapper) {
+        this.yxArticleRepository = yxArticleRepository;
+        this.yxArticleMapper = yxArticleMapper;
+    }
 
     @Value("${file.path}")
     private String uploadDirStr;

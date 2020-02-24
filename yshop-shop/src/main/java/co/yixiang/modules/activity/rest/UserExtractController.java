@@ -11,8 +11,8 @@ import co.yixiang.modules.activity.service.dto.YxUserExtractQueryCriteria;
 import co.yixiang.modules.shop.domain.YxUserBill;
 import co.yixiang.modules.shop.service.YxUserBillService;
 import co.yixiang.modules.shop.service.YxUserService;
-import co.yixiang.modules.shop.service.dto.YxUserDTO;
 import co.yixiang.modules.shop.service.YxWechatUserService;
+import co.yixiang.modules.shop.service.dto.YxUserDTO;
 import co.yixiang.modules.shop.service.dto.YxWechatUserDTO;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
@@ -21,7 +21,6 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,25 +34,26 @@ import java.math.BigDecimal;
 * @author hupeng
 * @date 2019-11-14
 */
-@Api(tags = "提现管理")
+@Api(tags = "商城:提现管理")
 @RestController
 @RequestMapping("api")
-public class YxUserExtractController {
+public class UserExtractController {
 
-    @Autowired
-    private YxUserExtractService yxUserExtractService;
+    private final YxUserExtractService yxUserExtractService;
+    private final  YxUserService yxUserService;
+    private final YxUserBillService yxUserBillService;
+    private final WxPayService wxPayService;
+    private final YxWechatUserService wechatUserService;
 
-    @Autowired
-    private YxUserService yxUserService;
-
-    @Autowired
-    private YxUserBillService yxUserBillService;
-
-    @Autowired
-    private WxPayService wxPayService;
-
-    @Autowired
-    private YxWechatUserService wechatUserService;
+    public UserExtractController(YxUserExtractService yxUserExtractService, YxUserService yxUserService,
+                                 YxUserBillService yxUserBillService, WxPayService wxPayService,
+                                 YxWechatUserService wechatUserService) {
+        this.yxUserExtractService = yxUserExtractService;
+        this.yxUserService = yxUserService;
+        this.yxUserBillService = yxUserBillService;
+        this.wxPayService = wxPayService;
+        this.wechatUserService = wechatUserService;
+    }
 
     @Log("查询")
     @ApiOperation(value = "查询")

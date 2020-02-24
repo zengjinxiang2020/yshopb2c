@@ -31,7 +31,6 @@ import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,32 +49,31 @@ import java.util.*;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class YxStoreOrderServiceImpl implements YxStoreOrderService {
 
-    @Autowired
-    private YxStoreOrderRepository yxStoreOrderRepository;
+    private final YxStoreOrderRepository yxStoreOrderRepository;
+    private final YxStoreOrderCartInfoRepository yxStoreOrderCartInfoRepository;
+    private final YxUserRepository userRepository;
+    private final YxStorePinkRepository storePinkRepository;
 
-    @Autowired
-    private YxStoreOrderCartInfoRepository yxStoreOrderCartInfoRepository;
+    private final YxStoreOrderMapper yxStoreOrderMapper;
 
-    @Autowired
-    private YxStoreOrderMapper yxStoreOrderMapper;
+    private final YxUserBillService yxUserBillService;
+    private final YxStoreOrderStatusService yxStoreOrderStatusService;
+    private final YxUserService userService;
+    private final WxPayService wxPayService;
 
-    @Autowired
-    private YxStoreOrderStatusService yxStoreOrderStatusService;
-
-    @Autowired
-    private YxUserService userService;
-
-    @Autowired
-    private YxUserRepository userRepository;
-
-    @Autowired
-    private YxUserBillService yxUserBillService;
-
-    @Autowired
-    private YxStorePinkRepository storePinkRepository;
-
-    @Autowired
-    private WxPayService wxPayService;
+    public YxStoreOrderServiceImpl(YxStoreOrderRepository yxStoreOrderRepository, YxStoreOrderCartInfoRepository yxStoreOrderCartInfoRepository, YxUserRepository userRepository,
+                                   YxStorePinkRepository storePinkRepository, YxStoreOrderMapper yxStoreOrderMapper, YxUserBillService yxUserBillService,
+                                   YxStoreOrderStatusService yxStoreOrderStatusService, YxUserService userService, WxPayService wxPayService) {
+        this.yxStoreOrderRepository = yxStoreOrderRepository;
+        this.yxStoreOrderCartInfoRepository = yxStoreOrderCartInfoRepository;
+        this.userRepository = userRepository;
+        this.storePinkRepository = storePinkRepository;
+        this.yxStoreOrderMapper = yxStoreOrderMapper;
+        this.yxUserBillService = yxUserBillService;
+        this.yxStoreOrderStatusService = yxStoreOrderStatusService;
+        this.userService = userService;
+        this.wxPayService = wxPayService;
+    }
 
     @Override
     public OrderTimeDataDTO getOrderTimeData() {

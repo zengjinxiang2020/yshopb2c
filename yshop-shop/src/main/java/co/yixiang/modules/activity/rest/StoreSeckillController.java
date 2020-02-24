@@ -1,16 +1,13 @@
 package co.yixiang.modules.activity.rest;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.activity.domain.YxStoreSeckill;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.service.dto.YxStoreSeckillQueryCriteria;
 import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +19,19 @@ import org.springframework.web.bind.annotation.*;
 * @author xuwenbo
 * @date 2019-12-14
 */
-@Api(tags = "秒杀管理")
+@Api(tags = "商城:秒杀管理")
 @RestController
 @RequestMapping("api")
-public class YxStoreSeckillController {
+public class StoreSeckillController {
 
-    @Autowired
-    private YxStoreSeckillService yxStoreSeckillService;
+    private final YxStoreSeckillService yxStoreSeckillService;
 
-    @Log("查询YxStoreSeckill")
-    @ApiOperation(value = "查询YxStoreSeckill")
+    public StoreSeckillController(YxStoreSeckillService yxStoreSeckillService) {
+        this.yxStoreSeckillService = yxStoreSeckillService;
+    }
+
+    @Log("列表")
+    @ApiOperation(value = "列表")
     @GetMapping(value = "/yxStoreSeckill")
     @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_SELECT')")
     public ResponseEntity getYxStoreSeckills(YxStoreSeckillQueryCriteria criteria, Pageable pageable){
@@ -40,8 +40,8 @@ public class YxStoreSeckillController {
 
 
 
-    @Log("修改YxStoreSeckill")
-    @ApiOperation(value = "修改YxStoreSeckill")
+    @Log("发布")
+    @ApiOperation(value = "发布")
     @PutMapping(value = "/yxStoreSeckill")
     @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreSeckill resources){
@@ -62,8 +62,8 @@ public class YxStoreSeckillController {
         }
     }
 
-    @Log("删除YxStoreSeckill")
-    @ApiOperation(value = "删除YxStoreSeckill")
+    @Log("删除")
+    @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxStoreSeckill/{id}")
     @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){

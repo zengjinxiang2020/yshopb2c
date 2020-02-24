@@ -1,7 +1,5 @@
 package co.yixiang.mp.controller;
 
-import cn.hutool.core.util.StrUtil;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.mp.domain.YxWechatTemplate;
 import co.yixiang.mp.service.YxWechatTemplateService;
 import co.yixiang.mp.service.dto.YxWechatTemplateQueryCriteria;
@@ -19,13 +17,16 @@ import org.springframework.web.bind.annotation.*;
 * @author xuwenbo
 * @date 2019-12-10
 */
-@Api(tags = "微信模板管理")
+@Api(tags = "商城:微信模板管理")
 @RestController
 @RequestMapping("api")
-public class YxWechatTemplateController {
+public class WechatTemplateController {
 
-    @Autowired
-    private YxWechatTemplateService yxWechatTemplateService;
+    private final YxWechatTemplateService yxWechatTemplateService;
+
+    public WechatTemplateController(YxWechatTemplateService yxWechatTemplateService) {
+        this.yxWechatTemplateService = yxWechatTemplateService;
+    }
 
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxWechatTemplate")
