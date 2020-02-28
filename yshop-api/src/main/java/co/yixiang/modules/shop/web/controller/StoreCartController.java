@@ -14,6 +14,7 @@ import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.shop.service.YxStoreCartService;
 import co.yixiang.modules.shop.web.param.CartIdsParm;
+import co.yixiang.modules.shop.web.param.YxStoreCartQueryParam;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -49,10 +50,10 @@ public class StoreCartController extends BaseController {
      */
     @GetMapping("/cart/count")
     @ApiOperation(value = "获取数量",notes = "获取数量")
-    public ApiResult<Map<String,Object>> count(@RequestParam(value = "numType",defaultValue = "0") int numType){
+    public ApiResult<Map<String,Object>> count(YxStoreCartQueryParam queryParam){
         Map<String,Object> map = new LinkedHashMap<>();
         int uid = SecurityUtils.getUserId().intValue();
-        map.put("count",storeCartService.getUserCartNum(uid,"product",numType));
+        map.put("count",storeCartService.getUserCartNum(uid,"product",queryParam.getNumType().intValue()));
         return ApiResult.ok(map);
     }
 
@@ -144,10 +145,6 @@ public class StoreCartController extends BaseController {
     @ApiOperation(value = "购物车删除产品",notes = "购物车删除产品")
     public ApiResult<Object> cartDel(@Validated @RequestBody CartIdsParm parm){
         int uid = SecurityUtils.getUserId().intValue();
-//        JSONObject jsonObject = JSON.parseObject(jsonStr);
-//        if(ObjectUtil.isNull(jsonObject.get("ids"))){
-//            ApiResult.fail("参数错误");
-//        }
         storeCartService.removeUserCart(uid, parm.getIds());
 
         return ApiResult.ok("ok");

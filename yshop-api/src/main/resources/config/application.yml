@@ -30,11 +30,11 @@ spring:
     open-in-view: true
 
 #配置rocketmq
-rocketmq:
-  nameServer: localhost:9876
-  producer:
-    group: yshop-group
-    sendMessageTimeout: 300000
+#rocketmq:
+#  nameServer: localhost:9876
+#  producer:
+#    group: yshop-group
+#    sendMessageTimeout: 300000
 
 
 

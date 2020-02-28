@@ -32,8 +32,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,23 +54,19 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxUserSign> implements YxUserSignService {
 
-    @Autowired
     private YxUserSignMapper yxUserSignMapper;
+    private YxUserBillMapper userBillMapper;
 
-    @Autowired
     private  YxSystemGroupDataService systemGroupDataService;
-
-    @Autowired
     private YxUserService yxUserService;
-
-    @Autowired
     private YxUserBillService billService;
 
-    @Autowired
-    private YxUserBillMapper userBillMapper;
+
+
 
 
     /**

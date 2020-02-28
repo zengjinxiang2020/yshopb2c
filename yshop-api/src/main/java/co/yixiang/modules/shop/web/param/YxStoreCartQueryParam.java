@@ -16,4 +16,5 @@ import lombok.Data;
 public class YxStoreCartQueryParam  {
     private static final long serialVersionUID = 1L;
 
+    private Integer numType = 0;
 }

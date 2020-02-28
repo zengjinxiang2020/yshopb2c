@@ -47,7 +47,6 @@ import java.util.Map;
 @Api(value = "用户提现", tags = "用户提现", description = "用户提现")
 public class UserExtractController extends BaseController {
 
-
     private final YxUserExtractService userExtractService;
     private final YxUserService userService;
     private final YxSystemConfigService systemConfigService;

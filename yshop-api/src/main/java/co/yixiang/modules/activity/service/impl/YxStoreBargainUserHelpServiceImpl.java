@@ -22,10 +22,12 @@ import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -53,7 +55,6 @@ public class YxStoreBargainUserHelpServiceImpl extends BaseServiceImpl<YxStoreBa
 
     @Autowired
     private YxStoreBargainUserService storeBargainUserService;
-
     @Autowired
     private YxUserService userService;
 

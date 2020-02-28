@@ -38,7 +38,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(value = "用户等级", tags = "用户等级", description = "用户等级")
 public class UserLevelController extends BaseController {
 
-
     private final YxUserLevelService userLevelService;
     private final YxSystemUserLevelService systemUserLevelService;
     private final YxSystemUserTaskService systemUserTaskService;

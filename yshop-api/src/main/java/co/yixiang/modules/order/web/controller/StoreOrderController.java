@@ -25,10 +25,7 @@ import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.service.YxStoreOrderStatusService;
 import co.yixiang.modules.order.web.dto.*;
-import co.yixiang.modules.order.web.param.ExpressParam;
-import co.yixiang.modules.order.web.param.OrderParam;
-import co.yixiang.modules.order.web.param.PayParam;
-import co.yixiang.modules.order.web.param.RefundParam;
+import co.yixiang.modules.order.web.param.*;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.shop.entity.YxStoreProductReply;
 import co.yixiang.modules.shop.service.YxStoreCartService;
@@ -387,12 +384,10 @@ public class StoreOrderController extends BaseController {
     @Log(value = "查看订单列表",type = 1)
     @GetMapping("/order/list")
     @ApiOperation(value = "订单列表",notes = "订单列表")
-    public ApiResult<List<YxStoreOrderQueryVo>> orderList(@RequestParam(value = "type",defaultValue = "0") int type,
-                                                    @RequestParam(value = "page",defaultValue = "1") int page,
-                                                    @RequestParam(value = "limit",defaultValue = "10") int limit){
+    public ApiResult<List<YxStoreOrderQueryVo>> orderList(YxStoreOrderQueryParam queryParam){
         int uid = SecurityUtils.getUserId().intValue();
-
-        return ApiResult.ok(storeOrderService.orderList(uid,type,page,limit));
+        return ApiResult.ok(storeOrderService.orderList(uid,queryParam.getType().intValue(),
+                queryParam.getPage().intValue(),queryParam.getLimit().intValue()));
     }
 
 

@@ -20,8 +20,8 @@ import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,11 +39,11 @@ import java.math.BigDecimal;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMapper, YxUserRecharge> implements YxUserRechargeService {
 
-    @Autowired
-    private YxUserRechargeMapper yxUserRechargeMapper;
+    private final YxUserRechargeMapper yxUserRechargeMapper;
 
 
     /**

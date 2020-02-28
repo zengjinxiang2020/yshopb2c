@@ -22,10 +22,10 @@ import co.yixiang.modules.shop.web.vo.YxStoreCouponIssueQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -44,20 +44,15 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreCouponIssueServiceImpl extends BaseServiceImpl<YxStoreCouponIssueMapper, YxStoreCouponIssue> implements YxStoreCouponIssueService {
 
-    @Autowired
-    private YxStoreCouponIssueMapper yxStoreCouponIssueMapper;
+    private final YxStoreCouponIssueMapper yxStoreCouponIssueMapper;
+    private final YxStoreCouponIssueUserMapper storeCouponIssueUserMapper;
 
-    @Autowired
-    private YxStoreCouponIssueUserMapper storeCouponIssueUserMapper;
-
-    @Autowired
-    private YxStoreCouponUserService storeCouponUserService;
-
-    @Autowired
-    private YxStoreCouponIssueUserService storeCouponIssueUserService;
+    private final YxStoreCouponUserService storeCouponUserService;
+    private final YxStoreCouponIssueUserService storeCouponIssueUserService;
 
     /**
      * 领取优惠券

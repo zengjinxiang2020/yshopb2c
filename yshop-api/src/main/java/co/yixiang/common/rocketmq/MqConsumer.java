@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
@@ -15,17 +16,17 @@ import org.springframework.stereotype.Component;
  * @Author hupeng <610796224@qq.com>
  * @Date 2020/1/1
  **/
-@Component
-@RocketMQMessageListener(
-        topic = "yshop-topic",
-        consumerGroup = "yshop-group",
-        selectorExpression = "*"
-)
+//@Component
+//@RocketMQMessageListener(
+//        topic = "yshop-topic",
+//        consumerGroup = "yshop-group",
+//        selectorExpression = "*"
+//)
 @Slf4j
+@AllArgsConstructor
 public class MqConsumer implements RocketMQListener<String> {
 
-    @Autowired
-    private YxStoreOrderService storeOrderService;
+    private final YxStoreOrderService storeOrderService;
 
     @Override
     public void onMessage(String msg) {

@@ -20,19 +20,16 @@ import co.yixiang.modules.user.web.vo.YxUserBillQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -45,14 +42,13 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxUserBillServiceImpl extends BaseServiceImpl<YxUserBillMapper, YxUserBill> implements YxUserBillService {
 
-    @Autowired
-    private YxUserBillMapper yxUserBillMapper;
+    private final YxUserBillMapper yxUserBillMapper;
 
-    @Autowired
-    private BiillMap biillMap;
+    private final BiillMap biillMap;
 
 
     /**
@@ -110,7 +106,7 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<YxUserBillMapper, YxU
             case 0:
                 wrapper.eq("category","now_money");
                 String str = "recharge,brokerage,pay_product,system_add,pay_product_refund,system_sub";
-                wrapper.in("type",str.split(","));
+                wrapper.in("type", Arrays.asList(str.split(",")));
                 break;
             case 1:
                 wrapper.eq("category","now_money");
@@ -137,7 +133,7 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<YxUserBillMapper, YxU
         List<BillDTO> billDTOList = yxUserBillMapper.getBillList(wrapper,pageModel);
         for (BillDTO billDTO : billDTOList) {
             QueryWrapper<YxUserBill> wrapperT = new QueryWrapper<>();
-            wrapperT.in("id",billDTO.getIds().split(","));
+            wrapperT.in("id",Arrays.asList(billDTO.getIds().split(",")));
             billDTO.setList(yxUserBillMapper.getUserBillList(wrapperT));
 
         }

@@ -14,6 +14,7 @@ import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.shop.service.YxStoreCouponIssueService;
 import co.yixiang.modules.shop.service.YxStoreCouponUserService;
+import co.yixiang.modules.shop.web.param.YxStoreCouponQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreCouponUserQueryVo;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
@@ -50,13 +51,10 @@ public class CouponController extends BaseController {
     @Log(value = "查看优惠券",type = 1)
     @GetMapping("/coupons")
     @ApiOperation(value = "可领取优惠券列表",notes = "可领取优惠券列表")
-    public ApiResult<Object> getList(
-            @RequestParam(value = "page",defaultValue = "1") int page,
-            @RequestParam(value = "limit",defaultValue = "10") int limit
-    ){
-
+    public ApiResult<Object> getList(YxStoreCouponQueryParam queryParam){
         int uid = SecurityUtils.getUserId().intValue();
-        return ApiResult.ok(couponIssueService.getCouponList(page,limit,uid));
+        return ApiResult.ok(couponIssueService.getCouponList(queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue(),uid));
     }
 
     /**

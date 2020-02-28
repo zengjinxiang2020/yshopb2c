@@ -18,8 +18,8 @@ import co.yixiang.modules.shop.web.vo.YxArticleQueryVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,11 +36,11 @@ import java.io.Serializable;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class ArticleServiceImpl extends BaseServiceImpl<YxArticleMapper, YxArticle> implements ArticleService {
 
-    @Autowired
-    private YxArticleMapper yxArticleMapper;
+    private final YxArticleMapper yxArticleMapper;
 
     @Override
     public YxArticleQueryVo getYxArticleById(Serializable id) throws Exception{

@@ -17,10 +17,10 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -38,11 +38,11 @@ import java.io.Serializable;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxSystemAttachmentServiceImpl extends BaseServiceImpl<YxSystemAttachmentMapper, YxSystemAttachment> implements YxSystemAttachmentService {
 
-    @Autowired
-    private YxSystemAttachmentMapper yxSystemAttachmentMapper;
+    private final YxSystemAttachmentMapper yxSystemAttachmentMapper;
 
     @Override
     public YxSystemAttachment getInfo(String name) {

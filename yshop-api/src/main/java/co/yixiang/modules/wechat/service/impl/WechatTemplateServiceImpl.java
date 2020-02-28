@@ -18,8 +18,8 @@ import co.yixiang.modules.wechat.web.vo.YxWechatTemplateQueryVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,11 +36,11 @@ import java.io.Serializable;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class WechatTemplateServiceImpl extends BaseServiceImpl<YxWechatTemplateMapper, YxWechatTemplate> implements YxWechatTemplateService {
 
-    @Autowired
-    private YxWechatTemplateMapper yxWechatTemplateMapper;
+    private final YxWechatTemplateMapper yxWechatTemplateMapper;
 
     @Override
     public YxWechatTemplateQueryVo getYxWechatTemplateById(Serializable id) throws Exception{

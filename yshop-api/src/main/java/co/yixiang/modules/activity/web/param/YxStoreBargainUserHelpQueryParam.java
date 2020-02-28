@@ -16,7 +16,7 @@ import co.yixiang.common.web.param.QueryParam;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value="YxStoreBargainUserHelpQueryParam对象", description="砍价用户帮助表查询参数")
+@ApiModel(value="砍价用户帮助表查询参数", description="砍价用户帮助表查询参数")
 public class YxStoreBargainUserHelpQueryParam extends QueryParam {
     private static final long serialVersionUID = 1L;
 }

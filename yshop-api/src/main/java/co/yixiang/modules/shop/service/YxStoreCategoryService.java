@@ -33,9 +33,9 @@ public interface YxStoreCategoryService extends BaseService<YxStoreCategory> {
      */
     YxStoreCategoryQueryVo getYxStoreCategoryById(Serializable id) throws Exception;
 
-    public List<CateDTO> getList();
+    List<CateDTO> getList();
 
-    public List<String> getAllChilds(int catid);
+    List<String> getAllChilds(int catid);
 
 
 

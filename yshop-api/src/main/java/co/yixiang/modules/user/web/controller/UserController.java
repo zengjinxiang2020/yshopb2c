@@ -21,6 +21,7 @@ import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxUserSignService;
 import co.yixiang.modules.user.web.param.UserEditParam;
+import co.yixiang.modules.user.web.param.YxUserSignQueryParam;
 import co.yixiang.modules.user.web.vo.YxSystemUserLevelQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.SecurityUtils;
@@ -70,6 +71,8 @@ public class UserController extends BaseController {
     @ApiOperation(value = "获取用户信息",notes = "获取用户信息",response = YxUserQueryVo.class)
     public ApiResult<Object> userInfo(){
         int uid = SecurityUtils.getUserId().intValue();
+
+        System.out.println("aa:"+uid);
         //update count
         yxUserService.setUserSpreadCount(uid);
         return ApiResult.ok(yxUserService.getYxUserById(uid));
@@ -149,6 +152,7 @@ public class UserController extends BaseController {
     @AnonymousAccess
     @GetMapping("/user/activity")
     @ApiOperation(value = "获取活动状态",notes = "获取活动状态")
+    @Deprecated
     public ApiResult<Object> activity(){
         Map<String,Object> map = new LinkedHashMap<>();
         map.put("is_bargin",false);
@@ -190,10 +194,10 @@ public class UserController extends BaseController {
      */
     @GetMapping("/sign/list")
     @ApiOperation(value = "签到列表",notes = "签到列表")
-    public ApiResult<Object> signList(@RequestParam(value = "page",defaultValue = "1") int page,
-                                      @RequestParam(value = "limit",defaultValue = "10") int limit){
+    public ApiResult<Object> signList(YxUserSignQueryParam queryParam){
         int uid = SecurityUtils.getUserId().intValue();
-        return ApiResult.ok(userSignService.getSignList(uid,page,limit));
+        return ApiResult.ok(userSignService.getSignList(uid,queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue()));
     }
 
     /**
@@ -201,10 +205,10 @@ public class UserController extends BaseController {
      */
     @GetMapping("/sign/month")
     @ApiOperation(value = "签到列表（年月）",notes = "签到列表（年月）")
-    public ApiResult<Object> signMonthList(@RequestParam(value = "page",defaultValue = "1") int page,
-                                      @RequestParam(value = "limit",defaultValue = "10") int limit){
+    public ApiResult<Object> signMonthList(YxUserSignQueryParam queryParam){
         int uid = SecurityUtils.getUserId().intValue();
-        return ApiResult.ok(userBillService.getUserBillList(page,limit,uid,5));
+        return ApiResult.ok(userBillService.getUserBillList(queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue(),uid,5));
     }
 
     /**

@@ -13,7 +13,8 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.common.rocketmq.MqProducer;
+//import co.yixiang.common.rocketmq.MqProducer;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.domain.AlipayConfig;
@@ -81,12 +82,14 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -105,83 +108,64 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
     @Autowired
     private YxStoreOrderMapper yxStoreOrderMapper;
+    @Autowired
+    private YxStoreCartMapper storeCartMapper;
+    @Autowired
+    private YxStoreCouponUserMapper yxStoreCouponUserMapper;
 
     @Autowired
-    private  YxSystemConfigService systemConfigService;
-
+    private YxSystemConfigService systemConfigService;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private YxUserAddressService userAddressService;
+    @Autowired
+    private YxStoreOrderCartInfoService orderCartInfoService;
+    @Autowired
+    private YxStoreOrderStatusService orderStatusService;
+    @Autowired
+    private YxUserBillService billService;
+    @Autowired
+    private YxStoreProductReplyService storeProductReplyService;
+    @Autowired
+    private WxPayService wxPayService;
+    @Autowired
+    private YxWechatUserService wechatUserService;
+    @Autowired
+    private YxStoreCouponUserService couponUserService;
+    @Autowired
+    private YxStoreSeckillService storeSeckillService;
+    @Autowired
+    private YxUserService userService;
+    @Autowired
+    private YxStoreProductService productService;
+    @Autowired
+    private YxStoreCombinationService combinationService;
+    @Autowired
+    private YxStorePinkService pinkService;
+    @Autowired
+    private YxStoreBargainUserService storeBargainUserService;
+    @Autowired
+    private YxStoreBargainService storeBargainService;
+    @Autowired
+    private WxMpTemplateMessageService templateMessageService;
+    @Autowired
+    private YxWechatTemplateService yxWechatTemplateService;
+    @Autowired
+    private YxExpressService expressService;
+    @Autowired
+    private AlipayService alipayService;
 
     @Autowired
     private OrderMap orderMap;
 
-    @Autowired
-    private YxUserService userService;
+    //@Autowired
+    //private MqProducer mqProducer;
 
     @Autowired
-    private YxUserAddressService userAddressService;
-
-    @Autowired
-    private YxStoreProductService productService;
-
-    @Autowired
-    private YxStoreOrderCartInfoService orderCartInfoService;
-
-    @Autowired
-    private YxStoreCartMapper storeCartMapper;
-
-    @Autowired
-    private YxStoreOrderStatusService orderStatusService;
-
-    @Autowired
-    private YxUserBillService billService;
-
-    @Autowired
-    private YxStoreProductReplyService storeProductReplyService;
-
-    @Autowired
-    private  WxPayService wxPayService;
-
-    @Autowired
-    private YxWechatUserService wechatUserService;
-
-    @Autowired
-    private YxStoreCouponUserService couponUserService;
-
-    @Autowired
-    private YxStoreCouponUserMapper yxStoreCouponUserMapper;
+    private RedisTemplate<String, String> redisTemplate;
 
 
-    @Autowired
-    private YxStoreCombinationService combinationService;
-
-    @Autowired
-    private YxStoreSeckillService storeSeckillService;
-
-    @Autowired
-    private YxStoreBargainService storeBargainService;
-
-    @Autowired
-    private YxStoreBargainUserService storeBargainUserService;
-
-    @Autowired
-    private YxStorePinkService pinkService;
-
-    @Autowired
-    private WxMpTemplateMessageService templateMessageService;
-
-    @Autowired
-    private YxWechatTemplateService yxWechatTemplateService;
-
-    @Autowired
-    private YxExpressService expressService;
-
-    @Autowired
-    private AlipayService alipayService;
-
-
-    @Autowired
-    private MqProducer mqProducer;
 
 
     /**
@@ -322,7 +306,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         yxStoreOrderMapper.updateById(storeOrder);
 
         //增加状态
-        orderStatusService.create(storeOrder.getId(),"delivery_goods",
+        orderStatusService.create(orderQueryVo.getId(),"delivery_goods",
                 "已发货 快递公司："+expressQueryVo.getName()+"快递单号：" +param.getDeliveryId());
 
         //模板消息通知
@@ -347,6 +331,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             }
 
         }
+
+        //加入redis，7天后自动确认收货
+        String redisKey = String.valueOf(StrUtil.format("{}{}",
+                ShopConstants.REDIS_ORDER_OUTTIME_UNCONFIRM,orderQueryVo.getId()));
+        redisTemplate.opsForValue().set(redisKey, orderQueryVo.getOrderId(),
+                ShopConstants.ORDER_OUTTIME_UNCONFIRM, TimeUnit.DAYS);
 
     }
 
@@ -1451,6 +1441,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //使用MQ延时消息
         //mqProducer.sendMsg("yshop-topic",storeOrder.getId().toString());
         //log.info("投递延时订单id： [{}]：", storeOrder.getId());
+
+        //加入redis，30分钟自动取消
+        String redisKey = String.valueOf(StrUtil.format("{}{}",
+                ShopConstants.REDIS_ORDER_OUTTIME_UNPAY, storeOrder.getId()));
+        redisTemplate.opsForValue().set(redisKey, storeOrder.getOrderId() ,
+                ShopConstants.ORDER_OUTTIME_UNPAY, TimeUnit.MINUTES);
 
         return storeOrder;
     }

@@ -25,10 +25,10 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.OrderUtil;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -47,17 +47,14 @@ import java.math.BigDecimal;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMapper, YxUserExtract> implements YxUserExtractService {
 
-    @Autowired
-    private YxUserExtractMapper yxUserExtractMapper;
+    private final YxUserExtractMapper yxUserExtractMapper;
 
-    @Autowired
-    private  YxUserService userService;
-
-    @Autowired
-    private YxUserBillService billService;
+    private final YxUserService userService;
+    private final YxUserBillService billService;
 
     /**
      * 开始提现

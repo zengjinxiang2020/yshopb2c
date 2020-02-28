@@ -17,8 +17,8 @@ import co.yixiang.modules.shop.web.vo.YxStoreCategoryQueryVo;
 import co.yixiang.utils.CateDTO;
 import co.yixiang.utils.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +36,13 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreCategoryServiceImpl extends BaseServiceImpl<YxStoreCategoryMapper, YxStoreCategory> implements YxStoreCategoryService {
 
-    @Autowired
-    private YxStoreCategoryMapper yxStoreCategoryMapper;
+    private final YxStoreCategoryMapper yxStoreCategoryMapper;
 
-    @Autowired
-    private CategoryMap categoryMap;
+    private final CategoryMap categoryMap;
 
     @Override
     public YxStoreCategoryQueryVo getYxStoreCategoryById(Serializable id) throws Exception{

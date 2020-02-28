@@ -13,10 +13,10 @@ import co.yixiang.modules.order.mapper.YxStoreOrderStatusMapper;
 import co.yixiang.modules.order.service.YxStoreOrderStatusService;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.utils.OrderUtil;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <p>
@@ -28,11 +28,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreOrderStatusServiceImpl extends BaseServiceImpl<YxStoreOrderStatusMapper, YxStoreOrderStatus> implements YxStoreOrderStatusService {
 
-    @Autowired
-    private YxStoreOrderStatusMapper yxStoreOrderStatusMapper;
+    private final YxStoreOrderStatusMapper yxStoreOrderStatusMapper;
 
     @Override
     public void create(int oid, String changetype, String changeMessage) {

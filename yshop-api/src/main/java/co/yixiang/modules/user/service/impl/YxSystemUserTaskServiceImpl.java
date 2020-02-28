@@ -9,6 +9,8 @@
 package co.yixiang.modules.user.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.order.mapper.YxStoreOrderMapper;
 import co.yixiang.modules.user.entity.YxSystemUserTask;
 import co.yixiang.modules.user.entity.YxUserTaskFinish;
@@ -16,7 +18,6 @@ import co.yixiang.modules.user.mapper.YxSystemUserTaskMapper;
 import co.yixiang.modules.user.mapper.YxUserBillMapper;
 import co.yixiang.modules.user.mapper.YxUserTaskFinishMapper;
 import co.yixiang.modules.user.mapping.SystemUserTaskMap;
-import co.yixiang.modules.user.service.YxSystemUserLevelService;
 import co.yixiang.modules.user.service.YxSystemUserTaskService;
 import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserTaskFinishService;
@@ -24,17 +25,15 @@ import co.yixiang.modules.user.web.dto.TaskDTO;
 import co.yixiang.modules.user.web.dto.UserLevelInfoDTO;
 import co.yixiang.modules.user.web.param.YxSystemUserTaskQueryParam;
 import co.yixiang.modules.user.web.vo.YxSystemUserTaskQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.List;
@@ -51,32 +50,19 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxSystemUserTaskServiceImpl extends BaseServiceImpl<YxSystemUserTaskMapper, YxSystemUserTask> implements YxSystemUserTaskService {
 
-    @Autowired
-    private YxSystemUserTaskMapper yxSystemUserTaskMapper;
+    private final YxSystemUserTaskMapper yxSystemUserTaskMapper;
+    private final YxUserTaskFinishMapper yxUserTaskFinishMapper;
+    private final YxUserBillMapper userBillMapper;
+    private final YxStoreOrderMapper storeOrderMapper;
 
-    @Autowired
-    private SystemUserTaskMap systemUserTaskMap;
+    private final YxUserTaskFinishService userTaskFinishService;
+    private final YxUserBillService userBillService;
 
-    @Autowired
-    private YxSystemUserLevelService systemUserLevelService;
-
-    @Autowired
-    private YxUserTaskFinishMapper yxUserTaskFinishMapper;
-
-    @Autowired
-    private YxUserBillMapper userBillMapper;
-
-    @Autowired
-    private YxStoreOrderMapper storeOrderMapper;
-
-    @Autowired
-    private YxUserTaskFinishService userTaskFinishService;
-
-    @Autowired
-    private YxUserBillService userBillService;
+    private final SystemUserTaskMap systemUserTaskMap;
 
     /**
      * 设置任务内容完成情况

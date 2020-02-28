@@ -125,16 +125,11 @@ public class UserAddressController extends BaseController {
     @Log(value = "查看地址",type = 1)
     @GetMapping("/address/list")
     @ApiOperation(value = "用户地址列表",notes = "用户地址列表",response = YxUserAddressQueryVo.class)
-    public ApiResult<Paging<YxUserAddressQueryVo>> getYxUserAddressPageList(
-            @RequestParam(value = "page",defaultValue = "1") int page,
-            @RequestParam(value = "limit",defaultValue = "10") int limit){
+    public ApiResult<Paging<YxUserAddressQueryVo>> getYxUserAddressPageList(YxUserAddressQueryParam queryParam){
         int uid = SecurityUtils.getUserId().intValue();
-        YxUserAddressQueryParam  yxUserAddressQueryParam = new YxUserAddressQueryParam();
-        yxUserAddressQueryParam.setCurrent(page);
-        yxUserAddressQueryParam.setSize(limit);
-        yxUserAddressQueryParam.setUid(uid);
-        yxUserAddressQueryParam.setIsDel(0);
-        Paging<YxUserAddressQueryVo> paging = userAddressService.getYxUserAddressPageList(yxUserAddressQueryParam);
+        queryParam.setUid(uid);
+        queryParam.setIsDel(0);
+        Paging<YxUserAddressQueryVo> paging = userAddressService.getYxUserAddressPageList(queryParam);
         return ApiResult.ok(paging.getRecords());
     }
 

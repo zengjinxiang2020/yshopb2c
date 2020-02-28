@@ -9,8 +9,8 @@
 package co.yixiang.modules.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-import co.yixiang.exception.ErrorRequestException;
-import co.yixiang.modules.user.entity.YxSystemUserTask;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserLevel;
 import co.yixiang.modules.user.mapper.YxSystemUserTaskMapper;
@@ -23,21 +23,19 @@ import co.yixiang.modules.user.web.dto.UserLevelInfoDTO;
 import co.yixiang.modules.user.web.param.YxUserLevelQueryParam;
 import co.yixiang.modules.user.web.vo.YxSystemUserLevelQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserLevelQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
-import java.util.List;
 
 
 /**
@@ -55,16 +53,13 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
 
     @Autowired
     private YxUserLevelMapper yxUserLevelMapper;
-
-    @Autowired
-    private YxUserService userService;
-
-    @Autowired
-    private YxSystemUserLevelService systemUserLevelService;
-
     @Autowired
     private YxSystemUserTaskMapper yxSystemUserTaskMapper;
 
+    @Autowired
+    private YxUserService userService;
+    @Autowired
+    private YxSystemUserLevelService systemUserLevelService;
     @Autowired
     private YxSystemUserTaskService systemUserTaskService;
 

@@ -13,31 +13,25 @@ import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.security.security.vo.JwtUser;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Optional;
-
 /**
  * @author hupeng
  * @date 2020/01/12
  */
 @Service("userDetailsService")
+@AllArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final YxUserService userService;
     private final JwtPermissionService permissionService;
 
-
-    public UserDetailsServiceImpl(YxUserService userService,JwtPermissionService permissionService) {
-        this.userService = userService;
-        this.permissionService = permissionService;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username){

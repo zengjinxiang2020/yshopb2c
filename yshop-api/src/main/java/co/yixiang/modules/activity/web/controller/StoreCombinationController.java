@@ -21,6 +21,7 @@ import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.activity.entity.YxStorePink;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
+import co.yixiang.modules.activity.web.param.YxStoreCombinationQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreCombinationQueryVo;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.entity.YxSystemAttachment;
@@ -76,10 +77,9 @@ public class StoreCombinationController extends BaseController {
     @AnonymousAccess
     @GetMapping("/combination/list")
     @ApiOperation(value = "拼团产品列表",notes = "拼团产品列表",response = YxStoreCombinationQueryVo.class)
-    public ApiResult<Object> getList(@RequestParam(value = "page",defaultValue = "1") int page,
-                                     @RequestParam(value = "limit",defaultValue = "10") int limit){
-
-        return ApiResult.ok(storeCombinationService.getList(page,limit));
+    public ApiResult<Object> getList(YxStoreCombinationQueryParam queryParam){
+        return ApiResult.ok(storeCombinationService.getList(queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue()));
     }
 
     /**

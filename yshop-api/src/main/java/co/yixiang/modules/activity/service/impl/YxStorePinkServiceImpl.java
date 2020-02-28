@@ -36,6 +36,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,16 +62,13 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
 
     @Autowired
     private YxStorePinkMapper yxStorePinkMapper;
-
-    @Autowired
-    private YxStoreCombinationService combinationService;
-
-    @Autowired
-    private YxStoreOrderService storeOrderService;
-
     @Autowired
     private YxStoreCombinationMapper yxStoreCombinationMapper;
 
+    @Autowired
+    private YxStoreCombinationService combinationService;
+    @Autowired
+    private YxStoreOrderService storeOrderService;
     @Autowired
     private YxUserService userService;
 

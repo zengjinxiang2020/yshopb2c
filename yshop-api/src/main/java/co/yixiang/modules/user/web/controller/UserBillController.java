@@ -23,6 +23,7 @@ import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserExtractService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.web.param.PromParam;
+import co.yixiang.modules.user.web.param.YxUserBillQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
@@ -110,10 +111,10 @@ public class UserBillController extends BaseController {
     @Log(value = "查看积分流水",type = 1)
     @GetMapping("/integral/list")
     @ApiOperation(value = "积分记录",notes = "积分记录")
-    public ApiResult<Object> userInfo(@RequestParam(value = "page",defaultValue = "1") int page,
-                                      @RequestParam(value = "limit",defaultValue = "10") int limit){
+    public ApiResult<Object> userInfo(YxUserBillQueryParam queryParam){
         int uid = SecurityUtils.getUserId().intValue();
-        return ApiResult.ok(userBillService.userBillList(uid,page,limit,"integral"));
+        return ApiResult.ok(userBillService.userBillList(uid,queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue(),"integral"));
     }
 
 
@@ -261,12 +262,11 @@ public class UserBillController extends BaseController {
     @Log(value = "查看佣金",type = 1)
     @GetMapping("/spread/commission/{type}")
     @ApiOperation(value = "推广佣金明细",notes = "推广佣金明细")
-    public ApiResult<Object> spreadCommission(@RequestParam(value = "page",defaultValue = "1") int page,
-                                              @RequestParam(value = "limit",defaultValue = "10") int limit,
+    public ApiResult<Object> spreadCommission(YxUserBillQueryParam queryParam,
                                               @PathVariable int type){
         int uid = SecurityUtils.getUserId().intValue();
-
-        return ApiResult.ok(userBillService.getUserBillList(page,limit,uid,type));
+        return ApiResult.ok(userBillService.getUserBillList(queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue(),uid,type));
     }
 
 

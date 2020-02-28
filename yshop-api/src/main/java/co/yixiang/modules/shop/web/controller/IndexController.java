@@ -13,7 +13,6 @@ import cn.hutool.core.io.resource.ClassPathResource;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.modules.shop.service.YxStoreProductService;
-import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.utils.FileUtil;
 import com.alibaba.fastjson.JSON;
@@ -44,7 +43,6 @@ import java.util.Map;
 public class IndexController {
 
     private final YxSystemGroupDataService systemGroupDataService;
-    private final YxSystemConfigService systemConfigService;
     private final YxStoreProductService storeProductService;
 
 
@@ -99,7 +97,6 @@ public class IndexController {
     @ApiOperation(value = "获取图片base64",notes = "获取图片base64")
     @Deprecated
     public ApiResult<List<String>> imageBase64(){
-
         return ApiResult.ok(null);
     }
 

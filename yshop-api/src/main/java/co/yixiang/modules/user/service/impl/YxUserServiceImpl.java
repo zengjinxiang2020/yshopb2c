@@ -63,18 +63,16 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
 
     @Autowired
     private YxStoreOrderService orderService;
-
     @Autowired
     private YxSystemConfigService systemConfigService;
-
     @Autowired
     private YxUserBillService billService;
-
     @Autowired
     private YxUserLevelService userLevelService;
-
     @Autowired
     private YxStoreCouponUserService storeCouponUserService;
+
+
 
     /**
      * 返回会员价
@@ -420,7 +418,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
     @Override
     public YxUserQueryVo getYxUserById(Serializable id){
         YxUserQueryVo userQueryVo = yxUserMapper.getYxUserById(id);
-        //userQueryVo.setOrderStatusNum(orderService.orderData((int)id));
+        userQueryVo.setOrderStatusNum(orderService.orderData((int)id));
         return userQueryVo;
     }
 

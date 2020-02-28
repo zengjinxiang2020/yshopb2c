@@ -17,6 +17,7 @@ import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.web.dto.SeckillConfigDTO;
 import co.yixiang.modules.activity.web.dto.SeckillTimeDTO;
+import co.yixiang.modules.activity.web.param.YxStoreSeckillQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreSeckillQueryVo;
 import co.yixiang.modules.shop.entity.YxSystemGroupData;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
@@ -53,7 +54,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class StoreSeckillController extends BaseController {
 
     private final YxStoreSeckillService yxStoreSeckillService;
-
     private final YxSystemGroupDataService yxSystemGroupDataService;
 
     /**
@@ -63,8 +63,7 @@ public class StoreSeckillController extends BaseController {
     @GetMapping("/seckill/list/{time}")
     @ApiOperation(value = "秒杀产品列表", notes = "秒杀产品列表", response = YxStoreSeckillQueryVo.class)
     public ApiResult<Object> getYxStoreSeckillPageList(@PathVariable String time,
-                                                       @RequestParam(value = "page", defaultValue = "1") int page,
-                                                       @RequestParam(value = "limit", defaultValue = "10") int limit) throws Exception {
+                                                       YxStoreSeckillQueryParam queryParam) throws Exception {
         if (StrUtil.isBlank(time)) return ApiResult.fail("参数错误");
         YxSystemGroupData systemGroupData = yxSystemGroupDataService
                 .findData(Integer.valueOf(time));
@@ -75,7 +74,8 @@ public class StoreSeckillController extends BaseController {
         int endTime = today + ((jsonObject.getInteger("time") + jsonObject.getInteger("continued")) * 3600);
 
 
-        return ApiResult.ok(yxStoreSeckillService.getList(page, limit, startTime, endTime));
+        return ApiResult.ok(yxStoreSeckillService.getList(queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue(), startTime, endTime));
     }
 
 
@@ -84,7 +84,7 @@ public class StoreSeckillController extends BaseController {
      */
     @AnonymousAccess
     @GetMapping("/seckill/detail/{id}")
-    @ApiOperation(value = "获取YxStoreSeckill对象详情", notes = "查看商品秒杀产品表", response = YxStoreSeckillQueryVo.class)
+    @ApiOperation(value = "秒杀产品详情", notes = "秒杀产品详情", response = YxStoreSeckillQueryVo.class)
     public ApiResult<Object> getYxStoreSeckill(@PathVariable Integer id) throws Exception {
         return ApiResult.ok(yxStoreSeckillService.getDetail(id));
     }

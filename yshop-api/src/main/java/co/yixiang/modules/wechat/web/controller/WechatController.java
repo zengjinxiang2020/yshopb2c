@@ -150,7 +150,7 @@ public class WechatController extends BaseController {
      * 微信验证消息
      */
     @AnonymousAccess
-    @GetMapping("/wechat/serve")
+    @GetMapping( value = "/wechat/serve",produces = "text/plain;charset=utf-8")
     @ApiOperation(value = "微信验证消息",notes = "微信验证消息")
     public String authGet(@RequestParam(name = "signature", required = false) String signature,
                           @RequestParam(name = "timestamp", required = false) String timestamp,

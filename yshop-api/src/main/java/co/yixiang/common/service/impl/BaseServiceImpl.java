@@ -17,6 +17,7 @@ import java.util.List;
  * @author hupeng
  * @since 2019-10-16
  */
+@SuppressWarnings("unchecked")
 public abstract class BaseServiceImpl<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements BaseService<T> {
 
     protected Page setPageParam(QueryParam queryParam) {
@@ -26,9 +27,9 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T> extends Servic
     protected Page setPageParam(QueryParam queryParam, OrderItem defaultOrder) {
         Page page = new Page();
         // 设置当前页码
-        page.setCurrent(queryParam.getCurrent());
+        page.setCurrent(queryParam.getPage());
         // 设置页大小
-        page.setSize(queryParam.getSize());
+        page.setSize(queryParam.getLimit());
         /**
          * 如果是queryParam是OrderQueryParam，并且不为空，则使用前端排序
          * 否则使用默认排序

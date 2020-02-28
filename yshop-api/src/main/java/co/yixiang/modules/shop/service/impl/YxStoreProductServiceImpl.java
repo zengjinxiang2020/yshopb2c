@@ -10,33 +10,32 @@ package co.yixiang.modules.shop.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.exception.ErrorRequestException;
-import co.yixiang.modules.shop.entity.YxStoreCategory;
 import co.yixiang.modules.shop.entity.YxStoreProduct;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
-import co.yixiang.modules.shop.mapper.YxStoreCategoryMapper;
 import co.yixiang.modules.shop.mapper.YxStoreProductAttrValueMapper;
 import co.yixiang.modules.shop.mapper.YxStoreProductMapper;
 import co.yixiang.modules.shop.mapping.YxStoreProductMap;
-import co.yixiang.modules.shop.service.*;
+import co.yixiang.modules.shop.service.YxStoreProductAttrService;
+import co.yixiang.modules.shop.service.YxStoreProductRelationService;
+import co.yixiang.modules.shop.service.YxStoreProductReplyService;
+import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.web.dto.ProductDTO;
 import co.yixiang.modules.shop.web.param.YxStoreProductQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.service.YxUserService;
-import co.yixiang.utils.CateDTO;
-import co.yixiang.utils.TreeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -53,29 +52,20 @@ import java.util.Map;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMapper, YxStoreProduct> implements YxStoreProductService {
 
-    @Autowired
-    private YxStoreProductMapper yxStoreProductMapper;
+    private final YxStoreProductMapper yxStoreProductMapper;
+    private final YxStoreProductAttrValueMapper storeProductAttrValueMapper;
 
-    @Autowired
-    private YxStoreProductMap storeProductMap;
+    private final YxStoreProductAttrService storeProductAttrService;
+    private final YxStoreProductRelationService relationService;
+    private final YxStoreProductReplyService replyService;
+    private final YxUserService userService;
 
-    @Autowired
-    private YxStoreProductAttrService storeProductAttrService;
+    private final YxStoreProductMap storeProductMap;
 
-    @Autowired
-    private YxStoreProductRelationService relationService;
-
-    @Autowired
-    private YxStoreProductReplyService replyService;
-
-    @Autowired
-    private YxUserService userService;
-
-    @Autowired
-    private YxStoreProductAttrValueMapper storeProductAttrValueMapper;
 
 
     /**
@@ -165,6 +155,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
      * @return
      */
     @Override
+    @SuppressWarnings("unchecked")
     public List<YxStoreProductQueryVo> getGoodsList(YxStoreProductQueryParam productQueryParam) {
 
         QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();

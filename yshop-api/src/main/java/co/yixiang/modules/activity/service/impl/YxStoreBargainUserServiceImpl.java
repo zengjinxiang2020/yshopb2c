@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,13 +53,11 @@ public class YxStoreBargainUserServiceImpl extends BaseServiceImpl<YxStoreBargai
 
     @Autowired
     private YxStoreBargainUserMapper yxStoreBargainUserMapper;
-
     @Autowired
     private StoreBargainUserMap storeBargainUserMap;
 
     @Autowired
     private YxStoreBargainService storeBargainService;
-
     @Autowired
     private YxStoreBargainUserHelpService storeBargainUserHelpService;
 

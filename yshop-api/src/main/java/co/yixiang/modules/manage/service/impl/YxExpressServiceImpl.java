@@ -15,10 +15,10 @@ import co.yixiang.modules.manage.web.param.YxExpressQueryParam;
 import co.yixiang.modules.manage.web.vo.YxExpressQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -36,11 +36,11 @@ import java.io.Serializable;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxExpressServiceImpl extends BaseServiceImpl<YxExpressMapper, YxExpress> implements YxExpressService {
 
-    @Autowired
-    private YxExpressMapper yxExpressMapper;
+    private final YxExpressMapper yxExpressMapper;
 
     @Override
     public YxExpressQueryVo getYxExpressById(Serializable id){

@@ -1,6 +1,7 @@
 package co.yixiang.common.rocketmq;
 
 import co.yixiang.exception.ErrorRequestException;
+import lombok.AllArgsConstructor;
 import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -15,11 +16,11 @@ import org.springframework.stereotype.Component;
  * @Author hupeng <610796224@qq.com>
  * @Date 2020/1/1
  **/
-@Component
+//@Component
+@AllArgsConstructor
 public class MqProducer {
      //注入rocketMQ的模板
-    @Autowired
-    private RocketMQTemplate rocketMQTemplate;
+    private final RocketMQTemplate rocketMQTemplate;
 
 
     /**

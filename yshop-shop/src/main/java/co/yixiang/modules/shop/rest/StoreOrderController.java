@@ -6,6 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxStoreOrder;
 import co.yixiang.modules.shop.domain.YxStoreOrderStatus;
@@ -26,6 +27,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author hupeng
@@ -52,16 +55,19 @@ public class StoreOrderController {
     private final YxWechatUserService wechatUserService;
     private final WxMpTemplateMessageService templateMessageService;
     private final YxWechatTemplateService yxWechatTemplateService;
+    private final RedisTemplate<String, String> redisTemplate;
 
     public StoreOrderController(YxStoreOrderService yxStoreOrderService, YxStoreOrderStatusService yxStoreOrderStatusService,
                                 YxExpressService yxExpressService, YxWechatUserService wechatUserService, WxMpTemplateMessageService templateMessageService,
-                                YxWechatTemplateService yxWechatTemplateService) {
+                                YxWechatTemplateService yxWechatTemplateService,
+                                RedisTemplate<String, String> redisTemplate) {
         this.yxStoreOrderService = yxStoreOrderService;
         this.yxStoreOrderStatusService = yxStoreOrderStatusService;
         this.yxExpressService = yxExpressService;
         this.wechatUserService = wechatUserService;
         this.templateMessageService = templateMessageService;
         this.yxWechatTemplateService = yxWechatTemplateService;
+        this.redisTemplate = redisTemplate;
     }
 
     @GetMapping(value = "/data/count")
@@ -210,6 +216,12 @@ public class StoreOrderController {
         } catch (Exception e) {
             log.info("当前用户不是微信用户不能发送模板消息哦!");
         }
+
+        //加入redis，7天后自动确认收货
+        String redisKey = String.valueOf(StrUtil.format("{}{}",
+                ShopConstants.REDIS_ORDER_OUTTIME_UNCONFIRM,resources.getId()));
+        redisTemplate.opsForValue().set(redisKey, resources.getOrderId(),
+                ShopConstants.ORDER_OUTTIME_UNCONFIRM, TimeUnit.DAYS);
 
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);

@@ -15,10 +15,10 @@ import co.yixiang.modules.shop.web.param.YxStoreCouponQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreCouponQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -36,11 +36,11 @@ import java.io.Serializable;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreCouponServiceImpl extends BaseServiceImpl<YxStoreCouponMapper, YxStoreCoupon> implements YxStoreCouponService {
 
-    @Autowired
-    private YxStoreCouponMapper yxStoreCouponMapper;
+    private final YxStoreCouponMapper yxStoreCouponMapper;
 
     @Override
     public YxStoreCouponQueryVo getYxStoreCouponById(Serializable id){

@@ -17,6 +17,7 @@ import co.yixiang.modules.shop.web.param.YxArticleQueryParam;
 import co.yixiang.modules.shop.web.vo.YxArticleQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +32,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/article")
 @Api(value = "文章模块", tags = "文章模块", description = "文章模块")
 public class ArticleController extends BaseController {
 
-    @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
 
 
     /**
@@ -57,15 +58,8 @@ public class ArticleController extends BaseController {
     @AnonymousAccess
     @GetMapping("/list")
     @ApiOperation(value = "文章列表",notes = "文章列表",response = YxArticleQueryVo.class)
-    public ApiResult<Paging<YxArticleQueryVo>> getYxArticlePageList(
-            @RequestParam(value = "page",defaultValue = "1") int page,
-            @RequestParam(value = "limit",defaultValue = "10") int limit
-    ){
-       // throw new ErrorRequestException("error");
-        YxArticleQueryParam yxArticleQueryParam = new YxArticleQueryParam();
-        yxArticleQueryParam.setCurrent(page);
-        yxArticleQueryParam.setSize(limit);
-        Paging<YxArticleQueryVo> paging = articleService.getYxArticlePageList(yxArticleQueryParam);
+    public ApiResult<Paging<YxArticleQueryVo>> getYxArticlePageList(YxArticleQueryParam queryParam){
+        Paging<YxArticleQueryVo> paging = articleService.getYxArticlePageList(queryParam);
         return ApiResult.ok(paging.getRecords());
     }
 

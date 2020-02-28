@@ -8,23 +8,15 @@
  */
 package co.yixiang.modules.shop.service.impl;
 
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.entity.YxSystemConfig;
 import co.yixiang.modules.shop.mapper.YxSystemConfigMapper;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
-import co.yixiang.modules.shop.web.param.YxSystemConfigQueryParam;
-import co.yixiang.modules.shop.web.vo.YxSystemConfigQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import java.io.Serializable;
 
 
 /**
@@ -37,11 +29,11 @@ import java.io.Serializable;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxSystemConfigServiceImpl extends BaseServiceImpl<YxSystemConfigMapper, YxSystemConfig> implements YxSystemConfigService {
 
-    @Autowired
-    private YxSystemConfigMapper yxSystemConfigMapper;
+    private final YxSystemConfigMapper yxSystemConfigMapper;
 
     @Override
     public String getData(String name) {

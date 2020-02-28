@@ -40,7 +40,6 @@ import java.util.Map;
 @Api(value = "用户充值", tags = "用户充值", description = "用户充值")
 public class UserRechargeController extends BaseController {
 
-
     private final YxUserRechargeService userRechargeService;
 
     /**

@@ -18,6 +18,7 @@ import co.yixiang.modules.manage.web.dto.OrderTimeDataDTO;
 import co.yixiang.modules.manage.web.param.OrderDeliveryParam;
 import co.yixiang.modules.manage.web.param.OrderPriceParam;
 import co.yixiang.modules.manage.web.param.OrderRefundParam;
+import co.yixiang.modules.manage.web.param.ShoperQueryParam;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.dto.OrderCountDTO;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
@@ -45,7 +46,6 @@ import java.util.Map;
 public class ShoperController extends BaseController {
 
     private final YxStoreOrderService storeOrderService;
-    //private final YxUserService yxUserService;
     private final YxExpressService expressService;
 
     /**
@@ -54,7 +54,6 @@ public class ShoperController extends BaseController {
     @GetMapping("/admin/order/statistics")
     @ApiOperation(value = "订单数据统计",notes = "订单数据统计")
     public ApiResult<Object> statistics(){
-
         OrderCountDTO orderCountDTO  = storeOrderService.orderData(0);
         OrderTimeDataDTO orderTimeDataDTO = storeOrderService.getOrderTimeData();
 
@@ -69,11 +68,9 @@ public class ShoperController extends BaseController {
      */
     @GetMapping("/admin/order/data")
     @ApiOperation(value = "订单每月统计数据",notes = "订单每月统计数据")
-    public ApiResult<Object> data(@RequestParam(value = "page",defaultValue = "1") int page,
-                                  @RequestParam(value = "limit",defaultValue = "10") int limit){
-        int uid = SecurityUtils.getUserId().intValue();
-
-        return ApiResult.ok(storeOrderService.getOrderDataPriceCount(page,limit));
+    public ApiResult<Object> data(ShoperQueryParam queryParam){
+        return ApiResult.ok(storeOrderService.getOrderDataPriceCount(queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue()));
     }
 
 
@@ -82,12 +79,9 @@ public class ShoperController extends BaseController {
      */
     @GetMapping("/admin/order/list")
     @ApiOperation(value = "订单列表",notes = "订单列表")
-    public ApiResult<Object> orderList(@RequestParam(value = "status",defaultValue = "0") int type,
-                                  @RequestParam(value = "page",defaultValue = "1") int page,
-                                  @RequestParam(value = "limit",defaultValue = "10") int limit){
-        int uid = SecurityUtils.getUserId().intValue();
-
-        return ApiResult.ok(storeOrderService.orderList(0,type,page,limit));
+    public ApiResult<Object> orderList(ShoperQueryParam queryParam) {
+        return ApiResult.ok(storeOrderService.orderList(0, queryParam.getStatus().intValue(),
+                queryParam.getPage().intValue(), queryParam.getLimit().intValue()));
     }
 
     /**
@@ -96,7 +90,6 @@ public class ShoperController extends BaseController {
     @GetMapping("/admin/order/detail/{key}")
     @ApiOperation(value = "订单详情",notes = "订单详情")
     public ApiResult<Object> orderDetail(@PathVariable String key){
-
         if(StrUtil.isEmpty(key)) return ApiResult.fail("参数错误");
         YxStoreOrderQueryVo storeOrder = storeOrderService.getOrderInfo(key,0);
         if(ObjectUtil.isNull(storeOrder)){
@@ -112,9 +105,7 @@ public class ShoperController extends BaseController {
     @PostMapping("/admin/order/price")
     @ApiOperation(value = "订单改价",notes = "订单改价")
     public ApiResult<Object> orderPrice(@Validated @RequestBody OrderPriceParam param){
-
         storeOrderService.editOrderPrice(param);
-
         return ApiResult.ok("ok");
     }
 
@@ -125,7 +116,6 @@ public class ShoperController extends BaseController {
     @GetMapping("/logistics")
     @ApiOperation(value = "快递公司",notes = "快递公司")
     public ApiResult<Object> express(){
-
         return ApiResult.ok(expressService.list());
     }
 
@@ -136,9 +126,7 @@ public class ShoperController extends BaseController {
     @PostMapping("/admin/order/delivery/keep")
     @ApiOperation(value = "订单发货",notes = "订单发货")
     public ApiResult<Object> orderDelivery(@Validated @RequestBody OrderDeliveryParam param){
-
         storeOrderService.orderDelivery(param);
-
         return ApiResult.ok("ok");
     }
 
@@ -148,9 +136,7 @@ public class ShoperController extends BaseController {
     @PostMapping("/admin/order/refund")
     @ApiOperation(value = "订单退款",notes = "订单退款")
     public ApiResult<Object> orderRefund(@Validated @RequestBody OrderRefundParam param){
-
         storeOrderService.orderRefund(param);
-
         return ApiResult.ok("ok");
     }
 
@@ -160,10 +146,9 @@ public class ShoperController extends BaseController {
      */
     @GetMapping("/admin/order/time")
     @ApiOperation(value = "chart统计",notes = "chart统计")
-    public ApiResult<Object> chartCount(@RequestParam(value = "cate",defaultValue = "1") int cate,
-                                        @RequestParam(value = "type",defaultValue = "1") int type){
-
-        return ApiResult.ok(storeOrderService.chartCount(cate,type));
+    public ApiResult<Object> chartCount(ShoperQueryParam queryParam){
+        return ApiResult.ok(storeOrderService.chartCount(queryParam.getCate().intValue(),
+                queryParam.getType().intValue()));
     }
 
 

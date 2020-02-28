@@ -48,12 +48,13 @@ import com.aliyuncs.CommonResponse;
 import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -65,7 +66,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.sound.midi.SoundbankResource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -79,6 +79,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @Api(tags = "用户授权中心")
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthController {
 
     @Value("${single.login:false}")
@@ -98,25 +99,6 @@ public class AuthController {
     private final WxMaService wxMaService;
     private final NotifyService notifyService;
 
-    public AuthController(SecurityProperties properties, RedisUtils redisUtils,
-                          UserDetailsService userDetailsService,
-                          OnlineUserService onlineUserService, TokenProvider tokenProvider,
-                          AuthenticationManagerBuilder authenticationManagerBuilder,
-                          YxUserService userService, PasswordEncoder passwordEncoder,
-                          YxWechatUserService wechatUserService,
-                          WxMaService wxMaService,NotifyService notifyService) {
-        this.properties = properties;
-        this.redisUtils = redisUtils;
-        this.userDetailsService = userDetailsService;
-        this.onlineUserService = onlineUserService;
-        this.tokenProvider = tokenProvider;
-        this.authenticationManagerBuilder = authenticationManagerBuilder;
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-        this.wechatUserService = wechatUserService;
-        this.wxMaService = wxMaService;
-        this.notifyService = notifyService;
-    }
 
     @Log("H5用户登录")
     @ApiOperation("H5登录授权")

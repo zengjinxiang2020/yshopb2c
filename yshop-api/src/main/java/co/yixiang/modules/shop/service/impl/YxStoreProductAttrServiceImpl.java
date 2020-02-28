@@ -8,6 +8,7 @@
  */
 package co.yixiang.modules.shop.service.impl;
 
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.entity.YxStoreProductAttr;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
 import co.yixiang.modules.shop.mapper.YxStoreProductAttrMapper;
@@ -15,23 +16,13 @@ import co.yixiang.modules.shop.mapper.YxStoreProductAttrValueMapper;
 import co.yixiang.modules.shop.mapping.ProductAttrMap;
 import co.yixiang.modules.shop.service.YxStoreProductAttrService;
 import co.yixiang.modules.shop.web.dto.AttrValueDTO;
-import co.yixiang.modules.shop.web.param.YxStoreProductAttrQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreProductAttrQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
-import co.yixiang.modules.shop.web.vo.YxStoreProductAttrValueQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.util.LinkedCaseInsensitiveMap;
-
-import java.io.Serializable;
 import java.util.*;
 
 
@@ -45,17 +36,14 @@ import java.util.*;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<YxStoreProductAttrMapper, YxStoreProductAttr> implements YxStoreProductAttrService {
 
-    @Autowired
-    private YxStoreProductAttrMapper yxStoreProductAttrMapper;
+    private final YxStoreProductAttrMapper yxStoreProductAttrMapper;
+    private final YxStoreProductAttrValueMapper yxStoreProductAttrValueMapper;
 
-    @Autowired
-    private YxStoreProductAttrValueMapper yxStoreProductAttrValueMapper;
-
-    @Autowired
-    private ProductAttrMap productAttrMap;
+    private final ProductAttrMap productAttrMap;
 
     @Override
     public void incProductAttrStock(int num, int productId, String unique) {

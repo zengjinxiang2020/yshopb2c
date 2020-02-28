@@ -8,27 +8,17 @@
  */
 package co.yixiang.modules.shop.service.impl;
 
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.entity.YxSystemGroupData;
 import co.yixiang.modules.shop.mapper.YxSystemGroupDataMapper;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
-import co.yixiang.modules.shop.web.param.YxSystemGroupDataQueryParam;
-import co.yixiang.modules.shop.web.vo.YxSystemGroupDataQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 

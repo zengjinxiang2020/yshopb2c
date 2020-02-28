@@ -3,11 +3,6 @@ package co.yixiang.common.constant;
 
 public interface CommonConstant {
 
-
-    /**
-     * 订单超时未支付时间 默认30分钟
-     */
-    Long ORDER_OUTTIME_UNPAY = 1000* 1800L;
     /**
      * 默认页码为1
      */

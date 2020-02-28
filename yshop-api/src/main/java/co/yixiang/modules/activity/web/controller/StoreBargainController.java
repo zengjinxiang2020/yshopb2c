@@ -24,6 +24,8 @@ import co.yixiang.modules.activity.entity.YxStoreBargainUserHelp;
 import co.yixiang.modules.activity.service.YxStoreBargainService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserHelpService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserService;
+import co.yixiang.modules.activity.web.param.YxStoreBargainQueryParam;
+import co.yixiang.modules.activity.web.param.YxStoreBargainUserQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreBargainQueryVo;
 import co.yixiang.modules.activity.web.vo.YxStoreBargainUserQueryVo;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
@@ -67,6 +69,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @RequestMapping
 @Api(value = "砍价商品", tags = "砍价商品", description = "砍价商品")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@SuppressWarnings("unchecked")
 public class StoreBargainController extends BaseController {
 
     private final YxStoreBargainService storeBargainService;
@@ -89,9 +92,9 @@ public class StoreBargainController extends BaseController {
     @AnonymousAccess
     @GetMapping("/bargain/list")
     @ApiOperation(value = "砍价产品列表",notes = "砍价产品列表",response = YxStoreBargainQueryVo.class)
-    public ApiResult<Object> getYxStoreBargainPageList(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                                              @RequestParam(value = "limit", defaultValue = "10") int limit){
-        return ApiResult.ok(storeBargainService.getList(page,limit));
+    public ApiResult<Object> getYxStoreBargainPageList(YxStoreBargainQueryParam queryParam){
+        return ApiResult.ok(storeBargainService.getList(queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue()));
     }
 
     /**
@@ -447,11 +450,10 @@ public class StoreBargainController extends BaseController {
      */
     @GetMapping("/bargain/user/list")
     @ApiOperation(value = "砍价列表(已参与)",notes = "砍价列表(已参与)")
-    public ApiResult<Object> bargainUserList(@RequestParam(value = "page", defaultValue = "1") int page,
-                                             @RequestParam(value = "limit", defaultValue = "10") int limit){
+    public ApiResult<Object> bargainUserList(YxStoreBargainUserQueryParam queryParam){
         int uid = SecurityUtils.getUserId().intValue();
         List<YxStoreBargainUserQueryVo> yxStoreBargainUserQueryVos = storeBargainUserService
-                .bargainUserList(uid,page,limit);
+                .bargainUserList(uid,queryParam.getPage().intValue(),queryParam.getLimit().intValue());
         if(yxStoreBargainUserQueryVos.isEmpty()) return ApiResult.fail("暂无参与砍价");
         return ApiResult.ok(yxStoreBargainUserQueryVos);
     }

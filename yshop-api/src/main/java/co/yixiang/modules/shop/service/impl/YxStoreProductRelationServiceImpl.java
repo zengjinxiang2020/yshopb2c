@@ -19,10 +19,10 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -41,11 +41,11 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStoreProductRelationMapper, YxStoreProductRelation> implements YxStoreProductRelationService {
 
-    @Autowired
-    private YxStoreProductRelationMapper yxStoreProductRelationMapper;
+    private final YxStoreProductRelationMapper yxStoreProductRelationMapper;
 
     @Override
     public YxStoreProductRelationQueryVo getYxStoreProductRelationById(Serializable id) throws Exception{

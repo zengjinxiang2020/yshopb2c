@@ -76,7 +76,6 @@ public class StoreProductController extends BaseController {
     @GetMapping("/groom/list/{type}")
     @ApiOperation(value = "获取首页更多产品",notes = "获取首页更多产品")
     public ApiResult<Map<String,Object>> moreGoodsList(@PathVariable Integer type){
-
         Map<String,Object> map = new LinkedHashMap<>();
         if(type == 1){//TODO 精品推荐
             map.put("list",storeProductService.getList(1,20,1));
@@ -98,7 +97,6 @@ public class StoreProductController extends BaseController {
     @GetMapping("/products")
     @ApiOperation(value = "商品列表",notes = "商品列表")
     public ApiResult<List<YxStoreProductQueryVo>> goodsList(YxStoreProductQueryParam productQueryParam){
-
         return ApiResult.ok(storeProductService.getGoodsList(productQueryParam));
     }
 
@@ -108,11 +106,9 @@ public class StoreProductController extends BaseController {
     @AnonymousAccess
     @GetMapping("/product/hot")
     @ApiOperation(value = "为你推荐",notes = "为你推荐")
-    public ApiResult<List<YxStoreProductQueryVo>> productRecommend(
-            @RequestParam(value = "page",defaultValue = "1") int page,
-            @RequestParam(value = "limit",defaultValue = "10") int limit){
-
-        return ApiResult.ok(storeProductService.getList(page,limit,1));
+    public ApiResult<List<YxStoreProductQueryVo>> productRecommend(YxStoreProductQueryParam queryParam){
+        return ApiResult.ok(storeProductService.getList(queryParam.getPage().intValue(),
+                queryParam.getLimit().intValue(),1));
     }
 
     /**
@@ -215,10 +211,9 @@ public class StoreProductController extends BaseController {
     @GetMapping("/reply/list/{id}")
     @ApiOperation(value = "获取产品评论",notes = "获取产品评论")
     public ApiResult<Object> replyList(@PathVariable Integer id,
-                                       @RequestParam(value = "type",defaultValue = "0") int type,
-                                       @RequestParam(value = "page",defaultValue = "1") int page,
-                                       @RequestParam(value = "limit",defaultValue = "10") int limit){
-        return ApiResult.ok(replyService.getReplyList(id,type,page,limit));
+                                       YxStoreProductQueryParam queryParam){
+        return ApiResult.ok(replyService.getReplyList(id,queryParam.getType(),
+                queryParam.getPage().intValue(),queryParam.getLimit().intValue()));
     }
 
     /**

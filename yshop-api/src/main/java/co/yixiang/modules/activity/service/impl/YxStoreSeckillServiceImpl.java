@@ -26,8 +26,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,17 +45,14 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMapper, YxStoreSeckill> implements YxStoreSeckillService {
 
-    @Autowired
-    private YxStoreSeckillMapper yxStoreSeckillMapper;
+    private final YxStoreSeckillMapper yxStoreSeckillMapper;
+    private final StoreSeckillMap storeSeckillMap;
 
-    @Autowired
-    private StoreSeckillMap storeSeckillMap;
-
-    @Autowired
-    private YxStoreProductReplyService replyService;
+    private final YxStoreProductReplyService replyService;
 
     /**
      * 退回库存减少销量

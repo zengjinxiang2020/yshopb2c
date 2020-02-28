@@ -10,6 +10,7 @@ package co.yixiang.modules.shop.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.entity.YxStoreBargain;
 import co.yixiang.modules.activity.entity.YxStoreCombination;
@@ -29,28 +30,18 @@ import co.yixiang.modules.shop.mapping.CartMap;
 import co.yixiang.modules.shop.service.YxStoreCartService;
 import co.yixiang.modules.shop.service.YxStoreProductAttrService;
 import co.yixiang.modules.shop.service.YxStoreProductService;
-import co.yixiang.modules.shop.web.param.YxStoreCartQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.util.StringUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
-import javax.validation.Valid;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -68,44 +59,24 @@ import java.util.Map;
 @Slf4j
 @Service
 @Builder
+@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, YxStoreCart> implements YxStoreCartService {
 
-    @Autowired
-    private YxStoreCartMapper yxStoreCartMapper;
+    private final YxStoreCartMapper yxStoreCartMapper;
+    private final YxStoreSeckillMapper storeSeckillMapper;
+    private final YxStoreBargainMapper yxStoreBargainMapper;
+    private final YxStoreCombinationMapper storeCombinationMapper;
 
-    @Autowired
-    private YxStoreProductService productService;
+    private final YxStoreProductService productService;
+    private final YxStoreProductAttrService productAttrService;
+    private final YxStoreCombinationService storeCombinationService;
+    private final YxStoreSeckillService storeSeckillService;
+    private final YxStoreBargainService storeBargainService;
+    private final YxStoreOrderService storeOrderService;
+    private final YxUserService userService;
 
-    @Autowired
-    private YxStoreProductAttrService productAttrService;
-
-    @Autowired
-    private YxStoreCombinationService storeCombinationService;
-
-    @Autowired
-    private YxStoreCombinationMapper storeCombinationMapper;
-
-    @Autowired
-    private YxStoreSeckillService storeSeckillService;
-
-    @Autowired
-    private YxStoreBargainService storeBargainService;
-
-    @Autowired
-    private YxStoreOrderService storeOrderService;
-
-    @Autowired
-    private YxStoreSeckillMapper storeSeckillMapper;
-
-    @Autowired
-    private YxStoreBargainMapper yxStoreBargainMapper;
-
-    @Autowired
-    private YxUserService userService;
-
-    @Autowired
-    private CartMap cartMap;
+    private final CartMap cartMap;
 
     /**
      * 删除购物车
