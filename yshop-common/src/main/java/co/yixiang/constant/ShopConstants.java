@@ -24,4 +24,16 @@ public interface ShopConstants {
 	 */
 	String REDIS_ORDER_OUTTIME_UNCONFIRM = "order:unconfirm:";
 
+	/**
+	 * 微信支付service
+	 */
+	String YSHOP_WEIXIN_PAY_SERVICE = "yshop_weixin_pay_service";
+
+	/**
+	 * 微信公众号service
+	 */
+	String YSHOP_WEIXIN_MP_SERVICE = "yshop_weixin_mp_service";
+
+
+
 }

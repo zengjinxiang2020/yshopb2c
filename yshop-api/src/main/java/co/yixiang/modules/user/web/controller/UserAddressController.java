@@ -44,7 +44,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "用户地址", tags = "用户地址", description = "用户地址")
+@Api(value = "用户地址", tags = "用户:用户地址", description = "用户地址")
 public class UserAddressController extends BaseController {
 
     private final YxUserAddressService userAddressService;

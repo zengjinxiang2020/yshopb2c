@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.binarywang</groupId>
-            <artifactId>wx-java-pay-spring-boot-starter</artifactId>
+            <artifactId>weixin-java-pay</artifactId>
             <version>${weixin-java.version}</version>
         </dependency>
         <dependency>

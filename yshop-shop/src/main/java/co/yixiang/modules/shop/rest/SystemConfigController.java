@@ -6,6 +6,7 @@ import co.yixiang.modules.shop.domain.YxSystemConfig;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.dto.YxSystemConfigQueryCriteria;
 import co.yixiang.mp.config.WxMpConfiguration;
+import co.yixiang.mp.config.WxPayConfiguration;
 import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -55,7 +56,10 @@ public class SystemConfigController {
                     yxSystemConfigModel.setValue(value.toString());
                     //重新配置微信相关
                     if(key.equals("wechat_appid")){
-                        WxMpConfiguration.removeWxMpService(value.toString());
+                        WxMpConfiguration.removeWxMpService();
+                    }
+                    if(key.equals("wxpay_appId")){
+                        WxPayConfiguration.removeWxPayService();
                     }
                     RedisUtil.set(key,value.toString(),0);
                     if(ObjectUtil.isNull(yxSystemConfig)){

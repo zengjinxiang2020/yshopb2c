@@ -19,6 +19,8 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.domain.AlipayConfig;
 import co.yixiang.domain.vo.TradeVo;
+import co.yixiang.enums.BillEnum;
+import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.service.*;
 import co.yixiang.modules.manage.service.YxExpressService;
@@ -34,6 +36,7 @@ import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.entity.YxStoreOrderCartInfo;
 import co.yixiang.modules.order.mapper.YxStoreOrderMapper;
 import co.yixiang.modules.order.mapping.OrderMap;
+import co.yixiang.modules.order.service.YxPayService;
 import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.service.YxStoreOrderStatusService;
@@ -63,6 +66,7 @@ import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 import co.yixiang.modules.wechat.entity.YxWechatTemplate;
 import co.yixiang.modules.wechat.service.YxWechatTemplateService;
+import co.yixiang.mp.config.WxPayConfiguration;
 import co.yixiang.mp.service.WxMpTemplateMessageService;
 import co.yixiang.service.AlipayService;
 import co.yixiang.utils.OrderUtil;
@@ -127,8 +131,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     private YxUserBillService billService;
     @Autowired
     private YxStoreProductReplyService storeProductReplyService;
-    @Autowired
-    private WxPayService wxPayService;
+   // @Autowired
+    //private WxPayService wxPayService;
     @Autowired
     private YxWechatUserService wechatUserService;
     @Autowired
@@ -165,6 +169,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
+    @Autowired
+    private YxPayService payService;
+
 
 
 
@@ -188,14 +195,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         storeOrder.setId(orderQueryVo.getId());
 
         if(param.getType() == 2){
-            storeOrder.setRefundStatus(0);
+            storeOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_0.getValue());
             yxStoreOrderMapper.updateById(storeOrder);
             return;
         }
 
         //根据支付类型不同退款不同
         if(orderQueryVo.getPayType().equals("yue")){
-            storeOrder.setRefundStatus(2);
+            storeOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_2.getValue());
             storeOrder.setRefundPrice(BigDecimal.valueOf(param.getPrice()));
             yxStoreOrderMapper.updateById(storeOrder);
             //退款到余额
@@ -205,7 +212,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             YxUserBill userBill = new YxUserBill();
             userBill.setUid(orderQueryVo.getUid());
             userBill.setLinkId(orderQueryVo.getId().toString());
-            userBill.setPm(1);
+            userBill.setPm(BillEnum.PM_1.getValue());
             userBill.setTitle("商品退款");
             userBill.setCategory("now_money");
             userBill.setType("pay_product_refund");
@@ -213,43 +220,16 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             userBill.setBalance(NumberUtil.add(param.getPrice(),userQueryVo.getNowMoney()));
             userBill.setMark("订单退款到余额");
             userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
-            userBill.setStatus(1);
+            userBill.setStatus(BillEnum.STATUS_1.getValue());
             billService.save(userBill);
 
 
             orderStatusService.create(orderQueryVo.getId(),"order_edit","退款给用户："+param.getPrice() +"元");
         }else{
-            String apiUrl = RedisUtil.get("api_url");
-            if(StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
-            //读取redis配置
-            String appId = RedisUtil.get("wxpay_appId");
-            String mchId = RedisUtil.get("wxpay_mchId");
-            String mchKey = RedisUtil.get("wxpay_mchKey");
-            String keyPath = RedisUtil.get("wxpay_keyPath");
-
-            if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId) || StrUtil.isBlank(mchKey)){
-                throw new ErrorRequestException("请配置微信支付");
-            }
-            if(StrUtil.isBlank(keyPath)){
-                throw new ErrorRequestException("请配置微信支付证书");
-            }
-            WxPayRefundRequest wxPayRefundRequest = new WxPayRefundRequest();
             BigDecimal bigDecimal = new BigDecimal("100");
-            wxPayRefundRequest.setTotalFee(bigDecimal.multiply(orderQueryVo.getPayPrice()).intValue());//订单总金额
-            wxPayRefundRequest.setOutTradeNo(param.getOrderId());
-            wxPayRefundRequest.setOutRefundNo(param.getOrderId());
-            wxPayRefundRequest.setRefundFee(bigDecimal.multiply(orderQueryVo.getPayPrice()).intValue());//退款金额
-            wxPayRefundRequest.setOpUserId(mchId); //操作人默认商户号当前
-            wxPayRefundRequest.setNotifyUrl(apiUrl+"/api/notify/refund");
-
-            WxPayConfig wxPayConfig = new WxPayConfig();
-            wxPayConfig.setAppId(appId);
-            wxPayConfig.setMchId(mchId);
-            wxPayConfig.setMchKey(mchKey);
-            wxPayConfig.setKeyPath(keyPath);
-            wxPayService.setConfig(wxPayConfig);
             try {
-                wxPayService.refund(wxPayRefundRequest);
+                payService.refundOrder(param.getOrderId(),
+                        bigDecimal.multiply(orderQueryVo.getPayPrice()).intValue());
             } catch (WxPayException e) {
                 log.info("refund-error:{}",e.getMessage());
             }
@@ -1053,48 +1033,25 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
      */
     @Override
     public WxPayMwebOrderResult wxH5Pay(String orderId) throws WxPayException {
-
-        String apiUrl = systemConfigService.getData("api_url");
-        if(StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
-
-        //读取redis配置
-        String appId = RedisUtil.get("wxpay_appId");
-        String mchId = RedisUtil.get("wxpay_mchId");
-        String mchKey = RedisUtil.get("wxpay_mchKey");
-        if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId) || StrUtil.isBlank(mchKey)){
-            throw new ErrorRequestException("请配置微信支付与公众号appId");
-        }
-        WxPayConfig wxPayConfig = new WxPayConfig();
-        wxPayConfig.setAppId(appId);
-        wxPayConfig.setMchId(mchId);
-        wxPayConfig.setMchKey(mchKey);
-        wxPayService.setConfig(wxPayConfig);
-
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
         if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
         if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
 
         if(orderInfo.getPayPrice().doubleValue() <= 0) throw new ErrorRequestException("该支付无需支付");
 
-        WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
         YxUser wechatUser = userService.getById(orderInfo.getUid());
         if(ObjectUtil.isNull(wechatUser)) throw new ErrorRequestException("用户错误");
-        orderRequest.setTradeType("MWEB");
-        orderRequest.setBody("商品购买");
+
         if(StrUtil.isNotEmpty(orderInfo.getExtendOrderId())){
             orderId = orderInfo.getExtendOrderId();
         }
-        orderRequest.setOutTradeNo(orderId);
+
         BigDecimal bigDecimal = new BigDecimal(100);
-        orderRequest.setTotalFee(bigDecimal.multiply(orderInfo.getPayPrice()).intValue());//元转成分
-        orderRequest.setSpbillCreateIp("127.0.0.1");
-        orderRequest.setNotifyUrl(apiUrl+"/api/wechat/notify");
 
-
-        WxPayMwebOrderResult orderResult = wxPayService.createOrder(orderRequest);
-
-        return orderResult;
+        return payService.wxH5Pay(orderId,"H5商品购买",
+                bigDecimal.multiply(orderInfo.getPayPrice()).intValue());
     }
+
 
     /**
      * 小程序支付
@@ -1104,48 +1061,25 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
      */
     @Override
     public WxPayMpOrderResult wxAppPay(String orderId) throws WxPayException {
-        String apiUrl = systemConfigService.getData("api_url");
-        if(StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
-
-        //读取redis配置
-        String appId = RedisUtil.get("wxapp_appId");
-        String mchId = RedisUtil.get("wxpay_mchId");
-        String mchKey = RedisUtil.get("wxpay_mchKey");
-        if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId) || StrUtil.isBlank(mchKey)){
-            throw new ErrorRequestException("请配置微信支付与小程序appId");
-        }
-        WxPayConfig wxPayConfig = new WxPayConfig();
-        wxPayConfig.setAppId(appId);
-        wxPayConfig.setMchId(mchId);
-        wxPayConfig.setMchKey(mchKey);
-        wxPayService.setConfig(wxPayConfig);
-
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
         if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
         if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
 
         if(orderInfo.getPayPrice().doubleValue() <= 0) throw new ErrorRequestException("该支付无需支付");
 
-        WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
         YxWechatUser wechatUser = wechatUserService.getById(orderInfo.getUid());
         if(ObjectUtil.isNull(wechatUser)) throw new ErrorRequestException("用户错误");
-        orderRequest.setTradeType("JSAPI");
-        orderRequest.setOpenid(wechatUser.getRoutineOpenid());
-        orderRequest.setBody("商品购买");
+
         if(StrUtil.isNotEmpty(orderInfo.getExtendOrderId())){
             orderId = orderInfo.getExtendOrderId();
         }
-        orderRequest.setOutTradeNo(orderId);
+
         BigDecimal bigDecimal = new BigDecimal(100);
-        orderRequest.setTotalFee(bigDecimal.multiply(orderInfo.getPayPrice()).intValue());//元转成分
-        orderRequest.setSpbillCreateIp("127.0.0.1");
-        orderRequest.setNotifyUrl(apiUrl+"/api/wechat/notify");
 
-
-        WxPayMpOrderResult orderResult = wxPayService.createOrder(orderRequest);
-
-        return orderResult;
+        return payService.wxPay(orderId,wechatUser.getRoutineOpenid(),"小程序商品购买",
+                bigDecimal.multiply(orderInfo.getPayPrice()).intValue());
     }
+
 
     /**
      * 微信支付
@@ -1153,49 +1087,25 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
      */
     @Override
     public WxPayMpOrderResult wxPay(String orderId) throws WxPayException {
-        String apiUrl = systemConfigService.getData("api_url");
-        if(StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
-
-        //读取redis配置
-        String appId = RedisUtil.get("wxpay_appId");
-        String mchId = RedisUtil.get("wxpay_mchId");
-        String mchKey = RedisUtil.get("wxpay_mchKey");
-        if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId) || StrUtil.isBlank(mchKey)){
-            throw new ErrorRequestException("请配置微信支付与公众号appId");
-        }
-        WxPayConfig wxPayConfig = new WxPayConfig();
-        wxPayConfig.setAppId(appId);
-        wxPayConfig.setMchId(mchId);
-        wxPayConfig.setMchKey(mchKey);
-        wxPayService.setConfig(wxPayConfig);
-
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
         if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
         if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
 
         if(orderInfo.getPayPrice().doubleValue() <= 0) throw new ErrorRequestException("该支付无需支付");
 
-        WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
         YxWechatUser wechatUser = wechatUserService.getById(orderInfo.getUid());
         if(ObjectUtil.isNull(wechatUser)) throw new ErrorRequestException("用户错误");
-        orderRequest.setTradeType("JSAPI");
-        orderRequest.setOpenid(wechatUser.getOpenid());
-        orderRequest.setBody("商品购买");
         if(StrUtil.isNotEmpty(orderInfo.getExtendOrderId())){
             orderId = orderInfo.getExtendOrderId();
         }
-        orderRequest.setOutTradeNo(orderId);
         BigDecimal bigDecimal = new BigDecimal(100);
-        orderRequest.setTotalFee(bigDecimal.multiply(orderInfo.getPayPrice()).intValue());//元转成分
-        orderRequest.setSpbillCreateIp("127.0.0.1");
-        orderRequest.setNotifyUrl(apiUrl+"/api/wechat/notify");
 
-
-        WxPayMpOrderResult orderResult = wxPayService.createOrder(orderRequest);
-
-        return orderResult;
+        return payService.wxPay(orderId,wechatUser.getOpenid(),"公众号商品购买",
+                bigDecimal.multiply(orderInfo.getPayPrice()).intValue());
 
     }
+
+
 
     /**
      * 余额支付
@@ -1331,39 +1241,42 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         // 积分抵扣
         double deductionPrice = 0; //抵扣金额
         double usedIntegral = 0; //使用的积分
-        if(useIntegral > 0 && userInfo.getIntegral().doubleValue() > 0){
-            deductionPrice = NumberUtil.mul(userInfo.getIntegral(),
-                    Double.valueOf(cacheDTO.getOther().getIntegralRatio())).doubleValue();
-            if(deductionPrice < payPrice){
-                payPrice = NumberUtil.sub(payPrice.doubleValue(),deductionPrice);
-                usedIntegral = userInfo.getIntegral().doubleValue();
-                YxUser yxUser = new YxUser();
-                yxUser.setIntegral(BigDecimal.ZERO);
-                yxUser.setUid(uid);
-                userService.updateById(yxUser);
-            }else{
-                deductionPrice = payPrice;
-                usedIntegral = NumberUtil.div(payPrice,
-                        Double.valueOf(cacheDTO.getOther().getIntegralRatio()));
-                userService.decIntegral(uid,usedIntegral);
-                payPrice = 0d;
 
+        //积分抵扣开始
+        if(useIntegral > 0 && userInfo.getIntegral().doubleValue() > 0){
+            Double integralMax = Double.valueOf(cacheDTO.getOther().getIntegralMax());
+            Double integralFull = Double.valueOf(cacheDTO.getOther().getIntegralFull());
+            Double integralRatio = Double.valueOf(cacheDTO.getOther().getIntegralRatio());
+            if(totalPrice >= integralFull){
+                Double userIntegral = userInfo.getIntegral().doubleValue();
+                if(userIntegral >= integralMax) userIntegral = integralMax;
+                deductionPrice = NumberUtil.mul(userIntegral, integralRatio);
+                if(deductionPrice < payPrice){
+                    payPrice = NumberUtil.sub(payPrice.doubleValue(),deductionPrice);
+                    usedIntegral = userIntegral;
+                }else{
+                    deductionPrice = payPrice;
+                    usedIntegral = NumberUtil.div(payPrice,
+                            Double.valueOf(cacheDTO.getOther().getIntegralRatio()));
+                    payPrice = 0d;
+                }
+                userService.decIntegral(uid,usedIntegral);
+                //积分流水
+                YxUserBill userBill = new YxUserBill();
+                userBill.setUid(uid);
+                userBill.setTitle("积分抵扣");
+                userBill.setLinkId(key);
+                userBill.setCategory("integral");
+                userBill.setType("deduction");
+                userBill.setNumber(BigDecimal.valueOf(usedIntegral));
+                userBill.setBalance(userInfo.getIntegral());
+                userBill.setMark("购买商品使用");
+                userBill.setStatus(1);
+                userBill.setPm(0);
+                userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
+                billService.save(userBill);
             }
 
-            //积分流水
-            YxUserBill userBill = new YxUserBill();
-            userBill.setUid(uid);
-            userBill.setTitle("积分抵扣");
-            userBill.setLinkId(key);
-            userBill.setCategory("integral");
-            userBill.setType("deduction");
-            userBill.setNumber(BigDecimal.valueOf(usedIntegral));
-            userBill.setBalance(userInfo.getIntegral());
-            userBill.setMark("购买商品使用");
-            userBill.setStatus(1);
-            userBill.setPm(0);
-            userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
-            billService.save(userBill);
 
         }
 
@@ -1480,13 +1393,15 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         boolean deduction = false;//拼团秒杀砍价等
         int combinationId = 0;
         int seckillId = 0;
+        int bargainId = 0;
         List<YxStoreCartQueryVo> cartInfo = cacheDTO.getCartInfo();
         for (YxStoreCartQueryVo cart : cartInfo) {
             combinationId = cart.getCombinationId();
             seckillId = cart.getSeckillId();
+            bargainId = cart.getBargainId();
         }
         //拼团等不参与抵扣
-        if(combinationId > 0 || seckillId > 0) deduction = true;
+        if(combinationId > 0 || seckillId > 0 || bargainId > 0) deduction = true;
 
 
         if(deduction){
@@ -1510,15 +1425,20 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         // 积分抵扣
         double deductionPrice = 0;
         if(useIntegral > 0 && userInfo.getIntegral().doubleValue() > 0){
-            deductionPrice = NumberUtil.mul(userInfo.getIntegral(),
-                    Double.valueOf(cacheDTO.getOther().getIntegralRatio())).doubleValue();
-            if(deductionPrice < payPrice){
-                payPrice = NumberUtil.sub(payPrice.doubleValue(),deductionPrice);
-            }else{
-                deductionPrice = payPrice;
-                payPrice = 0d;
+            Double integralMax = Double.valueOf(cacheDTO.getOther().getIntegralMax());
+            Double integralFull = Double.valueOf(cacheDTO.getOther().getIntegralFull());
+            Double integralRatio = Double.valueOf(cacheDTO.getOther().getIntegralRatio());
+            if(computeDTO.getTotalPrice() >= integralFull){
+                Double userIntegral = userInfo.getIntegral().doubleValue();
+                if(userIntegral >= integralMax) userIntegral = integralMax;
+                deductionPrice = NumberUtil.mul(userIntegral, integralRatio);
+                if(deductionPrice < payPrice){
+                    payPrice = NumberUtil.sub(payPrice.doubleValue(),deductionPrice);
+                }else{
+                    deductionPrice = payPrice;
+                    payPrice = 0d;
+                }
             }
-
         }
 
         if(payPrice <= 0) payPrice = 0d;

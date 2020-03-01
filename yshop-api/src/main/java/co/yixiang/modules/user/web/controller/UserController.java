@@ -51,7 +51,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "用户中心", tags = "用户中心", description = "用户中心")
+@Api(value = "用户中心", tags = "用户:用户中心", description = "用户中心")
 public class UserController extends BaseController {
 
     private final YxUserService yxUserService;

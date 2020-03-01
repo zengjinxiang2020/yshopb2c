@@ -54,7 +54,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@Api(value = "产品模块", tags = "产品模块", description = "产品模块")
+@Api(value = "产品模块", tags = "商城:产品模块", description = "产品模块")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StoreProductController extends BaseController {
 

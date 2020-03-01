@@ -49,7 +49,6 @@ public class GlobalExceptionHandler {
      */
 	@ExceptionHandler(value = BadRequestException.class)
 	public ResponseEntity<ApiError> badRequestException(BadRequestException e) {
-        System.out.println("88888");
         // 打印堆栈信息
         log.error(ThrowableUtil.getStackTrace(e));
         return buildResponseEntity(ApiError.error(e.getStatus(),e.getMessage()));

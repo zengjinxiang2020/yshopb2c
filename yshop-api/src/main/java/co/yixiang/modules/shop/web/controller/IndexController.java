@@ -39,7 +39,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "首页模块", tags = "首页模块", description = "首页模块")
+@Api(value = "首页模块", tags = "商城:首页模块", description = "首页模块")
 public class IndexController {
 
     private final YxSystemGroupDataService systemGroupDataService;

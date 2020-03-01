@@ -32,21 +32,21 @@ import java.util.Map;
  * </p>
  *
  * @author hupeng
- * @since 2019-12-08
+ * @since 2019-03-01
  */
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "用户充值", tags = "用户充值", description = "用户充值")
+@Api(value = "用户充值", tags = "用户:用户充值", description = "用户充值")
 public class UserRechargeController extends BaseController {
 
     private final YxUserRechargeService userRechargeService;
 
     /**
-     * 公众号充值
+     * 公众号充值/H5充值
      */
     @PostMapping("/recharge/wechat")
-    @ApiOperation(value = "公众号充值",notes = "公众号充值",response = ApiResult.class)
+    @ApiOperation(value = "公众号充值/H5充值",notes = "公众号充值/H5充值",response = ApiResult.class)
     public ApiResult<Map<String,Object>> add(@Valid @RequestBody RechargeParam param){
         int uid = SecurityUtils.getUserId().intValue();
 

@@ -15,4 +15,11 @@ public class OtherDTO implements Serializable {
     private String offlinePostage;
     //积分抵扣
     private String integralRatio;
+
+    //最大
+    private String integralMax;
+
+    //满多少
+    private String integralFull;
+
 }

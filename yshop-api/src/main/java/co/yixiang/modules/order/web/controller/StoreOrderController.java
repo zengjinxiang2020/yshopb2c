@@ -13,6 +13,7 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.express.ExpressService;
 import co.yixiang.express.dao.ExpressInfo;
@@ -65,7 +66,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "订单模块", tags = "订单模块", description = "订单模块")
+@Api(value = "订单模块", tags = "商城:订单模块", description = "订单模块")
 public class StoreOrderController extends BaseController {
 
     private final YxStoreOrderService storeOrderService;
@@ -113,6 +114,8 @@ public class StoreOrderController extends BaseController {
         //积分抵扣
         OtherDTO other = new OtherDTO();
         other.setIntegralRatio(systemConfigService.getData("integral_ratio"));
+        other.setIntegralFull(systemConfigService.getData("integral_full"));
+        other.setIntegralMax(systemConfigService.getData("integral_max"));
 
         //todo 拼团 砍价 秒杀
         int combinationId = 0;
@@ -138,6 +141,12 @@ public class StoreOrderController extends BaseController {
 
         //拼团砍价秒杀类产品不参与抵扣
         if(combinationId > 0 || secKillId > 0 || bargainId > 0) confirmOrderDTO.setDeduction(true);
+
+        //判断积分是否满足订单额度
+        if(priceGroup.getTotalPrice() < Double.valueOf(other.getIntegralFull())) confirmOrderDTO.setEnableIntegral(false);
+
+        confirmOrderDTO.setEnableIntegralNum(Double.valueOf(other.getIntegralMax()));
+
 
         confirmOrderDTO.setAddressInfo(addressService.getUserDefaultAddress(uid));
 
@@ -179,7 +188,7 @@ public class StoreOrderController extends BaseController {
             YxStoreBargainUser storeBargainUser = storeBargainUserService.
                     getBargainUserInfo(param.getBargainId(),uid);
             if(ObjectUtil.isNull(storeBargainUser)) return ApiResult.fail("砍价失败");
-            if(storeBargainUser.getStatus() == 3) return ApiResult.fail("砍价已支付");
+            if(storeBargainUser.getStatus().equals(OrderInfoEnum.BARGAIN_STATUS_3.getValue())) return ApiResult.fail("砍价已支付");
 
             storeBargainUserService.setBargainUserStatus(param.getBargainId(),uid);
 
@@ -311,7 +320,7 @@ public class StoreOrderController extends BaseController {
                 .getOrderInfo(param.getUni(),uid);
         if(ObjectUtil.isNull(storeOrder)) return ApiResult.fail("订单不存在");
 
-        if(storeOrder.getPaid() == 1) return ApiResult.fail("该订单已支付");
+        if(storeOrder.getPaid().equals(OrderInfoEnum.REFUND_STATUS_1.getValue())) return ApiResult.fail("该订单已支付");
 
 
         String orderId = storeOrder.getOrderId();

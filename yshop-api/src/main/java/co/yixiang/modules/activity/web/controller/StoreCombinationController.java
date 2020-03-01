@@ -58,7 +58,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "拼团", tags = "拼团", description = "拼团")
+@Api(value = "拼团", tags = "营销:拼团", description = "拼团")
 public class StoreCombinationController extends BaseController {
 
     private final YxStoreCombinationService storeCombinationService;

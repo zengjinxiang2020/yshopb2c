@@ -50,7 +50,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "微信模块", tags = "微信模块", description = "微信模块")
+@Api(value = "微信模块", tags = "微信:微信模块", description = "微信模块")
 public class WechatController extends BaseController {
 
     private final WxPayService wxPayService;
@@ -81,9 +81,7 @@ public class WechatController extends BaseController {
     @GetMapping("/wechat/config")
     @ApiOperation(value = "jssdk配置",notes = "jssdk配置")
     public ApiResult<Object> jsConfig(@RequestParam(value = "url") String url) throws WxErrorException {
-        String appId = RedisUtil.get("wechat_appid");
-        if(StrUtil.isBlank(appId)) return ApiResult.fail("请配置公众号");
-        WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
+        WxMpService wxService = WxMpConfiguration.getWxMpService();
         return ApiResult.ok(wxService.createJsapiSignature(url));
     }
 
@@ -157,12 +155,9 @@ public class WechatController extends BaseController {
                           @RequestParam(name = "nonce", required = false) String nonce,
                           @RequestParam(name = "echostr", required = false) String echostr){
 
-        String appId = RedisUtil.get("wechat_appid");
-        if(StrUtil.isBlank(appId)) return "请配置公众号";
-
-        final WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
+        final WxMpService wxService = WxMpConfiguration.getWxMpService();
         if (wxService == null) {
-            throw new IllegalArgumentException(String.format("未找到对应appid=[%d]的配置，请核实！", appId));
+            throw new IllegalArgumentException("未找到对应配置的服务，请核实！");
         }
 
         if (wxService.checkSignature(timestamp, nonce, signature)) {
@@ -186,12 +181,7 @@ public class WechatController extends BaseController {
                        HttpServletRequest request,
                        HttpServletResponse response) throws IOException {
 
-        String appId = RedisUtil.get("wechat_appid");
-        if(StrUtil.isBlank(appId)) {
-            log.error("请配置公众号！");
-            return;
-        }
-        WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
+        WxMpService wxService = WxMpConfiguration.getWxMpService();
 
         if (!wxService.checkSignature(timestamp, nonce, signature)) {
             throw new IllegalArgumentException("非法请求，可能属于伪造的请求！");
@@ -201,14 +191,14 @@ public class WechatController extends BaseController {
         if (encType == null) {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
-            WxMpXmlOutMessage outMessage = this.route(inMessage,appId);
+            WxMpXmlOutMessage outMessage = this.route(inMessage);
             if(outMessage == null) return;
             out = outMessage.toXml();;
         } else if ("aes".equalsIgnoreCase(encType)) {
             // aes加密的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
                     timestamp, nonce, msgSignature);
-            WxMpXmlOutMessage outMessage = this.route(inMessage,appId);
+            WxMpXmlOutMessage outMessage = this.route(inMessage);
             if(outMessage == null) return;
 
             out = outMessage.toEncryptedXml(wxService.getWxMpConfigStorage());
@@ -220,9 +210,9 @@ public class WechatController extends BaseController {
         writer.close();
     }
 
-    private WxMpXmlOutMessage route(WxMpXmlMessage message,String appId) {
+    private WxMpXmlOutMessage route(WxMpXmlMessage message) {
         try {
-            return WxMpConfiguration.getWxMpMessageRouter(appId).route(message);
+            return WxMpConfiguration.getWxMpMessageRouter().route(message);
         } catch (Exception e) {
             log.error("路由消息时出现异常！", e);
         }

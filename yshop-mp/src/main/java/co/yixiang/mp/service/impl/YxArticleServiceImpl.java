@@ -106,11 +106,7 @@ public class YxArticleServiceImpl implements YxArticleService {
     @Override
     public void uploadNews(YxArticleDTO wxNewsArticleItem) throws Exception {
 
-        String appId = RedisUtil.get("wechat_appid");
-        if(StrUtil.isBlank(appId)) {
-            throw new BadRequestException("请配置公众号");
-        }
-        WxMpService wxMpService = WxMpConfiguration.getWxMpService(appId);
+        WxMpService wxMpService = WxMpConfiguration.getWxMpService();
 
         WxMpMaterialNews wxMpMaterialNews = new WxMpMaterialNews();
 

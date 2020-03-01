@@ -29,6 +29,10 @@ public class ConfirmOrderDTO implements Serializable {
     //优惠券减
     private Boolean deduction = false;
 
+    private Boolean enableIntegral = true;
+
+    private Double enableIntegralNum = 0d;
+
     //积分抵扣
     private Integer integralRatio = 0;
 

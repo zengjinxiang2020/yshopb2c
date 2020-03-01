@@ -39,6 +39,8 @@ public class YxSystemConfigServiceImpl extends BaseServiceImpl<YxSystemConfigMap
     public String getData(String name) {
         QueryWrapper<YxSystemConfig> wrapper = new QueryWrapper<>();
         wrapper.eq("menu_name",name);
-        return yxSystemConfigMapper.selectOne(wrapper).getValue();
+        YxSystemConfig systemConfig = yxSystemConfigMapper.selectOne(wrapper);
+        if(systemConfig == null) return "";
+        return systemConfig.getValue();
     }
 }

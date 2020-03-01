@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/article")
-@Api(value = "文章模块", tags = "文章模块", description = "文章模块")
+@Api(value = "文章模块", tags = "商城:文章模块", description = "文章模块")
 public class ArticleController extends BaseController {
 
     private final ArticleService articleService;

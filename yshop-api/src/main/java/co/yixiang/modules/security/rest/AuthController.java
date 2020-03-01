@@ -78,7 +78,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@Api(tags = "用户授权中心")
+@Api(tags = "授权:用户授权中心")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthController {
 
@@ -150,11 +150,7 @@ public class AuthController {
                                        HttpServletRequest request) {
 
         try {
-            String appId = RedisUtil.get("wechat_appid");
-            if(StrUtil.isBlank(appId)) {
-                return ApiResult.fail("请配置公众号");
-            }
-            WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
+            WxMpService wxService = WxMpConfiguration.getWxMpService();
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
             WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
             String openid = wxMpUser.getOpenId();

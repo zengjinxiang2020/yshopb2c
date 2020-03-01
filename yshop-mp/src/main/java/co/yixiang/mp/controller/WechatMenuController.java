@@ -55,11 +55,7 @@ public class WechatMenuController {
         Boolean isExist = yxCacheService.isExist("wechat_menus");
         WxMenu menu = JSONObject.parseObject(jsonStr,WxMenu.class);
 
-        String appId = RedisUtil.get("wechat_appid");
-        if(StrUtil.isBlank(appId)) {
-            throw new BadRequestException("请配置公众号");
-        }
-        WxMpService wxService = WxMpConfiguration.getWxMpService(appId);
+        WxMpService wxService = WxMpConfiguration.getWxMpService();
         if(isExist){
             yxCache.setKey("wechat_menus");
             yxCache.setResult(jsonButton);

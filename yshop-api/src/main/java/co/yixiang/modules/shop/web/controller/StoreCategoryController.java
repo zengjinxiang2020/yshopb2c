@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@Api(value = "商品分类", tags = "商品分类", description = "商品分类")
+@Api(value = "商品分类", tags = "商城:商品分类", description = "商品分类")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StoreCategoryController extends BaseController {
 

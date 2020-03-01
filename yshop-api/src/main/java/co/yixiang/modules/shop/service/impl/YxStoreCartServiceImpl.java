@@ -42,10 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -145,7 +142,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
         wrapper.eq("uid",uid).eq("type","product").eq("is_pay",0)
                 .eq("is_del",0).orderByDesc("add_time");
         if(status == 0) wrapper.eq("is_new",0);
-        if(StrUtil.isNotEmpty(cartIds)) wrapper.in("id",cartIds.split(","));
+        if(StrUtil.isNotEmpty(cartIds)) wrapper.in("id", Arrays.asList(cartIds.split(",")));
         List<YxStoreCart> carts = yxStoreCartMapper.selectList(wrapper);
 
         List<YxStoreCartQueryVo> valid = new ArrayList<>();
@@ -306,7 +303,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
                 .eq("product_id",productId)
                 .eq("is_new",isNew).eq("product_attr_unique",productAttrUnique)
                 .eq("combination_id",combinationId).eq("bargain_id",bargainId)
-                .eq("seckill_id",seckillId);
+                .eq("seckill_id",seckillId).orderByDesc("id").last("limit 1");
 
         YxStoreCart cart =yxStoreCartMapper.selectOne(wrapper);
         YxStoreCart storeCart = new YxStoreCart();
@@ -327,6 +324,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
             storeCart.setId(cart.getId());
             yxStoreCartMapper.updateById(storeCart);
         }else{
+            //判断是否已经添加过
             storeCart.setAddTime(OrderUtil.getSecondTimestampTwo());
             yxStoreCartMapper.insert(storeCart);
         }

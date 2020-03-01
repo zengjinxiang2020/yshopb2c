@@ -54,7 +54,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "用户分销", tags = "用户分销", description = "用户分销")
+@Api(value = "用户分销", tags = "用户:用户分销", description = "用户分销")
 public class UserBillController extends BaseController {
 
     private final YxUserBillService userBillService;

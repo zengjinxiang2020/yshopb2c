@@ -115,7 +115,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
      */
     @Override
     public boolean backOrderBrokerage(YxStoreOrderQueryVo order) {
-        //todo 拼团等
+        //如果分销没开启直接返回
+        String open = systemConfigService.getData("store_brokerage_open");
+        if(StrUtil.isEmpty(open) || open.equals("2")) return false;
         //支付金额减掉邮费
         double payPrice = 0d;
         payPrice = NumberUtil.sub(order.getPayPrice(),order.getPayPostage()).doubleValue();
@@ -366,6 +368,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
      */
     @Override
     public boolean setSpread(int spread, int uid) {
+        //如果分销没开启直接返回
+        String open = systemConfigService.getData("store_brokerage_open");
+        if(StrUtil.isEmpty(open) || open.equals("2")) return false;
         //当前用户信息
         YxUserQueryVo userInfo = getYxUserById(uid);
         if(ObjectUtil.isNull(userInfo)) return true;

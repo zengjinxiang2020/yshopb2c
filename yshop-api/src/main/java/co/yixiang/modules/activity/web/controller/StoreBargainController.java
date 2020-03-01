@@ -67,7 +67,7 @@ import java.util.concurrent.locks.ReentrantLock;
 @Slf4j
 @RestController
 @RequestMapping
-@Api(value = "砍价商品", tags = "砍价商品", description = "砍价商品")
+@Api(value = "砍价商品", tags = "营销:砍价商品", description = "砍价商品")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @SuppressWarnings("unchecked")
 public class StoreBargainController extends BaseController {
