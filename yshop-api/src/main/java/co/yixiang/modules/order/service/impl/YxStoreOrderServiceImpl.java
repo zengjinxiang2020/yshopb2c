@@ -266,7 +266,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         YxStoreOrderQueryVo orderQueryVo = getOrderInfo(param.getOrderId(),0);
         if(ObjectUtil.isNull(orderQueryVo)) throw new ErrorRequestException("订单不存在");
 
-        if(orderQueryVo.getStatus() != 0 || orderQueryVo.getPaid() == 0) throw new ErrorRequestException("订单状态错误");
+        if(!orderQueryVo.getStatus().equals(OrderInfoEnum.STATUS_0.getValue()) ||
+                orderQueryVo.getPaid().equals(OrderInfoEnum.PAY_STATUS_0.getValue())){
+            throw new ErrorRequestException("订单状态错误");
+        }
 
         YxExpressQueryVo expressQueryVo = expressService
                 .getYxExpressById(Integer.valueOf(param.getDeliveryName()));
@@ -274,7 +277,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         YxStoreOrder storeOrder = new YxStoreOrder();
         storeOrder.setId(orderQueryVo.getId());
-        storeOrder.setStatus(1);
+        storeOrder.setStatus(OrderInfoEnum.STATUS_1.getValue());
         storeOrder.setDeliveryId(param.getDeliveryId());
         storeOrder.setDeliveryName(expressQueryVo.getName());
         storeOrder.setDeliveryType(param.getDeliveryType());
@@ -457,8 +460,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         userBill.setNumber(order.getUseIntegral());
         userBill.setBalance(userQueryVo.getIntegral());
         userBill.setMark("购买商品失败,回退积分");
-        userBill.setStatus(1);
-        userBill.setPm(1);
+        userBill.setStatus(BillEnum.STATUS_1.getValue());
+        userBill.setPm(BillEnum.PM_1.getValue());
         userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
         billService.save(userBill);
 
@@ -478,7 +481,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     public void cancelOrder(String orderId, int uid) {
         YxStoreOrderQueryVo order = getOrderInfo(orderId,uid);
         if(ObjectUtil.isNull(order)) throw new ErrorRequestException("订单不存在");
-        if(order.getIsDel() == 1)throw new ErrorRequestException("订单已取消");
+        if(order.getIsDel().equals(OrderInfoEnum.CANCEL_STATUS_1.getValue()))throw new ErrorRequestException("订单已取消");
         regressionIntegral(order);
 
         regressionStock(order);
@@ -486,7 +489,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         regressionCoupon(order);
 
         YxStoreOrder storeOrder = new YxStoreOrder();
-        storeOrder.setIsDel(1);
+        storeOrder.setIsDel(OrderInfoEnum.CANCEL_STATUS_1.getValue());
         storeOrder.setId(order.getId());
         yxStoreOrderMapper.updateById(storeOrder);
     }
@@ -503,7 +506,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
             if(ObjectUtil.isNull(order)) throw new ErrorRequestException("订单不存在");
 
-            if(order.getIsDel() == 1)throw new ErrorRequestException("订单已取消");
+            if(order.getIsDel() == OrderInfoEnum.CANCEL_STATUS_1.getValue())throw new ErrorRequestException("订单已取消");
 
             regressionIntegral(order);
 
@@ -512,7 +515,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             regressionCoupon(order);
 
             YxStoreOrder storeOrder = new YxStoreOrder();
-            storeOrder.setIsDel(1);
+            storeOrder.setIsDel(OrderInfoEnum.CANCEL_STATUS_1.getValue());
             storeOrder.setId(order.getId());
             yxStoreOrderMapper.updateById(storeOrder);
         } catch (Exception e) {
@@ -547,8 +550,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             userBill.setNumber(order.getGainIntegral());
             userBill.setBalance(userQueryVo.getIntegral());
             userBill.setMark("购买商品赠送");
-            userBill.setStatus(1);
-            userBill.setPm(1);
+            userBill.setStatus(BillEnum.STATUS_1.getValue());
+            userBill.setPm(BillEnum.PM_1.getValue());
             userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
             billService.save(userBill);
 
@@ -573,7 +576,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         }
 
         YxStoreOrder storeOrder = new YxStoreOrder();
-        storeOrder.setIsDel(1);
+        storeOrder.setIsDel(OrderInfoEnum.CANCEL_STATUS_1.getValue());
         storeOrder.setId(order.getId());
         yxStoreOrderMapper.updateById(storeOrder);
 
@@ -594,7 +597,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         if(!order.get_status().get_type().equals("2")) throw new ErrorRequestException("订单状态错误");
 
         YxStoreOrder storeOrder = new YxStoreOrder();
-        storeOrder.setStatus(2);
+        storeOrder.setStatus(OrderInfoEnum.STATUS_2.getValue());
         storeOrder.setId(order.getId());
         yxStoreOrderMapper.updateById(storeOrder);
 
@@ -623,7 +626,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         if(order.getStatus() == 1 ) throw new ErrorRequestException("订单当前无法退款");
 
         YxStoreOrder storeOrder = new YxStoreOrder();
-        storeOrder.setRefundStatus(1);
+        storeOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_1.getValue());
         storeOrder.setRefundReasonTime(OrderUtil.getSecondTimestampTwo());
         storeOrder.setRefundReasonWapExplain(param.getRefund_reason_wap_explain());
         storeOrder.setRefundReasonWapImg(param.getRefund_reason_wap_img());
@@ -958,7 +961,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
         wrapper.eq("order_id",orderId);
         YxStoreOrder storeOrder = new YxStoreOrder();
-        storeOrder.setPaid(1);
+        storeOrder.setPaid(OrderInfoEnum.PAY_STATUS_1.getValue());
         storeOrder.setPayType(payType);
         storeOrder.setPayTime(OrderUtil.getSecondTimestampTwo());
         yxStoreOrderMapper.update(storeOrder,wrapper);
@@ -1032,7 +1035,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     public WxPayMwebOrderResult wxH5Pay(String orderId) throws WxPayException {
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
         if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
-        if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
+        if(orderInfo.getPaid().equals(OrderInfoEnum.PAY_STATUS_1.getValue())) throw new ErrorRequestException("该订单已支付");
 
         if(orderInfo.getPayPrice().doubleValue() <= 0) throw new ErrorRequestException("该支付无需支付");
 
@@ -1060,7 +1063,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     public WxPayMpOrderResult wxAppPay(String orderId) throws WxPayException {
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
         if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
-        if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
+        if(orderInfo.getPaid().equals(OrderInfoEnum.PAY_STATUS_1.getValue())) throw new ErrorRequestException("该订单已支付");
 
         if(orderInfo.getPayPrice().doubleValue() <= 0) throw new ErrorRequestException("该支付无需支付");
 
@@ -1086,7 +1089,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     public WxPayMpOrderResult wxPay(String orderId) throws WxPayException {
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
         if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
-        if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
+        if(orderInfo.getPaid().equals(OrderInfoEnum.PAY_STATUS_1.getValue())) throw new ErrorRequestException("该订单已支付");
 
         if(orderInfo.getPayPrice().doubleValue() <= 0) throw new ErrorRequestException("该支付无需支付");
 
@@ -1114,7 +1117,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,uid);
         if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
 
-        if(orderInfo.getPaid() == 1) throw new ErrorRequestException("该订单已支付");
+        if(orderInfo.getPaid().equals(OrderInfoEnum.PAY_STATUS_1.getValue())) throw new ErrorRequestException("该订单已支付");
 
         YxUserQueryVo userInfo = userService.getYxUserById(uid);
 
@@ -1133,8 +1136,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         userBill.setNumber(orderInfo.getPayPrice());
         userBill.setBalance(userInfo.getNowMoney());
         userBill.setMark("余额支付");
-        userBill.setStatus(1);
-        userBill.setPm(0);
+        userBill.setStatus(BillEnum.STATUS_1.getValue());
+        userBill.setPm(BillEnum.PM_0.getValue());
         userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
         billService.save(userBill);
 
@@ -1298,7 +1301,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         storeOrder.setPayPrice(BigDecimal.valueOf(payPrice));
         storeOrder.setPayPostage(BigDecimal.valueOf(payPostage));
         storeOrder.setDeductionPrice(BigDecimal.valueOf(deductionPrice));
-        storeOrder.setPaid(0);
+        storeOrder.setPaid(OrderInfoEnum.PAY_STATUS_0.getValue());
         storeOrder.setPayType(param.getPayType());
         storeOrder.setUseIntegral(BigDecimal.valueOf(usedIntegral));
         storeOrder.setGainIntegral(BigDecimal.valueOf(gainIntegral));

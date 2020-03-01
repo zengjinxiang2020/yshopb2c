@@ -10,6 +10,7 @@ package co.yixiang.modules.user.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.enums.BillEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserBill;
@@ -127,8 +128,8 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
         userBill.setNumber(BigDecimal.valueOf(money));
         userBill.setBalance(BigDecimal.valueOf(balance));
         userBill.setMark(mark);
-        userBill.setStatus(1);
-        userBill.setPm(0);
+        userBill.setStatus(BillEnum.STATUS_1.getValue());
+        userBill.setPm(BillEnum.PM_0.getValue());
         userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
         billService.save(userBill);
 

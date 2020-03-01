@@ -20,6 +20,8 @@ import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiCode;
 import co.yixiang.common.api.ApiResult;
+import co.yixiang.constant.ShopConstants;
+import co.yixiang.enums.AppFromEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.notify.NotifyService;
 import co.yixiang.modules.notify.NotifyType;
@@ -182,10 +184,10 @@ public class AuthController {
                 YxUser user = new YxUser();
                 user.setAccount(nickname);
                 user.setUsername(wxMpUser.getOpenId());
-                user.setPassword(passwordEncoder.encode("123456"));
-                user.setPwd(passwordEncoder.encode("123456"));
+                user.setPassword(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
+                user.setPwd(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
                 user.setPhone("");
-                user.setUserType("wechat");
+                user.setUserType(AppFromEnum.WECHAT.getValue());
                 user.setAddTime(OrderUtil.getSecondTimestampTwo());
                 user.setLastTime(OrderUtil.getSecondTimestampTwo());
                 user.setNickname(nickname);
@@ -240,7 +242,7 @@ public class AuthController {
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(jwtUser.getUsername(),
-                            "123456");
+                            ShopConstants.YSHOP_DEFAULT_PWD);
 
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -320,10 +322,10 @@ public class AuthController {
                 YxUser user = new YxUser();
                 user.setAccount(nickname);
                 user.setUsername(wxMpUser.getOpenId());
-                user.setPassword(passwordEncoder.encode("123456"));
-                user.setPwd(passwordEncoder.encode("123456"));
+                user.setPassword(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
+                user.setPwd(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
                 user.setPhone("");
-                user.setUserType("routine");
+                user.setUserType(AppFromEnum.ROUNTINE.getValue());
                 user.setAddTime(OrderUtil.getSecondTimestampTwo());
                 user.setLastTime(OrderUtil.getSecondTimestampTwo());
                 user.setNickname(nickname);
@@ -369,7 +371,7 @@ public class AuthController {
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(jwtUser.getUsername(),
-                            "123456");
+                            ShopConstants.YSHOP_DEFAULT_PWD);
 
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -467,11 +469,11 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(param.getPassword()));
         user.setPwd(passwordEncoder.encode(param.getPassword()));
         user.setPhone(param.getAccount());
-        user.setUserType("h5");
+        user.setUserType(AppFromEnum.H5.getValue());
         user.setAddTime(OrderUtil.getSecondTimestampTwo());
         user.setLastTime(OrderUtil.getSecondTimestampTwo());
         user.setNickname(param.getAccount());
-        user.setAvatar("https://image.dayouqiantu.cn/5dc2c7f3a104c.png");
+        user.setAvatar(ShopConstants.YSHOP_DEFAULT_AVATAR);
         user.setNowMoney(BigDecimal.ZERO);
         user.setBrokeragePrice(BigDecimal.ZERO);
         user.setIntegral(BigDecimal.ZERO);

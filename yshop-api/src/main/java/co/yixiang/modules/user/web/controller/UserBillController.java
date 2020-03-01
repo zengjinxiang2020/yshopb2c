@@ -16,6 +16,7 @@ import cn.hutool.extra.qrcode.QrCodeUtil;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.enums.AppFromEnum;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.entity.YxSystemAttachment;
 import co.yixiang.modules.user.service.YxSystemAttachmentService;
@@ -136,7 +137,9 @@ public class UserBillController extends BaseController {
         }
 
         String userType = userInfo.getUserType();
-        if(!userType.equals("routine")) userType = "H5";
+        if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
+            userType = AppFromEnum.H5.getValue();
+        }
 
         String name = uid + "_"+userType+"_user_wap.jpg";
 
@@ -146,7 +149,7 @@ public class UserBillController extends BaseController {
         if(ObjectUtil.isNull(attachment)){
             //生成二维码
             //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
-            if(userType.equals("routine")){
+            if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
                 siteUrl = siteUrl+"/distribution/";
             }
             File file = FileUtil.mkdir(new File(fileDir));

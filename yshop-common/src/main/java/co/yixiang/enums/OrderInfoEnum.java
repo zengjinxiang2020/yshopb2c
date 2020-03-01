@@ -26,7 +26,12 @@ public enum OrderInfoEnum {
 
 	BARGAIN_STATUS_1(1,"参与中"),
 	BARGAIN_STATUS_2(2,"参与失败"),
-	BARGAIN_STATUS_3(3,"参与成功");
+	BARGAIN_STATUS_3(3,"参与成功"),
+
+	CANCEL_STATUS_0(0,"正常"),
+	CANCEL_STATUS_1(1,"已取消");
+
+
 
 	private Integer value;
 	private String desc;

@@ -34,6 +34,16 @@ public interface ShopConstants {
 	 */
 	String YSHOP_WEIXIN_MP_SERVICE = "yshop_weixin_mp_service";
 
+	/**
+	 * 商城默认密码
+	 */
+	String YSHOP_DEFAULT_PWD = "123456";
+
+	/**
+	 * 商城默认注册图片
+	 */
+	String YSHOP_DEFAULT_AVATAR = "https://image.dayouqiantu.cn/5dc2c7f3a104c.png";
+
 
 
 }

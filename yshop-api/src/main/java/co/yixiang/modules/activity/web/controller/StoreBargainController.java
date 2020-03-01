@@ -19,6 +19,7 @@ import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.enums.AppFromEnum;
 import co.yixiang.modules.activity.entity.YxStoreBargainUser;
 import co.yixiang.modules.activity.entity.YxStoreBargainUserHelp;
 import co.yixiang.modules.activity.service.YxStoreBargainService;
@@ -296,7 +297,9 @@ public class StoreBargainController extends BaseController {
 
         YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
         String userType = userInfo.getUserType();
-        if(!userType.equals("routine")) userType = "H5";
+        if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
+            userType = AppFromEnum.H5.getValue();
+        }
         String name = bargainId+"_"+uid + "_"+userType+"_bargain_share_wap.jpg";
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
         String fileDir = path+"qrcode"+ File.separator;
@@ -305,7 +308,7 @@ public class StoreBargainController extends BaseController {
             //生成二维码
             //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
             File file = FileUtil.mkdir(new File(fileDir));
-            if(userType.equals("routine")){
+            if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
                 siteUrl = siteUrl+"/bargain/";
                 QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));

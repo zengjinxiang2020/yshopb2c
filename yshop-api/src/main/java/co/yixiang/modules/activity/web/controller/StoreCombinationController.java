@@ -18,6 +18,7 @@ import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.enums.AppFromEnum;
 import co.yixiang.modules.activity.entity.YxStorePink;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
@@ -131,7 +132,9 @@ public class StoreCombinationController extends BaseController {
         int uid = SecurityUtils.getUserId().intValue();
         YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
         String userType = userInfo.getUserType();
-        if(!userType.equals("routine")) userType = "H5";
+        if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
+            userType = AppFromEnum.H5.getValue();
+        }
         String name = pinkId+"_"+uid + "_"+userType+"_pink_share_wap.jpg";
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
         String fileDir = path+"qrcode"+ File.separator;
@@ -140,7 +143,7 @@ public class StoreCombinationController extends BaseController {
             //生成二维码
             //String fileDir = path+"qrcode"+File.separator;
             File file = FileUtil.mkdir(new File(fileDir));
-            if(userType.equals("routine")){
+            if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
                 siteUrl = siteUrl+"/pink/";
                 QrCodeUtil.generate(siteUrl+"?pinkId="+pinkId+"&spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));

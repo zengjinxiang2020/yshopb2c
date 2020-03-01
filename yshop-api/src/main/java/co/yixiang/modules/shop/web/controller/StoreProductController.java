@@ -17,6 +17,8 @@ import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.enums.AppFromEnum;
+import co.yixiang.enums.ProductEnum;
 import co.yixiang.modules.shop.service.YxStoreProductRelationService;
 import co.yixiang.modules.shop.service.YxStoreProductReplyService;
 import co.yixiang.modules.shop.service.YxStoreProductService;
@@ -77,13 +79,13 @@ public class StoreProductController extends BaseController {
     @ApiOperation(value = "获取首页更多产品",notes = "获取首页更多产品")
     public ApiResult<Map<String,Object>> moreGoodsList(@PathVariable Integer type){
         Map<String,Object> map = new LinkedHashMap<>();
-        if(type == 1){//TODO 精品推荐
+        if(type.equals(ProductEnum.TYPE_1.getValue())){//TODO 精品推荐
             map.put("list",storeProductService.getList(1,20,1));
-        }else if(type == 2){//TODO  热门榜单
+        }else if(type.equals(ProductEnum.TYPE_2.getValue())){//TODO  热门榜单
             map.put("list",storeProductService.getList(1,20,4));
-        }else if(type == 3){//TODO 首发新品
+        }else if(type.equals(ProductEnum.TYPE_3.getValue())){//TODO 首发新品
             map.put("list",storeProductService.getList(1,20,2));
-        }else if(type == 4){//TODO 促销单品
+        }else if(type.equals(ProductEnum.TYPE_4.getValue())){//TODO 促销单品
             map.put("list",storeProductService.getList(1,20,3));
         }
 
@@ -134,7 +136,9 @@ public class StoreProductController extends BaseController {
 
         YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
         String userType = userInfo.getUserType();
-        if(!userType.equals("routine")) userType = "H5";
+        if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
+            userType = AppFromEnum.H5.getValue();
+        }
         String name = id+"_"+uid + "_"+userType+"_product_detail_wap.jpg";
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
         String fileDir = path+"qrcode"+ File.separator;
@@ -143,7 +147,7 @@ public class StoreProductController extends BaseController {
         if(ObjectUtil.isNull(attachment)){
             //生成二维码
             File file = FileUtil.mkdir(new File(fileDir));
-            if(userType.equals("routine")){
+            if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
                 //下载图片
                 siteUrl = siteUrl+"/product/";
                 QrCodeUtil.generate(siteUrl+"?productId="+id+"&spread="+uid, 180, 180,
@@ -165,7 +169,7 @@ public class StoreProductController extends BaseController {
             routineQrcodeUrl = apiUrl + "/api/file/" + attachment.getSattDir();
         }
 
-        if(userType.equals("routine")){
+        if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
             productDTO.getStoreInfo().setCodeBase(routineQrcodeUrl);
         }else{
             try {
