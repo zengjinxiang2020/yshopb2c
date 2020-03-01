@@ -14,8 +14,9 @@ import co.yixiang.modules.shop.service.YxUserService;
 import co.yixiang.modules.shop.service.YxWechatUserService;
 import co.yixiang.modules.shop.service.dto.YxUserDTO;
 import co.yixiang.modules.shop.service.dto.YxWechatUserDTO;
+import co.yixiang.mp.config.WxPayConfiguration;
+import co.yixiang.mp.service.YxPayService;
 import co.yixiang.utils.OrderUtil;
-import co.yixiang.utils.RedisUtil;
 import com.github.binarywang.wxpay.bean.entpay.EntPayRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
@@ -42,17 +43,17 @@ public class UserExtractController {
     private final YxUserExtractService yxUserExtractService;
     private final  YxUserService yxUserService;
     private final YxUserBillService yxUserBillService;
-    private final WxPayService wxPayService;
     private final YxWechatUserService wechatUserService;
+    private final YxPayService payService;
 
-    public UserExtractController(YxUserExtractService yxUserExtractService, YxUserService yxUserService,
-                                 YxUserBillService yxUserBillService, WxPayService wxPayService,
-                                 YxWechatUserService wechatUserService) {
+    public UserExtractController(YxUserExtractService yxUserExtractService,YxUserService yxUserService,
+                                 YxUserBillService yxUserBillService,YxWechatUserService wechatUserService,
+                                 YxPayService payService) {
         this.yxUserExtractService = yxUserExtractService;
         this.yxUserService = yxUserService;
         this.yxUserBillService = yxUserBillService;
-        this.wxPayService = wxPayService;
         this.wechatUserService = wechatUserService;
+        this.payService = payService;
     }
 
     @Log("查询")
@@ -110,27 +111,10 @@ public class UserExtractController {
         if(!isTest){
             YxWechatUserDTO wechatUser =  wechatUserService.findById(resources.getUid());
             if(ObjectUtil.isNotNull(wechatUser)){
-                String apiUrl = RedisUtil.get("api_url");
-                if(StrUtil.isBlank(apiUrl)) throw new BadRequestException("请配置api地址");
-                //读取redis配置
-                String appId = RedisUtil.get("wxpay_appId");
-                String mchId = RedisUtil.get("wxpay_mchId");
-                if(StrUtil.isBlank(appId) || StrUtil.isBlank(mchId)){
-                    throw new BadRequestException("请配置微信支付");
-                }
-                EntPayRequest entPayRequest = new EntPayRequest();
                 try {
-                    entPayRequest.setAppid(appId);
-                    entPayRequest.setMchId(mchId);
-                    entPayRequest.setOpenid(wechatUser.getOpenid());
-                    entPayRequest.setPartnerTradeNo(resources.getId().toString());
-                    entPayRequest.setCheckName("FORCE_CHECK");
-                    entPayRequest.setReUserName(resources.getRealName());
-                    entPayRequest.setAmount(resources.getExtractPrice()
-                            .multiply(new BigDecimal(100)).intValue());
-                    entPayRequest.setDescription("佣金提现");
-                    entPayRequest.setSpbillCreateIp("127.0.0.1");
-                    wxPayService.getEntPayService().entPay(entPayRequest);
+                    payService.entPay(wechatUser.getOpenid(),resources.getId().toString(),
+                            resources.getRealName(),
+                            resources.getExtractPrice().multiply(new BigDecimal(100)).intValue());
                 } catch (WxPayException e) {
                     throw new BadRequestException(e.getMessage());
                 }
