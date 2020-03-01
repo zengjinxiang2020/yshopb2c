@@ -8,11 +8,25 @@
  */
 package co.yixiang.modules.user.web.controller;
 
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.exception.ErrorRequestException;
+import co.yixiang.modules.order.service.YxPayService;
+import co.yixiang.modules.shop.service.YxSystemConfigService;
+import co.yixiang.modules.user.entity.YxUser;
+import co.yixiang.modules.user.entity.YxWechatUser;
 import co.yixiang.modules.user.service.YxUserRechargeService;
+import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.modules.user.service.YxWechatUserService;
 import co.yixiang.modules.user.web.param.RechargeParam;
 import co.yixiang.utils.SecurityUtils;
+import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
+import com.github.binarywang.wxpay.exception.WxPayException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +37,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -41,6 +57,9 @@ import java.util.Map;
 public class UserRechargeController extends BaseController {
 
     private final YxUserRechargeService userRechargeService;
+    private final YxSystemConfigService systemConfigService;
+    private final YxPayService payService;
+    private final YxWechatUserService wechatUserService;
 
     /**
      * 公众号充值/H5充值
@@ -49,9 +68,41 @@ public class UserRechargeController extends BaseController {
     @ApiOperation(value = "公众号充值/H5充值",notes = "公众号充值/H5充值",response = ApiResult.class)
     public ApiResult<Map<String,Object>> add(@Valid @RequestBody RechargeParam param){
         int uid = SecurityUtils.getUserId().intValue();
+        String money = systemConfigService.getData("store_user_min_recharge");
+        Double newMoney = 0d;
+        if(StrUtil.isNotEmpty(money)) newMoney = Double.valueOf(money);
+        if(newMoney > param.getPrice())  throw new ErrorRequestException("充值金额不能低于"+newMoney);
 
         Map<String,Object> map = new LinkedHashMap<>();
-        map.put("id",null);
+        map.put("type",param.getFrom());
+
+        //生成分布式唯一值
+        String orderSn = IdUtil.getSnowflake(0,0).nextIdStr();
+        BigDecimal bigDecimal = new BigDecimal(100);
+        int price = bigDecimal.multiply(BigDecimal.valueOf(param.getPrice())).intValue();
+        try{
+            if(param.getFrom().equals("weixinh5")){
+                WxPayMwebOrderResult result = payService.wxH5Pay(orderSn,"H5充值", price,2);
+                map.put("data",result.getMwebUrl());
+            }else{
+                YxWechatUser wechatUser = wechatUserService.getById(uid);
+                if(ObjectUtil.isNull(wechatUser)) throw new ErrorRequestException("用户错误");
+                WxPayMpOrderResult result = payService.wxPay(orderSn,wechatUser.getOpenid(),
+                        "H5充值", price,2);
+                Map<String,String> jsConfig = new HashMap<>();
+                jsConfig.put("appId",result.getAppId());
+                jsConfig.put("timeStamp",result.getTimeStamp());
+                jsConfig.put("nonceStr",result.getNonceStr());
+                jsConfig.put("package",result.getPackageValue());
+                jsConfig.put("signType",result.getSignType());
+                jsConfig.put("paySign",result.getPaySign());
+                map.put("data",jsConfig);
+            }
+        }catch  (WxPayException e){
+            return ApiResult.fail(e.getMessage());
+        }
+
+
         return ApiResult.ok(map);
     }
 

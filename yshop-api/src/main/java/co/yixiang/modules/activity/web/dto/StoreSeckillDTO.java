@@ -22,7 +22,7 @@ public class StoreSeckillDTO implements Serializable {
 
     private YxStoreProductReplyQueryVo reply;
 
-    private Integer replyCount = 0;
+    private Integer replyCount;
 
     private YxStoreSeckillQueryVo storeInfo;
 

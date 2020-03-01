@@ -1049,7 +1049,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         BigDecimal bigDecimal = new BigDecimal(100);
 
         return payService.wxH5Pay(orderId,"H5商品购买",
-                bigDecimal.multiply(orderInfo.getPayPrice()).intValue());
+                bigDecimal.multiply(orderInfo.getPayPrice()).intValue(),1);
     }
 
 
@@ -1077,7 +1077,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         BigDecimal bigDecimal = new BigDecimal(100);
 
         return payService.wxPay(orderId,wechatUser.getRoutineOpenid(),"小程序商品购买",
-                bigDecimal.multiply(orderInfo.getPayPrice()).intValue());
+                bigDecimal.multiply(orderInfo.getPayPrice()).intValue(),1);
     }
 
 
@@ -1101,7 +1101,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         BigDecimal bigDecimal = new BigDecimal(100);
 
         return payService.wxPay(orderId,wechatUser.getOpenid(),"公众号商品购买",
-                bigDecimal.multiply(orderInfo.getPayPrice()).intValue());
+                bigDecimal.multiply(orderInfo.getPayPrice()).intValue(),1);
 
     }
 

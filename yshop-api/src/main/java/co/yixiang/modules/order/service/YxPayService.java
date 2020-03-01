@@ -37,7 +37,7 @@ public class YxPayService {
      * @throws WxPayException
      */
     public WxPayMpOrderResult wxPay(String orderId, String openId, String body,
-                                    Integer totalFee) throws WxPayException {
+                                    Integer totalFee,int type) throws WxPayException {
 
         String apiUrl = systemConfigService.getData("api_url");
         if (StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
@@ -51,7 +51,11 @@ public class YxPayService {
         orderRequest.setOutTradeNo(orderId);
         orderRequest.setTotalFee(totalFee);
         orderRequest.setSpbillCreateIp("127.0.0.1");
-        orderRequest.setNotifyUrl(apiUrl + "/api/wechat/notify");
+        if(type == 2){
+            orderRequest.setNotifyUrl(apiUrl + "/api/wechat/renotify");
+        }else{
+            orderRequest.setNotifyUrl(apiUrl + "/api/wechat/notify");
+        }
 
 
         WxPayMpOrderResult orderResult = wxPayService.createOrder(orderRequest);
@@ -73,7 +77,7 @@ public class YxPayService {
      * @throws WxPayException
      */
     public WxPayMwebOrderResult wxH5Pay(String orderId, String body,
-                                        Integer totalFee) throws WxPayException {
+                                        Integer totalFee,int type) throws WxPayException {
 
         String apiUrl = systemConfigService.getData("api_url");
         if (StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
@@ -86,8 +90,11 @@ public class YxPayService {
         orderRequest.setOutTradeNo(orderId);
         orderRequest.setTotalFee(totalFee);
         orderRequest.setSpbillCreateIp("127.0.0.1");
-        orderRequest.setNotifyUrl(apiUrl + "/api/wechat/notify");
-
+        if(type == 2){
+            orderRequest.setNotifyUrl(apiUrl + "/api/wechat/renotify");
+        }else{
+            orderRequest.setNotifyUrl(apiUrl + "/api/wechat/notify");
+        }
 
         WxPayMwebOrderResult orderResult = wxPayService.createOrder(orderRequest);
 
