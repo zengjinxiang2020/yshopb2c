@@ -18,4 +18,6 @@ public class RechargeParam  implements Serializable {
     @NotNull(message = "金额必填")
     @Min(value = 1,message = "充值金额不能低于1")
     private Double price;
+
+    private String orderSn;
 }

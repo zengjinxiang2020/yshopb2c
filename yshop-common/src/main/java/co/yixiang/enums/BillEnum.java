@@ -18,6 +18,7 @@ public enum BillEnum {
 	STATUS_2(2,"无效");
 
 
+
 	private Integer value;
 	private String desc;
 

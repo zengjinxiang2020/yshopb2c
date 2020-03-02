@@ -31,6 +31,9 @@ public class YxUserRecharge extends BaseEntity {
     @ApiModelProperty(value = "充值用户UID")
     private Integer uid;
 
+    @ApiModelProperty(value = "充值用户")
+    private String nickname;
+
     @ApiModelProperty(value = "订单号")
     private String orderId;
 

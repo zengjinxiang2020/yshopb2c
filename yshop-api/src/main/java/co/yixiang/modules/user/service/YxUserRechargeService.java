@@ -27,7 +27,12 @@ import java.io.Serializable;
  */
 public interface YxUserRechargeService extends BaseService<YxUserRecharge> {
 
+    void updateRecharge(YxUserRecharge userRecharge);
+
+    YxUserRecharge getInfoByOrderId(String orderId);
+
     void addRecharge(RechargeParam param,int uid);
+
 
     /**
      * 根据ID获取查询对象

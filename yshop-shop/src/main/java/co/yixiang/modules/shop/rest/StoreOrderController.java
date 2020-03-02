@@ -20,6 +20,7 @@ import co.yixiang.modules.shop.service.YxWechatUserService;
 import co.yixiang.modules.shop.service.dto.YxWechatUserDTO;
 import co.yixiang.mp.domain.YxWechatTemplate;
 import co.yixiang.mp.service.WxMpTemplateMessageService;
+import co.yixiang.mp.service.YxTemplateService;
 import co.yixiang.mp.service.YxWechatTemplateService;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
@@ -56,11 +57,13 @@ public class StoreOrderController {
     private final WxMpTemplateMessageService templateMessageService;
     private final YxWechatTemplateService yxWechatTemplateService;
     private final RedisTemplate<String, String> redisTemplate;
+    private YxTemplateService templateService;
 
     public StoreOrderController(YxStoreOrderService yxStoreOrderService, YxStoreOrderStatusService yxStoreOrderStatusService,
                                 YxExpressService yxExpressService, YxWechatUserService wechatUserService, WxMpTemplateMessageService templateMessageService,
                                 YxWechatTemplateService yxWechatTemplateService,
-                                RedisTemplate<String, String> redisTemplate) {
+                                RedisTemplate<String, String> redisTemplate,
+                                YxTemplateService templateService) {
         this.yxStoreOrderService = yxStoreOrderService;
         this.yxStoreOrderStatusService = yxStoreOrderStatusService;
         this.yxExpressService = yxExpressService;
@@ -68,6 +71,7 @@ public class StoreOrderController {
         this.templateMessageService = templateMessageService;
         this.yxWechatTemplateService = yxWechatTemplateService;
         this.redisTemplate = redisTemplate;
+        this.templateService = templateService;
     }
 
     @GetMapping(value = "/data/count")
@@ -192,26 +196,15 @@ public class StoreOrderController {
         yxStoreOrderStatusService.create(storeOrderStatus);
 
         //模板消息通知
-        String siteUrl = RedisUtil.get("site_url");
         try {
             YxWechatUserDTO wechatUser = wechatUserService.findById(resources.getUid());
             if (ObjectUtil.isNotNull(wechatUser)) {
                 if (StrUtil.isNotBlank(wechatUser.getOpenid())) {
-                    YxWechatTemplate WechatTemplate = yxWechatTemplateService
-                            .findByTempkey("OPENTM200565259");
-                    Map<String, String> map = new HashMap<>();
-                    map.put("first", "亲，宝贝已经启程了，好想快点来到你身边。");
-                    map.put("keyword1", resources.getOrderId());//订单号
-                    map.put("keyword2", expressDTO.getName());
-                    map.put("keyword3", resources.getDeliveryId());
-                    map.put("remark", "yshop电商系统为你服务！");
-                    templateMessageService.sendWxMpTemplateMessage(wechatUser.getOpenid()
-                            , WechatTemplate.getTempid(),
-                            siteUrl + "/order/detail/" + resources.getOrderId(), map);
+                    templateService.deliverySuccessNotice(resources.getOrderId(),
+                            expressDTO.getName(),resources.getDeliveryId(),wechatUser.getOpenid());
                 } else if (StrUtil.isNotBlank(wechatUser.getRoutineOpenid())) {
                     //todo 小程序通知
                 }
-
             }
         } catch (Exception e) {
             log.info("当前用户不是微信用户不能发送模板消息哦!");
@@ -235,26 +228,16 @@ public class StoreOrderController {
         yxStoreOrderService.refund(resources);
 
         //模板消息通知
-        String siteUrl = RedisUtil.get("site_url");
         try {
             YxWechatUserDTO wechatUser = wechatUserService.findById(resources.getUid());
             if (ObjectUtil.isNotNull(wechatUser)) {
                 if (StrUtil.isNotBlank(wechatUser.getOpenid())) {
-                    YxWechatTemplate WechatTemplate = yxWechatTemplateService
-                            .findByTempkey("OPENTM410119152");
-                    Map<String, String> map = new HashMap<>();
-                    map.put("first", "您在yshop的订单退款申请被通过，钱款将很快还至您的支付账户。");
-                    map.put("keyword1", resources.getOrderId());//订单号
-                    map.put("keyword2", resources.getPayPrice().toString());
-                    map.put("keyword3", OrderUtil.stampToDate(resources.getAddTime().toString()));
-                    map.put("remark", "yshop电商系统为你服务！");
-                    templateMessageService.sendWxMpTemplateMessage(wechatUser.getOpenid()
-                            , WechatTemplate.getTempid(),
-                            siteUrl + "/order/detail/" + resources.getOrderId(), map);
+                    templateService.refundSuccessNotice(resources.getOrderId(),
+                            resources.getPayPrice().toString(),wechatUser.getOpenid(),
+                            OrderUtil.stampToDate(resources.getAddTime().toString()));
                 } else if (StrUtil.isNotBlank(wechatUser.getRoutineOpenid())) {
                     //todo 小程序通知
                 }
-
             }
         } catch (Exception e) {
             log.info("当前用户不是微信用户不能发送模板消息哦!");

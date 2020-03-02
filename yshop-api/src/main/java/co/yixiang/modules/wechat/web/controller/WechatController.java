@@ -12,11 +12,16 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.enums.BillDetailEnum;
+import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
+import co.yixiang.modules.user.entity.YxUserRecharge;
+import co.yixiang.modules.user.service.YxUserRechargeService;
 import co.yixiang.mp.config.WxMpConfiguration;
+import co.yixiang.mp.config.WxPayConfiguration;
 import co.yixiang.utils.RedisUtil;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
@@ -53,9 +58,9 @@ import java.util.Map;
 @Api(value = "微信模块", tags = "微信:微信模块", description = "微信模块")
 public class WechatController extends BaseController {
 
-    private final WxPayService wxPayService;
     private final YxStoreOrderService orderService;
     private final YxSystemConfigService systemConfigService;
+    private final YxUserRechargeService userRechargeService;
 
 
     /**
@@ -95,6 +100,7 @@ public class WechatController extends BaseController {
     @ApiOperation(value = "微信支付回调",notes = "微信支付回调")
     public String notify(@RequestBody String xmlData) {
         try {
+            WxPayService wxPayService = WxPayConfiguration.getPayService();
             WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
             String orderId = notifyResult.getOutTradeNo();
             YxStoreOrderQueryVo orderInfo = orderService.getOrderInfo(orderId,0);
@@ -103,6 +109,44 @@ public class WechatController extends BaseController {
             }
 
             orderService.paySuccess(orderInfo.getOrderId(),"weixin");
+
+            return WxPayNotifyResponse.success("处理成功!");
+        } catch (WxPayException e) {
+            log.error(e.getMessage());
+            return WxPayNotifyResponse.fail(e.getMessage());
+        }
+
+    }
+
+    /**
+     * 微信支付充值回调
+     */
+    @AnonymousAccess
+    @PostMapping("/wechat/renotify")
+    @ApiOperation(value = "微信支付充值回调",notes = "微信支付充值回调")
+    public String renotify(@RequestBody String xmlData) {
+        try {
+            WxPayService wxPayService = WxPayConfiguration.getPayService();
+            WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
+            String orderId = notifyResult.getOutTradeNo();
+            String attach = notifyResult.getAttach();
+            if(BillDetailEnum.TYPE_3.getValue().equals(attach)){
+                YxStoreOrderQueryVo orderInfo = orderService.getOrderInfo(orderId,0);
+                if(orderInfo == null) return WxPayNotifyResponse.success("处理成功!");
+                if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(orderInfo.getPaid())){
+                    return WxPayNotifyResponse.success("处理成功!");
+                }
+                orderService.paySuccess(orderInfo.getOrderId(),"weixin");
+            }else if(BillDetailEnum.TYPE_1.getValue().equals(attach)){
+                //处理充值
+                YxUserRecharge userRecharge = userRechargeService.getInfoByOrderId(orderId);
+                if(userRecharge == null) return WxPayNotifyResponse.success("处理成功!");
+                if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(userRecharge.getPaid())){
+                    return WxPayNotifyResponse.success("处理成功!");
+                }
+
+                userRechargeService.updateRecharge(userRecharge);
+            }
 
             return WxPayNotifyResponse.success("处理成功!");
         } catch (WxPayException e) {
@@ -123,6 +167,7 @@ public class WechatController extends BaseController {
     @PostMapping("/notify/refund")
     public String parseRefundNotifyResult(@RequestBody String xmlData) {
         try {
+            WxPayService wxPayService = WxPayConfiguration.getPayService();
             WxPayRefundNotifyResult result = wxPayService.parseRefundNotifyResult(xmlData);
             String orderId = result.getReqInfo().getOutTradeNo();
             Integer refundFee = result.getReqInfo().getRefundFee()/100;

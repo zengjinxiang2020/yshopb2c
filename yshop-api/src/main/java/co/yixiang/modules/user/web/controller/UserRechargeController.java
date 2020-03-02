@@ -14,6 +14,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.entity.YxUser;
@@ -48,7 +49,7 @@ import java.util.Map;
  * </p>
  *
  * @author hupeng
- * @since 2019-03-01
+ * @since 2020-03-01
  */
 @Slf4j
 @RestController
@@ -78,17 +79,22 @@ public class UserRechargeController extends BaseController {
 
         //生成分布式唯一值
         String orderSn = IdUtil.getSnowflake(0,0).nextIdStr();
+
+        param.setOrderSn(orderSn);
+        userRechargeService.addRecharge(param,uid);
+
         BigDecimal bigDecimal = new BigDecimal(100);
         int price = bigDecimal.multiply(BigDecimal.valueOf(param.getPrice())).intValue();
         try{
             if(param.getFrom().equals("weixinh5")){
-                WxPayMwebOrderResult result = payService.wxH5Pay(orderSn,"H5充值", price,2);
+                WxPayMwebOrderResult result = payService.wxH5Pay(orderSn,"H5充值", price,
+                        BillDetailEnum.TYPE_1.getValue());
                 map.put("data",result.getMwebUrl());
             }else{
                 YxWechatUser wechatUser = wechatUserService.getById(uid);
                 if(ObjectUtil.isNull(wechatUser)) throw new ErrorRequestException("用户错误");
                 WxPayMpOrderResult result = payService.wxPay(orderSn,wechatUser.getOpenid(),
-                        "H5充值", price,2);
+                        "公众号充值", price,BillDetailEnum.TYPE_1.getValue());
                 Map<String,String> jsConfig = new HashMap<>();
                 jsConfig.put("appId",result.getAppId());
                 jsConfig.put("timeStamp",result.getTimeStamp());

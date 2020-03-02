@@ -8,10 +8,19 @@
  */
 package co.yixiang.modules.user.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.enums.AppFromEnum;
+import co.yixiang.enums.BillEnum;
+import co.yixiang.enums.OrderInfoEnum;
+import co.yixiang.enums.PayTypeEnum;
+import co.yixiang.modules.user.entity.YxUser;
+import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.entity.YxUserRecharge;
+import co.yixiang.modules.user.mapper.YxUserMapper;
 import co.yixiang.modules.user.mapper.YxUserRechargeMapper;
+import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserRechargeService;
 import co.yixiang.modules.user.web.param.RechargeParam;
 import co.yixiang.modules.user.web.param.YxUserRechargeQueryParam;
@@ -19,6 +28,7 @@ import co.yixiang.modules.user.web.vo.YxUserRechargeQueryVo;
 import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +45,7 @@ import java.math.BigDecimal;
  * </p>
  *
  * @author hupeng
- * @since 2019-12-08
+ * @since 2020-03-02
  */
 @Slf4j
 @Service
@@ -44,21 +54,60 @@ import java.math.BigDecimal;
 public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMapper, YxUserRecharge> implements YxUserRechargeService {
 
     private final YxUserRechargeMapper yxUserRechargeMapper;
+    private final YxUserBillService billService;
+    private final YxUserMapper yxUserMapper;
 
+    @Override
+    public void updateRecharge(YxUserRecharge userRecharge) {
+        YxUser user = yxUserMapper.selectById(userRecharge.getUid());
+
+        //修改状态
+        userRecharge.setPaid(OrderInfoEnum.PAY_STATUS_1.getValue());
+        userRecharge.setPayTime(OrderUtil.getSecondTimestampTwo());
+        userRecharge.setNickname(user.getNickname());
+        yxUserRechargeMapper.updateById(userRecharge);
+
+        //增加流水
+        YxUserBill userBill = new YxUserBill();
+        userBill.setUid(userRecharge.getUid());
+        userBill.setTitle("用户余额充值");
+        userBill.setLinkId(userRecharge.getId().toString());
+        userBill.setCategory("now_money");
+        userBill.setType("recharge");
+        userBill.setNumber(userRecharge.getPrice());
+        userBill.setBalance(NumberUtil.add(userRecharge.getPrice(),user.getNowMoney()));
+        userBill.setMark("成功充值余额"+userRecharge.getPrice());
+        userBill.setStatus(BillEnum.STATUS_1.getValue());
+        userBill.setPm(BillEnum.PM_1.getValue());
+        userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
+        billService.save(userBill);
+
+        //update 余额
+        user.setNowMoney(NumberUtil.add(userRecharge.getPrice(),user.getNowMoney()));
+        yxUserMapper.updateById(user);
+    }
+
+    @Override
+    public YxUserRecharge getInfoByOrderId(String orderId) {
+        YxUserRecharge userRecharge = new YxUserRecharge();
+        userRecharge.setOrderId(orderId);
+
+        return yxUserRechargeMapper.selectOne(Wrappers.query(userRecharge));
+    }
 
     /**
-     * 充值(废弃掉)
+     * 充值
      * @param param
      */
     @Override
     public void addRecharge(RechargeParam param,int uid) {
         YxUserRecharge yxUserRecharge = new YxUserRecharge();
-        String orderId = "re_"+OrderUtil.orderSn();
-        yxUserRecharge.setOrderId(orderId);
+
+        yxUserRecharge.setOrderId(param.getOrderSn());
         yxUserRecharge.setUid(uid);
         yxUserRecharge.setPrice(BigDecimal.valueOf(param.getPrice()));
-        yxUserRecharge.setRechargeType("weixin");
-        yxUserRecharge.setPaid(0);
+        yxUserRecharge.setRechargeType(PayTypeEnum.WEIXIN.getValue());
+        yxUserRecharge.setPaid(OrderInfoEnum.PAY_STATUS_0.getValue());
         yxUserRecharge.setAddTime(OrderUtil.getSecondTimestampTwo());
 
         yxUserRechargeMapper.insert(yxUserRecharge);
