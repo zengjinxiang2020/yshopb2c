@@ -44,6 +44,11 @@ public interface ShopConstants {
 	 */
 	String YSHOP_DEFAULT_AVATAR = "https://image.dayouqiantu.cn/5dc2c7f3a104c.png";
 
+	/**
+	 * 腾讯地图地址解析
+	 */
+	String QQ_MAP_URL = "https://apis.map.qq.com/ws/geocoder/v1/";
+
 
 
 }
