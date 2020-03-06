@@ -2,6 +2,7 @@ package co.yixiang.modules.order.web.vo;
 
 import co.yixiang.modules.order.web.dto.StatusDTO;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
+import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -181,5 +182,11 @@ public class YxStoreOrderQueryVo implements Serializable {
     private Integer isRemind;
 
     private Integer isSystemDel;
+
+    private String code;
+
+    private String mapKey;
+
+    private YxSystemStoreQueryVo systemStore;
 
 }

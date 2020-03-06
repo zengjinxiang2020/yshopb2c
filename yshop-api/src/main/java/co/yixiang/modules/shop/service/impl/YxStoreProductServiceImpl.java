@@ -18,15 +18,13 @@ import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
 import co.yixiang.modules.shop.mapper.YxStoreProductAttrValueMapper;
 import co.yixiang.modules.shop.mapper.YxStoreProductMapper;
 import co.yixiang.modules.shop.mapping.YxStoreProductMap;
-import co.yixiang.modules.shop.service.YxStoreProductAttrService;
-import co.yixiang.modules.shop.service.YxStoreProductRelationService;
-import co.yixiang.modules.shop.service.YxStoreProductReplyService;
-import co.yixiang.modules.shop.service.YxStoreProductService;
+import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.web.dto.ProductDTO;
 import co.yixiang.modules.shop.web.param.YxStoreProductQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
 import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.utils.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -63,6 +61,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
     private final YxStoreProductRelationService relationService;
     private final YxStoreProductReplyService replyService;
     private final YxUserService userService;
+    private final YxSystemStoreService systemStoreService;
 
     private final YxStoreProductMap storeProductMap;
 
@@ -146,6 +145,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
         int replyCount = replyService.productReplyCount(id);
         productDTO.setReplyCount(replyCount);
         productDTO.setReplyChance(replyService.doReply(id,replyCount));//百分比
+
+        //门店
+        productDTO.setSystemStore(systemStoreService.getStoreInfo());
+        productDTO.setMapKey(RedisUtil.get("store_self_mention"));
 
         return productDTO;
     }

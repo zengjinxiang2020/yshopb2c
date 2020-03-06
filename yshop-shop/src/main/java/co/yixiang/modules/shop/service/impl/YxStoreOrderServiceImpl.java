@@ -3,6 +3,7 @@ package co.yixiang.modules.shop.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.EntityExistException;
 import co.yixiang.modules.activity.domain.YxStorePink;
@@ -166,7 +167,8 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
     }
 
     @Override
-    public String orderType(int id,int pinkId, int combinationId,int seckillId,int bargainId) {
+    public String orderType(int id,int pinkId, int combinationId,int seckillId,
+                            int bargainId,int shippingType) {
         String str = "[普通订单]";
         if(pinkId > 0 || combinationId > 0){
             YxStorePink storePink = storePinkRepository.findByOrderIdKey(id);
@@ -194,6 +196,7 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
         }else if(bargainId > 0){
             str = "[砍价订单]";
         }
+        if(shippingType == 2) str = "[核销订单]";
         return str;
     }
 
@@ -234,7 +237,8 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
 
             yxStoreOrderDTO.setPinkName(orderType(yxStoreOrder.getId()
                     ,yxStoreOrder.getPinkId(),yxStoreOrder.getCombinationId()
-                    ,yxStoreOrder.getSeckillId(),yxStoreOrder.getBargainId()));
+                    ,yxStoreOrder.getSeckillId(),yxStoreOrder.getBargainId(),
+                    yxStoreOrder.getShippingType()));
 
             List<StoreOrderCartInfo> cartInfos = yxStoreOrderCartInfoRepository
                     .findByOid(yxStoreOrder.getId());

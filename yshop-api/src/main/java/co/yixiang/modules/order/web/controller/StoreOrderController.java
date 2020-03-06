@@ -8,18 +8,23 @@
  */
 package co.yixiang.modules.order.web.controller;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.OrderInfoEnum;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.express.ExpressService;
 import co.yixiang.express.dao.ExpressInfo;
 import co.yixiang.modules.activity.entity.YxStoreBargainUser;
 import co.yixiang.modules.activity.service.YxStoreBargainUserService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
+import co.yixiang.modules.activity.web.vo.YxStorePinkQueryVo;
 import co.yixiang.modules.order.entity.YxStoreOrder;
 import co.yixiang.modules.order.entity.YxStoreOrderCartInfo;
 import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
@@ -29,17 +34,18 @@ import co.yixiang.modules.order.web.dto.*;
 import co.yixiang.modules.order.web.param.*;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.shop.entity.YxStoreProductReply;
-import co.yixiang.modules.shop.service.YxStoreCartService;
-import co.yixiang.modules.shop.service.YxStoreCouponUserService;
-import co.yixiang.modules.shop.service.YxStoreProductReplyService;
-import co.yixiang.modules.shop.service.YxSystemConfigService;
+import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
+import co.yixiang.modules.user.entity.YxSystemAttachment;
+import co.yixiang.modules.user.service.YxSystemAttachmentService;
 import co.yixiang.modules.user.service.YxUserAddressService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.OrderUtil;
+import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -48,9 +54,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -81,8 +89,13 @@ public class StoreOrderController extends BaseController {
     private final YxStorePinkService storePinkService;
     private final ExpressService expressService;
     private final YxStoreBargainUserService storeBargainUserService;
+    private final YxSystemStoreService systemStoreService;
+    private final YxSystemAttachmentService systemAttachmentService;
 
     private static Lock lock = new ReentrantLock(false);
+
+    @Value("${file.path}")
+    private String path;
 
 
     /**
@@ -157,6 +170,9 @@ public class StoreOrderController extends BaseController {
 
 
         confirmOrderDTO.setUserInfo(userService.getYxUserById(uid));
+
+        //门店
+        confirmOrderDTO.setSystemStore(systemStoreService.getStoreInfo());
 
         return ApiResult.ok(confirmOrderDTO);
     }
@@ -413,7 +429,34 @@ public class StoreOrderController extends BaseController {
         if(ObjectUtil.isNull(storeOrder)){
             return ApiResult.fail("订单不存在");
         }
-        //todo 门店核销
+        String mapKey = RedisUtil.get("tengxun_map_key");
+        if(StrUtil.isBlank(mapKey)) return ApiResult.fail("请配置腾讯地图key");
+        //门店
+        if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(storeOrder.getShippingType())){
+            String apiUrl = systemConfigService.getData("api_url");
+            if(StrUtil.isEmpty(apiUrl)){
+                return ApiResult.fail("未配置api地址");
+            }
+            //生成二维码
+            String name = storeOrder.getVerifyCode()+"_yshop.jpg";
+            YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
+            String fileDir = path+"qrcode"+ File.separator;
+            String qrcodeUrl = "";
+            if(ObjectUtil.isNull(attachment)){
+                //生成二维码
+                File file = FileUtil.mkdir(new File(fileDir));
+                QrCodeUtil.generate(storeOrder.getVerifyCode(), 180, 180,
+                        FileUtil.file(fileDir+name));
+                systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
+                        fileDir+name,"qrcode/"+name);
+                qrcodeUrl = apiUrl + "/api/file/qrcode/"+name;
+            }else{
+                qrcodeUrl = apiUrl + "/api/file/" + attachment.getSattDir();
+            }
+            storeOrder.setCode(qrcodeUrl);
+            storeOrder.setMapKey(mapKey);
+            storeOrder.setSystemStore(systemStoreService.getStoreInfo());
+        }
 
         return ApiResult.ok(storeOrderService.handleOrder(storeOrder));
     }
@@ -609,7 +652,7 @@ public class StoreOrderController extends BaseController {
         ArrayList<String> list = new ArrayList<>();
         list.add("收货地址填错了");
         list.add("与描述不符");
-        list.add("信了息填错，重新拍\\");
+        list.add("信息填错了，重新拍");
         list.add("收到商品损坏了");
         list.add("未按预定时间发货");
         list.add("其它原因");
@@ -658,6 +701,40 @@ public class StoreOrderController extends BaseController {
         if(!expressInfo.isSuccess()) return ApiResult.fail(expressInfo.getReason());
         return ApiResult.ok(expressInfo);
     }
+
+    /**
+     * 订单核销
+     */
+    @PostMapping("/order/order_verific")
+    @ApiOperation(value = "订单核销",notes = "订单核销")
+    public ApiResult<Object> orderVerify( @RequestBody OrderVerifyParam param){
+        YxStoreOrder storeOrder = new YxStoreOrder();
+        storeOrder.setVerifyCode(param.getVerifyCode());
+        storeOrder.setIsDel(OrderInfoEnum.CANCEL_STATUS_0.getValue());
+        storeOrder.setPaid(OrderInfoEnum.PAY_STATUS_1.getValue());
+        storeOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_0.getValue());
+
+        YxStoreOrder order = storeOrderService.getOne(Wrappers.query(storeOrder));
+        if(order == null) return ApiResult.fail("核销的订单不存在或未支付或已退款");
+        if(order.getStatus() > 0)  return ApiResult.fail("订单已经核销");
+
+        if(order.getCombinationId() > 0 && order.getPinkId() > 0){
+            YxStorePinkQueryVo storePink = storePinkService.getYxStorePinkById(order.getPinkId());
+            if(!OrderInfoEnum.PINK_STATUS_2.getValue().equals(storePink.getStatus())){
+                return ApiResult.fail("拼团订单暂未成功无法核销");
+            }
+        }
+
+        if(OrderInfoEnum.CONFIRM_STATUS_0.getValue().equals(param.getIsConfirm())){
+            return ApiResult.ok(order);
+        }
+
+        order.setStatus(OrderInfoEnum.STATUS_2.getValue());
+        storeOrderService.updateById(order);
+
+        return ApiResult.ok("核销成功");
+    }
+
 
 
 }

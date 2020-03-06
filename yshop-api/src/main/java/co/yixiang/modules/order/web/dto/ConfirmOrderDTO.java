@@ -2,6 +2,7 @@ package co.yixiang.modules.order.web.dto;
 
 import co.yixiang.modules.shop.entity.YxStoreCouponUser;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
+import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import co.yixiang.modules.user.entity.YxUserAddress;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import lombok.Data;
@@ -46,7 +47,8 @@ public class ConfirmOrderDTO implements Serializable {
     private Integer storeSelfMention = 1;
 
     //店铺信息
-    private List systemStore;
+    private YxSystemStoreQueryVo systemStore;
+
 
     private YxStoreCouponUser usableCoupon;
 

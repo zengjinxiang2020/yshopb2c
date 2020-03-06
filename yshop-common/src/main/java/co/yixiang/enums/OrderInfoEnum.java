@@ -20,7 +20,7 @@ public enum OrderInfoEnum {
 	PAY_STATUS_0(0,"未支付"),
 	PAY_STATUS_1(1,"已支付"),
 
-	REFUND_STATUS_0(0,"未支付"),
+	REFUND_STATUS_0(0,"正常"),
 	REFUND_STATUS_1(1,"退款中"),
 	REFUND_STATUS_2(2,"已退款"),
 
@@ -28,8 +28,19 @@ public enum OrderInfoEnum {
 	BARGAIN_STATUS_2(2,"参与失败"),
 	BARGAIN_STATUS_3(3,"参与成功"),
 
+	PINK_STATUS_1(1,"进行中"),
+	PINK_STATUS_2(2,"已完成"),
+	PINK_STATUS_3(3,"未完成"),
+
 	CANCEL_STATUS_0(0,"正常"),
-	CANCEL_STATUS_1(1,"已取消");
+	CANCEL_STATUS_1(1,"已取消"),
+
+	CONFIRM_STATUS_0(0,"正常"),
+	CONFIRM_STATUS_1(1,"确认"),
+
+
+	SHIPPIING_TYPE_1(1,"快递"),
+	SHIPPIING_TYPE_2(2,"门店自提");
 
 
 

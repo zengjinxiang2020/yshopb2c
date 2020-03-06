@@ -74,7 +74,7 @@ public class SystemStoreController {
     @ApiOperation("设置门店信息")
     @PreAuthorize("@el.check('yxSystemStore:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody YxSystemStore resources){
-
+        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         if(resources.getId() == null){
             resources.setAddTime(OrderUtil.getSecondTimestampTwo());
             yxSystemStoreService.create(resources);

@@ -48,11 +48,9 @@ import co.yixiang.modules.shop.entity.YxStoreCart;
 import co.yixiang.modules.shop.entity.YxStoreCouponUser;
 import co.yixiang.modules.shop.mapper.YxStoreCartMapper;
 import co.yixiang.modules.shop.mapper.YxStoreCouponUserMapper;
-import co.yixiang.modules.shop.service.YxStoreCouponUserService;
-import co.yixiang.modules.shop.service.YxStoreProductReplyService;
-import co.yixiang.modules.shop.service.YxStoreProductService;
-import co.yixiang.modules.shop.service.YxSystemConfigService;
+import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
+import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.entity.YxWechatUser;
@@ -148,6 +146,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     private YxExpressService expressService;
     @Autowired
     private AlipayService alipayService;
+    @Autowired
+    private YxSystemStoreService systemStoreService;
 
     @Autowired
     private OrderMap orderMap;
@@ -872,8 +872,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             statusDTO.set_type("-2");
             statusDTO.set_title("已退款");
         }else if(order.getStatus() == 0){
-            //todo 拼团
-            //todo 店铺核销
+            // 拼团
             if(order.getPinkId() > 0){
                 if(pinkService.pinkIngCount(order.getPinkId()) > 0){
                     statusDTO.set_class("state-nfh");
@@ -887,10 +886,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
                     statusDTO.set_title("未发货");
                 }
             }else{
-                statusDTO.set_class("state-nfh");
-                statusDTO.set_msg("商家未发货,请耐心等待");
-                statusDTO.set_type("1");
-                statusDTO.set_title("未发货");
+                if(OrderInfoEnum.SHIPPIING_TYPE_1.getValue().equals(order.getShippingType())){
+                    statusDTO.set_class("state-nfh");
+                    statusDTO.set_msg("商家未发货,请耐心等待");
+                    statusDTO.set_type("1");
+                    statusDTO.set_title("未发货");
+                }else{
+                    statusDTO.set_class("state-nfh");
+                    statusDTO.set_msg("待核销,请到核销点进行核销");
+                    statusDTO.set_type("1");
+                    statusDTO.set_title("待核销");
+                }
             }
 
         }else if(order.getStatus() == 1){
@@ -1136,10 +1142,21 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         Double payPostage = cacheDTO.getPriceGroup().getStorePostage();
         OtherDTO other = cacheDTO.getOther();
         YxUserAddressQueryVo userAddress = null;
-        if(param.getShippingType() == 1){
+        if(OrderInfoEnum.SHIPPIING_TYPE_1.getValue().equals(param.getShippingType())){
             if(StrUtil.isEmpty(param.getAddressId())) throw new ErrorRequestException("请选择收货地址");
             userAddress = userAddressService.getYxUserAddressById(param.getAddressId());
             if(ObjectUtil.isNull(userAddress)) throw new ErrorRequestException("地址选择有误");
+        }else{ //门店
+            if(StrUtil.isBlank(param.getRealName()) || StrUtil.isBlank(param.getPhone())) {
+                throw new ErrorRequestException("请填写姓名和电话");
+            }
+            userAddress = new YxUserAddressQueryVo();
+            userAddress.setRealName(param.getRealName());
+            userAddress.setPhone(param.getPhone());
+            userAddress.setProvince("");
+            userAddress.setCity("");
+            userAddress.setDistrict("");
+            userAddress.setDetail("");
         }
 
         Integer totalNum = 0;
@@ -1168,10 +1185,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         }
 
 
-        //todo 门店等二期
+        //门店
 
-        if(param.getShippingType() == 1){
+        if(OrderInfoEnum.SHIPPIING_TYPE_1.getValue().equals(param.getShippingType())){
             payPrice = NumberUtil.add(payPrice,payPostage);
+        }else{
+            payPostage = 0d;
         }
 
         //优惠券
@@ -1281,6 +1300,13 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         storeOrder.setAddTime(OrderUtil.getSecondTimestampTwo());
         storeOrder.setUnique(key);
         storeOrder.setShippingType(param.getShippingType());
+        //处理门店
+        if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(param.getShippingType())){
+            YxSystemStoreQueryVo systemStoreQueryVo = systemStoreService.getStoreInfo();
+            if(systemStoreQueryVo == null ) throw new ErrorRequestException("暂无门店无法选择门店自提");
+            storeOrder.setVerifyCode(StrUtil.sub(orderSn,orderSn.length(),-12));
+            storeOrder.setStoreId(systemStoreQueryVo.getId());
+        }
 
         boolean res = save(storeOrder);
         if(!res) throw new ErrorRequestException("订单生成失败");
@@ -1352,8 +1378,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         Double payPrice = cacheDTO.getPriceGroup().getTotalPrice();
         Double payPostage = cacheDTO.getPriceGroup().getStorePostage();
 
+        //1-配送 2-到店
         if(shippingType == 1){
             payPrice = NumberUtil.add(payPrice,payPostage);
+        }else{
+            payPostage = 0d;
         }
 
         boolean deduction = false;//拼团秒杀砍价等

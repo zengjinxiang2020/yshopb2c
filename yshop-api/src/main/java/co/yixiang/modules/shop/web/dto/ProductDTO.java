@@ -5,6 +5,7 @@ import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
 import co.yixiang.modules.shop.web.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductReplyQueryVo;
+import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,8 +31,6 @@ public class ProductDTO extends QueryParam {
     //todo
     private List<YxStoreProductQueryVo> goodList = new ArrayList();
 
-    //todo
-    private String mapKay = "";
 
     //todo
     private Integer merId = 0;
@@ -53,8 +52,10 @@ public class ProductDTO extends QueryParam {
 
     private YxStoreProductQueryVo storeInfo;
 
-    //todo
-    private Map system_store = new LinkedHashMap<>();
+    private String mapKey;
+
+    //门店
+    private YxSystemStoreQueryVo systemStore;
 
     private Integer uid = 0;
 

@@ -32,6 +32,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.bean.WxJsapiSignature;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.message.WxMpXmlMessage;
@@ -87,42 +88,25 @@ public class WechatController extends BaseController {
     @ApiOperation(value = "jssdk配置",notes = "jssdk配置")
     public ApiResult<Object> jsConfig(@RequestParam(value = "url") String url) throws WxErrorException {
         WxMpService wxService = WxMpConfiguration.getWxMpService();
-        return ApiResult.ok(wxService.createJsapiSignature(url));
+        WxJsapiSignature jsapiSignature = wxService.createJsapiSignature(url);
+        Map<String,Object> map = new LinkedHashMap<>();
+
+        map.put("appId",jsapiSignature.getAppId());
+        map.put("jsApiList",new String[]{"updateAppMessageShareData","openLocation","scanQRCode","chooseWXPay"});
+        map.put("nonceStr",jsapiSignature.getNonceStr());
+        map.put("signature",jsapiSignature.getSignature());
+        map.put("timestamp",jsapiSignature.getTimestamp());
+        map.put("url",jsapiSignature.getUrl());
+        return ApiResult.ok(map);
     }
 
 
 
     /**
-     * 微信支付回调
+     * 微信支付/充值回调
      */
     @AnonymousAccess
     @PostMapping("/wechat/notify")
-    @ApiOperation(value = "微信支付回调",notes = "微信支付回调")
-    public String notify(@RequestBody String xmlData) {
-        try {
-            WxPayService wxPayService = WxPayConfiguration.getPayService();
-            WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
-            String orderId = notifyResult.getOutTradeNo();
-            YxStoreOrderQueryVo orderInfo = orderService.getOrderInfo(orderId,0);
-            if(orderInfo.getPaid() == 1){
-                return WxPayNotifyResponse.success("处理成功!");
-            }
-
-            orderService.paySuccess(orderInfo.getOrderId(),"weixin");
-
-            return WxPayNotifyResponse.success("处理成功!");
-        } catch (WxPayException e) {
-            log.error(e.getMessage());
-            return WxPayNotifyResponse.fail(e.getMessage());
-        }
-
-    }
-
-    /**
-     * 微信支付充值回调
-     */
-    @AnonymousAccess
-    @PostMapping("/wechat/renotify")
     @ApiOperation(value = "微信支付充值回调",notes = "微信支付充值回调")
     public String renotify(@RequestBody String xmlData) {
         try {

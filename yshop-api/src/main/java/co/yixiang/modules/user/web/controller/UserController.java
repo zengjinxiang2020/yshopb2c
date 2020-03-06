@@ -72,7 +72,6 @@ public class UserController extends BaseController {
     public ApiResult<Object> userInfo(){
         int uid = SecurityUtils.getUserId().intValue();
 
-        System.out.println("aa:"+uid);
         //update count
         yxUserService.setUserSpreadCount(uid);
         return ApiResult.ok(yxUserService.getYxUserById(uid));

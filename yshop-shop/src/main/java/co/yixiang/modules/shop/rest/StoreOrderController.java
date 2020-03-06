@@ -7,23 +7,24 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.exception.BadRequestException;
+import co.yixiang.modules.activity.service.YxStorePinkService;
+import co.yixiang.modules.activity.service.dto.YxStorePinkDTO;
 import co.yixiang.modules.shop.domain.YxStoreOrder;
 import co.yixiang.modules.shop.domain.YxStoreOrderStatus;
 import co.yixiang.modules.shop.service.YxExpressService;
 import co.yixiang.modules.shop.service.YxStoreOrderService;
 import co.yixiang.modules.shop.service.YxStoreOrderStatusService;
+import co.yixiang.modules.shop.service.YxWechatUserService;
 import co.yixiang.modules.shop.service.dto.YxExpressDTO;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderDTO;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderQueryCriteria;
-import co.yixiang.modules.shop.service.YxWechatUserService;
 import co.yixiang.modules.shop.service.dto.YxWechatUserDTO;
-import co.yixiang.mp.domain.YxWechatTemplate;
 import co.yixiang.mp.service.WxMpTemplateMessageService;
 import co.yixiang.mp.service.YxTemplateService;
 import co.yixiang.mp.service.YxWechatTemplateService;
 import co.yixiang.utils.OrderUtil;
-import co.yixiang.utils.RedisUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +36,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -54,24 +53,21 @@ public class StoreOrderController {
     private final YxStoreOrderStatusService yxStoreOrderStatusService;
     private final YxExpressService yxExpressService;
     private final YxWechatUserService wechatUserService;
-    private final WxMpTemplateMessageService templateMessageService;
-    private final YxWechatTemplateService yxWechatTemplateService;
     private final RedisTemplate<String, String> redisTemplate;
-    private YxTemplateService templateService;
+    private final YxTemplateService templateService;
+    private final YxStorePinkService  storePinkService;
 
     public StoreOrderController(YxStoreOrderService yxStoreOrderService, YxStoreOrderStatusService yxStoreOrderStatusService,
-                                YxExpressService yxExpressService, YxWechatUserService wechatUserService, WxMpTemplateMessageService templateMessageService,
-                                YxWechatTemplateService yxWechatTemplateService,
+                                YxExpressService yxExpressService, YxWechatUserService wechatUserService,
                                 RedisTemplate<String, String> redisTemplate,
-                                YxTemplateService templateService) {
+                                YxTemplateService templateService,YxStorePinkService storePinkService) {
         this.yxStoreOrderService = yxStoreOrderService;
         this.yxStoreOrderStatusService = yxStoreOrderStatusService;
         this.yxExpressService = yxExpressService;
         this.wechatUserService = wechatUserService;
-        this.templateMessageService = templateMessageService;
-        this.yxWechatTemplateService = yxWechatTemplateService;
         this.redisTemplate = redisTemplate;
         this.templateService = templateService;
+        this.storePinkService = storePinkService;
     }
 
     @GetMapping(value = "/data/count")
@@ -96,6 +92,7 @@ public class StoreOrderController {
                                            @RequestParam(name = "orderType") String orderType) {
 
 
+        criteria.setShippingType(1);//默认查询所有快递订单
         //订单状态查询
         if (StrUtil.isNotEmpty(orderStatus)) {
             switch (orderStatus) {
@@ -161,8 +158,12 @@ public class StoreOrderController {
                 case "4":
                     criteria.setNewBargainId(0);
                     break;
+                case "5":
+                    criteria.setShippingType(2);
+                    break;
             }
         }
+
 
         return new ResponseEntity(yxStoreOrderService.queryAll(criteria, pageable), HttpStatus.OK);
     }
@@ -215,6 +216,34 @@ public class StoreOrderController {
                 ShopConstants.REDIS_ORDER_OUTTIME_UNCONFIRM,resources.getId()));
         redisTemplate.opsForValue().set(redisKey, resources.getOrderId(),
                 ShopConstants.ORDER_OUTTIME_UNCONFIRM, TimeUnit.DAYS);
+
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @ApiOperation(value = "订单核销")
+    @PutMapping(value = "/yxStoreOrder/check")
+    @PreAuthorize("@el.check('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")
+    public ResponseEntity check(@Validated @RequestBody YxStoreOrder resources) {
+        if (StrUtil.isBlank(resources.getVerifyCode())) throw new BadRequestException("核销码不能为空");
+        YxStoreOrderDTO storeOrderDTO = yxStoreOrderService.findById(resources.getId());
+        if(!resources.getVerifyCode().equals(storeOrderDTO.getVerifyCode())){
+            throw new BadRequestException("核销码不对");
+        }
+        if(OrderInfoEnum.PAY_STATUS_0.getValue().equals(storeOrderDTO.getPaid())){
+            throw new BadRequestException("订单未支付");
+        }
+        if(storeOrderDTO.getStatus() > 0) throw new BadRequestException("订单已核销");
+
+        if(storeOrderDTO.getCombinationId() > 0 && storeOrderDTO.getPinkId() > 0){
+            YxStorePinkDTO storePinkDTO = storePinkService.findById(storeOrderDTO.getPinkId());
+            if(!OrderInfoEnum.PINK_STATUS_2.getValue().equals(storePinkDTO.getStatus())){
+                throw new BadRequestException("拼团订单暂未成功无法核销");
+            }
+        }
+
+        resources.setStatus(OrderInfoEnum.STATUS_2.getValue());
+        yxStoreOrderService.update(resources);
 
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);

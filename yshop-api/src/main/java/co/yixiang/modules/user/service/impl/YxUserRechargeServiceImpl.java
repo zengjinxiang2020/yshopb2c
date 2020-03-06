@@ -9,12 +9,11 @@
 package co.yixiang.modules.user.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
-import co.yixiang.enums.AppFromEnum;
-import co.yixiang.enums.BillEnum;
-import co.yixiang.enums.OrderInfoEnum;
-import co.yixiang.enums.PayTypeEnum;
+import co.yixiang.enums.*;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.entity.YxUserRecharge;
@@ -22,9 +21,12 @@ import co.yixiang.modules.user.mapper.YxUserMapper;
 import co.yixiang.modules.user.mapper.YxUserRechargeMapper;
 import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserRechargeService;
+import co.yixiang.modules.user.service.YxWechatUserService;
 import co.yixiang.modules.user.web.param.RechargeParam;
 import co.yixiang.modules.user.web.param.YxUserRechargeQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserRechargeQueryVo;
+import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
+import co.yixiang.mp.service.YxTemplateService;
 import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
@@ -32,6 +34,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,6 +59,8 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMap
     private final YxUserRechargeMapper yxUserRechargeMapper;
     private final YxUserBillService billService;
     private final YxUserMapper yxUserMapper;
+    private final YxWechatUserService wechatUserService;
+    private final YxTemplateService templateService;
 
     @Override
     public void updateRecharge(YxUserRecharge userRecharge) {
@@ -64,7 +69,6 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMap
         //修改状态
         userRecharge.setPaid(OrderInfoEnum.PAY_STATUS_1.getValue());
         userRecharge.setPayTime(OrderUtil.getSecondTimestampTwo());
-        userRecharge.setNickname(user.getNickname());
         yxUserRechargeMapper.updateById(userRecharge);
 
         //增加流水
@@ -72,8 +76,8 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMap
         userBill.setUid(userRecharge.getUid());
         userBill.setTitle("用户余额充值");
         userBill.setLinkId(userRecharge.getId().toString());
-        userBill.setCategory("now_money");
-        userBill.setType("recharge");
+        userBill.setCategory(BillDetailEnum.CATEGORY_1.getValue());
+        userBill.setType(BillDetailEnum.TYPE_1.getValue());
         userBill.setNumber(userRecharge.getPrice());
         userBill.setBalance(NumberUtil.add(userRecharge.getPrice(),user.getNowMoney()));
         userBill.setMark("成功充值余额"+userRecharge.getPrice());
@@ -85,6 +89,19 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMap
         //update 余额
         user.setNowMoney(NumberUtil.add(userRecharge.getPrice(),user.getNowMoney()));
         yxUserMapper.updateById(user);
+
+        //模板消息推送
+        YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(userRecharge.getUid());
+        if(ObjectUtil.isNotNull(wechatUser)){
+            //公众号模板通知
+            if(StrUtil.isNotBlank(wechatUser.getOpenid())){
+                templateService.rechargeSuccessNotice(OrderUtil.stampToDate(userRecharge.getPayTime().toString()),
+                        userRecharge.getPrice().toString(),wechatUser.getOpenid());
+            }else if(StrUtil.isNotBlank(wechatUser.getRoutineOpenid())){
+                //todo 小程序模板通知
+
+            }
+        }
     }
 
     @Override
@@ -103,6 +120,9 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMap
     public void addRecharge(RechargeParam param,int uid) {
         YxUserRecharge yxUserRecharge = new YxUserRecharge();
 
+        YxUser user = yxUserMapper.selectById(uid);
+
+        yxUserRecharge.setNickname(user.getNickname());
         yxUserRecharge.setOrderId(param.getOrderSn());
         yxUserRecharge.setUid(uid);
         yxUserRecharge.setPrice(BigDecimal.valueOf(param.getPrice()));

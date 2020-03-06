@@ -97,7 +97,7 @@ public class UserRechargeController extends BaseController {
                         "公众号充值", price,BillDetailEnum.TYPE_1.getValue());
                 Map<String,String> jsConfig = new HashMap<>();
                 jsConfig.put("appId",result.getAppId());
-                jsConfig.put("timeStamp",result.getTimeStamp());
+                jsConfig.put("timestamp",result.getTimeStamp());
                 jsConfig.put("nonceStr",result.getNonceStr());
                 jsConfig.put("package",result.getPackageValue());
                 jsConfig.put("signType",result.getSignType());

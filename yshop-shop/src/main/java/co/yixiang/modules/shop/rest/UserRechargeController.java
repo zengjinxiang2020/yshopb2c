@@ -1,6 +1,8 @@
 package co.yixiang.modules.shop.rest;
 
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxUserRecharge;
 import co.yixiang.modules.shop.service.YxUserRechargeService;
 import co.yixiang.modules.shop.service.dto.YxUserRechargeQueryCriteria;
@@ -62,6 +64,7 @@ public class UserRechargeController {
     @PreAuthorize("@el.check('yxUserRecharge:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
+        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         yxUserRechargeService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }

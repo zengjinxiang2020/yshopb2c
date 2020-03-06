@@ -18,11 +18,34 @@ public class YxTemplateService {
     private final String PAY_SUCCESS_KEY = "OPENTM207791277"; //pay
     private final String DELIVERY_SUCCESS_KEY = "OPENTM200565259"; //Delivery
     private final String REFUND_SUCCESS_KEY = "OPENTM410119152"; //Refund
+    private final String RECHARGE_SUCCESS_KEY = "OPENTM405847076"; //Recharge
 
     @Autowired
     private YxWechatTemplateService templateService;
     @Autowired
     private WxMpTemplateMessageService templateMessageService;
+
+
+    /**
+     * 支付成功通知
+     * @param time
+     * @param price
+     * @param openid
+     */
+    public void rechargeSuccessNotice(String time,String price,String openid){
+        String siteUrl = RedisUtil.get("site_url");
+        YxWechatTemplate WechatTemplate = templateService.findByTempkey(RECHARGE_SUCCESS_KEY);
+        Map<String,String> map = new HashMap<>();
+        map.put("first","您的账户金币发生变动，详情如下：");
+        map.put("keyword1","充值");
+        map.put("keyword2",time);
+        map.put("keyword3",price);
+        map.put("remark","yshop电商系统为你服务！");
+        templateMessageService.sendWxMpTemplateMessage( openid
+                ,WechatTemplate.getTempid(),
+                siteUrl+"/user/account",map);
+    }
+
 
     /**
      * 支付成功通知
