@@ -12,9 +12,11 @@ import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.io.resource.ClassPathResource;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.utils.FileUtil;
+import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
@@ -52,6 +54,9 @@ public class IndexController {
     @ApiOperation(value = "首页数据",notes = "首页数据")
     public ApiResult<Map<String,Object>> index(){
 
+        if(RedisUtil.get(ShopConstants.YSHOP_REDIS_INDEX_KEY) != null){
+            return ApiResult.ok(RedisUtil.get(ShopConstants.YSHOP_REDIS_INDEX_KEY));
+        }
 
         Map<String,Object> map = new LinkedHashMap<>();
         //banner
@@ -75,7 +80,8 @@ public class IndexController {
         map.put("roll",systemGroupDataService.getDatas("routine_home_roll_news"));
 
 
-
+        //缓存
+        RedisUtil.set(ShopConstants.YSHOP_REDIS_INDEX_KEY,map,ShopConstants.YSHOP_REDIS_INDEX_KEY_EXPIRE);
 
         return ApiResult.ok(map);
     }

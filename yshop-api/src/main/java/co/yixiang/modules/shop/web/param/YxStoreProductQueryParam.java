@@ -22,7 +22,6 @@ public class YxStoreProductQueryParam extends QueryParam {
 
     private int type;
     private int sid;
-    private int cid;
     private int news;
     private String priceOrder;
     private String salesOrder;

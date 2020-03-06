@@ -857,8 +857,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         order.setCartInfo(cartInfo);
         StatusDTO statusDTO = new StatusDTO();
         if(order.getPaid() == 0){
+            //计算未支付到自动取消订 时间
+            long time = ShopConstants.ORDER_OUTTIME_UNPAY *60 + Long.valueOf(order.getAddTime());
             statusDTO.set_class("nobuy");
-            statusDTO.set_msg("请完成支付");
+            statusDTO.set_msg(StrUtil.format("请在{}前完成支付",OrderUtil.stampToDate(String.valueOf(time))));
             statusDTO.set_type("0");
             statusDTO.set_title("未支付");
         }else if(order.getRefundStatus() == 1){

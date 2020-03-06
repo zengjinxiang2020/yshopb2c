@@ -49,6 +49,16 @@ public interface ShopConstants {
 	 */
 	String QQ_MAP_URL = "https://apis.map.qq.com/ws/geocoder/v1/";
 
+	/**
+	 * redis首页键
+	 */
+	String YSHOP_REDIS_INDEX_KEY = "yshop_index_data";
+
+	/**
+	 * redis首页过期时间 单位秒
+	 */
+	long YSHOP_REDIS_INDEX_KEY_EXPIRE = 7200;
+
 
 
 }
