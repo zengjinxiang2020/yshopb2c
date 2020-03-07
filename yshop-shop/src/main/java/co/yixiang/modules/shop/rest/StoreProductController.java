@@ -3,6 +3,7 @@ package co.yixiang.modules.shop.rest;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxStoreProduct;
 import co.yixiang.modules.shop.service.YxStoreProductService;
@@ -12,6 +13,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +48,7 @@ public class StoreProductController {
 
     @Log("新增商品")
     @ApiOperation(value = "新增商品")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PostMapping(value = "/yxStoreProduct")
     @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxStoreProduct resources){
@@ -58,6 +61,7 @@ public class StoreProductController {
 
     @Log("修改商品")
     @ApiOperation(value = "修改商品")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PutMapping(value = "/yxStoreProduct")
     @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreProduct resources){
@@ -68,6 +72,7 @@ public class StoreProductController {
 
     @Log("删除商品")
     @ApiOperation(value = "删除商品")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @DeleteMapping(value = "/yxStoreProduct/{id}")
     @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
@@ -77,6 +82,7 @@ public class StoreProductController {
     }
 
     @ApiOperation(value = "恢复数据")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @DeleteMapping(value = "/yxStoreProduct/recovery/{id}")
     @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_DELETE')")
     public ResponseEntity recovery(@PathVariable Integer id){
@@ -85,6 +91,7 @@ public class StoreProductController {
     }
 
     @ApiOperation(value = "商品上架/下架")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PostMapping(value = "/yxStoreProduct/onsale/{id}")
     public ResponseEntity onSale(@PathVariable Integer id,@RequestBody String jsonStr){
         JSONObject jsonObject = JSON.parseObject(jsonStr);
@@ -101,6 +108,7 @@ public class StoreProductController {
     }
 
     @ApiOperation(value = "设置保存属性")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PostMapping(value = "/yxStoreProduct/setAttr/{id}")
     public ResponseEntity setAttr(@PathVariable Integer id,@RequestBody String jsonStr){
         yxStoreProductService.createProductAttr(id,jsonStr);
@@ -108,6 +116,7 @@ public class StoreProductController {
     }
 
     @ApiOperation(value = "清除属性")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PostMapping(value = "/yxStoreProduct/clearAttr/{id}")
     public ResponseEntity clearAttr(@PathVariable Integer id){
         yxStoreProductService.clearProductAttr(id,true);

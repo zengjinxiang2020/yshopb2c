@@ -16,13 +16,13 @@ import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,13 +50,10 @@ public class IndexController {
 
 
     @AnonymousAccess
+    @Cacheable(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY)
     @GetMapping("/index")
     @ApiOperation(value = "首页数据",notes = "首页数据")
     public ApiResult<Map<String,Object>> index(){
-
-        if(RedisUtil.get(ShopConstants.YSHOP_REDIS_INDEX_KEY) != null){
-            return ApiResult.ok(RedisUtil.get(ShopConstants.YSHOP_REDIS_INDEX_KEY));
-        }
 
         Map<String,Object> map = new LinkedHashMap<>();
         //banner
@@ -78,10 +75,6 @@ public class IndexController {
 
         //滚动
         map.put("roll",systemGroupDataService.getDatas("routine_home_roll_news"));
-
-
-        //缓存
-        RedisUtil.set(ShopConstants.YSHOP_REDIS_INDEX_KEY,map,ShopConstants.YSHOP_REDIS_INDEX_KEY_EXPIRE);
 
         return ApiResult.ok(map);
     }

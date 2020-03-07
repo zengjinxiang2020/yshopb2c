@@ -52,7 +52,7 @@ public interface ShopConstants {
 	/**
 	 * redis首页键
 	 */
-	String YSHOP_REDIS_INDEX_KEY = "yshop_index_data";
+	String YSHOP_REDIS_INDEX_KEY = "yshop:index_data";
 
 	/**
 	 * redis首页过期时间 单位秒
