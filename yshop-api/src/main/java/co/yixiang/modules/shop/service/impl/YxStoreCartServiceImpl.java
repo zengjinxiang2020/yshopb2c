@@ -38,6 +38,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,24 +57,35 @@ import java.util.*;
 @Slf4j
 @Service
 @Builder
-@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, YxStoreCart> implements YxStoreCartService {
 
-    private final YxStoreCartMapper yxStoreCartMapper;
-    private final YxStoreSeckillMapper storeSeckillMapper;
-    private final YxStoreBargainMapper yxStoreBargainMapper;
-    private final YxStoreCombinationMapper storeCombinationMapper;
+    @Autowired
+    private YxStoreCartMapper yxStoreCartMapper;
+    @Autowired
+    private YxStoreSeckillMapper storeSeckillMapper;
+    @Autowired
+    private YxStoreBargainMapper yxStoreBargainMapper;
+    @Autowired
+    private YxStoreCombinationMapper storeCombinationMapper;
 
-    private final YxStoreProductService productService;
-    private final YxStoreProductAttrService productAttrService;
-    private final YxStoreCombinationService storeCombinationService;
-    private final YxStoreSeckillService storeSeckillService;
-    private final YxStoreBargainService storeBargainService;
-    private final YxStoreOrderService storeOrderService;
-    private final YxUserService userService;
+    @Autowired
+    private YxStoreProductService productService;
+    @Autowired
+    private YxStoreProductAttrService productAttrService;
+    @Autowired
+    private YxStoreCombinationService storeCombinationService;
+    @Autowired
+    private YxStoreSeckillService storeSeckillService;
+    @Autowired
+    private YxStoreBargainService storeBargainService;
+    @Autowired
+    private YxStoreOrderService storeOrderService;
+    @Autowired
+    private YxUserService userService;
 
-    private final CartMap cartMap;
+    @Autowired
+    private CartMap cartMap;
 
     /**
      * 删除购物车

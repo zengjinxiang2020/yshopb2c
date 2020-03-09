@@ -34,6 +34,8 @@ public interface ShopConstants {
 	 */
 	String YSHOP_WEIXIN_MP_SERVICE = "yshop_weixin_mp_service";
 
+
+
 	/**
 	 * 商城默认密码
 	 */

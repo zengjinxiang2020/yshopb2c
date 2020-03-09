@@ -31,6 +31,7 @@ import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,20 +52,27 @@ import java.util.Map;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
 @Transactional(rollbackFor = Exception.class)
 public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMapper, YxStoreProduct> implements YxStoreProductService {
 
-    private final YxStoreProductMapper yxStoreProductMapper;
-    private final YxStoreProductAttrValueMapper storeProductAttrValueMapper;
+    @Autowired
+    private YxStoreProductMapper yxStoreProductMapper;
+    @Autowired
+    private YxStoreProductAttrValueMapper storeProductAttrValueMapper;
 
-    private final YxStoreProductAttrService storeProductAttrService;
-    private final YxStoreProductRelationService relationService;
-    private final YxStoreProductReplyService replyService;
-    private final YxUserService userService;
-    private final YxSystemStoreService systemStoreService;
+    @Autowired
+    private YxStoreProductAttrService storeProductAttrService;
+    @Autowired
+    private YxStoreProductRelationService relationService;
+    @Autowired
+    private YxStoreProductReplyService replyService;
+    @Autowired
+    private YxUserService userService;
+    @Autowired
+    private YxSystemStoreService systemStoreService;
 
-    private final YxStoreProductMap storeProductMap;
+    @Autowired
+    private YxStoreProductMap storeProductMap;
 
 
 
