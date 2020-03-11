@@ -13,4 +13,6 @@ public interface YxStoreCategoryRepository extends JpaRepository<YxStoreCategory
     @Query(value = "select cate_name from yx_store_category where id = ?1",nativeQuery = true)
     String findNameById(Integer id);
 
+    YxStoreCategory findByPid(Integer pid);
+
 }

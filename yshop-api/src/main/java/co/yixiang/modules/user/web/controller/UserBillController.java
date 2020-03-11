@@ -132,7 +132,7 @@ public class UserBillController extends BaseController {
             return ApiResult.fail("未配置h5地址");
         }
         String apiUrl = systemConfigService.getData("api_url");
-        if(StrUtil.isEmpty(siteUrl)){
+        if(StrUtil.isEmpty(apiUrl)){
             return ApiResult.fail("未配置api地址");
         }
 

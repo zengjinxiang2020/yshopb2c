@@ -119,6 +119,7 @@ public class YxStoreProductServiceImpl implements YxStoreProductService {
     @Transactional(rollbackFor = Exception.class)
     public void recovery(Integer id) {
         yxStoreProductRepository.updateDel(0,id);
+        yxStoreProductRepository.updateOnsale(0,id);
     }
 
     @Override

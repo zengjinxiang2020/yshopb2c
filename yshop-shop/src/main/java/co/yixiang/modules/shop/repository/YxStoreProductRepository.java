@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
 * @author hupeng
 * @date 2019-10-04
@@ -18,4 +20,6 @@ public interface YxStoreProductRepository extends JpaRepository<YxStoreProduct, 
     @Modifying
     @Query(value = "update yx_store_product set is_del = ?1 where id = ?2",nativeQuery = true)
     void updateDel(int status, int id);
+
+    List<YxStoreProduct> findByCateId(String cateId);
 }

@@ -49,10 +49,13 @@ public class YxStoreProductReplyServiceImpl implements YxStoreProductReplyServic
                         ,pageable);
         List<YxStoreProductReplyDTO> productReplyDTOS = new ArrayList<>();
         for (YxStoreProductReply reply : page.getContent()) {
-
             YxStoreProductReplyDTO productReplyDTO = yxStoreProductReplyMapper.toDto(reply);
-            productReplyDTO.setUsername(userService.findById(reply.getUid()).getAccount());
-            productReplyDTO.setProductName(productService.findById(reply.getProductId()).getStoreName());
+            try{
+                productReplyDTO.setUsername(userService.findById(reply.getUid()).getAccount());
+                productReplyDTO.setProductName(productService.findById(reply.getProductId()).getStoreName());
+            }catch (Exception e){
+                continue;
+            }
             productReplyDTOS.add(productReplyDTO);
         }
         Map<String,Object> map = new LinkedHashMap<>(2);
