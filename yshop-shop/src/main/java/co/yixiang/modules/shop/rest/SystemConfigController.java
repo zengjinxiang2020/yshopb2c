@@ -61,8 +61,9 @@ public class SystemConfigController {
                     //重新配置微信相关
                     if(key.equals("wechat_appid")){
                         WxMpConfiguration.removeWxMpService();
+                        WxPayConfiguration.removeWxPayService();
                     }
-                    if(key.equals("wxpay_appId")){
+                    if(key.equals("wxpay_mchId") || key.equals("wxapp_appId")){
                         WxPayConfiguration.removeWxPayService();
                     }
                     RedisUtil.set(key,value.toString(),0);

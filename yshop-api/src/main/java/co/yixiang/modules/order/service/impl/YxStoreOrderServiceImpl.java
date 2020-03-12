@@ -18,6 +18,7 @@ import co.yixiang.common.web.vo.Paging;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.domain.AlipayConfig;
 import co.yixiang.domain.vo.TradeVo;
+import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.enums.BillEnum;
 import co.yixiang.enums.OrderInfoEnum;
@@ -63,6 +64,7 @@ import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 import co.yixiang.mp.service.YxPayService;
 import co.yixiang.mp.service.YxTemplateService;
+import co.yixiang.mp.service.YxMiniPayService;
 import co.yixiang.service.AlipayService;
 import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
@@ -161,6 +163,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Autowired
     private YxPayService payService;
     @Autowired
+    private YxMiniPayService miniPayService;
+    @Autowired
     private YxTemplateService templateService;
 
 
@@ -219,8 +223,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         }else{
             BigDecimal bigDecimal = new BigDecimal("100");
             try {
-                payService.refundOrder(param.getOrderId(),
-                        bigDecimal.multiply(orderQueryVo.getPayPrice()).intValue());
+                if(OrderInfoEnum.PAY_CHANNEL_1.getValue().equals(orderQueryVo.getIsChannel())){
+                    miniPayService.refundOrder(param.getOrderId(),
+                            bigDecimal.multiply(orderQueryVo.getPayPrice()).intValue());
+                }else{
+                    payService.refundOrder(param.getOrderId(),
+                            bigDecimal.multiply(orderQueryVo.getPayPrice()).intValue());
+                }
+
             } catch (WxPayException e) {
                 log.info("refund-error:{}",e.getMessage());
             }
@@ -1048,7 +1058,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         BigDecimal bigDecimal = new BigDecimal(100);
 
-        return payService.wxPay(orderId,wechatUser.getRoutineOpenid(),"小程序商品购买",
+        return miniPayService.wxPay(orderId,wechatUser.getRoutineOpenid(),"小程序商品购买",
                 bigDecimal.multiply(orderInfo.getPayPrice()).intValue(),
                 BillDetailEnum.TYPE_3.getValue());
     }
@@ -1298,7 +1308,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         storeOrder.setSeckillId(seckillId);
         storeOrder.setBargainId(bargainId);
         storeOrder.setCost(BigDecimal.valueOf(cacheDTO.getPriceGroup().getCostPrice()));
-        storeOrder.setIsChannel(param.getIsChannel());
+        if(AppFromEnum.ROUNTINE.getValue().equals(param.getFrom())){
+            storeOrder.setIsChannel(OrderInfoEnum.PAY_CHANNEL_1.getValue());
+        }else{
+            storeOrder.setIsChannel(OrderInfoEnum.PAY_CHANNEL_0.getValue());
+        }
         storeOrder.setAddTime(OrderUtil.getSecondTimestampTwo());
         storeOrder.setUnique(key);
         storeOrder.setShippingType(param.getShippingType());

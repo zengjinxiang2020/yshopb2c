@@ -21,6 +21,7 @@ import co.yixiang.modules.shop.service.YxUserBillService;
 import co.yixiang.modules.shop.service.YxUserService;
 import co.yixiang.modules.shop.service.dto.*;
 import co.yixiang.modules.shop.service.mapper.YxStoreOrderMapper;
+import co.yixiang.mp.service.YxMiniPayService;
 import co.yixiang.mp.service.YxPayService;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.QueryHelp;
@@ -57,11 +58,12 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
     private final YxStoreOrderStatusService yxStoreOrderStatusService;
     private final YxUserService userService;
     private final YxPayService payService;
+    private final YxMiniPayService miniPayService;
 
     public YxStoreOrderServiceImpl(YxStoreOrderRepository yxStoreOrderRepository, YxStoreOrderCartInfoRepository yxStoreOrderCartInfoRepository, YxUserRepository userRepository,
                                    YxStorePinkRepository storePinkRepository, YxStoreOrderMapper yxStoreOrderMapper, YxUserBillService yxUserBillService,
                                    YxStoreOrderStatusService yxStoreOrderStatusService,
-                                   YxUserService userService, YxPayService payService) {
+                                   YxUserService userService, YxPayService payService, YxMiniPayService miniPayService) {
         this.yxStoreOrderRepository = yxStoreOrderRepository;
         this.yxStoreOrderCartInfoRepository = yxStoreOrderCartInfoRepository;
         this.userRepository = userRepository;
@@ -71,6 +73,7 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
         this.yxStoreOrderStatusService = yxStoreOrderStatusService;
         this.userService = userService;
         this.payService = payService;
+        this.miniPayService = miniPayService;
     }
 
     @Override
@@ -155,8 +158,14 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
         }else{
             BigDecimal bigDecimal = new BigDecimal("100");
             try {
-                payService.refundOrder(resources.getOrderId(),
-                        bigDecimal.multiply(resources.getPayPrice()).intValue());
+                if(OrderInfoEnum.PAY_CHANNEL_1.getValue().equals(resources.getIsChannel())){
+                    miniPayService.refundOrder(resources.getOrderId(),
+                            bigDecimal.multiply(resources.getPayPrice()).intValue());
+                }else{
+                    payService.refundOrder(resources.getOrderId(),
+                            bigDecimal.multiply(resources.getPayPrice()).intValue());
+                }
+
             } catch (WxPayException e) {
                 log.info("refund-error:{}",e.getMessage());
             }

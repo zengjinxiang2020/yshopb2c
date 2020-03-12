@@ -30,6 +30,11 @@ public interface ShopConstants {
 	String YSHOP_WEIXIN_PAY_SERVICE = "yshop_weixin_pay_service";
 
 	/**
+	 * 微信支付小程序service
+	 */
+	String YSHOP_WEIXIN_MINI_PAY_SERVICE = "yshop_weixin_mini_pay_service";
+
+	/**
 	 * 微信公众号service
 	 */
 	String YSHOP_WEIXIN_MP_SERVICE = "yshop_weixin_mp_service";
@@ -56,10 +61,6 @@ public interface ShopConstants {
 	 */
 	String YSHOP_REDIS_INDEX_KEY = "yshop:index_data";
 
-	/**
-	 * redis首页过期时间 单位秒
-	 */
-	long YSHOP_REDIS_INDEX_KEY_EXPIRE = 7200;
 
 
 
