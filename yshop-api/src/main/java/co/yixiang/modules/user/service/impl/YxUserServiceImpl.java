@@ -13,6 +13,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.shop.service.YxStoreCouponUserService;
@@ -423,13 +424,15 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
     @Override
     public YxUserQueryVo getYxUserById(Serializable id){
         YxUserQueryVo userQueryVo = yxUserMapper.getYxUserById(id);
-        userQueryVo.setOrderStatusNum(orderService.orderData((int)id));
         return userQueryVo;
     }
 
     @Override
     public YxUserQueryVo getNewYxUserById(Serializable id) {
         YxUserQueryVo userQueryVo = yxUserMapper.getYxUserById(id);
+        if(userQueryVo == null){
+            throw new ErrorRequestException("用户不存在");
+        }
         userQueryVo.setOrderStatusNum(orderService.orderData((int)id));
         userQueryVo.setCouponCount(storeCouponUserService.getUserValidCouponCount((int)id));
         //判断分销类型

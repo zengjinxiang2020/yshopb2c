@@ -156,26 +156,19 @@ public class AuthController {
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
             WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
             String openid = wxMpUser.getOpenId();
-            YxWechatUser wechatUser = wechatUserService.getUserInfo(openid);
 
+            YxUser yxUser = userService.findByName(openid);
 
             JwtUser jwtUser = null;
-            if (ObjectUtil.isNotNull(wechatUser)) {
-                YxUserQueryVo yxUserQueryVo = userService.getYxUserById(wechatUser.getUid());
-                if (ObjectUtil.isNotNull(yxUserQueryVo)) {
-                    jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getOpenid());
-                } else {
-                    if (ObjectUtil.isNotNull(wechatUser)) {
-                        wechatUserService.removeById(wechatUser.getUid());
-                    }
-                    if (ObjectUtil.isNotNull(yxUserQueryVo)) {
-                        userService.removeById(yxUserQueryVo.getUid());
-                    }
-                    return ApiResult.fail(ApiCode.FAIL_AUTH, "授权失败");
-                }
-
-
+            if (ObjectUtil.isNotNull(yxUser)) {
+                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(openid);
             } else {
+
+                //如果后台删除了用户
+                YxWechatUser wechatUser = wechatUserService.getUserInfo(openid);
+                if(wechatUser != null){
+                    wechatUserService.removeById(wechatUser.getUid());
+                }
 
                 //过滤掉表情
                 String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickname());
@@ -293,27 +286,22 @@ public class AuthController {
             wxMaConfig.setAppid(appId);
             wxMaConfig.setSecret(secret);
 
-
             wxMaService.setWxMaConfig(wxMaConfig);
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-            YxWechatUser wechatUser = wechatUserService.getUserAppInfo(session.getOpenid());
-            ;
+            String openid = session.getOpenid();
+
+            YxUser yxUser = userService.findByName(openid);
             JwtUser jwtUser = null;
-            if (ObjectUtil.isNotNull(wechatUser)) {
-                YxUserQueryVo yxUserQueryVo = userService.getYxUserById(wechatUser.getUid());
-                if (ObjectUtil.isNotNull(yxUserQueryVo)) {
-                    jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wechatUser.getRoutineOpenid());
-                } else {
-                    if (ObjectUtil.isNotNull(wechatUser)) {
-                        wechatUserService.removeById(wechatUser.getUid());
-                    }
-                    if (ObjectUtil.isNotNull(yxUserQueryVo)) {
-                        userService.removeById(yxUserQueryVo.getUid());
-                    }
-                    return ApiResult.fail(ApiCode.FAIL_AUTH, "授权失败");
+            if (ObjectUtil.isNotNull(yxUser)) {
+                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(openid);
+            } else {
+
+                //如果后台删除了用户
+                YxWechatUser wechatUser = wechatUserService.getUserAppInfo(openid);
+                if(wechatUser != null){
+                    wechatUserService.removeById(wechatUser.getUid());
                 }
 
-            } else {
                 WxMaUserInfo wxMpUser = wxMaService.getUserService()
                         .getUserInfo(session.getSessionKey(), encryptedData, iv);
                 //过滤掉表情

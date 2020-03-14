@@ -130,27 +130,18 @@ public class StoreOrderController extends BaseController {
         other.setIntegralFull(systemConfigService.getData("integral_full"));
         other.setIntegralMax(systemConfigService.getData("integral_max"));
 
-        //todo 拼团 砍价 秒杀
+        //拼团 砍价 秒杀
         int combinationId = 0;
-        if(cartId.split(",").length == 1){
-            YxStoreCartQueryVo cartQueryVo = cartService.getYxStoreCartById(Integer
-                    .valueOf(cartId));
-            combinationId = cartQueryVo.getCombinationId();
-        }
-
         int secKillId = 0;
-        if(cartId.split(",").length == 1){
-            YxStoreCartQueryVo cartQueryVo = cartService.getYxStoreCartById(Integer
-                    .valueOf(cartId));
-            secKillId = cartQueryVo.getSeckillId();
-        }
-
         int bargainId = 0;
         if(cartId.split(",").length == 1){
             YxStoreCartQueryVo cartQueryVo = cartService.getYxStoreCartById(Integer
                     .valueOf(cartId));
+            combinationId = cartQueryVo.getCombinationId();
+            secKillId = cartQueryVo.getSeckillId();
             bargainId = cartQueryVo.getBargainId();
         }
+
 
         //拼团砍价秒杀类产品不参与抵扣
         if(combinationId > 0 || secKillId > 0 || bargainId > 0) confirmOrderDTO.setDeduction(true);
