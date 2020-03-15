@@ -9,6 +9,8 @@ import co.yixiang.aop.log.Log;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.exception.BadRequestException;
+import co.yixiang.express.ExpressService;
+import co.yixiang.express.dao.ExpressInfo;
 import co.yixiang.modules.activity.service.YxStorePinkService;
 import co.yixiang.modules.activity.service.dto.YxStorePinkDTO;
 import co.yixiang.modules.shop.domain.YxStoreOrder;
@@ -21,6 +23,7 @@ import co.yixiang.modules.shop.service.dto.YxExpressDTO;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderDTO;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderQueryCriteria;
 import co.yixiang.modules.shop.service.dto.YxWechatUserDTO;
+import co.yixiang.modules.shop.service.param.ExpressParam;
 import co.yixiang.mp.service.WxMpTemplateMessageService;
 import co.yixiang.mp.service.YxTemplateService;
 import co.yixiang.mp.service.YxWechatTemplateService;
@@ -56,11 +59,13 @@ public class StoreOrderController {
     private final RedisTemplate<String, String> redisTemplate;
     private final YxTemplateService templateService;
     private final YxStorePinkService  storePinkService;
+    private final ExpressService expressService;
 
     public StoreOrderController(YxStoreOrderService yxStoreOrderService, YxStoreOrderStatusService yxStoreOrderStatusService,
                                 YxExpressService yxExpressService, YxWechatUserService wechatUserService,
                                 RedisTemplate<String, String> redisTemplate,
-                                YxTemplateService templateService,YxStorePinkService storePinkService) {
+                                YxTemplateService templateService,YxStorePinkService storePinkService,
+                                ExpressService expressService) {
         this.yxStoreOrderService = yxStoreOrderService;
         this.yxStoreOrderStatusService = yxStoreOrderStatusService;
         this.yxExpressService = yxExpressService;
@@ -68,6 +73,7 @@ public class StoreOrderController {
         this.redisTemplate = redisTemplate;
         this.templateService = templateService;
         this.storePinkService = storePinkService;
+        this.expressService = expressService;
     }
 
     @GetMapping(value = "/data/count")
@@ -327,4 +333,18 @@ public class StoreOrderController {
         yxStoreOrderService.update(resources);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+
+    /**@Valid
+     * 获取物流信息,根据传的订单编号 ShipperCode快递公司编号 和物流单号,
+     */
+    @PostMapping("/yxStoreOrder/express")
+    @ApiOperation(value = "获取物流信息",notes = "获取物流信息",response = ExpressParam.class)
+    public ResponseEntity express( @RequestBody ExpressParam expressInfoDo){
+        ExpressInfo expressInfo = expressService.getExpressInfo(expressInfoDo.getOrderCode(),
+                expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode());
+        if(!expressInfo.isSuccess()) throw new BadRequestException(expressInfo.getReason());
+        return new ResponseEntity(expressInfo, HttpStatus.OK);
+    }
+
 }

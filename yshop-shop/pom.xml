@@ -17,15 +17,23 @@
     </properties>
 
     <dependencies>
+        <!--    tools 模块包含了 common 和 logging 模块    -->
         <dependency>
             <groupId>co.yixiang</groupId>
-            <artifactId>yshop-logging</artifactId>
+            <artifactId>yshop-tools</artifactId>
             <version>2.0</version>
         </dependency>
+
         <dependency>
             <groupId>co.yixiang</groupId>
             <artifactId>yshop-mp</artifactId>
             <version>2.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>co.yixiang</groupId>
+                    <artifactId>yshop-common</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

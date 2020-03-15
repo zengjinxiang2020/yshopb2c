@@ -115,6 +115,8 @@ public class YxStoreOrderDTO implements Serializable {
     // 快递名称/送货人姓名
     private String deliveryName;
 
+    private String deliverySn;
+
     // 发货类型
     private String deliveryType;
 
