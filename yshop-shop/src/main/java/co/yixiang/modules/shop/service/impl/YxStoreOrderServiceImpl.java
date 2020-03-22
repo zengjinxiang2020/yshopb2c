@@ -259,6 +259,7 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
                 cartInfoDTOS.add(cartInfoDTO);
             }
             yxStoreOrderDTO.setCartInfoList(cartInfoDTOS);
+            yxStoreOrderDTO.setUserDTO(userService.findById(yxStoreOrder.getUid()));
 
             storeOrderDTOS.add(yxStoreOrderDTO);
 

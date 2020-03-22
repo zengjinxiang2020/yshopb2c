@@ -78,6 +78,11 @@ public class YxStoreCategoryServiceImpl implements YxStoreCategoryService {
     }
 
     @Override
+    public YxStoreCategoryDTO findByName(String name) {
+        return null;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public YxStoreCategoryDTO create(YxStoreCategory resources) {
         if(ObjectUtil.isNull(resources.getPid())) resources.setPid(0);
@@ -88,6 +93,9 @@ public class YxStoreCategoryServiceImpl implements YxStoreCategoryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(YxStoreCategory resources) {
+        if(resources.getId().equals(resources.getPid())){
+            throw new BadRequestException("自己不能选择自己哦");
+        }
         Optional<YxStoreCategory> optionalYxStoreCategory = yxStoreCategoryRepository.findById(resources.getId());
         ValidationUtil.isNull( optionalYxStoreCategory,"YxStoreCategory","id",resources.getId());
         YxStoreCategory yxStoreCategory = optionalYxStoreCategory.get();

@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.service.dto;
 
+import co.yixiang.modules.shop.domain.YxUser;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -36,6 +37,8 @@ public class YxStoreOrderDTO implements Serializable {
 
     // 用户id
     private Integer uid;
+
+    private YxUserDTO userDTO;
 
     // 用户姓名
     private String realName;
