@@ -17,6 +17,7 @@ import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
+import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxWechatUser;
 import co.yixiang.modules.user.service.YxUserRechargeService;
@@ -33,6 +34,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,6 +63,18 @@ public class UserRechargeController extends BaseController {
     private final YxSystemConfigService systemConfigService;
     private final YxPayService payService;
     private final YxWechatUserService wechatUserService;
+    private final YxSystemGroupDataService systemGroupDataService;
+
+    /**
+     * 充值方案
+     */
+    @GetMapping("/recharge/index")
+    @ApiOperation(value = "充值方案",notes = "充值方案",response = ApiResult.class)
+    public ApiResult<Object> getWays(){
+        Map<String,Object> map = new LinkedHashMap<>();
+        map.put("recharge_price_ways",systemGroupDataService.getDatas("recharge_price_ways"));
+        return ApiResult.ok(map);
+    }
 
     /**
      * 公众号充值/H5充值

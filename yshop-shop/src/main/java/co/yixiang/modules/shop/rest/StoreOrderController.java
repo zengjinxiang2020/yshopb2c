@@ -206,11 +206,10 @@ public class StoreOrderController {
         try {
             YxWechatUserDTO wechatUser = wechatUserService.findById(resources.getUid());
             if (ObjectUtil.isNotNull(wechatUser)) {
+                //公众号与小程序打通统一公众号模板通知
                 if (StrUtil.isNotBlank(wechatUser.getOpenid())) {
                     templateService.deliverySuccessNotice(resources.getOrderId(),
                             expressDTO.getName(),resources.getDeliveryId(),wechatUser.getOpenid());
-                } else if (StrUtil.isNotBlank(wechatUser.getRoutineOpenid())) {
-                    //todo 小程序通知
                 }
             }
         } catch (Exception e) {
@@ -266,12 +265,11 @@ public class StoreOrderController {
         try {
             YxWechatUserDTO wechatUser = wechatUserService.findById(resources.getUid());
             if (ObjectUtil.isNotNull(wechatUser)) {
+                //公众号与小程序打通统一公众号模板通知
                 if (StrUtil.isNotBlank(wechatUser.getOpenid())) {
                     templateService.refundSuccessNotice(resources.getOrderId(),
                             resources.getPayPrice().toString(),wechatUser.getOpenid(),
                             OrderUtil.stampToDate(resources.getAddTime().toString()));
-                } else if (StrUtil.isNotBlank(wechatUser.getRoutineOpenid())) {
-                    //todo 小程序通知
                 }
             }
         } catch (Exception e) {

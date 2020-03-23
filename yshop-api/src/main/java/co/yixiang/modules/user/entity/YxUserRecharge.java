@@ -40,6 +40,8 @@ public class YxUserRecharge extends BaseEntity {
     @ApiModelProperty(value = "充值金额")
     private BigDecimal price;
 
+    private BigDecimal givePrice;
+
     @ApiModelProperty(value = "充值类型")
     private String rechargeType;
 

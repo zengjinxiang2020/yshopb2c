@@ -239,12 +239,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //模板消息通知
         YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(orderQueryVo.getUid());
         if(ObjectUtil.isNotNull(wechatUser)){
+            //公众号与小程序打通统一公众号模板通知
             if(StrUtil.isNotBlank(wechatUser.getOpenid())){
                 templateService.refundSuccessNotice(orderQueryVo.getOrderId(),
                         orderQueryVo.getPayPrice().toString(),wechatUser.getOpenid(),
                         OrderUtil.stampToDate(orderQueryVo.getAddTime().toString()));
-            }else if(StrUtil.isNotBlank(wechatUser.getRoutineOpenid())){
-                //todo 小程序通知
             }
 
         }
@@ -287,11 +286,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //模板消息通知
         YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(orderQueryVo.getUid());
         if(ObjectUtil.isNotNull(wechatUser)){
+            ////公众号与小程序打通统一公众号模板通知
             if(StrUtil.isNotBlank(wechatUser.getOpenid())){
                 templateService.deliverySuccessNotice(storeOrder.getOrderId(),
                         expressQueryVo.getName(),param.getDeliveryId(),wechatUser.getOpenid());
-            }else if(StrUtil.isNotBlank(wechatUser.getRoutineOpenid())){
-                //todo 小程序通知
             }
 
         }
@@ -973,13 +971,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //模板消息推送
         YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(orderInfo.getUid());
         if(ObjectUtil.isNotNull(wechatUser)){
-            //公众号模板通知
+            ////公众号与小程序打通统一公众号模板通知
             if(StrUtil.isNotBlank(wechatUser.getOpenid())){
                 templateService.paySuccessNotice(orderInfo.getOrderId(),
                         orderInfo.getPayPrice().toString(),wechatUser.getOpenid());
-            }else if(StrUtil.isNotBlank(wechatUser.getRoutineOpenid())){
-                //todo 小程序模板通知
-
             }
         }
 

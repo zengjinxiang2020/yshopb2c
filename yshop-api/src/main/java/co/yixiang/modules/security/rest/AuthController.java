@@ -84,7 +84,7 @@ import java.util.Map;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthController {
 
-    @Value("${single.login:false}")
+    @Value("${single.login:true}")
     private Boolean singleLogin;
     @Value("${yshop.notify.sms.enable}")
     private Boolean enableSms;
@@ -157,6 +157,10 @@ public class AuthController {
             WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
             String openid = wxMpUser.getOpenId();
 
+            //如果开启了UnionId
+            if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
+                 openid = wxMpUser.getUnionId();
+            }
             YxUser yxUser = userService.findByName(openid);
 
             JwtUser jwtUser = null;
@@ -164,19 +168,18 @@ public class AuthController {
                 jwtUser = (JwtUser) userDetailsService.loadUserByUsername(openid);
             } else {
 
-                //如果后台删除了用户
-                YxWechatUser wechatUser = wechatUserService.getUserInfo(openid);
-                if(wechatUser != null){
-                    wechatUserService.removeById(wechatUser.getUid());
-                }
-
                 //过滤掉表情
                 String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickname());
                 log.info("昵称：{}", nickname);
                 //用户保存
                 YxUser user = new YxUser();
                 user.setAccount(nickname);
-                user.setUsername(wxMpUser.getOpenId());
+                //如果开启了UnionId
+                if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
+                    user.setUsername(wxMpUser.getUnionId());
+                }else{
+                    user.setUsername(wxMpUser.getOpenId());
+                }
                 user.setPassword(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
                 user.setPwd(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
                 user.setPhone("");
@@ -209,7 +212,7 @@ public class AuthController {
                 if (ObjectUtil.isNotNull(wxMpUser.getSubscribeTime())) {
                     yxWechatUser.setSubscribeTime(wxMpUser.getSubscribeTime().intValue());
                 }
-                if (StrUtil.isNotEmpty(wxMpUser.getUnionId())) {
+                if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
                     yxWechatUser.setUnionid(wxMpUser.getUnionId());
                 }
                 if (StrUtil.isNotEmpty(wxMpUser.getRemark())) {
@@ -227,11 +230,6 @@ public class AuthController {
             }
 
 
-            //设置推广关系
-            if (StrUtil.isNotEmpty(spread) && !spread.equals("NaN")) {
-                userService.setSpread(Integer.valueOf(spread),
-                        jwtUser.getId().intValue());
-            }
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(jwtUser.getUsername(),
@@ -251,6 +249,17 @@ public class AuthController {
             Map<String, String> map = new LinkedHashMap<>();
             map.put("token", token);
             map.put("expires_time", expiresTimeStr);
+
+            if (singleLogin) {
+                //踢掉之前已经登录的token
+                onlineUserService.checkLoginOnUser(jwtUserT.getUsername(), token);
+            }
+
+            //设置推广关系
+            if (StrUtil.isNotEmpty(spread) && !spread.equals("NaN")) {
+                userService.setSpread(Integer.valueOf(spread),
+                        jwtUser.getId().intValue());
+            }
 
             // 返回 token
             return ApiResult.ok(map);
@@ -289,18 +298,16 @@ public class AuthController {
             wxMaService.setWxMaConfig(wxMaConfig);
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
             String openid = session.getOpenid();
+            //如果开启了UnionId
+            if (StrUtil.isNotBlank(session.getUnionid())) {
+                openid = session.getUnionid();
+            }
 
             YxUser yxUser = userService.findByName(openid);
             JwtUser jwtUser = null;
             if (ObjectUtil.isNotNull(yxUser)) {
                 jwtUser = (JwtUser) userDetailsService.loadUserByUsername(openid);
             } else {
-
-                //如果后台删除了用户
-                YxWechatUser wechatUser = wechatUserService.getUserAppInfo(openid);
-                if(wechatUser != null){
-                    wechatUserService.removeById(wechatUser.getUid());
-                }
 
                 WxMaUserInfo wxMpUser = wxMaService.getUserService()
                         .getUserInfo(session.getSessionKey(), encryptedData, iv);
@@ -309,7 +316,13 @@ public class AuthController {
                 //用户保存
                 YxUser user = new YxUser();
                 user.setAccount(nickname);
-                user.setUsername(wxMpUser.getOpenId());
+
+                //如果开启了UnionId
+                if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
+                    user.setUsername(wxMpUser.getUnionId());
+                }else{
+                    user.setUsername(wxMpUser.getOpenId());
+                }
                 user.setPassword(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
                 user.setPwd(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
                 user.setPhone("");
@@ -339,7 +352,7 @@ public class AuthController {
                 yxWechatUser.setProvince(wxMpUser.getProvince());
                 yxWechatUser.setCountry(wxMpUser.getCountry());
                 yxWechatUser.setHeadimgurl(wxMpUser.getAvatarUrl());
-                if (StrUtil.isNotEmpty(wxMpUser.getUnionId())) {
+                if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
                     yxWechatUser.setUnionid(wxMpUser.getUnionId());
                 }
                 yxWechatUser.setUid(user.getUid());
@@ -351,11 +364,6 @@ public class AuthController {
             }
 
 
-            //设置推广关系
-            if (StrUtil.isNotEmpty(spread)) {
-                userService.setSpread(Integer.valueOf(spread),
-                        jwtUser.getId().intValue());
-            }
 
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(jwtUser.getUsername(),
@@ -376,6 +384,17 @@ public class AuthController {
             Map<String, String> map = new LinkedHashMap<>();
             map.put("token", token);
             map.put("expires_time", expiresTimeStr);
+
+            if (singleLogin) {
+                //踢掉之前已经登录的token
+                onlineUserService.checkLoginOnUser(jwtUserT.getUsername(), token);
+            }
+
+            //设置推广关系
+            if (StrUtil.isNotEmpty(spread)) {
+                userService.setSpread(Integer.valueOf(spread),
+                        jwtUser.getId().intValue());
+            }
 
             // 返回 token
             return ApiResult.ok(map);

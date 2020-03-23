@@ -71,7 +71,7 @@ public class UserExtractController extends BaseController {
     */
     @PostMapping("/extract/cash")
     @ApiOperation(value = "用户提现",notes = "用户提现")
-    public ApiResult<Boolean> addYxUserExtract(@Valid @RequestBody UserExtParam param) throws Exception{
+    public ApiResult<String> addYxUserExtract(@Valid @RequestBody UserExtParam param) throws Exception{
         int uid = SecurityUtils.getUserId().intValue();
         userExtractService.userExtract(uid,param);
 

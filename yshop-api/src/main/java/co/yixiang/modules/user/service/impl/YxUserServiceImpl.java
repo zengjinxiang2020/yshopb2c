@@ -18,6 +18,7 @@ import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.shop.service.YxStoreCouponUserService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
+import co.yixiang.modules.shop.service.YxSystemStoreStaffService;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.entity.YxUserLevel;
@@ -72,6 +73,8 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
     private YxUserLevelService userLevelService;
     @Autowired
     private YxStoreCouponUserService storeCouponUserService;
+    @Autowired
+    private YxSystemStoreStaffService systemStoreStaffService;
 
 
 
@@ -442,8 +445,10 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
         }else{
             userQueryVo.setStatu(0);
         }
-        //todo 测试环境设置所有人是管理员,生成环境记得去掉
-        //userQueryVo.setAdminid(1);
+
+        //获取核销权限
+        userQueryVo.setCheckStatus(systemStoreStaffService.checkStatus((int)id));
+
         return userQueryVo;
     }
 

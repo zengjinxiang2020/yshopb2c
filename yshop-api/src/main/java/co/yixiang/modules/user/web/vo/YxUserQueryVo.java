@@ -45,6 +45,8 @@ public class YxUserQueryVo implements Serializable {
 
     private Boolean isYesterDaySign;
 
+    private Boolean checkStatus;
+
 
 
 //    @ApiModelProperty(value = "用户密码（跟pwd）")

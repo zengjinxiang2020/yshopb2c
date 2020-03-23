@@ -47,7 +47,7 @@ public class CodeGenerator {
     // 作者
     private static final String AUTHOR = "hupeng";
     // 生成的表名称
-    private static final String TABLE_NAME = "yx_system_store";    // 主键数据库列名称
+    private static final String TABLE_NAME = "yx_system_store_staff";    // 主键数据库列名称
     private static final String PK_ID_COLUMN_NAME = "id";
     // 代码生成策略 true：All/false:SIMPLE
     private static final boolean GENERATOR_STRATEGY = true;

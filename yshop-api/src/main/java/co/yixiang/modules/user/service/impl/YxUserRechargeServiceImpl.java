@@ -71,6 +71,9 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMap
         userRecharge.setPayTime(OrderUtil.getSecondTimestampTwo());
         yxUserRechargeMapper.updateById(userRecharge);
 
+        //最终充值金额
+        BigDecimal newPrice = NumberUtil.add(userRecharge.getPrice(),user.getNowMoney());
+        newPrice = NumberUtil.add(userRecharge.getGivePrice(),newPrice);
         //增加流水
         YxUserBill userBill = new YxUserBill();
         userBill.setUid(userRecharge.getUid());
@@ -79,7 +82,7 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMap
         userBill.setCategory(BillDetailEnum.CATEGORY_1.getValue());
         userBill.setType(BillDetailEnum.TYPE_1.getValue());
         userBill.setNumber(userRecharge.getPrice());
-        userBill.setBalance(NumberUtil.add(userRecharge.getPrice(),user.getNowMoney()));
+        userBill.setBalance(newPrice);
         userBill.setMark("成功充值余额"+userRecharge.getPrice());
         userBill.setStatus(BillEnum.STATUS_1.getValue());
         userBill.setPm(BillEnum.PM_1.getValue());
@@ -87,19 +90,16 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMap
         billService.save(userBill);
 
         //update 余额
-        user.setNowMoney(NumberUtil.add(userRecharge.getPrice(),user.getNowMoney()));
+        user.setNowMoney(newPrice);
         yxUserMapper.updateById(user);
 
         //模板消息推送
         YxWechatUserQueryVo wechatUser =  wechatUserService.getYxWechatUserById(userRecharge.getUid());
         if(ObjectUtil.isNotNull(wechatUser)){
-            //公众号模板通知
+            //公众号与小程序打通统一公众号模板通知
             if(StrUtil.isNotBlank(wechatUser.getOpenid())){
                 templateService.rechargeSuccessNotice(OrderUtil.stampToDate(userRecharge.getPayTime().toString()),
                         userRecharge.getPrice().toString(),wechatUser.getOpenid());
-            }else if(StrUtil.isNotBlank(wechatUser.getRoutineOpenid())){
-                //todo 小程序模板通知
-
             }
         }
     }
@@ -126,6 +126,7 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<YxUserRechargeMap
         yxUserRecharge.setOrderId(param.getOrderSn());
         yxUserRecharge.setUid(uid);
         yxUserRecharge.setPrice(BigDecimal.valueOf(param.getPrice()));
+        yxUserRecharge.setGivePrice(BigDecimal.valueOf(param.getPaidPrice()));
         yxUserRecharge.setRechargeType(PayTypeEnum.WEIXIN.getValue());
         yxUserRecharge.setPaid(OrderInfoEnum.PAY_STATUS_0.getValue());
         yxUserRecharge.setAddTime(OrderUtil.getSecondTimestampTwo());
