@@ -163,11 +163,8 @@ public class AuthController {
             }
             YxUser yxUser = userService.findByName(openid);
 
-            JwtUser jwtUser = null;
-            if (ObjectUtil.isNotNull(yxUser)) {
-                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(openid);
-            } else {
-
+            String username = "";
+            if(ObjectUtil.isNull(yxUser)){
                 //过滤掉表情
                 String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickname());
                 log.info("昵称：{}", nickname);
@@ -176,8 +173,10 @@ public class AuthController {
                 user.setAccount(nickname);
                 //如果开启了UnionId
                 if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
+                    username = wxMpUser.getUnionId();
                     user.setUsername(wxMpUser.getUnionId());
                 }else{
+                    username = wxMpUser.getOpenId();
                     user.setUsername(wxMpUser.getOpenId());
                 }
                 user.setPassword(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
@@ -225,14 +224,14 @@ public class AuthController {
 
                 wechatUserService.save(yxWechatUser);
 
-
-                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getOpenId());
+                //jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getOpenId());
+            }else{
+                username = yxUser.getUsername();
             }
 
 
-
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(jwtUser.getUsername(),
+                    new UsernamePasswordAuthenticationToken(username,
                             ShopConstants.YSHOP_DEFAULT_PWD);
 
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -258,7 +257,7 @@ public class AuthController {
             //设置推广关系
             if (StrUtil.isNotEmpty(spread) && !spread.equals("NaN")) {
                 userService.setSpread(Integer.valueOf(spread),
-                        jwtUser.getId().intValue());
+                        jwtUserT.getId().intValue());
             }
 
             // 返回 token
@@ -304,10 +303,12 @@ public class AuthController {
             }
 
             YxUser yxUser = userService.findByName(openid);
-            JwtUser jwtUser = null;
-            if (ObjectUtil.isNotNull(yxUser)) {
-                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(openid);
-            } else {
+            String username = "";
+           // JwtUser jwtUser = null;
+//            if (ObjectUtil.isNotNull(yxUser)) {
+//                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(openid);
+//            } else
+            if(ObjectUtil.isNull(yxUser)){
 
                 WxMaUserInfo wxMpUser = wxMaService.getUserService()
                         .getUserInfo(session.getSessionKey(), encryptedData, iv);
@@ -319,8 +320,10 @@ public class AuthController {
 
                 //如果开启了UnionId
                 if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
+                    username = wxMpUser.getUnionId();
                     user.setUsername(wxMpUser.getUnionId());
                 }else{
+                    username = wxMpUser.getOpenId();
                     user.setUsername(wxMpUser.getOpenId());
                 }
                 user.setPassword(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
@@ -359,14 +362,14 @@ public class AuthController {
 
                 wechatUserService.save(yxWechatUser);
 
-
-                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getOpenId());
+                //jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getOpenId());
+            }else{
+                username = yxUser.getUsername();
             }
 
-
-
+            
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(jwtUser.getUsername(),
+                    new UsernamePasswordAuthenticationToken(username,
                             ShopConstants.YSHOP_DEFAULT_PWD);
 
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -393,7 +396,7 @@ public class AuthController {
             //设置推广关系
             if (StrUtil.isNotEmpty(spread)) {
                 userService.setSpread(Integer.valueOf(spread),
-                        jwtUser.getId().intValue());
+                        jwtUserT.getId().intValue());
             }
 
             // 返回 token
