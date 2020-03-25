@@ -14,6 +14,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
@@ -72,7 +73,7 @@ public class UserRechargeController extends BaseController {
     @ApiOperation(value = "充值方案",notes = "充值方案",response = ApiResult.class)
     public ApiResult<Object> getWays(){
         Map<String,Object> map = new LinkedHashMap<>();
-        map.put("recharge_price_ways",systemGroupDataService.getDatas("recharge_price_ways"));
+        map.put("recharge_price_ways",systemGroupDataService.getDatas(ShopConstants.YSHOP_RECHARGE_PRICE_WAYS));
         return ApiResult.ok(map);
     }
 

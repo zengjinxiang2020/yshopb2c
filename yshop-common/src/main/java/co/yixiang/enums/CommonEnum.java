@@ -5,16 +5,17 @@ import lombok.Getter;
 
 /**
  * @author hupeng
- * 产品相关枚举
+ * 通用枚举
  */
 @Getter
 @AllArgsConstructor
-public enum ProductEnum {
+public enum CommonEnum {
 
-	TYPE_1(1,"精品推荐"),
-	TYPE_2(2,"热门榜单"),
-	TYPE_3(3,"首发新品"),
-	TYPE_4(4,"促销单品");
+	DEL_STATUS_0(0,"未删除"),
+	DEL_STATUS_1(1,"已删除"),
+
+	SHOW_STATUS_0(0,"未显示"),
+	SHOW_STATUS_1(1,"显示");
 
 
 	private Integer value;

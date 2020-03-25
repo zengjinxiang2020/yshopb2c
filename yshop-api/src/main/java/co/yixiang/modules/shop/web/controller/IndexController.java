@@ -57,11 +57,11 @@ public class IndexController {
 
         Map<String,Object> map = new LinkedHashMap<>();
         //banner
-        map.put("banner",systemGroupDataService.getDatas("routine_home_banner"));
+        map.put("banner",systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_BANNER));
         //首页按钮
-        map.put("menus",systemGroupDataService.getDatas("routine_home_menus"));
+        map.put("menus",systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_MENUS));
         //首页活动区域图片
-        map.put("activity",systemGroupDataService.getDatas("routine_home_activity"));
+        map.put("activity",new String[]{});
 
 
         //精品推荐
@@ -74,7 +74,7 @@ public class IndexController {
         map.put("likeInfo",storeProductService.getList(1,3,4));
 
         //滚动
-        map.put("roll",systemGroupDataService.getDatas("routine_home_roll_news"));
+        map.put("roll",systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_ROLL_NEWS));
 
         return ApiResult.ok(map);
     }
@@ -83,7 +83,7 @@ public class IndexController {
     @GetMapping("/search/keyword")
     @ApiOperation(value = "热门搜索关键字获取",notes = "热门搜索关键字获取")
     public ApiResult<List<String>> search(){
-        List<Map<String,Object>> list = systemGroupDataService.getDatas("routine_hot_search");
+        List<Map<String,Object>> list = systemGroupDataService.getDatas(ShopConstants.YSHOP_HOT_SEARCH);
         List<String>  stringList = new ArrayList<>();
         for (Map<String,Object> map : list) {
             stringList.add(map.get("title").toString());

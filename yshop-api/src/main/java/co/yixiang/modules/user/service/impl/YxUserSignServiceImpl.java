@@ -13,6 +13,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.user.entity.YxUser;
@@ -67,15 +68,13 @@ public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxU
 
 
 
-
-
     /**
      * 用户签到
      * @param uid
      */
     @Override
     public int sign(int uid) {
-        List<Map<String,Object>> list = systemGroupDataService.getDatas("sign_day_num");
+        List<Map<String,Object>> list = systemGroupDataService.getDatas(ShopConstants.YSHOP_SIGN_DAY_NUM);
         if(ObjectUtil.isNull(list)) throw new ErrorRequestException("请先配置签到天数");
 
         YxUserQueryVo userQueryVo = yxUserService.getYxUserById(uid);

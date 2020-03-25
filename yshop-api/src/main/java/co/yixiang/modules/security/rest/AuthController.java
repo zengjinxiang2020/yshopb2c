@@ -151,6 +151,13 @@ public class AuthController {
                                        @RequestParam(value = "spread") String spread,
                                        HttpServletRequest request) {
 
+        /**
+         * 公众号与小程序打通说明：
+         * 1、打通方式以UnionId方式，需要去注册微信开放平台
+         * 2、目前登陆授权打通方式适用于新项目（也就是你yx_user、yx_wechat_user都是空的）
+         * 3、如果你以前已经有数据请自行处理
+         */
+
         try {
             WxMpService wxService = WxMpConfiguration.getWxMpService();
             WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
@@ -183,6 +190,7 @@ public class AuthController {
                 user.setPwd(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
                 user.setPhone("");
                 user.setUserType(AppFromEnum.WECHAT.getValue());
+                user.setLoginType(AppFromEnum.WECHAT.getValue());
                 user.setAddTime(OrderUtil.getSecondTimestampTwo());
                 user.setLastTime(OrderUtil.getSecondTimestampTwo());
                 user.setNickname(nickname);
@@ -224,9 +232,15 @@ public class AuthController {
 
                 wechatUserService.save(yxWechatUser);
 
-                //jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getOpenId());
             }else{
                 username = yxUser.getUsername();
+                if(StrUtil.isNotBlank(wxMpUser.getOpenId()) && StrUtil.isNotBlank(wxMpUser.getUnionId())){
+                    YxWechatUser wechatUser = new YxWechatUser();
+                    wechatUser.setUid(yxUser.getUid());
+                    wechatUser.setUnionid(wxMpUser.getUnionId());
+
+                    wechatUserService.updateById(wechatUser);
+                }
             }
 
 
@@ -279,6 +293,12 @@ public class AuthController {
     @ApiOperation(value = "小程序登陆", notes = "小程序登陆")
     public ApiResult<Object> login(@Validated @RequestBody LoginParam loginParam,
                                    HttpServletRequest request) {
+        /**
+         * 公众号与小程序打通说明：
+         * 1、打通方式以UnionId方式，需要去注册微信开放平台
+         * 2、目前登陆授权打通方式适用于新项目（也就是你yx_user、yx_wechat_user都是空的）
+         * 3、如果你以前已经有数据请自行处理
+         */
         String code = loginParam.getCode();
         String encryptedData = loginParam.getEncryptedData();
         String iv = loginParam.getIv();
@@ -304,10 +324,6 @@ public class AuthController {
 
             YxUser yxUser = userService.findByName(openid);
             String username = "";
-           // JwtUser jwtUser = null;
-//            if (ObjectUtil.isNotNull(yxUser)) {
-//                jwtUser = (JwtUser) userDetailsService.loadUserByUsername(openid);
-//            } else
             if(ObjectUtil.isNull(yxUser)){
 
                 WxMaUserInfo wxMpUser = wxMaService.getUserService()
@@ -362,12 +378,18 @@ public class AuthController {
 
                 wechatUserService.save(yxWechatUser);
 
-                //jwtUser = (JwtUser) userDetailsService.loadUserByUsername(wxMpUser.getOpenId());
             }else{
                 username = yxUser.getUsername();
+                if(StrUtil.isNotBlank(session.getOpenid()) && StrUtil.isNotBlank(session.getUnionid())){
+                    YxWechatUser wechatUser = new YxWechatUser();
+                    wechatUser.setUid(yxUser.getUid());
+                    wechatUser.setUnionid(session.getUnionid());
+
+                    wechatUserService.updateById(wechatUser);
+                }
             }
 
-            
+
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(username,
                             ShopConstants.YSHOP_DEFAULT_PWD);

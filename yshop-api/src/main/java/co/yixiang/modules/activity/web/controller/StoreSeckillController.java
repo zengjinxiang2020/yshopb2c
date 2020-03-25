@@ -14,6 +14,7 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.web.dto.SeckillConfigDTO;
 import co.yixiang.modules.activity.web.dto.SeckillTimeDTO;
@@ -100,7 +101,8 @@ public class StoreSeckillController extends BaseController {
         //获取秒杀配置
         AtomicInteger seckillTimeIndex = new AtomicInteger();
         SeckillConfigDTO seckillConfigDTO = new SeckillConfigDTO();
-        List<YxSystemGroupData> yxSystemGroupDataList = yxSystemGroupDataService.list(new QueryWrapper<YxSystemGroupData>().eq("group_name", "routine_seckill_time"));
+        List<YxSystemGroupData> yxSystemGroupDataList = yxSystemGroupDataService.list(new QueryWrapper<YxSystemGroupData>()
+                .eq("group_name", ShopConstants.YSHOP_SECKILL_TIME));
         List<SeckillTimeDTO> list = new ArrayList<>();
         int today = OrderUtil.dateToTimestampT(DateUtil.beginOfDay(new Date()));
         yxSystemGroupDataList.forEach(i -> {

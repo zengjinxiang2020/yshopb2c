@@ -157,7 +157,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
 
         //门店
         productDTO.setSystemStore(systemStoreService.getStoreInfo());
-        productDTO.setMapKey(RedisUtil.get("store_self_mention"));
+        productDTO.setMapKey(RedisUtil.get("tengxun_map_key"));
 
         return productDTO;
     }

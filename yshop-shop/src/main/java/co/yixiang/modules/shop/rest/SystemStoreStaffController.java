@@ -1,6 +1,8 @@
 package co.yixiang.modules.shop.rest;
 
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxSystemStoreStaff;
 import co.yixiang.modules.shop.service.YxSystemStoreStaffService;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreStaffQueryCriteria;
@@ -69,6 +71,7 @@ public class SystemStoreStaffController {
     @PreAuthorize("@el.check('yxSystemStoreStaff:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
+        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         yxSystemStoreStaffService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }

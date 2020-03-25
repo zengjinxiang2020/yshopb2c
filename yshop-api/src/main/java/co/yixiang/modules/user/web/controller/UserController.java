@@ -12,6 +12,7 @@ import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.shop.service.YxStoreProductRelationService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
@@ -85,7 +86,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "获取个人中心菜单",notes = "获取个人中心菜单")
     public ApiResult<Map<String,Object>> userMenu(){
         Map<String,Object> map = new LinkedHashMap<>();
-        map.put("routine_my_menus",systemGroupDataService.getDatas("routine_my_menus"));
+        map.put("routine_my_menus",systemGroupDataService.getDatas(ShopConstants.YSHOP_MY_MENUES));
         return ApiResult.ok(map);
     }
 
@@ -185,7 +186,7 @@ public class UserController extends BaseController {
     @GetMapping("/sign/config")
     @ApiOperation(value = "签到配置",notes = "签到配置")
     public ApiResult<Object> signConfig(){
-        return ApiResult.ok(systemGroupDataService.getDatas("sign_day_num"));
+        return ApiResult.ok(systemGroupDataService.getDatas(ShopConstants.YSHOP_SIGN_DAY_NUM));
     }
 
     /**

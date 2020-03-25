@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.service.impl;
 
+import co.yixiang.enums.CommonEnum;
 import co.yixiang.modules.shop.entity.YxSystemStore;
 import co.yixiang.modules.shop.mapper.YxSystemStoreMapper;
 import co.yixiang.modules.shop.mapping.SystemStoreMap;
@@ -43,8 +44,13 @@ public class YxSystemStoreServiceImpl extends BaseServiceImpl<YxSystemStoreMappe
     @Override
     public YxSystemStoreQueryVo getStoreInfo() {
         YxSystemStore systemStore = new YxSystemStore();
-        systemStore.setIsDel(0);
-        YxSystemStore yxSystemStore = yxSystemStoreMapper.selectOne(Wrappers.query(systemStore));
+        systemStore.setIsDel(CommonEnum.DEL_STATUS_0.getValue());
+        systemStore.setIsShow(CommonEnum.SHOW_STATUS_1.getValue());
+        YxSystemStore yxSystemStore = yxSystemStoreMapper.selectOne(
+                Wrappers
+                .query(systemStore)
+                .orderByDesc("id")
+                .last("limit 1"));
         if(yxSystemStore == null) return null;
         String mention = RedisUtil.get("store_self_mention");
         if(mention == null || Integer.valueOf(mention) == 2) return null;

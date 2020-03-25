@@ -6,6 +6,7 @@ import lombok.Getter;
 import javax.persistence.criteria.CriteriaBuilder;
 
 /**
+ * @author hupeng
  * 订单相关枚举
  */
 @Getter
