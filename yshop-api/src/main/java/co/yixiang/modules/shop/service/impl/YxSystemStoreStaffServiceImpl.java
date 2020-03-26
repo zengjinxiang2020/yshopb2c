@@ -37,9 +37,10 @@ public class YxSystemStoreStaffServiceImpl extends BaseServiceImpl<YxSystemStore
     private YxSystemStoreStaffMapper yxSystemStoreStaffMapper;
 
     @Override
-    public boolean checkStatus(int uid) {
+    public boolean checkStatus(int uid,int storeId) {
         YxSystemStoreStaff storeStaff = new YxSystemStoreStaff();
         storeStaff.setUid(uid);
+        if(storeId > 0) storeStaff.setStoreId(storeId);
         return yxSystemStoreStaffMapper.selectCount(Wrappers.query(storeStaff)) > 0;
     }
 

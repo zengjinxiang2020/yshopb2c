@@ -91,6 +91,7 @@ public class StoreOrderController extends BaseController {
     private final YxStoreBargainUserService storeBargainUserService;
     private final YxSystemStoreService systemStoreService;
     private final YxSystemAttachmentService systemAttachmentService;
+    private final YxSystemStoreStaffService systemStoreStaffService;
 
     private static Lock lock = new ReentrantLock(false);
 
@@ -163,7 +164,7 @@ public class StoreOrderController extends BaseController {
         confirmOrderDTO.setUserInfo(userService.getYxUserById(uid));
 
         //门店
-        confirmOrderDTO.setSystemStore(systemStoreService.getStoreInfo());
+        confirmOrderDTO.setSystemStore(systemStoreService.getStoreInfo("",""));
 
         return ApiResult.ok(confirmOrderDTO);
     }
@@ -446,7 +447,7 @@ public class StoreOrderController extends BaseController {
             }
             storeOrder.setCode(qrcodeUrl);
             storeOrder.setMapKey(mapKey);
-            storeOrder.setSystemStore(systemStoreService.getStoreInfo());
+            storeOrder.setSystemStore(systemStoreService.getYxSystemStoreById(storeOrder.getStoreId()));
         }
 
         return ApiResult.ok(storeOrderService.handleOrder(storeOrder));
@@ -478,14 +479,14 @@ public class StoreOrderController extends BaseController {
         String couponId = jsonObject.getString("couponId");
         String shippingType = jsonObject.getString("shipping_type");
         String useIntegral = jsonObject.getString("useIntegral");
-        //todo 砍价
+        // 砍价
         if(ObjectUtil.isNotNull(jsonObject.getInteger("bargainId"))){
             YxStoreBargainUser storeBargainUser = storeBargainUserService.getBargainUserInfo(jsonObject.getInteger("bargainId")
                     ,uid);
             if(ObjectUtil.isNull(storeBargainUser)) return ApiResult.fail("砍价失败");
             if(storeBargainUser.getStatus() == 3) return ApiResult.fail("砍价已支付");
         }
-        //todo 拼团
+        // 拼团
         if(ObjectUtil.isNotNull(jsonObject.getInteger("pinkId"))){
             int pinkId = jsonObject.getInteger("pinkId");
             YxStoreOrder yxStoreOrder = storeOrderService.getOrderPink(pinkId,uid,1);
@@ -707,6 +708,11 @@ public class StoreOrderController extends BaseController {
 
         YxStoreOrder order = storeOrderService.getOne(Wrappers.query(storeOrder));
         if(order == null) return ApiResult.fail("核销的订单不存在或未支付或已退款");
+
+        int uid = SecurityUtils.getUserId().intValue();
+        boolean checkStatus = systemStoreStaffService.checkStatus(uid,order.getStoreId());
+        if(!checkStatus) return ApiResult.fail("您没有当前店铺核销权限！");
+
         if(order.getStatus() > 0)  return ApiResult.fail("订单已经核销");
 
         if(order.getCombinationId() > 0 && order.getPinkId() > 0){

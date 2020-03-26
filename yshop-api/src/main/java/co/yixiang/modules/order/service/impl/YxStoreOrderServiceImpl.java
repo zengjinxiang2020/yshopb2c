@@ -1313,7 +1313,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         storeOrder.setShippingType(param.getShippingType());
         //处理门店
         if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(param.getShippingType())){
-            YxSystemStoreQueryVo systemStoreQueryVo = systemStoreService.getStoreInfo();
+            YxSystemStoreQueryVo systemStoreQueryVo = systemStoreService.getYxSystemStoreById(param.getStoreId());
             if(systemStoreQueryVo == null ) throw new ErrorRequestException("暂无门店无法选择门店自提");
             storeOrder.setVerifyCode(StrUtil.sub(orderSn,orderSn.length(),-12));
             storeOrder.setStoreId(systemStoreQueryVo.getId());

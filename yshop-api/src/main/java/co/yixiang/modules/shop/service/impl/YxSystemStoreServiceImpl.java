@@ -1,5 +1,7 @@
 package co.yixiang.modules.shop.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.enums.CommonEnum;
 import co.yixiang.modules.shop.entity.YxSystemStore;
 import co.yixiang.modules.shop.mapper.YxSystemStoreMapper;
@@ -9,6 +11,7 @@ import co.yixiang.modules.shop.web.param.YxSystemStoreQueryParam;
 import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.utils.LocationUtils;
 import co.yixiang.utils.RedisUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +23,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
+import java.util.List;
 
 
 /**
@@ -42,7 +46,19 @@ public class YxSystemStoreServiceImpl extends BaseServiceImpl<YxSystemStoreMappe
     private SystemStoreMap storeMap;
 
     @Override
-    public YxSystemStoreQueryVo getStoreInfo() {
+    public List<YxSystemStoreQueryVo> getStoreList(String latitude, String longitude, int page, int limit) {
+
+        Page<YxSystemStore> pageModel = new Page<>(page, limit);
+        List<YxSystemStoreQueryVo> list = yxSystemStoreMapper.getStoreList(pageModel,Double.valueOf(longitude),Double.valueOf(latitude));
+        list.forEach(item->{
+            String newDis = NumberUtil.round(Double.valueOf(item.getDistance()) / 1000,2).toString();
+            item.setDistance(newDis);
+        });
+        return list;
+    }
+
+    @Override
+    public YxSystemStoreQueryVo getStoreInfo(String latitude,String longitude) {
         YxSystemStore systemStore = new YxSystemStore();
         systemStore.setIsDel(CommonEnum.DEL_STATUS_0.getValue());
         systemStore.setIsShow(CommonEnum.SHOW_STATUS_1.getValue());
@@ -54,17 +70,23 @@ public class YxSystemStoreServiceImpl extends BaseServiceImpl<YxSystemStoreMappe
         if(yxSystemStore == null) return null;
         String mention = RedisUtil.get("store_self_mention");
         if(mention == null || Integer.valueOf(mention) == 2) return null;
-        return storeMap.toDto(yxSystemStore);
+        YxSystemStoreQueryVo systemStoreQueryVo = storeMap.toDto(yxSystemStore);
+        if(StrUtil.isNotEmpty(latitude) && StrUtil.isNotEmpty(longitude)){
+            double distance = LocationUtils.getDistance(Double.valueOf(latitude),Double.valueOf(longitude),
+                    Double.valueOf(yxSystemStore.getLatitude()),Double.valueOf(yxSystemStore.getLongitude()));
+            systemStoreQueryVo.setDistance(String.valueOf(distance));
+        }
+        return systemStoreQueryVo;
     }
 
     @Override
-    public YxSystemStoreQueryVo getYxSystemStoreById(Serializable id) throws Exception{
+    public YxSystemStoreQueryVo getYxSystemStoreById(Serializable id){
         return yxSystemStoreMapper.getYxSystemStoreById(id);
     }
 
     @Override
-    public Paging<YxSystemStoreQueryVo> getYxSystemStorePageList(YxSystemStoreQueryParam yxSystemStoreQueryParam) throws Exception{
-        Page page = setPageParam(yxSystemStoreQueryParam,OrderItem.desc("create_time"));
+    public Paging<YxSystemStoreQueryVo> getYxSystemStorePageList(YxSystemStoreQueryParam yxSystemStoreQueryParam){
+        Page page = setPageParam(yxSystemStoreQueryParam,OrderItem.desc("add_time"));
         IPage<YxSystemStoreQueryVo> iPage = yxSystemStoreMapper.getYxSystemStorePageList(page,yxSystemStoreQueryParam);
         return new Paging(iPage);
     }

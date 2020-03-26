@@ -12,7 +12,7 @@
     </select>
 
     <select id="getYxSystemStorePageList" resultType="co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo">
-        select <include refid="Base_Column_List"/> from yx_system_store
+        select <include refid="Base_Column_List"/> from yx_system_store where is_show = 1 and is_del = 0
     </select>
 
 </mapper>

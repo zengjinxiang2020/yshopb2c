@@ -70,4 +70,6 @@ public class YxSystemStoreQueryVo implements Serializable {
 
     private Date validTimeStart;
 
+    private String distance;
+
 }

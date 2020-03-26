@@ -119,10 +119,12 @@ public class StoreProductController extends BaseController {
     @Log(value = "查看商品详情",type = 1)
     @GetMapping("/product/detail/{id}")
     @ApiOperation(value = "普通商品详情",notes = "普通商品详情")
-    public ApiResult<ProductDTO> detail(@PathVariable Integer id){
+    public ApiResult<ProductDTO> detail(@PathVariable Integer id,
+                                        @RequestParam(value = "") String latitude,
+                                        @RequestParam(value = "") String longitude){
         int uid = SecurityUtils.getUserId().intValue();
 
-        ProductDTO productDTO = storeProductService.goodsDetail(id,0,uid);
+        ProductDTO productDTO = storeProductService.goodsDetail(id,0,uid,latitude,longitude);
 
         // 海报
         String siteUrl = systemConfigService.getData("site_url");

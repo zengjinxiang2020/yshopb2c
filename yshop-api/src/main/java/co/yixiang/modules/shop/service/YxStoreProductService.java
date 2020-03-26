@@ -36,7 +36,7 @@ public interface YxStoreProductService extends BaseService<YxStoreProduct> {
     int getProductStock(int productId,String unique);
 
 
-    ProductDTO goodsDetail(int id,int type,int uid);
+    ProductDTO goodsDetail(int id,int type,int uid,String latitude,String longitude);
 
     List<YxStoreProductQueryVo> getGoodsList(YxStoreProductQueryParam productQueryParam);
 

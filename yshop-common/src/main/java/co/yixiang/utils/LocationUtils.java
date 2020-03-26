@@ -1,5 +1,7 @@
 package co.yixiang.utils;
 
+import cn.hutool.core.util.NumberUtil;
+
 /**
  * @ClassName LocationUtils
  * @Author hupeng <610796224@qq.com>
@@ -13,7 +15,7 @@ public class LocationUtils {
     }
 
     /**
-     * 通过经纬度获取距离(单位：米)
+     * 通过经纬度获取距离(单位：千米)
      * @param lat1
      * @param lng1
      * @param lat2
@@ -31,7 +33,8 @@ public class LocationUtils {
                 * Math.pow(Math.sin(b / 2), 2)));
         s = s * EARTH_RADIUS;
         s = Math.round(s * 10000d) / 10000d;
-        s = s*1000;
-        return s;
+        //s = s*1000;
+        return  NumberUtil.round(s,2).doubleValue();
+        //return s;
     }
 }

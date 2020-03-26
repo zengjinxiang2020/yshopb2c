@@ -27,5 +27,6 @@ public class OrderParam implements Serializable {
     private Integer shippingType;
     private Double useIntegral;
     private Integer isChannel = 1;
+    private Integer storeId;
 
 }

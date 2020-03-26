@@ -6,6 +6,9 @@ import lombok.EqualsAndHashCode;
 
 import co.yixiang.common.web.param.QueryParam;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.validation.constraints.NotBlank;
+
 /**
  * <p>
  * 门店自提 查询参数对象
@@ -16,7 +19,12 @@ import co.yixiang.common.web.param.QueryParam;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel(value="YxSystemStoreQueryParam对象", description="门店自提查询参数")
+@ApiModel(value="门店自提", description="门店自提查询参数")
 public class YxSystemStoreQueryParam extends QueryParam {
     private static final long serialVersionUID = 1L;
+
+    private String latitude;
+
+    private String longitude;
+
 }

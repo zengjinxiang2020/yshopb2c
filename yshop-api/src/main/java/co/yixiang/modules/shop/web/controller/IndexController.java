@@ -10,12 +10,17 @@ package co.yixiang.modules.shop.web.controller;
 
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.io.resource.ClassPathResource;
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
+import co.yixiang.modules.shop.service.YxSystemStoreService;
+import co.yixiang.modules.shop.web.param.YxSystemStoreQueryParam;
+import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import co.yixiang.utils.FileUtil;
+import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
@@ -23,6 +28,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +52,7 @@ public class IndexController {
 
     private final YxSystemGroupDataService systemGroupDataService;
     private final YxStoreProductService storeProductService;
+    private final YxSystemStoreService systemStoreService;
 
 
 
@@ -120,6 +127,28 @@ public class IndexController {
 
     }
 
+
+
+    @AnonymousAccess
+    @GetMapping("/store_list")
+    @ApiOperation(value = "获取门店列表",notes = "获取门店列表")
+    public ApiResult<Object> storeList( YxSystemStoreQueryParam param){
+        Map<String,Object> map = new LinkedHashMap<>();
+        List<YxSystemStoreQueryVo> lists;
+        if(StrUtil.isBlank(param.getLatitude()) || StrUtil.isBlank(param.getLongitude())){
+            lists = systemStoreService.getYxSystemStorePageList(param).getRecords();
+        }else{
+            lists = systemStoreService.getStoreList(
+                    param.getLatitude(),
+                    param.getLongitude(),
+                    param.getPage(),param.getLimit());
+        }
+
+        map.put("list",lists);
+       // map.put("mapKey",RedisUtil.get("tengxun_map_key"));
+        return ApiResult.ok(map);
+
+    }
 
 
 

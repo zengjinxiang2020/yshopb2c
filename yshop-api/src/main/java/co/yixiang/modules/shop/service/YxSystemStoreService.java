@@ -7,6 +7,7 @@ import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <p>
@@ -18,20 +19,23 @@ import java.io.Serializable;
  */
 public interface YxSystemStoreService extends BaseService<YxSystemStore> {
 
-    YxSystemStoreQueryVo getStoreInfo();
+    List<YxSystemStoreQueryVo> getStoreList(String latitude,String longitude,int page, int limit);
+
+
+    YxSystemStoreQueryVo getStoreInfo(String latitude,String longitude);
 
     /**
      * 根据ID获取查询对象
      * @param id
      * @return
      */
-    YxSystemStoreQueryVo getYxSystemStoreById(Serializable id) throws Exception;
+    YxSystemStoreQueryVo getYxSystemStoreById(Serializable id);
 
     /**
      * 获取分页对象
      * @param yxSystemStoreQueryParam
      * @return
      */
-    Paging<YxSystemStoreQueryVo> getYxSystemStorePageList(YxSystemStoreQueryParam yxSystemStoreQueryParam) throws Exception;
+    Paging<YxSystemStoreQueryVo> getYxSystemStorePageList(YxSystemStoreQueryParam yxSystemStoreQueryParam);
 
 }

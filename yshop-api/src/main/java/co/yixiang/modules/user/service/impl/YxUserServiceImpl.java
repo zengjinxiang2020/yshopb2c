@@ -447,7 +447,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
         }
 
         //获取核销权限
-        userQueryVo.setCheckStatus(systemStoreStaffService.checkStatus((int)id));
+        userQueryVo.setCheckStatus(systemStoreStaffService.checkStatus((int)id,0));
 
         return userQueryVo;
     }

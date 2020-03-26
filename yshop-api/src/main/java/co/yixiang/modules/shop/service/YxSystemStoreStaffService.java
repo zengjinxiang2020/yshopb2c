@@ -18,7 +18,7 @@ import java.io.Serializable;
  */
 public interface YxSystemStoreStaffService extends BaseService<YxSystemStoreStaff> {
 
-    boolean checkStatus(int uid);
+    boolean checkStatus(int uid,int storeId);
 
     /**
      * 根据ID获取查询对象
