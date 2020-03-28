@@ -73,6 +73,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -999,6 +1000,34 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         trade.setOutTradeNo(orderId);
         String payUrl = alipayService.toPayAsWeb(alipay,trade);
         return payUrl;
+    }
+
+    /**
+     * 微信APP支付
+     * @param orderId
+     * @return
+     * @throws WxPayException
+     */
+    @Override
+    public WxPayAppOrderResult appPay(String orderId) throws WxPayException {
+        YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,0);
+        if(ObjectUtil.isNull(orderInfo)) throw new ErrorRequestException("订单不存在");
+        if(orderInfo.getPaid().equals(OrderInfoEnum.PAY_STATUS_1.getValue())) throw new ErrorRequestException("该订单已支付");
+
+        if(orderInfo.getPayPrice().doubleValue() <= 0) throw new ErrorRequestException("该支付无需支付");
+
+        YxUser wechatUser = userService.getById(orderInfo.getUid());
+        if(ObjectUtil.isNull(wechatUser)) throw new ErrorRequestException("用户错误");
+
+        if(StrUtil.isNotEmpty(orderInfo.getExtendOrderId())){
+            orderId = orderInfo.getExtendOrderId();
+        }
+
+        BigDecimal bigDecimal = new BigDecimal(100);
+
+        return payService.appPay(orderId,"app商品购买",
+                bigDecimal.multiply(orderInfo.getPayPrice()).intValue(),
+                BillDetailEnum.TYPE_3.getValue());
     }
 
     /**

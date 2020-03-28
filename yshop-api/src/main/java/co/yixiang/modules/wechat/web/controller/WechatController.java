@@ -94,7 +94,7 @@ public class WechatController extends BaseController {
         map.put("appId",jsapiSignature.getAppId());
         map.put("jsApiList",new String[]{"updateAppMessageShareData","openLocation","scanQRCode",
                 "chooseWXPay","updateAppMessageShareData","updateTimelineShareData",
-                "openAddress","editAddress"});
+                "openAddress","editAddress","getLocation"});
         map.put("nonceStr",jsapiSignature.getNonceStr());
         map.put("signature",jsapiSignature.getSignature());
         map.put("timestamp",jsapiSignature.getTimestamp());

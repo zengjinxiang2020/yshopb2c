@@ -34,8 +34,10 @@ import co.yixiang.modules.security.security.TokenProvider;
 import co.yixiang.modules.security.security.vo.AuthUser;
 import co.yixiang.modules.security.security.vo.JwtUser;
 import co.yixiang.modules.security.service.OnlineUserService;
+import co.yixiang.modules.user.entity.YxSystemAttachment;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxWechatUser;
+import co.yixiang.modules.user.service.YxSystemAttachmentService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxWechatUserService;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
@@ -100,10 +102,11 @@ public class AuthController {
     private final YxWechatUserService wechatUserService;
     private final WxMaService wxMaService;
     private final NotifyService notifyService;
+    private final YxSystemAttachmentService systemAttachmentService;
 
 
-    @Log("H5用户登录")
-    @ApiOperation("H5登录授权")
+    @Log("H5/APP用户登录")
+    @ApiOperation("H5/APP登录授权")
     @AnonymousAccess
     @PostMapping(value = "/login")
     public ApiResult<Map<String, String>> login(@Validated @RequestBody AuthUser authUser,
@@ -477,7 +480,7 @@ public class AuthController {
 
     @AnonymousAccess
     @PostMapping("/register")
-    @ApiOperation(value = "H5注册新用户", notes = "H5注册新用户")
+    @ApiOperation(value = "H5/APP注册新用户", notes = "H5/APP5注册新用户")
     public ApiResult<String> register(@Validated @RequestBody RegParam param) {
 
         Object codeObj = redisUtils.get("code_" + param.getAccount());
@@ -501,7 +504,11 @@ public class AuthController {
         user.setPassword(passwordEncoder.encode(param.getPassword()));
         user.setPwd(passwordEncoder.encode(param.getPassword()));
         user.setPhone(param.getAccount());
-        user.setUserType(AppFromEnum.H5.getValue());
+        if (StrUtil.isNotBlank(param.getInviteCode())){
+            user.setUserType(AppFromEnum.APP.getValue());
+        }else{
+            user.setUserType(AppFromEnum.H5.getValue());
+        }
         user.setAddTime(OrderUtil.getSecondTimestampTwo());
         user.setLastTime(OrderUtil.getSecondTimestampTwo());
         user.setNickname(param.getAccount());
@@ -511,6 +518,13 @@ public class AuthController {
         user.setIntegral(BigDecimal.ZERO);
 
         userService.save(user);
+
+        //设置推广关系
+        if (StrUtil.isNotBlank(param.getInviteCode())) {
+            YxSystemAttachment systemAttachment = systemAttachmentService.getByCode(param.getInviteCode());
+            userService.setSpread(systemAttachment.getUid(),
+                    user.getUid());
+        }
 
         return ApiResult.ok("注册成功");
     }

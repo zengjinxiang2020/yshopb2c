@@ -26,6 +26,7 @@ import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.web.param.PromParam;
 import co.yixiang.modules.user.web.param.YxUserBillQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
+import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -124,7 +125,7 @@ public class UserBillController extends BaseController {
      */
     @GetMapping("/spread/banner")
     @ApiOperation(value = "分销二维码海报生成",notes = "分销二维码海报生成")
-    public ApiResult<Object> spreadBanner(){
+    public ApiResult<Object> spreadBanner(@RequestParam(value = "",required=false) String from){
         int uid = SecurityUtils.getUserId().intValue();
         YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
         String siteUrl = systemConfigService.getData("site_url");
@@ -136,89 +137,147 @@ public class UserBillController extends BaseController {
             return ApiResult.fail("未配置api地址");
         }
 
-        String userType = userInfo.getUserType();
-        if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
-            userType = AppFromEnum.H5.getValue();
-        }
-
-        String name = uid + "_"+userType+"_user_wap.jpg";
-
-        YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
-        String fileDir = path+"qrcode"+File.separator;
-        String qrcodeUrl = "";
-        if(ObjectUtil.isNull(attachment)){
-            //生成二维码
-            //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
-            if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
-                siteUrl = siteUrl+"/distribution/";
-            }
-            File file = FileUtil.mkdir(new File(fileDir));
-            QrCodeUtil.generate(siteUrl+"?spread="+uid, 180, 180,
-                    FileUtil.file(fileDir+name));
-
-            systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
-                    fileDir+name,"qrcode/"+name);
-
-            qrcodeUrl = fileDir+name;
-        }else{
-            qrcodeUrl = attachment.getAttDir();
-        }
-
-
-        String spreadPicName = uid + "_"+userType+"_user_spread.jpg";
-        String spreadPicPath = fileDir+spreadPicName;
-
-        YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
         String spreadUrl = "";
-        InputStream stream =  getClass().getClassLoader().getResourceAsStream("fx.jpg");
-        InputStream streamT =  getClass().getClassLoader()
-                .getResourceAsStream("simsunb.ttf");
-        File newFile = new File("fx.jpg");
-        File newFileT = new File("simsunb.ttf");
-        try {
-            FileUtils.copyInputStreamToFile(stream, newFile);
-            FileUtils.copyInputStreamToFile(streamT, newFileT);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(ObjectUtil.isNull(attachmentT)){
+        //app类型
+        if(StrUtil.isNotBlank(from) && AppFromEnum.APP.getValue().equals(from)){
+            String spreadPicName = uid + "_"+from+"_user_spread.jpg";
+            String fileDir = path+"qrcode"+File.separator;
+            String spreadPicPath = fileDir+spreadPicName;
+
+            YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
+            InputStream stream =  getClass().getClassLoader().getResourceAsStream("fx.jpg");
+            InputStream streamT =  getClass().getClassLoader()
+                    .getResourceAsStream("simsunb.ttf");
+            File newFile = new File("fx.jpg");
+            File newFileT = new File("simsunb.ttf");
             try {
-
-               // Font font = new Font(newFileT.getAbsolutePath(), Font.BOLD, 20);
-                Font font =  Font.createFont(Font.TRUETYPE_FONT, newFileT);
-                Font f= font.deriveFont(Font.PLAIN,20);
-                //font.
-                ImgUtil.pressText(//
-                        newFile,
-                        FileUtil.file(spreadPicPath),
-                        userInfo.getNickname()+"邀您加入",
-                        Color.BLACK,
-                        f, //字体
-                        50, //x坐标修正值。 默认在中间，偏移量相对于中间偏移
-                        300, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
-                        0.8f//透明度：alpha 必须是范围 [0.0, 1.0] 之内（包含边界值）的一个浮点数字
-                );
-
-                ImgUtil.pressImage(
-                        FileUtil.file(spreadPicPath),
-                        FileUtil.file(spreadPicPath),
-                        ImgUtil.read(FileUtil.file(qrcodeUrl)), //水印图片
-                        -150, //x坐标修正值。 默认在中间，偏移量相对于中间偏移
-                        340, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
-                        0.8f
-                );
-
-                systemAttachmentService.attachmentAdd(spreadPicName,
-                        String.valueOf(FileUtil.size(new File(spreadPicPath))),
-                        spreadPicPath,"qrcode/"+spreadPicName);
-
-                spreadUrl = apiUrl + "/api/file/qrcode/"+spreadPicName;
-
-            } catch (Exception e) {
+                FileUtils.copyInputStreamToFile(stream, newFile);
+                FileUtils.copyInputStreamToFile(streamT, newFileT);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-        }else{
-            spreadUrl = apiUrl + "/api/file/" + attachmentT.getSattDir();
+            if(ObjectUtil.isNull(attachmentT)){
+                try {
+                    Font font =  Font.createFont(Font.TRUETYPE_FONT, newFileT);
+                    Font f= font.deriveFont(Font.PLAIN,20);
+                    ImgUtil.pressText(//
+                            newFile,
+                            FileUtil.file(spreadPicPath),
+                            userInfo.getNickname()+"邀您加入",
+                            Color.BLACK,
+                            f, //字体
+                            0, //x坐标修正值。 默认在中间，偏移量相对于中间偏移
+                            300, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
+                            0.8f//透明度：alpha 必须是范围 [0.0, 1.0] 之内（包含边界值）的一个浮点数字
+                    );
+
+                    String inviteCode =  OrderUtil.createShareCode();
+                    ImgUtil.pressText(
+                            FileUtil.file(spreadPicPath),
+                            FileUtil.file(spreadPicPath),
+                            "邀您码:"+ inviteCode,
+                            Color.RED,
+                            f, //字体
+                            0, //x坐标修正值。 默认在中间，偏移量相对于中间偏移
+                            340, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
+                            0.8f
+                    );
+
+                    systemAttachmentService.newAttachmentAdd(spreadPicName,
+                            String.valueOf(FileUtil.size(new File(spreadPicPath))),
+                            spreadPicPath,"qrcode/"+spreadPicName,uid,inviteCode);
+
+                    spreadUrl = apiUrl + "/api/file/qrcode/"+spreadPicName;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                spreadUrl = apiUrl + "/api/file/" + attachmentT.getSattDir();
+            }
+        }
+        else{//其他
+            String userType = userInfo.getUserType();
+            if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
+                userType = AppFromEnum.H5.getValue();
+            }
+
+            String name = uid + "_"+userType+"_user_wap.jpg";
+
+            YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
+            String fileDir = path+"qrcode"+File.separator;
+            String qrcodeUrl = "";
+            if(ObjectUtil.isNull(attachment)){
+                //生成二维码
+                //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
+                if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
+                    siteUrl = siteUrl+"/distribution/";
+                }
+                File file = FileUtil.mkdir(new File(fileDir));
+                QrCodeUtil.generate(siteUrl+"?spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+
+                systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
+                        fileDir+name,"qrcode/"+name);
+
+                qrcodeUrl = fileDir+name;
+            }else{
+                qrcodeUrl = attachment.getAttDir();
+            }
+
+            String spreadPicName = uid + "_"+userType+"_user_spread.jpg";
+            String spreadPicPath = fileDir+spreadPicName;
+
+            YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
+            InputStream stream =  getClass().getClassLoader().getResourceAsStream("fx.jpg");
+            InputStream streamT =  getClass().getClassLoader()
+                    .getResourceAsStream("simsunb.ttf");
+            File newFile = new File("fx.jpg");
+            File newFileT = new File("simsunb.ttf");
+            try {
+                FileUtils.copyInputStreamToFile(stream, newFile);
+                FileUtils.copyInputStreamToFile(streamT, newFileT);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(ObjectUtil.isNull(attachmentT)){
+                try {
+
+                    Font font =  Font.createFont(Font.TRUETYPE_FONT, newFileT);
+                    Font f= font.deriveFont(Font.PLAIN,20);
+                    //font.
+                    ImgUtil.pressText(//
+                            newFile,
+                            FileUtil.file(spreadPicPath),
+                            userInfo.getNickname()+"邀您加入",
+                            Color.BLACK,
+                            f, //字体
+                            50, //x坐标修正值。 默认在中间，偏移量相对于中间偏移
+                            300, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
+                            0.8f//透明度：alpha 必须是范围 [0.0, 1.0] 之内（包含边界值）的一个浮点数字
+                    );
+
+                    ImgUtil.pressImage(
+                            FileUtil.file(spreadPicPath),
+                            FileUtil.file(spreadPicPath),
+                            ImgUtil.read(FileUtil.file(qrcodeUrl)), //水印图片
+                            -150, //x坐标修正值。 默认在中间，偏移量相对于中间偏移
+                            340, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
+                            0.8f
+                    );
+
+                    systemAttachmentService.attachmentAdd(spreadPicName,
+                            String.valueOf(FileUtil.size(new File(spreadPicPath))),
+                            spreadPicPath,"qrcode/"+spreadPicName);
+
+                    spreadUrl = apiUrl + "/api/file/qrcode/"+spreadPicName;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else{
+                spreadUrl = apiUrl + "/api/file/" + attachmentT.getSattDir();
+            }
+
         }
 
 

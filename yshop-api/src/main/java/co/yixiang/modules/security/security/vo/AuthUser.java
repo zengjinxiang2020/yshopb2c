@@ -25,6 +25,7 @@ public class AuthUser {
 
     private String spread;
 
+
     @Override
     public String toString() {
         return "{username=" + username  + ", password= ******}";

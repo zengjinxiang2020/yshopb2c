@@ -47,7 +47,14 @@ public class YxSystemAttachmentServiceImpl extends BaseServiceImpl<YxSystemAttac
     @Override
     public YxSystemAttachment getInfo(String name) {
         QueryWrapper<YxSystemAttachment> wrapper = new QueryWrapper<>();
-        wrapper.eq("name",name);
+        wrapper.eq("name",name).last("limit 1");
+        return yxSystemAttachmentMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public YxSystemAttachment getByCode(String code) {
+        QueryWrapper<YxSystemAttachment> wrapper = new QueryWrapper<>();
+        wrapper.eq("invite_code",code).last("limit 1");
         return yxSystemAttachmentMapper.selectOne(wrapper);
     }
 
@@ -63,6 +70,23 @@ public class YxSystemAttachmentServiceImpl extends BaseServiceImpl<YxSystemAttac
         attachment.setImageType(1);
         attachment.setModuleType(2);
         attachment.setPid(1);
+        yxSystemAttachmentMapper.insert(attachment);
+    }
+
+    @Override
+    public void newAttachmentAdd(String name, String attSize, String attDir, String sattDir, int uid, String code) {
+        YxSystemAttachment attachment = new YxSystemAttachment();
+        attachment.setName(name);
+        attachment.setAttSize(attSize);
+        attachment.setAttDir(attDir);
+        attachment.setAttType("image/jpeg");
+        attachment.setSattDir(sattDir);
+        attachment.setTime(OrderUtil.getSecondTimestampTwo());
+        attachment.setImageType(1);
+        attachment.setModuleType(2);
+        attachment.setPid(1);
+        attachment.setUid(uid);
+        attachment.setInviteCode(code);
         yxSystemAttachmentMapper.insert(attachment);
     }
 

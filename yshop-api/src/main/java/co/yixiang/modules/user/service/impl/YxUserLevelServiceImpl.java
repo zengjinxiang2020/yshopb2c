@@ -115,14 +115,14 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
      * @param uid
      */
     @Override
-    public void setLevelComplete(int uid) {
+    public boolean setLevelComplete(int uid) {
         YxUserQueryVo userQueryVo =  userService.getYxUserById(uid);
-        if(ObjectUtil.isNull(userQueryVo)) return;
+        if(ObjectUtil.isNull(userQueryVo)) return false;
 
         int levelId = getUserLevel(uid,9);
 
         int nextLevelId = systemUserLevelService.getNextLevelId(levelId);
-        if(nextLevelId == 0) return;
+        if(nextLevelId == 0) return false;
 
         //QueryWrapper<YxSystemUserTask> wrapper = new QueryWrapper<>();
         //wrapper.eq("level_id",nextLevelId).eq("is_show",1);
@@ -131,7 +131,11 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
         int finishCount = systemUserTaskService.getTaskComplete(nextLevelId,uid);
         if(finishCount == 3){
             setUserLevel(uid,nextLevelId);
+            return true;
         }
+
+
+        return false;
 
 
     }

@@ -46,6 +46,7 @@ import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -283,7 +284,21 @@ public class StoreOrderController extends BaseController {
                              orderDTO.setJsConfig(jsConfig);
                              map.put("result",orderDTO);
                              return ApiResult.ok(map,"订单创建成功");
-                         }else{
+                         }else if(param.getFrom().equals("app")){//app支付
+                             map.put("status","WECHAT_APP_PAY");
+                             WxPayAppOrderResult wxPayAppOrderResult = storeOrderService
+                                     .appPay(orderId);
+                             jsConfig.put("appid",wxPayAppOrderResult.getAppId());
+                             jsConfig.put("partnerid",wxPayAppOrderResult.getPartnerId());
+                             jsConfig.put("prepayid",wxPayAppOrderResult.getPrepayId());
+                             jsConfig.put("package",wxPayAppOrderResult.getPackageValue());
+                             jsConfig.put("noncestr",wxPayAppOrderResult.getNonceStr());
+                             jsConfig.put("timestamp",wxPayAppOrderResult.getTimeStamp());
+                             jsConfig.put("sign",wxPayAppOrderResult.getSign());
+                             orderDTO.setJsConfig(jsConfig);
+                             map.put("result",orderDTO);
+                             return ApiResult.ok(map,"订单创建成功");
+                         } else{//公众号
                              map.put("status","WECHAT_PAY");
                              WxPayMpOrderResult wxPayMpOrderResult = storeOrderService
                                      .wxPay(orderId);
@@ -362,6 +377,20 @@ public class StoreOrderController extends BaseController {
                             jsConfig.put("package",wxPayMpOrderResult.getPackageValue());
                             jsConfig.put("signType",wxPayMpOrderResult.getSignType());
                             jsConfig.put("paySign",wxPayMpOrderResult.getPaySign());
+                            orderDTO.setJsConfig(jsConfig);
+                            map.put("result",orderDTO);
+                            return ApiResult.ok(map,"订单创建成功");
+                        }else if(param.getFrom().equals("app")){//app支付
+                            map.put("status","WECHAT_APP_PAY");
+                            WxPayAppOrderResult wxPayAppOrderResult = storeOrderService
+                                    .appPay(orderId);
+                            jsConfig.put("appid",wxPayAppOrderResult.getAppId());
+                            jsConfig.put("partnerid",wxPayAppOrderResult.getPartnerId());
+                            jsConfig.put("prepayid",wxPayAppOrderResult.getPrepayId());
+                            jsConfig.put("package",wxPayAppOrderResult.getPackageValue());
+                            jsConfig.put("noncestr",wxPayAppOrderResult.getNonceStr());
+                            jsConfig.put("timestamp",wxPayAppOrderResult.getTimeStamp());
+                            jsConfig.put("sign",wxPayAppOrderResult.getSign());
                             orderDTO.setJsConfig(jsConfig);
                             map.put("result",orderDTO);
                             return ApiResult.ok(map,"订单创建成功");

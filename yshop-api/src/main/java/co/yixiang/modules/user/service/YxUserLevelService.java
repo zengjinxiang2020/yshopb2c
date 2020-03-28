@@ -29,7 +29,7 @@ public interface YxUserLevelService extends BaseService<YxUserLevel> {
 
     void setUserLevel(int uid,int levelId);
 
-    void setLevelComplete(int uid);
+    boolean setLevelComplete(int uid);
 
     UserLevelInfoDTO getUserLevelInfo(int id);
 

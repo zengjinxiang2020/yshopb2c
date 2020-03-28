@@ -35,6 +35,11 @@ public interface ShopConstants {
 	String YSHOP_WEIXIN_MINI_PAY_SERVICE = "yshop_weixin_mini_pay_service";
 
 	/**
+	 * 微信支付app service
+	 */
+	String YSHOP_WEIXIN_APP_PAY_SERVICE = "yshop_weixin_app_pay_service";
+
+	/**
 	 * 微信公众号service
 	 */
 	String YSHOP_WEIXIN_MP_SERVICE = "yshop_weixin_mp_service";

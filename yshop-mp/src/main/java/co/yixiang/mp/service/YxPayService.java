@@ -6,6 +6,7 @@ import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.mp.config.WxPayConfiguration;
 import co.yixiang.mp.handler.RedisHandler;
 import com.github.binarywang.wxpay.bean.entpay.EntPayRequest;
+import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
@@ -94,6 +95,38 @@ public class YxPayService {
         WxPayMwebOrderResult orderResult = wxPayService.createOrder(orderRequest);
 
         return orderResult;
+
+    }
+
+    /**
+     * 微信app支付
+     *
+     * @param orderId
+     * @param body
+     * @param totalFee
+     * @return
+     * @throws WxPayException
+     */
+    public WxPayAppOrderResult appPay(String orderId, String body,
+                                      Integer totalFee, String attach) throws WxPayException {
+
+        String apiUrl = redisHandler.getVal("api_url");
+        if (StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
+
+        WxPayService wxPayService = WxPayConfiguration.getAppPayService();
+        WxPayUnifiedOrderRequest orderRequest = new WxPayUnifiedOrderRequest();
+
+        orderRequest.setTradeType("APP");
+        orderRequest.setBody(body);
+        orderRequest.setOutTradeNo(orderId);
+        orderRequest.setTotalFee(totalFee);
+        orderRequest.setSpbillCreateIp("127.0.0.1");
+        orderRequest.setNotifyUrl(apiUrl + "/api/wechat/notify");
+        orderRequest.setAttach(attach);
+
+        WxPayAppOrderResult appOrderResult = wxPayService.createOrder(orderRequest);
+
+        return appOrderResult;
 
     }
 

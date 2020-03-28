@@ -53,4 +53,8 @@ public class YxSystemAttachment extends BaseEntity {
     @ApiModelProperty(value = "图片上传模块类型 1 后台上传 2 用户生成")
     private Integer moduleType;
 
+    private Integer uid;
+
+    private String inviteCode;
+
 }

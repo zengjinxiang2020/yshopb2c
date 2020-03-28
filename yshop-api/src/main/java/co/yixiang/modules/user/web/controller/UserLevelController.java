@@ -70,8 +70,13 @@ public class UserLevelController extends BaseController {
     @ApiOperation(value = "检测用户是否可以成为会员",notes = "检测用户是否可以成为会员")
     public ApiResult<Object> detection(){
         int uid = SecurityUtils.getUserId().intValue();
-        userLevelService.setLevelComplete(uid);
-        return ApiResult.ok("ok");
+        boolean res = userLevelService.setLevelComplete(uid);
+        if(res){
+            return ApiResult.ok("升级成功!");
+        }else{
+            return ApiResult.fail("还不符合升级条件哦!");
+        }
+
     }
 
 

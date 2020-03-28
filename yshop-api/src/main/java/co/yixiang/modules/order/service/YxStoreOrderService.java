@@ -22,6 +22,7 @@ import co.yixiang.modules.order.web.param.YxStoreOrderQueryParam;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
+import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -90,6 +91,8 @@ public interface YxStoreOrderService extends BaseService<YxStoreOrder> {
     WxPayMpOrderResult wxPay(String orderId) throws WxPayException;
 
     WxPayMwebOrderResult wxH5Pay(String orderId) throws WxPayException;
+
+    WxPayAppOrderResult appPay(String orderId) throws WxPayException;
 
     String aliPay(String orderId) throws Exception;
 

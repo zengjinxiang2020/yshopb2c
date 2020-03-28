@@ -83,6 +83,8 @@ public class IndexController {
         //滚动
         map.put("roll",systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_ROLL_NEWS));
 
+        map.put("mapKey",RedisUtil.get("tengxun_map_key"));
+
         return ApiResult.ok(map);
     }
 

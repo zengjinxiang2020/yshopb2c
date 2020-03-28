@@ -22,4 +22,6 @@ public class RegParam {
 
     //todo
     private Integer spread;
+
+    private String inviteCode;
 }

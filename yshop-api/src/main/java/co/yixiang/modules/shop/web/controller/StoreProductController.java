@@ -31,6 +31,7 @@ import co.yixiang.modules.user.entity.YxSystemAttachment;
 import co.yixiang.modules.user.service.YxSystemAttachmentService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
+import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -120,8 +121,9 @@ public class StoreProductController extends BaseController {
     @GetMapping("/product/detail/{id}")
     @ApiOperation(value = "普通商品详情",notes = "普通商品详情")
     public ApiResult<ProductDTO> detail(@PathVariable Integer id,
-                                        @RequestParam(value = "") String latitude,
-                                        @RequestParam(value = "") String longitude){
+                                        @RequestParam(value = "",required=false) String latitude,
+                                        @RequestParam(value = "",required=false) String longitude,
+                                        @RequestParam(value = "",required=false) String from){
         int uid = SecurityUtils.getUserId().intValue();
 
         ProductDTO productDTO = storeProductService.goodsDetail(id,0,uid,latitude,longitude);
@@ -141,47 +143,59 @@ public class StoreProductController extends BaseController {
         if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
             userType = AppFromEnum.H5.getValue();
         }
-        String name = id+"_"+uid + "_"+userType+"_product_detail_wap.jpg";
-        YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
-        String fileDir = path+"qrcode"+ File.separator;
-        String qrcodeUrl = "";
-        String routineQrcodeUrl = "";
-        if(ObjectUtil.isNull(attachment)){
-            //生成二维码
-            File file = FileUtil.mkdir(new File(fileDir));
-            if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
-                //下载图片
-                siteUrl = siteUrl+"/product/";
-                QrCodeUtil.generate(siteUrl+"?productId="+id+"&spread="+uid, 180, 180,
-                        FileUtil.file(fileDir+name));
+        from = "app";
+        //app类型
+        if(StrUtil.isNotBlank(from) && AppFromEnum.APP.getValue().equals(from)){
+            String name = id+"_"+uid + "_"+from+"_product_detail_wap.jpg";
+            YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
+            String inviteCode =  OrderUtil.createShareCode();
+            if(ObjectUtil.isNull(attachment)){
+                systemAttachmentService.newAttachmentAdd(name, "", "","",uid,inviteCode);
             }else{
-                QrCodeUtil.generate(siteUrl+"/detail/"+id+"?spread="+uid, 180, 180,
-                        FileUtil.file(fileDir+name));
+                inviteCode = attachment.getInviteCode();
             }
 
+            productDTO.getStoreInfo().setCodeBase(inviteCode);
+        }else {
+            String name = id+"_"+uid + "_"+userType+"_product_detail_wap.jpg";
+            YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
+            String fileDir = path+"qrcode"+ File.separator;
+            String qrcodeUrl = "";
+            String routineQrcodeUrl = "";
+            if(ObjectUtil.isNull(attachment)){
+                //生成二维码
+                File file = FileUtil.mkdir(new File(fileDir));
+                if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
+                    //下载图片
+                    siteUrl = siteUrl+"/product/";
+                    QrCodeUtil.generate(siteUrl+"?productId="+id+"&spread="+uid, 180, 180,
+                            FileUtil.file(fileDir+name));
+                }else{
+                    QrCodeUtil.generate(siteUrl+"/detail/"+id+"?spread="+uid, 180, 180,
+                            FileUtil.file(fileDir+name));
+                }
 
-            systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
-                    fileDir+name,"qrcode/"+name);
+                systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
+                        fileDir+name,"qrcode/"+name);
 
-            qrcodeUrl = fileDir+name;
-            routineQrcodeUrl = apiUrl + "/api/file/qrcode/"+name;
+                qrcodeUrl = fileDir+name;
+                routineQrcodeUrl = apiUrl + "/api/file/qrcode/"+name;
+            }else{
+                qrcodeUrl = attachment.getAttDir();
+                routineQrcodeUrl = apiUrl + "/api/file/" + attachment.getSattDir();
+            }
 
-        }else{
-            qrcodeUrl = attachment.getAttDir();
-            routineQrcodeUrl = apiUrl + "/api/file/" + attachment.getSattDir();
-        }
-
-        if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
-            productDTO.getStoreInfo().setCodeBase(routineQrcodeUrl);
-        }else{
-            try {
-                String base64CodeImg = co.yixiang.utils.FileUtil.fileToBase64(new File(qrcodeUrl));
-                productDTO.getStoreInfo().setCodeBase("data:image/jpeg;base64," + base64CodeImg);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
+                productDTO.getStoreInfo().setCodeBase(routineQrcodeUrl);
+            }else{
+                try {
+                    String base64CodeImg = co.yixiang.utils.FileUtil.fileToBase64(new File(qrcodeUrl));
+                    productDTO.getStoreInfo().setCodeBase("data:image/jpeg;base64," + base64CodeImg);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
-
 
 
         return ApiResult.ok(productDTO);
