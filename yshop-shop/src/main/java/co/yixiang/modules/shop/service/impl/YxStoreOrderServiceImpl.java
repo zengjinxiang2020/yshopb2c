@@ -15,10 +15,7 @@ import co.yixiang.modules.shop.domain.YxUserBill;
 import co.yixiang.modules.shop.repository.YxStoreOrderCartInfoRepository;
 import co.yixiang.modules.shop.repository.YxStoreOrderRepository;
 import co.yixiang.modules.shop.repository.YxUserRepository;
-import co.yixiang.modules.shop.service.YxStoreOrderService;
-import co.yixiang.modules.shop.service.YxStoreOrderStatusService;
-import co.yixiang.modules.shop.service.YxUserBillService;
-import co.yixiang.modules.shop.service.YxUserService;
+import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.service.dto.*;
 import co.yixiang.modules.shop.service.mapper.YxStoreOrderMapper;
 import co.yixiang.mp.service.YxMiniPayService;
@@ -59,10 +56,11 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
     private final YxUserService userService;
     private final YxPayService payService;
     private final YxMiniPayService miniPayService;
+    private final YxSystemStoreService systemStoreService;
 
     public YxStoreOrderServiceImpl(YxStoreOrderRepository yxStoreOrderRepository, YxStoreOrderCartInfoRepository yxStoreOrderCartInfoRepository, YxUserRepository userRepository,
                                    YxStorePinkRepository storePinkRepository, YxStoreOrderMapper yxStoreOrderMapper, YxUserBillService yxUserBillService,
-                                   YxStoreOrderStatusService yxStoreOrderStatusService,
+                                   YxStoreOrderStatusService yxStoreOrderStatusService, YxSystemStoreService systemStoreService,
                                    YxUserService userService, YxPayService payService, YxMiniPayService miniPayService) {
         this.yxStoreOrderRepository = yxStoreOrderRepository;
         this.yxStoreOrderCartInfoRepository = yxStoreOrderCartInfoRepository;
@@ -74,6 +72,7 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
         this.userService = userService;
         this.payService = payService;
         this.miniPayService = miniPayService;
+        this.systemStoreService = systemStoreService;
     }
 
     @Override
@@ -223,10 +222,16 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
             Integer _status = OrderUtil.orderStatus(yxStoreOrder.getPaid(),yxStoreOrder.getStatus(),
                     yxStoreOrder.getRefundStatus());
 
+            if(yxStoreOrder.getStoreId() > 0) {
+                String storeName = systemStoreService.findById(yxStoreOrder.getStoreId()).getName();
+                yxStoreOrderDTO.setStoreName(storeName);
+            }
+
             //订单状态
             String orderStatusStr = OrderUtil.orderStatusStr(yxStoreOrder.getPaid()
                     ,yxStoreOrder.getStatus(),yxStoreOrder.getShippingType()
                     ,yxStoreOrder.getRefundStatus());
+
             if(_status == 3){
                 String refundTime = OrderUtil.stampToDate(String.valueOf(yxStoreOrder
                         .getRefundReasonTime()));

@@ -450,10 +450,11 @@ public class StoreOrderController extends BaseController {
         if(ObjectUtil.isNull(storeOrder)){
             return ApiResult.fail("订单不存在");
         }
-        String mapKey = RedisUtil.get("tengxun_map_key");
-        if(StrUtil.isBlank(mapKey)) return ApiResult.fail("请配置腾讯地图key");
+
         //门店
         if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(storeOrder.getShippingType())){
+            String mapKey = RedisUtil.get("tengxun_map_key");
+            if(StrUtil.isBlank(mapKey)) return ApiResult.fail("请配置腾讯地图key");
             String apiUrl = systemConfigService.getData("api_url");
             if(StrUtil.isEmpty(apiUrl)){
                 return ApiResult.fail("未配置api地址");

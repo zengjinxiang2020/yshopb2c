@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -35,6 +36,10 @@ public class YxStoreCategory implements Serializable {
     @Column(name = "cate_name",nullable = false)
     @NotBlank(message = "分类名称不能为空")
     private String cateName;
+
+//    @OneToMany
+//    @JoinColumn(name = "cate_id")
+//    private List<YxStoreProduct> storeProducts;
 
     // 排序
     @Column(name = "sort",nullable = false)

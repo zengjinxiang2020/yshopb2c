@@ -65,11 +65,9 @@ public class YxStoreProductServiceImpl implements YxStoreProductService {
                         ,pageable);
         List<YxStoreProductDTO> storeProductDTOS = new ArrayList<>();
         for (YxStoreProduct product : page.getContent()) {
-            if(StrUtil.isEmpty(product.getCateId())) continue;
-            String cateName = yxStoreCategoryRepository
-                    .findNameById(Integer.valueOf(product.getCateId()));
+
             YxStoreProductDTO yxStoreProductDTO = yxStoreProductMapper.toDto(product);
-            yxStoreProductDTO.setCateName(cateName);
+
             //规格属性库存
             Integer newStock = yxStoreProductAttrValueRepository.sumStock(product.getId());
             if(newStock != null) yxStoreProductDTO.setStock(newStock);

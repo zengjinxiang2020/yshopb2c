@@ -48,6 +48,7 @@ public class SystemConfigController {
     @Log("新增或修改")
     @ApiOperation(value = "新增或修改")
     @PostMapping(value = "/yxSystemConfig")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PreAuthorize("@el.check('admin','YXSYSTEMCONFIG_ALL','YXSYSTEMCONFIG_CREATE')")
     public ResponseEntity create(@RequestBody String jsonStr){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");

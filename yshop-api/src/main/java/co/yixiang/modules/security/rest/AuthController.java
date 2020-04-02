@@ -522,8 +522,10 @@ public class AuthController {
         //设置推广关系
         if (StrUtil.isNotBlank(param.getInviteCode())) {
             YxSystemAttachment systemAttachment = systemAttachmentService.getByCode(param.getInviteCode());
-            userService.setSpread(systemAttachment.getUid(),
-                    user.getUid());
+            if(systemAttachment != null){
+                userService.setSpread(systemAttachment.getUid(),
+                        user.getUid());
+            }
         }
 
         return ApiResult.ok("注册成功");

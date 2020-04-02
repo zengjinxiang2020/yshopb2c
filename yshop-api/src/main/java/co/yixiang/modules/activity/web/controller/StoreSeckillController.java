@@ -41,10 +41,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <p>
- * 商品秒杀产品 前端控制器
+ * 商品秒杀产品前端控制器
  * </p>
  *
- * @author xuwenbo
+ * @author hupeng
  * @since 2019-12-14
  */
 @Slf4j

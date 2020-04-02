@@ -173,6 +173,8 @@ public class YxStoreOrderDTO implements Serializable {
     // 门店id
     private Integer storeId;
 
+    private String storeName;
+
     // 配送方式 1=快递 ，2=门店自提
     private Integer shippingType;
 

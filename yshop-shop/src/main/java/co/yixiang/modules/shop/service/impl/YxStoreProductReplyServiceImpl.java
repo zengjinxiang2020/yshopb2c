@@ -8,6 +8,7 @@ import co.yixiang.modules.shop.service.YxUserService;
 import co.yixiang.modules.shop.service.dto.YxStoreProductReplyDTO;
 import co.yixiang.modules.shop.service.dto.YxStoreProductReplyQueryCriteria;
 import co.yixiang.modules.shop.service.mapper.YxStoreProductReplyMapper;
+import co.yixiang.utils.PageUtil;
 import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;
 import org.springframework.data.domain.Page;
@@ -43,25 +44,8 @@ public class YxStoreProductReplyServiceImpl implements YxStoreProductReplyServic
 
     @Override
     public Map<String,Object> queryAll(YxStoreProductReplyQueryCriteria criteria, Pageable pageable){
-        Page<YxStoreProductReply> page = yxStoreProductReplyRepository
-                .findAll((root, criteriaQuery, criteriaBuilder)
-                        -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)
-                        ,pageable);
-        List<YxStoreProductReplyDTO> productReplyDTOS = new ArrayList<>();
-        for (YxStoreProductReply reply : page.getContent()) {
-            YxStoreProductReplyDTO productReplyDTO = yxStoreProductReplyMapper.toDto(reply);
-            try{
-                productReplyDTO.setUsername(userService.findById(reply.getUid()).getAccount());
-                productReplyDTO.setProductName(productService.findById(reply.getProductId()).getStoreName());
-            }catch (Exception e){
-                continue;
-            }
-            productReplyDTOS.add(productReplyDTO);
-        }
-        Map<String,Object> map = new LinkedHashMap<>(2);
-        map.put("content",productReplyDTOS);
-        map.put("totalElements",page.getTotalElements());
-        return map;
+        Page<YxStoreProductReply> page = yxStoreProductReplyRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(yxStoreProductReplyMapper::toDto));
     }
 
     @Override

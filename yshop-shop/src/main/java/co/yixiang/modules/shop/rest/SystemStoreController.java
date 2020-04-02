@@ -39,6 +39,15 @@ public class SystemStoreController {
         this.yxSystemStoreService = yxSystemStoreService;
     }
 
+
+    @Log("所有门店")
+    @ApiOperation("所有门店")
+    @GetMapping(value = "/all")
+    @PreAuthorize("@el.check('yxSystemStore:list')")
+    public ResponseEntity<Object>  getAll(YxSystemStoreQueryCriteria criteria) {
+        return new ResponseEntity<>(yxSystemStoreService.queryAll(criteria),HttpStatus.OK);
+    }
+
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")

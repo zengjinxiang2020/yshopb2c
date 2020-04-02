@@ -1,5 +1,6 @@
 package co.yixiang.modules.shop.repository;
 
+import co.yixiang.modules.shop.domain.YxStoreCategory;
 import co.yixiang.modules.shop.domain.YxStoreProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -21,5 +22,5 @@ public interface YxStoreProductRepository extends JpaRepository<YxStoreProduct, 
     @Query(value = "update yx_store_product set is_del = ?1 where id = ?2",nativeQuery = true)
     void updateDel(int status, int id);
 
-    List<YxStoreProduct> findByCateId(String cateId);
+    List<YxStoreProduct> findByStoreCategory(YxStoreCategory storeCategory);
 }
