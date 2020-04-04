@@ -3,6 +3,7 @@ package co.yixiang.modules.shop.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.EntityExistException;
@@ -12,9 +13,7 @@ import co.yixiang.modules.shop.domain.StoreOrderCartInfo;
 import co.yixiang.modules.shop.domain.YxStoreOrder;
 import co.yixiang.modules.shop.domain.YxStoreOrderStatus;
 import co.yixiang.modules.shop.domain.YxUserBill;
-import co.yixiang.modules.shop.repository.YxStoreOrderCartInfoRepository;
-import co.yixiang.modules.shop.repository.YxStoreOrderRepository;
-import co.yixiang.modules.shop.repository.YxUserRepository;
+import co.yixiang.modules.shop.repository.*;
 import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.service.dto.*;
 import co.yixiang.modules.shop.service.mapper.YxStoreOrderMapper;
@@ -48,6 +47,8 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
     private final YxStoreOrderCartInfoRepository yxStoreOrderCartInfoRepository;
     private final YxUserRepository userRepository;
     private final YxStorePinkRepository storePinkRepository;
+    private final YxStoreProductRepository storeProductRepository;
+    private final YxStoreCartRepository yxStoreCartRepository;
 
     private final YxStoreOrderMapper yxStoreOrderMapper;
 
@@ -60,8 +61,8 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
 
     public YxStoreOrderServiceImpl(YxStoreOrderRepository yxStoreOrderRepository, YxStoreOrderCartInfoRepository yxStoreOrderCartInfoRepository, YxUserRepository userRepository,
                                    YxStorePinkRepository storePinkRepository, YxStoreOrderMapper yxStoreOrderMapper, YxUserBillService yxUserBillService,
-                                   YxStoreOrderStatusService yxStoreOrderStatusService, YxSystemStoreService systemStoreService,
-                                   YxUserService userService, YxPayService payService, YxMiniPayService miniPayService) {
+                                   YxStoreOrderStatusService yxStoreOrderStatusService, YxSystemStoreService systemStoreService,YxStoreCartRepository yxStoreCartRepository,
+                                   YxUserService userService, YxPayService payService, YxMiniPayService miniPayService,YxStoreProductRepository storeProductRepository) {
         this.yxStoreOrderRepository = yxStoreOrderRepository;
         this.yxStoreOrderCartInfoRepository = yxStoreOrderCartInfoRepository;
         this.userRepository = userRepository;
@@ -73,6 +74,39 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
         this.payService = payService;
         this.miniPayService = miniPayService;
         this.systemStoreService = systemStoreService;
+        this.storeProductRepository = storeProductRepository;
+        this.yxStoreCartRepository = yxStoreCartRepository;
+    }
+
+    @Override
+    public OrderCountDto getOrderCount() {
+        //获取所有订单转态为已支付的
+        List<CountDto> nameList =  yxStoreCartRepository.findCateName();
+        System.out.println("nameList:"+nameList);
+        Map<String,Integer> childrenMap = new HashMap<>();
+        nameList.forEach(i ->{
+            if(i != null) {
+                if(childrenMap.containsKey(i.getCatename())) {
+                    childrenMap.put(i.getCatename(), childrenMap.get(i.getCatename())+1);
+                }else {
+                    childrenMap.put(i.getCatename(), 1);
+                }
+            }
+
+        });
+        List<OrderCountDto.OrderCountData> list = new ArrayList<>();
+        List<String> columns = new ArrayList<>();
+        childrenMap.forEach((k,v) ->{
+            OrderCountDto.OrderCountData orderCountData = new OrderCountDto.OrderCountData();
+            orderCountData.setName(k);
+            orderCountData.setValue(v);
+            columns.add(k);
+            list.add(orderCountData);
+        });
+        OrderCountDto orderCountDto = new OrderCountDto();
+        orderCountDto.setColumn(columns);
+        orderCountDto.setOrderCountDatas(list);
+        return orderCountDto;
     }
 
     @Override
@@ -86,17 +120,22 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
         OrderTimeDataDTO orderTimeDataDTO = new OrderTimeDataDTO();
 
         orderTimeDataDTO.setTodayCount(yxStoreOrderRepository.countByPayTimeGreaterThanEqual(today));
-        orderTimeDataDTO.setTodayPrice(yxStoreOrderRepository.sumPrice(today));
+        //orderTimeDataDTO.setTodayPrice(yxStoreOrderRepository.sumPrice(today));
 
         orderTimeDataDTO.setProCount(yxStoreOrderRepository
                 .countByPayTimeLessThanAndPayTimeGreaterThanEqual(today,yesterday));
-        orderTimeDataDTO.setProPrice(yxStoreOrderRepository.sumTPrice(today,yesterday));
+        //orderTimeDataDTO.setProPrice(yxStoreOrderRepository.sumTPrice(today,yesterday));
 
         orderTimeDataDTO.setLastWeekCount(yxStoreOrderRepository.countByPayTimeGreaterThanEqual(lastWeek));
-        orderTimeDataDTO.setLastWeekPrice(yxStoreOrderRepository.sumPrice(lastWeek));
+        //orderTimeDataDTO.setLastWeekPrice(yxStoreOrderRepository.sumPrice(lastWeek));
 
         orderTimeDataDTO.setMonthCount(yxStoreOrderRepository.countByPayTimeGreaterThanEqual(nowMonth));
-        orderTimeDataDTO.setMonthPrice(yxStoreOrderRepository.sumPrice(nowMonth));
+        //orderTimeDataDTO.setMonthPrice(yxStoreOrderRepository.sumPrice(nowMonth));
+
+        orderTimeDataDTO.setUserCount(userRepository.count());
+        orderTimeDataDTO.setOrderCount(yxStoreOrderRepository.count());
+        orderTimeDataDTO.setPriceCount(yxStoreOrderRepository.sumTotalPrice());
+        orderTimeDataDTO.setGoodsCount(storeProductRepository.count());
 
         return orderTimeDataDTO;
     }

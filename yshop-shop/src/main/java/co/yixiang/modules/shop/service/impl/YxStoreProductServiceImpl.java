@@ -38,18 +38,16 @@ import java.util.stream.Collectors;
 public class YxStoreProductServiceImpl implements YxStoreProductService {
 
     private final YxStoreProductRepository yxStoreProductRepository;
-    private final YxStoreCategoryRepository yxStoreCategoryRepository;
     private final YxStoreProductAttrRepository yxStoreProductAttrRepository;
     private final YxStoreProductAttrValueRepository yxStoreProductAttrValueRepository;
     private final YxStoreProductAttrResultRepository yxStoreProductAttrResultRepository;
 
     private final YxStoreProductMapper yxStoreProductMapper;
 
-    public YxStoreProductServiceImpl(YxStoreProductRepository yxStoreProductRepository, YxStoreCategoryRepository yxStoreCategoryRepository,
+    public YxStoreProductServiceImpl(YxStoreProductRepository yxStoreProductRepository,
                                      YxStoreProductAttrRepository yxStoreProductAttrRepository, YxStoreProductAttrValueRepository yxStoreProductAttrValueRepository,
                                      YxStoreProductAttrResultRepository yxStoreProductAttrResultRepository, YxStoreProductMapper yxStoreProductMapper) {
         this.yxStoreProductRepository = yxStoreProductRepository;
-        this.yxStoreCategoryRepository = yxStoreCategoryRepository;
         this.yxStoreProductAttrRepository = yxStoreProductAttrRepository;
         this.yxStoreProductAttrValueRepository = yxStoreProductAttrValueRepository;
         this.yxStoreProductAttrResultRepository = yxStoreProductAttrResultRepository;

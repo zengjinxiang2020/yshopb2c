@@ -31,15 +31,13 @@ public class YxStoreProductReplyServiceImpl implements YxStoreProductReplyServic
 
     private final YxStoreProductReplyMapper yxStoreProductReplyMapper;
 
-    private final YxUserService userService;
-    private final YxStoreProductService productService;
 
-    public YxStoreProductReplyServiceImpl(YxStoreProductReplyRepository yxStoreProductReplyRepository, YxStoreProductReplyMapper yxStoreProductReplyMapper,
-                                          YxUserService userService, YxStoreProductService productService) {
+
+    public YxStoreProductReplyServiceImpl(YxStoreProductReplyRepository yxStoreProductReplyRepository,
+                                          YxStoreProductReplyMapper yxStoreProductReplyMapper) {
         this.yxStoreProductReplyRepository = yxStoreProductReplyRepository;
         this.yxStoreProductReplyMapper = yxStoreProductReplyMapper;
-        this.userService = userService;
-        this.productService = productService;
+
     }
 
     @Override

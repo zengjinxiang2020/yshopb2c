@@ -59,6 +59,7 @@ public class YxStoreProduct implements Serializable {
     @Column(name = "bar_code",nullable = false)
     private String barCode;
 
+   // private Integer cateId;
 
     @ManyToOne(fetch=FetchType.LAZY,optional = false)
     @JoinColumn(name = "cate_id")

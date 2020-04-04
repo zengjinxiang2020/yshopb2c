@@ -1270,7 +1270,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             Double integralRatio = Double.valueOf(cacheDTO.getOther().getIntegralRatio());
             if(totalPrice >= integralFull){
                 Double userIntegral = userInfo.getIntegral().doubleValue();
-                if(userIntegral >= integralMax) userIntegral = integralMax;
+                if(integralMax > 0 && userIntegral >= integralMax) userIntegral = integralMax;
                 deductionPrice = NumberUtil.mul(userIntegral, integralRatio);
                 if(deductionPrice < payPrice){
                     payPrice = NumberUtil.sub(payPrice.doubleValue(),deductionPrice);

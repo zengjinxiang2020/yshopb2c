@@ -143,7 +143,6 @@ public class StoreProductController extends BaseController {
         if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
             userType = AppFromEnum.H5.getValue();
         }
-        from = "app";
         //app类型
         if(StrUtil.isNotBlank(from) && AppFromEnum.APP.getValue().equals(from)){
             String name = id+"_"+uid + "_"+from+"_product_detail_wap.jpg";

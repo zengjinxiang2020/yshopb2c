@@ -16,10 +16,7 @@ import co.yixiang.modules.activity.service.dto.YxStorePinkDTO;
 import co.yixiang.modules.shop.domain.YxStoreOrder;
 import co.yixiang.modules.shop.domain.YxStoreOrderStatus;
 import co.yixiang.modules.shop.service.*;
-import co.yixiang.modules.shop.service.dto.YxExpressDTO;
-import co.yixiang.modules.shop.service.dto.YxStoreOrderDTO;
-import co.yixiang.modules.shop.service.dto.YxStoreOrderQueryCriteria;
-import co.yixiang.modules.shop.service.dto.YxWechatUserDTO;
+import co.yixiang.modules.shop.service.dto.*;
 import co.yixiang.modules.shop.service.param.ExpressParam;
 import co.yixiang.mp.service.WxMpTemplateMessageService;
 import co.yixiang.mp.service.YxTemplateService;
@@ -72,6 +69,16 @@ public class StoreOrderController {
         this.templateService = templateService;
         this.storePinkService = storePinkService;
         this.expressService = expressService;
+    }
+
+    /**@Valid
+     * 根据商品分类统计订单占比
+     */
+    @GetMapping("/yxStoreOrder/orderCount")
+    @ApiOperation(value = "根据商品分类统计订单占比",notes = "根据商品分类统计订单占比",response = ExpressParam.class)
+    public ResponseEntity orderCount(){
+        OrderCountDto orderCountDto  = yxStoreOrderService.getOrderCount();
+        return new ResponseEntity(orderCountDto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/data/count")
