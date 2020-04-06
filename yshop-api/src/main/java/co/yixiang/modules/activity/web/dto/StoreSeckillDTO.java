@@ -26,6 +26,9 @@ public class StoreSeckillDTO implements Serializable {
 
     private YxStoreSeckillQueryVo storeInfo;
 
+    @Builder.Default
+    private Boolean userCollect = false;
+
 
 
 }

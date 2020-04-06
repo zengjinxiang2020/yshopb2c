@@ -54,6 +54,7 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
 
     private final YxStoreProductReplyService replyService;
 
+
     /**
      * 退回库存减少销量
      * @param num
@@ -104,6 +105,7 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
                 .replyCount(replyService.productReplyCount(yxStoreSeckillQueryVo.getProductId()))
                 .build();
 
+
         return storeSeckillDTO;
     }
 
@@ -116,11 +118,13 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
      * @return
      */
     @Override
-    public List<YxStoreSeckillQueryVo> getList(int page, int limit,int startTime,int endTime) {
+    public List<YxStoreSeckillQueryVo> getList(int page, int limit, int time) {
+        int nowTime = OrderUtil.getSecondTimestampTwo();
         Page<YxStoreSeckill> pageModel = new Page<>(page, limit);
         QueryWrapper<YxStoreSeckill> wrapper = new QueryWrapper<>();
         wrapper.eq("is_del",0).eq("status",1)
-                .le("start_time",startTime).ge("stop_time",endTime).orderByDesc("sort");
+                .eq("time_id",time)
+                .le("start_time",nowTime).ge("stop_time",nowTime).orderByDesc("sort");
         List<YxStoreSeckillQueryVo> yxStoreSeckillQueryVos = storeSeckillMap
                 .toDto(yxStoreSeckillMapper.selectPage(pageModel,wrapper).getRecords());
         yxStoreSeckillQueryVos.forEach(item->{

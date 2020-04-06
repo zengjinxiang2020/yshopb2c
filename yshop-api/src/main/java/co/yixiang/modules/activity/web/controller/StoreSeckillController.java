@@ -18,11 +18,14 @@ import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.web.dto.SeckillConfigDTO;
 import co.yixiang.modules.activity.web.dto.SeckillTimeDTO;
+import co.yixiang.modules.activity.web.dto.StoreSeckillDTO;
 import co.yixiang.modules.activity.web.param.YxStoreSeckillQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreSeckillQueryVo;
 import co.yixiang.modules.shop.entity.YxSystemGroupData;
+import co.yixiang.modules.shop.service.YxStoreProductRelationService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.utils.OrderUtil;
+import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -56,6 +59,7 @@ public class StoreSeckillController extends BaseController {
 
     private final YxStoreSeckillService yxStoreSeckillService;
     private final YxSystemGroupDataService yxSystemGroupDataService;
+    private final YxStoreProductRelationService relationService;
 
     /**
      * 秒杀产品列表
@@ -66,6 +70,7 @@ public class StoreSeckillController extends BaseController {
     public ApiResult<Object> getYxStoreSeckillPageList(@PathVariable String time,
                                                        YxStoreSeckillQueryParam queryParam) throws Exception {
         if (StrUtil.isBlank(time)) return ApiResult.fail("参数错误");
+        /** 此处代码已经废弃
         YxSystemGroupData systemGroupData = yxSystemGroupDataService
                 .findData(Integer.valueOf(time));
         if (ObjectUtil.isNull(systemGroupData)) return ApiResult.fail("参数错误");
@@ -73,10 +78,9 @@ public class StoreSeckillController extends BaseController {
         JSONObject jsonObject = JSONObject.parseObject(systemGroupData.getValue());
         int startTime = today + (jsonObject.getInteger("time") * 3600);
         int endTime = today + ((jsonObject.getInteger("time") + jsonObject.getInteger("continued")) * 3600);
-
-
+        **/
         return ApiResult.ok(yxStoreSeckillService.getList(queryParam.getPage().intValue(),
-                queryParam.getLimit().intValue(), startTime, endTime));
+                queryParam.getLimit().intValue(), Integer.valueOf(time)));
     }
 
 
@@ -87,7 +91,11 @@ public class StoreSeckillController extends BaseController {
     @GetMapping("/seckill/detail/{id}")
     @ApiOperation(value = "秒杀产品详情", notes = "秒杀产品详情", response = YxStoreSeckillQueryVo.class)
     public ApiResult<Object> getYxStoreSeckill(@PathVariable Integer id) throws Exception {
-        return ApiResult.ok(yxStoreSeckillService.getDetail(id));
+        int uid = SecurityUtils.getUserId().intValue();
+        StoreSeckillDTO storeSeckillDTO = yxStoreSeckillService.getDetail(id);
+        storeSeckillDTO.setUserCollect(relationService
+                .isProductRelation(storeSeckillDTO.getStoreInfo().getProductId(),"product",uid,"collect"));
+        return ApiResult.ok(storeSeckillDTO);
     }
 
 

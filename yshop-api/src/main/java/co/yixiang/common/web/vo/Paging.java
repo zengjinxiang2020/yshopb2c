@@ -12,6 +12,7 @@ import java.util.List;
 
 
 @ApiModel("分页")
+@SuppressWarnings("unchecked")
 public class Paging<T> implements Serializable {
     private static final long serialVersionUID = -1683800405530086022L;
 

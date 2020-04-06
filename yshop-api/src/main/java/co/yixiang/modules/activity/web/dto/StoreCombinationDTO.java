@@ -34,6 +34,8 @@ public class StoreCombinationDTO implements Serializable {
     private String replyChance;
     private YxStoreCombinationQueryVo storeInfo;
 
+    private Boolean userCollect = false;
+
 
 
 }

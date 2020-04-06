@@ -22,8 +22,10 @@ import co.yixiang.enums.AppFromEnum;
 import co.yixiang.modules.activity.entity.YxStorePink;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
+import co.yixiang.modules.activity.web.dto.StoreCombinationDTO;
 import co.yixiang.modules.activity.web.param.YxStoreCombinationQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreCombinationQueryVo;
+import co.yixiang.modules.shop.service.YxStoreProductRelationService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.entity.YxSystemAttachment;
 import co.yixiang.modules.user.service.YxSystemAttachmentService;
@@ -67,6 +69,7 @@ public class StoreCombinationController extends BaseController {
     private final YxSystemConfigService systemConfigService;
     private final YxUserService yxUserService;
     private final YxSystemAttachmentService systemAttachmentService;
+    private final YxStoreProductRelationService relationService;
 
     @Value("${file.path}")
     private String path;
@@ -92,7 +95,10 @@ public class StoreCombinationController extends BaseController {
     public ApiResult<Object> detail(@PathVariable Integer id){
         if(ObjectUtil.isNull(id)) return ApiResult.fail("参数有误");
         int uid = SecurityUtils.getUserId().intValue();
-        return ApiResult.ok(storeCombinationService.getDetail(id,uid));
+        StoreCombinationDTO storeCombinationDTO = storeCombinationService.getDetail(id,uid);
+        storeCombinationDTO.setUserCollect(relationService
+                .isProductRelation(storeCombinationDTO.getStoreInfo().getProductId(),"product",uid,"collect"));
+        return ApiResult.ok(storeCombinationDTO);
     }
 
     /**

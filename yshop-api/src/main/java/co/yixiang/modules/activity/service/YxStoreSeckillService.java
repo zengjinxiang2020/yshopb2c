@@ -43,7 +43,7 @@ public interface YxStoreSeckillService extends BaseService<YxStoreSeckill> {
      * @param limit
      * @return
      */
-    List<YxStoreSeckillQueryVo> getList(int page, int limit, int startTime,int endTime);
+    List<YxStoreSeckillQueryVo> getList(int page, int limit, int time);
     /**
      * 根据ID获取查询对象
      * @param id
