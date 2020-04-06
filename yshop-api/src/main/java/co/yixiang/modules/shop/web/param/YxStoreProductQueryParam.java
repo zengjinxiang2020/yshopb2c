@@ -20,9 +20,9 @@ import co.yixiang.common.web.param.QueryParam;
 public class YxStoreProductQueryParam extends QueryParam {
     private static final long serialVersionUID = 1L;
 
-    private int type;
-    private int sid;
-    private int news;
+    private String type;
+    private String sid;
+    private String news;
     private String priceOrder;
     private String salesOrder;
     private String keyword;

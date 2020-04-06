@@ -12,6 +12,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.enums.CommonEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.entity.YxStoreProduct;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
@@ -53,6 +54,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @Transactional(rollbackFor = Exception.class)
+@SuppressWarnings("unchecked")
 public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMapper, YxStoreProduct> implements YxStoreProductService {
 
     @Autowired
@@ -167,14 +169,13 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
      * @return
      */
     @Override
-    @SuppressWarnings("unchecked")
     public List<YxStoreProductQueryVo> getGoodsList(YxStoreProductQueryParam productQueryParam) {
 
         QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();
-        wrapper.eq("is_del",0).eq("is_show",1).orderByDesc("sort");
+        wrapper.eq("is_del", CommonEnum.DEL_STATUS_0.getValue()).eq("is_show",CommonEnum.SHOW_STATUS_1.getValue());
 
         //分类搜索
-        if(productQueryParam.getSid() > 0){
+        if(StrUtil.isNotBlank(productQueryParam.getSid()) && !productQueryParam.getSid().equals("0")){
             wrapper.eq("cate_id",productQueryParam.getSid());
         }
         //关键字搜索
@@ -183,21 +184,22 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
         }
 
         //新品搜索
-        if(productQueryParam.getNews() == 1){
+        if(StrUtil.isNotBlank(productQueryParam.getNews()) && productQueryParam.getNews().equals("1")){
             wrapper.eq("is_new",1);
         }
         //销量排序
         if(productQueryParam.getSalesOrder().equals("desc")){
             wrapper.orderByDesc("sales");
-        }else{
+        }else if(productQueryParam.getSalesOrder().equals("asc")) {
             wrapper.orderByAsc("sales");
         }
         //价格排序
         if(productQueryParam.getPriceOrder().equals("desc")){
             wrapper.orderByDesc("price");
-        }else{
+        }else if(productQueryParam.getPriceOrder().equals("asc")){
             wrapper.orderByAsc("price");
         }
+        wrapper.orderByDesc("sort");
 
 
         Page<YxStoreProduct> pageModel = new Page<>(productQueryParam.getPage(),

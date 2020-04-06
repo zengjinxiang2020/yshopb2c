@@ -231,7 +231,7 @@ public class StoreProductController extends BaseController {
     @ApiOperation(value = "获取产品评论",notes = "获取产品评论")
     public ApiResult<Object> replyList(@PathVariable Integer id,
                                        YxStoreProductQueryParam queryParam){
-        return ApiResult.ok(replyService.getReplyList(id,queryParam.getType(),
+        return ApiResult.ok(replyService.getReplyList(id,Integer.valueOf(queryParam.getType()),
                 queryParam.getPage().intValue(),queryParam.getLimit().intValue()));
     }
 
