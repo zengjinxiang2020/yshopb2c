@@ -52,7 +52,7 @@ public class YxStoreCategoryServiceImpl extends BaseServiceImpl<YxStoreCategoryM
     @Override
     public List<CateDTO> getList() {
         QueryWrapper<YxStoreCategory> wrapper = new QueryWrapper<>();
-        wrapper.eq("is_show",1).orderByAsc("sort");
+        wrapper.eq("is_show",1).eq("is_del",0).orderByAsc("sort");
         List<CateDTO> list = categoryMap.toDto(baseMapper.selectList(wrapper));
         return TreeUtil.list2TreeConverter(list,0);
     }
@@ -64,7 +64,7 @@ public class YxStoreCategoryServiceImpl extends BaseServiceImpl<YxStoreCategoryM
 
         List<CateDTO> list = categoryMap.toDto(baseMapper.selectList(wrapper));
 
-        System.out.println(TreeUtil.getChildList(list,new CateDTO()));
+        //System.out.println(TreeUtil.getChildList(list,new CateDTO()));
         return null;
     }
 }

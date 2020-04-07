@@ -5,6 +5,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Table(name="yx_store_category")
+//@Where(clause = "is_del = 0")
 public class YxStoreCategory implements Serializable {
 
     // 商品分类表ID
@@ -57,6 +59,9 @@ public class YxStoreCategory implements Serializable {
     // 添加时间
     @Column(name = "add_time",nullable = false)
     private Integer addTime;
+
+    @Column(name = "is_del",insertable = false)
+    private Integer isDel;
 
     public void copy(YxStoreCategory source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

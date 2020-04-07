@@ -22,5 +22,5 @@ public interface YxStoreProductRepository extends JpaRepository<YxStoreProduct, 
     @Query(value = "update yx_store_product set is_del = ?1 where id = ?2",nativeQuery = true)
     void updateDel(int status, int id);
 
-    List<YxStoreProduct> findByStoreCategory(YxStoreCategory storeCategory);
+    List<YxStoreProduct> findByStoreCategoryAndIsDel(YxStoreCategory storeCategory,int isDel);
 }

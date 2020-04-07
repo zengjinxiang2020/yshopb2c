@@ -111,11 +111,11 @@ public class YxStoreCategoryServiceImpl implements YxStoreCategoryService {
         if(storeCategory != null) throw new BadRequestException("请先删除子类");
         YxStoreCategory category = new YxStoreCategory();
         category.setId(id);
-        List<YxStoreProduct> storeProduct = yxStoreProductRepository.findByStoreCategory(category);
+        List<YxStoreProduct> storeProduct = yxStoreProductRepository.findByStoreCategoryAndIsDel(category,0);
 
         if(!storeProduct.isEmpty()) throw new BadRequestException("此分类下有商品,不能删除");
 
-        yxStoreCategoryRepository.deleteById(id);
+        yxStoreCategoryRepository.delCategory(id);
     }
 
 
