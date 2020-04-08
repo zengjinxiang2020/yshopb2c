@@ -237,10 +237,11 @@ public class AuthController {
 
             }else{
                 username = yxUser.getUsername();
-                if(StrUtil.isNotBlank(wxMpUser.getOpenId()) && StrUtil.isNotBlank(wxMpUser.getUnionId())){
+                if(StrUtil.isNotBlank(wxMpUser.getOpenId()) || StrUtil.isNotBlank(wxMpUser.getUnionId())){
                     YxWechatUser wechatUser = new YxWechatUser();
                     wechatUser.setUid(yxUser.getUid());
                     wechatUser.setUnionid(wxMpUser.getUnionId());
+                    wechatUser.setOpenid(wxMpUser.getOpenId());
 
                     wechatUserService.updateById(wechatUser);
                 }
@@ -383,10 +384,11 @@ public class AuthController {
 
             }else{
                 username = yxUser.getUsername();
-                if(StrUtil.isNotBlank(session.getOpenid()) && StrUtil.isNotBlank(session.getUnionid())){
+                if(StrUtil.isNotBlank(session.getOpenid()) || StrUtil.isNotBlank(session.getUnionid())){
                     YxWechatUser wechatUser = new YxWechatUser();
                     wechatUser.setUid(yxUser.getUid());
                     wechatUser.setUnionid(session.getUnionid());
+                    wechatUser.setRoutineOpenid(session.getOpenid());
 
                     wechatUserService.updateById(wechatUser);
                 }
