@@ -80,14 +80,14 @@ public class StoreProductController extends BaseController {
     @ApiOperation(value = "获取首页更多产品",notes = "获取首页更多产品")
     public ApiResult<Map<String,Object>> moreGoodsList(@PathVariable Integer type){
         Map<String,Object> map = new LinkedHashMap<>();
-        if(type.equals(ProductEnum.TYPE_1.getValue())){//TODO 精品推荐
+        if(type.equals(ProductEnum.TYPE_1.getValue())){// 精品推荐
             map.put("list",storeProductService.getList(1,20,1));
-        }else if(type.equals(ProductEnum.TYPE_2.getValue())){//TODO  热门榜单
-            map.put("list",storeProductService.getList(1,20,4));
-        }else if(type.equals(ProductEnum.TYPE_3.getValue())){//TODO 首发新品
+        }else if(type.equals(ProductEnum.TYPE_2.getValue())){// 热门榜单
             map.put("list",storeProductService.getList(1,20,2));
-        }else if(type.equals(ProductEnum.TYPE_4.getValue())){//TODO 促销单品
+        }else if(type.equals(ProductEnum.TYPE_3.getValue())){// 首发新品
             map.put("list",storeProductService.getList(1,20,3));
+        }else if(type.equals(ProductEnum.TYPE_4.getValue())){// 促销单品
+            map.put("list",storeProductService.getList(1,20,4));
         }
 
         return ApiResult.ok(map);

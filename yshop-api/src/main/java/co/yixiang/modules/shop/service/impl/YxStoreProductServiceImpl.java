@@ -13,6 +13,7 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.enums.CommonEnum;
+import co.yixiang.enums.ProductEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.entity.YxStoreProduct;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
@@ -229,20 +230,19 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
         QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();
         wrapper.eq("is_del",0).eq("is_show",1).orderByDesc("sort");
 
-
-        //todo order = 1 精品推荐  order=2  新品 3-优惠产品 4-热卖
-        switch (order){
-            case 1:
-                wrapper.eq("is_best",1);
+        // order
+        switch (ProductEnum.toType(order)){
+            case TYPE_1:
+                wrapper.eq("is_best",1); //精品推荐
                 break;
-            case 2:
-                wrapper.eq("is_new",1);
+            case TYPE_3:
+                wrapper.eq("is_new",1); //// 首发新品
                 break;
-            case 3:
-                wrapper.eq("is_benefit",1);
+            case TYPE_4:
+                wrapper.eq("is_benefit",1); //// 促销单品
                 break;
-            case 4:
-                wrapper.eq("is_hot",1);
+            case TYPE_2:
+                wrapper.eq("is_hot",1);//// 热门榜单
                 break;
         }
         Page<YxStoreProduct> pageModel = new Page<>(page, limit);

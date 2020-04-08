@@ -8,6 +8,8 @@
  */
 package co.yixiang.modules.user.service.impl;
 
+import co.yixiang.enums.BillEnum;
+import co.yixiang.enums.BillInfoEnum;
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.mapper.YxUserBillMapper;
 import co.yixiang.modules.user.mapping.BiillMap;
@@ -102,32 +104,32 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<YxUserBillMapper, YxU
     public List<BillDTO> getUserBillList(int page, int limit, int uid, int type) {
         QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
         wrapper.eq("uid",uid).orderByDesc("add_time").groupBy("time");
-        switch (type){
-            case 0:
-                wrapper.eq("category","now_money");
-                String str = "recharge,brokerage,pay_product,system_add,pay_product_refund,system_sub";
-                wrapper.in("type", Arrays.asList(str.split(",")));
-                break;
-            case 1:
+        switch (BillInfoEnum.toType(type)){
+            case PAY_PRODUCT:
                 wrapper.eq("category","now_money");
                 wrapper.eq("type","pay_product");
                 break;
-            case 2:
+            case RECHAREGE:
                 wrapper.eq("category","now_money");
                 wrapper.eq("type","recharge");
                 break;
-            case 3:
+            case BROKERAGE:
                 wrapper.eq("category","now_money");
                 wrapper.eq("type","brokerage");
                 break;
-            case 4:
+            case EXTRACT:
                 wrapper.eq("category","now_money");
                 wrapper.eq("type","extract");
                 break;
-            case 5:
+            case SIGN_INTEGRAL:
                 wrapper.eq("category","integral");
                 wrapper.eq("type","sign");
                 break;
+            default:
+                wrapper.eq("category","now_money");
+                String str = "recharge,brokerage,pay_product,system_add,pay_product_refund,system_sub";
+                wrapper.in("type", Arrays.asList(str.split(",")));
+
         }
         Page<YxUserBill> pageModel = new Page<>(page, limit);
         List<BillDTO> billDTOList = yxUserBillMapper.getBillList(wrapper,pageModel);

@@ -12,6 +12,7 @@ import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.enums.CouponEnum;
 import co.yixiang.modules.shop.service.YxStoreCouponIssueService;
 import co.yixiang.modules.shop.service.YxStoreCouponUserService;
 import co.yixiang.modules.shop.web.param.YxStoreCouponQueryParam;
@@ -83,14 +84,14 @@ public class CouponController extends BaseController {
         if(ObjectUtil.isEmpty(type)) type = 0;
         int uid = SecurityUtils.getUserId().intValue();
         List<YxStoreCouponUserQueryVo> list = null;
-        switch (type){
-            case 0:
+        switch (CouponEnum.toType(type)){
+            case TYPE_0:
                 list = storeCouponUserService.getUserCoupon(uid,0);
                 break;
-            case 1:
+            case TYPE_1:
                 list = storeCouponUserService.getUserCoupon(uid,1);
                 break;
-            case 2:
+            case TYPE_2:
                 list = storeCouponUserService.getUserCoupon(uid,2);
                 break;
             default:

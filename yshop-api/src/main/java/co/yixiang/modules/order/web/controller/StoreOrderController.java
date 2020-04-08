@@ -17,6 +17,7 @@ import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.OrderInfoEnum;
+import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.express.ExpressService;
@@ -258,8 +259,8 @@ public class StoreOrderController extends BaseController {
                 return ApiResult.ok(map,"支付成功");
             }
 
-            switch (param.getPayType()){
-                case "weixin":
+            switch (PayTypeEnum.toType(param.getPayType())){
+                case WEIXIN:
                      try {
                          Map<String,String> jsConfig = new HashMap<>();
                          if(param.getFrom().equals("weixinh5")){
@@ -316,7 +317,7 @@ public class StoreOrderController extends BaseController {
                      } catch (WxPayException e) {
                         return ApiResult.fail(e.getMessage());
                     }
-                case "yue":
+                case YUE:
                     storeOrderService.yuePay(orderId,uid);
                     return ApiResult.ok(map,"余额支付成功");
             }
@@ -354,8 +355,8 @@ public class StoreOrderController extends BaseController {
         map.put("result",orderDTO);
         //开始处理支付
         if(StrUtil.isNotEmpty(orderId)){
-            switch (param.getPaytype()){
-                case "weixin":
+            switch (PayTypeEnum.toType(param.getPaytype())){
+                case WEIXIN:
                     try {
                         Map<String,String> jsConfig = new HashMap<>();
                         if(param.getFrom().equals("weixinh5")){
@@ -413,7 +414,7 @@ public class StoreOrderController extends BaseController {
                     } catch (WxPayException e) {
                         return ApiResult.fail(e.getMessage());
                     }
-                case "yue":
+                case YUE:
                     storeOrderService.yuePay(orderId,uid);
                     return ApiResult.ok(map,"余额支付成功");
             }

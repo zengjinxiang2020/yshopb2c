@@ -18,10 +18,7 @@ import co.yixiang.common.web.vo.Paging;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.domain.AlipayConfig;
 import co.yixiang.domain.vo.TradeVo;
-import co.yixiang.enums.AppFromEnum;
-import co.yixiang.enums.BillDetailEnum;
-import co.yixiang.enums.BillEnum;
-import co.yixiang.enums.OrderInfoEnum;
+import co.yixiang.enums.*;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.service.*;
 import co.yixiang.modules.manage.service.YxExpressService;
@@ -637,29 +634,29 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         if(uid > 0) wrapper.eq("uid",uid);
         wrapper.eq("is_del",0).orderByDesc("add_time");
 
-        switch (type){
-            case 0://未支付
+        switch (OrderStatusEnum.toType(type)){
+            case STATUS_0://未支付
                 wrapper.eq("paid",0).eq("refund_status",0).eq("status",0);
                 break;
-            case 1://待发货
+            case STATUS_1://待发货
                 wrapper.eq("paid",1).eq("refund_status",0).eq("status",0);
                 break;
-            case 2://待收货
+            case STATUS_2://待收货
                 wrapper.eq("paid",1).eq("refund_status",0).eq("status",1);
                 break;
-            case 3://待评价
+            case STATUS_3://待评价
                 wrapper.eq("paid",1).eq("refund_status",0).eq("status",2);
                 break;
-            case 4://已完成
+            case STATUS_4://已完成
                 wrapper.eq("paid",1).eq("refund_status",0).eq("status",3);
                 break;
-            case -1://退款中
+            case STATUS_MINUS_1://退款中
                 wrapper.eq("paid",1).eq("refund_status",1);
                 break;
-            case -2://已退款
+            case STATUS_MINUS_2://已退款
                 wrapper.eq("paid",0).eq("refund_status",2);
                 break;
-            case -3://退款
+            case STATUS_MINUS_3://退款
                 String[] strs = {"1","2"};
                 wrapper.eq("paid",1).in("refund_status",Arrays.asList(strs));
                 break;
@@ -697,17 +694,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
         wrapper.eq("paid",1).eq("refund_status",0).eq("is_del",0);
 
-        switch (cate){
-            case 1: //今天
+        switch (OrderCountEnum.toType(cate)){
+            case TODAY: //今天
                 wrapper.ge("pay_time",today);
                 break;
-            case 2: //昨天
+            case YESTERDAY: //昨天
                 wrapper.lt("pay_time",today).ge("pay_time",yesterday);
                 break;
-            case 3: //上周
+            case WEEK: //上周
                 wrapper.ge("pay_time",lastWeek);
                 break;
-            case 4: //本月
+            case MONTH: //本月
                 wrapper.ge("pay_time",nowMonth);
                 break;
         }
