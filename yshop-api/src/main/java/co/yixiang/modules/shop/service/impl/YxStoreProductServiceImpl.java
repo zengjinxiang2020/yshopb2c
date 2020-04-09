@@ -261,6 +261,11 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
     }
 
     @Override
+    public YxStoreProductQueryVo getNewStoreProductById(int id) {
+        return storeProductMap.toDto(yxStoreProductMapper.selectById(id));
+    }
+
+    @Override
     public Paging<YxStoreProductQueryVo> getYxStoreProductPageList(YxStoreProductQueryParam yxStoreProductQueryParam) throws Exception{
         Page page = setPageParam(yxStoreProductQueryParam,OrderItem.desc("create_time"));
         IPage<YxStoreProductQueryVo> iPage = yxStoreProductMapper.getYxStoreProductPageList(page,yxStoreProductQueryParam);

@@ -56,6 +56,8 @@ public interface YxStoreProductService extends BaseService<YxStoreProduct> {
      */
     YxStoreProductQueryVo getYxStoreProductById(Serializable id);
 
+    YxStoreProductQueryVo getNewStoreProductById(int id);
+
     /**
      * 获取分页对象
      * @param yxStoreProductQueryParam

@@ -133,6 +133,7 @@ public class YxSystemUserTaskServiceImpl extends BaseServiceImpl<YxSystemUserTas
         List<YxSystemUserTask> list = yxSystemUserTaskMapper.selectList(wrapper);
         List<Integer> taskIds = list.stream().map(YxSystemUserTask::getId)
                 .collect(Collectors.toList());
+        if(taskIds.isEmpty()) return 0;
 
         QueryWrapper<YxUserTaskFinish> wrapperT = new QueryWrapper<>();
         wrapperT.in("task_id",taskIds).eq("uid",uid);

@@ -171,7 +171,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
             }else{
                 //必须得重新克隆创建一个新对象
                 storeProduct = ObjectUtil.clone(productService
-                        .getYxStoreProductById(storeCart.getProductId()));
+                        .getNewStoreProductById(storeCart.getProductId()));
             }
 
             YxStoreCartQueryVo storeCartQueryVo = cartMap.toDto(storeCart);
