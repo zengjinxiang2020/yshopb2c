@@ -22,9 +22,12 @@ import co.yixiang.mp.service.WxMpTemplateMessageService;
 import co.yixiang.mp.service.YxTemplateService;
 import co.yixiang.mp.service.YxWechatTemplateService;
 import co.yixiang.utils.OrderUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -32,7 +35,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.text.MessageFormat;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -44,6 +49,9 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping("api")
 @Slf4j
 public class StoreOrderController {
+
+    @Value("${yshop.apiUrl}")
+    private String apiUrl;
 
 
     private final YxStoreOrderService yxStoreOrderService;
@@ -243,6 +251,8 @@ public class StoreOrderController {
         if(OrderInfoEnum.PAY_STATUS_0.getValue().equals(storeOrderDTO.getPaid())){
             throw new BadRequestException("订单未支付");
         }
+
+        /**
         if(storeOrderDTO.getStatus() > 0) throw new BadRequestException("订单已核销");
 
         if(storeOrderDTO.getCombinationId() > 0 && storeOrderDTO.getPinkId() > 0){
@@ -251,9 +261,19 @@ public class StoreOrderController {
                 throw new BadRequestException("拼团订单暂未成功无法核销");
             }
         }
+         **/
 
-        resources.setStatus(OrderInfoEnum.STATUS_2.getValue());
-        yxStoreOrderService.update(resources);
+        //远程调用API
+        RestTemplate rest = new RestTemplate();
+        String url = StrUtil.format(apiUrl+"/order/admin/order_verific/{}", resources.getVerifyCode());
+        String text = rest.getForObject(url, String.class);
+
+        JSONObject jsonObject = JSON.parseObject(text);
+
+        Integer status = jsonObject.getInteger("status");
+        String msg = jsonObject.getString("msg");
+
+        if(status != 200) throw new BadRequestException(msg);
 
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);

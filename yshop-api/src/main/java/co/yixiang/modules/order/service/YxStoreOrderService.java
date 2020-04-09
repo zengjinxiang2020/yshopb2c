@@ -75,6 +75,8 @@ public interface YxStoreOrderService extends BaseService<YxStoreOrder> {
 
     void takeOrder(String orderId,int uid);
 
+    void verificOrder(String orderId);
+
     List<YxStoreOrderQueryVo> orderList(int uid,int type,int page,int limit);
 
     //@WebMethod

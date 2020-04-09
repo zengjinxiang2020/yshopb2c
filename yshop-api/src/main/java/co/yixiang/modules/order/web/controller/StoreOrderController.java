@@ -12,6 +12,7 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
@@ -757,11 +758,41 @@ public class StoreOrderController extends BaseController {
             return ApiResult.ok(order);
         }
 
-        order.setStatus(OrderInfoEnum.STATUS_2.getValue());
-        storeOrderService.updateById(order);
+        storeOrderService.verificOrder(order.getOrderId());
 
         return ApiResult.ok("核销成功");
     }
+
+    /**
+     * 后台订单核销用于远程调用
+     */
+    @AnonymousAccess
+    @GetMapping("/order/admin/order_verific/{code}")
+    public ApiResult<Object> orderAminVerify(@PathVariable String code){
+        YxStoreOrder storeOrder = new YxStoreOrder();
+        storeOrder.setVerifyCode(code);
+        storeOrder.setIsDel(OrderInfoEnum.CANCEL_STATUS_0.getValue());
+        storeOrder.setPaid(OrderInfoEnum.PAY_STATUS_1.getValue());
+        storeOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_0.getValue());
+
+        YxStoreOrder order = storeOrderService.getOne(Wrappers.query(storeOrder));
+        if(order == null) return ApiResult.fail("核销的订单不存在或未支付或已退款");
+
+
+        if(order.getStatus() > 0)  return ApiResult.fail("订单已经核销");
+
+        if(order.getCombinationId() > 0 && order.getPinkId() > 0){
+            YxStorePinkQueryVo storePink = storePinkService.getYxStorePinkById(order.getPinkId());
+            if(!OrderInfoEnum.PINK_STATUS_2.getValue().equals(storePink.getStatus())){
+                return ApiResult.fail("拼团订单暂未成功无法核销");
+            }
+        }
+
+        storeOrderService.verificOrder(order.getOrderId());
+
+        return ApiResult.ok("核销成功");
+    }
+
 
 
 

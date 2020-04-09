@@ -593,6 +593,30 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     }
 
     /**
+     * 核销订单
+     * @param orderId
+     */
+    @Override
+    public void verificOrder(String orderId) {
+        YxStoreOrderQueryVo order = getOrderInfo(orderId,0);
+        if(ObjectUtil.isNull(order)) throw new ErrorRequestException("订单不存在");
+
+        YxStoreOrder storeOrder = new YxStoreOrder();
+        storeOrder.setStatus(OrderInfoEnum.STATUS_2.getValue());
+        storeOrder.setId(order.getId());
+        yxStoreOrderMapper.updateById(storeOrder);
+
+        //增加状态
+        orderStatusService.create(order.getId(),"user_take_delivery","已核销");
+
+        //奖励积分
+        gainUserIntegral(order);
+
+        //分销计算
+        userService.backOrderBrokerage(order);
+    }
+
+    /**
      * 申请退款
      * @param param
      * @param uid
