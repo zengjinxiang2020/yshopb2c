@@ -10,8 +10,10 @@ package co.yixiang.modules.activity.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.entity.YxStorePink;
 import co.yixiang.modules.activity.mapper.YxStoreCombinationMapper;
@@ -35,16 +37,19 @@ import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -71,6 +76,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
     private YxStoreOrderService storeOrderService;
     @Autowired
     private YxUserService userService;
+
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
     @Autowired
     private StorePinkMap pinkMap;
@@ -487,6 +495,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         YxStoreCombinationQueryVo combinationQueryVo = combinationService
                 .getYxStoreCombinationById(order.getCombinationId());
         order = storeOrderService.handleOrder(order);
+        int pinkCount = yxStorePinkMapper.selectCount(Wrappers.<YxStorePink>lambdaQuery()
+                .eq(YxStorePink::getOrderId,order.getOrderId()));
+        if(pinkCount > 0) return;
         if(ObjectUtil.isNotNull(combinationQueryVo)){
             YxStorePink  storePink = new YxStorePink();
             storePink.setUid(order.getUid());
@@ -501,10 +512,11 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
                 storePink.setPid(queryVo.getProductId());
                 storePink.setPrice(queryVo.getProductInfo().getPrice());
             }
+            int nowTime = OrderUtil.getSecondTimestampTwo();
+            int stopTime = nowTime +(combinationQueryVo.getEffectiveTime()*3600);
             storePink.setPeople(combinationQueryVo.getPeople());
-            storePink.setStopTime(OrderUtil.getSecondTimestampTwo()
-                    +(combinationQueryVo.getEffectiveTime()*3600)+"");
-            storePink.setAddTime(OrderUtil.getSecondTimestampTwo()+"");
+            storePink.setStopTime(stopTime+"");
+            storePink.setAddTime(nowTime+"");
             if(order.getPinkId() > 0){
                 if(getIsPinkUid(order.getPinkId(),order.getUid()) > 0) return;
                 storePink.setKId(order.getPinkId());
@@ -532,6 +544,12 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
                 yxStoreOrder.setPinkId(storePink.getId());
                 yxStoreOrder.setId(order.getId());
                 storeOrderService.updateById(yxStoreOrder);
+
+                //开团加入队列
+                String redisKey = String.valueOf(StrUtil.format("{}{}",
+                        ShopConstants.REDIS_PINK_CANCEL_KEY, storePink.getId()));
+                redisTemplate.opsForValue().set(redisKey, "1" , stopTime, TimeUnit.SECONDS);
+
             }
 
             //todo 模板消息

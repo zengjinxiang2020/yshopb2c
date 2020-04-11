@@ -26,3 +26,4 @@ ADD COLUMN `time_id` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '时间段id' AFTER
 
 ALTER TABLE `yx_store_category`
 ADD COLUMN `is_del` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '删除状态' AFTER `add_time`
+

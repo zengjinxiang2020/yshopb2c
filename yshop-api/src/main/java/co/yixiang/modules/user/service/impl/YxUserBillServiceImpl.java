@@ -8,8 +8,10 @@
  */
 package co.yixiang.modules.user.service.impl;
 
+import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.enums.BillEnum;
 import co.yixiang.enums.BillInfoEnum;
+import co.yixiang.modules.activity.entity.YxStorePink;
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.mapper.YxUserBillMapper;
 import co.yixiang.modules.user.mapping.BiillMap;
@@ -22,6 +24,7 @@ import co.yixiang.modules.user.web.vo.YxUserBillQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -80,7 +83,10 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<YxUserBillMapper, YxU
 //        wrapperT.in("uid",uid).eq("type","brokerage")
 //                .eq("category","now_money");
 
-        int count = (int)pageModel.getTotal();
+        int count = yxUserBillMapper.selectCount(Wrappers.<YxUserBill>lambdaQuery()
+                .eq(YxUserBill::getUid,uid)
+                .eq(YxUserBill::getType, BillDetailEnum.TYPE_2.getValue())
+                .eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue()));
         List<BillOrderDTO> listT = new ArrayList<>();
         for (String str : list) {
             BillOrderDTO billOrderDTO = new BillOrderDTO();
