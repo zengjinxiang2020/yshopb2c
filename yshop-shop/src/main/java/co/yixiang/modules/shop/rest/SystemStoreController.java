@@ -103,6 +103,7 @@ public class SystemStoreController {
     @PreAuthorize("@el.check('yxSystemStore:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
+        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         yxSystemStoreService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }

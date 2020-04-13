@@ -10,6 +10,7 @@ package co.yixiang.modules.user.web.controller;
 
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
@@ -325,10 +326,12 @@ public class UserBillController extends BaseController {
     @GetMapping("/spread/commission/{type}")
     @ApiOperation(value = "推广佣金明细",notes = "推广佣金明细")
     public ApiResult<Object> spreadCommission(YxUserBillQueryParam queryParam,
-                                              @PathVariable int type){
+                                              @PathVariable String type){
+        int newType = 0;
+        if(NumberUtil.isNumber(type)) newType = Integer.valueOf(type);
         int uid = SecurityUtils.getUserId().intValue();
         return ApiResult.ok(userBillService.getUserBillList(queryParam.getPage().intValue(),
-                queryParam.getLimit().intValue(),uid,type));
+                queryParam.getLimit().intValue(),uid,newType));
     }
 
 
