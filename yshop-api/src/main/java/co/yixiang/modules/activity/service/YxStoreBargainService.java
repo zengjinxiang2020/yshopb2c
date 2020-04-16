@@ -40,7 +40,7 @@ public interface YxStoreBargainService extends BaseService<YxStoreBargain> {
 
     TopCountDTO topCount(int bargainId);
 
-    BargainCountDTO helpCount(int bargainId, int uid);
+    BargainCountDTO helpCount(int bargainId, int uid,int myUid);
 
     int getBargainPayCount(int bargainId);
 

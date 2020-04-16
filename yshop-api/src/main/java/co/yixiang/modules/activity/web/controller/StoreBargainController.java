@@ -120,8 +120,8 @@ public class StoreBargainController extends BaseController {
         Integer bargainId = jsonObject.getInteger("bargainId");
         Integer bargainUserUid = jsonObject.getInteger("bargainUserUid");
         if(ObjectUtil.isNull(bargainId) || ObjectUtil.isNull(bargainUserUid)) return ApiResult.fail("参数错误");
-
-        return ApiResult.ok(storeBargainService.helpCount(bargainId,bargainUserUid));
+        int uid = SecurityUtils.getUserId().intValue();
+        return ApiResult.ok(storeBargainService.helpCount(bargainId,bargainUserUid,uid));
     }
 
     /**

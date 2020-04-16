@@ -189,9 +189,11 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
      * @param uid
      */
     @Override
-    public BargainCountDTO helpCount(int bargainId, int uid) {
+    public BargainCountDTO helpCount(int bargainId, int uid,int myUid) {
         YxStoreBargainUser storeBargainUser = storeBargainUserService
                 .getBargainUserInfo(bargainId,uid);
+
+        boolean userBargainStatus = true;
         if(ObjectUtil.isNull(storeBargainUser)) {
             BargainCountDTO bargainCountDTO = BargainCountDTO
                     .builder()
@@ -200,10 +202,17 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
                     .status(0)
                     .pricePercent(0)
                     .price(0d)
+                    .userBargainStatus(userBargainStatus)
                     .build();
 
             return bargainCountDTO;
         }
+
+        int helpCount = storeBargainUserHelpService.count(new QueryWrapper<YxStoreBargainUserHelp>()
+                .eq("bargain_user_id", storeBargainUser.getId())
+                .eq("bargain_id",bargainId).eq("uid",myUid));
+
+        if(helpCount > 0) userBargainStatus = false;
 
 
         int count = storeBargainUserHelpService
@@ -229,6 +238,7 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
                 .status(storeBargainUser.getStatus())
                 .pricePercent(pricePercent)
                 .price(NumberUtil.sub(diffPrice,storeBargainUser.getPrice()).doubleValue())
+                .userBargainStatus(userBargainStatus)
                 .build();
 
         return bargainCountDTO;

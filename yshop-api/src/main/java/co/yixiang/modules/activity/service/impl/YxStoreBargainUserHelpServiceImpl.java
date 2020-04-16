@@ -61,6 +61,7 @@ public class YxStoreBargainUserHelpServiceImpl extends BaseServiceImpl<YxStoreBa
     @Autowired
     private StoreBargainHelpMap storeBargainHelpMap;
 
+
     /**
      * 获取砍价帮
      * @param bargainId

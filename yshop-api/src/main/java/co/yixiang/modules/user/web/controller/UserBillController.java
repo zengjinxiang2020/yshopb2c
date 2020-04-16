@@ -79,9 +79,9 @@ public class UserBillController extends BaseController {
 
         //判断分销类型
         String statu = systemConfigService.getData("store_brokerage_statu");
+        YxUserQueryVo userQueryVo = yxUserService.getYxUserById(uid);
         if(StrUtil.isNotEmpty(statu)){
             if(Integer.valueOf(statu) == 1){
-                YxUserQueryVo userQueryVo = yxUserService.getYxUserById(uid);
                 if(userQueryVo.getIsPromoter() == 0){
                     return ApiResult.fail("你不是推广员哦!");
                 }
@@ -92,18 +92,13 @@ public class UserBillController extends BaseController {
         double lastDayCount = userBillService.yesterdayCommissionSum(uid);
         //累计提现金额
         double extractCount = extractService.extractSum(uid);
-        //获取总佣金
-        double commissionCount = userBillService.getBrokerage(uid);
 
-        //计算当前拥有的佣金
-        if(commissionCount > 0){
 
-        }
 
         Map<String,Object> map = new LinkedHashMap<>();
         map.put("lastDayCount",lastDayCount);
         map.put("extractCount",extractCount);
-        map.put("commissionCount",commissionCount);
+        map.put("commissionCount",userQueryVo.getBrokeragePrice());
 
         return ApiResult.ok(map);
     }
