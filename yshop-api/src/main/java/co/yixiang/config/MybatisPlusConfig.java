@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  *
  */
 @Configuration
-//@MapperScan(basePackages = {"com.ruoyi.app.common.persistence.dao"})
 public class MybatisPlusConfig {
 
     /**
