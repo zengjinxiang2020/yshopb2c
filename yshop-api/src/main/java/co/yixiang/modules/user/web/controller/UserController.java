@@ -75,7 +75,7 @@ public class UserController extends BaseController {
 
         //update count
         yxUserService.setUserSpreadCount(uid);
-        return ApiResult.ok(yxUserService.getYxUserById(uid));
+        return ApiResult.ok(yxUserService.getNewYxUserById(uid));
     }
 
     /**
