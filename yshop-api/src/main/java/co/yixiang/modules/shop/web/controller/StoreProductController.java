@@ -19,10 +19,7 @@ import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.ProductEnum;
-import co.yixiang.modules.shop.service.YxStoreProductRelationService;
-import co.yixiang.modules.shop.service.YxStoreProductReplyService;
-import co.yixiang.modules.shop.service.YxStoreProductService;
-import co.yixiang.modules.shop.service.YxSystemConfigService;
+import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.web.dto.ProductDTO;
 import co.yixiang.modules.shop.web.param.YxStoreProductQueryParam;
 import co.yixiang.modules.shop.web.param.YxStoreProductRelationQueryParam;
@@ -67,7 +64,7 @@ public class StoreProductController extends BaseController {
     private final YxSystemConfigService systemConfigService;
     private final YxSystemAttachmentService systemAttachmentService;
     private final YxUserService yxUserService;
-
+    private final CreatShareProductService creatShareProductService;
     @Value("${file.path}")
     private String path;
 
@@ -125,9 +122,7 @@ public class StoreProductController extends BaseController {
                                         @RequestParam(value = "",required=false) String longitude,
                                         @RequestParam(value = "",required=false) String from){
         int uid = SecurityUtils.getUserId().intValue();
-
         ProductDTO productDTO = storeProductService.goodsDetail(id,0,uid,latitude,longitude);
-
         // 海报
         String siteUrl = systemConfigService.getData("site_url");
         if(StrUtil.isEmpty(siteUrl)){
@@ -137,66 +132,40 @@ public class StoreProductController extends BaseController {
         if(StrUtil.isEmpty(apiUrl)){
             return ApiResult.fail("未配置api地址");
         }
-
         YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
         String userType = userInfo.getUserType();
         if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
             userType = AppFromEnum.H5.getValue();
         }
-        //app类型
-        if(StrUtil.isNotBlank(from) && AppFromEnum.APP.getValue().equals(from)){
-            String name = id+"_"+uid + "_"+from+"_product_detail_wap.jpg";
-            YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
-            String inviteCode =  OrderUtil.createShareCode();
-            if(ObjectUtil.isNull(attachment)){
-                systemAttachmentService.newAttachmentAdd(name, "", "","",uid,inviteCode);
-            }else{
-                inviteCode = attachment.getInviteCode();
-            }
-
-            productDTO.getStoreInfo().setCodeBase(inviteCode);
-        }else {
             String name = id+"_"+uid + "_"+userType+"_product_detail_wap.jpg";
             YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
             String fileDir = path+"qrcode"+ File.separator;
             String qrcodeUrl = "";
-            String routineQrcodeUrl = "";
             if(ObjectUtil.isNull(attachment)){
-                //生成二维码
                 File file = FileUtil.mkdir(new File(fileDir));
+                //如果类型是小程序
                 if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
-                    //下载图片
+                    //h5地址
                     siteUrl = siteUrl+"/product/";
+                    //生成二维码
                     QrCodeUtil.generate(siteUrl+"?productId="+id+"&spread="+uid, 180, 180,
                             FileUtil.file(fileDir+name));
-                }else{
+                }else{//如果类型是h5
+                    //生成二维码
                     QrCodeUtil.generate(siteUrl+"/detail/"+id+"?spread="+uid, 180, 180,
                             FileUtil.file(fileDir+name));
                 }
-
                 systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
                         fileDir+name,"qrcode/"+name);
 
-                qrcodeUrl = fileDir+name;
-                routineQrcodeUrl = apiUrl + "/api/file/qrcode/"+name;
+                qrcodeUrl = apiUrl + "/api/file/qrcode/"+name;
             }else{
-                qrcodeUrl = attachment.getAttDir();
-                routineQrcodeUrl = apiUrl + "/api/file/" + attachment.getSattDir();
+                qrcodeUrl = apiUrl + "/api/file/" + attachment.getSattDir();
             }
-
-            if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
-                productDTO.getStoreInfo().setCodeBase(routineQrcodeUrl);
-            }else{
-                try {
-                    String base64CodeImg = co.yixiang.utils.FileUtil.fileToBase64(new File(qrcodeUrl));
-                    productDTO.getStoreInfo().setCodeBase("data:image/jpeg;base64," + base64CodeImg);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-
+                String spreadPicName = id+"_"+uid + "_"+userType+"_product_user_spread.jpg";
+                String spreadPicPath = fileDir+spreadPicName;
+                String rr =  creatShareProductService.creatProductPic(productDTO,qrcodeUrl,spreadPicName,spreadPicPath,apiUrl);
+                productDTO.getStoreInfo().setCodeBase(rr);
         return ApiResult.ok(productDTO);
     }
 
@@ -243,17 +212,6 @@ public class StoreProductController extends BaseController {
     public ApiResult<Object> replyCount(@PathVariable Integer id){
         return ApiResult.ok(replyService.getReplyCount(id));
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
