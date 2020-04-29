@@ -33,7 +33,7 @@ public interface YxUserLevelService extends BaseService<YxUserLevel> {
 
     UserLevelInfoDTO getUserLevelInfo(int id);
 
-    int getUserLevel(int uid,int grade);
+    YxUserLevel getUserLevel(int uid,int grade);
 
     /**
      * 根据ID获取查询对象
