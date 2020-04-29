@@ -22,6 +22,7 @@ import co.yixiang.common.api.ApiCode;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.AppFromEnum;
+import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.notify.NotifyService;
 import co.yixiang.modules.notify.NotifyType;
@@ -309,8 +310,8 @@ public class AuthController {
         String spread = loginParam.getSpread();
         try {
             //读取redis配置
-            String appId = RedisUtil.get("wxapp_appId");
-            String secret = RedisUtil.get("wxapp_secret");
+            String appId = RedisUtil.get(RedisKeyEnum.WXAPP_APPID.getValue());
+            String secret = RedisUtil.get(RedisKeyEnum.WXAPP_SECRET.getValue());
             if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
                 throw new ErrorRequestException("请先配置小程序");
             }

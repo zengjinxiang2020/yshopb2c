@@ -17,6 +17,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
+import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.notify.NotifyType;
 import co.yixiang.modules.notify.SmsResult;
@@ -107,8 +108,8 @@ public class WxMaUserController {
         }
 
         //读取redis配置
-        String appId = RedisUtil.get("wxapp_appId");
-        String secret = RedisUtil.get("wxapp_secret");
+        String appId = RedisUtil.get(RedisKeyEnum.WXAPP_APPID.getValue());
+        String secret = RedisUtil.get(RedisKeyEnum.WXAPP_SECRET.getValue());
         if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
             throw new ErrorRequestException("请先配置小程序");
         }

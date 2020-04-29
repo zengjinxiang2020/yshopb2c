@@ -19,6 +19,7 @@ import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.PayTypeEnum;
+import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.express.ExpressService;
@@ -455,7 +456,7 @@ public class StoreOrderController extends BaseController {
 
         //门店
         if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(storeOrder.getShippingType())){
-            String mapKey = RedisUtil.get("tengxun_map_key");
+            String mapKey = RedisUtil.get(RedisKeyEnum.TENGXUN_MAP_KEY.getValue());
             if(StrUtil.isBlank(mapKey)) return ApiResult.fail("请配置腾讯地图key");
             String apiUrl = systemConfigService.getData("api_url");
             if(StrUtil.isEmpty(apiUrl)){

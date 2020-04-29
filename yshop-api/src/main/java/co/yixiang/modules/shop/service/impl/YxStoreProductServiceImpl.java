@@ -14,6 +14,7 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.enums.CommonEnum;
 import co.yixiang.enums.ProductEnum;
+import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.entity.YxStoreProduct;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
@@ -160,7 +161,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
 
         //门店
         productDTO.setSystemStore(systemStoreService.getStoreInfo(latitude,longitude));
-        productDTO.setMapKey(RedisUtil.get("tengxun_map_key"));
+        productDTO.setMapKey(RedisUtil.get(RedisKeyEnum.TENGXUN_MAP_KEY.getValue()));
 
         return productDTO;
     }
