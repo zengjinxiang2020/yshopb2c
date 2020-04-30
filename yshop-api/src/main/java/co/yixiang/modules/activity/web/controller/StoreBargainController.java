@@ -310,12 +310,12 @@ public class StoreBargainController extends BaseController {
             File file = FileUtil.mkdir(new File(fileDir));
             if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
                 siteUrl = siteUrl+"/bargain/";
-                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid+"&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
+                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid+"&pageType=dargain&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
             }
-            if(userType.equals(AppFromEnum.APP.getValue())){
+           else if(userType.equals(AppFromEnum.APP.getValue())){
                 siteUrl = siteUrl+"/bargain/";
-                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid+"&codeType="+AppFromEnum.APP.getValue(), 180, 180,
+                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid+"&pageType=dargain&codeType="+AppFromEnum.APP.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
             }else{
                 QrCodeUtil.generate(siteUrl+"/activity/dargain_detail/"+bargainId+"/"+uid+"?spread="+uid, 180, 180,
