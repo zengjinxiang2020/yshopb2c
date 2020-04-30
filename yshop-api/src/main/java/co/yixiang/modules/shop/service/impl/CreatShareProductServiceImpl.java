@@ -49,7 +49,7 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            g.drawImage(priductUrl.getScaledInstance(690,516,Image.SCALE_DEFAULT),29,61,null);
+            g.drawImage(priductUrl.getScaledInstance(750,590,Image.SCALE_DEFAULT),0,0,null);
             InputStream streamT =  getClass().getClassLoader()
                     .getResourceAsStream("Alibaba-PuHuiTi-Regular.otf");
             File newFileT = new File("Alibaba-PuHuiTi-Regular.otf");
