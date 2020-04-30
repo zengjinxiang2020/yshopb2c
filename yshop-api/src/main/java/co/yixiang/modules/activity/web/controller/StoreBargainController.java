@@ -259,10 +259,10 @@ public class StoreBargainController extends BaseController {
     }
 
     /**
-     * 拼团海报
+     * 砍价海报
      */
     @PostMapping("/bargain/poster")
-    @ApiOperation(value = "拼团海报",notes = "拼团海报")
+    @ApiOperation(value = "砍价海报",notes = "砍价海报")
     public ApiResult<Object> poster(@RequestBody String jsonStr){
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         Integer bargainId = jsonObject.getInteger("bargainId");
@@ -310,7 +310,12 @@ public class StoreBargainController extends BaseController {
             File file = FileUtil.mkdir(new File(fileDir));
             if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
                 siteUrl = siteUrl+"/bargain/";
-                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid, 180, 180,
+                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid+"&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
+                        FileUtil.file(fileDir+name));
+            }
+            if(userType.equals(AppFromEnum.APP.getValue())){
+                siteUrl = siteUrl+"/bargain/";
+                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid+"&codeType="+AppFromEnum.APP.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
             }else{
                 QrCodeUtil.generate(siteUrl+"/activity/dargain_detail/"+bargainId+"/"+uid+"?spread="+uid, 180, 180,

@@ -151,9 +151,15 @@ public class StoreCombinationController extends BaseController {
             File file = FileUtil.mkdir(new File(fileDir));
             if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
                 siteUrl = siteUrl+"/pink/";
-                QrCodeUtil.generate(siteUrl+"?pinkId="+pinkId+"&spread="+uid, 180, 180,
+                QrCodeUtil.generate(siteUrl+"?pinkId="+pinkId+"&spread="+uid+"&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
-            }else{
+            }
+            if(userType.equals(AppFromEnum.APP.getValue())){
+                siteUrl = siteUrl+"/pink/";
+                QrCodeUtil.generate(siteUrl+"?pinkId="+pinkId+"&spread="+uid+"&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
+                        FileUtil.file(fileDir+name));
+            }
+            else{
                 QrCodeUtil.generate(siteUrl+"/activity/group_rule/"+pinkId+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
