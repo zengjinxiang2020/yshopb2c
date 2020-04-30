@@ -39,7 +39,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,7 +122,7 @@ public class StoreProductController extends BaseController {
     public ApiResult<ProductDTO> detail(@PathVariable Integer id,
                                         @RequestParam(value = "",required=false) String latitude,
                                         @RequestParam(value = "",required=false) String longitude,
-                                        @RequestParam(value = "",required=false) String from){
+                                        @RequestParam(value = "",required=false) String from) throws IOException, FontFormatException {
         int uid = SecurityUtils.getUserId().intValue();
         ProductDTO productDTO = storeProductService.goodsDetail(id,0,uid,latitude,longitude);
         // 海报

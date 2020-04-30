@@ -7,6 +7,7 @@ import co.yixiang.modules.shop.web.dto.ProductDTO;
 import co.yixiang.modules.user.entity.YxSystemAttachment;
 import co.yixiang.modules.user.service.YxSystemAttachmentService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
 
     private final YxSystemAttachmentService systemAttachmentService;
 
-    public  String creatProductPic(ProductDTO productDTO,String shareCode,String spreadPicName,String spreadPicPath,String apiUrl) {
+    public  String creatProductPic(ProductDTO productDTO,String shareCode,String spreadPicName,String spreadPicPath,String apiUrl) throws IOException, FontFormatException {
         YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
         String spreadUrl = "";
         if(ObjectUtil.isNull(attachmentT)){
@@ -35,14 +36,9 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             //开启画图
             Graphics g = img.getGraphics();
             //背景 -- 读取互联网图片
-            BufferedImage back = null;
             InputStream stream =  getClass().getClassLoader().getResourceAsStream("background.png");
-            try {
-                ImageInputStream background = ImageIO.createImageInputStream(stream);
-                back = ImageIO.read(background);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            ImageInputStream background = ImageIO.createImageInputStream(stream);
+            BufferedImage back = ImageIO.read(background);
 
             g.drawImage(back.getScaledInstance(750, 1334, Image.SCALE_DEFAULT), 0, 0, null); // 绘制缩小后的图
             //商品  banner图
@@ -54,13 +50,18 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
                 e.printStackTrace();
             }
             g.drawImage(priductUrl.getScaledInstance(690,516,Image.SCALE_DEFAULT),29,61,null);
+            InputStream streamT =  getClass().getClassLoader()
+                    .getResourceAsStream("Alibaba-PuHuiTi-Regular.otf");
+            File newFileT = new File("Alibaba-PuHuiTi-Regular.otf");
+            FileUtils.copyInputStreamToFile(streamT, newFileT);
+            Font font =  Font.createFont(Font.TRUETYPE_FONT, newFileT);
             //文案标题
-            g.setFont(new Font("微软雅黑", Font.BOLD, 34));
+            g.setFont(font.deriveFont(Font.BOLD,34));
             g.setColor(new Color(29,29,29));
             //绘制文字
             g.drawString(productDTO.getStoreInfo().getStoreName(), 31, 638);
             //文案
-            g.setFont(new Font("微软雅黑", Font.PLAIN, 30));
+            g.setFont(font.deriveFont(Font.PLAIN,30));
             g.setColor(new Color(47,47,47));
             int fontlen = getWatermarkLength(productDTO.getStoreInfo().getStoreInfo(), g);
             //文字长度相对于图片宽度应该有多少行
@@ -108,24 +109,24 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             g.drawImage(bground.getScaledInstance(160, 40, Image.SCALE_DEFAULT), 30, 1053, null);
 
             //限时促销价
-            g.setFont(new Font("微软雅黑", Font.PLAIN, 24));
+            g.setFont(font.deriveFont(Font.PLAIN,24));
             g.setColor(new Color(255,255,255));
             g.drawString("限时促销价", 50, 1080);
 
             //价格
-            g.setFont(new Font("微软雅黑", Font.PLAIN, 50));
+            g.setFont(font.deriveFont(Font.PLAIN,50));
             g.setColor(new Color(249,64,64));
             g.drawString("¥" +productDTO.getStoreInfo().getPrice(), 29, 1162);
 
             //原价
-            g.setFont(new Font("微软雅黑", Font.PLAIN, 36));
+            g.setFont(font.deriveFont(Font.PLAIN,36));
             g.setColor(new Color(171,171,171));
             String price = "¥" + productDTO.getStoreInfo().getOtPrice();
             g.drawString(price, 260, 1160);
             g.drawLine(250,1148,260+150,1148);
 
             //商品名称
-            g.setFont(new Font("微软雅黑", Font.PLAIN, 32));
+            g.setFont(font.deriveFont(Font.PLAIN,32));
             g.setColor(new Color(29,29,29));
             g.drawString(productDTO.getStoreInfo().getStoreName(), 30, 1229);
 
@@ -142,7 +143,7 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             g.drawImage(qrCode.getScaledInstance(174, 174, Image.SCALE_DEFAULT), 536, 1057, null);
 
             //二维码字体
-            g.setFont(new Font("微软雅黑", Font.PLAIN, 25));
+            g.setFont(font.deriveFont(Font.PLAIN,25));
             g.setColor(new Color(171,171,171));
             //绘制文字
             g.drawString("扫描或长按小程序码", 515, 1260);
