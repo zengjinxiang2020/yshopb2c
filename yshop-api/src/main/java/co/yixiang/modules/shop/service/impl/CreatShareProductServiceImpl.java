@@ -2,6 +2,7 @@ package co.yixiang.modules.shop.service.impl;
 
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.modules.shop.entity.YxStoreProduct;
 import co.yixiang.modules.shop.service.CreatShareProductService;
 import co.yixiang.modules.shop.web.dto.ProductDTO;
 import co.yixiang.modules.user.entity.YxSystemAttachment;
@@ -27,7 +28,7 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
 
     private final YxSystemAttachmentService systemAttachmentService;
 
-    public  String creatProductPic(ProductDTO productDTO,String shareCode,String spreadPicName,String spreadPicPath,String apiUrl) throws IOException, FontFormatException {
+    public  String creatProductPic(YxStoreProduct productDTO, String shareCode, String spreadPicName, String spreadPicPath, String apiUrl) throws IOException, FontFormatException {
         YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
         String spreadUrl = "";
         if(ObjectUtil.isNull(attachmentT)){
@@ -45,7 +46,7 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             //读取互联网图片
             BufferedImage priductUrl = null;
             try {
-                priductUrl = ImageIO.read(new URL(productDTO.getStoreInfo().getImage_base()));
+                priductUrl = ImageIO.read(new URL(productDTO.getImage()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -59,11 +60,11 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             g.setFont(font.deriveFont(Font.BOLD,34));
             g.setColor(new Color(29,29,29));
             //绘制文字
-            g.drawString(productDTO.getStoreInfo().getStoreName(), 31, 638);
+            g.drawString(productDTO.getStoreName(), 31, 638);
             //文案
             g.setFont(font.deriveFont(Font.PLAIN,30));
             g.setColor(new Color(47,47,47));
-            int fontlen = getWatermarkLength(productDTO.getStoreInfo().getStoreInfo(), g);
+            int fontlen = getWatermarkLength(productDTO.getStoreInfo(), g);
             //文字长度相对于图片宽度应该有多少行
             int line = fontlen / (back.getWidth() - 90);
             //高度
@@ -76,8 +77,8 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             //单行字符总长度临时计算
             int tempLineLen = 0;
             StringBuffer sb =new StringBuffer();
-            for(int i=0; i < productDTO.getStoreInfo().getStoreInfo().length(); i++) {
-                char tempChar = productDTO.getStoreInfo().getStoreInfo().charAt(i);
+            for(int i=0; i < productDTO.getStoreInfo().length(); i++) {
+                char tempChar = productDTO.getStoreInfo().charAt(i);
                 tempCharLen = getCharLen(tempChar, g);
                 tempLineLen += tempCharLen;
                 if(tempLineLen >= (back.getWidth()-90)) {
@@ -116,19 +117,19 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             //价格
             g.setFont(font.deriveFont(Font.PLAIN,50));
             g.setColor(new Color(249,64,64));
-            g.drawString("¥" +productDTO.getStoreInfo().getPrice(), 29, 1162);
+            g.drawString("¥" +productDTO.getPrice(), 29, 1162);
 
             //原价
             g.setFont(font.deriveFont(Font.PLAIN,36));
             g.setColor(new Color(171,171,171));
-            String price = "¥" + productDTO.getStoreInfo().getOtPrice();
+            String price = "¥" + productDTO.getOtPrice();
             g.drawString(price, 260, 1160);
             g.drawLine(250,1148,260+150,1148);
 
             //商品名称
             g.setFont(font.deriveFont(Font.PLAIN,32));
             g.setColor(new Color(29,29,29));
-            g.drawString(productDTO.getStoreInfo().getStoreName(), 30, 1229);
+            g.drawString(productDTO.getStoreName(), 30, 1229);
 
             //生成二维码返回链接
             String url = shareCode;

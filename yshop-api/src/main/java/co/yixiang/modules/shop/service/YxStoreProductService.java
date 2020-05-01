@@ -28,6 +28,8 @@ import java.util.List;
  */
 public interface YxStoreProductService extends BaseService<YxStoreProduct> {
 
+    YxStoreProduct getProductInfo(int id);
+
 
     void incProductStock(int num,int productId,String unique);
 
