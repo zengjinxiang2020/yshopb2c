@@ -14,6 +14,7 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
@@ -83,7 +84,7 @@ public class IndexController {
         //滚动
         map.put("roll",systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_ROLL_NEWS));
 
-        map.put("mapKey",RedisUtil.get("tengxun_map_key"));
+        map.put("mapKey",RedisUtil.get(RedisKeyEnum.TENGXUN_MAP_KEY.getValue()));
 
         return ApiResult.ok(map);
     }

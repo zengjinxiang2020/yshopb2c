@@ -22,6 +22,7 @@ import co.yixiang.modules.user.entity.YxUserSign;
 import co.yixiang.modules.user.mapper.YxUserBillMapper;
 import co.yixiang.modules.user.mapper.YxUserSignMapper;
 import co.yixiang.modules.user.service.YxUserBillService;
+import co.yixiang.modules.user.service.YxUserLevelService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxUserSignService;
 import co.yixiang.modules.user.web.dto.SignDTO;
@@ -65,8 +66,7 @@ public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxU
     private  YxSystemGroupDataService systemGroupDataService;
     private YxUserService yxUserService;
     private YxUserBillService billService;
-
-
+    private YxUserLevelService userLevelService;
 
     /**
      * 用户签到
@@ -132,6 +132,8 @@ public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxU
         userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
         billService.save(userBill);
 
+        //检查是否符合会员升级条件
+        userLevelService.setLevelComplete(uid);
         return signNumber;
     }
 

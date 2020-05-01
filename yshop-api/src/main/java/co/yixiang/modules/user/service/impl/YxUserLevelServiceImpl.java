@@ -119,7 +119,7 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
         YxUserQueryVo userQueryVo =  userService.getYxUserById(uid);
         if(ObjectUtil.isNull(userQueryVo)) return false;
 
-        int levelId = getUserLevel(uid,9);
+        int levelId = getUserLevel(uid,9).getLevelId();
 
         int nextLevelId = systemUserLevelService.getNextLevelId(levelId);
         if(nextLevelId == 0) return false;
@@ -152,14 +152,14 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
      * @return
      */
     @Override
-    public int getUserLevel(int uid, int grade) {
+    public YxUserLevel getUserLevel(int uid, int grade) {
         QueryWrapper<YxUserLevel> wrapper = new QueryWrapper<>();
         wrapper.eq("is_del",0).eq("status",1)
                 .eq("uid",uid).orderByDesc("grade");
         if(grade > 0) wrapper.lt("grade",grade);
-        YxUserLevel userLevel = yxUserLevelMapper.selectOne(wrapper);
-        if(ObjectUtil.isNull(userLevel)) return 0;
-        if(userLevel.getIsForever() == 1) return userLevel.getId();
+        YxUserLevel userLevel = this.getOne(wrapper,false);
+        if(ObjectUtil.isNull(userLevel)) return new YxUserLevel();
+        if(userLevel.getIsForever() == 1) return userLevel;
         int nowTime = OrderUtil.getSecondTimestampTwo();
         if(nowTime > userLevel.getValidTime()){
             if(userLevel.getStatus() == 1){
@@ -169,7 +169,7 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
 
             return getUserLevel(uid,userLevel.getGrade());
         }
-        return userLevel.getId();
+        return userLevel;
     }
 
     @Override

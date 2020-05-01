@@ -133,7 +133,7 @@ public class YxSystemUserLevelServiceImpl extends BaseServiceImpl<YxSystemUserLe
      */
     @Override
     public UserLevelDTO getLevelInfo(int uid,boolean isTask) {
-        int id = userLevelService.getUserLevel(uid,0); //用户当前等级id
+        int id = userLevelService.getUserLevel(uid,0).getId(); //用户当前等级id
         UserLevelInfoDTO userLevelInfoDTO = null;
         if(id > 0) userLevelInfoDTO = userLevelService.getUserLevelInfo(id);
         int levelId = 0;
