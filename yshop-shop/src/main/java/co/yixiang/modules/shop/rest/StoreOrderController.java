@@ -389,11 +389,11 @@ public class StoreOrderController {
                          @RequestParam(name = "orderType") String orderType,
                          @RequestParam(name = "listContent") String listContent) throws IOException, ParseException {
         List<YxStoreOrderDTO> list = (List)getYxStoreList(criteria, pageable, orderStatus, orderType).get("content");
-        List<String> idList = JSONArray.parseArray(listContent).toJavaList(String.class);
-        List<YxStoreOrderDTO> yxStoreOrderDTOS = new ArrayList<>();
         if(StringUtils.isEmpty(listContent)){
             yxStoreOrderService.download(list, response);
         }else {
+            List<String> idList = JSONArray.parseArray(listContent).toJavaList(String.class);
+            List<YxStoreOrderDTO> yxStoreOrderDTOS = new ArrayList<>();
             for(YxStoreOrderDTO yx : list){
                 for(String ids : idList){
                     if(yx.getOrderId().equals(ids)){
