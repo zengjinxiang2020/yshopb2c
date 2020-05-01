@@ -52,10 +52,7 @@ import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.entity.YxUserBill;
 import co.yixiang.modules.user.entity.YxWechatUser;
-import co.yixiang.modules.user.service.YxUserAddressService;
-import co.yixiang.modules.user.service.YxUserBillService;
-import co.yixiang.modules.user.service.YxUserService;
-import co.yixiang.modules.user.service.YxWechatUserService;
+import co.yixiang.modules.user.service.*;
 import co.yixiang.modules.user.web.vo.YxUserAddressQueryVo;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
@@ -164,8 +161,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     private YxMiniPayService miniPayService;
     @Autowired
     private YxTemplateService templateService;
-
-
+    @Autowired
+    private YxUserLevelService userLevelService;
 
 
     /**
@@ -590,6 +587,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         //分销计算
         userService.backOrderBrokerage(order);
 
+        //检查是否符合会员升级条件
+        userLevelService.setLevelComplete(uid);
     }
 
     /**
@@ -614,6 +613,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         //分销计算
         userService.backOrderBrokerage(order);
+
+        //检查是否符合会员升级条件
+        userLevelService.setLevelComplete(order.getUid());
     }
 
     /**
