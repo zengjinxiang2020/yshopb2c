@@ -10,6 +10,7 @@ package co.yixiang.modules.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.modules.user.entity.YxSystemUserLevel;
+import co.yixiang.modules.user.entity.YxUserLevel;
 import co.yixiang.modules.user.mapper.YxSystemUserLevelMapper;
 import co.yixiang.modules.user.mapping.SystemUserLevelMap;
 import co.yixiang.modules.user.service.YxSystemUserLevelService;
@@ -133,7 +134,11 @@ public class YxSystemUserLevelServiceImpl extends BaseServiceImpl<YxSystemUserLe
      */
     @Override
     public UserLevelDTO getLevelInfo(int uid,boolean isTask) {
-        int id = userLevelService.getUserLevel(uid,0).getId(); //用户当前等级id
+        int id = 0; //用户当前等级id
+        YxUserLevel userLevel = userLevelService.getUserLevel(uid, 0);
+        if(userLevel.getId()!=null){
+            userLevel.getId();
+        }
         UserLevelInfoDTO userLevelInfoDTO = null;
         if(id > 0) userLevelInfoDTO = userLevelService.getUserLevelInfo(id);
         int levelId = 0;

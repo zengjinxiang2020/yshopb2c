@@ -118,9 +118,11 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
     public boolean setLevelComplete(int uid) {
         YxUserQueryVo userQueryVo =  userService.getYxUserById(uid);
         if(ObjectUtil.isNull(userQueryVo)) return false;
-
-        int levelId = getUserLevel(uid,9).getLevelId();
-
+        int levelId = 0;
+        YxUserLevel yxUserLevel = getUserLevel(uid,9);
+        if(yxUserLevel.getId()!=null ){
+            levelId =  yxUserLevel.getLevelId();
+        }
         int nextLevelId = systemUserLevelService.getNextLevelId(levelId);
         if(nextLevelId == 0) return false;
 
