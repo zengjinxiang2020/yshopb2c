@@ -137,7 +137,7 @@ public class YxSystemUserLevelServiceImpl extends BaseServiceImpl<YxSystemUserLe
         int id = 0; //用户当前等级id
         YxUserLevel userLevel = userLevelService.getUserLevel(uid, 0);
         if(userLevel.getId()!=null){
-            userLevel.getId();
+            id =  userLevel.getId();
         }
         UserLevelInfoDTO userLevelInfoDTO = null;
         if(id > 0) userLevelInfoDTO = userLevelService.getUserLevelInfo(id);
