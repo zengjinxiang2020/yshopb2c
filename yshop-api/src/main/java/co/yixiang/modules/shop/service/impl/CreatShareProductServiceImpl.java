@@ -59,8 +59,38 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             //文案标题
             g.setFont(font.deriveFont(Font.BOLD,34));
             g.setColor(new Color(29,29,29));
-            //绘制文字
-            g.drawString(productDTO.getStoreName(), 31, 638);
+            int fontlenb = getWatermarkLength(productDTO.getStoreName(), g);
+            //文字长度相对于图片宽度应该有多少行
+            int lineb = fontlenb / (back.getWidth() +200);
+            //高度
+            int yb = back.getHeight() - (lineb + 1) * 30 + 100;
+            //文字叠加,自动换行叠加
+            int tempXb = 32;
+            int tempYb = yb;
+            //单字符长度
+            int tempCharLenb = 0;
+            //单行字符总长度临时计算
+            int tempLineLenb = 0;
+            StringBuffer sbb =new StringBuffer();
+            for(int i=0; i < productDTO.getStoreName().length(); i++) {
+                char tempChar = productDTO.getStoreName().charAt(i);
+                tempCharLenb = getCharLen(tempChar, g);
+                tempLineLenb += tempCharLenb;
+                if(tempLineLenb >= (back.getWidth()+220)) {
+                    //长度已经满一行,进行文字叠加
+                    g.drawString(sbb.toString(), tempXb, tempYb + 50);
+                    //清空内容,重新追加
+                    sbb.delete(0, sbb.length());
+                    //每行文字间距50
+                    tempYb += 50;
+                    tempLineLenb =0;
+                }
+                //追加字符
+                sbb.append(tempChar);
+            }
+            g.drawString(sbb.toString(), tempXb, tempYb + 50);
+
+            //------------------------------------------------文案-----------------------
             //文案
             g.setFont(font.deriveFont(Font.PLAIN,30));
             g.setColor(new Color(47,47,47));
@@ -68,7 +98,7 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             //文字长度相对于图片宽度应该有多少行
             int line = fontlen / (back.getWidth() - 90);
             //高度
-            int y = back.getHeight() - (line + 1) * 30 + 200;
+            int y = tempYb + 50 - (line + 1) * 30 + 100;
             //文字叠加,自动换行叠加
             int tempX = 32;
             int tempY = y;
@@ -77,6 +107,7 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             //单行字符总长度临时计算
             int tempLineLen = 0;
             StringBuffer sb =new StringBuffer();
+
             for(int i=0; i < productDTO.getStoreInfo().length(); i++) {
                 char tempChar = productDTO.getStoreInfo().charAt(i);
                 tempCharLen = getCharLen(tempChar, g);
@@ -126,10 +157,10 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             g.drawString(price, 260, 1160);
             g.drawLine(250,1148,260+150,1148);
 
-            //商品名称
-            g.setFont(font.deriveFont(Font.PLAIN,32));
-            g.setColor(new Color(29,29,29));
-            g.drawString(productDTO.getStoreName(), 30, 1229);
+//            //商品名称
+//            g.setFont(font.deriveFont(Font.PLAIN,32));
+//            g.setColor(new Color(29,29,29));
+//            g.drawString(productDTO.getStoreName(), 30, 1229);
 
             //生成二维码返回链接
             String url = shareCode;
