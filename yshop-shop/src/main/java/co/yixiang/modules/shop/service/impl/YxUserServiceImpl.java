@@ -100,8 +100,11 @@ public class YxUserServiceImpl implements YxUserService {
     @Override
     public YxUserDTO findById(Integer uid) {
         Optional<YxUser> yxUser = yxUserRepository.findById(uid);
-        ValidationUtil.isNull(yxUser,"YxUser","uid",uid);
-        return yxUserMapper.toDto(yxUser.get());
+//        ValidationUtil.isNull(yxUser,"YxUser","uid",uid);
+        if(yxUser.isPresent()){
+            return yxUserMapper.toDto(yxUser.get());
+        }
+        return new YxUserDTO();
     }
 
     @Override

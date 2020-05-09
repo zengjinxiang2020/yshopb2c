@@ -79,4 +79,7 @@ public interface YxStoreOrderService {
      */
     //@CacheEvict(allEntries = true)
     void delete(Integer id);
+
+
+     Map<String,Object> queryAll(List<String> ids);
 }

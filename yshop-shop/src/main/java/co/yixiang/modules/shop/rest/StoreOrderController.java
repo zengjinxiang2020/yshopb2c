@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -388,21 +389,14 @@ public class StoreOrderController {
                          @RequestParam(name = "orderStatus") String orderStatus,
                          @RequestParam(name = "orderType") String orderType,
                          @RequestParam(name = "listContent") String listContent) throws IOException, ParseException {
-        List<YxStoreOrderDTO> list = (List)getYxStoreList(criteria, pageable, orderStatus, orderType).get("content");
+        List<YxStoreOrderDTO> list;
         if(StringUtils.isEmpty(listContent)){
-            yxStoreOrderService.download(list, response);
+            list =  (List)getYxStoreList(criteria, pageable, orderStatus, orderType).get("content");
         }else {
             List<String> idList = JSONArray.parseArray(listContent).toJavaList(String.class);
-            List<YxStoreOrderDTO> yxStoreOrderDTOS = new ArrayList<>();
-            for(YxStoreOrderDTO yx : list){
-                for(String ids : idList){
-                    if(yx.getOrderId().equals(ids)){
-                        yxStoreOrderDTOS.add(yx);
-                    }
-                }
-            }
-            yxStoreOrderService.download(yxStoreOrderDTOS, response);
+            list = (List)yxStoreOrderService.queryAll(idList).get("content");
         }
+        yxStoreOrderService.download(list, response);
     }
 
     public Map<String,Object> getYxStoreList(YxStoreOrderQueryCriteria criteria,

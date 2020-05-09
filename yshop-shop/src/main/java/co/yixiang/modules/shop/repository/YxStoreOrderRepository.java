@@ -54,4 +54,6 @@ public interface YxStoreOrderRepository extends JpaRepository<YxStoreOrder, Inte
      * @return
      */
     YxStoreOrder findByUnique(String unique);
+
+   List<YxStoreOrder> findByOrderIdIn(List<String> ids);
 }

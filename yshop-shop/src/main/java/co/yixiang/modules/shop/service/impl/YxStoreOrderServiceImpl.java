@@ -319,7 +319,70 @@ public class YxStoreOrderServiceImpl implements YxStoreOrderService {
 
         return map;
     }
+    @Override
+    public Map<String,Object> queryAll(List<String> ids){
+        List<YxStoreOrder> yxStoreOrders = yxStoreOrderRepository.findByOrderIdIn(ids);
+        List<YxStoreOrderDTO> storeOrderDTOS = new ArrayList<>();
+        for (YxStoreOrder yxStoreOrder :yxStoreOrders) {
+            YxStoreOrderDTO yxStoreOrderDTO = yxStoreOrderMapper.toDto(yxStoreOrder);
 
+
+            Integer _status = OrderUtil.orderStatus(yxStoreOrder.getPaid(),yxStoreOrder.getStatus(),
+                    yxStoreOrder.getRefundStatus());
+
+            if(yxStoreOrder.getStoreId() > 0) {
+                String storeName = systemStoreService.findById(yxStoreOrder.getStoreId()).getName();
+                yxStoreOrderDTO.setStoreName(storeName);
+            }
+
+            //订单状态
+            String orderStatusStr = OrderUtil.orderStatusStr(yxStoreOrder.getPaid()
+                    ,yxStoreOrder.getStatus(),yxStoreOrder.getShippingType()
+                    ,yxStoreOrder.getRefundStatus());
+
+            if(_status == 3){
+                String refundTime = OrderUtil.stampToDate(String.valueOf(yxStoreOrder
+                        .getRefundReasonTime()));
+                String str = "<b style='color:#f124c7'>申请退款</b><br/>"+
+                        "<span>退款原因："+yxStoreOrder.getRefundReasonWap()+"</span><br/>" +
+                        "<span>备注说明："+yxStoreOrder.getRefundReasonWapExplain()+"</span><br/>" +
+                        "<span>退款时间："+refundTime+"</span><br/>";
+                orderStatusStr = str;
+            }
+            yxStoreOrderDTO.setStatusName(orderStatusStr);
+
+            yxStoreOrderDTO.set_status(_status);
+
+            String payTypeName = OrderUtil.payTypeName(yxStoreOrder.getPayType()
+                    ,yxStoreOrder.getPaid());
+            yxStoreOrderDTO.setPayTypeName(payTypeName);
+
+            yxStoreOrderDTO.setPinkName(orderType(yxStoreOrder.getId()
+                    ,yxStoreOrder.getPinkId(),yxStoreOrder.getCombinationId()
+                    ,yxStoreOrder.getSeckillId(),yxStoreOrder.getBargainId(),
+                    yxStoreOrder.getShippingType()));
+
+            List<StoreOrderCartInfo> cartInfos = yxStoreOrderCartInfoRepository
+                    .findByOid(yxStoreOrder.getId());
+            List<StoreOrderCartInfoDTO> cartInfoDTOS = new ArrayList<>();
+            for (StoreOrderCartInfo cartInfo : cartInfos) {
+                StoreOrderCartInfoDTO cartInfoDTO = new StoreOrderCartInfoDTO();
+                cartInfoDTO.setCartInfoMap(JSON.parseObject(cartInfo.getCartInfo()));
+
+                cartInfoDTOS.add(cartInfoDTO);
+            }
+            yxStoreOrderDTO.setCartInfoList(cartInfoDTOS);
+            yxStoreOrderDTO.setUserDTO(userService.findById(yxStoreOrder.getUid()));
+
+            storeOrderDTOS.add(yxStoreOrderDTO);
+
+        }
+
+        Map<String,Object> map = new LinkedHashMap<>(2);
+        map.put("content",storeOrderDTOS);
+
+        return map;
+    }
     @Override
     public List<YxStoreOrderDTO> queryAll(YxStoreOrderQueryCriteria criteria){
         return yxStoreOrderMapper.toDto(yxStoreOrderRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
