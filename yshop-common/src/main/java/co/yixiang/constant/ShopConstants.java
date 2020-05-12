@@ -78,32 +78,49 @@ public interface ShopConstants {
 	/**
 	 * 首页banner
 	 */
-	String YSHOP_HOME_BANNER = "yshop_home_banner";
+	String YSHOP_HOME_BANNER = "routine_home_banner";
 	/**
 	 * 首页菜单
 	 */
-	String YSHOP_HOME_MENUS = "yshop_home_menus";
+	String YSHOP_HOME_MENUS = "routine_home_menus";
 	/**
 	 * 首页滚动新闻
 	 */
-	String YSHOP_HOME_ROLL_NEWS = "yshop_home_roll_news";
+	String YSHOP_HOME_ROLL_NEWS = "routine_home_roll_news";
 	/**
 	 * 热门搜索
 	 */
-	String YSHOP_HOT_SEARCH = "yshop_hot_search";
+	String YSHOP_HOT_SEARCH = "routine_hot_search";
 	/**
 	 * 个人中心菜单
 	 */
-	String YSHOP_MY_MENUES = "yshop_my_menus";
+	String YSHOP_MY_MENUES = "routine_my_menus";
 	/**
 	 * 秒杀时间段
 	 */
-	String YSHOP_SECKILL_TIME = "yshop_seckill_time";
+	String YSHOP_SECKILL_TIME = "routine_seckill_time";
 	/**
 	 * 签到天数
 	 */
-	String YSHOP_SIGN_DAY_NUM = "yshop_sign_day_num";
+	String YSHOP_SIGN_DAY_NUM = "sign_day_num";
 
+	/**
+	 * 打印机配置
+	 */
+	String YSHOP_ORDER_PRINT_COUNT = "order_print_count";
+	/**
+	 * 飞蛾用户信息
+	 */
+	String YSHOP_FEI_E_USER = "fei_e_user";
+	/**
+	 * 飞蛾用户密钥
+	 */
+	String YSHOP_FEI_E_UKEY= "fei_e_ukey";
+
+	/**
+	 * 打印机配置
+	 */
+	String YSHOP_ORDER_PRINT_COUNT_DETAIL = "order_print_count_detail";
 
 
 

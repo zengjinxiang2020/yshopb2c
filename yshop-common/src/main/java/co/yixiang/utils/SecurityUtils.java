@@ -29,7 +29,7 @@ public class SecurityUtils {
      */
     public static String getUsername(){
         Object obj = getUserDetails();
-        return new JSONObject(obj).get("username", String.class);
+        return  new JSONObject(obj).get("username", String.class);
     }
 
     /**

@@ -1,5 +1,5 @@
 package co.yixiang;
-
+import co.yixiang.modules.activity.service.YxStoreCouponUserService;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.utils.SpringContextHolder;
 import org.springframework.boot.SpringApplication;

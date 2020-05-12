@@ -122,7 +122,12 @@ public class AuthController {
         // 几位数运算，默认是两位
         captcha.setLen(2);
         // 获取运算的结果
-        String result = captcha.text();
+        String result ="";
+        try {
+            result = new Double(Double.parseDouble(captcha.text())).intValue()+"";
+        }catch (Exception e){
+            result = captcha.text();
+        }
         String uuid = properties.getCodeKey() + IdUtil.simpleUUID();
         // 保存
         redisUtils.set(uuid, result, expiration, TimeUnit.MINUTES);

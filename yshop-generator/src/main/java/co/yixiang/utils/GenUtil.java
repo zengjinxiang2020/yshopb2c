@@ -36,14 +36,22 @@ public class GenUtil {
      */
     private static List<String> getAdminTemplateNames() {
         List<String> templateNames = new ArrayList<>();
-        templateNames.add("Entity");
+        /*templateNames.add("Entity");
         templateNames.add("Dto");
         templateNames.add("Mapper");
         templateNames.add("Controller");
         templateNames.add("QueryCriteria");
         templateNames.add("Service");
         templateNames.add("ServiceImpl");
-        templateNames.add("Repository");
+        templateNames.add("Repository");*/
+        templateNames.add("EntityP");
+        templateNames.add("DtoP");
+        templateNames.add("MapperP");
+        templateNames.add("ControllerP");
+        templateNames.add("QueryCriteriaP");
+        templateNames.add("ServiceP");
+        templateNames.add("ServiceImplP");
+        //templateNames.add("Repository");
         return templateNames;
     }
 
@@ -191,6 +199,8 @@ public class GenUtil {
         genMap.put("changeClassName", changeClassName);
         // 存在 Timestamp 字段
         genMap.put("hasTimestamp",false);
+        // 存在 Images 字段
+        genMap.put("hasImages",false);
         // 查询类中存在 Timestamp 字段
         genMap.put("queryHasTimestamp",false);
         // 存在 BigDecimal 字段
@@ -235,6 +245,10 @@ public class GenUtil {
                 genMap.put("pkChangeColName",changeColumnName);
                 // 存储大写开头的字段名
                 genMap.put("pkCapitalColName",capitalColumnName);
+            }
+            if("Images".equals(column.getFormType())){
+                // 存在 Images 字段
+                genMap.put("hasImages",true);
             }
             // 是否存在 Timestamp 类型的字段
             if(TIMESTAMP.equals(colType)){
@@ -331,28 +345,48 @@ public class GenUtil {
         if ("Entity".equals(templateName)) {
             return packagePath + "domain" + File.separator + className + ".java";
         }
-
+        if ("EntityP".equals(templateName)) {
+            return packagePath + "domain" + File.separator + className + ".java";
+        }
         if ("Controller".equals(templateName)) {
             return packagePath + "rest" + File.separator + className + "Controller.java";
         }
-
+        if ("ControllerP".equals(templateName)) {
+            return packagePath + "rest" + File.separator + className + "Controller.java";
+        }
         if ("Service".equals(templateName)) {
+            return packagePath + "service" + File.separator + className + "Service.java";
+        }
+        if ("ServiceP".equals(templateName)) {
             return packagePath + "service" + File.separator + className + "Service.java";
         }
 
         if ("ServiceImpl".equals(templateName)) {
             return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
         }
+        if ("ServiceImplP".equals(templateName)) {
+            return packagePath + "service" + File.separator + "impl" + File.separator + className + "ServiceImpl.java";
+        }
 
         if ("Dto".equals(templateName)) {
             return packagePath + "service" + File.separator + "dto" + File.separator + className + "Dto.java";
         }
+        if ("DtoP".equals(templateName)) {
+            return packagePath + "service" + File.separator + "dto" + File.separator + className + "Dto.java";
+        }
+
 
         if ("QueryCriteria".equals(templateName)) {
             return packagePath + "service" + File.separator + "dto" + File.separator + className + "QueryCriteria.java";
         }
+        if ("QueryCriteriaP".equals(templateName)) {
+            return packagePath + "service" + File.separator + "dto" + File.separator + className + "QueryCriteria.java";
+        }
 
         if ("Mapper".equals(templateName)) {
+            return packagePath + "service" + File.separator + "mapper" + File.separator + className + "Mapper.java";
+        }
+        if ("MapperP".equals(templateName)) {
             return packagePath + "service" + File.separator + "mapper" + File.separator + className + "Mapper.java";
         }
 

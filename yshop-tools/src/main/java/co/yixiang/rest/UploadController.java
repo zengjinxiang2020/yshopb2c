@@ -42,7 +42,7 @@ public class UploadController {
 
     private final QiNiuService qiNiuService;
 
-    public UploadController(LocalStorageService localStorageService,QiNiuService qiNiuService) {
+    public UploadController(LocalStorageService localStorageService, QiNiuService qiNiuService) {
         this.localStorageService = localStorageService;
         this.qiNiuService = qiNiuService;
     }
@@ -51,22 +51,33 @@ public class UploadController {
     @ApiOperation("上传文件")
     @PostMapping
     @AnonymousAccess
-    public ResponseEntity<Object> create(@RequestParam(defaultValue = "") String name, @RequestParam("file") MultipartFile file){
-        String url = "";
-        if(StrUtil.isNotEmpty(localUrl)){ //存在走本地
-            LocalStorageDTO localStorageDTO = localStorageService.create(name, file);
-            url = localUrl+"/file/"+localStorageDTO.getType()+"/"+localStorageDTO.getRealName();
-        }else{//走七牛云
-            QiniuContent qiniuContent = qiNiuService.upload(file,qiNiuService.find());
-            url = qiniuContent.getUrl();
+    public ResponseEntity<Object> create(@RequestParam(defaultValue = "") String name, @RequestParam("file") MultipartFile[] files) {
+        StringBuilder url = new StringBuilder();
+        if (StrUtil.isNotEmpty(localUrl)) { //存在走本地
+            for (MultipartFile file : files) {
+                LocalStorageDTO localStorageDTO = localStorageService.create(name, file);
+                if ("".equals(url.toString())) {
+                    url = url.append(localUrl + "/file/" + localStorageDTO.getType() + "/" + localStorageDTO.getRealName());
+                } else {
+                    url = url.append(","+localUrl + "/file/" + localStorageDTO.getType() + "/" + localStorageDTO.getRealName());
+                }
+            }
+        } else {//走七牛云
+            for (MultipartFile file : files) {
+                QiniuContent qiniuContent = qiNiuService.upload(file, qiNiuService.find());
+                if ("".equals(url.toString())) {
+                    url = url.append(qiniuContent.getUrl());
+                }else{
+                    url = url.append(","+qiniuContent.getUrl());
+                }
+            }
         }
 
-        Map<String,Object> map = new HashMap<>(2);
-        map.put("errno",0);
-        map.put("link",url);
-        return new ResponseEntity(map,HttpStatus.CREATED);
+        Map<String, Object> map = new HashMap<>(2);
+        map.put("errno", 0);
+        map.put("link", url);
+        return new ResponseEntity(map, HttpStatus.CREATED);
     }
-
 
 
 }
