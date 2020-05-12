@@ -8,12 +8,9 @@ import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.mp.domain.YxArticle;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.mp.utils.URLUtils;
-import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.mp.service.YxArticleService;
 import co.yixiang.mp.service.dto.YxArticleDto;
@@ -38,10 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
 
 import java.io.File;
 import java.util.List;
@@ -57,7 +51,6 @@ import java.util.LinkedHashMap;
 */
 @Slf4j
 @Service
-@AllArgsConstructor
 //@CacheConfig(cacheNames = "yxArticle")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class YxArticleServiceImpl extends BaseServiceImpl<YxArticleMapper, YxArticle> implements YxArticleService {
@@ -65,6 +58,11 @@ public class YxArticleServiceImpl extends BaseServiceImpl<YxArticleMapper, YxArt
     private final IGenerator generator;
     @Value("${file.path}")
     private String uploadDirStr;
+
+    public YxArticleServiceImpl(IGenerator generator) {
+        this.generator = generator;
+    }
+
     @Override
     //@Cacheable
     public Map<String, Object> queryAll(YxArticleQueryCriteria criteria, Pageable pageable) {
@@ -171,7 +169,7 @@ public class YxArticleServiceImpl extends BaseServiceImpl<YxArticleMapper, YxArt
     private WxMpMaterialUploadResult uploadPhotoToWx(WxMpService wxMpService, String picPath) throws WxErrorException {
         WxMpMaterial wxMpMaterial = new WxMpMaterial();
 
-        String filename = String.valueOf( System.currentTimeMillis() ) + ".png";
+        String filename = String.valueOf( (int)System.currentTimeMillis() ) + ".png";
         String downloadPath = uploadDirStr + filename;
         long size = HttpUtil.downloadFile(picPath, cn.hutool.core.io.FileUtil.file(downloadPath));
         picPath = downloadPath;
