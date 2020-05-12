@@ -16,6 +16,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
 * @author hupeng
 * @date 2019-12-04
@@ -46,7 +49,7 @@ public class SystemUserLevelController {
     public ResponseEntity create(@Validated @RequestBody YxSystemUserLevel resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         resources.setAddTime(OrderUtil.getSecondTimestampTwo());
-        return new ResponseEntity(yxSystemUserLevelService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity(yxSystemUserLevelService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改")
@@ -55,7 +58,7 @@ public class SystemUserLevelController {
     @PreAuthorize("@el.check('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxSystemUserLevel resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxSystemUserLevelService.update(resources);
+        yxSystemUserLevelService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -65,7 +68,7 @@ public class SystemUserLevelController {
     @PreAuthorize("@el.check('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxSystemUserLevelService.delete(id);
+        yxSystemUserLevelService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

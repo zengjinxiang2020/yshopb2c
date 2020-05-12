@@ -1,10 +1,10 @@
 package co.yixiang.modules.shop.rest;
 
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
+import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.modules.shop.domain.YxSystemStoreStaff;
 import co.yixiang.modules.shop.service.YxSystemStoreStaffService;
+import co.yixiang.modules.shop.service.dto.YxSystemStoreStaffDto;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreStaffQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
 * @author hupeng
@@ -29,8 +31,11 @@ public class SystemStoreStaffController {
 
     private final YxSystemStoreStaffService yxSystemStoreStaffService;
 
-    public SystemStoreStaffController(YxSystemStoreStaffService yxSystemStoreStaffService) {
+    private final IGenerator generator;
+
+    public SystemStoreStaffController(YxSystemStoreStaffService yxSystemStoreStaffService, IGenerator generator) {
         this.yxSystemStoreStaffService = yxSystemStoreStaffService;
+        this.generator = generator;
     }
 
     @Log("导出数据")
@@ -38,7 +43,7 @@ public class SystemStoreStaffController {
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('yxSystemStoreStaff:list')")
     public void download(HttpServletResponse response, YxSystemStoreStaffQueryCriteria criteria) throws IOException {
-        yxSystemStoreStaffService.download(yxSystemStoreStaffService.queryAll(criteria), response);
+        yxSystemStoreStaffService.download(generator.convert(yxSystemStoreStaffService.queryAll(criteria), YxSystemStoreStaffDto.class), response);
     }
 
     @GetMapping
@@ -54,7 +59,7 @@ public class SystemStoreStaffController {
     @ApiOperation("新增门店店员")
     @PreAuthorize("@el.check('yxSystemStoreStaff:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody YxSystemStoreStaff resources){
-        return new ResponseEntity<>(yxSystemStoreStaffService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(yxSystemStoreStaffService.save(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
@@ -62,7 +67,7 @@ public class SystemStoreStaffController {
     @ApiOperation("修改门店店员")
     @PreAuthorize("@el.check('yxSystemStoreStaff:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody YxSystemStoreStaff resources){
-        yxSystemStoreStaffService.update(resources);
+        yxSystemStoreStaffService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -72,7 +77,7 @@ public class SystemStoreStaffController {
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxSystemStoreStaffService.deleteAll(ids);
+        yxSystemStoreStaffService.removeByIds(new ArrayList<>(Arrays.asList(ids)));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

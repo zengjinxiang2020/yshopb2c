@@ -6,7 +6,7 @@ import co.yixiang.annotation.Query;
 
 /**
 * @author hupeng
-* @date 2020-03-02
+* @date 2020-05-12
 */
 @Data
 public class YxUserRechargeQueryCriteria{

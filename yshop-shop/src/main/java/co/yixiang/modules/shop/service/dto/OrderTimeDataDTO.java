@@ -21,8 +21,8 @@ public class OrderTimeDataDTO implements Serializable {
     private Integer lastWeekCount;//上周
     private Double lastWeekPrice; //上周
 
-    private Long userCount;
-    private Long orderCount;
+    private Integer userCount;
+    private Integer orderCount;
     private Double priceCount;
-    private Long goodsCount;
+    private Integer goodsCount;
 }

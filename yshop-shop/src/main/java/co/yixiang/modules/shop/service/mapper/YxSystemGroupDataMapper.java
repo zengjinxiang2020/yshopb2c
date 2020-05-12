@@ -1,16 +1,16 @@
 package co.yixiang.modules.shop.service.mapper;
 
-import co.yixiang.mapper.EntityMapper;
+import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.shop.domain.YxSystemGroupData;
-import co.yixiang.modules.shop.service.dto.YxSystemGroupDataDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
 * @author hupeng
-* @date 2019-10-18
+* @date 2020-05-12
 */
-@Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface YxSystemGroupDataMapper extends EntityMapper<YxSystemGroupDataDTO, YxSystemGroupData> {
+@Repository
+@Mapper
+public interface YxSystemGroupDataMapper extends CoreMapper<YxSystemGroupData> {
 
 }

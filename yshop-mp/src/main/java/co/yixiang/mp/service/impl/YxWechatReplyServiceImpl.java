@@ -79,7 +79,7 @@ public class YxWechatReplyServiceImpl extends BaseServiceImpl<YxWechatReplyMappe
 
     @Override
     public YxWechatReply isExist(String key) {
-        YxWechatReply yxWechatReply = this.getOne(new QueryWrapper<YxWechatReply>().eq("key",key));
+        YxWechatReply yxWechatReply = this.getOne(new QueryWrapper<YxWechatReply>().eq("`key`",key));
         return yxWechatReply;
     }
 

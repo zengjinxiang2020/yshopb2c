@@ -39,7 +39,7 @@ public class SystemUserTaskController {
     @PreAuthorize("@el.check('admin','YXSYSTEMUSERTASK_ALL','YXSYSTEMUSERTASK_SELECT')")
     public ResponseEntity getYxSystemUserTasks(YxSystemUserTaskQueryCriteria criteria,
                                                Pageable pageable){
-        Sort sort = new Sort(Sort.Direction.ASC, "levelId");
+        Sort sort = new Sort(Sort.Direction.ASC, "level_id");
         Pageable pageableT = PageRequest.of(pageable.getPageNumber(),
                 pageable.getPageSize(),
                 sort);
@@ -52,7 +52,7 @@ public class SystemUserTaskController {
     @PostMapping(value = "/yxSystemUserTask")
     @PreAuthorize("@el.check('admin','YXSYSTEMUSERTASK_ALL','YXSYSTEMUSERTASK_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxSystemUserTask resources){
-        return new ResponseEntity(yxSystemUserTaskService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity(yxSystemUserTaskService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改")
@@ -61,7 +61,7 @@ public class SystemUserTaskController {
     @PreAuthorize("@el.check('admin','YXSYSTEMUSERTASK_ALL','YXSYSTEMUSERTASK_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxSystemUserTask resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxSystemUserTaskService.update(resources);
+        yxSystemUserTaskService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -71,7 +71,7 @@ public class SystemUserTaskController {
     @PreAuthorize("@el.check('admin','YXSYSTEMUSERTASK_ALL','YXSYSTEMUSERTASK_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxSystemUserTaskService.delete(id);
+        yxSystemUserTaskService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

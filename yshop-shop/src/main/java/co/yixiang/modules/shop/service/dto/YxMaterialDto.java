@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2020-01-09
+* @date 2020-05-12
 */
 @Data
 public class YxMaterialDto implements Serializable {
@@ -14,12 +14,16 @@ public class YxMaterialDto implements Serializable {
     /** PK */
     private String id;
 
+    /** 所属租户 */
+    private String userId;
+
     /** 逻辑删除标记（0：显示；1：隐藏） */
-    private String delFlag;
 
     /** 创建时间 */
     private Timestamp createTime;
 
+    /** 最后更新时间 */
+    private Timestamp updateTime;
 
     /** 创建者ID */
     private String createId;

@@ -59,7 +59,7 @@ public class MemberController {
     @PostMapping(value = "/yxUser")
     @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxUser resources){
-        return new ResponseEntity(yxUserService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity(yxUserService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改用户")
@@ -67,7 +67,7 @@ public class MemberController {
     @PutMapping(value = "/yxUser")
     @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxUser resources){
-        yxUserService.update(resources);
+        yxUserService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -77,7 +77,7 @@ public class MemberController {
     @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_DELETE')")
     public ResponseEntity delete(@PathVariable Integer uid){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxUserService.delete(uid);
+        yxUserService.removeById(uid);
         return new ResponseEntity(HttpStatus.OK);
     }
 

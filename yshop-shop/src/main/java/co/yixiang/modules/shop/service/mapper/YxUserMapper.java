@@ -1,16 +1,29 @@
 package co.yixiang.modules.shop.service.mapper;
 
-import co.yixiang.mapper.EntityMapper;
+import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.shop.domain.YxUser;
-import co.yixiang.modules.shop.service.dto.YxUserDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 /**
 * @author hupeng
-* @date 2019-10-06
+* @date 2020-05-12
 */
-@Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface YxUserMapper extends EntityMapper<YxUserDTO, YxUser> {
+@Repository
+@Mapper
+public interface YxUserMapper extends CoreMapper<YxUser> {
+
+    @Update( "update yx_user set status = #{status} where uid = #{id}")
+    void updateOnstatus(@Param("status") int status, @Param("id") int id);
+
+    @Update( "update yx_user set now_money = now_money + ${money} where uid = #{id}")
+    void updateMoney(@Param("money") double money, @Param("id")int id);
+
+    @Update("update yx_user set brokerage_price = brokerage_price+ ${price} where uid = #{id}")
+    void incBrokeragePrice(@Param("price")double price,@Param("id") int id);
 
 }

@@ -1,16 +1,16 @@
 package co.yixiang.modules.shop.service.mapper;
 
-import co.yixiang.mapper.EntityMapper;
+import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.shop.domain.YxSystemUserTask;
-import co.yixiang.modules.shop.service.dto.YxSystemUserTaskDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
 * @author hupeng
-* @date 2019-12-04
+* @date 2020-05-12
 */
-@Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface YxSystemUserTaskMapper extends EntityMapper<YxSystemUserTaskDTO, YxSystemUserTask> {
+@Repository
+@Mapper
+public interface YxSystemUserTaskMapper extends CoreMapper<YxSystemUserTask> {
 
 }

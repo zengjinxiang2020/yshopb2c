@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2020-03-22
+* @date 2020-05-12
 */
 @Data
 public class YxSystemStoreStaffDto implements Serializable {

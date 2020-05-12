@@ -49,7 +49,7 @@ public class YxStoreCouponUserServiceImpl implements YxStoreCouponUserService {
         List<YxStoreCouponUserDTO> storeOrderDTOS = yxStoreCouponUserMapper
                 .toDto(page.getContent());
         for (YxStoreCouponUserDTO couponUserDTO : storeOrderDTOS) {
-            couponUserDTO.setNickname(userService.findById(couponUserDTO.getUid()).getNickname());
+            couponUserDTO.setNickname(userService.getById(couponUserDTO.getUid()).getNickname());
         }
         Map<String,Object> map = new LinkedHashMap<>(2);
         map.put("content",storeOrderDTOS);

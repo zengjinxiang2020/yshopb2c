@@ -7,20 +7,18 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.aop.log.Log;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.express.ExpressService;
 import co.yixiang.express.dao.ExpressInfo;
 import co.yixiang.modules.activity.service.YxStorePinkService;
-import co.yixiang.modules.activity.service.dto.YxStorePinkDTO;
 import co.yixiang.modules.shop.domain.YxStoreOrder;
 import co.yixiang.modules.shop.domain.YxStoreOrderStatus;
 import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.service.dto.*;
 import co.yixiang.modules.shop.service.param.ExpressParam;
-import co.yixiang.mp.service.WxMpTemplateMessageService;
 import co.yixiang.mp.service.YxTemplateService;
-import co.yixiang.mp.service.YxWechatTemplateService;
 import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -41,10 +39,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -62,29 +57,28 @@ public class StoreOrderController {
     @Value("${yshop.apiUrl}")
     private String apiUrl;
 
-
+    private final IGenerator generator;
     private final YxStoreOrderService yxStoreOrderService;
     private final YxStoreOrderStatusService yxStoreOrderStatusService;
     private final YxExpressService yxExpressService;
     private final YxWechatUserService wechatUserService;
     private final RedisTemplate<String, String> redisTemplate;
     private final YxTemplateService templateService;
-    private final YxStorePinkService  storePinkService;
     private final ExpressService expressService;
 
 
-    public StoreOrderController(YxStoreOrderService yxStoreOrderService, YxStoreOrderStatusService yxStoreOrderStatusService,
+    public StoreOrderController(IGenerator generator, YxStoreOrderService yxStoreOrderService, YxStoreOrderStatusService yxStoreOrderStatusService,
                                 YxExpressService yxExpressService, YxWechatUserService wechatUserService,
                                 RedisTemplate<String, String> redisTemplate,
-                                YxTemplateService templateService,YxStorePinkService storePinkService,
+                                YxTemplateService templateService, YxStorePinkService storePinkService,
                                 ExpressService expressService) {
+        this.generator = generator;
         this.yxStoreOrderService = yxStoreOrderService;
         this.yxStoreOrderStatusService = yxStoreOrderStatusService;
         this.yxExpressService = yxExpressService;
         this.wechatUserService = wechatUserService;
         this.redisTemplate = redisTemplate;
         this.templateService = templateService;
-        this.storePinkService = storePinkService;
         this.expressService = expressService;
     }
 
@@ -203,8 +197,8 @@ public class StoreOrderController {
     public ResponseEntity update(@Validated @RequestBody YxStoreOrder resources) {
         if (StrUtil.isBlank(resources.getDeliveryName())) throw new BadRequestException("请选择快递公司");
         if (StrUtil.isBlank(resources.getDeliveryId())) throw new BadRequestException("快递单号不能为空");
-        YxExpressDTO expressDTO = yxExpressService.findById(Integer.valueOf(resources
-                .getDeliveryName()));
+        YxExpressDto expressDTO = generator.convert(yxExpressService.getById(Integer.valueOf(resources
+                .getDeliveryName())),YxExpressDto.class);
         if (ObjectUtil.isNull(expressDTO)) {
             throw new BadRequestException("请先添加快递公司");
         }
@@ -222,11 +216,11 @@ public class StoreOrderController {
                 + " 快递单号：" + resources.getDeliveryId());
         storeOrderStatus.setChangeTime(OrderUtil.getSecondTimestampTwo());
 
-        yxStoreOrderStatusService.create(storeOrderStatus);
+        yxStoreOrderStatusService.save(storeOrderStatus);
 
         //模板消息通知
         try {
-            YxWechatUserDTO wechatUser = wechatUserService.findById(resources.getUid());
+            YxWechatUserDto wechatUser = generator.convert(wechatUserService.getById(resources.getUid()),YxWechatUserDto.class);
             if (ObjectUtil.isNotNull(wechatUser)) {
                 //公众号与小程序打通统一公众号模板通知
                 if (StrUtil.isNotBlank(wechatUser.getOpenid())) {
@@ -253,7 +247,7 @@ public class StoreOrderController {
     @PreAuthorize("@el.check('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")
     public ResponseEntity check(@Validated @RequestBody YxStoreOrder resources) {
         if (StrUtil.isBlank(resources.getVerifyCode())) throw new BadRequestException("核销码不能为空");
-        YxStoreOrderDTO storeOrderDTO = yxStoreOrderService.findById(resources.getId());
+        YxStoreOrderDto storeOrderDTO = generator.convert(yxStoreOrderService.getById(resources.getId()),YxStoreOrderDto.class);
         if(!resources.getVerifyCode().equals(storeOrderDTO.getVerifyCode())){
             throw new BadRequestException("核销码不对");
         }
@@ -297,7 +291,7 @@ public class StoreOrderController {
 
         //模板消息通知
         try {
-            YxWechatUserDTO wechatUser = wechatUserService.findById(resources.getUid());
+            YxWechatUserDto wechatUser = generator.convert(wechatUserService.getById(resources.getUid()),YxWechatUserDto.class);
             if (ObjectUtil.isNotNull(wechatUser)) {
                 //公众号与小程序打通统一公众号模板通知
                 if (StrUtil.isNotBlank(wechatUser.getOpenid())) {
@@ -321,7 +315,7 @@ public class StoreOrderController {
     @PreAuthorize("@el.check('admin','YXSTOREORDER_ALL','YXSTOREORDER_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id) {
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxStoreOrderService.delete(id);
+        yxStoreOrderService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -334,7 +328,7 @@ public class StoreOrderController {
         if (ObjectUtil.isNull(resources.getPayPrice())) throw new BadRequestException("请输入支付金额");
         if (resources.getPayPrice().doubleValue() < 0) throw new BadRequestException("金额不能低于0");
 
-        YxStoreOrderDTO storeOrder = yxStoreOrderService.findById(resources.getId());
+        YxStoreOrderDto storeOrder = generator.convert(yxStoreOrderService.getById(resources.getId()),YxStoreOrderDto.class);
         //判断金额是否有变动,生成一个额外订单号去支付
 
         int res = NumberUtil.compare(storeOrder.getPayPrice().doubleValue(), resources.getPayPrice().doubleValue());
@@ -344,7 +338,7 @@ public class StoreOrderController {
         }
 
 
-        yxStoreOrderService.update(resources);
+        yxStoreOrderService.saveOrUpdate(resources);
 
         YxStoreOrderStatus storeOrderStatus = new YxStoreOrderStatus();
         storeOrderStatus.setOid(resources.getId());
@@ -352,7 +346,7 @@ public class StoreOrderController {
         storeOrderStatus.setChangeMessage("修改订单价格为：" + resources.getPayPrice());
         storeOrderStatus.setChangeTime(OrderUtil.getSecondTimestampTwo());
 
-        yxStoreOrderStatusService.create(storeOrderStatus);
+        yxStoreOrderStatusService.save(storeOrderStatus);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -362,7 +356,7 @@ public class StoreOrderController {
     @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")
     public ResponseEntity editOrderRemark(@RequestBody YxStoreOrder resources) {
         if (StrUtil.isBlank(resources.getRemark())) throw new BadRequestException("请输入备注");
-        yxStoreOrderService.update(resources);
+        yxStoreOrderService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -389,7 +383,7 @@ public class StoreOrderController {
                          @RequestParam(name = "orderStatus") String orderStatus,
                          @RequestParam(name = "orderType") String orderType,
                          @RequestParam(name = "listContent") String listContent) throws IOException, ParseException {
-        List<YxStoreOrderDTO> list;
+        List<YxStoreOrderDto> list;
         if(StringUtils.isEmpty(listContent)){
             list =  (List)getYxStoreList(criteria, pageable, orderStatus, orderType).get("content");
         }else {

@@ -1,16 +1,16 @@
 package co.yixiang.modules.shop.service.mapper;
 
-import co.yixiang.mapper.EntityMapper;
+import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.shop.domain.YxUserBill;
-import co.yixiang.modules.shop.service.dto.YxUserBillDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
 * @author hupeng
-* @date 2019-11-06
+* @date 2020-05-12
 */
-@Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface YxUserBillMapper extends EntityMapper<YxUserBillDTO, YxUserBill> {
+@Repository
+@Mapper
+public interface YxUserBillMapper extends CoreMapper<YxUserBill> {
 
 }

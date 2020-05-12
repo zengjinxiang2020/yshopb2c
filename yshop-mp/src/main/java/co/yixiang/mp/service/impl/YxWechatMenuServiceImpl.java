@@ -2,6 +2,7 @@ package co.yixiang.mp.service.impl;
 
 import co.yixiang.mp.domain.YxWechatMenu;
 import co.yixiang.common.service.impl.BaseServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageHelper;
@@ -75,7 +76,7 @@ public class YxWechatMenuServiceImpl extends BaseServiceImpl<YxWechatMenuMapper,
 
     @Override
     public Boolean isExist(String wechat_menus) {
-        YxWechatMenu yxWechatMenu = this.getById(wechat_menus);
+        YxWechatMenu yxWechatMenu = this.getOne(new QueryWrapper<YxWechatMenu>().eq("key",wechat_menus));
         if(yxWechatMenu == null){
             return false;
         }

@@ -93,7 +93,7 @@ public class SystemGroupDataController {
         yxSystemGroupData.setSort(jsonObject.getInteger("sort"));
         yxSystemGroupData.setAddTime(OrderUtil.getSecondTimestampTwo());
 
-        return new ResponseEntity(yxSystemGroupDataService.create(yxSystemGroupData),HttpStatus.CREATED);
+        return new ResponseEntity(yxSystemGroupDataService.save(yxSystemGroupData),HttpStatus.CREATED);
     }
 
     @Log("修改数据配置")
@@ -141,7 +141,7 @@ public class SystemGroupDataController {
 
 
         yxSystemGroupData.setId(Integer.valueOf(jsonObject.get("id").toString()));
-        yxSystemGroupDataService.update(yxSystemGroupData);
+        yxSystemGroupDataService.saveOrUpdate(yxSystemGroupData);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -151,7 +151,7 @@ public class SystemGroupDataController {
     @PreAuthorize("@el.check('admin','YXSYSTEMGROUPDATA_ALL','YXSYSTEMGROUPDATA_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxSystemGroupDataService.delete(id);
+        yxSystemGroupDataService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

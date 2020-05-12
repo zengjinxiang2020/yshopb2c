@@ -1,11 +1,12 @@
 package co.yixiang.modules.shop.service.dto;
 
-import co.yixiang.annotation.Query;
 import lombok.Data;
+import java.util.List;
+import co.yixiang.annotation.Query;
 
 /**
 * @author hupeng
-* @date 2019-11-03
+* @date 2020-05-12
 */
 @Data
 public class YxStoreProductReplyQueryCriteria{

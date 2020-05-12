@@ -26,7 +26,7 @@ public class YxWechatReply implements Serializable {
 
 
     /** 关键字 */
-    @Column(name = "key",unique = true,nullable = false)
+    @TableField(value = "`key`")
     @NotBlank
     private String key;
 

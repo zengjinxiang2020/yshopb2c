@@ -1,17 +1,16 @@
 package co.yixiang.modules.shop.service.mapper;
 
-
-import co.yixiang.base.BaseMapper;
+import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.shop.domain.YxMaterial;
-import co.yixiang.modules.shop.service.dto.YxMaterialDto;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
 * @author hupeng
-* @date 2020-01-09
+* @date 2020-05-12
 */
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface YxMaterialMapper extends BaseMapper<YxMaterialDto, YxMaterial> {
+@Repository
+@Mapper
+public interface YxMaterialMapper extends CoreMapper<YxMaterial> {
 
 }

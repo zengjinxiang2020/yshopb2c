@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class YxWechatMenu implements Serializable {
 
     @Id
-    @Column(name = "key")
+    @TableField(value = "`key`")
     private String key;
 
 
