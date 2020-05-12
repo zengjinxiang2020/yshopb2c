@@ -18,7 +18,7 @@
         <module>yshop-api</module>
         <module>yshop-mp</module>
         <module>yshop-shop</module>
-        <module>yshop-mybatis</module>
+        <module>yshop-mproot</module>
     </modules>
 
     <name>YSHOP商城管理系统</name>

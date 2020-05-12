@@ -41,7 +41,7 @@ public class WechatMenuController {
     @GetMapping(value = "/YxWechatMenu")
     @PreAuthorize("@el.check('admin','YxWechatMenu_ALL','YxWechatMenu_SELECT')")
     public ResponseEntity getYxWechatMenus(){
-        return new ResponseEntity(YxWechatMenuService.findById("wechat_menus"),HttpStatus.OK);
+        return new ResponseEntity(YxWechatMenuService.getById("wechat_menus"),HttpStatus.OK);
     }
 
 
@@ -60,12 +60,12 @@ public class WechatMenuController {
         if(isExist){
             YxWechatMenu.setKey("wechat_menus");
             YxWechatMenu.setResult(jsonButton);
-            YxWechatMenuService.update(YxWechatMenu);
+            YxWechatMenuService.saveOrUpdate(YxWechatMenu);
         }else {
             YxWechatMenu.setKey("wechat_menus");
             YxWechatMenu.setResult(jsonButton);
             YxWechatMenu.setAddTime(OrderUtil.getSecondTimestampTwo());
-            YxWechatMenuService.create(YxWechatMenu);
+            YxWechatMenuService.save(YxWechatMenu);
         }
 
 

@@ -54,7 +54,7 @@ public class WechatReplyController {
             yxWechatReplyService.create(yxWechatReply);
         }else{
             yxWechatReply.setId(isExist.getId());
-            yxWechatReplyService.update(yxWechatReply);
+            yxWechatReplyService.upDate(yxWechatReply);
         }
 
         return new ResponseEntity(HttpStatus.CREATED);

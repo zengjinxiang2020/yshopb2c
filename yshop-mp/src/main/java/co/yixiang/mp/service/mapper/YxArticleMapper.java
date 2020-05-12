@@ -1,17 +1,16 @@
 package co.yixiang.mp.service.mapper;
 
-import co.yixiang.mapper.EntityMapper;
-
+import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.mp.domain.YxArticle;
-import co.yixiang.mp.service.dto.YxArticleDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
 
 /**
-* @author hupeng
-* @date 2019-10-07
+* @author xuwenbo
+* @date 2020-05-12
 */
-@Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface YxArticleMapper extends EntityMapper<YxArticleDTO, YxArticle> {
+@Repository
+@Mapper
+public interface YxArticleMapper extends CoreMapper<YxArticle> {
 
 }

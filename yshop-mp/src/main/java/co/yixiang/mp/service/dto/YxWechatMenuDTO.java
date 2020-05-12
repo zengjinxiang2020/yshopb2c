@@ -1,22 +1,20 @@
 package co.yixiang.mp.service.dto;
 
 import lombok.Data;
-
 import java.io.Serializable;
 
-
 /**
-* @author hupeng
-* @date 2019-10-06
+* @author xuwenbo
+* @date 2020-05-12
 */
 @Data
-public class YxWechatMenuDTO implements Serializable {
+public class YxWechatMenuDto implements Serializable {
 
     private String key;
 
-    // 缓存数据
+    /** 缓存数据 */
     private String result;
 
-    // 缓存时间
+    /** 缓存时间 */
     private Integer addTime;
 }
