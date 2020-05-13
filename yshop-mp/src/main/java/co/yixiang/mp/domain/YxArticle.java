@@ -20,7 +20,7 @@ public class YxArticle implements Serializable {
 
     /** 文章管理ID */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id")
     private Integer id;
 

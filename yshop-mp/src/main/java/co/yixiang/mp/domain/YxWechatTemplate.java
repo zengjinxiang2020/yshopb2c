@@ -20,7 +20,7 @@ public class YxWechatTemplate implements Serializable {
 
     /** 模板id */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id")
     private Integer id;
 

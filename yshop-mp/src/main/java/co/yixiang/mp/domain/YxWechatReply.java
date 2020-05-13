@@ -20,7 +20,7 @@ public class YxWechatReply implements Serializable {
 
     /** 微信关键字回复id */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id")
     private Integer id;
 
