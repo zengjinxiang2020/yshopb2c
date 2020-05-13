@@ -1,8 +1,8 @@
 package co.yixiang.modules.quartz.utils;
 
 import co.yixiang.exception.BadRequestException;
-import lombok.extern.slf4j.Slf4j;
 import co.yixiang.modules.quartz.domain.QuartzJob;
+import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.stereotype.Component;
