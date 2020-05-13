@@ -1,9 +1,11 @@
 package co.yixiang.service.impl;
 
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.domain.GenConfig;
-import co.yixiang.repository.GenConfigRepository;
 import co.yixiang.service.GenConfigService;
+import co.yixiang.service.mapper.GenConfigMapper;
 import co.yixiang.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -15,19 +17,13 @@ import java.io.File;
  * @date 2019-01-14
  */
 @Service
-@CacheConfig(cacheNames = "genConfig")
-public class GenConfigServiceImpl implements GenConfigService {
-
-    private final GenConfigRepository genConfigRepository;
-
-    public GenConfigServiceImpl(GenConfigRepository genConfigRepository) {
-        this.genConfigRepository = genConfigRepository;
-    }
+//@CacheConfig(cacheNames = "genConfig")
+public class GenConfigServiceImpl extends BaseServiceImpl<GenConfigMapper, GenConfig> implements GenConfigService {
 
     @Override
-    @Cacheable(key = "#p0")
+//    @Cacheable(key = "#p0")
     public GenConfig find(String tableName) {
-        GenConfig genConfig = genConfigRepository.findByTableName(tableName);
+        GenConfig genConfig = this.getOne(new QueryWrapper<GenConfig>().eq("table_name",tableName));
         if(genConfig == null){
             return new GenConfig(tableName);
         }
@@ -35,7 +31,7 @@ public class GenConfigServiceImpl implements GenConfigService {
     }
 
     @Override
-    @CachePut(key = "#p0")
+//    @CachePut(key = "#p0")
     public GenConfig update(String tableName, GenConfig genConfig) {
         // 如果 api 路径为空，则自动生成路径
         if(StringUtils.isBlank(genConfig.getApiPath())){
@@ -58,6 +54,7 @@ public class GenConfigServiceImpl implements GenConfigService {
             }
             genConfig.setApiPath(api.toString());
         }
-        return genConfigRepository.save(genConfig);
+        this.save(genConfig);
+        return genConfig;
     }
 }

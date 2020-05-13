@@ -3,16 +3,19 @@ package co.yixiang.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ZipUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.domain.ColumnInfo;
 import co.yixiang.domain.GenConfig;
+import co.yixiang.service.mapper.ColumnInfoMapper;
+import co.yixiang.service.mapper.GenConfigMapper;
 import co.yixiang.utils.GenUtil;
 import co.yixiang.domain.vo.TableInfo;
 import co.yixiang.exception.BadRequestException;
-import co.yixiang.repository.ColumnInfoRepository;
 import co.yixiang.service.GeneratorService;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.PageUtil;
 import co.yixiang.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,16 +37,11 @@ import java.util.stream.Collectors;
  */
 @Service
 @SuppressWarnings({"unchecked","all"})
-public class GeneratorServiceImpl implements GeneratorService {
+public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, ColumnInfo> implements GeneratorService {
 
     @PersistenceContext
     private EntityManager em;
 
-    private final ColumnInfoRepository columnInfoRepository;
-
-    public GeneratorServiceImpl(ColumnInfoRepository columnInfoRepository) {
-        this.columnInfoRepository = columnInfoRepository;
-    }
 
     @Override
     public Object getTables() {
@@ -78,12 +76,14 @@ public class GeneratorServiceImpl implements GeneratorService {
 
     @Override
     public List<ColumnInfo> getColumns(String tableName) {
-        List<ColumnInfo> columnInfos = columnInfoRepository.findByTableNameOrderByIdAsc(tableName);
+        List<ColumnInfo> columnInfos = this.list(new QueryWrapper<ColumnInfo>()
+                .eq("table_name",tableName).orderByAsc("id"));
         if(CollectionUtil.isNotEmpty(columnInfos)){
             return columnInfos;
         } else {
             columnInfos = query(tableName);
-            return columnInfoRepository.saveAll(columnInfos);
+            this.saveBatch(columnInfos);
+            return columnInfos;
         }
     }
 
@@ -127,10 +127,10 @@ public class GeneratorServiceImpl implements GeneratorService {
                 if(StringUtils.isBlank(column.getRemark())){
                     column.setRemark(columnInfo.getRemark());
                 }
-                columnInfoRepository.save(column);
+                this.save(column);
             } else {
                 // 如果找不到，则保存新字段信息
-                columnInfoRepository.save(columnInfo);
+                this.save(columnInfo);
             }
         }
         // 第二种情况，数据库字段删除了
@@ -139,14 +139,14 @@ public class GeneratorServiceImpl implements GeneratorService {
             List<ColumnInfo> columns = new ArrayList<ColumnInfo>(columnInfoList.stream().filter(c-> c.getColumnName().equals(columnInfo.getColumnName())).collect(Collectors.toList()));
             // 如果找不到，就代表字段被删除了，则需要删除该字段
             if(CollectionUtil.isEmpty(columns)){
-                columnInfoRepository.delete(columnInfo);
+                this.removeById(columnInfo.getId());
             }
         }
     }
 
     @Override
     public void save(List<ColumnInfo> columnInfos) {
-        columnInfoRepository.saveAll(columnInfos);
+        this.saveBatch(columnInfos);
     }
 
     @Override
