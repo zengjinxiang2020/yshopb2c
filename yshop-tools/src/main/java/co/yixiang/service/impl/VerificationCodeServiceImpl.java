@@ -6,11 +6,16 @@ import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.domain.AlipayConfig;
 import co.yixiang.domain.VerificationCode;
 import co.yixiang.domain.vo.EmailVo;
 import co.yixiang.service.VerificationCodeService;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.repository.VerificationCodeRepository;
+import co.yixiang.service.mapper.AlipayConfigMapper;
+import co.yixiang.service.mapper.VerificationCodeMapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,23 +29,19 @@ import java.util.concurrent.*;
  */
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class VerificationCodeServiceImpl implements VerificationCodeService {
-
-    private final VerificationCodeRepository verificationCodeRepository;
+public class VerificationCodeServiceImpl extends BaseServiceImpl<VerificationCodeMapper, VerificationCode>  implements VerificationCodeService {
 
     @Value("${code.expiration}")
     private Integer expiration;
 
-    public VerificationCodeServiceImpl(VerificationCodeRepository verificationCodeRepository) {
-        this.verificationCodeRepository = verificationCodeRepository;
-    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public EmailVo sendEmail(VerificationCode code) {
         EmailVo emailVo;
         String content;
-        VerificationCode verificationCode = verificationCodeRepository.findByScenesAndTypeAndValueAndStatusIsTrue(code.getScenes(),code.getType(),code.getValue());
+        VerificationCode verificationCode = this.getOne(new QueryWrapper<VerificationCode>()
+                .eq("scenes",code.getScenes()).eq("type",code.getType()).eq("value",code.getValue()));
         // 如果不存在有效的验证码，就创建一个新的
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("template", TemplateConfig.ResourceMode.CLASSPATH));
         Template template = engine.getTemplate("email/email.ftl");
@@ -48,7 +49,8 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
             code.setCode(RandomUtil.randomNumbers (6));
             content = template.render(Dict.create().set("code",code.getCode()));
             emailVo = new EmailVo(Collections.singletonList(code.getValue()),"yshop后台管理系统",content);
-            timedDestruction(verificationCodeRepository.save(code));
+            this.save(code);
+            timedDestruction(code);
         // 存在就再次发送原来的验证码
         } else {
             content = template.render(Dict.create().set("code",verificationCode.getCode()));
@@ -59,12 +61,14 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
 
     @Override
     public void validated(VerificationCode code) {
-        VerificationCode verificationCode = verificationCodeRepository.findByScenesAndTypeAndValueAndStatusIsTrue(code.getScenes(),code.getType(),code.getValue());
+        VerificationCode verificationCode = this.getOne(new QueryWrapper<VerificationCode>()
+                .eq("scenes",code.getScenes()).eq("type",code.getType()).eq("value",code.getValue())
+        .eq("status",true));
         if(verificationCode == null || !verificationCode.getCode().equals(code.getCode())){
             throw new BadRequestException("无效验证码");
         } else {
             verificationCode.setStatus(false);
-            verificationCodeRepository.save(verificationCode);
+            this.save(verificationCode);
         }
     }
 
@@ -78,7 +82,7 @@ public class VerificationCodeServiceImpl implements VerificationCodeService {
         try {
             executorService.schedule(() -> {
                 verifyCode.setStatus(false);
-                verificationCodeRepository.save(verifyCode);
+                this.save(verifyCode);
             }, expiration * 60 * 1000L, TimeUnit.MILLISECONDS);
         }catch (Exception e){
             e.printStackTrace();
