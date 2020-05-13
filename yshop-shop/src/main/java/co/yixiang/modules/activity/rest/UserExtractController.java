@@ -9,7 +9,9 @@ import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.activity.domain.YxUserExtract;
 import co.yixiang.modules.activity.service.YxUserExtractService;
 import co.yixiang.modules.activity.service.dto.YxUserExtractQueryCriteria;
+import co.yixiang.modules.shop.domain.YxUser;
 import co.yixiang.modules.shop.domain.YxUserBill;
+import co.yixiang.modules.shop.domain.YxWechatUser;
 import co.yixiang.modules.shop.service.YxUserBillService;
 import co.yixiang.modules.shop.service.YxUserService;
 import co.yixiang.modules.shop.service.YxWechatUserService;
@@ -17,6 +19,7 @@ import co.yixiang.modules.shop.service.dto.YxUserDto;
 import co.yixiang.modules.shop.service.dto.YxWechatUserDto;
 import co.yixiang.mp.service.YxPayService;
 import co.yixiang.utils.OrderUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -82,7 +85,7 @@ public class UserExtractController {
                 throw new BadRequestException("请填写失败原因");
             }
             String mark = "提现失败,退回佣金"+resources.getExtractPrice()+"元";
-            YxUserDto userDTO = generator.convert(yxUserService.getById(resources.getUid()),YxUserDto.class);
+            YxUserDto userDTO = generator.convert(yxUserService.getOne(new QueryWrapper<YxUser>().eq("uid",resources.getUid())),YxUserDto.class);
 
             //增加流水
             YxUserBill userBill = new YxUserBill();
@@ -109,7 +112,7 @@ public class UserExtractController {
         //todo 此处为企业付款，没经过测试
         boolean isTest = true;
         if(!isTest){
-            YxWechatUserDto wechatUser =  generator.convert(wechatUserService.getById(resources.getUid()),YxWechatUserDto.class);
+            YxWechatUserDto wechatUser =  generator.convert(wechatUserService.getOne(new QueryWrapper<YxWechatUser>().eq("uid",resources.getUid())),YxWechatUserDto.class);
             if(ObjectUtil.isNotNull(wechatUser)){
                 try {
                     payService.entPay(wechatUser.getOpenid(),resources.getId().toString(),

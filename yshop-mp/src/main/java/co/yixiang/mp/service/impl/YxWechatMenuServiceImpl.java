@@ -76,7 +76,7 @@ public class YxWechatMenuServiceImpl extends BaseServiceImpl<YxWechatMenuMapper,
 
     @Override
     public Boolean isExist(String wechat_menus) {
-        YxWechatMenu yxWechatMenu = this.getOne(new QueryWrapper<YxWechatMenu>().eq("key",wechat_menus));
+        YxWechatMenu yxWechatMenu = this.getOne(new QueryWrapper<YxWechatMenu>().eq("`key`",wechat_menus));
         if(yxWechatMenu == null){
             return false;
         }

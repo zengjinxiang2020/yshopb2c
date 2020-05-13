@@ -106,17 +106,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
                 .beginOfMonth(new Date()));
         OrderTimeDataDTO orderTimeDataDTO = new OrderTimeDataDTO();
 
-//        orderTimeDataDTO.setTodayCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(today));
+//  todo      orderTimeDataDTO.setTodayCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(today));
 //        //orderTimeDataDTO.setTodayPrice(yxStoreOrderMapper.sumPrice(today));
 //
-//        orderTimeDataDTO.setProCount(yxStoreOrderMapper
+//   todo     orderTimeDataDTO.setProCount(yxStoreOrderMapper
 //                .countByPayTimeLessThanAndPayTimeGreaterThanEqual(today,yesterday));
 //        //orderTimeDataDTO.setProPrice(yxStoreOrderMapper.sumTPrice(today,yesterday));
 //
-//        orderTimeDataDTO.setLastWeekCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(lastWeek));
+// todo       orderTimeDataDTO.setLastWeekCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(lastWeek));
 //        //orderTimeDataDTO.setLastWeekPrice(yxStoreOrderMapper.sumPrice(lastWeek));
 //
-//        orderTimeDataDTO.setMonthCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(nowMonth));
+//  todo       orderTimeDataDTO.setMonthCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(nowMonth));
 //        //orderTimeDataDTO.setMonthPrice(yxStoreOrderMapper.sumPrice(nowMonth));
 
         orderTimeDataDTO.setUserCount(userMapper.selectCount(new QueryWrapper<YxUser>()));
@@ -344,7 +344,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
                 cartInfoDTOS.add(cartInfoDTO);
             }
             yxStoreOrderDTO.setCartInfoList(cartInfoDTOS);
-            yxStoreOrderDTO.setUserDTO(generator.convert(userService.getById(yxStoreOrder.getUid()), YxUserDto.class));
+            yxStoreOrderDTO.setUserDTO(generator.convert(userService.getOne(new QueryWrapper<YxUser>().eq("uid",yxStoreOrder.getUid())), YxUserDto.class));
 
             storeOrderDTOS.add(yxStoreOrderDTO);
 
@@ -405,7 +405,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
             this.save(resources);
 
             //退款到余额
-            YxUserDto userDTO = generator.convert(userService.getById(resources.getUid()),YxUserDto.class);
+            YxUserDto userDTO = generator.convert(userService.getOne(new QueryWrapper<YxUser>().eq("uid",resources.getUid())),YxUserDto.class);
             userMapper.updateMoney(resources.getPayPrice().doubleValue(),
                     resources.getUid());
 

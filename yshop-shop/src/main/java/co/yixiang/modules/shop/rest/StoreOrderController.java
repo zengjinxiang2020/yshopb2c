@@ -15,6 +15,7 @@ import co.yixiang.express.dao.ExpressInfo;
 import co.yixiang.modules.activity.service.YxStorePinkService;
 import co.yixiang.modules.shop.domain.YxStoreOrder;
 import co.yixiang.modules.shop.domain.YxStoreOrderStatus;
+import co.yixiang.modules.shop.domain.YxWechatUser;
 import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.service.dto.*;
 import co.yixiang.modules.shop.service.param.ExpressParam;
@@ -23,6 +24,7 @@ import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -220,7 +222,7 @@ public class StoreOrderController {
 
         //模板消息通知
         try {
-            YxWechatUserDto wechatUser = generator.convert(wechatUserService.getById(resources.getUid()),YxWechatUserDto.class);
+            YxWechatUserDto wechatUser = generator.convert(wechatUserService.getOne(new QueryWrapper<YxWechatUser>().eq("uid",resources.getUid())),YxWechatUserDto.class);
             if (ObjectUtil.isNotNull(wechatUser)) {
                 //公众号与小程序打通统一公众号模板通知
                 if (StrUtil.isNotBlank(wechatUser.getOpenid())) {
@@ -291,7 +293,7 @@ public class StoreOrderController {
 
         //模板消息通知
         try {
-            YxWechatUserDto wechatUser = generator.convert(wechatUserService.getById(resources.getUid()),YxWechatUserDto.class);
+            YxWechatUserDto wechatUser = generator.convert(wechatUserService.getOne(new QueryWrapper<YxWechatUser>().eq("uid",resources.getUid())),YxWechatUserDto.class);
             if (ObjectUtil.isNotNull(wechatUser)) {
                 //公众号与小程序打通统一公众号模板通知
                 if (StrUtil.isNotBlank(wechatUser.getOpenid())) {

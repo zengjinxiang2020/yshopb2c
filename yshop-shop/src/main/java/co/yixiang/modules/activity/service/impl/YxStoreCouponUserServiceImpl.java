@@ -6,9 +6,11 @@ import co.yixiang.modules.activity.service.YxStoreCouponUserService;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponUserDTO;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponUserQueryCriteria;
 import co.yixiang.modules.activity.service.mapper.YxStoreCouponUserMapper;
+import co.yixiang.modules.shop.domain.YxUser;
 import co.yixiang.modules.shop.service.YxUserService;
 import co.yixiang.utils.QueryHelp;
 import co.yixiang.utils.ValidationUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,7 +51,7 @@ public class YxStoreCouponUserServiceImpl implements YxStoreCouponUserService {
         List<YxStoreCouponUserDTO> storeOrderDTOS = yxStoreCouponUserMapper
                 .toDto(page.getContent());
         for (YxStoreCouponUserDTO couponUserDTO : storeOrderDTOS) {
-            couponUserDTO.setNickname(userService.getById(couponUserDTO.getUid()).getNickname());
+            couponUserDTO.setNickname(userService.getOne(new QueryWrapper<YxUser>().eq("uid",couponUserDTO.getUid())).getNickname());
         }
         Map<String,Object> map = new LinkedHashMap<>(2);
         map.put("content",storeOrderDTOS);
