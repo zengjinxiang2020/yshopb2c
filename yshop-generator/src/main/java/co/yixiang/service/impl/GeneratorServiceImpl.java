@@ -4,10 +4,9 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ZipUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.domain.ColumnInfo;
+import co.yixiang.domain.ColumnConfig;
 import co.yixiang.domain.GenConfig;
 import co.yixiang.service.mapper.ColumnInfoMapper;
-import co.yixiang.service.mapper.GenConfigMapper;
 import co.yixiang.utils.GenUtil;
 import co.yixiang.domain.vo.TableInfo;
 import co.yixiang.exception.BadRequestException;
@@ -37,7 +36,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @SuppressWarnings({"unchecked","all"})
-public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, ColumnInfo> implements GeneratorService {
+public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, ColumnConfig> implements GeneratorService {
 
     @PersistenceContext
     private EntityManager em;
@@ -75,8 +74,8 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
     }
 
     @Override
-    public List<ColumnInfo> getColumns(String tableName) {
-        List<ColumnInfo> columnInfos = this.list(new QueryWrapper<ColumnInfo>()
+    public List<ColumnConfig> getColumns(String tableName) {
+        List<ColumnConfig> columnInfos = this.list(new QueryWrapper<ColumnConfig>()
                 .eq("table_name",tableName).orderByAsc("id"));
         if(CollectionUtil.isNotEmpty(columnInfos)){
             return columnInfos;
@@ -88,18 +87,18 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
     }
 
     @Override
-    public List<ColumnInfo> query(String tableName){
+    public List<ColumnConfig> query(String tableName){
         // 使用预编译防止sql注入
         String sql = "select column_name, is_nullable, data_type, column_comment, column_key, extra from information_schema.columns " +
                 "where table_name = ? and table_schema = (select database()) order by ordinal_position";
         Query query = em.createNativeQuery(sql);
         query.setParameter(1,tableName);
         List result = query.getResultList();
-        List<ColumnInfo> columnInfos = new ArrayList<>();
+        List<ColumnConfig> columnInfos = new ArrayList<>();
         for (Object obj : result) {
             Object[] arr = (Object[]) obj;
             columnInfos.add(
-                    new ColumnInfo(
+                    new ColumnConfig(
                             tableName,
                             arr[0].toString(),
                             "NO".equals(arr[1]),
@@ -113,14 +112,14 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
     }
 
     @Override
-    public void sync(List<ColumnInfo> columnInfos, List<ColumnInfo> columnInfoList) {
+    public void sync(List<ColumnConfig> columnInfos, List<ColumnConfig> columnInfoList) {
         // 第一种情况，数据库类字段改变或者新增字段
-        for (ColumnInfo columnInfo : columnInfoList) {
+        for (ColumnConfig columnInfo : columnInfoList) {
             // 根据字段名称查找
-            List<ColumnInfo> columns = new ArrayList<ColumnInfo>(columnInfos.stream().filter(c-> c.getColumnName().equals(columnInfo.getColumnName())).collect(Collectors.toList()));
+            List<ColumnConfig> columns = new ArrayList<ColumnConfig>(columnInfos.stream().filter(c-> c.getColumnName().equals(columnInfo.getColumnName())).collect(Collectors.toList()));
             // 如果能找到，就修改部分可能被字段
             if(CollectionUtil.isNotEmpty(columns)){
-                ColumnInfo column = columns.get(0);
+                ColumnConfig column = columns.get(0);
                 column.setColumnType(columnInfo.getColumnType());
                 column.setExtra(columnInfo.getExtra());
                 column.setKeyType(columnInfo.getKeyType());
@@ -134,9 +133,9 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
             }
         }
         // 第二种情况，数据库字段删除了
-        for (ColumnInfo columnInfo : columnInfos) {
+        for (ColumnConfig columnInfo : columnInfos) {
             // 根据字段名称查找
-            List<ColumnInfo> columns = new ArrayList<ColumnInfo>(columnInfoList.stream().filter(c-> c.getColumnName().equals(columnInfo.getColumnName())).collect(Collectors.toList()));
+            List<ColumnConfig> columns = new ArrayList<ColumnConfig>(columnInfoList.stream().filter(c-> c.getColumnName().equals(columnInfo.getColumnName())).collect(Collectors.toList()));
             // 如果找不到，就代表字段被删除了，则需要删除该字段
             if(CollectionUtil.isEmpty(columns)){
                 this.removeById(columnInfo.getId());
@@ -145,12 +144,12 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
     }
 
     @Override
-    public void save(List<ColumnInfo> columnInfos) {
+    public void save(List<ColumnConfig> columnInfos) {
         this.saveBatch(columnInfos);
     }
 
     @Override
-    public void generator(GenConfig genConfig, List<ColumnInfo> columns) {
+    public void generator(GenConfig genConfig, List<ColumnConfig> columns) {
         if(genConfig.getId() == null){
             throw new BadRequestException("请先配置生成器");
         }
@@ -163,7 +162,7 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
     }
 
     @Override
-    public ResponseEntity<Object> preview(GenConfig genConfig, List<ColumnInfo> columns) {
+    public ResponseEntity<Object> preview(GenConfig genConfig, List<ColumnConfig> columns) {
         if(genConfig.getId() == null){
             throw new BadRequestException("请先配置生成器");
         }
@@ -172,7 +171,7 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
     }
 
     @Override
-    public void download(GenConfig genConfig, List<ColumnInfo> columns, HttpServletRequest request, HttpServletResponse response) {
+    public void download(GenConfig genConfig, List<ColumnConfig> columns, HttpServletRequest request, HttpServletResponse response) {
         if(genConfig.getId() == null){
             throw new BadRequestException("请先配置生成器");
         }

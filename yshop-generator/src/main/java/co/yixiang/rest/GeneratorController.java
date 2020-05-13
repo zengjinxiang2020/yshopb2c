@@ -1,6 +1,6 @@
 package co.yixiang.rest;
 
-import co.yixiang.domain.ColumnInfo;
+import co.yixiang.domain.ColumnConfig;
 import co.yixiang.service.GenConfigService;
 import co.yixiang.service.GeneratorService;
 import io.swagger.annotations.Api;
@@ -54,13 +54,13 @@ public class GeneratorController {
     @ApiOperation("查询字段数据")
     @GetMapping(value = "/columns")
     public ResponseEntity<Object> getTables(@RequestParam String tableName){
-        List<ColumnInfo> columnInfos = generatorService.getColumns(tableName);
+        List<ColumnConfig> columnInfos = generatorService.getColumns(tableName);
         return new ResponseEntity<>(PageUtil.toPage(columnInfos,columnInfos.size()), HttpStatus.OK);
     }
 
     @ApiOperation("保存字段数据")
     @PutMapping
-    public ResponseEntity<HttpStatus> save(@RequestBody List<ColumnInfo> columnInfos){
+    public ResponseEntity<HttpStatus> save(@RequestBody List<ColumnConfig> columnInfos){
         generatorService.save(columnInfos);
         return new ResponseEntity<>(HttpStatus.OK);
     }

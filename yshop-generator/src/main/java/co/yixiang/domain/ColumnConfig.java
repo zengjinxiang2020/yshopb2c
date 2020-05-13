@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Table(name = "column_config")
-public class ColumnInfo {
+public class ColumnConfig {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,7 +60,7 @@ public class ColumnInfo {
     /** 日期注解 */
     private String dateAnnotation;
 
-    public ColumnInfo(String tableName, String columnName, Boolean notNull, String columnType, String remark, String keyType, String extra) {
+    public ColumnConfig(String tableName, String columnName, Boolean notNull, String columnType, String remark, String keyType, String extra) {
         this.tableName = tableName;
         this.columnName = columnName;
         this.columnType = columnType;

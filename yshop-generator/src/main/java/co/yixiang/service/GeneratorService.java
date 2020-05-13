@@ -1,6 +1,6 @@
 package co.yixiang.service;
 
-import co.yixiang.domain.ColumnInfo;
+import co.yixiang.domain.ColumnConfig;
 import co.yixiang.domain.GenConfig;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -27,7 +27,7 @@ public interface GeneratorService {
      * @param name 表名
      * @return /
      */
-    List<ColumnInfo> getColumns(String name);
+    List<ColumnConfig> getColumns(String name);
 
     /**
      * 同步表数据
@@ -35,13 +35,13 @@ public interface GeneratorService {
      * @param columnInfoList
      */
     @Async
-    void sync(List<ColumnInfo> columnInfos, List<ColumnInfo> columnInfoList);
+    void sync(List<ColumnConfig> columnInfos, List<ColumnConfig> columnInfoList);
 
     /**
      * 保持数据
      * @param columnInfos /
      */
-    void save(List<ColumnInfo> columnInfos);
+    void save(List<ColumnConfig> columnInfos);
 
     /**
      * 获取所有table
@@ -54,7 +54,7 @@ public interface GeneratorService {
      * @param genConfig 配置信息
      * @param columns 字段信息
      */
-    void generator(GenConfig genConfig, List<ColumnInfo> columns);
+    void generator(GenConfig genConfig, List<ColumnConfig> columns);
 
     /**
      * 预览
@@ -62,7 +62,7 @@ public interface GeneratorService {
      * @param columns 字段信息
      * @return /
      */
-    ResponseEntity<Object> preview(GenConfig genConfig, List<ColumnInfo> columns);
+    ResponseEntity<Object> preview(GenConfig genConfig, List<ColumnConfig> columns);
 
     /**
      * 打包下载
@@ -71,12 +71,12 @@ public interface GeneratorService {
      * @param request /
      * @param response /
      */
-    void download(GenConfig genConfig, List<ColumnInfo> columns, HttpServletRequest request, HttpServletResponse response);
+    void download(GenConfig genConfig, List<ColumnConfig> columns, HttpServletRequest request, HttpServletResponse response);
 
     /**
      * 查询数据库的表字段数据数据
      * @param table /
      * @return /
      */
-    List<ColumnInfo> query(String table);
+    List<ColumnConfig> query(String table);
 }

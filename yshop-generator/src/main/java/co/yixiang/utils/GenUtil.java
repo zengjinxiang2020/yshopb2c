@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.*;
 import lombok.extern.slf4j.Slf4j;
 import co.yixiang.domain.GenConfig;
-import co.yixiang.domain.ColumnInfo;
+import co.yixiang.domain.ColumnConfig;
 import org.springframework.util.ObjectUtils;
 import java.io.File;
 import java.io.FileWriter;
@@ -66,7 +66,7 @@ public class GenUtil {
         return templateNames;
     }
 
-    public static List<Map<String, Object>> preview(List<ColumnInfo> columns, GenConfig genConfig) {
+    public static List<Map<String, Object>> preview(List<ColumnConfig> columns, GenConfig genConfig) {
         Map<String,Object> genMap = getGenMap(columns, genConfig);
         List<Map<String,Object>> genList = new ArrayList<>();
         // 获取后端模版
@@ -92,7 +92,7 @@ public class GenUtil {
         return genList;
     }
 
-    public static String download(List<ColumnInfo> columns, GenConfig genConfig) throws IOException {
+    public static String download(List<ColumnConfig> columns, GenConfig genConfig) throws IOException {
         String tempPath =System.getProperty("java.io.tmpdir") + "yshop-gen-temp" + File.separator + genConfig.getTableName() + File.separator;
         Map<String,Object> genMap = getGenMap(columns, genConfig);
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("template", TemplateConfig.ResourceMode.CLASSPATH));
@@ -130,7 +130,7 @@ public class GenUtil {
         return tempPath;
     }
 
-    public static void generatorCode(List<ColumnInfo> columnInfos, GenConfig genConfig) throws IOException {
+    public static void generatorCode(List<ColumnConfig> columnInfos, GenConfig genConfig) throws IOException {
         Map<String,Object> genMap = getGenMap(columnInfos, genConfig);
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("template", TemplateConfig.ResourceMode.CLASSPATH));
         // 生成后端代码
@@ -169,7 +169,7 @@ public class GenUtil {
     }
 
     // 获取模版数据
-    private static Map<String,Object> getGenMap(List<ColumnInfo> columnInfos, GenConfig genConfig) {
+    private static Map<String,Object> getGenMap(List<ColumnConfig> columnInfos, GenConfig genConfig) {
         // 存储模版字段数据
         Map<String,Object> genMap = new HashMap<>(16);
         // 接口别名
@@ -226,7 +226,7 @@ public class GenUtil {
         // 存储不为空的字段信息
         List<Map<String,Object>> isNotNullColumns = new ArrayList<>();
 
-        for (ColumnInfo column : columnInfos) {
+        for (ColumnConfig column : columnInfos) {
             Map<String,Object> listMap = new HashMap<>(16);
             // 字段描述
             listMap.put("remark",column.getRemark());
