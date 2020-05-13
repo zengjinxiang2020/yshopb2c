@@ -2,6 +2,7 @@ package co.yixiang.modules.shop.service.impl;
 
 import co.yixiang.modules.shop.domain.YxSystemGroupData;
 import co.yixiang.common.service.impl.BaseServiceImpl;
+import com.alibaba.fastjson.JSON;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageHelper;
@@ -49,8 +50,15 @@ public class YxSystemGroupDataServiceImpl extends BaseServiceImpl<YxSystemGroupD
         getPage(pageable);
         PageInfo<YxSystemGroupData> page = new PageInfo<>(queryAll(criteria));
         Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxSystemGroupDataDto.class));
-        map.put("totalElements", page.getTotal());
+        List<YxSystemGroupDataDto> systemGroupDataDTOS = new ArrayList<>();
+        for (YxSystemGroupData systemGroupData : page.getList()) {
+
+            YxSystemGroupDataDto systemGroupDataDTO = generator.convert(systemGroupData,YxSystemGroupDataDto.class);
+            systemGroupDataDTO.setMap(JSON.parseObject(systemGroupData.getValue()));
+            systemGroupDataDTOS.add(systemGroupDataDTO);
+        }
+        map.put("content",systemGroupDataDTOS);
+        map.put("totalElements",page.getTotal());
         return map;
     }
 

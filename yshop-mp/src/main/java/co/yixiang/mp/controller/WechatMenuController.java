@@ -42,7 +42,7 @@ public class WechatMenuController {
     @GetMapping(value = "/YxWechatMenu")
     @PreAuthorize("@el.check('admin','YxWechatMenu_ALL','YxWechatMenu_SELECT')")
     public ResponseEntity getYxWechatMenus(){
-        return new ResponseEntity(YxWechatMenuService.getOne(new QueryWrapper<YxWechatMenu>().eq("key","wechat_menus")),HttpStatus.OK);
+        return new ResponseEntity(YxWechatMenuService.getOne(new QueryWrapper<YxWechatMenu>().eq("`key`","wechat_menus")),HttpStatus.OK);
     }
 
 

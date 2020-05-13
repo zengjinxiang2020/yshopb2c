@@ -197,7 +197,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
         }
         Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxStoreOrderDto.class));
+        map.put("content", storeOrderDTOS);
         map.put("totalElements", page.getTotal());
         return map;
     }
