@@ -1,4 +1,5 @@
 package co.yixiang.modules.activity.domain;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -21,7 +22,7 @@ import java.io.Serializable;
 public class YxStoreBargain implements Serializable {
 
     /** 砍价产品ID */
-    @Id
+    @TableId
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
