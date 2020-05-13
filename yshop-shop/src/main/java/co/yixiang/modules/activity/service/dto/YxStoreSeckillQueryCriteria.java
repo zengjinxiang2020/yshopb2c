@@ -1,14 +1,16 @@
 package co.yixiang.modules.activity.service.dto;
 
-import co.yixiang.annotation.Query;
 import lombok.Data;
+import java.util.List;
+import co.yixiang.annotation.Query;
 
 /**
-* @author xuwenbo
-* @date 2019-12-14
+* @author hupeng
+* @date 2020-05-13
 */
 @Data
 public class YxStoreSeckillQueryCriteria{
+
 
     // 模糊
     @Query(type = Query.Type.INNER_LIKE)

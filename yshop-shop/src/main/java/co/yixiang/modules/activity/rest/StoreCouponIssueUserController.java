@@ -43,7 +43,7 @@ public class StoreCouponIssueUserController {
     @PostMapping(value = "/yxStoreCouponIssueUser")
     @PreAuthorize("@el.check('admin','YXSTORECOUPONISSUEUSER_ALL','YXSTORECOUPONISSUEUSER_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxStoreCouponIssueUser resources){
-        return new ResponseEntity(yxStoreCouponIssueUserService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity(yxStoreCouponIssueUserService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改")
@@ -51,7 +51,7 @@ public class StoreCouponIssueUserController {
     @PutMapping(value = "/yxStoreCouponIssueUser")
     @PreAuthorize("@el.check('admin','YXSTORECOUPONISSUEUSER_ALL','YXSTORECOUPONISSUEUSER_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreCouponIssueUser resources){
-        yxStoreCouponIssueUserService.update(resources);
+        yxStoreCouponIssueUserService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -61,7 +61,7 @@ public class StoreCouponIssueUserController {
     @PreAuthorize("@el.check('admin','YXSTORECOUPONISSUEUSER_ALL','YXSTORECOUPONISSUEUSER_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxStoreCouponIssueUserService.delete(id);
+        yxStoreCouponIssueUserService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

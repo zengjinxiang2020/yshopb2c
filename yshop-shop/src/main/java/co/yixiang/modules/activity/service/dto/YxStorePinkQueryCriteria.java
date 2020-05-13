@@ -10,4 +10,6 @@ import co.yixiang.annotation.Query;
 */
 @Data
 public class YxStorePinkQueryCriteria{
+    @Query
+    private Integer kId;
 }

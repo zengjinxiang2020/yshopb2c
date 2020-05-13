@@ -1,19 +1,21 @@
 package co.yixiang.service;
-
+import co.yixiang.common.service.BaseService;
 import co.yixiang.domain.LocalStorage;
-import co.yixiang.service.dto.LocalStorageDTO;
+import co.yixiang.service.dto.LocalStorageDto;
 import co.yixiang.service.dto.LocalStorageQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import java.util.Map;
 import java.util.List;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
-* @author Zheng Jie
-* @date 2019-09-05
+* @author hupeng
+* @date 2020-05-13
 */
-public interface LocalStorageService {
+public interface LocalStorageService  extends BaseService<LocalStorage>{
 
     /**
      * 分页查询
@@ -21,21 +23,21 @@ public interface LocalStorageService {
      * @param pageable 分页参数
      * @return /
      */
-    Object queryAll(LocalStorageQueryCriteria criteria, Pageable pageable);
+    Map<String, Object> queryAll(LocalStorageQueryCriteria criteria, Pageable pageable);
 
     /**
      * 查询全部数据
      * @param criteria 条件
      * @return /
      */
-    List<LocalStorageDTO> queryAll(LocalStorageQueryCriteria criteria);
+    List<LocalStorageDto> queryAll(LocalStorageQueryCriteria criteria);
 
     /**
      * 根据ID查询
      * @param id /
      * @return /
      */
-    LocalStorageDTO findById(Long id);
+    LocalStorageDto findById(Long id);
 
     /**
      * 上传
@@ -43,13 +45,8 @@ public interface LocalStorageService {
      * @param file 文件
      * @return /
      */
-    LocalStorageDTO create(String name, MultipartFile file);
+    LocalStorageDto create(String name, MultipartFile file);
 
-    /**
-     * 编辑
-     * @param resources 文件信息
-     */
-    void update(LocalStorage resources);
 
     /**
      * 多选删除
@@ -63,5 +60,5 @@ public interface LocalStorageService {
      * @param response /
      * @throws IOException /
      */
-    void download(List<LocalStorageDTO> localStorageDtos, HttpServletResponse response) throws IOException;
+    void download(List<LocalStorageDto> localStorageDtos, HttpServletResponse response) throws IOException;
 }

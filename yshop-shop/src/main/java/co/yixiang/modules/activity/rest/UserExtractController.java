@@ -126,7 +126,7 @@ public class UserExtractController {
             }
 
         }
-        yxUserExtractService.update(resources);
+        yxUserExtractService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

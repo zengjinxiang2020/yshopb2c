@@ -2,81 +2,81 @@ package co.yixiang.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.domain.LocalStorage;
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.exception.BadRequestException;
-import co.yixiang.repository.LocalStorageRepository;
+import co.yixiang.utils.*;
+import co.yixiang.dozer.service.IGenerator;
+import com.github.pagehelper.PageInfo;
+import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.service.LocalStorageService;
-import co.yixiang.service.dto.LocalStorageDTO;
+import co.yixiang.service.dto.LocalStorageDto;
 import co.yixiang.service.dto.LocalStorageQueryCriteria;
 import co.yixiang.service.mapper.LocalStorageMapper;
-import co.yixiang.utils.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+// 默认不使用缓存
+//import org.springframework.cache.annotation.CacheConfig;
+//import org.springframework.cache.annotation.CacheEvict;
+//import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
- * @author Zheng Jie
- * @date 2019-09-05
- */
+* @author hupeng
+* @date 2020-05-13
+*/
 @Service
-@CacheConfig(cacheNames = "localStorage")
+//@CacheConfig(cacheNames = "localStorage")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class LocalStorageServiceImpl implements LocalStorageService {
+public class LocalStorageServiceImpl extends BaseServiceImpl<LocalStorageMapper, LocalStorage> implements LocalStorageService {
 
-    private final LocalStorageRepository localStorageRepository;
-
-    private final LocalStorageMapper localStorageMapper;
-
+    private final IGenerator generator;
     @Value("${file.path}")
     private String path;
 
     @Value("${file.maxSize}")
     private long maxSize;
 
-    public LocalStorageServiceImpl(LocalStorageRepository localStorageRepository, LocalStorageMapper localStorageMapper) {
-        this.localStorageRepository = localStorageRepository;
-        this.localStorageMapper = localStorageMapper;
+    public LocalStorageServiceImpl(IGenerator generator) {
+        this.generator = generator;
     }
 
     @Override
-    @Cacheable
-    public Object queryAll(LocalStorageQueryCriteria criteria, Pageable pageable){
-        Page<LocalStorage> page = localStorageRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(localStorageMapper::toDto));
+    //@Cacheable
+    public Map<String, Object> queryAll(LocalStorageQueryCriteria criteria, Pageable pageable) {
+        getPage(pageable);
+        PageInfo<LocalStorage> page = new PageInfo<>(baseMapper.selectList(QueryHelpPlus.getPredicate(LocalStorage.class, criteria)));
+        Map<String, Object> map = new LinkedHashMap<>(2);
+        map.put("content", generator.convert(page.getList(), LocalStorageDto.class));
+        map.put("totalElements", page.getTotal());
+        return map;
+    }
+
+
+    @Override
+    //@Cacheable
+    public List<LocalStorageDto> queryAll(LocalStorageQueryCriteria criteria){
+        return generator.convert(baseMapper.selectList(QueryHelpPlus.getPredicate(LocalStorage.class, criteria)),LocalStorageDto.class);
     }
 
     @Override
-    @Cacheable
-    public List<LocalStorageDTO> queryAll(LocalStorageQueryCriteria criteria){
-        return localStorageMapper.toDto(localStorageRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+    public LocalStorageDto findById(Long id) {
+        LocalStorage localStorage = this.getById(id);
+        return generator.convert(localStorage,LocalStorageDto.class);
     }
 
     @Override
-    @Cacheable(key = "#p0")
-    public LocalStorageDTO findById(Long id){
-        LocalStorage localStorage = localStorageRepository.findById(id).orElseGet(LocalStorage::new);
-        ValidationUtil.isNull(localStorage.getId(),"LocalStorage","id",id);
-        return localStorageMapper.toDto(localStorage);
-    }
-
-    @Override
-    @CacheEvict(allEntries = true)
-    @Transactional(rollbackFor = Exception.class)
-    public LocalStorageDTO create(String name, MultipartFile multipartFile) {
+    public LocalStorageDto create(String name, MultipartFile multipartFile) {
         FileUtil.checkSize(maxSize, multipartFile.getSize());
         String suffix = FileUtil.getExtensionName(multipartFile.getOriginalFilename());
         String type = FileUtil.getFileType(suffix);
@@ -92,48 +92,41 @@ public class LocalStorageServiceImpl implements LocalStorageService {
                     suffix,
                     file.getPath(),
                     type,
-                    FileUtil.getSize(file.length()),
+                    FileUtil.getSize(multipartFile.getSize()),
                     SecurityUtils.getUsername()
             );
-            return localStorageMapper.toDto(localStorageRepository.save(localStorage));
+
+            return generator.convert(localStorage,LocalStorageDto.class);
         }catch (Exception e){
             FileUtil.del(file);
             throw e;
         }
     }
 
-    @Override
-    @CacheEvict(allEntries = true)
-    @Transactional(rollbackFor = Exception.class)
-    public void update(LocalStorage resources) {
-        LocalStorage localStorage = localStorageRepository.findById(resources.getId()).orElseGet(LocalStorage::new);
-        ValidationUtil.isNull( localStorage.getId(),"LocalStorage","id",resources.getId());
-        localStorage.copy(resources);
-        localStorageRepository.save(localStorage);
-    }
 
     @Override
-    @CacheEvict(allEntries = true)
-    @Transactional(rollbackFor = Exception.class)
     public void deleteAll(Long[] ids) {
         for (Long id : ids) {
-            LocalStorage storage = localStorageRepository.findById(id).orElseGet(LocalStorage::new);
+            LocalStorage storage = this.getById(id);
             FileUtil.del(storage.getPath());
-            localStorageRepository.delete(storage);
+            this.removeById(id);
         }
     }
 
+
     @Override
-    public void download(List<LocalStorageDTO> queryAll, HttpServletResponse response) throws IOException {
+    public void download(List<LocalStorageDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (LocalStorageDTO localStorageDTO : queryAll) {
+        for (LocalStorageDto localStorage : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put("文件名", localStorageDTO.getRealName());
-            map.put("备注名", localStorageDTO.getName());
-            map.put("文件类型", localStorageDTO.getType());
-            map.put("文件大小", localStorageDTO.getSize());
-            map.put("操作人", localStorageDTO.getOperate());
-            map.put("创建日期", localStorageDTO.getCreateTime());
+            map.put("文件真实的名称", localStorage.getRealName());
+            map.put("文件名", localStorage.getName());
+            map.put("后缀", localStorage.getSuffix());
+//            map.put("路径", localStorage.getPath());
+            map.put("类型", localStorage.getType());
+            map.put("大小", localStorage.getSize());
+            map.put("操作人", localStorage.getOperate());
+            map.put("创建日期", localStorage.getCreateTime());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

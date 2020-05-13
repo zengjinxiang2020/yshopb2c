@@ -1,62 +1,69 @@
 package co.yixiang.domain;
-
-import lombok.*;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import lombok.Data;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
+import java.io.Serializable;
 
 /**
-* @author Zheng Jie
-* @date 2019-09-05
+* @author hupeng
+* @date 2020-05-13
 */
-@Getter
-@Setter
 @Entity
+@Data
 @Table(name="local_storage")
-@NoArgsConstructor
-public class LocalStorage  implements Serializable {
+public class LocalStorage implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    /** 真实文件名 */
+
+    /** 文件真实的名称 */
     @Column(name = "real_name")
     private String realName;
 
-    /**文件名 */
+
+    /** 文件名 */
     @Column(name = "name")
     private String name;
 
-    /**后缀 */
+
+    /** 后缀 */
     @Column(name = "suffix")
     private String suffix;
+
 
     /** 路径 */
     @Column(name = "path")
     private String path;
 
+
     /** 类型 */
     @Column(name = "type")
     private String type;
+
 
     /** 大小 */
     @Column(name = "size")
     private String size;
 
+
     /** 操作人 */
     @Column(name = "operate")
     private String operate;
 
-    @Column(name = "create_time")
-    @CreationTimestamp
-    private Timestamp createTime;
 
+    /** 创建日期 */
+    @Column(name = "create_time")
+    @TableField(fill= FieldFill.INSERT)
+    private Timestamp createTime;
     public LocalStorage(String realName,String name, String suffix, String path, String type, String size, String operate) {
         this.realName = realName;
         this.name = name;

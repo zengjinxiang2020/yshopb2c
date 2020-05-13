@@ -1,6 +1,8 @@
 package co.yixiang.rest;
 
 import co.yixiang.aop.log.Log;
+import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.service.dto.PictureDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import co.yixiang.domain.Picture;
@@ -17,17 +19,18 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author 郑杰
+ * @author hupeng
  * @date 2018/09/20 14:13:32
  */
 @RestController
 @RequestMapping("/api/pictures")
 @Api(tags = "工具：免费图床管理")
 public class PictureController {
-
+    private final IGenerator generator;
     private final PictureService pictureService;
 
-    public PictureController(PictureService pictureService) {
+    public PictureController(IGenerator generator, PictureService pictureService) {
+        this.generator = generator;
         this.pictureService = pictureService;
     }
 
@@ -44,7 +47,7 @@ public class PictureController {
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('pictures:list')")
     public void download(HttpServletResponse response, PictureQueryCriteria criteria) throws IOException {
-        pictureService.download(pictureService.queryAll(criteria), response);
+        pictureService.download(generator.convert(pictureService.queryAll(criteria), PictureDto.class), response);
     }
 
     @Log("上传图片")

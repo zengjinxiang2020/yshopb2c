@@ -49,13 +49,13 @@ public class YxStoreOrderQueryCriteria{
     @Query
     private Integer bargainId;
 
-    @Query(propName="combination_id",type = Query.Type.NOT_EQUAL)
+    @Query(propName="combinationId",type = Query.Type.NOT_EQUAL)
     private Integer newCombinationId;
 
-    @Query(propName="seckill_id",type = Query.Type.NOT_EQUAL)
+    @Query(propName="seckillId",type = Query.Type.NOT_EQUAL)
     private Integer newSeckillId;
 
-    @Query(propName="bargain_id",type = Query.Type.NOT_EQUAL)
+    @Query(propName="bargainId",type = Query.Type.NOT_EQUAL)
     private Integer newBargainId;
 
     @Query

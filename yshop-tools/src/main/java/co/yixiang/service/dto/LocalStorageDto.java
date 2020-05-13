@@ -1,16 +1,15 @@
 package co.yixiang.service.dto;
 
 import lombok.Data;
-import java.io.Serializable;
 import java.sql.Timestamp;
+import java.io.Serializable;
 
 /**
-* @author Zheng Jie
-* @date 2019-09-05
+* @author hupeng
+* @date 2020-05-13
 */
 @Data
-public class LocalStorageDTO implements Serializable {
-
+public class LocalStorageDto implements Serializable {
     private Long id;
 
     private String realName;

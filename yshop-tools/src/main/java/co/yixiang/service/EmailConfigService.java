@@ -1,22 +1,21 @@
 package co.yixiang.service;
-
+import co.yixiang.common.service.BaseService;
 import co.yixiang.domain.EmailConfig;
 import co.yixiang.domain.vo.EmailVo;
 import org.springframework.scheduling.annotation.Async;
 
 /**
- * @author Zheng Jie
- * @date 2018-12-26
- */
-public interface EmailService {
-
+* @author hupeng
+* @date 2020-05-13
+*/
+public interface EmailConfigService  extends BaseService<EmailConfig>{
     /**
      * 更新邮件配置
      * @param emailConfig 邮件配置
      * @param old 旧的配置
      * @return EmailConfig
      */
-    EmailConfig update(EmailConfig emailConfig, EmailConfig old);
+    void update(EmailConfig emailConfig, EmailConfig old);
 
     /**
      * 查询配置

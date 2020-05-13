@@ -1,14 +1,14 @@
 package co.yixiang.service.dto;
 
 import lombok.Data;
+
 import java.sql.Timestamp;
 import java.util.List;
-
 import co.yixiang.annotation.Query;
 
 /**
-* @author Zheng Jie
-* @date 2019-09-05
+* @author hupeng
+* @date 2020-05-13
 */
 @Data
 public class LocalStorageQueryCriteria{

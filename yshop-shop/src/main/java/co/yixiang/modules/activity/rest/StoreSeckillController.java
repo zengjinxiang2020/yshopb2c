@@ -57,9 +57,9 @@ public class StoreSeckillController {
         }
         if(ObjectUtil.isNull(resources.getId())){
             resources.setAddTime(String.valueOf(OrderUtil.getSecondTimestampTwo()));
-            return new ResponseEntity(yxStoreSeckillService.create(resources),HttpStatus.CREATED);
+            return new ResponseEntity(yxStoreSeckillService.save(resources),HttpStatus.CREATED);
         }else{
-            yxStoreSeckillService.update(resources);
+            yxStoreSeckillService.saveOrUpdate(resources);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
     }
@@ -70,7 +70,7 @@ public class StoreSeckillController {
     @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxStoreSeckillService.delete(id);
+        yxStoreSeckillService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

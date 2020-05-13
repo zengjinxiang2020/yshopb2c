@@ -1,53 +1,77 @@
 package co.yixiang.domain;
-
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
-import java.io.Serializable;
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
+import java.io.Serializable;
 
 /**
- * sm.ms图床
- *
- * @author Zheng Jie
- * @date 2018-12-27
- */
-@Data
+* @author hupeng
+* @date 2020-05-13
+*/
 @Entity
-@Table(name = "picture")
+@Data
+@Table(name="picture")
 public class Picture implements Serializable {
 
+    /** ID */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    private String filename;
 
-    private String url;
-
-    private String size;
-
-    private String height;
-
-    private String width;
-
-    @Column(name = "delete_url")
-    private String delete;
-
-    private String username;
-
-    @CreationTimestamp
+    /** 上传日期 */
     @Column(name = "create_time")
+    @TableField(fill= FieldFill.INSERT)
     private Timestamp createTime;
 
-    /** 用于检测文件是否重复 */
-    private String md5Code;
 
-    @Override
-    public String toString() {
-        return "Picture{" +
-                "filename='" + filename + '\'' +
-                '}';
+    /** 删除的URL */
+    @Column(name = "delete_url")
+    private String deleteUrl;
+
+
+    /** 图片名称 */
+    @Column(name = "filename")
+    private String filename;
+
+
+    /** 图片高度 */
+    @Column(name = "height")
+    private String height;
+
+
+    /** 图片大小 */
+    @Column(name = "size")
+    private String size;
+
+
+    /** 图片地址 */
+    @Column(name = "url")
+    private String url;
+
+
+    /** 用户名称 */
+    @Column(name = "username")
+    private String username;
+
+
+    /** 图片宽度 */
+    @Column(name = "width")
+    private String width;
+
+
+    /** 文件的MD5值 */
+    @Column(name = "md5code")
+    private String md5code;
+
+    public void copy(Picture source){
+        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
 }

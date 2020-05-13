@@ -1,18 +1,17 @@
 package co.yixiang.modules.activity.service.dto;
 
 import lombok.Data;
-
-import java.io.Serializable;
+import java.sql.Timestamp;
 import java.math.BigDecimal;
+import java.io.Serializable;
 import java.util.Date;
-
 
 /**
 * @author hupeng
-* @date 2019-11-18
+* @date 2020-05-13
 */
 @Data
-public class YxStoreCombinationDTO implements Serializable {
+public class YxStoreCombinationDto implements Serializable {
 
     private Integer id;
 
@@ -107,4 +106,5 @@ public class YxStoreCombinationDTO implements Serializable {
 
     // 单位名
     private String unitName;
+
 }

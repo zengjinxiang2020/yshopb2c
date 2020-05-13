@@ -1,34 +1,45 @@
 package co.yixiang.service;
-
+import co.yixiang.common.service.BaseService;
 import co.yixiang.domain.Picture;
+import co.yixiang.service.dto.PictureDto;
 import co.yixiang.service.dto.PictureQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.util.Map;
 import java.util.List;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author Zheng Jie
- * @date 2018-12-27
- */
-public interface PictureService {
+* @author hupeng
+* @date 2020-05-13
+*/
+public interface PictureService  extends BaseService<Picture>{
+
+/**
+    * 查询数据分页
+    * @param criteria 条件
+    * @param pageable 分页参数
+    * @return Map<String,Object>
+    */
+    Map<String,Object> queryAll(PictureQueryCriteria criteria, Pageable pageable);
 
     /**
-     * 分页查询
-     * @param criteria 条件
-     * @param pageable 分页参数
-     * @return /
-     */
-    Object queryAll(PictureQueryCriteria criteria, Pageable pageable);
-
-    /**
-     * 查询全部数据
-     * @param criteria 条件
-     * @return /
-     */
+    * 查询所有数据不分页
+    * @param criteria 条件参数
+    * @return List<PictureDto>
+    */
     List<Picture> queryAll(PictureQueryCriteria criteria);
+
+    /**
+    * 导出数据
+    * @param all 待导出的数据
+    * @param response /
+    * @throws IOException /
+    */
+    void download(List<PictureDto> all, HttpServletResponse response) throws IOException;
+
 
     /**
      * 上传文件
@@ -51,13 +62,6 @@ public interface PictureService {
      */
     void deleteAll(Long[] ids);
 
-    /**
-     * 导出
-     * @param queryAll 待导出的数据
-     * @param response /
-     * @throws IOException /
-     */
-    void download(List<Picture> queryAll, HttpServletResponse response) throws IOException;
 
     /**
      * 同步数据

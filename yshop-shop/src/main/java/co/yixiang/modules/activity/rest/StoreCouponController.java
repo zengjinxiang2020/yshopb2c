@@ -45,7 +45,7 @@ public class StoreCouponController {
     @PreAuthorize("@el.check('admin','YXSTORECOUPON_ALL','YXSTORECOUPON_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxStoreCoupon resources){
         resources.setAddTime(OrderUtil.getSecondTimestampTwo());
-        return new ResponseEntity(yxStoreCouponService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity(yxStoreCouponService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改")
@@ -53,7 +53,7 @@ public class StoreCouponController {
     @PutMapping(value = "/yxStoreCoupon")
     @PreAuthorize("@el.check('admin','YXSTORECOUPON_ALL','YXSTORECOUPON_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreCoupon resources){
-        yxStoreCouponService.update(resources);
+        yxStoreCouponService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -66,7 +66,7 @@ public class StoreCouponController {
         YxStoreCoupon resources = new YxStoreCoupon();
         resources.setId(id);
         resources.setIsDel(1);
-        yxStoreCouponService.update(resources);
+        yxStoreCouponService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

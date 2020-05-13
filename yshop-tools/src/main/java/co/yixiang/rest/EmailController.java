@@ -1,11 +1,11 @@
 package co.yixiang.rest;
 
 import co.yixiang.aop.log.Log;
+import co.yixiang.service.EmailConfigService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import co.yixiang.domain.vo.EmailVo;
 import co.yixiang.domain.EmailConfig;
-import co.yixiang.service.EmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.*;
 @Api(tags = "工具：邮件管理")
 public class EmailController {
 
-    private final EmailService emailService;
+    private final EmailConfigService emailService;
 
-    public EmailController(EmailService emailService) {
+    public EmailController(EmailConfigService emailService) {
         this.emailService = emailService;
     }
 

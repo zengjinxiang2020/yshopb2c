@@ -7,7 +7,7 @@ import co.yixiang.domain.LocalStorage;
 import co.yixiang.domain.QiniuContent;
 import co.yixiang.service.LocalStorageService;
 import co.yixiang.service.QiNiuService;
-import co.yixiang.service.dto.LocalStorageDTO;
+import co.yixiang.service.dto.LocalStorageDto;
 import co.yixiang.service.dto.LocalStorageQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,7 +55,7 @@ public class UploadController {
         StringBuilder url = new StringBuilder();
         if (StrUtil.isNotEmpty(localUrl)) { //存在走本地
             for (MultipartFile file : files) {
-                LocalStorageDTO localStorageDTO = localStorageService.create(name, file);
+                LocalStorageDto localStorageDTO = localStorageService.create(name, file);
                 if ("".equals(url.toString())) {
                     url = url.append(localUrl + "/file/" + localStorageDTO.getType() + "/" + localStorageDTO.getRealName());
                 } else {

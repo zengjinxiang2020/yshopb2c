@@ -1,13 +1,13 @@
 package co.yixiang.service;
-
+import co.yixiang.common.service.BaseService;
 import co.yixiang.domain.AlipayConfig;
 import co.yixiang.domain.vo.TradeVo;
 
 /**
- * @author Zheng Jie
- * @date 2018-12-31
- */
-public interface AlipayService {
+* @author hupeng
+* @date 2020-05-13
+*/
+public interface AlipayConfigService  extends BaseService<AlipayConfig>{
 
     /**
      * 处理来自PC的交易请求
@@ -38,5 +38,5 @@ public interface AlipayService {
      * @param alipayConfig 支付宝配置
      * @return AlipayConfig
      */
-    AlipayConfig update(AlipayConfig alipayConfig);
+    void update(AlipayConfig alipayConfig);
 }

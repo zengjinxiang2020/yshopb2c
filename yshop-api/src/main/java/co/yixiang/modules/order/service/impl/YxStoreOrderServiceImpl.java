@@ -59,7 +59,7 @@ import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 import co.yixiang.mp.service.YxPayService;
 import co.yixiang.mp.service.YxTemplateService;
 import co.yixiang.mp.service.YxMiniPayService;
-import co.yixiang.service.AlipayService;
+import co.yixiang.service.AlipayConfigService;
 import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -142,7 +142,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Autowired
     private YxExpressService expressService;
     @Autowired
-    private AlipayService alipayService;
+    private AlipayConfigService alipayService;
     @Autowired
     private YxSystemStoreService systemStoreService;
 

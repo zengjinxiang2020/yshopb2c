@@ -5,39 +5,52 @@ import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import co.yixiang.domain.Picture;
-import co.yixiang.service.dto.PictureQueryCriteria;
-import co.yixiang.utils.*;
-import com.alibaba.fastjson.JSON;
-import lombok.extern.slf4j.Slf4j;
-import co.yixiang.repository.PictureRepository;
-import co.yixiang.service.PictureService;
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.exception.BadRequestException;
+import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.utils.TranslatorUtil;
+import co.yixiang.utils.ValidationUtil;
+import co.yixiang.utils.YshopConstant;
+import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageInfo;
+import co.yixiang.common.utils.QueryHelpPlus;
+import co.yixiang.utils.FileUtil;
+import co.yixiang.service.PictureService;
+import co.yixiang.service.dto.PictureDto;
+import co.yixiang.service.dto.PictureQueryCriteria;
+import co.yixiang.service.mapper.PictureMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+// 默认不使用缓存
+//import org.springframework.cache.annotation.CacheConfig;
+//import org.springframework.cache.annotation.CacheEvict;
+//import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
-import javax.servlet.http.HttpServletResponse;
+
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author Zheng Jie
- * @date 2018-12-27
- */
-@Slf4j
-@Service(value = "pictureService")
-@CacheConfig(cacheNames = "picture")
+* @author hupeng
+* @date 2020-05-13
+*/
+@Service
+//@AllArgsConstructor
+//@CacheConfig(cacheNames = "picture")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class PictureServiceImpl implements PictureService {
+public class PictureServiceImpl extends BaseServiceImpl<PictureMapper, Picture> implements PictureService {
+
+    private final IGenerator generator;
 
     @Value("${smms.token}")
     private String token;
 
-    private final PictureRepository pictureRepository;
 
     private static final String SUCCESS = "success";
 
@@ -45,18 +58,46 @@ public class PictureServiceImpl implements PictureService {
 
     private static final String MSG = "message";
 
-    public PictureServiceImpl(PictureRepository pictureRepository) {
-        this.pictureRepository = pictureRepository;
+    public PictureServiceImpl(IGenerator generator) {
+        this.generator = generator;
     }
 
     @Override
-    public Object queryAll(PictureQueryCriteria criteria, Pageable pageable){
-        return PageUtil.toPage(pictureRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable));
+    //@Cacheable
+    public Map<String, Object> queryAll(PictureQueryCriteria criteria, Pageable pageable) {
+        getPage(pageable);
+        PageInfo<Picture> page = new PageInfo<>(queryAll(criteria));
+        Map<String, Object> map = new LinkedHashMap<>(2);
+        map.put("content", generator.convert(page.getList(), PictureDto.class));
+        map.put("totalElements", page.getTotal());
+        return map;
     }
 
+
     @Override
-    public List<Picture> queryAll(PictureQueryCriteria criteria) {
-        return pictureRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder));
+    //@Cacheable
+    public List<Picture> queryAll(PictureQueryCriteria criteria){
+        return baseMapper.selectList(QueryHelpPlus.getPredicate(Picture.class, criteria));
+    }
+
+
+    @Override
+    public void download(List<PictureDto> all, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (PictureDto picture : all) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("上传日期", picture.getCreateTime());
+            map.put("删除的URL", picture.getDeleteUrl());
+            map.put("图片名称", picture.getFilename());
+            map.put("图片高度", picture.getHeight());
+            map.put("图片大小", picture.getSize());
+            map.put("图片地址", picture.getUrl());
+            map.put("用户名称", picture.getUsername());
+            map.put("图片宽度", picture.getWidth());
+            map.put("文件的MD5值", picture.getMd5code());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
     }
 
     @Override
@@ -64,9 +105,9 @@ public class PictureServiceImpl implements PictureService {
     public Picture upload(MultipartFile multipartFile, String username) {
         File file = FileUtil.toFile(multipartFile);
         // 验证是否重复上传
-        Picture picture = pictureRepository.findByMd5Code(FileUtil.getMd5(file));
+        Picture picture = this.getOne(new QueryWrapper<Picture>().eq("md5code",FileUtil.getMd5(file)));
         if(picture != null){
-           return picture;
+            return picture;
         }
         HashMap<String, Object> paramMap = new HashMap<>(1);
         paramMap.put("smfile", file);
@@ -83,9 +124,9 @@ public class PictureServiceImpl implements PictureService {
         picture = JSON.parseObject(jsonObject.get("data").toString(), Picture.class);
         picture.setSize(FileUtil.getSize(Integer.parseInt(picture.getSize())));
         picture.setUsername(username);
-        picture.setMd5Code(FileUtil.getMd5(file));
+        picture.setMd5code(FileUtil.getMd5(file));
         picture.setFilename(FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename())+"."+FileUtil.getExtensionName(multipartFile.getOriginalFilename()));
-        pictureRepository.save(picture);
+        this.save(picture);
         //删除临时文件
         FileUtil.del(file);
         return picture;
@@ -94,7 +135,7 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public Picture findById(Long id) {
-        Picture picture = pictureRepository.findById(id).orElseGet(Picture::new);
+        Picture picture = this.getById(id);
         ValidationUtil.isNull(picture.getId(),"Picture","id",id);
         return picture;
     }
@@ -104,10 +145,10 @@ public class PictureServiceImpl implements PictureService {
         for (Long id : ids) {
             Picture picture = findById(id);
             try {
-                HttpUtil.get(picture.getDelete());
-                pictureRepository.delete(picture);
+                HttpUtil.get(picture.getDeleteUrl());
+                this.removeById(id);
             } catch(Exception e){
-                pictureRepository.delete(picture);
+                this.removeById(id);
             }
         }
     }
@@ -123,30 +164,12 @@ public class PictureServiceImpl implements PictureService {
         JSONObject jsonObject = JSONUtil.parseObj(result);
         List<Picture> pictures = JSON.parseArray(jsonObject.get("data").toString(), Picture.class);
         for (Picture picture : pictures) {
-            if(!pictureRepository.existsByUrl(picture.getUrl())){
+            if(this.getOne(new QueryWrapper<Picture>().eq("url",picture.getUrl()))==null){
                 picture.setSize(FileUtil.getSize(Integer.parseInt(picture.getSize())));
                 picture.setUsername("System Sync");
-                picture.setMd5Code("");
-                pictureRepository.save(picture);
+                picture.setMd5code("");
+                this.save(picture);
             }
         }
-    }
-
-    @Override
-    public void download(List<Picture> queryAll, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (Picture picture : queryAll) {
-            Map<String,Object> map = new LinkedHashMap<>();
-            map.put("文件名", picture.getFilename());
-            map.put("图片地址", picture.getUrl());
-            map.put("文件大小", picture.getSize());
-            map.put("操作人", picture.getUsername());
-            map.put("高度", picture.getHeight());
-            map.put("宽度", picture.getWidth());
-            map.put("删除地址", picture.getDelete());
-            map.put("创建日期", picture.getCreateTime());
-            list.add(map);
-        }
-        FileUtil.downloadExcel(list, response);
     }
 }

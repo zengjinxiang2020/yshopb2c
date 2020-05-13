@@ -1,11 +1,11 @@
 package co.yixiang.rest;
 
+import co.yixiang.service.EmailConfigService;
 import co.yixiang.utils.YshopConstant;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import co.yixiang.domain.VerificationCode;
 import co.yixiang.domain.vo.EmailVo;
-import co.yixiang.service.EmailService;
 import co.yixiang.service.VerificationCodeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +22,9 @@ public class VerificationCodeController {
 
     private final VerificationCodeService verificationCodeService;
 
-    private final EmailService emailService;
+    private final EmailConfigService emailService;
 
-    public VerificationCodeController(VerificationCodeService verificationCodeService,  EmailService emailService) {
+    public VerificationCodeController(VerificationCodeService verificationCodeService,  EmailConfigService emailService) {
         this.verificationCodeService = verificationCodeService;
         this.emailService = emailService;
     }

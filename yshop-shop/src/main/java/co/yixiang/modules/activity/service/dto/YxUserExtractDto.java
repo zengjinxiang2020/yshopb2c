@@ -1,17 +1,16 @@
 package co.yixiang.modules.activity.service.dto;
 
 import lombok.Data;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
-
+import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2019-11-14
+* @date 2020-05-13
 */
 @Data
-public class YxUserExtractDTO implements Serializable {
+public class YxUserExtractDto implements Serializable {
+
 
     private Integer id;
 

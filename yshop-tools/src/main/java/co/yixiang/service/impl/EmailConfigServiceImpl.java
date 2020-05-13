@@ -3,38 +3,42 @@ package co.yixiang.service.impl;
 import cn.hutool.extra.mail.Mail;
 import cn.hutool.extra.mail.MailAccount;
 import co.yixiang.domain.EmailConfig;
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.domain.vo.EmailVo;
-import co.yixiang.repository.EmailRepository;
-import co.yixiang.service.EmailService;
 import co.yixiang.exception.BadRequestException;
-import co.yixiang.utils.EncryptUtils;
-import org.springframework.cache.annotation.CacheConfig;
+import co.yixiang.utils.*;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
+import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.service.EmailConfigService;
+import co.yixiang.service.mapper.EmailConfigMapper;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
+// 默认不使用缓存
+//import org.springframework.cache.annotation.CacheConfig;
+//import org.springframework.cache.annotation.CacheEvict;
+//import org.springframework.cache.annotation.Cacheable;
+
 
 /**
- * @author Zheng Jie
- * @date 2018-12-26
- */
+* @author hupeng
+* @date 2020-05-13
+*/
 @Service
-@CacheConfig(cacheNames = "email")
+@AllArgsConstructor
+//@CacheConfig(cacheNames = "emailConfig")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class EmailServiceImpl implements EmailService {
+public class EmailConfigServiceImpl extends BaseServiceImpl<EmailConfigMapper, EmailConfig> implements EmailConfigService {
 
-    private final EmailRepository emailRepository;
-
-    public EmailServiceImpl(EmailRepository emailRepository) {
-        this.emailRepository = emailRepository;
-    }
+    private final IGenerator generator;
 
     @Override
-    @CachePut(key = "'1'")
+//    @CachePut(key = "'1'")
     @Transactional(rollbackFor = Exception.class)
-    public EmailConfig update(EmailConfig emailConfig, EmailConfig old) {
+    public void update(EmailConfig emailConfig, EmailConfig old) {
         try {
             if(!emailConfig.getPass().equals(old.getPass())){
                 // 对称加密
@@ -43,14 +47,14 @@ public class EmailServiceImpl implements EmailService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return emailRepository.save(emailConfig);
+         this.save(emailConfig);
     }
 
     @Override
-    @Cacheable(key = "'1'")
+//    @Cacheable(key = "'1'")
     public EmailConfig find() {
-        Optional<EmailConfig> emailConfig = emailRepository.findById(1L);
-        return emailConfig.orElseGet(EmailConfig::new);
+        EmailConfig emailConfig = this.list().get(0);
+        return emailConfig;
     }
 
     @Override

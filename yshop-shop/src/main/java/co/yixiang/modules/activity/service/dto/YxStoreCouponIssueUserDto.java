@@ -1,25 +1,23 @@
 package co.yixiang.modules.activity.service.dto;
 
 import lombok.Data;
-
 import java.io.Serializable;
-
 
 /**
 * @author hupeng
-* @date 2019-11-09
+* @date 2020-05-13
 */
 @Data
-public class YxStoreCouponIssueUserDTO implements Serializable {
+public class YxStoreCouponIssueUserDto implements Serializable {
 
     private Integer id;
 
-    // 领取优惠券用户ID
+    /** 领取优惠券用户ID */
     private Integer uid;
 
-    // 优惠券前台领取ID
+    /** 优惠券前台领取ID */
     private Integer issueCouponId;
 
-    // 领取时间
+    /** 领取时间 */
     private Integer addTime;
 }

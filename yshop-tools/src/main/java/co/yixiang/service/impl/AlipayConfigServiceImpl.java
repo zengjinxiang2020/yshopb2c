@@ -1,39 +1,37 @@
 package co.yixiang.service.impl;
 
 import co.yixiang.domain.AlipayConfig;
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.domain.vo.TradeVo;
 import co.yixiang.exception.BadRequestException;
-import co.yixiang.repository.AlipayRepository;
-import co.yixiang.service.AlipayService;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
-import org.springframework.cache.annotation.CacheConfig;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.AllArgsConstructor;
+import co.yixiang.service.AlipayConfigService;
+import co.yixiang.service.mapper.AlipayConfigMapper;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+// 默认不使用缓存
+//import org.springframework.cache.annotation.CacheConfig;
+//import org.springframework.cache.annotation.CacheEvict;
+//import org.springframework.cache.annotation.Cacheable;
 
-import java.util.Optional;
 
 /**
- * @author Zheng Jie
- * @date 2018-12-31
- */
+* @author hupeng
+* @date 2020-05-13
+*/
 @Service
-@CacheConfig(cacheNames = "alipay")
-@SuppressWarnings("all")
+@AllArgsConstructor
+//@CacheConfig(cacheNames = "alipayConfig")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class AlipayServiceImpl implements AlipayService {
-
-    private final AlipayRepository alipayRepository;
-
-    public AlipayServiceImpl(AlipayRepository alipayRepository) {
-        this.alipayRepository = alipayRepository;
-    }
-
+public class AlipayConfigServiceImpl extends BaseServiceImpl<AlipayConfigMapper, AlipayConfig> implements AlipayConfigService {
     @Override
     public String toPayAsPc(AlipayConfig alipay, TradeVo trade) throws Exception {
 
@@ -94,16 +92,16 @@ public class AlipayServiceImpl implements AlipayService {
     }
 
     @Override
-    @Cacheable(key = "'1'")
+//    @Cacheable(key = "'1'")
     public AlipayConfig find() {
-        Optional<AlipayConfig> alipayConfig = alipayRepository.findById(1L);
-        return alipayConfig.orElseGet(AlipayConfig::new);
+        AlipayConfig alipayConfig = this.list().get(0);
+        return alipayConfig;
     }
 
     @Override
-    @CachePut(key = "'1'")
+//    @CachePut(key = "'1'")
     @Transactional(rollbackFor = Exception.class)
-    public AlipayConfig update(AlipayConfig alipayConfig) {
-        return alipayRepository.save(alipayConfig);
+    public void update(AlipayConfig alipayConfig) {
+         this.save(alipayConfig);
     }
 }

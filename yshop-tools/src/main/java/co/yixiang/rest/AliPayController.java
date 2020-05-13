@@ -1,6 +1,7 @@
 package co.yixiang.rest;
 
 import co.yixiang.aop.log.Log;
+import co.yixiang.service.AlipayConfigService;
 import co.yixiang.utils.AliPayStatusEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -9,7 +10,6 @@ import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.domain.vo.TradeVo;
 import co.yixiang.domain.AlipayConfig;
 import co.yixiang.utils.AlipayUtils;
-import co.yixiang.service.AlipayService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -32,9 +32,9 @@ public class AliPayController {
 
     private final AlipayUtils alipayUtils;
 
-    private final AlipayService alipayService;
+    private final AlipayConfigService alipayService;
 
-    public AliPayController(AlipayUtils alipayUtils, AlipayService alipayService) {
+    public AliPayController(AlipayUtils alipayUtils, AlipayConfigService alipayService) {
         this.alipayUtils = alipayUtils;
         this.alipayService = alipayService;
     }
