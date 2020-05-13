@@ -5,15 +5,13 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.service.dto.CountDto;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.modules.shop.service.YxStoreCartService;
 import co.yixiang.modules.shop.service.dto.YxStoreCartDto;
 import co.yixiang.modules.shop.service.dto.YxStoreCartQueryCriteria;
-import co.yixiang.modules.shop.service.mapper.YxStoreCartMapper;
+import co.yixiang.modules.shop.service.mapper.StoreCartMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -40,11 +36,11 @@ import java.util.LinkedHashMap;
 @AllArgsConstructor
 //@CacheConfig(cacheNames = "yxStoreCart")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, YxStoreCart> implements YxStoreCartService {
+public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxStoreCart> implements YxStoreCartService {
 
     private final IGenerator generator;
 
-    private final YxStoreCartMapper storeCartMapper;
+    private final StoreCartMapper storeCartMapper;
     @Override
     //@Cacheable
     public Map<String, Object> queryAll(YxStoreCartQueryCriteria criteria, Pageable pageable) {

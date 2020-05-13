@@ -13,19 +13,16 @@ import co.yixiang.modules.shop.service.YxStoreProductAttrResultService;
 import co.yixiang.modules.shop.service.YxStoreProductAttrService;
 import co.yixiang.modules.shop.service.YxStoreProductAttrValueService;
 import co.yixiang.modules.shop.service.dto.*;
-import co.yixiang.modules.shop.service.mapper.YxStoreProductAttrMapper;
-import co.yixiang.modules.shop.service.mapper.YxStoreProductAttrValueMapper;
 import co.yixiang.utils.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.modules.shop.service.YxStoreProductService;
-import co.yixiang.modules.shop.service.mapper.YxStoreProductMapper;
+import co.yixiang.modules.shop.service.mapper.StoreProductMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -50,11 +46,11 @@ import javax.servlet.http.HttpServletResponse;
 @AllArgsConstructor
 //@CacheConfig(cacheNames = "yxStoreProduct")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMapper, YxStoreProduct> implements YxStoreProductService {
+public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMapper, YxStoreProduct> implements YxStoreProductService {
 
     private final IGenerator generator;
 
-    private final YxStoreProductMapper storeProductMapper;
+    private final StoreProductMapper storeProductMapper;
 
     private final YxStoreProductAttrService yxStoreProductAttrService;
 

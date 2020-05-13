@@ -4,15 +4,13 @@ import co.yixiang.modules.shop.domain.YxStoreCategory;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.modules.shop.service.YxStoreCategoryService;
 import co.yixiang.modules.shop.service.dto.YxStoreCategoryDto;
 import co.yixiang.modules.shop.service.dto.YxStoreCategoryQueryCriteria;
-import co.yixiang.modules.shop.service.mapper.YxStoreCategoryMapper;
+import co.yixiang.modules.shop.service.mapper.StoreCategoryMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -39,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 @AllArgsConstructor
 //@CacheConfig(cacheNames = "yxStoreCategory")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxStoreCategoryServiceImpl extends BaseServiceImpl<YxStoreCategoryMapper, YxStoreCategory> implements YxStoreCategoryService {
+public class YxStoreCategoryServiceImpl extends BaseServiceImpl<StoreCategoryMapper, YxStoreCategory> implements YxStoreCategoryService {
 
     private final IGenerator generator;
 

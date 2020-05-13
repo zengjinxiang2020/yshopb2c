@@ -1,11 +1,10 @@
 package co.yixiang.modules.system.rest;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import co.yixiang.aop.log.Log;
 import co.yixiang.config.DataScope;
-import co.yixiang.domain.VerificationCode;
+import co.yixiang.tools.domain.VerificationCode;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.User;
 import co.yixiang.modules.system.domain.vo.UserPassVo;
@@ -15,7 +14,7 @@ import co.yixiang.modules.system.service.UserService;
 import co.yixiang.modules.system.service.dto.RoleSmallDTO;
 import co.yixiang.modules.system.service.dto.UserDTO;
 import co.yixiang.modules.system.service.dto.UserQueryCriteria;
-import co.yixiang.service.VerificationCodeService;
+import co.yixiang.tools.service.VerificationCodeService;
 import co.yixiang.utils.PageUtil;
 import co.yixiang.utils.SecurityUtils;
 import co.yixiang.utils.YshopConstant;

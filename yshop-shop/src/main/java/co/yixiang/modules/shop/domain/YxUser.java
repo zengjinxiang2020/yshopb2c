@@ -1,8 +1,6 @@
 package co.yixiang.modules.shop.domain;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
@@ -14,15 +12,11 @@ import java.io.Serializable;
 * @author hupeng
 * @date 2020-05-12
 */
-@Entity
 @Data
-@Table(name="yx_user")
 public class YxUser implements Serializable {
 
     /** 用户id */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "uid")
+    @TableId(value = "uid", type = IdType.AUTO)
     private Integer uid;
 
 

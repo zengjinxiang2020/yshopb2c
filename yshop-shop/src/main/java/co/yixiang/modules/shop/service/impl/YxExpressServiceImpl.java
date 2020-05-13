@@ -1,19 +1,16 @@
 package co.yixiang.modules.shop.service.impl;
 
 import co.yixiang.modules.shop.domain.YxExpress;
-import co.yixiang.exception.EntityExistException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.modules.shop.service.YxExpressService;
 import co.yixiang.modules.shop.service.dto.YxExpressDto;
 import co.yixiang.modules.shop.service.dto.YxExpressQueryCriteria;
-import co.yixiang.modules.shop.service.mapper.YxExpressMapper;
+import co.yixiang.modules.shop.service.mapper.ExpressMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -40,7 +35,7 @@ import java.util.LinkedHashMap;
 @AllArgsConstructor
 //@CacheConfig(cacheNames = "yxExpress")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxExpressServiceImpl extends BaseServiceImpl<YxExpressMapper, YxExpress> implements YxExpressService {
+public class YxExpressServiceImpl extends BaseServiceImpl<ExpressMapper, YxExpress> implements YxExpressService {
 
     private final IGenerator generator;
 

@@ -6,15 +6,13 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.mp.service.YxWechatReplyService;
 import co.yixiang.mp.service.dto.YxWechatReplyDto;
 import co.yixiang.mp.service.dto.YxWechatReplyQueryCriteria;
-import co.yixiang.mp.service.mapper.YxWechatReplyMapper;
+import co.yixiang.mp.service.mapper.WechatReplyMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
 
 import java.util.*;
 import java.io.IOException;
@@ -39,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 @AllArgsConstructor
 //@CacheConfig(cacheNames = "yxWechatReply")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxWechatReplyServiceImpl extends BaseServiceImpl<YxWechatReplyMapper, YxWechatReply> implements YxWechatReplyService {
+public class YxWechatReplyServiceImpl extends BaseServiceImpl<WechatReplyMapper, YxWechatReply> implements YxWechatReplyService {
 
     private final IGenerator generator;
 

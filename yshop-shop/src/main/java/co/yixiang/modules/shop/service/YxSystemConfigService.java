@@ -3,7 +3,6 @@ import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.shop.domain.YxSystemConfig;
 import co.yixiang.modules.shop.service.dto.YxSystemConfigDto;
 import co.yixiang.modules.shop.service.dto.YxSystemConfigQueryCriteria;
-import co.yixiang.utils.AliPayStatusEnum;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;

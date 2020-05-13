@@ -5,15 +5,13 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.service.dto.UserMoneyDTO;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.modules.shop.service.YxUserService;
 import co.yixiang.modules.shop.service.dto.YxUserDto;
 import co.yixiang.modules.shop.service.dto.YxUserQueryCriteria;
-import co.yixiang.modules.shop.service.mapper.YxUserMapper;
+import co.yixiang.modules.shop.service.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -40,11 +36,11 @@ import java.util.LinkedHashMap;
 @AllArgsConstructor
 //@CacheConfig(cacheNames = "yxUser")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> implements YxUserService {
+public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> implements YxUserService {
 
     private final IGenerator generator;
 
-    private final YxUserMapper yxUserMapper;
+    private final UserMapper yxUserMapper;
 
     @Override
     //@Cacheable

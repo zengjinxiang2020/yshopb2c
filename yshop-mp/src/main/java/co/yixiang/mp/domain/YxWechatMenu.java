@@ -1,8 +1,6 @@
 package co.yixiang.mp.domain;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
@@ -19,7 +17,7 @@ import java.io.Serializable;
 public class YxWechatMenu implements Serializable {
 
     @Id
-    @TableField(value = "`key`")
+    @TableId(value = "`key`")
     private String key;
 
 

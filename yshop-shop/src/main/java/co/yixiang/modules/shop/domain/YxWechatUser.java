@@ -1,12 +1,13 @@
 package co.yixiang.modules.shop.domain;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import javax.persistence.*;
-import javax.validation.constraints.*;
+
+import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.io.Serializable;
 
@@ -14,15 +15,11 @@ import java.io.Serializable;
 * @author hupeng
 * @date 2020-05-12
 */
-@Entity
 @Data
-@Table(name="yx_wechat_user")
 public class YxWechatUser implements Serializable {
 
     /** 微信用户id */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "uid")
+    @TableId
     private Integer uid;
 
 

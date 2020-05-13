@@ -4,15 +4,13 @@ import co.yixiang.modules.shop.domain.YxStoreOrderStatus;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.modules.shop.service.YxStoreOrderStatusService;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderStatusDto;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderStatusQueryCriteria;
-import co.yixiang.modules.shop.service.mapper.YxStoreOrderStatusMapper;
+import co.yixiang.modules.shop.service.mapper.StoreOrderStatusMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
+
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -39,7 +35,7 @@ import java.util.LinkedHashMap;
 @AllArgsConstructor
 //@CacheConfig(cacheNames = "yxStoreOrderStatus")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxStoreOrderStatusServiceImpl extends BaseServiceImpl<YxStoreOrderStatusMapper, YxStoreOrderStatus> implements YxStoreOrderStatusService {
+public class YxStoreOrderStatusServiceImpl extends BaseServiceImpl<StoreOrderStatusMapper, YxStoreOrderStatus> implements YxStoreOrderStatusService {
 
     private final IGenerator generator;
 

@@ -15,7 +15,7 @@ import co.yixiang.utils.FileUtil;
 import co.yixiang.mp.service.YxArticleService;
 import co.yixiang.mp.service.dto.YxArticleDto;
 import co.yixiang.mp.service.dto.YxArticleQueryCriteria;
-import co.yixiang.mp.service.mapper.YxArticleMapper;
+import co.yixiang.mp.service.mapper.ArticleMapper;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -53,7 +53,7 @@ import java.util.LinkedHashMap;
 @Service
 //@CacheConfig(cacheNames = "yxArticle")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxArticleServiceImpl extends BaseServiceImpl<YxArticleMapper, YxArticle> implements YxArticleService {
+public class YxArticleServiceImpl extends BaseServiceImpl<ArticleMapper, YxArticle> implements YxArticleService {
 
     private final IGenerator generator;
     @Value("${file.path}")

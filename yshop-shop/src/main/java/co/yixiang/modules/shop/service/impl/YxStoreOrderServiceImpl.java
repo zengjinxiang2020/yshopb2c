@@ -7,13 +7,13 @@ import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.EntityExistException;
 import co.yixiang.modules.activity.domain.YxStorePink;
-import co.yixiang.modules.activity.repository.YxStorePinkRepository;
+import co.yixiang.modules.activity.repository.StorePinkRepository;
 import co.yixiang.modules.shop.domain.*;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.service.dto.*;
-import co.yixiang.modules.shop.service.mapper.YxStoreProductMapper;
-import co.yixiang.modules.shop.service.mapper.YxUserMapper;
+import co.yixiang.modules.shop.service.mapper.StoreProductMapper;
+import co.yixiang.modules.shop.service.mapper.UserMapper;
 import co.yixiang.mp.service.YxMiniPayService;
 import co.yixiang.mp.service.YxPayService;
 import co.yixiang.utils.*;
@@ -24,7 +24,7 @@ import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.modules.shop.service.mapper.YxStoreOrderMapper;
+import co.yixiang.modules.shop.service.mapper.StoreOrderMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -49,12 +49,12 @@ import javax.servlet.http.HttpServletResponse;
 @AllArgsConstructor
 //@CacheConfig(cacheNames = "yxStoreOrder")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper, YxStoreOrder> implements YxStoreOrderService {
+public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, YxStoreOrder> implements YxStoreOrderService {
 
     private final IGenerator generator;
     private YxUserService userService;
-    private YxUserMapper userMapper;
-    private YxStorePinkRepository storePinkRepository;
+    private UserMapper userMapper;
+    private StorePinkRepository storePinkRepository;
     private YxStoreOrderCartInfoService storeOrderCartInfoService;
     private final YxUserBillService yxUserBillService;
     private final YxStoreOrderStatusService yxStoreOrderStatusService;
@@ -62,8 +62,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     private final YxMiniPayService miniPayService;
     private final YxSystemStoreService systemStoreService;
     private final YxStoreCartService storeCartService;
-    private final YxStoreOrderMapper yxStoreOrderMapper;
-    private final YxStoreProductMapper yxStoreProductMapper;
+    private final StoreOrderMapper yxStoreOrderMapper;
+    private final StoreProductMapper yxStoreProductMapper;
 
     @Override
     public OrderCountDto getOrderCount() {

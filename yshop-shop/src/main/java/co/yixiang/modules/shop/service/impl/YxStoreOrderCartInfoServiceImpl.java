@@ -10,7 +10,7 @@ import co.yixiang.utils.FileUtil;
 import co.yixiang.modules.shop.service.YxStoreOrderCartInfoService;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderCartInfoDto;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderCartInfoQueryCriteria;
-import co.yixiang.modules.shop.service.mapper.YxStoreOrderCartInfoMapper;
+import co.yixiang.modules.shop.service.mapper.StoreOrderCartInfoMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +35,7 @@ import java.util.LinkedHashMap;
 @AllArgsConstructor
 //@CacheConfig(cacheNames = "yxStoreOrderCartInfo")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxStoreOrderCartInfoServiceImpl extends BaseServiceImpl<YxStoreOrderCartInfoMapper, YxStoreOrderCartInfo> implements YxStoreOrderCartInfoService {
+public class YxStoreOrderCartInfoServiceImpl extends BaseServiceImpl<StoreOrderCartInfoMapper, YxStoreOrderCartInfo> implements YxStoreOrderCartInfoService {
 
     private final IGenerator generator;
 
