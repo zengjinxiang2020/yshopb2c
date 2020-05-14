@@ -45,4 +45,6 @@ public interface UserAvatarService  extends BaseService<UserAvatar>{
     * @throws IOException /
     */
     void download(List<UserAvatarDto> all, HttpServletResponse response) throws IOException;
+
+    UserAvatar saveFile(UserAvatar userAvatar);
 }

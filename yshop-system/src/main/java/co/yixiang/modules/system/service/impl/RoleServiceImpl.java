@@ -149,9 +149,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
      */
     @Override
     public void updateMenu(Role resources, RoleDto roleDto) {
-        //Role role =generator.convert(resources,roleDto);
-        //todo
-        Role role = new Role();
+        Role role =generator.convert(roleDto,Role.class);
         role.setMenus(resources.getMenus());
         this.save(role);
     }

@@ -87,4 +87,10 @@ public class UserAvatarServiceImpl extends BaseServiceImpl<UserAvatarMapper, Use
         }
         FileUtil.downloadExcel(list, response);
     }
+
+    @Override
+    public UserAvatar saveFile(UserAvatar userAvatar) {
+        //todo
+        return null;
+    }
 }

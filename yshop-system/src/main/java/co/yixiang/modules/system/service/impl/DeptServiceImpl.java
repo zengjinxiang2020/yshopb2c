@@ -161,9 +161,9 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, Dept> implement
      */
     @Override
     public Set<DeptDto> getDeleteDepts(List<Dept> deptList, Set<DeptDto> deptDtos) {
+
         for (Dept dept : deptList) {
-            //todo
-            //deptDtos.add(generator.convert(dept,deptDtos));
+            deptDtos.add((DeptDto)generator.convert(deptList,DeptDto.class));
             List<Dept> depts = Collections.singletonList(this.getOne(new QueryWrapper<Dept>().eq("id", dept.getId())));
             if(depts!=null && depts.size()!=0){
                 getDeleteDepts(depts, deptDtos);

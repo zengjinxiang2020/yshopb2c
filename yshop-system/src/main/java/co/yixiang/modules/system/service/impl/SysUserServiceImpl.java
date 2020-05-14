@@ -11,6 +11,7 @@ package co.yixiang.modules.system.service.impl;
 import co.yixiang.modules.system.domain.User;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.system.domain.UserAvatar;
+import co.yixiang.modules.system.service.UserAvatarService;
 import co.yixiang.utils.SecurityUtils;
 import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -21,8 +22,7 @@ import co.yixiang.utils.FileUtil;
 import co.yixiang.modules.system.service.UserService;
 import co.yixiang.modules.system.service.dto.UserDto;
 import co.yixiang.modules.system.service.dto.UserQueryCriteria;
-import co.yixiang.modules.system.service.mapper.UserMapper;
-import lombok.AllArgsConstructor;
+import co.yixiang.modules.system.service.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -48,16 +48,23 @@ import java.util.LinkedHashMap;
 * @date 2020-05-14
 */
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 //@CacheConfig(cacheNames = "user")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements UserService {
+public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> implements UserService {
 
     @Value("${file.avatar}")
     private String avatar;
 
     private final IGenerator generator;
-    private final UserMapper userMapper;
+    private final SysUserMapper userMapper;
+    private final UserAvatarService userAvatarService;
+
+    public SysUserServiceImpl(IGenerator generator, SysUserMapper userMapper, UserAvatarService userAvatarService) {
+        this.generator = generator;
+        this.userMapper = userMapper;
+        this.userAvatarService = userAvatarService;
+    }
 
     @Override
     //@Cacheable
@@ -139,9 +146,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         }
         File file = FileUtil.upload(multipartFile, avatar);
         assert file != null;
-        //todo
-        //userAvatar = userAvatarService.save(new UserAvatar(userAvatar,file.getName(), file.getPath(), FileUtil.getSize(multipartFile.getSize())));
-        user.setUserAvatar(userAvatar);
+        UserAvatar saveUserAvatar = new UserAvatar(userAvatar,file.getName(), file.getPath(), FileUtil.getSize(multipartFile.getSize()));
+        userAvatarService.save(saveUserAvatar);
+        user.setUserAvatar(saveUserAvatar);
         this.save(user);
         if(StringUtils.isNotBlank(oldPath)){
             FileUtil.del(oldPath);

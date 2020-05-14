@@ -55,7 +55,7 @@ import java.util.stream.Collectors;
 @Api(tags = "系统：用户管理")
 @RestController
 @RequestMapping("/api/users")
-public class UserController {
+public class SysUserController {
 
     @Value("${rsa.private_key}")
     private String privateKey;
@@ -67,7 +67,7 @@ public class UserController {
     private final VerificationCodeService verificationCodeService;
     private final IGenerator generator;
 
-    public UserController(PasswordEncoder passwordEncoder, UserService userService, DataScope dataScope, DeptService deptService, RoleService roleService, VerificationCodeService verificationCodeService, IGenerator generator) {
+    public SysUserController(PasswordEncoder passwordEncoder, UserService userService, DataScope dataScope, DeptService deptService, RoleService roleService, VerificationCodeService verificationCodeService, IGenerator generator) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.dataScope = dataScope;

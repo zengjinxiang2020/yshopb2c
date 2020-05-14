@@ -23,7 +23,7 @@ import java.util.Date;
 */
 @Repository
 @Mapper
-public interface UserMapper extends CoreMapper<User> {
+public interface SysUserMapper extends CoreMapper<User> {
 
     /**
      * 修改密码
