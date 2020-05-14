@@ -9,7 +9,7 @@
 package co.yixiang.modules.shop.web.controller;
 
 import cn.hutool.core.util.ObjectUtil;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.modules.shop.service.YxStoreCartService;

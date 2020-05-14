@@ -9,8 +9,7 @@
 package co.yixiang.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.config.DataScope;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Dept;

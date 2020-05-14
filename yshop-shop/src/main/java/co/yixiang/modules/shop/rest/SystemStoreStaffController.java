@@ -8,7 +8,7 @@
  */
 package co.yixiang.modules.shop.rest;
 
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.modules.shop.domain.YxSystemStoreStaff;
 import co.yixiang.modules.shop.service.YxSystemStoreStaffService;

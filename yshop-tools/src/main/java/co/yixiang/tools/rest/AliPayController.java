@@ -8,7 +8,7 @@
  */
 package co.yixiang.tools.rest;
 
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.tools.service.AlipayConfigService;
 import co.yixiang.tools.utils.AliPayStatusEnum;
 import io.swagger.annotations.Api;

@@ -8,7 +8,7 @@
  */
 package co.yixiang.modules.quartz.rest;
 
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.quartz.domain.QuartzJob;
@@ -18,8 +18,6 @@ import co.yixiang.modules.quartz.service.dto.QuartzJobDto;
 import co.yixiang.modules.quartz.service.dto.QuartzJobQueryCriteria;
 import co.yixiang.modules.quartz.service.dto.QuartzLogDto;
 import co.yixiang.modules.quartz.service.dto.QuartzLogQueryCriteria;
-import co.yixiang.modules.shop.domain.YxUser;
-import co.yixiang.modules.system.service.dto.JobQueryCriteria;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

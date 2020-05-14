@@ -8,7 +8,7 @@
  */
 package co.yixiang.modules.shop.rest;
 
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.shop.domain.YxMaterialGroup;
 import co.yixiang.modules.shop.service.YxMaterialGroupService;
 import co.yixiang.modules.shop.service.dto.YxMaterialGroupQueryCriteria;

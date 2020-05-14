@@ -9,7 +9,7 @@
 package co.yixiang.modules.activity.rest;
 
 import cn.hutool.core.util.ObjectUtil;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreBargain;
 import co.yixiang.modules.activity.service.YxStoreBargainService;
 import co.yixiang.modules.activity.service.dto.YxStoreBargainQueryCriteria;

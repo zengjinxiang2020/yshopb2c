@@ -10,7 +10,7 @@ package co.yixiang.modules.system.rest;
 
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.config.DataScope;
 import co.yixiang.tools.domain.VerificationCode;
 import co.yixiang.exception.BadRequestException;

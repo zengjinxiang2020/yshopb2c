@@ -26,7 +26,7 @@ import org.springframework.core.io.Resource;
 @Configuration
 public class DozerMapperConfig {
     @Bean
-    public DozerBeanMapperFactoryBean dozerBeanMapperFactoryBean(@Value("classpath*:dozer/*.xml" ) Resource[] resources) throws Exception {
+    public DozerBeanMapperFactoryBean dozerBeanMapperFactoryBean(@Value("classpath*:dozer/dozerBeanMapping.xml" ) Resource[] resources) throws Exception {
         final DozerBeanMapperFactoryBean dozerBeanMapperFactoryBean = new DozerBeanMapperFactoryBean();
         dozerBeanMapperFactoryBean.setMappingFiles(resources);
         return dozerBeanMapperFactoryBean;
