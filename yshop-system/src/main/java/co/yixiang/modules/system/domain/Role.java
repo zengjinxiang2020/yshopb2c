@@ -49,6 +49,7 @@ public class Role implements Serializable {
     /** 角色级别 */
     private Integer level;
 
+    @TableField(exist = false)
     private Set<Menu> menus;
 
     /** 创建日期 */

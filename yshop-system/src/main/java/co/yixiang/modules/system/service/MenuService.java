@@ -91,4 +91,16 @@ public interface MenuService  extends BaseService<Menu>{
      * @return /
      */
     List<MenuDto> findByRoles(List<RoleSmallDto> roles);
+
+    /**
+     * 删除
+     * @param menuSet /
+     */
+    void delete(Set<Menu> menuSet);
+
+    /**
+     * 编辑
+     * @param resources /
+     */
+    void update(Menu resources);
 }

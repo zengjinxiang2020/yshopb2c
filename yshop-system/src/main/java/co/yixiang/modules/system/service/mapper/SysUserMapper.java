@@ -40,6 +40,6 @@ public interface SysUserMapper extends CoreMapper<User> {
      * @param email 邮箱
      */
     @Update("update `user` set email = email+ ${email} where username = #{username}")
-    void updateEmail(@Param("username") String email, @Param("username") String username);
+    void updateEmail(@Param("email") String email, @Param("username") String username);
 
 }

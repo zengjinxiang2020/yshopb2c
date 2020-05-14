@@ -10,11 +10,17 @@ package co.yixiang.modules.system.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.exception.BadRequestException;
+import co.yixiang.exception.EntityExistException;
 import co.yixiang.modules.system.domain.Menu;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.system.domain.vo.MenuMetaVo;
 import co.yixiang.modules.system.domain.vo.MenuVo;
 import co.yixiang.modules.system.service.dto.RoleSmallDto;
+import co.yixiang.modules.system.service.mapper.RoleMapper;
+import co.yixiang.utils.StringUtils;
+import co.yixiang.utils.ValidationUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
@@ -24,6 +30,7 @@ import co.yixiang.modules.system.service.MenuService;
 import co.yixiang.modules.system.service.dto.MenuDto;
 import co.yixiang.modules.system.service.dto.MenuQueryCriteria;
 import co.yixiang.modules.system.service.mapper.MenuMapper;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +64,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
 
     private final IGenerator generator;
     private final MenuMapper menuMapper;
+    private final RoleMapper roleMapper;
 
     @Override
     //@Cacheable
@@ -254,5 +262,65 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
     @Override
     public List<MenuDto> findByRoles(List<RoleSmallDto> roles) {
         return null;
+    }
+
+    /**
+     * 删除
+     *
+     * @param menuSet /
+     */
+    @Override
+    public void delete(Set<Menu> menuSet) {
+        for (Menu menu : menuSet) {
+            roleMapper.untiedMenu(menu.getId());
+            this.removeById(menu.getId());
+        }
+    }
+
+    /**
+     * 编辑
+     *
+     * @param resources /
+     */
+    @Override
+    @CacheEvict(allEntries = true)
+    public void update(Menu resources) {
+        if(resources.getId().equals(resources.getPid())) {
+            throw new BadRequestException("上级不能为自己");
+        }
+        Menu menu = this.getById(resources.getId());
+        ValidationUtil.isNull(menu.getId(),"Permission","id",resources.getId());
+
+        if(resources.getIFrame()){
+            String http = "http://", https = "https://";
+            if (!(resources.getPath().toLowerCase().startsWith(http)||resources.getPath().toLowerCase().startsWith(https))) {
+                throw new BadRequestException("外链必须以http://或者https://开头");
+            }
+        }
+        Menu menu1 = this.getOne(new QueryWrapper<Menu>().eq("name",resources.getName()));
+
+        if(menu1 != null && !menu1.getId().equals(menu.getId())){
+            throw new EntityExistException(Menu.class,"name",resources.getName());
+        }
+
+        if(StringUtils.isNotBlank(resources.getComponentName())){
+            menu1 = this.getOne(new QueryWrapper<Menu>().eq("componentName",resources.getComponentName()));
+            if(menu1 != null && !menu1.getId().equals(menu.getId())){
+                throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
+            }
+        }
+        menu.setName(resources.getName());
+        menu.setComponent(resources.getComponent());
+        menu.setPath(resources.getPath());
+        menu.setIcon(resources.getIcon());
+        menu.setIFrame(resources.getIFrame());
+        menu.setPid(resources.getPid());
+        menu.setSort(resources.getSort());
+        menu.setCache(resources.getCache());
+        menu.setHidden(resources.getHidden());
+        menu.setComponentName(resources.getComponentName());
+        menu.setPermission(resources.getPermission());
+        menu.setType(resources.getType());
+        this.save(menu);
     }
 }

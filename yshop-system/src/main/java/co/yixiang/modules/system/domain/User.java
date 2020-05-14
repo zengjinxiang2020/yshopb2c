@@ -44,10 +44,11 @@ public class User implements Serializable {
     /** 状态：1启用、0禁用 */
     private Long enabled;
 
-    /** 用户头像ID */
-    @TableId
+    /** 用户头像 */
+    @TableField(exist = false)
     private UserAvatar userAvatar;
 
+    @TableField(exist = false)
     private Set<Role> roles;
 
     /** 密码 */

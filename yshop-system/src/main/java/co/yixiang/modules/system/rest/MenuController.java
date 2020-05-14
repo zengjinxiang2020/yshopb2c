@@ -8,6 +8,7 @@
  */
 package co.yixiang.modules.system.rest;
 
+import co.yixiang.exception.EntityExistException;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
@@ -20,6 +21,7 @@ import co.yixiang.modules.system.service.dto.MenuDto;
 import co.yixiang.modules.system.service.dto.MenuQueryCriteria;
 import co.yixiang.modules.system.service.dto.UserDto;
 import co.yixiang.utils.SecurityUtils;
+import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -105,6 +107,22 @@ public class MenuController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
+        Menu menu = menuService.getOne(new QueryWrapper<Menu>().eq("name",resources.getName()));
+        if(menu != null){
+            throw new EntityExistException(Menu.class,"name",resources.getName());
+        }
+        if(StringUtils.isNotBlank(resources.getComponentName())){
+            menu = menuService.getOne(new QueryWrapper<Menu>().eq("componentName",resources.getComponentName()));
+            if(menu != null){
+                throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
+            }
+        }
+        if(resources.getIFrame()){
+            String http = "http://", https = "https://";
+            if (!(resources.getPath().toLowerCase().startsWith(http)||resources.getPath().toLowerCase().startsWith(https))) {
+                throw new BadRequestException("外链必须以http://或者https://开头");
+            }
+        }
         return new ResponseEntity<>(menuService.save(resources),HttpStatus.CREATED);
     }
 
@@ -114,7 +132,7 @@ public class MenuController {
     @PreAuthorize("@el.check('menu:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Menu resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        menuService.saveOrUpdate(resources);
+        menuService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -130,7 +148,7 @@ public class MenuController {
             menuSet.add(menuService.getOne(new QueryWrapper<Menu>().eq("pid",id)));
             menuSet = menuService.getDeleteMenus(menuList, menuSet);
         }
-        menuService.removeByIds(menuSet);
+        menuService.delete(menuSet);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

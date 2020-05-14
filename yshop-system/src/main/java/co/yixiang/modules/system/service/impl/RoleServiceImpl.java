@@ -66,6 +66,7 @@ import java.util.stream.Collectors;
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements RoleService {
 
     private final IGenerator generator;
+    private final RoleMapper roleMapper;
 
     @Override
     //@Cacheable
@@ -161,9 +162,9 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
      * @return 权限信息
      */
     @Override
-    @Cacheable(key = "'loadPermissionByUser:' + #p0.username")
+    //@Cacheable(key = "'loadPermissionByUser:' + #p0.username")
     public Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user) {
-        Set<Role> roles = (Set<Role>) this.getOne(new QueryWrapper<Role>().eq("id",user.getId()));
+        Set<Role> roles = roleMapper.findByUsers_Id(user.getId());
         Set<String> permissions = roles.stream().filter(role -> StringUtils.isNotBlank(role.getPermission())).map(Role::getPermission).collect(Collectors.toSet());
         permissions.addAll(
                 roles.stream().flatMap(role -> role.getMenus().stream())
