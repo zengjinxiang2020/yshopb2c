@@ -1,14 +1,11 @@
-package co.yixiang.service.impl;
+package co.gen.service.impl;
 
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.domain.GenConfig;
-import co.yixiang.service.GenConfigService;
-import co.yixiang.service.mapper.GenConfigMapper;
+import co.gen.domain.GenConfig;
+import co.gen.service.GenConfigService;
+import co.gen.service.mapper.GenConfigMapper;
 import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import java.io.File;
 

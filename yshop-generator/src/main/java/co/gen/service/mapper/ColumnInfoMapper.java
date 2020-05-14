@@ -1,11 +1,11 @@
-package co.yixiang.service.mapper;
+package co.gen.service.mapper;
 
+import co.gen.domain.ColumnConfig;
 import co.yixiang.common.mapper.CoreMapper;
-import co.yixiang.domain.GenConfig;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @Mapper
-public interface GenConfigMapper extends CoreMapper<GenConfig> {
+public interface ColumnInfoMapper extends CoreMapper<ColumnConfig> {
 }

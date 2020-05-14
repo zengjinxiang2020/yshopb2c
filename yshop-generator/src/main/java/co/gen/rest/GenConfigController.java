@@ -1,7 +1,7 @@
-package co.yixiang.rest;
+package co.gen.rest;
 
-import co.yixiang.domain.GenConfig;
-import co.yixiang.service.GenConfigService;
+import co.gen.service.GenConfigService;
+import co.gen.domain.GenConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;

@@ -1,11 +1,12 @@
 package co.yixiang.tools.domain;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -15,14 +16,13 @@ import java.sql.Timestamp;
  * @date 2018-12-26
  */
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "verification_code")
+@TableName("verification_code")
 public class VerificationCode  implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableId
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String code;
@@ -34,16 +34,14 @@ public class VerificationCode  implements Serializable {
     private Boolean status = true;
 
     /** 类型 ：phone 和 email */
-    @NotBlank
     private String type;
 
     /** 具体的phone与email */
-    @NotBlank
     private String value;
 
     /** 创建日期 */
     @CreationTimestamp
-    @Column(name = "create_time")
+   // @Column(name = "create_time")
     private Timestamp createTime;
 
     public VerificationCode(String code, String scenes, @NotBlank String type, @NotBlank String value) {

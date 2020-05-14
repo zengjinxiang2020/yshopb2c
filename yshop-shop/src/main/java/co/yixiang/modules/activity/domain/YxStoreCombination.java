@@ -12,7 +12,7 @@ import java.io.Serializable;
 * @date 2020-05-13
 */
 @Data
-@TableName(value="yx_store_combination")
+@TableName("yx_store_combination")
 public class YxStoreCombination implements Serializable {
 
     @TableId

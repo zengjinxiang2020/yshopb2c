@@ -1,16 +1,16 @@
-package co.yixiang.service.impl;
+package co.gen.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ZipUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.domain.ColumnConfig;
-import co.yixiang.domain.GenConfig;
-import co.yixiang.service.mapper.ColumnInfoMapper;
-import co.yixiang.utils.GenUtil;
-import co.yixiang.domain.vo.TableInfo;
+import co.gen.domain.ColumnConfig;
+import co.gen.domain.GenConfig;
+import co.gen.service.mapper.ColumnInfoMapper;
+import co.gen.utils.GenUtil;
+import co.gen.domain.vo.TableInfo;
 import co.yixiang.exception.BadRequestException;
-import co.yixiang.service.GeneratorService;
+import co.gen.service.GeneratorService;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.PageUtil;
 import co.yixiang.utils.StringUtils;

@@ -1,7 +1,7 @@
-package co.yixiang.service;
+package co.gen.service;
 
-import co.yixiang.domain.ColumnConfig;
-import co.yixiang.domain.GenConfig;
+import co.gen.domain.ColumnConfig;
+import co.gen.domain.GenConfig;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import javax.servlet.http.HttpServletRequest;

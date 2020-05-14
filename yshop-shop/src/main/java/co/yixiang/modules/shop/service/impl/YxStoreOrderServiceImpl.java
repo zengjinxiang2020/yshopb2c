@@ -7,7 +7,8 @@ import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.EntityExistException;
 import co.yixiang.modules.activity.domain.YxStorePink;
-import co.yixiang.modules.activity.repository.StorePinkRepository;
+import co.yixiang.modules.activity.service.YxStorePinkService;
+import co.yixiang.modules.activity.service.mapper.YxStorePinkMapper;
 import co.yixiang.modules.shop.domain.*;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.service.*;
@@ -54,7 +55,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     private final IGenerator generator;
     private YxUserService userService;
     private UserMapper userMapper;
-    private StorePinkRepository storePinkRepository;
+    private YxStorePinkService storePinkService;
     private YxStoreOrderCartInfoService storeOrderCartInfoService;
     private final YxUserBillService yxUserBillService;
     private final YxStoreOrderStatusService yxStoreOrderStatusService;
@@ -362,7 +363,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                             int bargainId,int shippingType) {
         String str = "[普通订单]";
         if(pinkId > 0 || combinationId > 0){
-            YxStorePink storePink = storePinkRepository.findByOrderIdKey(id);
+            YxStorePink storePink = storePinkService.getOne(new QueryWrapper<YxStorePink>().
+                    eq("order_id_key",id));
             if(ObjectUtil.isNull(storePink)) {
                 str = "[拼团订单]";
             }else{

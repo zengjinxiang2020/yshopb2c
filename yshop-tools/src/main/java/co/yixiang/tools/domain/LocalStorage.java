@@ -1,4 +1,6 @@
 package co.yixiang.tools.domain;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -12,54 +14,54 @@ import java.io.Serializable;
 * @author hupeng
 * @date 2020-05-13
 */
-@Entity
+
 @Data
-@Table(name="local_storage")
+@TableName("local_storage")
 public class LocalStorage implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @TableId
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+   // @Column(name = "id")
     private Long id;
 
 
     /** 文件真实的名称 */
-    @Column(name = "real_name")
+   // @Column(name = "real_name")
     private String realName;
 
 
     /** 文件名 */
-    @Column(name = "name")
+   // @Column(name = "name")
     private String name;
 
 
     /** 后缀 */
-    @Column(name = "suffix")
+   // @Column(name = "suffix")
     private String suffix;
 
 
     /** 路径 */
-    @Column(name = "path")
+   // @Column(name = "path")
     private String path;
 
 
     /** 类型 */
-    @Column(name = "type")
+   // @Column(name = "type")
     private String type;
 
 
     /** 大小 */
-    @Column(name = "size")
+   // @Column(name = "size")
     private String size;
 
 
     /** 操作人 */
-    @Column(name = "operate")
+   // @Column(name = "operate")
     private String operate;
 
 
     /** 创建日期 */
-    @Column(name = "create_time")
+   // @Column(name = "create_time")
     @TableField(fill= FieldFill.INSERT)
     private Timestamp createTime;
     public LocalStorage(String realName,String name, String suffix, String path, String type, String size, String operate) {
