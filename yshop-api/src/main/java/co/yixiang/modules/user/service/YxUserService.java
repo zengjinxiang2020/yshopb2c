@@ -11,12 +11,14 @@ package co.yixiang.modules.user.service;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.order.web.vo.YxStoreOrderQueryVo;
+import co.yixiang.modules.security.rest.param.LoginParam;
 import co.yixiang.modules.user.entity.YxUser;
 import co.yixiang.modules.user.web.dto.PromUserDTO;
 import co.yixiang.modules.user.web.param.PromParam;
 import co.yixiang.modules.user.web.param.YxUserQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.List;
 
@@ -71,4 +73,7 @@ public interface YxUserService extends BaseService<YxUser> {
      */
     Paging<YxUserQueryVo> getYxUserPageList(YxUserQueryParam yxUserQueryParam) throws Exception;
 
+    Object authLogin(String code, String spread, HttpServletRequest request);
+
+    Object wxappAuth(LoginParam loginParam, HttpServletRequest request);
 }
