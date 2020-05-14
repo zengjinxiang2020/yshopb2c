@@ -8,17 +8,19 @@
  */
 package co.yixiang.modules.system.rest;
 
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
+import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
+import co.yixiang.modules.shop.domain.YxSystemConfig;
 import co.yixiang.modules.system.domain.Menu;
 import co.yixiang.modules.system.service.MenuService;
 import co.yixiang.modules.system.service.RoleService;
 import co.yixiang.modules.system.service.UserService;
-import co.yixiang.modules.system.service.dto.MenuDTO;
+import co.yixiang.modules.system.service.dto.MenuDto;
 import co.yixiang.modules.system.service.dto.MenuQueryCriteria;
-import co.yixiang.modules.system.service.dto.UserDTO;
+import co.yixiang.modules.system.service.dto.UserDto;
 import co.yixiang.utils.SecurityUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
@@ -49,12 +51,15 @@ public class MenuController {
 
     private final RoleService roleService;
 
+    private final IGenerator generator;
+
     private static final String ENTITY_NAME = "menu";
 
-    public MenuController(MenuService menuService, UserService userService, RoleService roleService) {
+    public MenuController(MenuService menuService, UserService userService, RoleService roleService, IGenerator generator) {
         this.menuService = menuService;
         this.userService = userService;
         this.roleService = roleService;
+        this.generator = generator;
     }
 
     @Log("导出菜单数据")
@@ -63,15 +68,15 @@ public class MenuController {
     @PreAuthorize("@el.check('menu:list')")
     public void download(HttpServletResponse response, MenuQueryCriteria criteria) throws IOException {
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        menuService.download(menuService.queryAll(criteria), response);
+        menuService.download(generator.convert(menuService.queryAll(criteria),MenuDto.class), response);
     }
 
     @ApiOperation("获取前端所需菜单")
     @GetMapping(value = "/build")
     public ResponseEntity<Object> buildMenus(){
-        UserDTO user = userService.findByName(SecurityUtils.getUsername());
-        List<MenuDTO> menuDtoList = menuService.findByRoles(roleService.findByUsersId(user.getId()));
-        List<MenuDTO> menuDtos = (List<MenuDTO>) menuService.buildTree(menuDtoList).get("content");
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        List<MenuDto> menuDtoList = menuService.findByRoles(roleService.findByUsersId(user.getId()));
+        List<MenuDto> menuDtos = (List<MenuDto>) menuService.buildTree(menuDtoList).get("content");
         return new ResponseEntity<>(menuService.buildMenus(menuDtos),HttpStatus.OK);
     }
 
@@ -87,7 +92,7 @@ public class MenuController {
     @GetMapping
     @PreAuthorize("@el.check('menu:list')")
     public ResponseEntity<Object> getMenus(MenuQueryCriteria criteria){
-        List<MenuDTO> menuDtoList = menuService.queryAll(criteria);
+        List<MenuDto> menuDtoList = generator.convert(menuService.queryAll(criteria),MenuDto.class);
         return new ResponseEntity<>(menuService.buildTree(menuDtoList),HttpStatus.OK);
     }
 
@@ -100,16 +105,16 @@ public class MenuController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        return new ResponseEntity<>(menuService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(menuService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改菜单")
     @ApiOperation("修改菜单")
     @PutMapping
     @PreAuthorize("@el.check('menu:edit')")
-    public ResponseEntity<Object> update(@Validated(Menu.Update.class) @RequestBody Menu resources){
+    public ResponseEntity<Object> update(@Validated @RequestBody Menu resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        menuService.update(resources);
+        menuService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -122,10 +127,10 @@ public class MenuController {
         Set<Menu> menuSet = new HashSet<>();
         for (Long id : ids) {
             List<Menu> menuList = menuService.findByPid(id);
-            menuSet.add(menuService.findOne(id));
+            menuSet.add(menuService.getOne(new QueryWrapper<Menu>().eq("pid",id)));
             menuSet = menuService.getDeleteMenus(menuList, menuSet);
         }
-        menuService.delete(menuSet);
+        menuService.removeByIds(menuSet);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

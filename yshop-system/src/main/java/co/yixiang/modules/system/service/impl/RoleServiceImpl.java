@@ -1,169 +1,171 @@
 /**
- * Copyright (C) 2018-2019
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
+* Copyright (C) 2018-2019
+* All rights reserved, Designed By www.yixiang.co
+* 注意：
+* 本软件为www.yixiang.co开发研制，未经购买不得使用
+* 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+* 一经发现盗用、分享等行为，将追究法律责任，后果自负
+*/
 package co.yixiang.modules.system.service.impl;
 
-import co.yixiang.modules.system.service.dto.RoleDTO;
-import co.yixiang.modules.system.service.dto.RoleSmallDTO;
-import co.yixiang.modules.system.service.dto.UserDTO;
+import co.yixiang.modules.system.domain.Dept;
 import co.yixiang.modules.system.domain.Menu;
 import co.yixiang.modules.system.domain.Role;
-import co.yixiang.exception.EntityExistException;
-import co.yixiang.modules.system.repository.RoleRepository;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.modules.system.service.dto.RoleSmallDto;
+import co.yixiang.modules.system.service.dto.UserDto;
+import co.yixiang.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.api.R;
+import lombok.AllArgsConstructor;
+import co.yixiang.dozer.service.IGenerator;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import co.yixiang.common.utils.QueryHelpPlus;
+import co.yixiang.utils.ValidationUtil;
+import co.yixiang.utils.FileUtil;
 import co.yixiang.modules.system.service.RoleService;
+import co.yixiang.modules.system.service.dto.RoleDto;
 import co.yixiang.modules.system.service.dto.RoleQueryCriteria;
 import co.yixiang.modules.system.service.mapper.RoleMapper;
-import co.yixiang.modules.system.service.mapper.RoleSmallMapper;
-import co.yixiang.utils.*;
-
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+// 默认不使用缓存
+//import org.springframework.cache.annotation.CacheConfig;
+//import org.springframework.cache.annotation.CacheEvict;
+//import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import co.yixiang.utils.PageUtil;
+import co.yixiang.utils.QueryHelp;
 
-import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.io.IOException;
-import java.util.*;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author hupeng
- * @date 2018-12-03
- */
+* @author hupeng
+* @date 2020-05-14
+*/
 @Service
-@CacheConfig(cacheNames = "role")
+@AllArgsConstructor
+//@CacheConfig(cacheNames = "role")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements RoleService {
 
-    private final RoleRepository roleRepository;
-
-    private final RoleMapper roleMapper;
-
-    private final RoleSmallMapper roleSmallMapper;
-
-    public RoleServiceImpl(RoleRepository roleRepository, RoleMapper roleMapper, RoleSmallMapper roleSmallMapper) {
-        this.roleRepository = roleRepository;
-        this.roleMapper = roleMapper;
-        this.roleSmallMapper = roleSmallMapper;
-    }
+    private final IGenerator generator;
 
     @Override
-    @Cacheable
-    public Object queryAll(Pageable pageable) {
-        return roleMapper.toDto(roleRepository.findAll(pageable).getContent());
+    //@Cacheable
+    public Map<String, Object> queryAll(RoleQueryCriteria criteria, Pageable pageable) {
+        getPage(pageable);
+        PageInfo<Role> page = new PageInfo<>(queryAll(criteria));
+        Map<String, Object> map = new LinkedHashMap<>(2);
+        map.put("content", generator.convert(page.getList(), RoleDto.class));
+        map.put("totalElements", page.getTotal());
+        return map;
     }
 
-    @Override
-    @Cacheable
-    public List<RoleDTO> queryAll(RoleQueryCriteria criteria) {
-        return roleMapper.toDto(roleRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
-    }
 
     @Override
-    @Cacheable
-    public Object queryAll(RoleQueryCriteria criteria, Pageable pageable) {
-        Page<Role> page = roleRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(roleMapper::toDto));
+    //@Cacheable
+    public List<Role> queryAll(RoleQueryCriteria criteria){
+        return baseMapper.selectList(QueryHelpPlus.getPredicate(Role.class, criteria));
     }
 
-    @Override
-    @Cacheable(key = "#p0")
-    public RoleDTO findById(long id) {
-        Role role = roleRepository.findById(id).orElseGet(Role::new);
-        ValidationUtil.isNull(role.getId(),"Role","id",id);
-        return roleMapper.toDto(role);
-    }
 
     @Override
-    @CacheEvict(allEntries = true)
-    @Transactional(rollbackFor = Exception.class)
-    public RoleDTO create(Role resources) {
-        if(roleRepository.findByName(resources.getName()) != null){
-            throw new EntityExistException(Role.class,"username",resources.getName());
+    public void download(List<RoleDto> all, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (RoleDto role : all) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("名称", role.getName());
+            map.put("备注", role.getRemark());
+            map.put("数据权限", role.getDataScope());
+            map.put("角色级别", role.getLevel());
+            map.put("创建日期", role.getCreateTime());
+            map.put("功能权限", role.getPermission());
+            list.add(map);
         }
-        return roleMapper.toDto(roleRepository.save(resources));
+        FileUtil.downloadExcel(list, response);
     }
 
+    /**
+     * 根据用户ID查询
+     *
+     * @param id 用户ID
+     * @return /
+     */
     @Override
-    @CacheEvict(allEntries = true)
-    @Transactional(rollbackFor = Exception.class)
-    public void update(Role resources) {
-        Role role = roleRepository.findById(resources.getId()).orElseGet(Role::new);
-        ValidationUtil.isNull(role.getId(),"Role","id",resources.getId());
+    public List<RoleSmallDto> findByUsersId(Long id) {
 
-        Role role1 = roleRepository.findByName(resources.getName());
-
-        if(role1 != null && !role1.getId().equals(role.getId())){
-            throw new EntityExistException(Role.class,"username",resources.getName());
-        }
-        role1 = roleRepository.findByPermission(resources.getPermission());
-        if(role1 != null && !role1.getId().equals(role.getId())){
-            throw new EntityExistException(Role.class,"permission",resources.getPermission());
-        }
-        role.setName(resources.getName());
-        role.setRemark(resources.getRemark());
-        role.setDataScope(resources.getDataScope());
-        role.setDepts(resources.getDepts());
-        role.setLevel(resources.getLevel());
-        role.setPermission(resources.getPermission());
-        roleRepository.save(role);
+        return null;
     }
 
+    /**
+     * 根据角色查询角色级别
+     *
+     * @param roles /
+     * @return /
+     */
     @Override
-    @CacheEvict(allEntries = true)
-    public void updateMenu(Role resources, RoleDTO roleDTO) {
-        Role role = roleMapper.toEntity(roleDTO);
-        role.setMenus(resources.getMenus());
-        roleRepository.save(role);
-    }
-
-    @Override
-    @CacheEvict(allEntries = true)
-    @Transactional(rollbackFor = Exception.class)
-    public void untiedMenu(Long id) {
-        roleRepository.untiedMenu(id);
-    }
-
-    @Override
-    @CacheEvict(allEntries = true)
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(Set<Long> ids) {
-        for (Long id : ids) {
-            roleRepository.deleteById(id);
-        }
-    }
-
-    @Override
-    @Cacheable(key = "'findByUsers_Id:' + #p0")
-    public List<RoleSmallDTO> findByUsersId(Long id) {
-        return roleSmallMapper.toDto(new ArrayList<>(roleRepository.findByUsers_Id(id)));
-    }
-
-    @Override
-    @Cacheable
     public Integer findByRoles(Set<Role> roles) {
-        Set<RoleDTO> roleDtos = new HashSet<>();
+        Set<RoleDto> roleDtos = new HashSet<>();
         for (Role role : roles) {
             roleDtos.add(findById(role.getId()));
         }
-        return Collections.min(roleDtos.stream().map(RoleDTO::getLevel).collect(Collectors.toList()));
+        return Collections.min(roleDtos.stream().map(RoleDto::getLevel).collect(Collectors.toList()));
     }
 
+    /**
+     * 根据ID查询
+     *
+     * @param id /
+     * @return /
+     */
+    @Override
+    public RoleDto findById(long id) {
+        Role role = this.getById(id);
+        return generator.convert(role, RoleDto.class);
+    }
+
+    /**
+     * 修改绑定的菜单
+     *
+     * @param resources /
+     * @param roleDto   /
+     */
+    @Override
+    public void updateMenu(Role resources, RoleDto roleDto) {
+        //Role role =generator.convert(resources,roleDto);
+        //todo
+        Role role = new Role();
+        role.setMenus(resources.getMenus());
+        this.save(role);
+    }
+
+    /**
+     * 获取用户权限信息
+     *
+     * @param user 用户信息
+     * @return 权限信息
+     */
     @Override
     @Cacheable(key = "'loadPermissionByUser:' + #p0.username")
-    public Collection<GrantedAuthority> mapToGrantedAuthorities(UserDTO user) {
-        Set<Role> roles = roleRepository.findByUsers_Id(user.getId());
+    public Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user) {
+        Set<Role> roles = (Set<Role>) this.getOne(new QueryWrapper<Role>().eq("id",user.getId()));
         Set<String> permissions = roles.stream().filter(role -> StringUtils.isNotBlank(role.getPermission())).map(Role::getPermission).collect(Collectors.toSet());
         permissions.addAll(
                 roles.stream().flatMap(role -> role.getMenus().stream())
@@ -172,20 +174,5 @@ public class RoleServiceImpl implements RoleService {
         );
         return permissions.stream().map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public void download(List<RoleDTO> roles, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (RoleDTO role : roles) {
-            Map<String,Object> map = new LinkedHashMap<>();
-            map.put("角色名称", role.getName());
-            map.put("默认权限", role.getPermission());
-            map.put("角色级别", role.getLevel());
-            map.put("描述", role.getRemark());
-            map.put("创建日期", role.getCreateTime());
-            list.add(map);
-        }
-        FileUtil.downloadExcel(list, response);
     }
 }

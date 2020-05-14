@@ -9,6 +9,7 @@
 package co.yixiang.modules.system.service.dto;
 
 import lombok.Data;
+import java.util.List;
 import co.yixiang.annotation.Query;
 
 /**
@@ -16,11 +17,5 @@ import co.yixiang.annotation.Query;
 * @date 2020-05-14
 */
 @Data
-public class DictDetailQueryCriteria{
-
-    @Query(type = Query.Type.INNER_LIKE)
-    private String label;
-
-    @Query(propName = "name",joinName = "dict")
-    private String dictName;
+public class UserAvatarQueryCriteria{
 }

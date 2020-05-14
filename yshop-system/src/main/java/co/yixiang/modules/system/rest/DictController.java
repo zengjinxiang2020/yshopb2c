@@ -8,11 +8,12 @@
  */
 package co.yixiang.modules.system.rest;
 
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.aop.log.Log;
+import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Dict;
 import co.yixiang.modules.system.service.DictService;
+import co.yixiang.modules.system.service.dto.DictDto;
 import co.yixiang.modules.system.service.dto.DictQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,11 +37,13 @@ import java.io.IOException;
 public class DictController {
 
     private final DictService dictService;
+    private final IGenerator generator;
 
     private static final String ENTITY_NAME = "dict";
 
-    public DictController(DictService dictService) {
+    public DictController(DictService dictService, IGenerator generator) {
         this.dictService = dictService;
+        this.generator = generator;
     }
 
     @Log("导出字典数据")
@@ -48,7 +51,7 @@ public class DictController {
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','dict:list')")
     public void download(HttpServletResponse response, DictQueryCriteria criteria) throws IOException {
-        dictService.download(dictService.queryAll(criteria), response);
+        dictService.download(generator.convert(dictService.queryAll(criteria), DictDto.class), response);
     }
 
     @Log("查询字典")
@@ -75,16 +78,16 @@ public class DictController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        return new ResponseEntity<>(dictService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(dictService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改字典")
     @ApiOperation("修改字典")
     @PutMapping
     @PreAuthorize("@el.check('admin','dict:edit')")
-    public ResponseEntity<Object> update(@Validated(Dict.Update.class) @RequestBody Dict resources){
+    public ResponseEntity<Object> update(@Validated @RequestBody Dict resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        dictService.update(resources);
+        dictService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -94,7 +97,7 @@ public class DictController {
     @PreAuthorize("@el.check('admin','dict:del')")
     public ResponseEntity<Object> delete(@PathVariable Long id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        dictService.delete(id);
+        dictService.removeById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

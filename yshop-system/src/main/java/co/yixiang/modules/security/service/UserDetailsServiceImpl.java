@@ -9,12 +9,12 @@
 package co.yixiang.modules.security.service;
 
 import co.yixiang.modules.system.service.UserService;
-import co.yixiang.modules.system.service.dto.DeptSmallDTO;
-import co.yixiang.modules.system.service.dto.JobSmallDTO;
-import co.yixiang.modules.system.service.dto.UserDTO;
+import co.yixiang.modules.system.service.dto.DeptSmallDto;
+import co.yixiang.modules.system.service.dto.JobSmallDto;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.security.security.vo.JwtUser;
 import co.yixiang.modules.system.service.RoleService;
+import co.yixiang.modules.system.service.dto.UserDto;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -41,7 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username){
-        UserDTO user = userService.findByName(username);
+        UserDto user = userService.findByName(username);
         if (user == null) {
             throw new BadRequestException("账号不存在");
         } else {
@@ -52,7 +52,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
     }
 
-    private UserDetails createJwtUser(UserDTO user) {
+    private UserDetails createJwtUser(UserDto user) {
         return new JwtUser(
                 user.getId(),
                 user.getUsername(),
@@ -62,8 +62,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 user.getAvatar(),
                 user.getEmail(),
                 user.getPhone(),
-                Optional.ofNullable(user.getDept()).map(DeptSmallDTO::getName).orElse(null),
-                Optional.ofNullable(user.getJob()).map(JobSmallDTO::getName).orElse(null),
+                Optional.ofNullable(user.getDept()).map(DeptSmallDto::getName).orElse(null),
+                Optional.ofNullable(user.getJob()).map(JobSmallDto::getName).orElse(null),
                 roleService.mapToGrantedAuthorities(user),
                 user.getEnabled(),
                 user.getCreateTime(),

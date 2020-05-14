@@ -12,6 +12,8 @@ import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import co.yixiang.aop.log.Log;
 import co.yixiang.config.DataScope;
+import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.modules.system.service.dto.UserDto;
 import co.yixiang.tools.domain.VerificationCode;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.User;
@@ -19,8 +21,7 @@ import co.yixiang.modules.system.domain.vo.UserPassVo;
 import co.yixiang.modules.system.service.DeptService;
 import co.yixiang.modules.system.service.RoleService;
 import co.yixiang.modules.system.service.UserService;
-import co.yixiang.modules.system.service.dto.RoleSmallDTO;
-import co.yixiang.modules.system.service.dto.UserDTO;
+import co.yixiang.modules.system.service.dto.RoleSmallDto;
 import co.yixiang.modules.system.service.dto.UserQueryCriteria;
 import co.yixiang.tools.service.VerificationCodeService;
 import co.yixiang.utils.PageUtil;
@@ -64,14 +65,16 @@ public class UserController {
     private final DeptService deptService;
     private final RoleService roleService;
     private final VerificationCodeService verificationCodeService;
+    private final IGenerator generator;
 
-    public UserController(PasswordEncoder passwordEncoder, UserService userService, DataScope dataScope, DeptService deptService, RoleService roleService, VerificationCodeService verificationCodeService) {
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, DataScope dataScope, DeptService deptService, RoleService roleService, VerificationCodeService verificationCodeService, IGenerator generator) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.dataScope = dataScope;
         this.deptService = deptService;
         this.roleService = roleService;
         this.verificationCodeService = verificationCodeService;
+        this.generator = generator;
     }
 
     @Log("导出用户数据")
@@ -79,7 +82,7 @@ public class UserController {
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','user:list')")
     public void download(HttpServletResponse response, UserQueryCriteria criteria) throws IOException {
-        userService.download(userService.queryAll(criteria), response);
+        userService.download(generator.convert(userService.queryAll(criteria), UserDto.class), response);
     }
 
     @Log("查询用户")
@@ -125,30 +128,30 @@ public class UserController {
         checkLevel(resources);
         // 默认密码 123456
         resources.setPassword(passwordEncoder.encode("123456"));
-        return new ResponseEntity<>(userService.create(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改用户")
     @ApiOperation("修改用户")
     @PutMapping
     @PreAuthorize("@el.check('admin','user:edit')")
-    public ResponseEntity<Object> update(@Validated(User.Update.class) @RequestBody User resources){
+    public ResponseEntity<Object> update(@Validated @RequestBody User resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         checkLevel(resources);
-        userService.update(resources);
+        userService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Log("修改用户：个人中心")
     @ApiOperation("修改用户：个人中心")
     @PutMapping(value = "center")
-    public ResponseEntity<Object> center(@Validated(User.Update.class) @RequestBody User resources){
+    public ResponseEntity<Object> center(@Validated @RequestBody User resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        UserDTO userDto = userService.findByName(SecurityUtils.getUsername());
+        UserDto userDto = userService.findByName(SecurityUtils.getUsername());
         if(!resources.getId().equals(userDto.getId())){
             throw new BadRequestException("不能修改他人资料");
         }
-        userService.updateCenter(resources);
+        userService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -158,15 +161,15 @@ public class UserController {
     @PreAuthorize("@el.check('admin','user:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        UserDTO user = userService.findByName(SecurityUtils.getUsername());
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
         for (Long id : ids) {
-            Integer currentLevel =  Collections.min(roleService.findByUsersId(user.getId()).stream().map(RoleSmallDTO::getLevel).collect(Collectors.toList()));
-            Integer optLevel =  Collections.min(roleService.findByUsersId(id).stream().map(RoleSmallDTO::getLevel).collect(Collectors.toList()));
+            Integer currentLevel =  Collections.min(roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
+            Integer optLevel =  Collections.min(roleService.findByUsersId(id).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
             if (currentLevel > optLevel) {
                 throw new BadRequestException("角色权限不足，不能删除：" + userService.findByName(SecurityUtils.getUsername()).getUsername());
             }
         }
-        userService.delete(ids);
+        userService.removeByIds(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -178,7 +181,7 @@ public class UserController {
         RSA rsa = new RSA(privateKey, null);
         String oldPass = new String(rsa.decrypt(passVo.getOldPass(), KeyType.PrivateKey));
         String newPass = new String(rsa.decrypt(passVo.getNewPass(), KeyType.PrivateKey));
-        UserDTO user = userService.findByName(SecurityUtils.getUsername());
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
         if(!passwordEncoder.matches(oldPass, user.getPassword())){
             throw new BadRequestException("修改失败，旧密码错误");
         }
@@ -205,7 +208,7 @@ public class UserController {
         // 密码解密
         RSA rsa = new RSA(privateKey, null);
         String password = new String(rsa.decrypt(user.getPassword(), KeyType.PrivateKey));
-        UserDTO userDto = userService.findByName(SecurityUtils.getUsername());
+        UserDto userDto = userService.findByName(SecurityUtils.getUsername());
         if(!passwordEncoder.matches(password, userDto.getPassword())){
             throw new BadRequestException("密码错误");
         }
@@ -220,8 +223,8 @@ public class UserController {
      * @param resources /
      */
     private void checkLevel(User resources) {
-        UserDTO user = userService.findByName(SecurityUtils.getUsername());
-        Integer currentLevel =  Collections.min(roleService.findByUsersId(user.getId()).stream().map(RoleSmallDTO::getLevel).collect(Collectors.toList()));
+        UserDto user = userService.findByName(SecurityUtils.getUsername());
+        Integer currentLevel =  Collections.min(roleService.findByUsersId(user.getId()).stream().map(RoleSmallDto::getLevel).collect(Collectors.toList()));
         Integer optLevel = roleService.findByRoles(resources.getRoles());
         if (currentLevel > optLevel) {
             throw new BadRequestException("角色权限不足");

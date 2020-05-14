@@ -12,13 +12,17 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
-* @author hupeng
-* @date 2019-6-10 16:32:18
-*/
+ * @author hupeng
+ * @date 2018-11-23
+ */
 @Data
-public class DeptSmallDTO implements Serializable {
+public class RoleSmallDto implements Serializable {
 
     private Long id;
 
     private String name;
+
+    private Integer level;
+
+    private String dataScope;
 }

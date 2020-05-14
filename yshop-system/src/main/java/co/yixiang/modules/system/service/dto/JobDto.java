@@ -9,18 +9,31 @@
 package co.yixiang.modules.system.service.dto;
 
 import lombok.Data;
-import co.yixiang.annotation.Query;
+import java.sql.Timestamp;
+import java.io.Serializable;
 
 /**
 * @author hupeng
 * @date 2020-05-14
 */
 @Data
-public class DictDetailQueryCriteria{
+public class JobDto implements Serializable {
 
-    @Query(type = Query.Type.INNER_LIKE)
-    private String label;
+    /** 岗位ID */
+    private Long id;
 
-    @Query(propName = "name",joinName = "dict")
-    private String dictName;
+    /** 岗位名称 */
+    private String name;
+
+    /** 岗位状态 */
+    private Boolean enabled;
+
+    /** 岗位排序 */
+    private Long sort;
+
+    /** 部门ID */
+    private Long deptId;
+
+    /** 创建日期 */
+    private Timestamp createTime;
 }

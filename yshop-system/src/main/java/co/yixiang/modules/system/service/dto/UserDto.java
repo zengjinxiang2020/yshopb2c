@@ -6,88 +6,61 @@
 * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
-package co.yixiang.modules.system.domain;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+package co.yixiang.modules.system.service.dto;
+
 import lombok.Data;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
 * @author hupeng
 * @date 2020-05-14
 */
 @Data
-@TableName("user")
-public class User implements Serializable {
+public class UserDto implements Serializable {
 
-    /** 系统用户ID */
-    @TableId
+    /** ID */
     private Long id;
-
 
     /** 头像 */
     private Long avatarId;
 
+    private String avatar;
 
     /** 邮箱 */
     private String email;
 
-
     /** 状态：1启用、0禁用 */
-    private Long enabled;
-
-    /** 用户头像ID */
-    @TableId
-    private UserAvatar userAvatar;
-
-    private Set<Role> roles;
+    private Boolean enabled;
 
     /** 密码 */
     private String password;
 
-
     /** 用户名 */
     private String username;
-
 
     /** 部门名称 */
     private Long deptId;
 
-
     /** 手机号码 */
     private String phone;
-
 
     /** 岗位名称 */
     private Long jobId;
 
-
     /** 创建日期 */
-    //@TableField(fill= FieldFill.INSERT)
     private Timestamp createTime;
-
 
     /** 最后修改密码的日期 */
     private Timestamp lastPasswordResetTime;
 
-
     /** 昵称 */
     private String nickName;
 
+    private DeptSmallDto dept;
+
+    private JobSmallDto job;
 
     /** 性别 */
     private String sex;
-
-
-    public void copy(User source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
-    }
 }

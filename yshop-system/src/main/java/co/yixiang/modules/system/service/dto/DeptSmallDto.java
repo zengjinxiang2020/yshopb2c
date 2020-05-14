@@ -8,29 +8,17 @@
  */
 package co.yixiang.modules.system.service.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
+import lombok.Data;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 /**
 * @author hupeng
-* @date 2019-04-10
+* @date 2019-6-10 16:32:18
 */
-@Getter
-@Setter
-public class DictDetailDTO implements Serializable {
+@Data
+public class DeptSmallDto implements Serializable {
 
     private Long id;
 
-    private String label;
-
-    private String value;
-
-    private String sort;
-
-    private DictSmallDto dict;
-
-    private Timestamp createTime;
+    private String name;
 }

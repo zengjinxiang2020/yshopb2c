@@ -8,35 +8,39 @@
 */
 package co.yixiang.modules.system.service.dto;
 
+import co.yixiang.modules.system.domain.Menu;
 import lombok.Data;
-
 import java.sql.Timestamp;
-import java.util.List;
+import java.io.Serializable;
 import java.util.Set;
-
-import co.yixiang.annotation.Query;
 
 /**
 * @author hupeng
 * @date 2020-05-14
 */
 @Data
-public class UserQueryCriteria{
+public class RoleDto implements Serializable {
 
-    @Query
+    /** ID */
     private Long id;
 
-    @Query(propName = "id", type = Query.Type.IN, joinName = "dept")
-    private Set<Long> deptIds;
+    /** 名称 */
+    private String name;
 
-    @Query(blurry = "email,username,nickName")
-    private String blurry;
+    /** 备注 */
+    private String remark;
 
-    @Query
-    private Boolean enabled;
+    /** 数据权限 */
+    private String dataScope;
 
-    private Long deptId;
+    /** 角色级别 */
+    private Integer level;
 
-    @Query(type = Query.Type.BETWEEN)
-    private List<Timestamp> createTime;
+    private Set<Menu> menus;
+
+    /** 创建日期 */
+    private Timestamp createTime;
+
+    /** 功能权限 */
+    private String permission;
 }

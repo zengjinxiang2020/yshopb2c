@@ -8,9 +8,9 @@
 */
 package co.yixiang.modules.system.service;
 import co.yixiang.common.service.BaseService;
-import co.yixiang.modules.system.domain.Dict;
-import co.yixiang.modules.system.service.dto.DictDto;
-import co.yixiang.modules.system.service.dto.DictQueryCriteria;
+import co.yixiang.modules.system.domain.UserAvatar;
+import co.yixiang.modules.system.service.dto.UserAvatarDto;
+import co.yixiang.modules.system.service.dto.UserAvatarQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 * @author hupeng
 * @date 2020-05-14
 */
-public interface DictService  extends BaseService<Dict>{
+public interface UserAvatarService  extends BaseService<UserAvatar>{
 
 /**
     * 查询数据分页
@@ -29,14 +29,14 @@ public interface DictService  extends BaseService<Dict>{
     * @param pageable 分页参数
     * @return Map<String,Object>
     */
-    Map<String,Object> queryAll(DictQueryCriteria criteria, Pageable pageable);
+    Map<String,Object> queryAll(UserAvatarQueryCriteria criteria, Pageable pageable);
 
     /**
     * 查询所有数据不分页
     * @param criteria 条件参数
-    * @return List<DictDto>
+    * @return List<UserAvatarDto>
     */
-    List<Dict> queryAll(DictQueryCriteria criteria);
+    List<UserAvatar> queryAll(UserAvatarQueryCriteria criteria);
 
     /**
     * 导出数据
@@ -44,5 +44,5 @@ public interface DictService  extends BaseService<Dict>{
     * @param response /
     * @throws IOException /
     */
-    void download(List<DictDto> all, HttpServletResponse response) throws IOException;
+    void download(List<UserAvatarDto> all, HttpServletResponse response) throws IOException;
 }

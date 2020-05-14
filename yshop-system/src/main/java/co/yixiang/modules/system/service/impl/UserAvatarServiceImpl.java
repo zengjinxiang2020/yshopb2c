@@ -8,7 +8,7 @@
 */
 package co.yixiang.modules.system.service.impl;
 
-import co.yixiang.modules.system.domain.DictDetail;
+import co.yixiang.modules.system.domain.UserAvatar;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
@@ -17,10 +17,10 @@ import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
-import co.yixiang.modules.system.service.DictDetailService;
-import co.yixiang.modules.system.service.dto.DictDetailDto;
-import co.yixiang.modules.system.service.dto.DictDetailQueryCriteria;
-import co.yixiang.modules.system.service.mapper.DictDetailMapper;
+import co.yixiang.modules.system.service.UserAvatarService;
+import co.yixiang.modules.system.service.dto.UserAvatarDto;
+import co.yixiang.modules.system.service.dto.UserAvatarQueryCriteria;
+import co.yixiang.modules.system.service.mapper.UserAvatarMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,19 +45,19 @@ import java.util.LinkedHashMap;
 */
 @Service
 @AllArgsConstructor
-//@CacheConfig(cacheNames = "dictDetail")
+//@CacheConfig(cacheNames = "userAvatar")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class DictDetailServiceImpl extends BaseServiceImpl<DictDetailMapper, DictDetail> implements DictDetailService {
+public class UserAvatarServiceImpl extends BaseServiceImpl<UserAvatarMapper, UserAvatar> implements UserAvatarService {
 
     private final IGenerator generator;
 
     @Override
     //@Cacheable
-    public Map<String, Object> queryAll(DictDetailQueryCriteria criteria, Pageable pageable) {
+    public Map<String, Object> queryAll(UserAvatarQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
-        PageInfo<DictDetail> page = new PageInfo<>(queryAll(criteria));
+        PageInfo<UserAvatar> page = new PageInfo<>(queryAll(criteria));
         Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), DictDetailDto.class));
+        map.put("content", generator.convert(page.getList(), UserAvatarDto.class));
         map.put("totalElements", page.getTotal());
         return map;
     }
@@ -65,21 +65,24 @@ public class DictDetailServiceImpl extends BaseServiceImpl<DictDetailMapper, Dic
 
     @Override
     //@Cacheable
-    public List<DictDetail> queryAll(DictDetailQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(DictDetail.class, criteria));
+    public List<UserAvatar> queryAll(UserAvatarQueryCriteria criteria){
+        return baseMapper.selectList(QueryHelpPlus.getPredicate(UserAvatar.class, criteria));
     }
 
 
     @Override
-    public void download(List<DictDetailDto> all, HttpServletResponse response) throws IOException {
+    public void download(List<UserAvatarDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (DictDetailDto dictDetail : all) {
+        for (UserAvatarDto userAvatar : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put("字典标签", dictDetail.getLabel());
-            map.put("字典值", dictDetail.getValue());
-            map.put("排序", dictDetail.getSort());
-            map.put("字典id", dictDetail.getDictId());
-            map.put("创建日期", dictDetail.getCreateTime());
+            map.put("真实文件名", userAvatar.getRealName());
+            map.put("路径", userAvatar.getPath());
+            map.put("大小", userAvatar.getSize());
+            map.put("创建时间", userAvatar.getCreateTime());
+            map.put("真实文件名", userAvatar.getRealName());
+            map.put("路径", userAvatar.getPath());
+            map.put("大小", userAvatar.getSize());
+            map.put("创建时间", userAvatar.getCreateTime());
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);

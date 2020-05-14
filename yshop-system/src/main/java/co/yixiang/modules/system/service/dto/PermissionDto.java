@@ -8,28 +8,39 @@
  */
 package co.yixiang.modules.system.service.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
 /**
-* @author hupeng
-* @date 2019-04-10
-*/
-@Getter
-@Setter
-public class DictDTO implements Serializable {
+ * @author hupeng
+ * @date 2018-12-03
+ */
+@Data
+public class PermissionDto implements Serializable{
 
-    private Long id;
+	private Long id;
 
-    private String name;
+	private String name;
 
-    private String remark;
+	private Long pid;
 
-    private List<DictDetailDTO> dictDetails;
+	private String alias;
 
-    private Timestamp createTime;
+	private Timestamp createTime;
+
+	private List<PermissionDto>  children;
+
+	@Override
+	public String toString() {
+		return "Permission{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", pid=" + pid +
+				", alias='" + alias + '\'' +
+				", createTime=" + createTime +
+				'}';
+	}
 }

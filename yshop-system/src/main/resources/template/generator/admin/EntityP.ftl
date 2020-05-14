@@ -31,7 +31,7 @@ import java.io.Serializable;
 * @date ${date}
 */
 @Data
-@TableName(name="${tableName}")
+@TableName("${tableName}")
 public class ${className} implements Serializable {
 <#if columns??>
     <#list columns as column>
