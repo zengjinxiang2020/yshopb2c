@@ -52,8 +52,13 @@ public class YxSystemUserTaskServiceImpl extends BaseServiceImpl<SystemUserTaskM
     public Map<String, Object> queryAll(YxSystemUserTaskQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
         PageInfo<YxSystemUserTask> page = new PageInfo<>(queryAll(criteria));
+        List<YxSystemUserTaskDto> systemUserTaskDTOS = generator.convert(page.getList(),YxSystemUserTaskDto.class);
+        for (YxSystemUserTaskDto systemUserTaskDTO : systemUserTaskDTOS) {
+            systemUserTaskDTO.setLevalName(this
+                    .getById(systemUserTaskDTO.getLevelId()).getName());
+        }
         Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxSystemUserTaskDto.class));
+        map.put("content", systemUserTaskDTOS);
         map.put("totalElements", page.getTotal());
         return map;
     }

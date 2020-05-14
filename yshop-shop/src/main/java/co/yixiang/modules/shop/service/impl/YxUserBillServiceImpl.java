@@ -19,6 +19,7 @@ import co.yixiang.modules.shop.service.YxUserBillService;
 import co.yixiang.modules.shop.service.dto.YxUserBillDto;
 import co.yixiang.modules.shop.service.dto.YxUserBillQueryCriteria;
 import co.yixiang.modules.shop.service.mapper.UserBillMapper;
+import org.apache.xmlbeans.impl.xb.xmlconfig.Qnametargetlist;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,9 +52,9 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
     //@Cacheable
     public Map<String, Object> queryAll(YxUserBillQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
-        PageInfo<YxUserBill> page = new PageInfo<>(queryAll(criteria));
+        PageInfo<Map<String,Object>> page = new PageInfo<>(queryAll(criteria));
         Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxUserBillDto.class));
+        map.put("content", page.getList());
         map.put("totalElements", page.getTotal());
         return map;
     }
@@ -61,8 +62,9 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
 
     @Override
     //@Cacheable
-    public List<YxUserBill> queryAll(YxUserBillQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(YxUserBill.class, criteria));
+    public List<Map<String,Object>> queryAll(YxUserBillQueryCriteria criteria){
+
+        return baseMapper.findAllByQueryCriteria(criteria.getCategory(),criteria.getType(),criteria.getNickname());
     }
 
 

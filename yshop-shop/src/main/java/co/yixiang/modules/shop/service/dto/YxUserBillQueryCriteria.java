@@ -18,4 +18,7 @@ import co.yixiang.annotation.Query;
 */
 @Data
 public class YxUserBillQueryCriteria{
+    private String nickname;
+    private String category;
+    private String type;
 }

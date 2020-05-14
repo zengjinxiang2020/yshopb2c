@@ -10,8 +10,16 @@ package co.yixiang.modules.shop.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.shop.domain.YxUserBill;
+import co.yixiang.modules.shop.service.dto.YxUserBillDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.ResultType;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author hupeng
@@ -21,4 +29,9 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface UserBillMapper extends CoreMapper<YxUserBill> {
 
+    @ResultType(Map.class)
+    @Select("select b.title,b.pm,b.category,b.type,b.number,b.add_time as addTime,u.nickname " +
+            "from yx_user_bill b left join yx_user u on u.uid=b.uid  where if(#{category} !='',b.category=#{category},1=1) " +
+            "and if(#{type} !='',b.type=#{type},1=1)  and if(#{nickname} !='',u.nickname LIKE CONCAT('%',#{nickname},'%'),1=1)  ")
+    List<Map<String, Object>> findAllByQueryCriteria(@Param("category") String category, @Param("type") String type, @Param("nickname") String nickname);
 }
