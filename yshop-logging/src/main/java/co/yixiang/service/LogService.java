@@ -1,5 +1,6 @@
 package co.yixiang.service;
 
+import co.yixiang.common.service.BaseService;
 import co.yixiang.domain.Log;
 import co.yixiang.service.dto.LogQueryCriteria;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -14,7 +15,7 @@ import java.util.List;
  * @author Zheng Jie
  * @date 2018-11-24
  */
-public interface LogService {
+public interface LogService extends BaseService<Log> {
 
 
 

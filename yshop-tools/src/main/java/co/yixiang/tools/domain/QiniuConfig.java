@@ -36,7 +36,6 @@ public class QiniuConfig implements Serializable {
 
     /** 外链域名 */
    // @Column(name = "host",nullable = false)
-    @NotBlank
     private String host;
 
 

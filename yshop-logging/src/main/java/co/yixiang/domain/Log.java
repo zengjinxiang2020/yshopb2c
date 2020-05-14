@@ -1,5 +1,9 @@
 package co.yixiang.domain;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,17 +12,15 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * @author Zheng Jie
+ * @author hupeng
  * @date 2018-11-24
  */
-@Entity
 @Data
-@Table(name = "log")
+@TableName("log")
 @NoArgsConstructor
 public class Log  implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableId
     private Long id;
 
     /** 操作用户 */
@@ -35,19 +37,15 @@ public class Log  implements Serializable {
     private Integer type;
 
     /** 参数 */
-    @Column(columnDefinition = "text")
     private String params;
 
     /** 日志类型 */
-    @Column(name = "log_type")
     private String logType;
 
     /** 请求ip */
-    @Column(name = "request_ip")
     private String requestIp;
 
     /** 地址 */
-    @Column(name = "address")
     private String address;
 
     /** 浏览器  */
@@ -57,12 +55,10 @@ public class Log  implements Serializable {
     private Long time;
 
     /** 异常详细  */
-    @Column(name = "exception_detail", columnDefinition = "text")
     private byte[] exceptionDetail;
 
     /** 创建日期 */
-    @CreationTimestamp
-    @Column(name = "create_time")
+    @TableField(fill = FieldFill.INSERT)
     private Timestamp createTime;
 
     public Log(String logType, Long time) {

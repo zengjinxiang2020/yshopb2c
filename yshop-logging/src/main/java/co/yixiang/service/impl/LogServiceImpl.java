@@ -3,13 +3,19 @@ package co.yixiang.service.impl;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONObject;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.domain.Log;
-import co.yixiang.repository.LogRepository;
+import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.service.LogService;
+import co.yixiang.service.dto.LogErrorDTO;
 import co.yixiang.service.dto.LogQueryCriteria;
-import co.yixiang.service.mapper.LogErrorMapper;
-import co.yixiang.service.mapper.LogSmallMapper;
+import co.yixiang.service.dto.LogSmallDTO;
+import co.yixiang.service.mapper.LogMapper;
 import co.yixiang.utils.*;
+import com.baomidou.mybatisplus.core.conditions.query.Query;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.pagehelper.PageInfo;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.data.domain.Page;
@@ -32,49 +38,61 @@ import java.util.Map;
  */
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class LogServiceImpl implements LogService {
+public class LogServiceImpl extends BaseServiceImpl<LogMapper, Log>  implements LogService {
 
-    private final LogRepository logRepository;
 
-    private final LogErrorMapper logErrorMapper;
+    private final LogMapper logMapper;
 
-    private final LogSmallMapper logSmallMapper;
+    private final IGenerator generator;
 
+    public LogServiceImpl(LogMapper logMapper, IGenerator generator) {
+        this.logMapper = logMapper;
+        this.generator = generator;
+    }
 
     @Override
     public Object findAllByPageable(String nickname, Pageable pageable) {
-        Page<Map> page = logRepository.findAllByPageable(nickname,pageable);
+        getPage(pageable);
+        List<Log> list  = logMapper.findAllByPageable(nickname);
+        PageInfo<Log> page = new PageInfo<>(list);
+
         Map<String,Object> map = new LinkedHashMap<>(2);
-        map.put("content",page.getContent());
-        map.put("totalElements",page.getTotalElements());
+        map.put("content",page.getList());
+        map.put("totalElements",page.getTotal());
         return map;
     }
 
-    public LogServiceImpl(LogRepository logRepository, LogErrorMapper logErrorMapper, LogSmallMapper logSmallMapper) {
-        this.logRepository = logRepository;
-        this.logErrorMapper = logErrorMapper;
-        this.logSmallMapper = logSmallMapper;
-    }
 
     @Override
     public Object queryAll(LogQueryCriteria criteria, Pageable pageable){
-        Page<Log> page = logRepository.findAll(((root, criteriaQuery, cb) -> QueryHelp.getPredicate(root, criteria, cb)),pageable);
+
+        getPage(pageable);
+        PageInfo<Log> page = new PageInfo<>(queryAll(criteria));
+        Map<String, Object> map = new LinkedHashMap<>(2);
         String status = "ERROR";
-        if (status.equals(criteria.getLogType())) {
-            return PageUtil.toPage(page.map(logErrorMapper::toDto));
+        if(status.equals(criteria.getLogType())){
+            map.put("content", generator.convert(page.getList(), LogErrorDTO.class));
+            map.put("totalElements", page.getTotal());
         }
-        return page;
+        map.put("content", page.getList());
+        map.put("totalElements", page.getTotal());
+        return map;
     }
 
     @Override
     public List<Log> queryAll(LogQueryCriteria criteria) {
-        return logRepository.findAll(((root, criteriaQuery, cb) -> QueryHelp.getPredicate(root, criteria, cb)));
+        return baseMapper.selectList(QueryHelpPlus.getPredicate(Log.class, criteria));
     }
 
     @Override
     public Object queryAllByUser(LogQueryCriteria criteria, Pageable pageable) {
-        Page<Log> page = logRepository.findAll(((root, criteriaQuery, cb) -> QueryHelp.getPredicate(root, criteria, cb)),pageable);
-        return PageUtil.toPage(page.map(logSmallMapper::toDto));
+        getPage(pageable);
+        PageInfo<Log> page = new PageInfo<>(queryAll(criteria));
+        Map<String, Object> map = new LinkedHashMap<>(2);
+        map.put("content", generator.convert(page.getList(), LogSmallDTO.class));
+        map.put("totalElements", page.getTotal());
+        return map;
+
     }
 
     @Override
@@ -124,12 +142,12 @@ public class LogServiceImpl implements LogService {
         log.setMethod(methodName);
         log.setUsername(username);
         log.setParams(params.toString() + " }");
-        logRepository.save(log);
+        this.save(log);
     }
 
     @Override
     public Object findByErrDetail(Long id) {
-        Log log = logRepository.findById(id).orElseGet(Log::new);
+        Log log = this.getById(id);
         ValidationUtil.isNull( log.getId(),"Log","id", id);
         byte[] details = log.getExceptionDetail();
         return Dict.create().set("exception",new String(ObjectUtil.isNotNull(details) ? details : "".getBytes()));
@@ -156,12 +174,12 @@ public class LogServiceImpl implements LogService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delAllByError() {
-        logRepository.deleteByLogType("ERROR");
+        logMapper.deleteByLogType("ERROR");
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delAllByInfo() {
-        logRepository.deleteByLogType("INFO");
+        logMapper.deleteByLogType("INFO");
     }
 }
