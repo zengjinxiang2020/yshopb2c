@@ -10,7 +10,7 @@ package co.yixiang.modules.shop.rest;
 import java.util.Arrays;
 import co.yixiang.dozer.service.IGenerator;
 import lombok.AllArgsConstructor;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.shop.domain.YxWechatUser;
 import co.yixiang.modules.shop.service.YxWechatUserService;
 import co.yixiang.modules.shop.service.dto.YxWechatUserQueryCriteria;

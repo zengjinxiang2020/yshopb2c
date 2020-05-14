@@ -10,7 +10,7 @@ package co.yixiang.tools.rest;
 import java.util.Arrays;
 import co.yixiang.dozer.service.IGenerator;
 import lombok.AllArgsConstructor;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.tools.domain.LocalStorage;
 import co.yixiang.tools.service.LocalStorageService;
 import co.yixiang.tools.service.dto.LocalStorageQueryCriteria;

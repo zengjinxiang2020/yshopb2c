@@ -36,7 +36,7 @@ public interface YxUserBillService  extends BaseService<YxUserBill>{
     * @param criteria 条件参数
     * @return List<YxUserBillDto>
     */
-    List<YxUserBill> queryAll(YxUserBillQueryCriteria criteria);
+    List<YxUserBillDto> queryAll(YxUserBillQueryCriteria criteria);
 
     /**
     * 导出数据

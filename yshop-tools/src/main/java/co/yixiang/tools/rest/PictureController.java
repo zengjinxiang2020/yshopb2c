@@ -9,7 +9,7 @@
 package co.yixiang.tools.rest;
 
 import co.yixiang.tools.service.dto.PictureDto;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.dozer.service.IGenerator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

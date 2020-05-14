@@ -9,7 +9,7 @@
 package co.yixiang.modules.system.rest;
 
 import cn.hutool.core.lang.Dict;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Role;

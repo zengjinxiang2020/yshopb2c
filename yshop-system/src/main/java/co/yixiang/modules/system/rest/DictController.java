@@ -7,8 +7,7 @@
  * 一经发现盗用、分享等行为，将追究法律责任，后果自负
  */
 package co.yixiang.modules.system.rest;
-
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Dict;

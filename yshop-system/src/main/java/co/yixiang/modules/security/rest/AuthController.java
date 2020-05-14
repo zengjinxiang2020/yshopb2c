@@ -16,7 +16,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import co.yixiang.annotation.AnonymousAccess;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.security.config.SecurityProperties;
 import co.yixiang.modules.security.security.TokenProvider;
