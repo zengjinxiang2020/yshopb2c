@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * @author Zheng Jie
+ * @author hupeng
  * @date 2018-12-31
  */
 public interface QiNiuService {

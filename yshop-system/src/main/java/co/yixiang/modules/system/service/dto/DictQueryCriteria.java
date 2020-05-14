@@ -4,7 +4,7 @@ import lombok.Data;
 import co.yixiang.annotation.Query;
 
 /**
- * @author Zheng Jie
+ * @author hupeng
  * 公共查询类
  */
 @Data

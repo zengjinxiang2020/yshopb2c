@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Jwt参数配置
- * @author Zheng Jie
+ * @author hupeng
  * @date 2019年11月28日
  */
 @Data

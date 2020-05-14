@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 /**
- * @author Zheng Jie
+ * @author hupeng
  * @date 2018-12-17
  */
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)

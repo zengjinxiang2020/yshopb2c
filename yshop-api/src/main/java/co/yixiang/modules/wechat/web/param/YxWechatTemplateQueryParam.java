@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
  * 微信模板 查询参数对象
  * </p>
  *
- * @author xuwenbo
+ * @author hupeng
  * @date 2019-12-10
  */
 @Data

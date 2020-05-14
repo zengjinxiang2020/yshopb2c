@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.Set;
 
 /**
- * @author Zheng Jie
+ * @author hupeng
  */
 @RestController
 @RequestMapping("/auth/online")

@@ -21,7 +21,7 @@ import java.io.Serializable;
  * 微信模板 服务类
  * </p>
  *
- * @author xuwenbo
+ * @author hupeng
  * @since 2019-12-10
  */
 public interface YxWechatTemplateService extends BaseService<YxWechatTemplate> {

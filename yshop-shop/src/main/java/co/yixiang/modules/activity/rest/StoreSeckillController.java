@@ -18,7 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
-* @author xuwenbo
+* @author hupeng
 * @date 2019-12-14
 */
 @Api(tags = "商城:秒杀管理")

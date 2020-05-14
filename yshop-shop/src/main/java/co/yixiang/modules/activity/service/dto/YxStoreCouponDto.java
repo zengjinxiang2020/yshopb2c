@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import java.io.Serializable;
 
 /**
-* @author xuwenbo
+* @author hupeng
 * @date 2020-05-13
 */
 @Data

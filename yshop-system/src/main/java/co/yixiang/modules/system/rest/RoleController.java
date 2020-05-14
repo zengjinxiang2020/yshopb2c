@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author Zheng Jie
+ * @author hupeng
  * @date 2018-12-03
  */
 @Api(tags = "系统：角色管理")

@@ -5,7 +5,7 @@ import java.util.List;
 import co.yixiang.annotation.Query;
 
 /**
-* @author xuwenbo
+* @author hupeng
 * @date 2020-05-12
 */
 @Data

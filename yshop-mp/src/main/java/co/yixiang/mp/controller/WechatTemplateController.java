@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
-* @author xuwenbo
+* @author hupeng
 * @date 2019-12-10
 */
 @Api(tags = "商城:微信模板管理")

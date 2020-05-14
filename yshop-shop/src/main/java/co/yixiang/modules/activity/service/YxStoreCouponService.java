@@ -10,7 +10,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
 /**
-* @author xuwenbo
+* @author hupeng
 * @date 2020-05-13
 */
 public interface YxStoreCouponService  extends BaseService<YxStoreCoupon>{

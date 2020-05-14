@@ -12,7 +12,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
- * @author Zheng Jie
+ * @author hupeng
  * @date 2018-12-26
  */
 @Data

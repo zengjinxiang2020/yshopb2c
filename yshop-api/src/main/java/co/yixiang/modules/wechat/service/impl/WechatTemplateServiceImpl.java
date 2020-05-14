@@ -31,7 +31,7 @@ import java.io.Serializable;
  * 微信模板 服务实现类
  * </p>
  *
- * @author xuwenbo
+ * @author hupeng
  * @since 2019-12-10
  */
 @Slf4j

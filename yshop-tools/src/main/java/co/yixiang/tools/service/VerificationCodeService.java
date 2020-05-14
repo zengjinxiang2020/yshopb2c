@@ -4,7 +4,7 @@ import co.yixiang.tools.domain.VerificationCode;
 import co.yixiang.tools.domain.vo.EmailVo;
 
 /**
- * @author Zheng Jie
+ * @author hupeng
  * @date 2018-12-26
  */
 public interface VerificationCodeService {

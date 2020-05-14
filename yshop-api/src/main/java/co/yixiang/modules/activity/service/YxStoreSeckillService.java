@@ -23,7 +23,7 @@ import java.util.List;
  * 商品秒杀产品表 服务类
  * </p>
  *
- * @author xuwenbo
+ * @author hupeng
  * @since 2019-12-14
  */
 public interface YxStoreSeckillService extends BaseService<YxStoreSeckill> {
