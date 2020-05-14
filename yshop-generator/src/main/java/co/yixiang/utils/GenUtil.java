@@ -1,12 +1,10 @@
-package co.gen.utils;
+package co.yixiang.utils;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.*;
-import co.gen.domain.GenConfig;
-import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.StringUtils;
+import co.yixiang.domain.GenConfig;
 import lombok.extern.slf4j.Slf4j;
-import co.gen.domain.ColumnConfig;
+import co.yixiang.domain.ColumnConfig;
 import org.springframework.util.ObjectUtils;
 import java.io.File;
 import java.io.FileWriter;

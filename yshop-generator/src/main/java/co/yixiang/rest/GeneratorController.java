@@ -1,8 +1,8 @@
-package co.gen.rest;
+package co.yixiang.rest;
 
-import co.gen.service.GenConfigService;
-import co.gen.service.GeneratorService;
-import co.gen.domain.ColumnConfig;
+import co.yixiang.service.GenConfigService;
+import co.yixiang.service.GeneratorService;
+import co.yixiang.domain.ColumnConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import co.yixiang.exception.BadRequestException;

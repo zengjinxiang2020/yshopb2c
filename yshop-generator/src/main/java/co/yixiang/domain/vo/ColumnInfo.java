@@ -1,4 +1,4 @@
-package co.gen.domain.vo;
+package co.yixiang.domain.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package co.gen.utils;
+package co.yixiang.utils;
 
 import org.apache.commons.configuration.*;
 

@@ -1,6 +1,6 @@
-package co.gen.service;
+package co.yixiang.service;
 
-import co.gen.domain.GenConfig;
+import co.yixiang.domain.GenConfig;
 
 /**
  * @author Zheng Jie

@@ -1,6 +1,6 @@
-package co.gen.domain;
+package co.yixiang.domain;
 
-import co.gen.utils.GenUtil;
+import co.yixiang.utils.GenUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
