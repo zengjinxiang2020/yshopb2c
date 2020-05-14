@@ -29,9 +29,10 @@ import java.util.Map;
 @Mapper
 public interface UserBillMapper extends CoreMapper<YxUserBill> {
 
-    @ResultType(Map.class)
-    @Select("select b.title,b.pm,b.category,b.type,b.number,b.add_time as addTime,u.nickname " +
-            "from yx_user_bill b left join yx_user u on u.uid=b.uid  where if(#{category} !='',b.category=#{category},1=1) " +
-            "and if(#{type} !='',b.type=#{type},1=1)  and if(#{nickname} !='',u.nickname LIKE CONCAT('%',#{nickname},'%'),1=1)  ")
-    List<Map<String, Object>> findAllByQueryCriteria(@Param("category") String category, @Param("type") String type, @Param("nickname") String nickname);
+    @Select("<script> select b.title,b.pm,b.category,b.type,b.number,b.add_time ,u.nickname " +
+            "from yx_user_bill b left join yx_user u on u.uid=b.uid  where 1=1  "  +
+            "<if test =\"category !=''\">and b.category=#{category}</if> " +
+            "<if test =\"type !=''\">and b.type=#{type}</if> " +
+            "<if test =\"nickname !=''\">and u.nickname= LIKE CONCAT('%',#{nickname},'%')</if> </script> ")
+    List<YxUserBillDto> findAllByQueryCriteria(@Param("category") String category, @Param("type") String type, @Param("nickname") String nickname);
 }

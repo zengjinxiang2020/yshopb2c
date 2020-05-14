@@ -52,7 +52,7 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
     //@Cacheable
     public Map<String, Object> queryAll(YxUserBillQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
-        PageInfo<Map<String,Object>> page = new PageInfo<>(queryAll(criteria));
+        PageInfo<YxUserBillDto> page = new PageInfo<>(queryAll(criteria));
         Map<String, Object> map = new LinkedHashMap<>(2);
         map.put("content", page.getList());
         map.put("totalElements", page.getTotal());
@@ -62,7 +62,7 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
 
     @Override
     //@Cacheable
-    public List<Map<String,Object>> queryAll(YxUserBillQueryCriteria criteria){
+    public List<YxUserBillDto> queryAll(YxUserBillQueryCriteria criteria){
 
         return baseMapper.findAllByQueryCriteria(criteria.getCategory(),criteria.getType(),criteria.getNickname());
     }
