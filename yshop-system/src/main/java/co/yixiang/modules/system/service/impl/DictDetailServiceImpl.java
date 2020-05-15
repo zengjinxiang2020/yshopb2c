@@ -66,7 +66,8 @@ public class DictDetailServiceImpl extends BaseServiceImpl<DictDetailMapper, Dic
     @Override
     //@Cacheable
     public List<DictDetail> queryAll(DictDetailQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(DictDetail.class, criteria));
+         List<DictDetail> list =  baseMapper.selectDictDetailList(criteria.getLabel(),criteria.getDictName());
+        return list;
     }
 
 

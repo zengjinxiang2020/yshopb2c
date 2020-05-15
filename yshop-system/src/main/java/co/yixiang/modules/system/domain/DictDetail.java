@@ -47,7 +47,6 @@ public class DictDetail implements Serializable {
 
 
     /** 字典id */
-    @TableId
     private Long dictId;
 
 

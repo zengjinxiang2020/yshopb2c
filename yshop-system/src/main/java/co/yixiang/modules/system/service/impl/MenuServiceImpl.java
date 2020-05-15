@@ -289,7 +289,6 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
      * @param resources /
      */
     @Override
-    @CacheEvict(allEntries = true)
     public void update(Menu resources) {
         if(resources.getId().equals(resources.getPid())) {
             throw new BadRequestException("上级不能为自己");
@@ -315,6 +314,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
                 throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
             }
         }
+        menu.setId(resources.getId());
         menu.setName(resources.getName());
         menu.setComponent(resources.getComponent());
         menu.setPath(resources.getPath());
@@ -327,6 +327,6 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
         menu.setComponentName(resources.getComponentName());
         menu.setPermission(resources.getPermission());
         menu.setType(resources.getType());
-        this.save(menu);
+        this.saveOrUpdate(menu);
     }
 }

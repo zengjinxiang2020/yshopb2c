@@ -67,7 +67,6 @@ import java.util.stream.Collectors;
 */
 @Service
 @AllArgsConstructor
-@CacheConfig(cacheNames = "role")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements RoleService {
 
@@ -77,7 +76,6 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     private final DeptMapper deptMapper;
 
     @Override
-    @Cacheable
     public Map<String, Object> queryAll(RoleQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
         PageInfo<Role> page = new PageInfo<>(queryAll(criteria));
@@ -89,9 +87,13 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 
 
     @Override
-    @Cacheable
     public List<Role> queryAll(RoleQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(Role.class, criteria));
+        List<Role> roleList =  baseMapper.selectList(QueryHelpPlus.getPredicate(Role.class, criteria));
+        for (Role role : roleList) {
+            role.setMenus(menuMapper.findMenuByRoleId(role.getId()));
+            role.setDepts(deptMapper.findDeptByRoleId(role.getId()));
+        }
+        return roleList;
     }
 
 

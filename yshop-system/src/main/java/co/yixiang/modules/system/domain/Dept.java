@@ -33,7 +33,6 @@ public class Dept implements Serializable {
 
 
     /** 名称 */
-    @NotBlank
     private String name;
 
 
