@@ -20,47 +20,33 @@ import java.util.List;
 @Data
 public class MenuDto implements Serializable {
 
-    /** ID */
     private Long id;
 
-    /** 是否外链 */
-    private Boolean iFrame;
+    private Integer type;
 
-    /** 菜单名称 */
+    private String permission;
+
     private String name;
 
-    /** 组件 */
-    private String component;
-
-    /** 上级菜单ID */
-    private Long pid;
-
-    /** 排序 */
     private Long sort;
 
-    /** 图标 */
-    private String icon;
-
-    /** 链接地址 */
     private String path;
 
-    /** 缓存 */
+    private String component;
+
+    private Long pid;
+
+    private Boolean iFrame;
+
     private Boolean cache;
 
-    /** 是否隐藏 */
     private Boolean hidden;
 
-    /** 组件名称 */
     private String componentName;
 
-    /** 创建日期 */
-    private Timestamp createTime;
-
-    /** 权限 */
-    private String permission;
+    private String icon;
 
     private List<MenuDto> children;
 
-    /** 类型 */
-    private Integer type;
+    private Timestamp createTime;
 }

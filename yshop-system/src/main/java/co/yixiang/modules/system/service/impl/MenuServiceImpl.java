@@ -148,7 +148,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
      * @return /
      */
     @Override
-    public Object buildMenus(List<MenuDto> menuDtos) {
+    public List<MenuVo> buildMenus(List<MenuDto> menuDtos) {
         List<MenuVo> list = new LinkedList<>();
         menuDtos.forEach(menuDTO -> {
                     if (menuDTO!=null){
@@ -170,7 +170,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
                         if(menuDtoList !=null && menuDtoList.size()!=0){
                             menuVo.setAlwaysShow(true);
                             menuVo.setRedirect("noredirect");
-                            menuVo.setChildren((List<MenuVo>) buildMenus(menuDtoList));
+                            menuVo.setChildren(buildMenus(menuDtoList));
                             // 处理是一级菜单并且没有子菜单的情况
                         } else if(menuDTO.getPid() == 0){
                             MenuVo menuVo1 = new MenuVo();

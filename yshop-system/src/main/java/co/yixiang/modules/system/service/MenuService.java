@@ -9,6 +9,7 @@
 package co.yixiang.modules.system.service;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.system.domain.Menu;
+import co.yixiang.modules.system.domain.vo.MenuVo;
 import co.yixiang.modules.system.service.dto.MenuDto;
 import co.yixiang.modules.system.service.dto.MenuQueryCriteria;
 import co.yixiang.modules.system.service.dto.RoleSmallDto;
@@ -60,7 +61,7 @@ public interface MenuService  extends BaseService<Menu>{
      * @param menuDtos /
      * @return /
      */
-    Object buildMenus(List<MenuDto> menuDtos);
+    List<MenuVo> buildMenus(List<MenuDto> menuDtos);
 
     /**
      * 获取菜单树

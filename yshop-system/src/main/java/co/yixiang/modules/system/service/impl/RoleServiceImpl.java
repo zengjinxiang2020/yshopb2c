@@ -32,6 +32,8 @@ import co.yixiang.modules.system.service.RoleService;
 import co.yixiang.modules.system.service.dto.RoleDto;
 import co.yixiang.modules.system.service.dto.RoleQueryCriteria;
 import co.yixiang.modules.system.service.mapper.RoleMapper;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -65,7 +67,7 @@ import java.util.stream.Collectors;
 */
 @Service
 @AllArgsConstructor
-//@CacheConfig(cacheNames = "role")
+@CacheConfig(cacheNames = "role")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implements RoleService {
 
@@ -75,7 +77,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     private final DeptMapper deptMapper;
 
     @Override
-    //@Cacheable
+    @Cacheable
     public Map<String, Object> queryAll(RoleQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
         PageInfo<Role> page = new PageInfo<>(queryAll(criteria));
@@ -87,7 +89,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 
 
     @Override
-    //@Cacheable
+    @Cacheable
     public List<Role> queryAll(RoleQueryCriteria criteria){
         return baseMapper.selectList(QueryHelpPlus.getPredicate(Role.class, criteria));
     }
@@ -115,6 +117,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
      * @param id 用户ID
      * @return /
      */
+//    @Cacheable(key = "'findByUsers_Id:' + #p0")
     @Override
     public List<RoleSmallDto> findByUsersId(Long id) {
         List<Role> roles = roleMapper.selectListByUserId(id);
@@ -155,6 +158,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
      * @param roleDto   /
      */
     @Override
+//    @CacheEvict(allEntries = true)
     public void updateMenu(Role resources, RoleDto roleDto) {
         Role role =generator.convert(roleDto,Role.class);
         role.setMenus(resources.getMenus());
@@ -168,13 +172,14 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
      * @return 权限信息
      */
     @Override
-    //@Cacheable(key = "'loadPermissionByUser:' + #p0.username")
+//    @Cacheable(key = "'loadPermissionByUser:' + #p0.username")
     public Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user) {
         Set<Role> roles = roleMapper.findByUsers_Id(user.getId());
         for (Role role : roles) {
             Set<Menu> menuSet = menuMapper.findMenuByRoleId(role.getId());
             role.setMenus(menuSet);
             Set<Dept> deptSet = deptMapper.findDeptByRoleId(role.getId());
+            role.setDepts(deptSet);
         }
         Set<String> permissions = roles.stream().filter(role -> StringUtils.isNotBlank(role.getPermission())).map(Role::getPermission).collect(Collectors.toSet());
         permissions.addAll(
