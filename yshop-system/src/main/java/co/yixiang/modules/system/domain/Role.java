@@ -52,6 +52,9 @@ public class Role implements Serializable {
     @TableField(exist = false)
     private Set<Menu> menus;
 
+    @TableField(exist = false)
+    private Set<Dept> depts;
+
     /** 创建日期 */
     @TableField(fill= FieldFill.INSERT)
     private Timestamp createTime;

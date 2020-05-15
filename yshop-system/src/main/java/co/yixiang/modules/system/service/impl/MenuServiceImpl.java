@@ -261,7 +261,13 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
      */
     @Override
     public List<MenuDto> findByRoles(List<RoleSmallDto> roles) {
-        return null;
+        List<Long> roleIds = roles.stream().map(i ->{
+            Long role = i.getId();
+            return role;
+        }).collect(Collectors.toList());
+        List<Menu> list = menuMapper.selectListByRoles(roleIds);
+
+        return generator.convert(list,MenuDto.class);
     }
 
     /**

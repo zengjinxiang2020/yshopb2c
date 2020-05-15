@@ -12,8 +12,12 @@ import co.yixiang.modules.system.domain.Dept;
 import co.yixiang.modules.system.domain.Menu;
 import co.yixiang.modules.system.domain.Role;
 import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.modules.system.service.DeptService;
+import co.yixiang.modules.system.service.MenuService;
 import co.yixiang.modules.system.service.dto.RoleSmallDto;
 import co.yixiang.modules.system.service.dto.UserDto;
+import co.yixiang.modules.system.service.mapper.DeptMapper;
+import co.yixiang.modules.system.service.mapper.MenuMapper;
 import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -67,6 +71,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 
     private final IGenerator generator;
     private final RoleMapper roleMapper;
+    private final MenuMapper menuMapper;
+    private final DeptMapper deptMapper;
 
     @Override
     //@Cacheable
@@ -111,8 +117,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
      */
     @Override
     public List<RoleSmallDto> findByUsersId(Long id) {
-
-        return null;
+        List<Role> roles = roleMapper.selectListByUserId(id);
+        return generator.convert(roles,RoleSmallDto.class);
     }
 
     /**
@@ -165,6 +171,11 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     //@Cacheable(key = "'loadPermissionByUser:' + #p0.username")
     public Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user) {
         Set<Role> roles = roleMapper.findByUsers_Id(user.getId());
+        for (Role role : roles) {
+            Set<Menu> menuSet = menuMapper.findMenuByRoleId(role.getId());
+            role.setMenus(menuSet);
+            Set<Dept> deptSet = deptMapper.findDeptByRoleId(role.getId());
+        }
         Set<String> permissions = roles.stream().filter(role -> StringUtils.isNotBlank(role.getPermission())).map(Role::getPermission).collect(Collectors.toSet());
         permissions.addAll(
                 roles.stream().flatMap(role -> role.getMenus().stream())

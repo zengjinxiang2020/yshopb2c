@@ -11,9 +11,12 @@ package co.yixiang.modules.system.service.mapper;
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.system.domain.Menu;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 /**
 * @author hupeng
@@ -29,6 +32,11 @@ public interface MenuMapper extends CoreMapper<Menu> {
      * @param pid /
      * @return /
      */
-    //todo
-    List<Menu> findByPid(long pid);
+    @Select("SELECT * from menu m where m.pid = #{pid} ")
+    List<Menu> findByPid(@Param("pid") long pid);
+
+    @Select("select m.* from menu m LEFT JOIN roles_menus t on m.id= t.menu_id LEFT JOIN role r on r.id = t.role_id where r.id = #{roleId}")
+    Set<Menu> findMenuByRoleId(@Param("roleId") Long roleId);
+    @Select("<script>select m.* from menu m LEFT JOIN roles_menus t on m.id= t.menu_id LEFT JOIN role r on r.id = t.role_id where r.id in <foreach collection=\"roleIds\" index=\"index\" item=\"item\" open=\"(\" separator=\",\" close=\")\">#{item}</foreach></script>")
+    List<Menu> selectListByRoles(@Param("roleIds") List<Long> roleIds);
 }
