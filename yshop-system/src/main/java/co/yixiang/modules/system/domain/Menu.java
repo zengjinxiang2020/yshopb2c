@@ -83,7 +83,7 @@ public class Menu implements Serializable {
     private String permission;
 
 
-    /** 类型 */
+    /** 类型，目录、菜单、按钮 */
     private Integer type;
 
 
