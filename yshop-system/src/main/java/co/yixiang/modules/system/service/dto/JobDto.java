@@ -19,21 +19,22 @@ import java.io.Serializable;
 @Data
 public class JobDto implements Serializable {
 
-    /** 岗位ID */
     private Long id;
 
-    /** 岗位名称 */
-    private String name;
-
-    /** 岗位状态 */
-    private Boolean enabled;
-
-    /** 岗位排序 */
     private Long sort;
 
-    /** 部门ID */
-    private Long deptId;
+    private String name;
 
-    /** 创建日期 */
+    private Boolean enabled;
+
+    private DeptDto dept;
+
+    private String deptSuperiorName;
+
     private Timestamp createTime;
+
+//    public JobDto(String name, Boolean enabled) {
+//        this.name = name;
+//        this.enabled = enabled;
+//    }
 }

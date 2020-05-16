@@ -90,14 +90,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
         List<Map<String, Object>> list = new ArrayList<>();
         for (UserDto user : all) {
             Map<String,Object> map = new LinkedHashMap<>();
-            map.put("头像", user.getAvatarId());
             map.put("邮箱", user.getEmail());
             map.put("状态：1启用、0禁用", user.getEnabled());
             map.put("密码", user.getPassword());
             map.put("用户名", user.getUsername());
             map.put("部门名称", user.getDeptId());
             map.put("手机号码", user.getPhone());
-            map.put("岗位名称", user.getJobId());
             map.put("创建日期", user.getCreateTime());
             map.put("最后修改密码的日期", user.getLastPasswordResetTime());
             map.put("昵称", user.getNickName());

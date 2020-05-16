@@ -10,6 +10,7 @@ package co.yixiang.modules.system.service.impl;
 
 import co.yixiang.modules.system.domain.Job;
 import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.modules.system.service.DeptService;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageHelper;
@@ -51,6 +52,8 @@ public class JobServiceImpl extends BaseServiceImpl<JobMapper, Job> implements J
 
     private final IGenerator generator;
 
+    private final DeptService deptService;
+
     @Override
     //@Cacheable
     public Map<String, Object> queryAll(JobQueryCriteria criteria, Pageable pageable) {
@@ -66,7 +69,25 @@ public class JobServiceImpl extends BaseServiceImpl<JobMapper, Job> implements J
     @Override
     //@Cacheable
     public List<Job> queryAll(JobQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(Job.class, criteria));
+        List<Job> jobList = baseMapper.selectList(QueryHelpPlus.getPredicate(Job.class, criteria));
+        List<Job> jobScopeList = new ArrayList<>();
+        if(criteria.getDeptIds().size()==0){
+            for (Job job : jobList) {
+                    job.setDept(deptService.getById(job.getDeptId()));
+                    jobScopeList.add(job);
+            }
+        }else {
+            //断权限范围
+            for (Long deptId : criteria.getDeptIds()) {
+                for (Job job : jobList) {
+                    if(deptId ==job.getDeptId()){
+                        job.setDept(deptService.getById(job.getDeptId()));
+                        jobScopeList.add(job);
+                    }
+                }
+            }
+        }
+        return jobScopeList;
     }
 
 
@@ -78,7 +99,6 @@ public class JobServiceImpl extends BaseServiceImpl<JobMapper, Job> implements J
             map.put("岗位名称", job.getName());
             map.put("岗位状态", job.getEnabled());
             map.put("岗位排序", job.getSort());
-            map.put("部门ID", job.getDeptId());
             map.put("创建日期", job.getCreateTime());
             list.add(map);
         }

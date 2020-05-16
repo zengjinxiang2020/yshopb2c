@@ -55,6 +55,8 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, Dept> implement
 
     private final IGenerator generator;
 
+    private final DeptMapper deptMapper;
+
     @Override
     //@Cacheable
     public Map<String, Object> queryAll(DeptQueryCriteria criteria, Pageable pageable) {
@@ -95,7 +97,7 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, Dept> implement
      * @return /
      */
     @Override
-    @Cacheable(key = "#p0")
+//    @Cacheable(key = "#p0")
     public List<Dept> findByPid(long pid) {
         DeptQueryCriteria criteria = new DeptQueryCriteria();
         criteria.setPid(pid);
@@ -180,7 +182,6 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, Dept> implement
      */
     @Override
     public Set<Dept> findByRoleIds(Long id) {
-        //todo
-        return null;
+        return deptMapper.findDeptByRoleId(id);
     }
 }

@@ -40,6 +40,8 @@ public class Job implements Serializable {
     //@NotNull
     private Boolean enabled;
 
+    @TableField(exist = false)
+    private Dept dept;
 
     /** 岗位排序 */
     //@NotNull

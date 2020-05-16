@@ -26,6 +26,6 @@ import java.util.List;
 @Mapper
 public interface DictDetailMapper extends CoreMapper<DictDetail> {
 
-    @Select("<script>SELECT t.* from dict_detail d LEFT JOIN dict t on d.dict_id = t.id where 1=1 <if test = \"label !=null\" > and d.label LIKE concat('%', #{label}, '%') </if> <if test = \"dictName != ''||dictName !=null\" > AND t.name = #{dictName} order by t.sort asc</if></script>")
+    @Select("<script>SELECT d.* from dict_detail d LEFT JOIN dict t on d.dict_id = t.id where 1=1 <if test = \"label !=null\" > and d.label LIKE concat('%', #{label}, '%') </if> <if test = \"dictName != ''||dictName !=null\" > AND t.name = #{dictName} order by t.sort asc</if></script>")
     List<DictDetail> selectDictDetailList(@Param("label") String label,@Param("dictName") String dictName);
 }
