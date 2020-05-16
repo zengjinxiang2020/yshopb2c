@@ -125,9 +125,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
      */
     @Override
     public UserDto findByName(String userName) {
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("username",userName);
-        return generator.convert(getOne(wrapper),UserDto.class);
+      User user =   this.getOne(new QueryWrapper<User>().lambda()
+                .eq(User::getUsername,userName));
+        //用户所属岗位
+        user.setJob(jobService.getById(user.getJobId()));
+        //用户所属部门
+        user.setDept(deptService.getById(user.getDeptId()));
+        return generator.convert(user,UserDto.class);
     }
 
     /**
