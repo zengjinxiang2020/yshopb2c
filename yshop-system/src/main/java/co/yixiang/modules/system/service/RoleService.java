@@ -86,6 +86,4 @@ public interface RoleService  extends BaseService<Role>{
      * @return 权限信息
      */
     Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user);
-
-    Set<Role> findByDeptIds(Set<Long> deptIds);
 }

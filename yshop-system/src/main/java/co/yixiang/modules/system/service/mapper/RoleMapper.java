@@ -44,9 +44,7 @@ public interface RoleMapper extends CoreMapper<Role> {
      */
     @Delete("delete from roles_menus where menu_id = #{id}")
     void untiedMenu(@Param("id") Long id);
-    @Select("select m.* from role m LEFT JOIN users_roles t on m.id= t.role_id LEFT JOIN `user` r on r.id = t.user_id where r.id = #{id};")
+    @Select("select m.* from role m LEFT JOIN users_roles t on m.id= t.role_id LEFT JOIN `user` r on r.id = t.user_id where r.id = #{id}")
     List<Role> selectListByUserId(@Param("id") Long id);
 
-    @Select("")
-    Set<Role> findByDeptIds(@Param("deptIds")Set<Long> deptIds);
 }

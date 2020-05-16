@@ -193,8 +193,4 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public Set<Role> findByDeptIds(Set<Long> deptIds) {
-        return roleMapper.findByDeptIds(deptIds);
-    }
 }
