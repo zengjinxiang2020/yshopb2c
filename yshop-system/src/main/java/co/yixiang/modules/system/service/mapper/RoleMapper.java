@@ -34,7 +34,7 @@ public interface RoleMapper extends CoreMapper<Role> {
      */
     @Select( "SELECT r.id,r.create_time,r.data_scope,r.`level`,r.`name`,r.permission,r.remark " +
             "FROM role r LEFT OUTER JOIN users_roles u1 ON r.id = u1.role_id " +
-            "LEFT OUTER JOIN USER u2 ON u1.user_id = u2.id "+
+            "LEFT OUTER JOIN user u2 ON u1.user_id = u2.id "+
             "WHERE u2.id = #{id}")
     Set<Role> findByUsers_Id(@Param("id") Long id);
 

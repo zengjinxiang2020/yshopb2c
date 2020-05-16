@@ -200,8 +200,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 cartInfoDTOS.add(cartInfoDTO);
             }
             yxStoreOrderDTO.setCartInfoList(cartInfoDTOS);
-            yxStoreOrderDTO.setUserDTO(generator.convert(userService.getOne(new QueryWrapper<YxUser>().eq("uid",yxStoreOrder.getUid())),YxUserDto.class));
-
+            yxStoreOrderDTO.setUserDTO(generator.convert(userService.getById(yxStoreOrder.getUid()),YxUserDto.class));
+            if(yxStoreOrderDTO.getUserDTO()==null){
+                yxStoreOrderDTO.setUserDTO(new YxUserDto());
+            }
             storeOrderDTOS.add(yxStoreOrderDTO);
 
         }

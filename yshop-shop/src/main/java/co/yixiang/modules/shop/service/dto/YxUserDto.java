@@ -53,7 +53,7 @@ public class YxUserDto implements Serializable {
     private Integer groupId;
 
     /** 用户昵称 */
-    private String nickname;
+    private String nickname = "";
 
     /** 用户头像 */
     private String avatar;
