@@ -58,9 +58,7 @@ public class LogServiceImpl extends BaseServiceImpl<LogMapper, co.yixiang.loggin
     @Override
     public Object findAllByPageable(String nickname, Pageable pageable) {
         getPage(pageable);
-        List<co.yixiang.logging.domain.Log> list  = logMapper.findAllByPageable(nickname);
-        PageInfo<co.yixiang.logging.domain.Log> page = new PageInfo<>(list);
-
+        PageInfo<co.yixiang.logging.domain.Log> page = new PageInfo<>(logMapper.findAllByPageable(nickname));
         Map<String,Object> map = new LinkedHashMap<>(2);
         map.put("content",page.getList());
         map.put("totalElements",page.getTotal());
