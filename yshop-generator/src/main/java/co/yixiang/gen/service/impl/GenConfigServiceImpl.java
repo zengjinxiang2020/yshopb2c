@@ -59,7 +59,7 @@ public class GenConfigServiceImpl extends BaseServiceImpl<GenConfigMapper, GenCo
             }
             genConfig.setApiPath(api.toString());
         }
-        this.save(genConfig);
+        this.saveOrUpdate(genConfig);
         return genConfig;
     }
 }
