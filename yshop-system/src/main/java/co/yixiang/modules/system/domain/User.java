@@ -57,6 +57,7 @@ public class User implements Serializable {
     private Job job;
     @TableField(exist = false)
     private Dept dept;
+
     /** 密码 */
     private String password;
 
@@ -78,7 +79,7 @@ public class User implements Serializable {
 
 
     /** 创建日期 */
-    //@TableField(fill= FieldFill.INSERT)
+    @TableField(fill= FieldFill.INSERT)
     private Timestamp createTime;
 
 

@@ -8,45 +8,30 @@
 */
 package co.yixiang.modules.system.domain;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import javax.validation.constraints.*;
-import java.sql.Timestamp;
 import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2020-05-14
+* @date 2020-05-16
 */
 @Data
-@TableName("dict")
-public class Dict implements Serializable {
+@TableName("roles_depts")
+public class RolesDepts implements Serializable {
 
-    /** 字典ID */
     @TableId
-    private Long id;
+    private Long roleId;
 
 
-    /** 字典名称 */
-    //@NotBlank
-    private String name;
+    @TableId
+    private Long deptId;
 
 
-    /** 描述 */
-    private String remark;
-
-
-    /** 创建日期 */
-    @TableField(fill= FieldFill.INSERT)
-    private Timestamp createTime;
-
-
-    public void copy(Dict source){
+    public void copy(RolesDepts source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
 }

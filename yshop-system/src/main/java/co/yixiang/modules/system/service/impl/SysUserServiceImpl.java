@@ -8,13 +8,18 @@
 */
 package co.yixiang.modules.system.service.impl;
 
+import co.yixiang.exception.EntityExistException;
+import co.yixiang.modules.system.domain.Role;
 import co.yixiang.modules.system.domain.User;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.system.domain.UserAvatar;
+import co.yixiang.modules.system.domain.UsersRoles;
 import co.yixiang.modules.system.service.*;
 import co.yixiang.modules.system.service.mapper.RoleMapper;
+import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.SecurityUtils;
 import co.yixiang.utils.StringUtils;
+import co.yixiang.utils.ValidationUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
@@ -24,6 +29,7 @@ import co.yixiang.modules.system.service.dto.UserDto;
 import co.yixiang.modules.system.service.dto.UserQueryCriteria;
 import co.yixiang.modules.system.service.mapper.SysUserMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +48,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 /**
 * @author hupeng
@@ -62,14 +69,18 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
     private final JobService jobService;
     private final DeptService deptService;
     private final RoleMapper roleMapper;
+    private final RedisUtils redisUtils;
+    private final UsersRolesService usersRolesService;
 
-    public SysUserServiceImpl(IGenerator generator, SysUserMapper userMapper, UserAvatarService userAvatarService, JobService jobService, DeptService deptService, RoleService roleService, RoleMapper roleMapper) {
+    public SysUserServiceImpl(IGenerator generator, SysUserMapper userMapper, UserAvatarService userAvatarService, JobService jobService, DeptService deptService, RoleService roleService, RoleMapper roleMapper, RedisUtils redisUtils, UsersRolesService usersRolesService) {
         this.generator = generator;
         this.userMapper = userMapper;
         this.userAvatarService = userAvatarService;
         this.jobService = jobService;
         this.deptService = deptService;
         this.roleMapper = roleMapper;
+        this.redisUtils = redisUtils;
+        this.usersRolesService = usersRolesService;
     }
 
     @Override
@@ -178,6 +189,86 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
     @Override
     public void updateEmail(String username, String email) {
         userMapper.updateEmail(email, username);
+    }
+
+    /**
+     * 新增用户
+     *
+     * @param resources /
+     * @return /
+     */
+    @Override
+    //@CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public boolean create(User resources) {
+        User userName = this.getOne(new QueryWrapper<User>().lambda()
+                .eq(User::getUsername,resources.getUsername()));
+        if(userName != null){
+            throw new EntityExistException(User.class,"username",resources.getUsername());
+        }
+        User userEmail = this.getOne(new QueryWrapper<User>().lambda()
+                .eq(User::getEmail,resources.getEmail()));
+        if(userEmail != null){
+            throw new EntityExistException(User.class,"email",resources.getEmail());
+        }
+        resources.setDeptId(resources.getDept().getId());
+        resources.setJobId(resources.getJob().getId());
+        boolean result = this.save(resources);
+        UsersRoles usersRoles = new UsersRoles();
+        usersRoles.setUserId(resources.getId());
+        Set<Role> set = resources.getRoles();
+        for (Role roleIds : set ) {
+            usersRoles.setRoleId(roleIds.getId());
+        }
+        if (result) {
+            usersRolesService.save(usersRoles);
+        }
+        return result;
+    }
+
+    /**
+     * 编辑用户
+     *
+     * @param resources /
+     */
+    @Override
+    //@CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public void update(User resources) {
+        User user = this.getOne(new QueryWrapper<User>().lambda()
+                .eq(User::getId,resources.getId()));
+        ValidationUtil.isNull(user.getId(),"User","id",resources.getId());
+        User user1 = this.getOne(new QueryWrapper<User>().lambda()
+                .eq(User::getUsername,resources.getUsername()));
+        User user2 = this.getOne(new QueryWrapper<User>().lambda()
+                .eq(User::getEmail,resources.getEmail()));
+
+        if(user1 !=null&&!user.getId().equals(user1.getId())){
+            throw new EntityExistException(User.class,"username",resources.getUsername());
+        }
+
+        if(user2!=null&&!user.getId().equals(user2.getId())){
+            throw new EntityExistException(User.class,"email",resources.getEmail());
+        }
+
+        // 如果用户的角色改变了，需要手动清理下缓存
+        if (!resources.getRoles().equals(user.getRoles())) {
+            String key = "role::loadPermissionByUser:" + user.getUsername();
+            redisUtils.del(key);
+            key = "role::findByUsers_Id:" + user.getId();
+            redisUtils.del(key);
+        }
+
+        user.setUsername(resources.getUsername());
+        user.setEmail(resources.getEmail());
+        user.setEnabled(resources.getEnabled());
+        user.setRoles(resources.getRoles());
+        user.setDept(resources.getDept());
+        user.setJob(resources.getJob());
+        user.setPhone(resources.getPhone());
+        user.setNickName(resources.getNickName());
+        user.setSex(resources.getSex());
+        this.saveOrUpdate(user);
     }
 
 }

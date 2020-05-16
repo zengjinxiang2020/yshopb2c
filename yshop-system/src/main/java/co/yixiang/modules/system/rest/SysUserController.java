@@ -128,7 +128,7 @@ public class SysUserController {
         checkLevel(resources);
         // 默认密码 123456
         resources.setPassword(passwordEncoder.encode("123456"));
-        return new ResponseEntity<>(userService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(userService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改用户")
@@ -138,7 +138,7 @@ public class SysUserController {
     public ResponseEntity<Object> update(@Validated @RequestBody User resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         checkLevel(resources);
-        userService.saveOrUpdate(resources);
+        userService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -51,7 +51,7 @@ public class DictDetail implements Serializable {
 
 
     /** 创建日期 */
-    //@TableField(fill= FieldFill.INSERT)
+    @TableField(fill= FieldFill.INSERT)
     private Timestamp createTime;
 
 

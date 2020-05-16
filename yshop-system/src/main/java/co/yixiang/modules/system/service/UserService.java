@@ -12,10 +12,8 @@ import co.yixiang.modules.system.domain.User;
 import co.yixiang.modules.system.service.dto.UserDto;
 import co.yixiang.modules.system.service.dto.UserQueryCriteria;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
@@ -76,5 +74,18 @@ public interface UserService  extends BaseService<User>{
      * @param email 邮箱
      */
     void updateEmail(String username, String email);
+
+    /**
+     * 新增用户
+     * @param resources /
+     * @return /
+     */
+    boolean create(User resources);
+
+    /**
+     * 编辑用户
+     * @param resources /
+     */
+    void update(User resources);
 
 }
