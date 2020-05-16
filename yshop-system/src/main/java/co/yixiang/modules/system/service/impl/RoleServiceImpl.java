@@ -85,6 +85,18 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
         return map;
     }
 
+    /**
+     * 查询数据分页
+     *
+     * @param pageable 分页参数
+     * @return Object
+     */
+    @Override
+    public Object queryAlls(RoleQueryCriteria criteria,Pageable pageable) {
+        List<Role> roleList =  baseMapper.selectList(QueryHelpPlus.getPredicate(Role.class, criteria));
+        return roleList;
+    }
+
 
     @Override
     public List<Role> queryAll(RoleQueryCriteria criteria){

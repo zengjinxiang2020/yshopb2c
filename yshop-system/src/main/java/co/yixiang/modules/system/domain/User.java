@@ -45,7 +45,7 @@ public class User implements Serializable {
 
 
     /** 状态：1启用、0禁用 */
-    private Long enabled;
+    private Boolean enabled;
 
     /** 用户头像 */
     @TableField(exist = false)

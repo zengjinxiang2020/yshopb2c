@@ -79,7 +79,7 @@ public class RoleController {
     @GetMapping(value = "/all")
     @PreAuthorize("@el.check('roles:list','user:add','user:edit')")
     public ResponseEntity<Object> getAll(RoleQueryCriteria criteria ,@PageableDefault(value = 2000, sort = {"level"}, direction = Sort.Direction.ASC) Pageable pageable){
-        return new ResponseEntity<>(roleService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(roleService.queryAlls(criteria,pageable),HttpStatus.OK);
     }
 
     @Log("查询角色")

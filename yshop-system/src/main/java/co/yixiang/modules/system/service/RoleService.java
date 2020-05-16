@@ -37,6 +37,14 @@ public interface RoleService  extends BaseService<Role>{
     */
     Map<String,Object> queryAll(RoleQueryCriteria criteria, Pageable pageable);
 
+
+    /**
+     * 查询数据分页
+     * @param pageable 分页参数
+     * @return Map<String,Object>
+     */
+    Object queryAlls(RoleQueryCriteria criteria, Pageable pageable);
+
     /**
     * 查询所有数据不分页
     * @param criteria 条件参数
