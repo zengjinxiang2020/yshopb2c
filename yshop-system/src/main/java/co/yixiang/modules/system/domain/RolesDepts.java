@@ -23,11 +23,9 @@ import java.io.Serializable;
 @TableName("roles_depts")
 public class RolesDepts implements Serializable {
 
-    @TableId
     private Long roleId;
 
 
-    @TableId
     private Long deptId;
 
 

@@ -9,10 +9,10 @@
 package co.yixiang.gen.domain;
 
 import co.yixiang.gen.utils.GenUtil;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 
 /**
  * 列的数据信息
@@ -20,14 +20,11 @@ import javax.persistence.*;
  * @date 2019-01-02
  */
 @Data
-@Entity
 @NoArgsConstructor
-@Table(name = "column_config")
+@TableName("column_config")
 public class ColumnConfig {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @TableId
     private Long id;
 
     private String tableName;

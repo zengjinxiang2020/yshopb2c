@@ -51,10 +51,15 @@ public class User implements Serializable {
     @TableField(exist = false)
     private UserAvatar userAvatar;
 
+    /** 用户角色 */
     @TableField(exist = false)
     private Set<Role> roles;
+
+    /** 用户职位*/
     @TableField(exist = false)
     private Job job;
+
+    /** 用户部门*/
     @TableField(exist = false)
     private Dept dept;
 

@@ -25,38 +25,27 @@ import java.io.Serializable;
 public class YxStoreOrderCartInfo implements Serializable {
 
     @TableId
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "id")
     private Integer id;
 
 
     /** 订单id */
-    //@Column(name = "oid",nullable = false)
-   //@NotNull
     private Integer oid;
 
 
     /** 购物车id */
-    //@Column(name = "cart_id",nullable = false)
-   //@NotNull
     private Integer cartId;
 
 
     /** 商品ID */
-    //@Column(name = "product_id",nullable = false)
-   //@NotNull
     private Integer productId;
 
 
     /** 购买东西的详细信息 */
-    //@Column(name = "cart_info",nullable = false)
-    //@NotBlank
     private String cartInfo;
 
 
     /** 唯一id */
-        @TableField(value = "`unique`")
-    //@NotBlank
+    @TableField(value = "`unique`")
     private String unique;
 
 

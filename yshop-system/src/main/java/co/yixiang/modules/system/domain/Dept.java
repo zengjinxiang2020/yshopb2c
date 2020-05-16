@@ -8,14 +8,12 @@
 */
 package co.yixiang.modules.system.domain;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
 
@@ -37,12 +35,10 @@ public class Dept implements Serializable {
 
 
     /** 上级部门 */
-    @NotNull
     private Long pid;
 
 
     /** 状态 */
-    @NotNull
     private Boolean enabled;
 
 

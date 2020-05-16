@@ -11,8 +11,6 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 
 /**
@@ -26,29 +24,22 @@ public class YxSystemConfig implements Serializable {
 
     /** 配置id */
     @TableId
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "id")
     private Integer id;
 
 
     /** 字段名称 */
-    //@Column(name = "menu_name",nullable = false)
-    //@NotBlank
     private String menuName;
 
 
     /** 默认值 */
-    //@Column(name = "value")
     private String value;
 
 
     /** 排序 */
-    //@Column(name = "sort")
     private Integer sort;
 
 
     /** 是否隐藏 */
-    //@Column(name = "status")
     private Integer status;
 
 

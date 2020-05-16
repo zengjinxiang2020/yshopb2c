@@ -8,10 +8,10 @@
  */
 package co.yixiang.gen.domain;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 /**
  * 代码生成配置
@@ -19,9 +19,8 @@ import javax.validation.constraints.NotBlank;
  * @date 2019-01-03
  */
 @Data
-@Entity
 @NoArgsConstructor
-@Table(name = "gen_config")
+@TableName("gen_config")
 public class GenConfig {
 
     public GenConfig(String tableName) {
@@ -30,32 +29,25 @@ public class GenConfig {
         this.tableName = tableName;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @TableId
     private Long id;
 
-    @NotBlank
+    /**表明**/
     private String tableName;
 
     /** 接口名称 **/
     private String apiAlias;
 
     /** 包路径 */
-    @NotBlank
     private String pack;
 
     /** 模块名 */
-    @Column(name = "module_name")
-    @NotBlank
     private String moduleName;
 
     /** 前端文件路径 */
-    @NotBlank
     private String path;
 
     /** 前端文件路径 */
-    @Column(name = "api_path")
     private String apiPath;
 
     /** 作者 */

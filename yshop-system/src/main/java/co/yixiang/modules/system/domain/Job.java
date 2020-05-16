@@ -8,14 +8,12 @@
 */
 package co.yixiang.modules.system.domain;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
 
@@ -32,19 +30,16 @@ public class Job implements Serializable {
     private Long id;
 
     /** 岗位名称 */
-    //@NotBlank
     private String name;
 
 
     /** 岗位状态 */
-    //@NotNull
     private Boolean enabled;
 
     @TableField(exist = false)
     private Dept dept;
 
     /** 岗位排序 */
-    //@NotNull
     private Long sort;
 
 

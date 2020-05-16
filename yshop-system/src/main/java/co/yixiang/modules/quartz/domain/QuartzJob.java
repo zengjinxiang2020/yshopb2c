@@ -7,6 +7,8 @@
  * 一经发现盗用、分享等行为，将追究法律责任，后果自负
  */
 package co.yixiang.modules.quartz.domain;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -32,43 +34,35 @@ public class QuartzJob implements Serializable {
 
 
     /** Spring Bean名称 */
-    //@Column(name = "bean_name")
     private String beanName;
 
 
     /** cron 表达式 */
-    //@Column(name = "cron_expression")
     private String cronExpression;
 
 
     /** 状态：1暂停、0启用 */
-    //@Column(name = "is_pause")
     private Boolean isPause;
 
 
     /** 任务名称 */
-    //@Column(name = "job_name")
     private String jobName;
 
 
     /** 方法名称 */
-    //@Column(name = "method_name")
     private String methodName;
 
 
     /** 参数 */
-    //@Column(name = "params")
     private String params;
 
 
     /** 备注 */
-    //@Column(name = "remark")
     private String remark;
 
 
     /** 创建日期 */
-    //@Column(name = "create_time")
-    //@TableField(fill= FieldFill.INSERT)
+    @TableField(fill= FieldFill.INSERT)
     private Timestamp createTime;
 
     public void copy(QuartzJob source){

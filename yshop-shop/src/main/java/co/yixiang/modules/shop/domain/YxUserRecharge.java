@@ -11,8 +11,6 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.io.Serializable;
 
@@ -26,53 +24,43 @@ import java.io.Serializable;
 public class YxUserRecharge implements Serializable {
 
     @TableId
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "id")
     private Integer id;
 
 
     /** 充值用户UID */
-    //@Column(name = "uid")
     private Integer uid;
 
 
     /** 订单号 */
-    //@Column(name = "order_id",unique = true)
     private String orderId;
 
 
     /** 充值金额 */
-    //@Column(name = "price")
     private BigDecimal price;
 
 
     /** 充值类型 */
-    //@Column(name = "recharge_type")
     private String rechargeType;
 
 
     /** 是否充值 */
-    //@Column(name = "paid")
     private Integer paid;
 
 
     /** 充值支付时间 */
-    //@Column(name = "pay_time")
     private Integer payTime;
 
 
     /** 充值时间 */
-    //@Column(name = "add_time")
+    @TableField(fill= FieldFill.INSERT)
     private Integer addTime;
 
 
     /** 退款金额 */
-    //@Column(name = "refund_price")
     private BigDecimal refundPrice;
 
 
     /** 昵称 */
-    //@Column(name = "nickname")
     private String nickname;
 
 

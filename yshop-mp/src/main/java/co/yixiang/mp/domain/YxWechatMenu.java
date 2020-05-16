@@ -11,31 +11,26 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 
 /**
 * @author hupeng
 * @date 2020-05-12
 */
-@Entity
 @Data
-@Table(name="yx_wechat_menu")
+@TableName("yx_wechat_menu")
 public class YxWechatMenu implements Serializable {
 
-    @Id
     @TableId(value = "`key`")
     private String key;
 
 
     /** 缓存数据 */
-    @Column(name = "result")
     private String result;
 
 
     /** 缓存时间 */
-    @Column(name = "add_time")
+    @TableField(fill= FieldFill.INSERT)
     private Integer addTime;
 
 

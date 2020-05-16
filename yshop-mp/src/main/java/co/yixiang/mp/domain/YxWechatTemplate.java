@@ -7,7 +7,9 @@
  * 一经发现盗用、分享等行为，将追究法律责任，后果自负
  */
 package co.yixiang.mp.domain;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -21,50 +23,37 @@ import java.io.Serializable;
 * @author hupeng
 * @date 2020-05-12
 */
-@Entity
 @Data
-@Table(name="yx_wechat_template")
+@TableName("yx_wechat_template")
 public class YxWechatTemplate implements Serializable {
 
     /** 模板id */
-    @Id
-
-    @Column(name = "id")
+    @TableId
     private Integer id;
 
 
     /** 模板编号 */
-    @Column(name = "tempkey",nullable = false)
-    @NotBlank
     private String tempkey;
 
 
     /** 模板名 */
-    @Column(name = "name",nullable = false)
-    @NotBlank
     private String name;
 
 
     /** 回复内容 */
-    @Column(name = "content",nullable = false)
-    @NotBlank
     private String content;
 
 
     /** 模板ID */
-    @Column(name = "tempid")
     private String tempid;
 
 
     /** 添加时间 */
-    @Column(name = "add_time",nullable = false)
-    @NotBlank
+    @TableField(fill= FieldFill.INSERT)
     private String addTime;
 
 
     /** 状态 */
-    @Column(name = "status",nullable = false)
-    @NotNull
     private Integer status;
 
 
