@@ -15,6 +15,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
@@ -50,7 +53,10 @@ public class User implements Serializable {
 
     @TableField(exist = false)
     private Set<Role> roles;
-
+    @TableField(exist = false)
+    private Job job;
+    @TableField(exist = false)
+    private Dept dept;
     /** 密码 */
     private String password;
 

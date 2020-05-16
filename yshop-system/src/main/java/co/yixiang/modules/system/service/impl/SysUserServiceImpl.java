@@ -11,7 +11,8 @@ package co.yixiang.modules.system.service.impl;
 import co.yixiang.modules.system.domain.User;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.system.domain.UserAvatar;
-import co.yixiang.modules.system.service.UserAvatarService;
+import co.yixiang.modules.system.service.*;
+import co.yixiang.modules.system.service.mapper.RoleMapper;
 import co.yixiang.utils.SecurityUtils;
 import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -19,7 +20,6 @@ import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.utils.FileUtil;
-import co.yixiang.modules.system.service.UserService;
 import co.yixiang.modules.system.service.dto.UserDto;
 import co.yixiang.modules.system.service.dto.UserQueryCriteria;
 import co.yixiang.modules.system.service.mapper.SysUserMapper;
@@ -59,11 +59,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
     private final IGenerator generator;
     private final SysUserMapper userMapper;
     private final UserAvatarService userAvatarService;
+    private final JobService jobService;
+    private final DeptService deptService;
+    private final RoleMapper roleMapper;
 
-    public SysUserServiceImpl(IGenerator generator, SysUserMapper userMapper, UserAvatarService userAvatarService) {
+    public SysUserServiceImpl(IGenerator generator, SysUserMapper userMapper, UserAvatarService userAvatarService, JobService jobService, DeptService deptService, RoleService roleService, RoleMapper roleMapper) {
         this.generator = generator;
         this.userMapper = userMapper;
         this.userAvatarService = userAvatarService;
+        this.jobService = jobService;
+        this.deptService = deptService;
+        this.roleMapper = roleMapper;
     }
 
     @Override
@@ -81,7 +87,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
     @Override
     //@Cacheable
     public List<User> queryAll(UserQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(User.class, criteria));
+       List<User> userList =  baseMapper.selectList(QueryHelpPlus.getPredicate(User.class, criteria));
+        for (User user : userList) {
+            user.setJob(jobService.getById(user.getJobId()));
+            user.setDept(deptService.getById(user.getDeptId()));
+            user.setRoles(roleMapper.findByUsers_Id(user.getId()));
+        }
+       return userList;
     }
 
 

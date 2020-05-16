@@ -44,7 +44,7 @@ public class UserDto implements Serializable {
     @JsonIgnore
     private String password;
 
-    private Date lastPasswordResetTime;
+    private Timestamp lastPasswordResetTime;
 
     @ApiModelProperty(hidden = true)
     private Set<RoleSmallDto> roles;

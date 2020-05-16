@@ -192,4 +192,9 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
         return permissions.stream().map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public Set<Role> findByDeptIds(Set<Long> deptIds) {
+        return roleMapper.findByDeptIds(deptIds);
+    }
 }
