@@ -76,7 +76,8 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
             Object[] arr = (Object[]) obj;
             tableInfos.add(new TableInfo(arr[0],arr[1],arr[2],arr[3], ObjectUtil.isNotEmpty(arr[4])? arr[4] : "-"));
         }
-        Query query1 = em.createNativeQuery("SELECT COUNT(*) from information_schema.tables where table_schema = (select database())");
+        Query query1 = em.createNativeQuery("SELECT COUNT(*) from information_schema.tables where table_schema = (select database()) and table_name like ? order by create_time desc");
+        query1.setParameter(1, StringUtils.isNotBlank(name) ? ("%" + name + "%") : "%%");
         Object totalElements = query1.getSingleResult();
         return PageUtil.toPage(tableInfos,totalElements);
     }
@@ -153,7 +154,7 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
 
     @Override
     public void save(List<ColumnConfig> columnInfos) {
-        this.saveBatch(columnInfos);
+        this.saveOrUpdateBatch(columnInfos);
     }
 
     @Override
