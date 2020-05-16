@@ -7,10 +7,9 @@
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
 package ${package}.domain;
-import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 <#if isNotNullColumns??>
