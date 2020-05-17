@@ -13,7 +13,7 @@ import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.shop.domain.YxUser;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.YxUserService;
-import co.yixiang.modules.shop.service.dto.UserMoneyDTO;
+import co.yixiang.modules.shop.service.dto.UserMoneyDto;
 import co.yixiang.modules.shop.service.dto.YxUserQueryCriteria;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -100,7 +100,7 @@ public class MemberController {
     @ApiOperation(value = "修改余额")
     @PostMapping(value = "/yxUser/money")
     @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_EDIT')")
-    public ResponseEntity updatePrice(@Validated @RequestBody UserMoneyDTO param){
+    public ResponseEntity updatePrice(@Validated @RequestBody UserMoneyDto param){
         yxUserService.updateMoney(param);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

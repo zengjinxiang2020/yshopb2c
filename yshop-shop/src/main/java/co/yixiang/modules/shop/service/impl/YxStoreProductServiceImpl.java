@@ -146,14 +146,14 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     }
 
     @Override
-    public List<ProductFormatDTO> isFormatAttr(Integer id, String jsonStr) {
+    public List<ProductFormatDto> isFormatAttr(Integer id, String jsonStr) {
         if(ObjectUtil.isNull(id)) throw new BadRequestException("产品不存在");
 
         YxStoreProductDto yxStoreProductDTO = generator.convert(this.getById(id),YxStoreProductDto.class);
-        DetailDTO detailDTO = attrFormat(jsonStr);
-        List<ProductFormatDTO> newList = new ArrayList<>();
+        DetailDto detailDTO = attrFormat(jsonStr);
+        List<ProductFormatDto> newList = new ArrayList<>();
         for (Map<String, Map<String,String>> map : detailDTO.getRes()) {
-            ProductFormatDTO productFormatDTO = new ProductFormatDTO();
+            ProductFormatDto productFormatDTO = new ProductFormatDto();
             productFormatDTO.setDetail(map.get("detail"));
             productFormatDTO.setCost(yxStoreProductDTO.getCost().doubleValue());
             productFormatDTO.setPrice(yxStoreProductDTO.getPrice().doubleValue());
@@ -170,16 +170,16 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     public void createProductAttr(Integer id, String jsonStr) {
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         //System.out.println(jsonObject);
-        List<FromatDetailDTO> attrList = JSON.parseArray(
+        List<FromatDetailDto> attrList = JSON.parseArray(
                 jsonObject.get("items").toString(),
-                FromatDetailDTO.class);
-        List<ProductFormatDTO> valueList = JSON.parseArray(
+                FromatDetailDto.class);
+        List<ProductFormatDto> valueList = JSON.parseArray(
                 jsonObject.get("attrs").toString(),
-                ProductFormatDTO.class);
+                ProductFormatDto.class);
 
 
         List<YxStoreProductAttr> attrGroup = new ArrayList<>();
-        for (FromatDetailDTO fromatDetailDTO : attrList) {
+        for (FromatDetailDto fromatDetailDTO : attrList) {
             YxStoreProductAttr  yxStoreProductAttr = new YxStoreProductAttr();
             yxStoreProductAttr.setProductId(id);
             yxStoreProductAttr.setAttrName(fromatDetailDTO.getValue());
@@ -190,7 +190,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
 
         List<YxStoreProductAttrValue> valueGroup = new ArrayList<>();
-        for (ProductFormatDTO productFormatDTO : valueList) {
+        for (ProductFormatDto productFormatDTO : valueList) {
             YxStoreProductAttrValue yxStoreProductAttrValue = new YxStoreProductAttrValue();
             yxStoreProductAttrValue.setProductId(id);
             //productFormatDTO.getDetail().values().stream().collect(Collectors.toList());
@@ -267,10 +267,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
      * @param jsonStr
      * @return
      */
-    public DetailDTO attrFormat(String jsonStr){
+    public DetailDto attrFormat(String jsonStr){
         JSONObject jsonObject = JSON.parseObject(jsonStr);
-        List<FromatDetailDTO> fromatDetailDTOList = JSON.parseArray(jsonObject.get("items").toString(),
-                FromatDetailDTO.class);
+        List<FromatDetailDto> fromatDetailDTOList = JSON.parseArray(jsonObject.get("items").toString(),
+                FromatDetailDto.class);
         List<String> data = new ArrayList<>();
         List<Map<String,Map<String,String>>> res =new ArrayList<>();
         if(fromatDetailDTOList.size() > 1){
@@ -313,7 +313,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         }else{
             List<String> dataArr = new ArrayList<>();
 
-            for (FromatDetailDTO fromatDetailDTO : fromatDetailDTOList) {
+            for (FromatDetailDto fromatDetailDTO : fromatDetailDTOList) {
 
                 for (String str : fromatDetailDTO.getDetail()) {
                     Map<String,Map<String,String>> map2 = new LinkedHashMap<>();
@@ -329,7 +329,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             String s = StrUtil.join("-",dataArr);
             data.add(s);
         }
-        DetailDTO detailDTO = new DetailDTO();
+        DetailDto detailDTO = new DetailDto();
         detailDTO.setData(data);
         detailDTO.setRes(res);
         return detailDTO;

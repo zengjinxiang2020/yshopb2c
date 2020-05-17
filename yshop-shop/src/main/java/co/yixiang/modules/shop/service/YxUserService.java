@@ -9,7 +9,7 @@
 package co.yixiang.modules.shop.service;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.shop.domain.YxUser;
-import co.yixiang.modules.shop.service.dto.UserMoneyDTO;
+import co.yixiang.modules.shop.service.dto.UserMoneyDto;
 import co.yixiang.modules.shop.service.dto.YxUserDto;
 import co.yixiang.modules.shop.service.dto.YxUserQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +49,7 @@ public interface YxUserService  extends BaseService<YxUser>{
 
     void onStatus(Integer id, int status);
 
-    void updateMoney(UserMoneyDTO param);
+    void updateMoney(UserMoneyDto param);
 
     void incBrokeragePrice(double doubleValue, Integer uid);
 }

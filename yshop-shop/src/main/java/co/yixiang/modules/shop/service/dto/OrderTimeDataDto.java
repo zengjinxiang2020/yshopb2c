@@ -18,7 +18,7 @@ import java.io.Serializable;
  * @Date 2019/11/25
  **/
 @Data
-public class OrderTimeDataDTO implements Serializable {
+public class OrderTimeDataDto implements Serializable {
     private Double todayPrice;  //今日成交额
     private Integer todayCount; //今日订单数
     private Double proPrice;  //昨日成交额

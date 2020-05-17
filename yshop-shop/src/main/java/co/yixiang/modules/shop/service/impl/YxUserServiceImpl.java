@@ -10,7 +10,7 @@ package co.yixiang.modules.shop.service.impl;
 
 import co.yixiang.modules.shop.domain.YxUser;
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.modules.shop.service.dto.UserMoneyDTO;
+import co.yixiang.modules.shop.service.dto.UserMoneyDto;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
@@ -126,7 +126,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateMoney(UserMoneyDTO param) {
+    public void updateMoney(UserMoneyDto param) {
       //todo 修改用余额
     }
 

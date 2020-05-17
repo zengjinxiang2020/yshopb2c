@@ -10,22 +10,30 @@ package co.yixiang.modules.shop.service.dto;
 
 import lombok.Data;
 
-import java.util.List;
+import java.util.Map;
 
 /**
- * @ClassName FromatDetailDTO
+ * @ClassName ProductFormatDTO
  * @Author hupeng <610796224@qq.com>
  * @Date 2019/10/12
  **/
 
 @Data
-public class FromatDetailDTO {
-    private  boolean attrHidden;
+public class ProductFormatDto {
 
-    private  String detailValue;
+    private Double price;
 
-    private List<String> detail;
+    private Double cost;
 
-    private String value;
+    private int sales;
+
+    private String pic;
+
+   // private Map<String, List<Map<String,String>>> detail;
+
+    //private List<Map<String, String>> detail;
+    private Map<String, String> detail;
+    private Boolean check;
+
 
 }

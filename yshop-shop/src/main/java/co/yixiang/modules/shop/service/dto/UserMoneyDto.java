@@ -20,7 +20,7 @@ import java.io.Serializable;
  * @Date 2019/12/4
  **/
 @Data
-public class UserMoneyDTO implements Serializable {
+public class UserMoneyDto implements Serializable {
    //@NotNull(message = "参数缺失")
     private Integer uid;
    //@NotNull(message = "请选择修改余额方式")

@@ -8,17 +8,27 @@
  */
 package co.yixiang.modules.shop.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-/**
- * @ClassName ChartDataDTO
- * @Author hupeng <610796224@qq.com>
- * @Date 2019/11/25
- **/
-@Data
-public class ChartDataDTO{
+import java.io.Serializable;
+import java.util.List;
 
-   // @Value("#{target.adminCount}")
-   private  Double num;
-   private  String time;
+
+/**
+* @author hupeng
+* @date 2019-10-03
+*/
+@Data
+public class YxStoreCategorySmallDto implements Serializable {
+
+    // 商品分类表ID
+    private Integer id;
+
+
+    // 分类名称
+    private String cateName;
+
+
+
 }

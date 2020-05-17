@@ -10,30 +10,28 @@ package co.yixiang.modules.shop.service.dto;
 
 import lombok.Data;
 
-import java.util.Map;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 
 /**
- * @ClassName ProductFormatDTO
- * @Author hupeng <610796224@qq.com>
- * @Date 2019/10/12
- **/
-
+* @author hupeng
+* @date 2019-10-06
+*/
 @Data
-public class ProductFormatDTO {
+public class YxUserSmallDto implements Serializable {
 
-    private Double price;
+    // 用户id
+    private Integer uid;
 
-    private Double cost;
+    // 用户昵称
+    private String nickname;
 
-    private int sales;
+    // 用户头像
+    private String avatar;
 
-    private String pic;
-
-   // private Map<String, List<Map<String,String>>> detail;
-
-    //private List<Map<String, String>> detail;
-    private Map<String, String> detail;
-    private Boolean check;
+    // 手机号码
+    private String phone;
 
 
 }

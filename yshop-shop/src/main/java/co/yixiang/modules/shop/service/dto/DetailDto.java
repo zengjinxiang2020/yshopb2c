@@ -8,27 +8,21 @@
  */
 package co.yixiang.modules.shop.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.List;
-
+import java.util.Map;
 
 /**
-* @author hupeng
-* @date 2019-10-03
-*/
+ * @ClassName DetailDTO
+ * @Author hupeng <610796224@qq.com>
+ * @Date 2019/10/12
+ **/
 @Data
-public class YxStoreCategorySmallDTO implements Serializable {
+public class DetailDto {
+    private List<String> data;
 
-    // 商品分类表ID
-    private Integer id;
+    //private List<Map<String,List<Map<String,String>>>> res;
 
-
-    // 分类名称
-    private String cateName;
-
-
-
+    private List<Map<String,Map<String,String>>> res;
 }

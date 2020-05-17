@@ -9,7 +9,7 @@
 package co.yixiang.modules.shop.service;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.shop.domain.YxStoreProduct;
-import co.yixiang.modules.shop.service.dto.ProductFormatDTO;
+import co.yixiang.modules.shop.service.dto.ProductFormatDto;
 import co.yixiang.modules.shop.service.dto.YxStoreProductDto;
 import co.yixiang.modules.shop.service.dto.YxStoreProductQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -51,7 +51,7 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
 
     void onSale(Integer id, int status);
 
-    List<ProductFormatDTO> isFormatAttr(Integer id, String jsonStr);
+    List<ProductFormatDto> isFormatAttr(Integer id, String jsonStr);
 
     void createProductAttr(Integer id, String jsonStr);
 

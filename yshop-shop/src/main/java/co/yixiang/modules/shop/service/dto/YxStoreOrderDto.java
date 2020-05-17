@@ -33,7 +33,7 @@ public class YxStoreOrderDto implements Serializable {
     //订单类型
     private String pinkName;
 
-    private List<StoreOrderCartInfoDTO> cartInfoList;
+    private List<StoreOrderCartInfoDto> cartInfoList;
 
 
     // 订单号

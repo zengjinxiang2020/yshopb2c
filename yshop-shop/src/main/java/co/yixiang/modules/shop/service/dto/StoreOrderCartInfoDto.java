@@ -10,19 +10,34 @@ package co.yixiang.modules.shop.service.dto;
 
 import lombok.Data;
 
-import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName DetailDTO
+ * @ClassName StoreOrderCartInfo
  * @Author hupeng <610796224@qq.com>
- * @Date 2019/10/12
+ * @Date 2019/10/14
  **/
+
+
 @Data
-public class DetailDTO {
-    private List<String> data;
+public class StoreOrderCartInfoDto {
 
-    //private List<Map<String,List<Map<String,String>>>> res;
 
-    private List<Map<String,Map<String,String>>> res;
+    private Integer id;
+
+
+    private Integer oid;
+
+
+    private Integer cartId;
+
+
+    private String cartInfo;
+
+
+    private String unique;
+
+    private Map<String,Object> cartInfoMap;
+
+
 }

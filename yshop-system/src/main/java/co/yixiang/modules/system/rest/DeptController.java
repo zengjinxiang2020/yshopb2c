@@ -18,6 +18,7 @@ import co.yixiang.modules.system.service.DeptService;
 import co.yixiang.modules.system.service.dto.DeptDto;
 import co.yixiang.modules.system.service.dto.DeptQueryCriteria;
 import co.yixiang.utils.ThrowableUtil;
+import co.yixiang.utils.ValidationUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -91,6 +92,13 @@ public class DeptController {
     @PutMapping
     @PreAuthorize("@el.check('admin','dept:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Dept resources){
+        if(resources.getId().equals(resources.getPid())) {
+            throw new BadRequestException("上级不能为自己");
+        }
+        Dept dept = deptService.getOne(new QueryWrapper<Dept>().lambda()
+                .eq(Dept::getId,resources.getId()));
+        ValidationUtil.isNull( dept.getId(),"Dept","id",resources.getId());
+        resources.setId(dept.getId());
         deptService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

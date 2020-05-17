@@ -10,26 +10,22 @@ package co.yixiang.modules.shop.service.dto;
 
 import lombok.Data;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-
+import java.util.List;
 
 /**
-* @author hupeng
-* @date 2019-10-04
-*/
+ * @ClassName FromatDetailDTO
+ * @Author hupeng <610796224@qq.com>
+ * @Date 2019/10/12
+ **/
+
 @Data
-public class YxStoreProductSmallDTO implements Serializable {
+public class FromatDetailDto {
+    private  boolean attrHidden;
 
-    // 商品id
-    private Integer id;
+    private  String detailValue;
 
-    // 商品图片
-    private String image;
+    private List<String> detail;
 
-
-    // 商品名称
-    private String storeName;
-
+    private String value;
 
 }

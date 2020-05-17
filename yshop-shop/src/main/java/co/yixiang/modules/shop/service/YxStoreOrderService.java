@@ -10,7 +10,7 @@ package co.yixiang.modules.shop.service;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.shop.domain.YxStoreOrder;
 import co.yixiang.modules.shop.service.dto.OrderCountDto;
-import co.yixiang.modules.shop.service.dto.OrderTimeDataDTO;
+import co.yixiang.modules.shop.service.dto.OrderTimeDataDto;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderDto;
 import co.yixiang.modules.shop.service.dto.YxStoreOrderQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -63,7 +63,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
 
     OrderCountDto getOrderCount();
 
-    OrderTimeDataDTO getOrderTimeData();
+    OrderTimeDataDto getOrderTimeData();
 
     Map<String,Object> chartCount();
 }

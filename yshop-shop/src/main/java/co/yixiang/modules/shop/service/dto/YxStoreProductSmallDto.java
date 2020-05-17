@@ -16,22 +16,20 @@ import java.math.BigDecimal;
 
 /**
 * @author hupeng
-* @date 2019-10-06
+* @date 2019-10-04
 */
 @Data
-public class YxUserSmallDTO implements Serializable {
+public class YxStoreProductSmallDto implements Serializable {
 
-    // 用户id
-    private Integer uid;
+    // 商品id
+    private Integer id;
 
-    // 用户昵称
-    private String nickname;
+    // 商品图片
+    private String image;
 
-    // 用户头像
-    private String avatar;
 
-    // 手机号码
-    private String phone;
+    // 商品名称
+    private String storeName;
 
 
 }
