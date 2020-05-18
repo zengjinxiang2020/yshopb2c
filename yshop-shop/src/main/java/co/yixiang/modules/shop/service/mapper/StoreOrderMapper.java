@@ -26,9 +26,10 @@ import java.util.List;
 @Mapper
 public interface StoreOrderMapper extends CoreMapper<YxStoreOrder> {
 
-// todo   Integer countByPayTimeGreaterThanEqual(int today);
-//
-//   todo  Integer countByPayTimeLessThanAndPayTimeGreaterThanEqual(int today, int yesterday);
+    @Select("SELECT COUNT(*) FROM yx_store_order WHERE pay_time >= ${today}")
+    Integer countByPayTimeGreaterThanEqual(@Param("today")int today);
+    @Select("SELECT COUNT(*) FROM yx_store_order WHERE pay_time < ${today}  and pay_time >= ${yesterday}")
+    Integer countByPayTimeLessThanAndPayTimeGreaterThanEqual(@Param("today")int today, @Param("yesterday")int yesterday);
     @Select( "select IFNULL(sum(pay_price),0)  from yx_store_order " +
             "where refund_status=0 and is_del=0 and paid=1")
     Double sumTotalPrice();

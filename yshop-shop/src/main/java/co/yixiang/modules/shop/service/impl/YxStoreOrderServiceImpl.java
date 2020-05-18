@@ -114,18 +114,18 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 .beginOfMonth(new Date()));
         OrderTimeDataDto orderTimeDataDTO = new OrderTimeDataDto();
 
-//  todo      orderTimeDataDTO.setTodayCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(today));
-//        //orderTimeDataDTO.setTodayPrice(yxStoreOrderMapper.sumPrice(today));
-//
-//   todo     orderTimeDataDTO.setProCount(yxStoreOrderMapper
-//                .countByPayTimeLessThanAndPayTimeGreaterThanEqual(today,yesterday));
-//        //orderTimeDataDTO.setProPrice(yxStoreOrderMapper.sumTPrice(today,yesterday));
-//
-// todo       orderTimeDataDTO.setLastWeekCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(lastWeek));
-//        //orderTimeDataDTO.setLastWeekPrice(yxStoreOrderMapper.sumPrice(lastWeek));
-//
-//  todo       orderTimeDataDTO.setMonthCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(nowMonth));
-//        //orderTimeDataDTO.setMonthPrice(yxStoreOrderMapper.sumPrice(nowMonth));
+        orderTimeDataDTO.setTodayCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(today));
+        //orderTimeDataDTO.setTodayPrice(yxStoreOrderMapper.sumPrice(today));
+
+        orderTimeDataDTO.setProCount(yxStoreOrderMapper
+                .countByPayTimeLessThanAndPayTimeGreaterThanEqual(today,yesterday));
+        //orderTimeDataDTO.setProPrice(yxStoreOrderMapper.sumTPrice(today,yesterday));
+
+        orderTimeDataDTO.setLastWeekCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(lastWeek));
+        //orderTimeDataDTO.setLastWeekPrice(yxStoreOrderMapper.sumPrice(lastWeek));
+
+        orderTimeDataDTO.setMonthCount(yxStoreOrderMapper.countByPayTimeGreaterThanEqual(nowMonth));
+        //orderTimeDataDTO.setMonthPrice(yxStoreOrderMapper.sumPrice(nowMonth));
 
         orderTimeDataDTO.setUserCount(userMapper.selectCount(new QueryWrapper<YxUser>()));
         orderTimeDataDTO.setOrderCount(yxStoreOrderMapper.selectCount(new QueryWrapper<YxStoreOrder>()));
