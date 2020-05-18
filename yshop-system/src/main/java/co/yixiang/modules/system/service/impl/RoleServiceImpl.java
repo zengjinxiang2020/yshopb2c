@@ -17,6 +17,7 @@ import co.yixiang.modules.system.service.dto.UserDto;
 import co.yixiang.modules.system.service.mapper.DeptMapper;
 import co.yixiang.modules.system.service.mapper.MenuMapper;
 import co.yixiang.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
 import lombok.AllArgsConstructor;
@@ -180,7 +181,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 rolesMenus.setMenuId(i.getId());
                 return rolesMenus;
             }).collect(Collectors.toList());
-            rolesMenusService.saveOrUpdateBatch(rolesMenusList);
+            rolesMenusService.remove(new LambdaQueryWrapper<RolesMenus>().eq(RolesMenus::getRoleId,resources.getId()));
+            rolesMenusService.saveBatch(rolesMenusList);
         }
     }
 
@@ -200,6 +202,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 rolesDepts.setDeptId(i.getId());
                 return rolesDepts;
             }).collect(Collectors.toList());
+            rolesDeptsService.remove(new LambdaQueryWrapper<RolesDepts>().eq(RolesDepts::getRoleId,resources.getId()));
             rolesDeptsService.saveBatch(rolesDeptsList);
         }
         this.save(resources);
@@ -231,7 +234,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 rolesDepts.setDeptId(i.getId());
                 return rolesDepts;
             }).collect(Collectors.toList());
-            rolesDeptsService.saveOrUpdateBatch(rolesDeptsList);
+            rolesDeptsService.remove(new LambdaQueryWrapper<RolesDepts>().eq(RolesDepts::getRoleId,resources.getId()));
+            rolesDeptsService.saveBatch(rolesDeptsList);
         }
         role.setLevel(resources.getLevel());
         role.setPermission(resources.getPermission());
