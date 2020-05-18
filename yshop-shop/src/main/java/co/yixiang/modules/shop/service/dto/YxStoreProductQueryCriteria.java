@@ -18,4 +18,15 @@ import co.yixiang.annotation.Query;
 */
 @Data
 public class YxStoreProductQueryCriteria{
+
+    // 模糊
+    @Query(type = Query.Type.INNER_LIKE)
+    private String storeName;
+
+    // 精确
+    @Query
+    private Integer isDel;
+
+    @Query
+    private Integer isShow;
 }

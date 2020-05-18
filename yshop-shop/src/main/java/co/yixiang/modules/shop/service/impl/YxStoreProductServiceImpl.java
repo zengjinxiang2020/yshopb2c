@@ -271,6 +271,11 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     }
 
     @Override
+    public void delete(Integer id) {
+        storeProductMapper.updateDel(1,id);
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public void clearProductAttr(Integer id,boolean isActice) {
         if(ObjectUtil.isNull(id)) throw new BadRequestException("产品不存在");

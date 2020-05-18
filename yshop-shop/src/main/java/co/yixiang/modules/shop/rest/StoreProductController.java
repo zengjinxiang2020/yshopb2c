@@ -84,7 +84,7 @@ public class StoreProductController {
     @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxStoreProductService.removeById(id);
+        yxStoreProductService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 

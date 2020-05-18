@@ -64,4 +64,6 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
     String getStoreProductAttrResult(Integer id);
 
     void updateProduct(YxStoreProduct resources);
+
+    void delete(Integer id);
 }

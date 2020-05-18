@@ -24,8 +24,9 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
 
-    @Update("update yx_store_product set is_show = #{i} where id = #{id}")
-    void updateDel(@Param("i")int i,@Param("id") Integer id);
-    @Update("update yx_store_product set is_del = #{i} where id = #{id}")
-    void updateOnsale(@Param("i")int i, @Param("id")Integer id);
+
+    @Update("update yx_store_product set is_del = #{status} where id = #{id}")
+    void updateDel(@Param("status")int status,@Param("id") Integer id);
+    @Update("update yx_store_product set is_show = #{status} where id = #{id}")
+    void updateOnsale(@Param("status")int status, @Param("id")Integer id);
 }
