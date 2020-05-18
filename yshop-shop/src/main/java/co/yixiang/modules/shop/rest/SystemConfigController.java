@@ -20,6 +20,7 @@ import co.yixiang.mp.config.WxPayConfiguration;
 import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -63,7 +64,8 @@ public class SystemConfigController {
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         jsonObject.forEach(
                 (key,value)->{
-                    YxSystemConfig yxSystemConfig = yxSystemConfigService.getOne(new QueryWrapper<YxSystemConfig>().eq("key",key));
+                    YxSystemConfig yxSystemConfig = yxSystemConfigService.getOne(new LambdaQueryWrapper<YxSystemConfig>()
+                            .eq(YxSystemConfig::getMenuName,key));
                     YxSystemConfig yxSystemConfigModel = new YxSystemConfig();
                     yxSystemConfigModel.setMenuName(key);
                     yxSystemConfigModel.setValue(value.toString());

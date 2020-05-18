@@ -103,6 +103,6 @@ public class YxWechatReplyServiceImpl extends BaseServiceImpl<WechatReplyMapper,
             throw new EntityExistException(YxWechatReply.class,"key",resources.getKey());
         }
         yxWechatReply.copy(resources);
-        this.save(yxWechatReply);
+        this.saveOrUpdate(yxWechatReply);
     }
 }

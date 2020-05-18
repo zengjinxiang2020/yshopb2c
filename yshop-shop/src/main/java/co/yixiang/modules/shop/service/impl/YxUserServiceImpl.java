@@ -8,9 +8,13 @@
  */
 package co.yixiang.modules.shop.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import co.yixiang.modules.shop.domain.YxUser;
 import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.modules.shop.domain.YxUserBill;
+import co.yixiang.modules.shop.service.YxUserBillService;
 import co.yixiang.modules.shop.service.dto.UserMoneyDto;
+import co.yixiang.utils.OrderUtil;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
@@ -29,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -49,6 +54,8 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
     private final IGenerator generator;
 
     private final UserMapper yxUserMapper;
+
+    private final YxUserBillService yxUserBillService;
 
     @Override
     //@Cacheable
@@ -127,7 +134,42 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateMoney(UserMoneyDto param) {
-      //todo 修改用余额
+        YxUserDto userDTO = generator.convert(getById(param.getUid()),YxUserDto.class);
+        Double newMoney = 0d;
+        String mark = "";
+        String type = "system_add";
+        Integer pm = 1;
+        String title = "系统增加余额";
+        if(param.getPtype() == 1){
+            mark = "系统增加了"+param.getMoney()+"余额";
+            newMoney = NumberUtil.add(userDTO.getNowMoney(),param.getMoney()).doubleValue();
+        }else{
+            title = "系统减少余额";
+            mark = "系统扣除了"+param.getMoney()+"余额";
+            type = "system_sub";
+            pm = 0;
+            newMoney = NumberUtil.sub(userDTO.getNowMoney(),param.getMoney()).doubleValue();
+            if(newMoney < 0) newMoney = 0d;
+
+        }
+        YxUser user = new YxUser();
+        user.setUid(userDTO.getUid());
+        user.setNowMoney(BigDecimal.valueOf(newMoney));
+        saveOrUpdate(user);
+
+        YxUserBill userBill = new YxUserBill();
+        userBill.setUid(userDTO.getUid());
+        userBill.setLinkId("0");
+        userBill.setPm(pm);
+        userBill.setTitle(title);
+        userBill.setCategory("now_money");
+        userBill.setType(type);
+        userBill.setNumber(BigDecimal.valueOf(param.getMoney()));
+        userBill.setBalance(BigDecimal.valueOf(newMoney));
+        userBill.setMark(mark);
+        userBill.setAddTime(OrderUtil.getSecondTimestampTwo());
+        userBill.setStatus(1);
+        yxUserBillService.save(userBill);
     }
 
     @Override
