@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -34,21 +36,26 @@ public class YxArticle implements Serializable {
 
 
     /** 文章标题 */
+    @NotBlank(message = "请输入文章标题")
     private String title;
 
 
     /** 文章作者 */
+    @NotBlank(message = "请输入文章作者")
     private String author;
 
 
     /** 文章图片 */
+    @NotBlank(message = "请上传文章图片")
     private String imageInput;
 
 
     /** 文章简介 */
+    @NotBlank(message = "请填写文章简介")
     private String synopsis;
 
 
+    @NotBlank(message = "请填写文章详情")
     private String content;
 
 

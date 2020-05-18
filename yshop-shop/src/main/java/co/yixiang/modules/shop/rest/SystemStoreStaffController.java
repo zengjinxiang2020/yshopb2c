@@ -10,10 +10,13 @@ package co.yixiang.modules.shop.rest;
 
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.modules.shop.domain.YxSystemStore;
 import co.yixiang.modules.shop.domain.YxSystemStoreStaff;
+import co.yixiang.modules.shop.service.YxSystemStoreService;
 import co.yixiang.modules.shop.service.YxSystemStoreStaffService;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreStaffDto;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreStaffQueryCriteria;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Pageable;
@@ -38,10 +41,12 @@ import java.util.Arrays;
 public class SystemStoreStaffController {
 
     private final YxSystemStoreStaffService yxSystemStoreStaffService;
+    private final YxSystemStoreService yxSystemStoreService;
 
     private final IGenerator generator;
 
-    public SystemStoreStaffController(YxSystemStoreStaffService yxSystemStoreStaffService, IGenerator generator) {
+    public SystemStoreStaffController(YxSystemStoreService yxSystemStoreService,YxSystemStoreStaffService yxSystemStoreStaffService, IGenerator generator) {
+        this.yxSystemStoreService = yxSystemStoreService;
         this.yxSystemStoreStaffService = yxSystemStoreStaffService;
         this.generator = generator;
     }
@@ -67,6 +72,9 @@ public class SystemStoreStaffController {
     @ApiOperation("新增门店店员")
     @PreAuthorize("@el.check('yxSystemStoreStaff:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody YxSystemStoreStaff resources){
+        YxSystemStore systemStore = yxSystemStoreService.getOne(Wrappers.<YxSystemStore>lambdaQuery()
+                .eq(YxSystemStore::getId,resources.getStoreId()));
+        resources.setStoreName(systemStore.getName());
         return new ResponseEntity<>(yxSystemStoreStaffService.save(resources),HttpStatus.CREATED);
     }
 
@@ -75,6 +83,9 @@ public class SystemStoreStaffController {
     @ApiOperation("修改门店店员")
     @PreAuthorize("@el.check('yxSystemStoreStaff:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody YxSystemStoreStaff resources){
+        YxSystemStore systemStore = yxSystemStoreService.getOne(Wrappers.<YxSystemStore>lambdaQuery()
+                .eq(YxSystemStore::getId,resources.getStoreId()));
+        resources.setStoreName(systemStore.getName());
         yxSystemStoreStaffService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

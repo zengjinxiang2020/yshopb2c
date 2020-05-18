@@ -231,7 +231,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     @Transactional(rollbackFor = Exception.class)
     public YxStoreOrderDto create(YxStoreOrder resources) {
-        if(this.getOne(new QueryWrapper<YxStoreOrder>().eq("unique",resources.getUnique())) != null){
+        if(this.getOne(new QueryWrapper<YxStoreOrder>().eq("`unique`",resources.getUnique())) != null){
             throw new EntityExistException(YxStoreOrder.class,"unique",resources.getUnique());
         }
         this.save(resources);
@@ -242,7 +242,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Transactional(rollbackFor = Exception.class)
     public void update(YxStoreOrder resources) {
         YxStoreOrder yxStoreOrder = this.getById(resources.getId());
-        YxStoreOrder yxStoreOrder1 = this.getOne(new QueryWrapper<YxStoreOrder>().eq("unique",resources.getUnique()));
+        YxStoreOrder yxStoreOrder1 = this.getOne(new QueryWrapper<YxStoreOrder>().eq("`unique`",resources.getUnique()));
         if(yxStoreOrder1 != null && !yxStoreOrder1.getId().equals(yxStoreOrder.getId())){
             throw new EntityExistException(YxStoreOrder.class,"unique",resources.getUnique());
         }
@@ -422,7 +422,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             //修改状态
             resources.setRefundStatus(2);
             resources.setRefundPrice(resources.getPayPrice());
-            this.save(resources);
+            this.updateById(resources);
 
             //退款到余额
             YxUserDto userDTO = generator.convert(userService.getOne(new QueryWrapper<YxUser>().eq("uid",resources.getUid())),YxUserDto.class);

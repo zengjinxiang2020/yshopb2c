@@ -281,6 +281,7 @@ public class StoreOrderController {
         String url = StrUtil.format(apiUrl+"/order/admin/order_verific/{}", resources.getVerifyCode());
         String text = rest.getForObject(url, String.class);
 
+
         JSONObject jsonObject = JSON.parseObject(text);
 
         Integer status = jsonObject.getInteger("status");

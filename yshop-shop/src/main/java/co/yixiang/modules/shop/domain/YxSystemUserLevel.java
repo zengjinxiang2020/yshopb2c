@@ -11,6 +11,9 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.io.Serializable;
 
@@ -32,6 +35,7 @@ public class YxSystemUserLevel implements Serializable {
 
 
     /** 会员名称 */
+    @NotBlank(message = "名称必填")
     private String name;
 
 
@@ -56,17 +60,21 @@ public class YxSystemUserLevel implements Serializable {
 
 
     /** 会员等级 */
+    @NotNull(message = "请输入会员等级")
     private Integer grade;
 
 
     /** 享受折扣 */
+    @NotNull(message = "请输入会员折扣")
     private BigDecimal discount;
 
     /** 会员卡背景 */
+    @NotBlank(message = "请上传会员背景")
     private String image;
 
 
     /** 会员图标 */
+    @NotBlank(message = "请上传会员图标")
     private String icon;
 
 

@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
@@ -32,6 +34,7 @@ public class YxStoreCategory implements Serializable {
 
 
     /** 分类名称 */
+    @NotBlank(message = "分类名称必填")
     private String cateName;
 
 

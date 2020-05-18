@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
 import java.io.Serializable;
@@ -33,14 +35,17 @@ public class YxStoreSeckill implements Serializable {
 
 
     /** 推荐图 */
+    @NotBlank(message = "请上传商品图片")
     private String image;
 
 
     /** 轮播图 */
+    @NotBlank(message = "请上传商品轮播")
     private String images;
 
 
     /** 活动标题 */
+    @NotBlank(message = "请填写秒杀名称")
     private String title;
 
 
@@ -49,6 +54,9 @@ public class YxStoreSeckill implements Serializable {
 
 
     /** 价格 */
+    @NotNull(message = "请输入秒杀价")
+    @DecimalMin(value="0.00", message = "秒杀价不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "秒杀价不在合法范围内")
     private BigDecimal price;
 
 
@@ -69,6 +77,8 @@ public class YxStoreSeckill implements Serializable {
 
 
     /** 库存 */
+    @NotNull(message = "请输入库存")
+    @Min(message = "库存不能小于0",value = 1)
     private Integer stock;
 
 
@@ -85,6 +95,7 @@ public class YxStoreSeckill implements Serializable {
 
 
     /** 内容 */
+    @NotBlank(message = "请填写详情")
     private String description;
 
 
@@ -117,20 +128,23 @@ public class YxStoreSeckill implements Serializable {
 
 
     /** 最多秒杀几个 */
+    @NotNull(message = "请输入限购")
+    @Min(message = "限购不能小于0",value = 1)
     private Integer num;
 
 
     /** 显示 */
     private Integer isShow;
 
-
+    @NotNull(message = "请选择秒杀结束时间")
     private Timestamp endTimeDate;
 
-
+    @NotNull(message = "请选择秒杀开始时间")
     private Timestamp startTimeDate;
 
 
     /** 时间段id */
+    @NotNull(message = "请选择开始时间")
     private Integer timeId;
 
 

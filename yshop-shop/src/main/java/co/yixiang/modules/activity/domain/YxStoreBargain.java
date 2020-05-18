@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
 import java.io.Serializable;
@@ -33,10 +35,12 @@ public class YxStoreBargain implements Serializable {
 
 
     /** 砍价活动名称 */
+    @NotBlank(message = "请填写砍价名称")
     private String title;
 
 
     /** 砍价活动图片 */
+    @NotBlank(message = "请上传商品图片")
     private String image;
 
 
@@ -45,6 +49,8 @@ public class YxStoreBargain implements Serializable {
 
 
     /** 库存 */
+    @NotNull(message = "请输入库存")
+    @Min(message = "库存不能小于0",value = 1)
     private Integer stock;
 
 
@@ -53,6 +59,7 @@ public class YxStoreBargain implements Serializable {
 
 
     /** 砍价产品轮播图 */
+    @NotBlank(message = "请上传商品轮播")
     private String images;
 
 
@@ -69,26 +76,42 @@ public class YxStoreBargain implements Serializable {
 
 
     /** 砍价金额 */
+    @NotNull(message = "请输入砍价金额")
+    @DecimalMin(value="0.00", message = "砍价金额不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "砍价金额不在合法范围内")
     private BigDecimal price;
 
 
     /** 砍价商品最低价 */
+    @NotNull(message = "请输入砍到最低价")
+    @DecimalMin(value="0.00", message = "砍到最低价不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "砍到最低价不在合法范围内")
     private BigDecimal minPrice;
 
 
     /** 每次购买的砍价产品数量 */
+    @NotNull(message = "请输入限购")
+    @Min(message = "限购不能小于0",value = 1)
     private Integer num;
 
 
     /** 用户每次砍价的最大金额 */
+    @NotNull(message = "请输入单次砍最高价")
+    @DecimalMin(value="0.00", message = "单次砍最高价不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "单次砍最高价不在合法范围内")
     private BigDecimal bargainMaxPrice;
 
 
     /** 用户每次砍价的最小金额 */
+    @NotNull(message = "请输入单次砍最低价")
+    @DecimalMin(value="0.00", message = "单次砍最低价不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "单次砍最低价小金额不在合法范围内")
     private BigDecimal bargainMinPrice;
 
 
     /** 用户每次砍价的次数 */
+    @NotNull(message = "请输入砍价的次数")
+    @Min(message = "砍价的次数不能小于0",value = 1)
     private Integer bargainNum;
 
 
@@ -97,6 +120,7 @@ public class YxStoreBargain implements Serializable {
 
 
     /** 砍价详情 */
+    @NotBlank(message = "请填写详情")
     private String description;
 
 
@@ -137,6 +161,7 @@ public class YxStoreBargain implements Serializable {
 
 
     /** 砍价规则 */
+    @NotBlank(message = "请填写砍价规则")
     private String rule;
 
 
@@ -147,10 +172,10 @@ public class YxStoreBargain implements Serializable {
     /** 砍价产品分享量 */
     private Integer share;
 
-
+    @NotNull(message = "请选择结束时间")
     private Timestamp endTimeDate;
 
-
+    @NotNull(message = "请选择开始时间")
     private Timestamp startTimeDate;
 
 

@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.io.Serializable;
 
@@ -64,9 +66,10 @@ public class YxStoreCouponIssue implements Serializable {
     private Integer addTime;
 
 
+    @NotNull(message = "请选择结束时间")
     private Timestamp endTimeDate;
 
-
+    @NotNull(message = "请选择开始时间")
     private Timestamp startTimeDate;
 
 

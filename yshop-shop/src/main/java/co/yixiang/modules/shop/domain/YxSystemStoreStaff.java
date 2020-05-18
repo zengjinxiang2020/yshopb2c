@@ -11,6 +11,9 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -31,18 +34,22 @@ public class YxSystemStoreStaff implements Serializable {
 
 
     /** 店员头像 */
+    @NotBlank(message = "请选择用户")
     private String avatar;
 
 
     /** 门店id */
+    @NotNull(message = "请选择门店")
     private Integer storeId;
 
 
     /** 店员名称 */
+    @NotBlank(message = "请输入店员名称")
     private String staffName;
 
 
     /** 手机号码 */
+    @NotBlank(message = "请输入手机号码")
     private String phone;
 
 

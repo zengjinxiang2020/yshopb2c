@@ -12,6 +12,11 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.io.Serializable;
 
@@ -34,14 +39,17 @@ public class YxStoreProduct implements Serializable {
 
 
     /** 商品图片 */
+    @NotBlank(message = "请上传商品图片")
     private String image;
 
 
     /** 轮播图 */
+    @NotBlank(message = "请上传商品轮播")
     private String sliderImage;
 
 
     /** 商品名称 */
+    @NotBlank(message = "商品名称不能空")
     private String storeName;
 
 
@@ -58,10 +66,14 @@ public class YxStoreProduct implements Serializable {
 
 
     /** 分类id */
+    @NotBlank(message = "请选择分类")
     private String cateId;
 
 
     /** 商品价格 */
+    @NotNull(message = "请输入商品价格")
+    @DecimalMin(value="0.00", message = "商品价格不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "商品价格不在合法范围内")
     private BigDecimal price;
 
 
@@ -70,6 +82,9 @@ public class YxStoreProduct implements Serializable {
 
 
     /** 市场价 */
+    @NotNull(message = "请输入市场价")
+    @DecimalMin(value="0.00", message = "市场价不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "市场价不在合法范围内")
     private BigDecimal otPrice;
 
 
@@ -78,6 +93,7 @@ public class YxStoreProduct implements Serializable {
 
 
     /** 单位名 */
+    @NotBlank(message = "请填写单位")
     private String unitName;
 
 
@@ -114,6 +130,7 @@ public class YxStoreProduct implements Serializable {
 
 
     /** 产品描述 */
+    @NotBlank(message = "请填写商品详情")
     private String description;
 
 
@@ -134,10 +151,15 @@ public class YxStoreProduct implements Serializable {
 
 
     /** 获得积分 */
+    @DecimalMin(value="0.00", message = "获得积分不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "获得积分不在合法范围内")
     private BigDecimal giveIntegral;
 
 
     /** 成本价 */
+    @NotNull(message = "请输入成本价")
+    @DecimalMin(value="0.00", message = "成本价不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "成本价不在合法范围内")
     private BigDecimal cost;
 
 

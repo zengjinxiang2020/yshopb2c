@@ -11,6 +11,8 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
 import java.io.Serializable;
@@ -36,14 +38,17 @@ public class YxStoreCombination implements Serializable {
 
 
     /** 推荐图 */
+    @NotBlank(message = "请上传商品图片")
     private String image;
 
 
     /** 轮播图 */
+    @NotBlank(message = "请上传商品轮播")
     private String images;
 
 
     /** 活动标题 */
+    @NotBlank(message = "请填写拼团名称")
     private String title;
 
 
@@ -52,6 +57,8 @@ public class YxStoreCombination implements Serializable {
 
 
     /** 参团人数 */
+    @NotNull(message = "请输入拼团人数")
+    @Min(message = "拼团人数小于0",value = 1)
     private Integer people;
 
 
@@ -60,6 +67,9 @@ public class YxStoreCombination implements Serializable {
 
 
     /** 价格 */
+    @NotNull(message = "请输入拼团价")
+    @DecimalMin(value="0.00", message = "拼团价不在合法范围内" )
+    @DecimalMax(value="99999999.99", message = "拼团价不在合法范围内")
     private BigDecimal price;
 
 
@@ -72,6 +82,8 @@ public class YxStoreCombination implements Serializable {
 
 
     /** 库存 */
+    @NotNull(message = "请输入库存")
+    @Min(message = "库存不能小于0",value = 1)
     private Integer stock;
 
 
@@ -106,6 +118,7 @@ public class YxStoreCombination implements Serializable {
 
 
     /** 拼团内容 */
+    @NotBlank(message = "请填写详情")
     private String description;
 
 
@@ -118,6 +131,8 @@ public class YxStoreCombination implements Serializable {
 
 
     /** 拼团订单有效时间 */
+    @NotNull(message = "请输入拼团时效")
+    @Min(message = "拼团时效不能小于0",value = 1)
     private Integer effectiveTime;
 
 
@@ -132,10 +147,10 @@ public class YxStoreCombination implements Serializable {
     /** 单位名 */
     private String unitName;
 
-
+    @NotNull(message = "请选择结束时间")
     private Timestamp endTimeDate;
 
-
+    @NotNull(message = "请选择开始时间")
     private Timestamp startTimeDate;
 
 

@@ -10,6 +10,7 @@ package co.yixiang.modules.shop.service.dto;
 
 import lombok.Data;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
 * @author hupeng
@@ -58,4 +59,13 @@ public class YxSystemStoreDto implements Serializable {
 
     /** 是否删除 */
     private Integer isDel;
+
+    private Date validTimeEnd;
+
+    private Date validTimeStart;
+
+    private Date dayTimeStart;
+
+    private Date dayTimeEnd;
+
 }
