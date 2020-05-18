@@ -8,12 +8,10 @@
 */
 package co.yixiang.modules.system.service.impl;
 
-import co.yixiang.modules.system.domain.Dept;
-import co.yixiang.modules.system.domain.Menu;
-import co.yixiang.modules.system.domain.Role;
+import co.yixiang.exception.EntityExistException;
+import co.yixiang.modules.system.domain.*;
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.modules.system.service.DeptService;
-import co.yixiang.modules.system.service.MenuService;
+import co.yixiang.modules.system.service.*;
 import co.yixiang.modules.system.service.dto.RoleSmallDto;
 import co.yixiang.modules.system.service.dto.UserDto;
 import co.yixiang.modules.system.service.mapper.DeptMapper;
@@ -28,7 +26,6 @@ import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
-import co.yixiang.modules.system.service.RoleService;
 import co.yixiang.modules.system.service.dto.RoleDto;
 import co.yixiang.modules.system.service.dto.RoleQueryCriteria;
 import co.yixiang.modules.system.service.mapper.RoleMapper;
@@ -74,6 +71,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     private final RoleMapper roleMapper;
     private final MenuMapper menuMapper;
     private final DeptMapper deptMapper;
+    private final RolesMenusService rolesMenusService;
+    private final  RolesDeptsService rolesDeptsService;
 
     @Override
     public Map<String, Object> queryAll(RoleQueryCriteria criteria, Pageable pageable) {
@@ -174,11 +173,70 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Override
 //    @CacheEvict(allEntries = true)
     public void updateMenu(Role resources, RoleDto roleDto) {
-        Role role =generator.convert(roleDto,Role.class);
-        role.setMenus(resources.getMenus());
-        this.save(role);
+        if(resources.getMenus().size()>0){
+            List<RolesMenus> rolesMenusList = resources.getMenus().stream().map(i ->{
+                RolesMenus rolesMenus = new RolesMenus();
+                rolesMenus.setRoleId(resources.getId());
+                rolesMenus.setMenuId(i.getId());
+                return rolesMenus;
+            }).collect(Collectors.toList());
+            rolesMenusService.saveOrUpdateBatch(rolesMenusList);
+        }
     }
 
+
+    @Override
+//    @CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public RoleDto create(Role resources) {
+        if(this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName,resources.getName())) != null){
+            throw new EntityExistException(Role.class,"username",resources.getName());
+        }
+
+        if(resources.getDepts().size()>0){
+            List<RolesDepts> rolesDeptsList = resources.getDepts().stream().map(i ->{
+                RolesDepts rolesDepts = new RolesDepts();
+                rolesDepts.setRoleId(resources.getId());
+                rolesDepts.setDeptId(i.getId());
+                return rolesDepts;
+            }).collect(Collectors.toList());
+            rolesDeptsService.saveBatch(rolesDeptsList);
+        }
+        this.save(resources);
+        return generator.convert(resources,RoleDto.class);
+    }
+
+    @Override
+//    @CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public void update(Role resources) {
+        Role role = this.getById(resources.getId());
+
+        Role role1 = this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName,resources.getName()));
+
+        if(role1 != null && !role1.getId().equals(role.getId())){
+            throw new EntityExistException(Role.class,"username",resources.getName());
+        }
+        role1 = this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getPermission,resources.getPermission()));
+        if(role1 != null && !role1.getId().equals(role.getId())){
+            throw new EntityExistException(Role.class,"permission",resources.getPermission());
+        }
+        role.setName(resources.getName());
+        role.setRemark(resources.getRemark());
+        role.setDataScope(resources.getDataScope());
+        if(resources.getDepts().size()>0){
+            List<RolesDepts> rolesDeptsList = resources.getDepts().stream().map(i ->{
+                RolesDepts rolesDepts = new RolesDepts();
+                rolesDepts.setRoleId(resources.getId());
+                rolesDepts.setDeptId(i.getId());
+                return rolesDepts;
+            }).collect(Collectors.toList());
+            rolesDeptsService.saveOrUpdateBatch(rolesDeptsList);
+        }
+        role.setLevel(resources.getLevel());
+        role.setPermission(resources.getPermission());
+        this.saveOrUpdate(role);
+    }
     /**
      * 获取用户权限信息
      *

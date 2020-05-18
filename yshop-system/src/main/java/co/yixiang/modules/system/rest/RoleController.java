@@ -106,7 +106,7 @@ public class RoleController {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
         getLevels(resources.getLevel());
-        return new ResponseEntity<>(roleService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(roleService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改角色")
@@ -116,7 +116,7 @@ public class RoleController {
     public ResponseEntity<Object> update(@Validated @RequestBody Role resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         getLevels(resources.getLevel());
-        roleService.saveOrUpdate(resources);
+        roleService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

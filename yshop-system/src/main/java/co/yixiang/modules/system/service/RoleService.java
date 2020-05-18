@@ -89,6 +89,19 @@ public interface RoleService  extends BaseService<Role>{
     void updateMenu(Role resources, RoleDto roleDto);
 
     /**
+     * 创建
+     * @param resources /
+     * @return /
+     */
+    RoleDto create(Role resources);
+
+    /**
+     * 编辑
+     * @param resources /
+     */
+    void update(Role resources);
+
+    /**
      * 获取用户权限信息
      * @param user 用户信息
      * @return 权限信息
