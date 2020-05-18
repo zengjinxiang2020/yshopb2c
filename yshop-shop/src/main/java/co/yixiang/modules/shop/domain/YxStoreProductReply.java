@@ -83,6 +83,11 @@ public class YxStoreProductReply implements Serializable {
     /** 0未回复1已回复 */
     private Integer isReply;
 
+    @TableField(exist = false)
+    private YxStoreProduct storeProduct;
+
+    @TableField(exist = false)
+    private YxUser user;
 
     public void copy(YxStoreProductReply source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

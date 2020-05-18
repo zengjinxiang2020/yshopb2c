@@ -8,8 +8,12 @@
  */
 package co.yixiang.modules.shop.service.impl;
 
+import co.yixiang.modules.shop.domain.YxStoreProduct;
 import co.yixiang.modules.shop.domain.YxStoreProductReply;
 import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.modules.shop.domain.YxUser;
+import co.yixiang.modules.shop.service.YxStoreProductService;
+import co.yixiang.modules.shop.service.YxUserService;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
@@ -19,6 +23,7 @@ import co.yixiang.modules.shop.service.YxStoreProductReplyService;
 import co.yixiang.modules.shop.service.dto.YxStoreProductReplyDto;
 import co.yixiang.modules.shop.service.dto.YxStoreProductReplyQueryCriteria;
 import co.yixiang.modules.shop.service.mapper.StoreProductReplyMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +39,8 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
 * @author hupeng
@@ -46,6 +53,10 @@ import java.util.LinkedHashMap;
 public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProductReplyMapper, YxStoreProductReply> implements YxStoreProductReplyService {
 
     private final IGenerator generator;
+
+    private final YxUserService yxUserService;
+
+    private final YxStoreProductService yxStoreProductService;
 
     @Override
     //@Cacheable
@@ -62,7 +73,15 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProduct
     @Override
     //@Cacheable
     public List<YxStoreProductReply> queryAll(YxStoreProductReplyQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(YxStoreProductReply.class, criteria));
+        List<YxStoreProductReply> storeProductReplyList =  baseMapper.selectList(QueryHelpPlus.getPredicate(YxStoreProductReply.class, criteria));
+        List<YxStoreProductReply> storeProductReplys = storeProductReplyList.stream().map(i ->{
+            YxStoreProductReply yxStoreProductReply = new YxStoreProductReply();
+            BeanUtils.copyProperties(i,yxStoreProductReply);
+            yxStoreProductReply.setUser(yxUserService.getById(yxStoreProductReply.getUid()));;
+            yxStoreProductReply.setStoreProduct(yxStoreProductService.getById(yxStoreProductReply.getProductId()));
+            return yxStoreProductReply;
+        }).collect(Collectors.toList());
+        return storeProductReplys;
     }
 
 
