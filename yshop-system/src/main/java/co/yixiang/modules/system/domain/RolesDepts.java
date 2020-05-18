@@ -7,12 +7,10 @@
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
 package co.yixiang.modules.system.domain;
-import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.TableName;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import javax.validation.constraints.*;
 import java.io.Serializable;
 
 /**
@@ -23,9 +21,10 @@ import java.io.Serializable;
 @TableName("roles_depts")
 public class RolesDepts implements Serializable {
 
+    /** 角色ID */
     private Long roleId;
 
-
+    /** 部门ID */
     private Long deptId;
 
 

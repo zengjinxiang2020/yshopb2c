@@ -14,7 +14,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import javax.persistence.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
 

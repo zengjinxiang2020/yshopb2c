@@ -162,6 +162,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Override
     public RoleDto findById(long id) {
         Role role = this.getById(id);
+        role.setMenus(menuMapper.findMenuByRoleId(role.getId()));
+        role.setDepts(deptMapper.findDeptByRoleId(role.getId()));
         return generator.convert(role, RoleDto.class);
     }
 
@@ -195,6 +197,10 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
             throw new EntityExistException(Role.class,"username",resources.getName());
         }
 
+        if(this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName,resources.getName())) != null){
+            throw new EntityExistException(Role.class,"username",resources.getName());
+        }
+        this.save(resources);
         if(resources.getDepts().size()>0){
             List<RolesDepts> rolesDeptsList = resources.getDepts().stream().map(i ->{
                 RolesDepts rolesDepts = new RolesDepts();
@@ -202,10 +208,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 rolesDepts.setDeptId(i.getId());
                 return rolesDepts;
             }).collect(Collectors.toList());
-            rolesDeptsService.remove(new LambdaQueryWrapper<RolesDepts>().eq(RolesDepts::getRoleId,resources.getId()));
             rolesDeptsService.saveBatch(rolesDeptsList);
         }
-        this.save(resources);
         return generator.convert(resources,RoleDto.class);
     }
 

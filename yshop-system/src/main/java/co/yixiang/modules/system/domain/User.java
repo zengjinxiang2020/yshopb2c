@@ -8,7 +8,6 @@
 */
 package co.yixiang.modules.system.domain;
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.FieldFill;
@@ -16,9 +15,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
 import java.util.Set;
