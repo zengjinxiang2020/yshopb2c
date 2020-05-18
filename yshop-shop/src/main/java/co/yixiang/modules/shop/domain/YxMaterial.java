@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class YxMaterial implements Serializable {
 
     /** PK */
-    @TableId
+    @TableId(type = IdType.UUID)
     private String id;
 
     /** 逻辑删除标记（0：显示；1：隐藏） */

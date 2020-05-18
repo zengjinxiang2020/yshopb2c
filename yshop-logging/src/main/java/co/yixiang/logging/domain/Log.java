@@ -34,6 +34,9 @@ public class Log  implements Serializable {
     /** 操作用户 */
     private String username;
 
+    @TableField(exist = false)
+    private String nickname;
+
     /** 描述 */
     private String description;
 
