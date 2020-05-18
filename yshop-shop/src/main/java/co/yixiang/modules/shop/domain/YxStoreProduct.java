@@ -7,6 +7,7 @@
  * 一经发现盗用、分享等行为，将追究法律责任，后果自负
  */
 package co.yixiang.modules.shop.domain;
+import co.yixiang.annotation.Query;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
@@ -166,6 +167,9 @@ public class YxStoreProduct implements Serializable {
 
     /** 淘宝京东1688类型 */
     private String soureLink;
+
+    @TableField(exist = false)
+    private YxStoreCategory storeCategory;
 
 
     public void copy(YxStoreProduct source){

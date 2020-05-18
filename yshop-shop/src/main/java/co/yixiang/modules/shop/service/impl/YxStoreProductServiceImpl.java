@@ -17,9 +17,7 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.domain.YxStoreProductAttr;
 import co.yixiang.modules.shop.domain.YxStoreProductAttrResult;
 import co.yixiang.modules.shop.domain.YxStoreProductAttrValue;
-import co.yixiang.modules.shop.service.YxStoreProductAttrResultService;
-import co.yixiang.modules.shop.service.YxStoreProductAttrService;
-import co.yixiang.modules.shop.service.YxStoreProductAttrValueService;
+import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.service.dto.*;
 import co.yixiang.utils.*;
 import com.alibaba.fastjson.JSON;
@@ -29,8 +27,8 @@ import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.mapper.StoreProductMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +58,8 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
     private final StoreProductMapper storeProductMapper;
 
+    private final YxStoreCategoryService yxStoreCategoryService;
+
     private final YxStoreProductAttrService yxStoreProductAttrService;
 
     private final YxStoreProductAttrValueService yxStoreProductAttrValueService;
@@ -80,7 +80,14 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     @Override
     //@Cacheable
     public List<YxStoreProduct> queryAll(YxStoreProductQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(YxStoreProduct.class, criteria));
+        List<YxStoreProduct> yxStoreProductList = baseMapper.selectList(QueryHelpPlus.getPredicate(YxStoreProduct.class, criteria));
+        List<YxStoreProduct> storeProductList  = yxStoreProductList.stream().map(i ->{
+            YxStoreProduct yxStoreProduct = new YxStoreProduct();
+            BeanUtils.copyProperties(i,yxStoreProduct);
+            yxStoreProduct.setStoreCategory(yxStoreCategoryService.getById(i.getCateId()));
+            return yxStoreProduct;
+        }).collect(Collectors.toList());
+        return storeProductList;
     }
 
 
@@ -127,6 +134,13 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public YxStoreProduct saveProduct(YxStoreProduct storeProduct) {
+        storeProduct.setCateId(storeProduct.getStoreCategory().getId().toString());
+        this.save(storeProduct);
+        return storeProduct;
     }
 
     @Override
@@ -248,6 +262,12 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                 .getOne(new QueryWrapper<YxStoreProductAttrResult>().eq("product_id",id));
         if(ObjectUtil.isNull(yxStoreProductAttrResult)) return "";
         return  yxStoreProductAttrResult.getResult();
+    }
+
+    @Override
+    public void updateProduct(YxStoreProduct resources) {
+        resources.setCateId(resources.getStoreCategory().getId().toString());
+        this.saveOrUpdate(resources);
     }
 
     @Override

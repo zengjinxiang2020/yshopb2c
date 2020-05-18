@@ -63,7 +63,7 @@ public class StoreProductController {
         resources.setAddTime(OrderUtil.getSecondTimestampTwo());
         if(ObjectUtil.isEmpty(resources.getGiveIntegral())) resources.setGiveIntegral(BigDecimal.ZERO);
         if(ObjectUtil.isEmpty(resources.getCost())) resources.setCost(BigDecimal.ZERO);
-        return new ResponseEntity(yxStoreProductService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity(yxStoreProductService.saveProduct(resources),HttpStatus.CREATED);
     }
 
     @Log("修改商品")
@@ -73,7 +73,7 @@ public class StoreProductController {
     @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreProduct resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxStoreProductService.saveOrUpdate(resources);
+        yxStoreProductService.updateProduct(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

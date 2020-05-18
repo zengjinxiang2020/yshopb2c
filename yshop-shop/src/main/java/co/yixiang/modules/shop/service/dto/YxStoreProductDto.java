@@ -126,4 +126,6 @@ public class YxStoreProductDto implements Serializable {
 
     /** 淘宝京东1688类型 */
     private String soureLink;
+
+    private YxStoreCategorySmallDto storeCategory;
 }

@@ -47,6 +47,8 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
     */
     void download(List<YxStoreProductDto> all, HttpServletResponse response) throws IOException;
 
+    YxStoreProduct saveProduct(YxStoreProduct storeProduct);
+
     void recovery(Integer id);
 
     void onSale(Integer id, int status);
@@ -60,4 +62,6 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
     void setResult(Map<String, Object> map,Integer id);
 
     String getStoreProductAttrResult(Integer id);
+
+    void updateProduct(YxStoreProduct resources);
 }
