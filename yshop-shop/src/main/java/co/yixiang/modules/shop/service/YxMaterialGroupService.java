@@ -1,5 +1,13 @@
+/**
+ * Copyright (C) 2018-2020
+ * All rights reserved, Designed By www.yixiang.co
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
+ */
 package co.yixiang.modules.shop.service;
-
+import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.shop.domain.YxMaterialGroup;
 import co.yixiang.modules.shop.service.dto.YxMaterialGroupDto;
 import co.yixiang.modules.shop.service.dto.YxMaterialGroupQueryCriteria;
@@ -11,11 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
 * @author hupeng
-* @date 2020-01-09
+* @date 2020-05-12
 */
-public interface YxMaterialGroupService {
+public interface YxMaterialGroupService  extends BaseService<YxMaterialGroup>{
 
-    /**
+/**
     * 查询数据分页
     * @param criteria 条件
     * @param pageable 分页参数
@@ -28,35 +36,13 @@ public interface YxMaterialGroupService {
     * @param criteria 条件参数
     * @return List<YxMaterialGroupDto>
     */
-    List<YxMaterialGroupDto> queryAll(YxMaterialGroupQueryCriteria criteria);
+    List<YxMaterialGroup> queryAll(YxMaterialGroupQueryCriteria criteria);
 
     /**
-     * 根据ID查询
-     * @param id ID
-     * @return YxMaterialGroupDto
-     */
-    YxMaterialGroupDto findById(String id);
-
-    /**
-    * 创建
-    * @param resources /
-    * @return YxMaterialGroupDto
+    * 导出数据
+    * @param all 待导出的数据
+    * @param response /
+    * @throws IOException /
     */
-    YxMaterialGroupDto create(YxMaterialGroup resources);
-
-    /**
-    * 编辑
-    * @param resources /
-    */
-    void update(YxMaterialGroup resources);
-
-    /**
-    * 多选删除
-    * @param ids /
-    */
-    void deleteAll(String[] ids);
-
-    void deleteById(String id);
-
-
+    void download(List<YxMaterialGroupDto> all, HttpServletResponse response) throws IOException;
 }

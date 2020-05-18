@@ -1,3 +1,11 @@
+/**
+ * Copyright (C) 2018-2020
+ * All rights reserved, Designed By www.yixiang.co
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
+ */
 package co.yixiang.constant;
 
 /**
@@ -102,8 +110,25 @@ public interface ShopConstants {
 	/**
 	 * 签到天数
 	 */
-	String YSHOP_SIGN_DAY_NUM = "yshop_sign_day_num";
+	String YSHOP_SIGN_DAY_NUM = "sign_day_num";
 
+	/**
+	 * 打印机配置
+	 */
+	String YSHOP_ORDER_PRINT_COUNT = "order_print_count";
+	/**
+	 * 飞蛾用户信息
+	 */
+	String YSHOP_FEI_E_USER = "fei_e_user";
+	/**
+	 * 飞蛾用户密钥
+	 */
+	String YSHOP_FEI_E_UKEY= "fei_e_ukey";
+
+	/**
+	 * 打印机配置
+	 */
+	String YSHOP_ORDER_PRINT_COUNT_DETAIL = "order_print_count_detail";
 
 
 

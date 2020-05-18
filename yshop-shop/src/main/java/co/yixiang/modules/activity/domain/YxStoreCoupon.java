@@ -1,68 +1,67 @@
+/**
+ * Copyright (C) 2018-2020
+ * All rights reserved, Designed By www.yixiang.co
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
+ */
 package co.yixiang.modules.activity.domain;
-
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.Data;
-
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2019-11-09
+* @date 2020-05-13
 */
-@Entity
 @Data
-@Table(name="yx_store_coupon")
+@TableName("yx_store_coupon")
 public class YxStoreCoupon implements Serializable {
 
-    // 优惠券表ID
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    /** 优惠券表ID */
+    @TableId
     private Integer id;
 
-    // 优惠券名称
-    @Column(name = "title",nullable = false)
-    @NotBlank(message = "名称必填")
+
+    /** 优惠券名称 */
     private String title;
 
-    // 兑换消耗积分值
-    @Column(name = "integral",nullable = false)
+
+    /** 兑换消耗积分值 */
     private Integer integral;
 
-    // 兑换的优惠券面值
-    @Column(name = "coupon_price",nullable = false)
-    @Min(value = 1,message = "面值必须大于1")
+
+    /** 兑换的优惠券面值 */
     private BigDecimal couponPrice;
 
-    // 最低消费多少金额可用优惠券
-    @Column(name = "use_min_price",nullable = false)
-    @Min(value = 1,message = "最低消费必须大于1")
+
+    /** 最低消费多少金额可用优惠券 */
     private BigDecimal useMinPrice;
 
-    // 优惠券有效期限（单位：天）
-    @Column(name = "coupon_time",nullable = false)
+
+    /** 优惠券有效期限（单位：天） */
     private Integer couponTime;
 
-    // 排序
-    @Column(name = "sort",nullable = false)
+
+    /** 排序 */
     private Integer sort;
 
-    // 状态（0：关闭，1：开启）
-    @Column(name = "status",nullable = false)
+
+    /** 状态（0：关闭，1：开启） */
     private Integer status;
 
-    // 兑换项目添加时间
-    @Column(name = "add_time",nullable = false)
+
+    /** 兑换项目添加时间 */
     private Integer addTime;
 
-    // 是否删除
-    @Column(name = "is_del",nullable = false,insertable = false)
+
+    /** 是否删除 */
     private Integer isDel;
+
 
     public void copy(YxStoreCoupon source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

@@ -1,155 +1,138 @@
+/**
+ * Copyright (C) 2018-2020
+ * All rights reserved, Designed By www.yixiang.co
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
+ */
 package co.yixiang.modules.activity.domain;
-
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.Data;
-
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+import java.sql.Timestamp;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.io.Serializable;
 
 /**
-* @author xuwenbo
-* @date 2019-12-14
+* @author hupeng
+* @date 2020-05-13
 */
-@Entity
 @Data
-@Table(name="yx_store_seckill")
+@TableName("yx_store_seckill")
 public class YxStoreSeckill implements Serializable {
 
-    // 商品秒杀产品表id
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    /** 商品秒杀产品表id */
+    @TableId
     private Integer id;
 
-    // 商品id
-    @Column(name = "product_id",nullable = false)
+
+    /** 商品id */
     private Integer productId;
 
-    // 推荐图
-    @Column(name = "image",nullable = false)
-    @NotBlank(message = "请上传产品图片")
+
+    /** 推荐图 */
     private String image;
 
-    // 轮播图
-    @Column(name = "images",nullable = false)
-    @NotBlank(message = "请上传产品轮播图")
+
+    /** 轮播图 */
     private String images;
 
-    // 活动标题
-    @Column(name = "title",nullable = false)
-    @NotBlank(message = "请输入产品标题")
+
+    /** 活动标题 */
     private String title;
 
-    // 简介
-    @Column(name = "info",nullable = false)
-    @NotBlank(message = "请输入秒杀简介")
+
+    /** 简介 */
     private String info;
 
-    // 价格
-    @Column(name = "price",nullable = false)
-    @NotNull(message = "秒杀价必填")
-    @Min(value = 0,message = "秒杀价必须大于0")
+
+    /** 价格 */
     private BigDecimal price;
 
-    // 成本
-    @Column(name = "cost",nullable = false)
-    @NotNull(message = "成本价必填")
-    @Min(value = 0,message = "成本价必须大于0")
+
+    /** 成本 */
     private BigDecimal cost;
 
-    // 原价
-    @Column(name = "ot_price",nullable = false)
-    @NotNull(message = "原价必填")
-    @Min(value = 0,message = "原价必须大于0")
+
+    /** 原价 */
     private BigDecimal otPrice;
 
-    // 返多少积分
-    @Column(name = "give_integral",nullable = false)
+
+    /** 返多少积分 */
     private BigDecimal giveIntegral;
 
-    // 排序
-    @Column(name = "sort",nullable = false)
-    @NotNull(message = "排序必填")
+
+    /** 排序 */
     private Integer sort;
 
-    // 库存
-    @Column(name = "stock",nullable = false)
-    @NotNull(message = "库存必填")
+
+    /** 库存 */
     private Integer stock;
 
-    // 销量
-    @Column(name = "sales",nullable = false)
-    @NotNull(message = "销量必填")
+
+    /** 销量 */
     private Integer sales;
 
-    // 单位名
-    @Column(name = "unit_name",nullable = false)
-    @NotBlank(message = "单位名不能为空")
+
+    /** 单位名 */
     private String unitName;
 
-    // 邮费
-    @Column(name = "postage",nullable = false)
-    @NotNull(message = "邮费必填")
+
+    /** 邮费 */
     private BigDecimal postage;
 
-    // 内容
-    @Column(name = "description")
+
+    /** 内容 */
     private String description;
 
-    // 开始时间
-    @Column(name = "start_time",nullable = false)
+
+    /** 开始时间 */
     private Integer startTime;
 
-    // 结束时间
-    @Column(name = "stop_time",nullable = false)
+
+    /** 结束时间 */
     private Integer stopTime;
 
-    @NotNull(message = "开始时间不能为空")
-    private Date startTimeDate;
 
-    @NotNull(message = "结束时间不能为空")
-    private Date endTimeDate;
-
-    // 添加时间
-    @Column(name = "add_time",nullable = false)
+    /** 添加时间 */
     private String addTime;
 
-    // 产品状态
-    @Column(name = "status",nullable = false)
-    @NotNull(message = "活动状态必须选择")
+
+    /** 产品状态 */
     private Integer status;
 
-    // 是否包邮
-    @Column(name = "is_postage",nullable = false)
-    @NotNull(message = "包邮状态必须选择")
+
+    /** 是否包邮 */
     private Integer isPostage;
 
-    // 热门推荐
-    @Column(name = "is_hot",insertable = false)
+
+    /** 热门推荐 */
     private Integer isHot;
 
-    // 删除 0未删除1已删除
-    @Column(name = "is_del",insertable = false)
+
+    /** 删除 0未删除1已删除 */
     private Integer isDel;
 
-    // 最多秒杀几个
-    @Column(name = "num",nullable = false)
-    @NotNull(message = "限购必填")
-    @Min(value = 1,message = "限购必须大于0")
+
+    /** 最多秒杀几个 */
     private Integer num;
 
-    // 显示
-    @Column(name = "is_show",nullable = false)
+
+    /** 显示 */
     private Integer isShow;
 
-    @NotNull(message = "请选择开始时间")
+
+    private Timestamp endTimeDate;
+
+
+    private Timestamp startTimeDate;
+
+
+    /** 时间段id */
     private Integer timeId;
+
 
     public void copy(YxStoreSeckill source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

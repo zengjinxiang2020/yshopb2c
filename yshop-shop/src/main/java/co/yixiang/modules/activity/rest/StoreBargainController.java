@@ -1,9 +1,15 @@
+/**
+ * Copyright (C) 2018-2020
+ * All rights reserved, Designed By www.yixiang.co
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
+ */
 package co.yixiang.modules.activity.rest;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
-import co.yixiang.aop.log.Log;
-import co.yixiang.exception.BadRequestException;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreBargain;
 import co.yixiang.modules.activity.service.YxStoreBargainService;
 import co.yixiang.modules.activity.service.dto.YxStoreBargainQueryCriteria;
@@ -18,7 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
-* @author xuwenbo
+* @author hupeng
 * @date 2019-12-22
 */
 @Api(tags = "商城:砍价管理")
@@ -58,9 +64,9 @@ public class StoreBargainController {
         }
         if(ObjectUtil.isNull(resources.getId())){
             resources.setAddTime(OrderUtil.getSecondTimestampTwo());
-            return new ResponseEntity(yxStoreBargainService.create(resources),HttpStatus.CREATED);
+            return new ResponseEntity(yxStoreBargainService.save(resources),HttpStatus.CREATED);
         }else{
-            yxStoreBargainService.update(resources);
+            yxStoreBargainService.saveOrUpdate(resources);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
     }
@@ -71,7 +77,7 @@ public class StoreBargainController {
     @PreAuthorize("@el.check('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxStoreBargainService.delete(id);
+        yxStoreBargainService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

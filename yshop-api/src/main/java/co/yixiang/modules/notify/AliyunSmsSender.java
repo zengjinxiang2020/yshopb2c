@@ -1,6 +1,6 @@
 package co.yixiang.modules.notify;
 
-import co.yixiang.utils.JacksonUtil;
+import co.yixiang.tools.utils.JacksonUtil;
 import com.aliyuncs.CommonRequest;
 import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;

@@ -1,3 +1,11 @@
+/**
+ * Copyright (C) 2018-2020
+ * All rights reserved, Designed By www.yixiang.co
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
+ */
 package co.yixiang.mp.controller;
 
 
@@ -10,6 +18,7 @@ import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
@@ -41,7 +50,7 @@ public class WechatMenuController {
     @GetMapping(value = "/YxWechatMenu")
     @PreAuthorize("@el.check('admin','YxWechatMenu_ALL','YxWechatMenu_SELECT')")
     public ResponseEntity getYxWechatMenus(){
-        return new ResponseEntity(YxWechatMenuService.findById("wechat_menus"),HttpStatus.OK);
+        return new ResponseEntity(YxWechatMenuService.getOne(new QueryWrapper<YxWechatMenu>().eq("`key`","wechat_menus")),HttpStatus.OK);
     }
 
 
@@ -60,12 +69,12 @@ public class WechatMenuController {
         if(isExist){
             YxWechatMenu.setKey("wechat_menus");
             YxWechatMenu.setResult(jsonButton);
-            YxWechatMenuService.update(YxWechatMenu);
+            YxWechatMenuService.saveOrUpdate(YxWechatMenu);
         }else {
             YxWechatMenu.setKey("wechat_menus");
             YxWechatMenu.setResult(jsonButton);
             YxWechatMenu.setAddTime(OrderUtil.getSecondTimestampTwo());
-            YxWechatMenuService.create(YxWechatMenu);
+            YxWechatMenuService.save(YxWechatMenu);
         }
 
 

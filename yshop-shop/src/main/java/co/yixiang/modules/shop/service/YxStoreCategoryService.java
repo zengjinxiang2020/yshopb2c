@@ -1,80 +1,50 @@
+/**
+ * Copyright (C) 2018-2020
+ * All rights reserved, Designed By www.yixiang.co
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
+ */
 package co.yixiang.modules.shop.service;
-
+import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.shop.domain.YxStoreCategory;
-import co.yixiang.modules.shop.service.dto.YxStoreCategoryDTO;
+import co.yixiang.modules.shop.service.dto.YxStoreCategoryDto;
 import co.yixiang.modules.shop.service.dto.YxStoreCategoryQueryCriteria;
 import org.springframework.data.domain.Pageable;
-
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 
 /**
 * @author hupeng
-* @date 2019-10-03
+* @date 2020-05-12
 */
-//@CacheConfig(cacheNames = "yxStoreCategory")
-public interface YxStoreCategoryService {
+public interface YxStoreCategoryService  extends BaseService<YxStoreCategory>{
 
-    /**
-     * 导出数据
-     * @param queryAll 待导出的数据
-     * @param response /
-     * @throws IOException /
-     */
-    void download(List<YxStoreCategoryDTO> queryAll, HttpServletResponse response) throws IOException;
-
-
-    /**
+/**
     * 查询数据分页
-    * @param criteria
-    * @param pageable
-    * @return
+    * @param criteria 条件
+    * @param pageable 分页参数
+    * @return Map<String,Object>
     */
-    //@Cacheable
     Map<String,Object> queryAll(YxStoreCategoryQueryCriteria criteria, Pageable pageable);
 
     /**
     * 查询所有数据不分页
-    * @param criteria
-    * @return
+    * @param criteria 条件参数
+    * @return List<YxStoreCategoryDto>
     */
-    //@Cacheable
-    List<YxStoreCategoryDTO> queryAll(YxStoreCategoryQueryCriteria criteria);
+    List<YxStoreCategoryDto> queryAll(YxStoreCategoryQueryCriteria criteria);
 
     /**
-     * 根据ID查询
-     * @param id
-     * @return
-     */
-    //@Cacheable(key = "#p0")
-    YxStoreCategoryDTO findById(Integer id);
+    * 导出数据
+    * @param all 待导出的数据
+    * @param response /
+    * @throws IOException /
+    */
+    void download(List<YxStoreCategoryDto> all, HttpServletResponse response) throws IOException;
 
-    YxStoreCategoryDTO findByName(String name);
-
-    /**
-     * 创建
-     * @param resources
-     * @return
-     */
-    //@CacheEvict(allEntries = true)
-    YxStoreCategoryDTO create(YxStoreCategory resources);
-
-    /**
-     * 编辑
-     * @param resources
-     */
-    //@CacheEvict(allEntries = true)
-    void update(YxStoreCategory resources);
-
-    /**
-     * 删除
-     * @param id
-     */
-    //@CacheEvict(allEntries = true)
-    void delete(Integer id);
-
-    Object buildTree(List<YxStoreCategoryDTO> categoryDTOS);
-
+    Object buildTree(List<YxStoreCategoryDto> categoryDTOList);
 }

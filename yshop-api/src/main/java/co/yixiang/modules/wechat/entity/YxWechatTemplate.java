@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  * 微信模板
  * </p>
  *
- * @author xuwenbo
+ * @author hupeng
  * @since 2019-12-10
  */
 @Data

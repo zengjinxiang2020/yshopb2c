@@ -1,91 +1,88 @@
+/**
+ * Copyright (C) 2018-2020
+ * All rights reserved, Designed By www.yixiang.co
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
+ */
 package co.yixiang.modules.shop.domain;
-
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import lombok.Data;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2019-12-04
+* @date 2020-05-12
 */
-@Entity
+
 @Data
-@Table(name="yx_system_user_level")
+@TableName("yx_system_user_level")
 public class YxSystemUserLevel implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @TableId
     private Integer id;
 
-    // 商户id
-    @Column(name = "mer_id",insertable = false)
+
+    /** 商户id */
     private Integer merId;
 
-    // 会员名称
-    @Column(name = "name",nullable = false)
-    @NotBlank(message = "请填写等级名称")
+
+    /** 会员名称 */
     private String name;
 
-    // 购买金额
-    @Column(name = "money",insertable = false)
+
+    /** 购买金额 */
     private BigDecimal money;
 
-    // 有效时间
-    @Column(name = "valid_date",nullable = false)
+
+    /** 有效时间 */
     private Integer validDate;
 
-    // 是否为永久会员
-    @Column(name = "is_forever",nullable = false)
+
+    /** 是否为永久会员 */
     private Integer isForever;
 
-    // 是否购买,1=购买,0=不购买
-    @Column(name = "is_pay",insertable = false)
+
+    /** 是否购买,1=购买,0=不购买 */
     private Integer isPay;
 
-    // 是否显示 1=显示,0=隐藏
-    @Column(name = "is_show",nullable = false)
-    @NotNull(message = "请选择显示状态")
+
+    /** 是否显示 1=显示,0=隐藏 */
     private Integer isShow;
 
-    // 会员等级
-    @Column(name = "grade",nullable = false)
-    @NotNull(message = "等级必填")
+
+    /** 会员等级 */
     private Integer grade;
 
-    // 享受折扣
-    @Column(name = "discount",nullable = false)
-    @NotNull(message = "折扣必填")
+
+    /** 享受折扣 */
     private BigDecimal discount;
 
-    // 会员卡背景
-    @Column(name = "image",nullable = false)
-    @NotBlank(message = "请上传背景")
+    /** 会员卡背景 */
     private String image;
 
-    // 会员图标
-    @Column(name = "icon",nullable = false)
-    @NotBlank(message = "请上传图标")
+
+    /** 会员图标 */
     private String icon;
 
-    // 说明
-    @Column(name = "`explain`",nullable = false)
-    @NotBlank(message = "请填写说明")
+
+    /** 说明 */
+    @TableField(value = "`explain`")
     private String explain;
 
-    // 添加时间
-    @Column(name = "add_time",nullable = false)
+
+    /** 添加时间 */
+    @TableField(fill= FieldFill.INSERT)
     private Integer addTime;
 
-    // 是否删除.1=删除,0=未删除
-    @Column(name = "is_del",insertable = false)
+
+    /** 是否删除.1=删除,0=未删除 */
     private Integer isDel;
+
 
     public void copy(YxSystemUserLevel source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
