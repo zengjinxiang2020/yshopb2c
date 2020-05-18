@@ -1,18 +1,10 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.rest;
 
-import co.yixiang.logging.aop.log.Log;
-import co.yixiang.dozer.service.IGenerator;
+import cn.hutool.core.util.StrUtil;
+import co.yixiang.aop.log.Log;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxUserRecharge;
 import co.yixiang.modules.shop.service.YxUserRechargeService;
-import co.yixiang.modules.shop.service.dto.YxUserRechargeDto;
 import co.yixiang.modules.shop.service.dto.YxUserRechargeQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
 * @author hupeng
@@ -38,10 +28,9 @@ import java.util.Arrays;
 public class UserRechargeController {
 
     private final YxUserRechargeService yxUserRechargeService;
-    private final IGenerator generator;
-    public UserRechargeController(YxUserRechargeService yxUserRechargeService, IGenerator generator) {
+
+    public UserRechargeController(YxUserRechargeService yxUserRechargeService) {
         this.yxUserRechargeService = yxUserRechargeService;
-        this.generator = generator;
     }
 
     @Log("导出数据")
@@ -49,7 +38,7 @@ public class UserRechargeController {
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('yxUserRecharge:list')")
     public void download(HttpServletResponse response, YxUserRechargeQueryCriteria criteria) throws IOException {
-        yxUserRechargeService.download(generator.convert(yxUserRechargeService.queryAll(criteria), YxUserRechargeDto.class), response);
+        yxUserRechargeService.download(yxUserRechargeService.queryAll(criteria), response);
     }
 
     @GetMapping
@@ -65,7 +54,7 @@ public class UserRechargeController {
     @ApiOperation("新增充值管理")
     @PreAuthorize("@el.check('yxUserRecharge:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody YxUserRecharge resources){
-        return new ResponseEntity<>(yxUserRechargeService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(yxUserRechargeService.create(resources),HttpStatus.CREATED);
     }
 
 
@@ -76,7 +65,7 @@ public class UserRechargeController {
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxUserRechargeService.removeByIds(new ArrayList<>(Arrays.asList(ids)));
+        yxUserRechargeService.deleteAll(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

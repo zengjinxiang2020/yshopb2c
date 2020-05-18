@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018-2020
+ * Copyright (C) 2018-2019
  * All rights reserved, Designed By www.yixiang.co
  * 注意：
  * 本软件为www.yixiang.co开发研制，未经购买不得使用
@@ -11,10 +11,11 @@ package co.yixiang.modules.monitor.service.impl;
 import co.yixiang.modules.monitor.domain.Visits;
 import co.yixiang.modules.monitor.repository.VisitsRepository;
 import co.yixiang.modules.monitor.service.VisitsService;
-import co.yixiang.logging.service.mapper.LogMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import co.yixiang.repository.LogRepository;
 import co.yixiang.utils.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 public class VisitsServiceImpl implements VisitsService {
 
     private final VisitsRepository visitsRepository;
-    private final LogMapper logMapper;
+    private final LogRepository logRepository;
 
     @Override
     public void save() {
@@ -54,7 +55,7 @@ public class VisitsServiceImpl implements VisitsService {
         LocalDate localDate = LocalDate.now();
         Visits visits = visitsRepository.findByDate(localDate.toString());
         visits.setPvCounts(visits.getPvCounts()+1);
-        long ipCounts = logMapper.findIp(localDate.toString(), localDate.plusDays(1).toString());
+        long ipCounts = logRepository.findIp(localDate.toString(), localDate.plusDays(1).toString());
         visits.setIpCounts(ipCounts);
         visitsRepository.save(visits);
     }

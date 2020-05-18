@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018-2020
+ * Copyright (C) 2018-2019
  * All rights reserved, Designed By www.yixiang.co
  * 注意：
  * 本软件为www.yixiang.co开发研制，未经购买不得使用
@@ -31,7 +31,7 @@ import java.io.Serializable;
  * 微信模板 服务实现类
  * </p>
  *
- * @author hupeng
+ * @author xuwenbo
  * @since 2019-12-10
  */
 @Slf4j

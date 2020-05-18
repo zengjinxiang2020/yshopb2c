@@ -1,19 +1,13 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.rest;
 
 import cn.hutool.core.util.ObjectUtil;
-import co.yixiang.logging.aop.log.Log;
+import cn.hutool.core.util.StrUtil;
+import co.yixiang.aop.log.Log;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxUser;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.YxUserService;
-import co.yixiang.modules.shop.service.dto.UserMoneyDto;
+import co.yixiang.modules.shop.service.dto.UserMoneyDTO;
 import co.yixiang.modules.shop.service.dto.YxUserQueryCriteria;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -65,7 +59,7 @@ public class MemberController {
     @PostMapping(value = "/yxUser")
     @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxUser resources){
-        return new ResponseEntity(yxUserService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity(yxUserService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改用户")
@@ -73,7 +67,7 @@ public class MemberController {
     @PutMapping(value = "/yxUser")
     @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxUser resources){
-        yxUserService.saveOrUpdate(resources);
+        yxUserService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -83,7 +77,7 @@ public class MemberController {
     @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_DELETE')")
     public ResponseEntity delete(@PathVariable Integer uid){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxUserService.removeById(uid);
+        yxUserService.delete(uid);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -100,7 +94,7 @@ public class MemberController {
     @ApiOperation(value = "修改余额")
     @PostMapping(value = "/yxUser/money")
     @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_EDIT')")
-    public ResponseEntity updatePrice(@Validated @RequestBody UserMoneyDto param){
+    public ResponseEntity updatePrice(@Validated @RequestBody UserMoneyDTO param){
         yxUserService.updateMoney(param);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

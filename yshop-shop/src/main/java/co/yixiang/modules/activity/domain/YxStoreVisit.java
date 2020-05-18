@@ -1,61 +1,57 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.activity.domain;
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
+
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2020-05-13
+* @date 2019-11-18
 */
+@Entity
 @Data
-@TableName("yx_store_visit")
+@Table(name="yx_store_visit")
 public class YxStoreVisit implements Serializable {
 
-    @TableId
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
-
-    /** 产品ID */
+    // 产品ID
+    @Column(name = "product_id")
     private Integer productId;
 
-
-    /** 产品类型 */
+    // 产品类型
+    @Column(name = "product_type")
     private String productType;
 
-
-    /** 产品分类ID */
+    // 产品分类ID
+    @Column(name = "cate_id")
     private Integer cateId;
 
-
-    /** 产品类型 */
+    // 产品类型
+    @Column(name = "type")
     private String type;
 
-
-    /** 用户ID */
+    // 用户ID
+    @Column(name = "uid")
     private Integer uid;
 
-
-    /** 访问次数 */
+    // 访问次数
+    @Column(name = "count")
     private Integer count;
 
-
-    /** 备注描述 */
+    // 备注描述
+    @Column(name = "content")
     private String content;
 
-
-    /** 添加时间 */
+    // 添加时间
+    @Column(name = "add_time")
     private Integer addTime;
-
 
     public void copy(YxStoreVisit source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

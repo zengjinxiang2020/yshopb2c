@@ -1,11 +1,3 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.security.rest;
 
 import cn.hutool.core.util.IdUtil;
@@ -16,7 +8,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import co.yixiang.annotation.AnonymousAccess;
-import co.yixiang.logging.aop.log.Log;
+import co.yixiang.aop.log.Log;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.security.config.SecurityProperties;
 import co.yixiang.modules.security.security.TokenProvider;
@@ -42,7 +34,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author hupeng
+ * @author Zheng Jie
  * @date 2018-11-23
  * 授权、根据token获取用户详细信息
  */
@@ -130,12 +122,7 @@ public class AuthController {
         // 几位数运算，默认是两位
         captcha.setLen(2);
         // 获取运算的结果
-        String result ="";
-        try {
-            result = new Double(Double.parseDouble(captcha.text())).intValue()+"";
-        }catch (Exception e){
-            result = captcha.text();
-        }
+        String result = captcha.text();
         String uuid = properties.getCodeKey() + IdUtil.simpleUUID();
         // 保存
         redisUtils.set(uuid, result, expiration, TimeUnit.MINUTES);

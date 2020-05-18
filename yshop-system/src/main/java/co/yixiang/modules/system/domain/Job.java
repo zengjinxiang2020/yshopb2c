@@ -1,58 +1,51 @@
-/**
-* Copyright (C) 2018-2020
-* All rights reserved, Designed By www.yixiang.co
-* 注意：
-* 本软件为www.yixiang.co开发研制，未经购买不得使用
-* 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
-* 一经发现盗用、分享等行为，将追究法律责任，后果自负
-*/
 package co.yixiang.modules.system.domain;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import java.sql.Timestamp;
+
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
-* @author hupeng
-* @date 2020-05-14
+* @author Zheng Jie
+* @date 2019-03-29
 */
-@Data
-@TableName("job")
+@Entity
+@Getter
+@Setter
+@Table(name="job")
 public class Job implements Serializable {
 
-    /** 岗位ID */
-    @TableId
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @NotNull(groups = Update.class)
     private Long id;
 
-    /** 岗位名称 */
+    @Column(name = "name",nullable = false)
+    @NotBlank
     private String name;
 
-
-    /** 岗位状态 */
-    private Boolean enabled;
-
-    @TableField(exist = false)
-    private Dept dept;
-
-    /** 岗位排序 */
+    @Column(unique = true)
+    @NotNull
     private Long sort;
 
+    @Column(name = "enabled",nullable = false)
+    @NotNull
+    private Boolean enabled;
 
-    /** 部门ID */
-    private Long deptId;
+    @OneToOne
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
 
-
-    /** 创建日期 */
-    @TableField(fill= FieldFill.INSERT)
+    @Column(name = "create_time")
+    @CreationTimestamp
     private Timestamp createTime;
 
-
-    public void copy(Job source){
-        BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
-    }
+    public @interface Update {}
 }

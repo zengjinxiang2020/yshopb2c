@@ -20,7 +20,7 @@ import java.util.List;
  * 商品秒杀产品表 Mapper 接口
  * </p>
  *
- * @author hupeng
+ * @author xuwenbo
  * @since 2019-12-14
  */
 @Repository

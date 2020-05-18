@@ -1,13 +1,5 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.service;
-import co.yixiang.common.service.BaseService;
+
 import co.yixiang.modules.shop.domain.YxUserRecharge;
 import co.yixiang.modules.shop.service.dto.YxUserRechargeDto;
 import co.yixiang.modules.shop.service.dto.YxUserRechargeQueryCriteria;
@@ -19,11 +11,11 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
 * @author hupeng
-* @date 2020-05-12
+* @date 2020-03-02
 */
-public interface YxUserRechargeService  extends BaseService<YxUserRecharge>{
+public interface YxUserRechargeService {
 
-/**
+    /**
     * 查询数据分页
     * @param criteria 条件
     * @param pageable 分页参数
@@ -36,7 +28,29 @@ public interface YxUserRechargeService  extends BaseService<YxUserRecharge>{
     * @param criteria 条件参数
     * @return List<YxUserRechargeDto>
     */
-    List<YxUserRecharge> queryAll(YxUserRechargeQueryCriteria criteria);
+    List<YxUserRechargeDto> queryAll(YxUserRechargeQueryCriteria criteria);
+
+    /**
+     * 根据ID查询
+     * @param id ID
+     * @return YxUserRechargeDto
+     */
+    YxUserRechargeDto findById(Integer id);
+
+    /**
+    * 创建
+    * @param resources /
+    * @return YxUserRechargeDto
+    */
+    YxUserRechargeDto create(YxUserRecharge resources);
+
+
+
+    /**
+    * 多选删除
+    * @param ids /
+    */
+    void deleteAll(Integer[] ids);
 
     /**
     * 导出数据

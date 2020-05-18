@@ -1,109 +1,101 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.mp.domain;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2020-05-12
+* @date 2019-10-07
 */
+@Entity
 @Data
-@TableName("yx_article")
+@Table(name="yx_article")
 public class YxArticle implements Serializable {
 
-    /** 文章管理ID */
-    @TableId
+    // 文章管理ID
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
-
-    /** 分类id */
+    // 分类id
+    @Column(name = "cid")
     private String cid;
 
-
-    /** 文章标题 */
+    // 文章标题
+    @Column(name = "title",nullable = false)
     private String title;
 
-
-    /** 文章作者 */
+    // 文章作者
+    @Column(name = "author")
     private String author;
 
-
-    /** 文章图片 */
-    private String imageInput;
-
-
-    /** 文章简介 */
-    private String synopsis;
-
-
+    @Column(name = "content")
     private String content;
 
+    // 文章图片
+    @Column(name = "image_input",nullable = false)
+    private String imageInput;
 
-    /** 文章分享标题 */
+    // 文章简介
+    @Column(name = "synopsis")
+    private String synopsis;
+
+    // 文章分享标题
+    @Column(name = "share_title")
     private String shareTitle;
 
-
-    /** 文章分享简介 */
+    // 文章分享简介
+    @Column(name = "share_synopsis")
     private String shareSynopsis;
 
-
-    /** 浏览次数 */
+    // 浏览次数
+    @Column(name = "visit")
     private String visit;
 
-
-    /** 排序 */
+    // 排序
+    @Column(name = "sort",nullable = false)
     private Integer sort;
 
-
-    /** 原文链接 */
+    // 原文链接
+    @Column(name = "url")
     private String url;
 
-
-    /** 状态 */
+    // 状态
+    @Column(name = "status",nullable = false)
     private Integer status;
 
-
-    /** 添加时间 */
-    @TableField(fill= FieldFill.INSERT)
+    // 添加时间
+    @Column(name = "add_time",nullable = false)
     private String addTime;
 
-
-    /** 是否隐藏 */
+    // 是否隐藏
+    @Column(name = "hide",nullable = false)
     private Integer hide;
 
-
-    /** 管理员id */
+    // 管理员id
+    @Column(name = "admin_id",nullable = false)
     private Integer adminId;
 
-
-    /** 商户id */
+    // 商户id
+    @Column(name = "mer_id")
     private Integer merId;
 
-
-    /** 产品关联id */
+    // 产品关联id
+    @Column(name = "product_id",nullable = false)
     private Integer productId;
 
-
-    /** 是否热门(小程序) */
+    // 是否热门(小程序)
+    @Column(name = "is_hot",nullable = false)
     private Integer isHot;
 
-
-    /** 是否轮播图(小程序) */
+    // 是否轮播图(小程序)
+    @Column(name = "is_banner",nullable = false)
     private Integer isBanner;
-
 
     public void copy(YxArticle source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

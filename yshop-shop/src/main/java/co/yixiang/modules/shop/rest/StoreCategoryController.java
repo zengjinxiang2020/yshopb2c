@@ -1,19 +1,11 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.rest;
 
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.logging.aop.log.Log;
+import co.yixiang.aop.log.Log;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxStoreCategory;
 import co.yixiang.modules.shop.service.YxStoreCategoryService;
-import co.yixiang.modules.shop.service.dto.YxStoreCategoryDto;
+import co.yixiang.modules.shop.service.dto.YxStoreCategoryDTO;
 import co.yixiang.modules.shop.service.dto.YxStoreCategoryQueryCriteria;
 import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
@@ -61,7 +53,7 @@ public class StoreCategoryController {
     @PreAuthorize("@el.check('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_SELECT')")
     public ResponseEntity getYxStoreCategorys(YxStoreCategoryQueryCriteria criteria, Pageable pageable){
 
-        List<YxStoreCategoryDto> categoryDTOList = yxStoreCategoryService.queryAll(criteria);
+        List<YxStoreCategoryDTO> categoryDTOList = yxStoreCategoryService.queryAll(criteria);
         return new ResponseEntity(yxStoreCategoryService.buildTree(categoryDTOList),HttpStatus.OK);
     }
 
@@ -76,7 +68,7 @@ public class StoreCategoryController {
         }
 
         resources.setAddTime(OrderUtil.getSecondTimestampTwo());
-        return new ResponseEntity(yxStoreCategoryService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity(yxStoreCategoryService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改商品分类")
@@ -88,7 +80,7 @@ public class StoreCategoryController {
         if(resources.getPid() > 0 && StrUtil.isBlank(resources.getPic())) {
             throw new BadRequestException("子分类图片必传");
         }
-        yxStoreCategoryService.saveOrUpdate(resources);
+        yxStoreCategoryService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
@@ -100,7 +92,7 @@ public class StoreCategoryController {
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         String[] ids = id.split(",");
         for (String newId: ids) {
-            yxStoreCategoryService.removeById(Integer.valueOf(newId));
+            yxStoreCategoryService.delete(Integer.valueOf(newId));
         }
         return new ResponseEntity(HttpStatus.OK);
     }

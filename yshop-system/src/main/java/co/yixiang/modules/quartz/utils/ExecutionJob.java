@@ -1,19 +1,11 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.quartz.utils;
 
 import co.yixiang.config.thread.ThreadPoolExecutorUtil;
-import co.yixiang.modules.quartz.domain.QuartzJob;
-import co.yixiang.modules.quartz.service.QuartzLogService;
 import co.yixiang.utils.SpringContextHolder;
 import co.yixiang.utils.ThrowableUtil;
+import co.yixiang.modules.quartz.domain.QuartzJob;
 import co.yixiang.modules.quartz.domain.QuartzLog;
+import co.yixiang.modules.quartz.repository.QuartzLogRepository;
 import co.yixiang.modules.quartz.service.QuartzJobService;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
@@ -40,12 +32,12 @@ public class ExecutionJob extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext context) {
         QuartzJob quartzJob = (QuartzJob) context.getMergedJobDataMap().get(QuartzJob.JOB_KEY);
         // 获取spring bean
-        QuartzLogService quartzLogService = SpringContextHolder.getBean(QuartzLogService.class);
+        QuartzLogRepository quartzLogRepository = SpringContextHolder.getBean(QuartzLogRepository.class);
         QuartzJobService quartzJobService = SpringContextHolder.getBean(QuartzJobService.class);
 
         QuartzLog log = new QuartzLog();
         log.setJobName(quartzJob.getJobName());
-        log.setBaenName(quartzJob.getBeanName());
+        log.setBeanName(quartzJob.getBeanName());
         log.setMethodName(quartzJob.getMethodName());
         log.setParams(quartzJob.getParams());
         long startTime = System.currentTimeMillis();
@@ -73,7 +65,7 @@ public class ExecutionJob extends QuartzJobBean {
             //更新状态
             quartzJobService.updateIsPause(quartzJob);
         } finally {
-            quartzLogService.save(log);
+            quartzLogRepository.save(log);
         }
     }
 }

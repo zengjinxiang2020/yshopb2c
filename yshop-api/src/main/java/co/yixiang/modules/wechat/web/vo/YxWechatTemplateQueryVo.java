@@ -11,7 +11,7 @@ import java.io.Serializable;
  * 微信模板 查询结果对象
  * </p>
  *
- * @author hupeng
+ * @author xuwenbo
  * @date 2019-12-10
  */
 @Data

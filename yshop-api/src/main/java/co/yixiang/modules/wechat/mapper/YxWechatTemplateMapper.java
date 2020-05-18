@@ -16,7 +16,7 @@ import java.io.Serializable;
  * 微信模板 Mapper 接口
  * </p>
  *
- * @author hupeng
+ * @author xuwenbo
  * @since 2019-12-10
  */
 @Repository

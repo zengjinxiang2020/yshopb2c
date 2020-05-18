@@ -1,15 +1,7 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.rest;
 
 
-import co.yixiang.logging.aop.log.Log;
+import co.yixiang.aop.log.Log;
 import co.yixiang.modules.shop.domain.YxMaterial;
 import co.yixiang.modules.shop.service.YxMaterialService;
 import co.yixiang.modules.shop.service.dto.YxMaterialQueryCriteria;
@@ -51,14 +43,14 @@ public class MaterialController {
     @ApiOperation("新增素材管理")
     public ResponseEntity<Object> create(@Validated @RequestBody YxMaterial resources){
         resources.setCreateId(SecurityUtils.getUsername());
-        return new ResponseEntity<>(yxMaterialService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(yxMaterialService.create(resources),HttpStatus.CREATED);
     }
 
     @PutMapping
     @Log("修改素材管理")
     @ApiOperation("修改素材管理")
     public ResponseEntity<Object> update(@Validated @RequestBody YxMaterial resources){
-        yxMaterialService.saveOrUpdate(resources);
+        yxMaterialService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -66,7 +58,7 @@ public class MaterialController {
     @ApiOperation("删除素材管理")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Object> deleteAll(@PathVariable String id) {
-        yxMaterialService.removeById(id);
+        yxMaterialService.deleteById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

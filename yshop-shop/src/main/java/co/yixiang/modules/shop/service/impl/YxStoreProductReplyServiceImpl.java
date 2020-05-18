@@ -1,92 +1,82 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.service.impl;
 
 import co.yixiang.modules.shop.domain.YxStoreProductReply;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import lombok.AllArgsConstructor;
-import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageInfo;
-import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.FileUtil;
+import co.yixiang.modules.shop.repository.YxStoreProductReplyRepository;
 import co.yixiang.modules.shop.service.YxStoreProductReplyService;
-import co.yixiang.modules.shop.service.dto.YxStoreProductReplyDto;
+import co.yixiang.modules.shop.service.YxStoreProductService;
+import co.yixiang.modules.shop.service.YxUserService;
+import co.yixiang.modules.shop.service.dto.YxStoreProductReplyDTO;
 import co.yixiang.modules.shop.service.dto.YxStoreProductReplyQueryCriteria;
-import co.yixiang.modules.shop.service.mapper.StoreProductReplyMapper;
+import co.yixiang.modules.shop.service.mapper.YxStoreProductReplyMapper;
+import co.yixiang.utils.PageUtil;
+import co.yixiang.utils.QueryHelp;
+import co.yixiang.utils.ValidationUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-// 默认不使用缓存
-//import org.springframework.cache.annotation.CacheConfig;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 /**
 * @author hupeng
-* @date 2020-05-12
+* @date 2019-11-03
 */
 @Service
-@AllArgsConstructor
-//@CacheConfig(cacheNames = "yxStoreProductReply")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProductReplyMapper, YxStoreProductReply> implements YxStoreProductReplyService {
+public class YxStoreProductReplyServiceImpl implements YxStoreProductReplyService {
 
-    private final IGenerator generator;
+    private final YxStoreProductReplyRepository yxStoreProductReplyRepository;
 
-    @Override
-    //@Cacheable
-    public Map<String, Object> queryAll(YxStoreProductReplyQueryCriteria criteria, Pageable pageable) {
-        getPage(pageable);
-        PageInfo<YxStoreProductReply> page = new PageInfo<>(queryAll(criteria));
-        Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxStoreProductReplyDto.class));
-        map.put("totalElements", page.getTotal());
-        return map;
+    private final YxStoreProductReplyMapper yxStoreProductReplyMapper;
+
+
+
+    public YxStoreProductReplyServiceImpl(YxStoreProductReplyRepository yxStoreProductReplyRepository,
+                                          YxStoreProductReplyMapper yxStoreProductReplyMapper) {
+        this.yxStoreProductReplyRepository = yxStoreProductReplyRepository;
+        this.yxStoreProductReplyMapper = yxStoreProductReplyMapper;
+
     }
 
-
     @Override
-    //@Cacheable
-    public List<YxStoreProductReply> queryAll(YxStoreProductReplyQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(YxStoreProductReply.class, criteria));
+    public Map<String,Object> queryAll(YxStoreProductReplyQueryCriteria criteria, Pageable pageable){
+        Page<YxStoreProductReply> page = yxStoreProductReplyRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(yxStoreProductReplyMapper::toDto));
     }
 
+    @Override
+    public List<YxStoreProductReplyDTO> queryAll(YxStoreProductReplyQueryCriteria criteria){
+        return yxStoreProductReplyMapper.toDto(yxStoreProductReplyRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+    }
 
     @Override
-    public void download(List<YxStoreProductReplyDto> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (YxStoreProductReplyDto yxStoreProductReply : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
-            map.put("用户ID", yxStoreProductReply.getUid());
-            map.put("订单ID", yxStoreProductReply.getOid());
-            map.put("唯一id", yxStoreProductReply.getUnique());
-            map.put("产品id", yxStoreProductReply.getProductId());
-            map.put("某种商品类型(普通商品、秒杀商品）", yxStoreProductReply.getReplyType());
-            map.put("商品分数", yxStoreProductReply.getProductScore());
-            map.put("服务分数", yxStoreProductReply.getServiceScore());
-            map.put("评论内容", yxStoreProductReply.getComment());
-            map.put("评论图片", yxStoreProductReply.getPics());
-            map.put("评论时间", yxStoreProductReply.getAddTime());
-            map.put("管理员回复内容", yxStoreProductReply.getMerchantReplyContent());
-            map.put("管理员回复时间", yxStoreProductReply.getMerchantReplyTime());
-            map.put("0未删除1已删除", yxStoreProductReply.getIsDel());
-            map.put("0未回复1已回复", yxStoreProductReply.getIsReply());
-            list.add(map);
-        }
-        FileUtil.downloadExcel(list, response);
+    public YxStoreProductReplyDTO findById(Integer id) {
+        Optional<YxStoreProductReply> yxStoreProductReply = yxStoreProductReplyRepository.findById(id);
+        ValidationUtil.isNull(yxStoreProductReply,"YxStoreProductReply","id",id);
+        return yxStoreProductReplyMapper.toDto(yxStoreProductReply.get());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public YxStoreProductReplyDTO create(YxStoreProductReply resources) {
+        return yxStoreProductReplyMapper.toDto(yxStoreProductReplyRepository.save(resources));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void update(YxStoreProductReply resources) {
+        Optional<YxStoreProductReply> optionalYxStoreProductReply = yxStoreProductReplyRepository.findById(resources.getId());
+        ValidationUtil.isNull( optionalYxStoreProductReply,"YxStoreProductReply","id",resources.getId());
+        YxStoreProductReply yxStoreProductReply = optionalYxStoreProductReply.get();
+        yxStoreProductReply.copy(resources);
+        yxStoreProductReplyRepository.save(yxStoreProductReply);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Integer id) {
+        yxStoreProductReplyRepository.deleteById(id);
     }
 }
