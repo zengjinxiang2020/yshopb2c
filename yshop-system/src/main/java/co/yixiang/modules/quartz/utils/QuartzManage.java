@@ -1,16 +1,8 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.quartz.utils;
 
 import co.yixiang.exception.BadRequestException;
-import co.yixiang.modules.quartz.domain.QuartzJob;
 import lombok.extern.slf4j.Slf4j;
+import co.yixiang.modules.quartz.domain.QuartzJob;
 import org.quartz.*;
 import org.quartz.impl.triggers.CronTriggerImpl;
 import org.springframework.stereotype.Component;
@@ -19,7 +11,7 @@ import java.util.Date;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 /**
- * @author hupeng
+ * @author Zheng Jie
  * @date 2019-01-07
  */
 @Slf4j

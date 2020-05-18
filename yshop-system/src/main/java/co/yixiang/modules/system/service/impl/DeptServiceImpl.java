@@ -1,142 +1,97 @@
-/**
-* Copyright (C) 2018-2020
-* All rights reserved, Designed By www.yixiang.co
-* 注意：
-* 本软件为www.yixiang.co开发研制，未经购买不得使用
-* 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
-* 一经发现盗用、分享等行为，将追究法律责任，后果自负
-*/
 package co.yixiang.modules.system.service.impl;
 
-import co.yixiang.modules.system.domain.Dept;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.AllArgsConstructor;
-import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageInfo;
-import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.FileUtil;
-import co.yixiang.modules.system.service.DeptService;
-import co.yixiang.modules.system.service.dto.DeptDto;
+import co.yixiang.modules.system.service.dto.DeptDTO;
 import co.yixiang.modules.system.service.dto.DeptQueryCriteria;
 import co.yixiang.modules.system.service.mapper.DeptMapper;
+import co.yixiang.exception.BadRequestException;
+import co.yixiang.modules.system.domain.Dept;
+import co.yixiang.utils.FileUtil;
+import co.yixiang.utils.QueryHelp;
+import co.yixiang.utils.ValidationUtil;
+import co.yixiang.modules.system.repository.DeptRepository;
+import co.yixiang.modules.system.service.DeptService;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-// 默认不使用缓存
-//import org.springframework.cache.annotation.CacheConfig;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Pageable;
 import org.springframework.util.CollectionUtils;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
-* @author hupeng
-* @date 2020-05-14
+* @author Zheng Jie
+* @date 2019-03-25
 */
 @Service
-@AllArgsConstructor
-//@CacheConfig(cacheNames = "dept")
+@CacheConfig(cacheNames = "dept")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, Dept> implements DeptService {
+public class DeptServiceImpl implements DeptService {
 
-    private final IGenerator generator;
+    private final DeptRepository deptRepository;
 
     private final DeptMapper deptMapper;
 
-    @Override
-    //@Cacheable
-    public Map<String, Object> queryAll(DeptQueryCriteria criteria, Pageable pageable) {
-        getPage(pageable);
-        PageInfo<Dept> page = new PageInfo<>(queryAll(criteria));
-        Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), DeptDto.class));
-        map.put("totalElements", page.getTotal());
-        return map;
+    public DeptServiceImpl(DeptRepository deptRepository, DeptMapper deptMapper) {
+        this.deptRepository = deptRepository;
+        this.deptMapper = deptMapper;
     }
 
-
     @Override
-    //@Cacheable
-    public List<Dept> queryAll(DeptQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(Dept.class, criteria));
+    @Cacheable
+    public List<DeptDTO> queryAll(DeptQueryCriteria criteria) {
+        return deptMapper.toDto(deptRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
-
     @Override
-    public void download(List<DeptDto> all, HttpServletResponse response) throws IOException {
-        List<Map<String, Object>> list = new ArrayList<>();
-        for (DeptDto dept : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
-            map.put("名称", dept.getName());
-            map.put("上级部门", dept.getPid());
-            map.put("状态", dept.getEnabled());
-            map.put("创建日期", dept.getCreateTime());
-            list.add(map);
-        }
-        FileUtil.downloadExcel(list, response);
+    @Cacheable(key = "#p0")
+    public DeptDTO findById(Long id) {
+        Dept dept = deptRepository.findById(id).orElseGet(Dept::new);
+        ValidationUtil.isNull(dept.getId(),"Dept","id",id);
+        return deptMapper.toDto(dept);
     }
 
-    /**
-     * 根据PID查询
-     *
-     * @param pid /
-     * @return /
-     */
     @Override
-//    @Cacheable(key = "#p0")
+    @Cacheable
     public List<Dept> findByPid(long pid) {
-        DeptQueryCriteria criteria = new DeptQueryCriteria();
-        criteria.setPid(pid);
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(Dept.class, criteria));
+        return deptRepository.findByPid(pid);
     }
 
-    /**
-     * 构建树形数据
-     *
-     * @param deptDtos 原始数据
-     * @return /
-     */
     @Override
-    public Object buildTree(List<DeptDto> deptDtos) {
-        Set<DeptDto> trees = new LinkedHashSet<>();
-        Set<DeptDto> depts= new LinkedHashSet<>();
-        List<String> deptNames = deptDtos.stream().map(DeptDto::getName).collect(Collectors.toList());
+    public Set<Dept> findByRoleIds(Long id) {
+        return deptRepository.findByRoles_Id(id);
+    }
+
+    @Override
+    @Cacheable
+    public Object buildTree(List<DeptDTO> deptDtos) {
+        Set<DeptDTO> trees = new LinkedHashSet<>();
+        Set<DeptDTO> depts= new LinkedHashSet<>();
+        List<String> deptNames = deptDtos.stream().map(DeptDTO::getName).collect(Collectors.toList());
         boolean isChild;
-        DeptQueryCriteria criteria = new DeptQueryCriteria();
-        List<Dept> deptList =  this.queryAll(criteria);
-        for (DeptDto deptDto : deptDtos) {
+        List<Dept> deptList = deptRepository.findAll();
+        for (DeptDTO deptDTO : deptDtos) {
             isChild = false;
-            if ("0".equals(deptDto.getPid().toString())) {
-                trees.add(deptDto);
+            if ("0".equals(deptDTO.getPid().toString())) {
+                trees.add(deptDTO);
             }
-            for (DeptDto it : deptDtos) {
-                if (it.getPid().equals(deptDto.getId())) {
+            for (DeptDTO it : deptDtos) {
+                if (it.getPid().equals(deptDTO.getId())) {
                     isChild = true;
-                    if (deptDto.getChildren() == null) {
-                        deptDto.setChildren(new ArrayList<>());
+                    if (deptDTO.getChildren() == null) {
+                        deptDTO.setChildren(new ArrayList<>());
                     }
-                    deptDto.getChildren().add(it);
+                    deptDTO.getChildren().add(it);
                 }
             }
             if(isChild) {
-                depts.add(deptDto);
+                depts.add(deptDTO);
                 for (Dept dept : deptList) {
-                    if(dept.getId() == deptDto.getPid() && !deptNames.contains(dept.getName())){
-                        depts.add(deptDto);
+                    if(dept.getId() == deptDTO.getPid() && !deptNames.contains(dept.getName())){
+                        depts.add(deptDTO);
                     }
                 }
             }
@@ -154,34 +109,57 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, Dept> implement
         return map;
     }
 
-    /**
-     * 获取待删除的部门
-     *
-     * @param deptList /
-     * @param deptDtos /
-     * @return /
-     */
     @Override
-    public Set<DeptDto> getDeleteDepts(List<Dept> deptList, Set<DeptDto> deptDtos) {
+    @CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public DeptDTO create(Dept resources) {
+        return deptMapper.toDto(deptRepository.save(resources));
+    }
 
-        for (Dept dept : deptList) {
-            deptDtos.add((DeptDto)generator.convert(deptList,DeptDto.class));
-            List<Dept> depts = Collections.singletonList(this.getOne(new QueryWrapper<Dept>().eq("id", dept.getId())));
+    @Override
+    @CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public void update(Dept resources) {
+        if(resources.getId().equals(resources.getPid())) {
+            throw new BadRequestException("上级不能为自己");
+        }
+        Dept dept = deptRepository.findById(resources.getId()).orElseGet(Dept::new);
+        ValidationUtil.isNull( dept.getId(),"Dept","id",resources.getId());
+        resources.setId(dept.getId());
+        deptRepository.save(resources);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Set<DeptDTO> deptDtos) {
+        for (DeptDTO deptDto : deptDtos) {
+            deptRepository.deleteById(deptDto.getId());
+        }
+    }
+
+    @Override
+    public void download(List<DeptDTO> deptDtos, HttpServletResponse response) throws IOException {
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (DeptDTO deptDTO : deptDtos) {
+            Map<String,Object> map = new LinkedHashMap<>();
+            map.put("部门名称", deptDTO.getName());
+            map.put("部门状态", deptDTO.getEnabled() ? "启用" : "停用");
+            map.put("创建日期", deptDTO.getCreateTime());
+            list.add(map);
+        }
+        FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public Set<DeptDTO> getDeleteDepts(List<Dept> menuList, Set<DeptDTO> deptDtos) {
+        for (Dept dept : menuList) {
+            deptDtos.add(deptMapper.toDto(dept));
+            List<Dept> depts = deptRepository.findByPid(dept.getId());
             if(depts!=null && depts.size()!=0){
                 getDeleteDepts(depts, deptDtos);
             }
         }
         return deptDtos;
-    }
-
-    /**
-     * 根据角色ID查询
-     *
-     * @param id /
-     * @return /
-     */
-    @Override
-    public Set<Dept> findByRoleIds(Long id) {
-        return deptMapper.findDeptByRoleId(id);
     }
 }

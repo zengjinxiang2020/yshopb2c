@@ -1,24 +1,13 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.service.impl;
 
 import co.yixiang.modules.shop.domain.YxSystemStore;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import lombok.AllArgsConstructor;
-import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageInfo;
-import co.yixiang.common.utils.QueryHelpPlus;
+import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
+import co.yixiang.modules.shop.repository.YxSystemStoreRepository;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreDto;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreQueryCriteria;
-import co.yixiang.modules.shop.service.mapper.SystemStoreMapper;
+import co.yixiang.modules.shop.service.mapper.YxSystemStoreMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import co.yixiang.utils.PageUtil;
+import co.yixiang.utils.QueryHelp;
 import java.util.List;
 import java.util.Map;
 import java.io.IOException;
@@ -37,34 +28,67 @@ import java.util.LinkedHashMap;
 
 /**
 * @author hupeng
-* @date 2020-05-12
+* @date 2020-03-03
 */
 @Service
-@AllArgsConstructor
 //@CacheConfig(cacheNames = "yxSystemStore")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxSystemStoreServiceImpl extends BaseServiceImpl<SystemStoreMapper, YxSystemStore> implements YxSystemStoreService {
+public class YxSystemStoreServiceImpl implements YxSystemStoreService {
 
-    private final IGenerator generator;
+    private final YxSystemStoreRepository yxSystemStoreRepository;
+
+    private final YxSystemStoreMapper yxSystemStoreMapper;
+
+    public YxSystemStoreServiceImpl(YxSystemStoreRepository yxSystemStoreRepository, YxSystemStoreMapper yxSystemStoreMapper) {
+        this.yxSystemStoreRepository = yxSystemStoreRepository;
+        this.yxSystemStoreMapper = yxSystemStoreMapper;
+    }
 
     @Override
     //@Cacheable
-    public Map<String, Object> queryAll(YxSystemStoreQueryCriteria criteria, Pageable pageable) {
-        getPage(pageable);
-        PageInfo<YxSystemStore> page = new PageInfo<>(queryAll(criteria));
-        Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxSystemStoreDto.class));
-        map.put("totalElements", page.getTotal());
-        return map;
+    public Map<String,Object> queryAll(YxSystemStoreQueryCriteria criteria, Pageable pageable){
+        Page<YxSystemStore> page = yxSystemStoreRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(yxSystemStoreMapper::toDto));
     }
-
 
     @Override
     //@Cacheable
-    public List<YxSystemStore> queryAll(YxSystemStoreQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(YxSystemStore.class, criteria));
+    public List<YxSystemStoreDto> queryAll(YxSystemStoreQueryCriteria criteria){
+        return yxSystemStoreMapper.toDto(yxSystemStoreRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
+    @Override
+    //@Cacheable(key = "#p0")
+    public YxSystemStoreDto findById(Integer id) {
+        YxSystemStore yxSystemStore = yxSystemStoreRepository.findById(id).orElseGet(YxSystemStore::new);
+        ValidationUtil.isNull(yxSystemStore.getId(),"YxSystemStore","id",id);
+        return yxSystemStoreMapper.toDto(yxSystemStore);
+    }
+
+    @Override
+    //@CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public YxSystemStoreDto create(YxSystemStore resources) {
+        return yxSystemStoreMapper.toDto(yxSystemStoreRepository.save(resources));
+    }
+
+    @Override
+    //@CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public void update(YxSystemStore resources) {
+        YxSystemStore yxSystemStore = yxSystemStoreRepository.findById(resources.getId()).orElseGet(YxSystemStore::new);
+        ValidationUtil.isNull( yxSystemStore.getId(),"YxSystemStore","id",resources.getId());
+        yxSystemStore.copy(resources);
+        yxSystemStoreRepository.save(yxSystemStore);
+    }
+
+    @Override
+    //@CacheEvict(allEntries = true)
+    public void deleteAll(Integer[] ids) {
+        for (Integer id : ids) {
+            yxSystemStoreRepository.deleteById(id);
+        }
+    }
 
     @Override
     public void download(List<YxSystemStoreDto> all, HttpServletResponse response) throws IOException {

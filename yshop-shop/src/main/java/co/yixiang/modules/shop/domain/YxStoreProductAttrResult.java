@@ -1,42 +1,37 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.domain;
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
+
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.Data;
+
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2020-05-12
+* @date 2019-10-13
 */
-
+@Entity
 @Data
-@TableName("yx_store_product_attr_result")
+@Table(name="yx_store_product_attr_result")
 public class YxStoreProductAttrResult implements Serializable {
 
-    @TableId
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
-
-    /** 商品ID */
+    // 商品ID
+    @Column(name = "product_id",nullable = false)
     private Integer productId;
 
-
-    /** 商品属性参数 */
+    // 商品属性参数
+    @Column(name = "result",nullable = false)
     private String result;
 
-
-    /** 上次修改时间 */
+    // 上次修改时间
+    @Column(name = "change_time",nullable = false)
     private Integer changeTime;
-
 
     public void copy(YxStoreProductAttrResult source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

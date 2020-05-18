@@ -1,24 +1,14 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.service.impl;
 
 import co.yixiang.modules.shop.domain.YxSystemStoreStaff;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import lombok.AllArgsConstructor;
-import co.yixiang.dozer.service.IGenerator;
-import com.github.pagehelper.PageInfo;
-import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.FileUtil;
+import co.yixiang.modules.shop.service.YxSystemStoreService;
+import co.yixiang.modules.shop.service.dto.YxSystemStoreDto;
+import co.yixiang.utils.*;
+import co.yixiang.modules.shop.repository.YxSystemStoreStaffRepository;
 import co.yixiang.modules.shop.service.YxSystemStoreStaffService;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreStaffDto;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreStaffQueryCriteria;
-import co.yixiang.modules.shop.service.mapper.SystemStoreStaffMapper;
+import co.yixiang.modules.shop.service.mapper.YxSystemStoreStaffMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -37,34 +28,77 @@ import java.util.LinkedHashMap;
 
 /**
 * @author hupeng
-* @date 2020-05-12
+* @date 2020-03-22
 */
 @Service
-@AllArgsConstructor
 //@CacheConfig(cacheNames = "yxSystemStoreStaff")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class YxSystemStoreStaffServiceImpl extends BaseServiceImpl<SystemStoreStaffMapper, YxSystemStoreStaff> implements YxSystemStoreStaffService {
+public class YxSystemStoreStaffServiceImpl implements YxSystemStoreStaffService {
 
-    private final IGenerator generator;
+    private final YxSystemStoreStaffRepository yxSystemStoreStaffRepository;
+
+    private final YxSystemStoreStaffMapper yxSystemStoreStaffMapper;
+
+    private final YxSystemStoreService systemStoreService;
+
+    public YxSystemStoreStaffServiceImpl(YxSystemStoreStaffRepository yxSystemStoreStaffRepository,
+                                         YxSystemStoreStaffMapper yxSystemStoreStaffMapper,
+                                         YxSystemStoreService systemStoreService) {
+        this.yxSystemStoreStaffRepository = yxSystemStoreStaffRepository;
+        this.yxSystemStoreStaffMapper = yxSystemStoreStaffMapper;
+        this.systemStoreService = systemStoreService;
+    }
 
     @Override
     //@Cacheable
-    public Map<String, Object> queryAll(YxSystemStoreStaffQueryCriteria criteria, Pageable pageable) {
-        getPage(pageable);
-        PageInfo<YxSystemStoreStaff> page = new PageInfo<>(queryAll(criteria));
-        Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxSystemStoreStaffDto.class));
-        map.put("totalElements", page.getTotal());
-        return map;
+    public Map<String,Object> queryAll(YxSystemStoreStaffQueryCriteria criteria, Pageable pageable){
+        Page<YxSystemStoreStaff> page = yxSystemStoreStaffRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        return PageUtil.toPage(page.map(yxSystemStoreStaffMapper::toDto));
     }
-
 
     @Override
     //@Cacheable
-    public List<YxSystemStoreStaff> queryAll(YxSystemStoreStaffQueryCriteria criteria){
-        return baseMapper.selectList(QueryHelpPlus.getPredicate(YxSystemStoreStaff.class, criteria));
+    public List<YxSystemStoreStaffDto> queryAll(YxSystemStoreStaffQueryCriteria criteria){
+        return yxSystemStoreStaffMapper.toDto(yxSystemStoreStaffRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
+    @Override
+    //@Cacheable(key = "#p0")
+    public YxSystemStoreStaffDto findById(Integer id) {
+        YxSystemStoreStaff yxSystemStoreStaff = yxSystemStoreStaffRepository.findById(id).orElseGet(YxSystemStoreStaff::new);
+        ValidationUtil.isNull(yxSystemStoreStaff.getId(),"YxSystemStoreStaff","id",id);
+        return yxSystemStoreStaffMapper.toDto(yxSystemStoreStaff);
+    }
+
+    @Override
+    //@CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public YxSystemStoreStaffDto create(YxSystemStoreStaff resources) {
+        YxSystemStoreDto systemStoreDto = systemStoreService.findById(resources.getStoreId());
+        resources.setStoreName(systemStoreDto.getName());
+        resources.setAddTime(OrderUtil.getSecondTimestampTwo());
+        return yxSystemStoreStaffMapper.toDto(yxSystemStoreStaffRepository.save(resources));
+    }
+
+    @Override
+    //@CacheEvict(allEntries = true)
+    @Transactional(rollbackFor = Exception.class)
+    public void update(YxSystemStoreStaff resources) {
+        YxSystemStoreDto systemStoreDto = systemStoreService.findById(resources.getStoreId());
+        resources.setStoreName(systemStoreDto.getName());
+        YxSystemStoreStaff yxSystemStoreStaff = yxSystemStoreStaffRepository.findById(resources.getId()).orElseGet(YxSystemStoreStaff::new);
+        ValidationUtil.isNull( yxSystemStoreStaff.getId(),"YxSystemStoreStaff","id",resources.getId());
+        yxSystemStoreStaff.copy(resources);
+        yxSystemStoreStaffRepository.save(yxSystemStoreStaff);
+    }
+
+    @Override
+    //@CacheEvict(allEntries = true)
+    public void deleteAll(Integer[] ids) {
+        for (Integer id : ids) {
+            yxSystemStoreStaffRepository.deleteById(id);
+        }
+    }
 
     @Override
     public void download(List<YxSystemStoreStaffDto> all, HttpServletResponse response) throws IOException {

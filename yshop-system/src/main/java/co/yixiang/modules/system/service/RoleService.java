@@ -1,71 +1,57 @@
-/**
-* Copyright (C) 2018-2020
-* All rights reserved, Designed By www.yixiang.co
-* 注意：
-* 本软件为www.yixiang.co开发研制，未经购买不得使用
-* 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
-* 一经发现盗用、分享等行为，将追究法律责任，后果自负
-*/
 package co.yixiang.modules.system.service;
-import co.yixiang.common.service.BaseService;
+
 import co.yixiang.modules.system.domain.Role;
-import co.yixiang.modules.system.service.dto.RoleDto;
+import co.yixiang.modules.system.service.dto.RoleDTO;
 import co.yixiang.modules.system.service.dto.RoleQueryCriteria;
-import co.yixiang.modules.system.service.dto.RoleSmallDto;
-import co.yixiang.modules.system.service.dto.UserDto;
+import co.yixiang.modules.system.service.dto.RoleSmallDTO;
+import co.yixiang.modules.system.service.dto.UserDTO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.List;
-import java.io.IOException;
-import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
-* @author hupeng
-* @date 2020-05-14
-*/
-public interface RoleService  extends BaseService<Role>{
-
-/**
-    * 查询数据分页
-    * @param criteria 条件
-    * @param pageable 分页参数
-    * @return Map<String,Object>
-    */
-    Map<String,Object> queryAll(RoleQueryCriteria criteria, Pageable pageable);
-
+ * @author Zheng Jie
+ * @date 2018-12-03
+ */
+public interface RoleService {
 
     /**
-     * 查询数据分页
-     * @param pageable 分页参数
-     * @return Map<String,Object>
+     * 根据ID查询
+     * @param id /
+     * @return /
      */
-    Object queryAlls(RoleQueryCriteria criteria, Pageable pageable);
+    RoleDTO findById(long id);
 
     /**
-    * 查询所有数据不分页
-    * @param criteria 条件参数
-    * @return List<RoleDto>
-    */
-    List<Role> queryAll(RoleQueryCriteria criteria);
+     * 创建
+     * @param resources /
+     * @return /
+     */
+    RoleDTO create(Role resources);
 
     /**
-    * 导出数据
-    * @param all 待导出的数据
-    * @param response /
-    * @throws IOException /
-    */
-    void download(List<RoleDto> all, HttpServletResponse response) throws IOException;
+     * 编辑
+     * @param resources /
+     */
+    void update(Role resources);
+
+    /**
+     * 删除
+     * @param ids /
+     */
+    void delete(Set<Long> ids);
 
     /**
      * 根据用户ID查询
      * @param id 用户ID
      * @return /
      */
-    List<RoleSmallDto> findByUsersId(Long id);
+    List<RoleSmallDTO> findByUsersId(Long id);
 
     /**
      * 根据角色查询角色级别
@@ -75,36 +61,52 @@ public interface RoleService  extends BaseService<Role>{
     Integer findByRoles(Set<Role> roles);
 
     /**
-     * 根据ID查询
-     * @param id /
-     * @return /
-     */
-    RoleDto findById(long id);
-
-    /**
      * 修改绑定的菜单
      * @param resources /
-     * @param roleDto /
+     * @param roleDTO /
      */
-    void updateMenu(Role resources, RoleDto roleDto);
+    void updateMenu(Role resources, RoleDTO roleDTO);
 
     /**
-     * 创建
-     * @param resources /
+     * 解绑菜单
+     * @param id /
+     */
+    void untiedMenu(Long id);
+
+    /**
+     * 不带条件分页查询
+     * @param pageable 分页参数
      * @return /
      */
-    RoleDto create(Role resources);
+    Object queryAll(Pageable pageable);
 
     /**
-     * 编辑
-     * @param resources /
+     * 待条件分页查询
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return /
      */
-    void update(Role resources);
+    Object queryAll(RoleQueryCriteria criteria, Pageable pageable);
+
+    /**
+     * 查询全部
+     * @param criteria 条件
+     * @return /
+     */
+    List<RoleDTO> queryAll(RoleQueryCriteria criteria);
+
+    /**
+     * 导出数据
+     * @param queryAll 待导出的数据
+     * @param response /
+     * @throws IOException /
+     */
+    void download(List<RoleDTO> queryAll, HttpServletResponse response) throws IOException;
 
     /**
      * 获取用户权限信息
      * @param user 用户信息
      * @return 权限信息
      */
-    Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user);
+    Collection<GrantedAuthority> mapToGrantedAuthorities(UserDTO user);
 }

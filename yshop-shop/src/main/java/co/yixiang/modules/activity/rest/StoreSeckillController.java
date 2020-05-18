@@ -1,15 +1,9 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.activity.rest;
 
 import cn.hutool.core.util.ObjectUtil;
-import co.yixiang.logging.aop.log.Log;
+import cn.hutool.core.util.StrUtil;
+import co.yixiang.aop.log.Log;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.activity.domain.YxStoreSeckill;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.service.dto.YxStoreSeckillQueryCriteria;
@@ -24,7 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
-* @author hupeng
+* @author xuwenbo
 * @date 2019-12-14
 */
 @Api(tags = "商城:秒杀管理")
@@ -63,9 +57,9 @@ public class StoreSeckillController {
         }
         if(ObjectUtil.isNull(resources.getId())){
             resources.setAddTime(String.valueOf(OrderUtil.getSecondTimestampTwo()));
-            return new ResponseEntity(yxStoreSeckillService.save(resources),HttpStatus.CREATED);
+            return new ResponseEntity(yxStoreSeckillService.create(resources),HttpStatus.CREATED);
         }else{
-            yxStoreSeckillService.saveOrUpdate(resources);
+            yxStoreSeckillService.update(resources);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
     }
@@ -76,7 +70,7 @@ public class StoreSeckillController {
     @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        yxStoreSeckillService.removeById(id);
+        yxStoreSeckillService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

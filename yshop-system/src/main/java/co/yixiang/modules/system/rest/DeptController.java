@@ -1,25 +1,15 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.system.rest;
 
 import cn.hutool.core.collection.CollectionUtil;
-import co.yixiang.logging.aop.log.Log;
+import cn.hutool.core.util.StrUtil;
+import co.yixiang.aop.log.Log;
 import co.yixiang.config.DataScope;
-import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Dept;
 import co.yixiang.modules.system.service.DeptService;
-import co.yixiang.modules.system.service.dto.DeptDto;
+import co.yixiang.modules.system.service.dto.DeptDTO;
 import co.yixiang.modules.system.service.dto.DeptQueryCriteria;
 import co.yixiang.utils.ThrowableUtil;
-import co.yixiang.utils.ValidationUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
@@ -35,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
-* @author hupeng
+* @author Zheng Jie
 * @date 2019-03-25
 */
 @RestController
@@ -47,14 +37,11 @@ public class DeptController {
 
     private final DataScope dataScope;
 
-    private final IGenerator generator;
-
     private static final String ENTITY_NAME = "dept";
 
-    public DeptController(DeptService deptService, DataScope dataScope, IGenerator generator) {
+    public DeptController(DeptService deptService, DataScope dataScope) {
         this.deptService = deptService;
         this.dataScope = dataScope;
-        this.generator = generator;
     }
 
     @Log("导出部门数据")
@@ -62,7 +49,7 @@ public class DeptController {
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','dept:list')")
     public void download(HttpServletResponse response, DeptQueryCriteria criteria) throws IOException {
-        deptService.download(generator.convert(deptService.queryAll(criteria), DeptDto.class), response);
+        deptService.download(deptService.queryAll(criteria), response);
     }
 
     @Log("查询部门")
@@ -72,7 +59,7 @@ public class DeptController {
     public ResponseEntity<Object> getDepts(DeptQueryCriteria criteria){
         // 数据权限
         criteria.setIds(dataScope.getDeptIds());
-        List<DeptDto> deptDtos = generator.convert(deptService.queryAll(criteria),DeptDto.class);
+        List<DeptDTO> deptDtos = deptService.queryAll(criteria);
         return new ResponseEntity<>(deptService.buildTree(deptDtos),HttpStatus.OK);
     }
 
@@ -84,22 +71,15 @@ public class DeptController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        return new ResponseEntity<>(deptService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(deptService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改部门")
     @ApiOperation("修改部门")
     @PutMapping
     @PreAuthorize("@el.check('admin','dept:edit')")
-    public ResponseEntity<Object> update(@Validated @RequestBody Dept resources){
-        if(resources.getId().equals(resources.getPid())) {
-            throw new BadRequestException("上级不能为自己");
-        }
-        Dept dept = deptService.getOne(new QueryWrapper<Dept>().lambda()
-                .eq(Dept::getId,resources.getId()));
-        ValidationUtil.isNull( dept.getId(),"Dept","id",resources.getId());
-        resources.setId(dept.getId());
-        deptService.saveOrUpdate(resources);
+    public ResponseEntity<Object> update(@Validated(Dept.Update.class) @RequestBody Dept resources){
+        deptService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -109,16 +89,16 @@ public class DeptController {
     @PreAuthorize("@el.check('admin','dept:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        Set<DeptDto> deptDtos = new HashSet<>();
+        Set<DeptDTO> deptDtos = new HashSet<>();
         for (Long id : ids) {
             List<Dept> deptList = deptService.findByPid(id);
-            deptDtos.add(generator.convert(deptService.getOne(new QueryWrapper<Dept>().eq("id",id)),DeptDto.class));
+            deptDtos.add(deptService.findById(id));
             if(CollectionUtil.isNotEmpty(deptList)){
                 deptDtos = deptService.getDeleteDepts(deptList, deptDtos);
             }
         }
         try {
-            deptService.removeByIds(deptDtos);
+            deptService.delete(deptDtos);
         }catch (Throwable e){
             ThrowableUtil.throwForeignKeyException(e, "所选部门中存在岗位或者角色关联，请取消关联后再试");
         }

@@ -11,7 +11,7 @@ import co.yixiang.common.web.param.QueryParam;
  * 商品秒杀产品表 查询参数对象
  * </p>
  *
- * @author hupeng
+ * @author xuwenbo
  * @date 2019-12-14
  */
 @Data

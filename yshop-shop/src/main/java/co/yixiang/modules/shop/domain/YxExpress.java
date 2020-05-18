@@ -1,47 +1,47 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.shop.domain;
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
+
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import lombok.Data;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
 * @author hupeng
-* @date 2020-05-12
+* @date 2019-12-12
 */
-
+@Entity
 @Data
-@TableName("yx_express")
+@Table(name="yx_express")
 public class YxExpress implements Serializable {
 
-    /** 快递公司id */
-    @TableId
+    // 快递公司id
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
-
-    /** 快递公司简称 */
+    // 快递公司简称
+    @Column(name = "code",unique = true,nullable = false)
+    @NotBlank(message = "快递公司编号不能为空")
     private String code;
 
-
-    /** 快递公司全称 */
+    // 快递公司全称
+    @Column(name = "name",nullable = false)
+    @NotBlank(message = "快递公司名称不能为空")
     private String name;
 
-
-    /** 排序 */
+    // 排序
+    @Column(name = "sort",nullable = false)
+    @NotNull(message = "排序必填")
     private Integer sort;
 
-
-    /** 是否显示 */
+    // 是否显示
+    @Column(name = "is_show",insertable = false)
     private Integer isShow;
-
 
     public void copy(YxExpress source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

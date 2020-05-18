@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018-2020
+ * Copyright (C) 2018-2019
  * All rights reserved, Designed By www.yixiang.co
  * 注意：
  * 本软件为www.yixiang.co开发研制，未经购买不得使用
@@ -12,8 +12,9 @@ import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
+import cn.hutool.http.HttpUtil;
 import co.yixiang.annotation.AnonymousAccess;
-import co.yixiang.logging.aop.log.Log;
+import co.yixiang.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.enums.AppFromEnum;
@@ -28,6 +29,7 @@ import co.yixiang.modules.user.entity.YxSystemAttachment;
 import co.yixiang.modules.user.service.YxSystemAttachmentService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
+import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

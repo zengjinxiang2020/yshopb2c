@@ -1,51 +1,76 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.quartz.service;
-import co.yixiang.common.service.BaseService;
+
 import co.yixiang.modules.quartz.domain.QuartzJob;
-import co.yixiang.modules.quartz.service.dto.QuartzJobDto;
-import co.yixiang.modules.quartz.service.dto.QuartzJobQueryCriteria;
+import co.yixiang.modules.quartz.domain.QuartzLog;
+import co.yixiang.modules.quartz.service.dto.JobQueryCriteria;
 import org.springframework.data.domain.Pageable;
-import java.util.Map;
-import java.util.List;
-import java.io.IOException;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 /**
-* @author hupeng
-* @date 2020-05-13
-*/
-public interface QuartzJobService  extends BaseService<QuartzJob>{
-
-/**
-    * 查询数据分页
-    * @param criteria 条件
-    * @param pageable 分页参数
-    * @return Map<String,Object>
-    */
-    Map<String,Object> queryAll(QuartzJobQueryCriteria criteria, Pageable pageable);
+ * @author Zheng Jie
+ * @date 2019-01-07
+ */
+public interface QuartzJobService {
 
     /**
-    * 查询所有数据不分页
-    * @param criteria 条件参数
-    * @return List<QuartzJobDto>
-    */
-    List<QuartzJob> queryAll(QuartzJobQueryCriteria criteria);
+     * 分页查询
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return /
+     */
+    Object queryAll(JobQueryCriteria criteria, Pageable pageable);
 
     /**
-    * 导出数据
-    * @param all 待导出的数据
-    * @param response /
-    * @throws IOException /
-    */
-    void download(List<QuartzJobDto> all, HttpServletResponse response) throws IOException;
+     * 查询全部
+     * @param criteria 条件
+     * @return /
+     */
+    List<QuartzJob> queryAll(JobQueryCriteria criteria);
 
+    /**
+     * 分页查询日志
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return /
+     */
+    Object queryAllLog(JobQueryCriteria criteria, Pageable pageable);
+
+    /**
+     * 查询全部
+     * @param criteria 条件
+     * @return /
+     */
+    List<QuartzLog> queryAllLog(JobQueryCriteria criteria);
+
+    /**
+     * 创建
+     * @param resources /
+     * @return /
+     */
+    QuartzJob create(QuartzJob resources);
+
+    /**
+     * 编辑
+     * @param resources /
+     */
+    void update(QuartzJob resources);
+
+    /**
+     * 删除任务
+     * @param ids /
+     */
+    void delete(Set<Long> ids);
+
+    /**
+     * 根据ID查询
+     * @param id ID
+     * @return /
+     */
+    QuartzJob findById(Long id);
 
     /**
      * 更改定时任务状态
@@ -60,8 +85,18 @@ public interface QuartzJobService  extends BaseService<QuartzJob>{
     void execution(QuartzJob quartzJob);
 
     /**
-     * 查询启用的任务
-     * @return List
+     * 导出定时任务
+     * @param queryAll 待导出的数据
+     * @param response /
+     * @throws IOException /
      */
-    List<QuartzJob> findByIsPauseIsFalse();
+    void download(List<QuartzJob> queryAll, HttpServletResponse response) throws IOException;
+
+    /**
+     * 导出定时任务日志
+     * @param queryAllLog 待导出的数据
+     * @param response /
+     * @throws IOException /
+     */
+    void downloadLog(List<QuartzLog> queryAllLog, HttpServletResponse response) throws IOException;
 }

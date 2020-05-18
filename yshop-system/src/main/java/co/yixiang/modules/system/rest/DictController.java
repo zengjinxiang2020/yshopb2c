@@ -1,18 +1,10 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.system.rest;
-import co.yixiang.logging.aop.log.Log;
-import co.yixiang.dozer.service.IGenerator;
+
+import cn.hutool.core.util.StrUtil;
+import co.yixiang.aop.log.Log;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.system.domain.Dict;
 import co.yixiang.modules.system.service.DictService;
-import co.yixiang.modules.system.service.dto.DictDto;
 import co.yixiang.modules.system.service.dto.DictQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
-* @author hupeng
+* @author Zheng Jie
 * @date 2019-04-10
 */
 @Api(tags = "系统：字典管理")
@@ -36,13 +28,11 @@ import java.io.IOException;
 public class DictController {
 
     private final DictService dictService;
-    private final IGenerator generator;
 
     private static final String ENTITY_NAME = "dict";
 
-    public DictController(DictService dictService, IGenerator generator) {
+    public DictController(DictService dictService) {
         this.dictService = dictService;
-        this.generator = generator;
     }
 
     @Log("导出字典数据")
@@ -50,7 +40,7 @@ public class DictController {
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','dict:list')")
     public void download(HttpServletResponse response, DictQueryCriteria criteria) throws IOException {
-        dictService.download(generator.convert(dictService.queryAll(criteria), DictDto.class), response);
+        dictService.download(dictService.queryAll(criteria), response);
     }
 
     @Log("查询字典")
@@ -77,16 +67,16 @@ public class DictController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        return new ResponseEntity<>(dictService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(dictService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改字典")
     @ApiOperation("修改字典")
     @PutMapping
     @PreAuthorize("@el.check('admin','dict:edit')")
-    public ResponseEntity<Object> update(@Validated @RequestBody Dict resources){
+    public ResponseEntity<Object> update(@Validated(Dict.Update.class) @RequestBody Dict resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        dictService.saveOrUpdate(resources);
+        dictService.update(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -96,7 +86,7 @@ public class DictController {
     @PreAuthorize("@el.check('admin','dict:del')")
     public ResponseEntity<Object> delete(@PathVariable Long id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        dictService.removeById(id);
+        dictService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
