@@ -67,7 +67,7 @@ public interface DeptService  extends BaseService<Dept>{
      * @param deptDtos /
      * @return /
      */
-    Set<DeptDto> getDeleteDepts(List<Dept> deptList, Set<DeptDto> deptDtos);
+    /*Set<DeptDto> getDeleteDepts(List<Dept> deptList, Set<DeptDto> deptDtos);*/
 
     /**
      * 根据角色ID查询

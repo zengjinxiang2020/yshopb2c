@@ -161,7 +161,7 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, Dept> implement
      * @param deptDtos /
      * @return /
      */
-    @Override
+/*    @Override
     public Set<DeptDto> getDeleteDepts(List<Dept> deptList, Set<DeptDto> deptDtos) {
 
         for (Dept dept : deptList) {
@@ -172,7 +172,7 @@ public class DeptServiceImpl extends BaseServiceImpl<DeptMapper, Dept> implement
             }
         }
         return deptDtos;
-    }
+    }*/
 
     /**
      * 根据角色ID查询

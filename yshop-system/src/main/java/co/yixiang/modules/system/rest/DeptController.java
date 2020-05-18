@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -109,16 +110,21 @@ public class DeptController {
     @PreAuthorize("@el.check('admin','dept:del')")
     public ResponseEntity<Object> delete(@RequestBody Set<Long> ids){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        Set<DeptDto> deptDtos = new HashSet<>();
+        List<Long> deptIds = new ArrayList<>();
         for (Long id : ids) {
             List<Dept> deptList = deptService.findByPid(id);
-            deptDtos.add(generator.convert(deptService.getOne(new QueryWrapper<Dept>().eq("id",id)),DeptDto.class));
+            Dept dept =  deptService.getOne(new QueryWrapper<Dept>().eq("id",id));
+            if(null!=dept){
+                deptIds.add(dept.getId());
+            }
             if(CollectionUtil.isNotEmpty(deptList)){
-                deptDtos = deptService.getDeleteDepts(deptList, deptDtos);
+                for(Dept d:deptList){
+                    deptIds.add(d.getId());
+                }
             }
         }
         try {
-            deptService.removeByIds(deptDtos);
+            deptService.removeByIds(deptIds);
         }catch (Throwable e){
             ThrowableUtil.throwForeignKeyException(e, "所选部门中存在岗位或者角色关联，请取消关联后再试");
         }

@@ -7,11 +7,8 @@
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
 package co.yixiang.modules.system.domain;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 
@@ -29,7 +26,7 @@ import java.io.Serializable;
 public class Dept implements Serializable {
 
     /** ID */
-    @TableId
+    @TableId(value = "id",type= IdType.AUTO)
     private Long id;
 
 
