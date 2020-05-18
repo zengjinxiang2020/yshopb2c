@@ -112,7 +112,7 @@ public class MenuController {
             throw new EntityExistException(Menu.class,"name",resources.getName());
         }
         if(StringUtils.isNotBlank(resources.getComponentName())){
-            menu = menuService.getOne(new QueryWrapper<Menu>().eq("componentName",resources.getComponentName()));
+            menu = menuService.getOne(new QueryWrapper<Menu>().eq("component_name",resources.getComponentName()));
             if(menu != null){
                 throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
             }

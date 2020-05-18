@@ -73,6 +73,7 @@ public class DictDetailController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
+        resources.setDictId(resources.getDict().getId());
         return new ResponseEntity<>(dictDetailService.save(resources),HttpStatus.CREATED);
     }
 

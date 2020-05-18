@@ -45,6 +45,9 @@ public class DictDetail implements Serializable {
     /** 字典id */
     private Long dictId;
 
+    @TableField(exist = false)
+    private Dict dict;
+
 
     /** 创建日期 */
     @TableField(fill= FieldFill.INSERT)

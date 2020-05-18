@@ -309,7 +309,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
         }
 
         if(StringUtils.isNotBlank(resources.getComponentName())){
-            menu1 = this.getOne(new QueryWrapper<Menu>().eq("componentName",resources.getComponentName()));
+            menu1 = this.getOne(new QueryWrapper<Menu>().eq("component_name",resources.getComponentName()));
             if(menu1 != null && !menu1.getId().equals(menu.getId())){
                 throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
             }
