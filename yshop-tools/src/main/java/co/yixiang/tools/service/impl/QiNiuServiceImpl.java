@@ -29,10 +29,6 @@ import com.qiniu.util.Auth;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -47,7 +43,7 @@ import java.util.*;
  * @date 2018-12-31
  */
 @Service
-@CacheConfig(cacheNames = "qiNiu")
+//@CacheConfig(cacheNames = "qiNiu")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class QiNiuServiceImpl implements QiNiuService {
 
@@ -67,7 +63,7 @@ public class QiNiuServiceImpl implements QiNiuService {
     }
 
     @Override
-    @Cacheable
+//    @Cacheable
     public Object queryAll(QiniuQueryCriteria criteria, Pageable pageable){
         return qiniuContentService.queryAll(criteria,pageable);
     }
@@ -78,14 +74,14 @@ public class QiNiuServiceImpl implements QiNiuService {
     }
 
     @Override
-    @Cacheable(key = "'1'")
+//    @Cacheable(key = "'1'")
     public QiniuConfig find() {
         QiniuConfig qiniuConfig = qiniuConfigService.getById(1L);
         return qiniuConfig;
     }
 
     @Override
-    @CachePut(cacheNames = "qiNiuConfig", key = "'1'")
+//    @CachePut(cacheNames = "qiNiuConfig", key = "'1'")
     @Transactional(rollbackFor = Exception.class)
     public QiniuConfig update(QiniuConfig qiniuConfig) {
         String http = "http://", https = "https://";
@@ -93,12 +89,12 @@ public class QiNiuServiceImpl implements QiNiuService {
             throw new BadRequestException("外链域名必须以http://或者https://开头");
         }
         qiniuConfig.setId(1L);
-        qiniuConfigService.save(qiniuConfig);
+        qiniuConfigService.saveOrUpdate(qiniuConfig);
         return qiniuConfig;
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public QiniuContent upload(MultipartFile file, QiniuConfig qiniuConfig) {
         FileUtil.checkSize(maxSize, file.getSize());
@@ -135,14 +131,14 @@ public class QiNiuServiceImpl implements QiNiuService {
     }
 
     @Override
-    @Cacheable
+//    @Cacheable
     public QiniuContent findByContentId(Long id) {
         QiniuContent qiniuContent = qiniuContentService.getById(id);
         return qiniuContent;
     }
 
     @Override
-    @Cacheable
+//    @Cacheable
     public String download(QiniuContent content,QiniuConfig config){
         String finalUrl;
         String type = "公开";
@@ -158,7 +154,7 @@ public class QiNiuServiceImpl implements QiNiuService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void delete(QiniuContent content, QiniuConfig config) {
         //构造一个带指定Zone对象的配置类
@@ -174,7 +170,7 @@ public class QiNiuServiceImpl implements QiNiuService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void synchronize(QiniuConfig config) {
         if(config.getId() == null){
@@ -213,7 +209,7 @@ public class QiNiuServiceImpl implements QiNiuService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     public void deleteAll(Long[] ids, QiniuConfig config) {
         for (Long id : ids) {
             delete(findByContentId(id), config);
@@ -221,7 +217,7 @@ public class QiNiuServiceImpl implements QiNiuService {
     }
 
     @Override
-    @CacheEvict(allEntries = true)
+//    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void update(String type) {
         qiniuConfigService.update(type);

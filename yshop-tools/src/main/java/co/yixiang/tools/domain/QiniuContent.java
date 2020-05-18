@@ -40,7 +40,7 @@ public class QiniuContent implements Serializable {
 
 
     /** 文件名称 */
-   // @Column(name = "name")
+    @TableField("name")
     private String name;
 
 

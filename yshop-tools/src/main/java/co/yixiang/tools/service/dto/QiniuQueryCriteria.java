@@ -22,7 +22,7 @@ import java.util.List;
 public class QiniuQueryCriteria{
 
     @Query(type = Query.Type.INNER_LIKE)
-    private String key;
+    private String name;
 
     @Query(type = Query.Type.BETWEEN)
     private List<Timestamp> createTime;

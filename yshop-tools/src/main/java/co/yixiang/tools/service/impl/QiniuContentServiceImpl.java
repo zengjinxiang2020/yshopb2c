@@ -72,7 +72,7 @@ public class QiniuContentServiceImpl extends BaseServiceImpl<QiniuContentMapper,
         for (QiniuContentDto qiniuContent : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("Bucket 识别符", qiniuContent.getBucket());
-            map.put("文件名称", qiniuContent.getName());
+            map.put("文件名称", qiniuContent.getKey());
             map.put("文件大小", qiniuContent.getSize());
             map.put("文件类型：私有或公开", qiniuContent.getType());
             map.put("上传或同步的时间", qiniuContent.getUpdateTime());

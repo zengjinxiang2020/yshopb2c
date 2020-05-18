@@ -41,4 +41,8 @@ public class QiniuContentDto implements Serializable {
     private String url;
 
     private String suffix;
+
+    public String getKey(){
+        return this.name;
+    }
 }
