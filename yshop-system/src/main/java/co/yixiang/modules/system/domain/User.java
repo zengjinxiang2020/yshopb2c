@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.io.Serializable;
 import java.util.Set;
@@ -64,6 +65,7 @@ public class User implements Serializable {
 
 
     /** 用户名 */
+    @NotBlank(message = "请填写用户名称")
     private String username;
 
 
@@ -72,6 +74,7 @@ public class User implements Serializable {
 
 
     /** 手机号码 */
+    @NotBlank(message = "请输入手机号码")
     private String phone;
 
 

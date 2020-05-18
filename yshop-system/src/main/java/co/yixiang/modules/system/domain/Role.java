@@ -33,6 +33,7 @@ public class Role implements Serializable {
 
 
     /** 名称 */
+    @NotBlank(message = "请填写角色名称")
     private String name;
 
 

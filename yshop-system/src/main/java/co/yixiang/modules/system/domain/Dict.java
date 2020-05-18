@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.NotBlank;
 import java.sql.Timestamp;
 import java.io.Serializable;
 
@@ -31,6 +33,7 @@ public class Dict implements Serializable {
 
 
     /** 字典名称 */
+    @NotBlank(message = "字典名称不能为空")
     private String name;
 
 

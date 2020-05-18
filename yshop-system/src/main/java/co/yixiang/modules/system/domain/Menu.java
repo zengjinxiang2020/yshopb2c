@@ -36,6 +36,7 @@ public class Menu implements Serializable {
 
 
     /** 菜单名称 */
+    @NotBlank(message = "请填写菜单名称")
     private String name;
 
 
@@ -44,12 +45,12 @@ public class Menu implements Serializable {
 
 
     /** 上级菜单ID */
-    @NotNull
+    @NotNull(message = "上级菜单ID不能为空")
     private Long pid;
 
 
     /** 排序 */
-    @NotNull
+    @NotNull(message = "排序不能为空")
     private Long sort;
 
 

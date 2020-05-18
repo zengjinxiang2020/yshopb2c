@@ -14,6 +14,9 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.io.Serializable;
 
@@ -31,10 +34,12 @@ public class Dept implements Serializable {
 
 
     /** 名称 */
+    @NotBlank(message = "部门名称不能为空")
     private String name;
 
 
     /** 上级部门 */
+    @NotNull(message = "上级部门不能为空")
     private Long pid;
 
 
