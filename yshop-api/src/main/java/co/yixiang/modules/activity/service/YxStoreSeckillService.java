@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018-2019
+ * Copyright (C) 2018-2020
  * All rights reserved, Designed By www.yixiang.co
  * 注意：
  * 本软件为www.yixiang.co开发研制，未经购买不得使用
@@ -23,7 +23,7 @@ import java.util.List;
  * 商品秒杀产品表 服务类
  * </p>
  *
- * @author xuwenbo
+ * @author hupeng
  * @since 2019-12-14
  */
 public interface YxStoreSeckillService extends BaseService<YxStoreSeckill> {

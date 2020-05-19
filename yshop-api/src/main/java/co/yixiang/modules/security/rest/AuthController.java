@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018-2019
+ * Copyright (C) 2018-2020
  * All rights reserved, Designed By www.yixiang.co
  * 注意：
  * 本软件为www.yixiang.co开发研制，未经购买不得使用
@@ -8,22 +8,15 @@
  */
 package co.yixiang.modules.security.rest;
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
-import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
-import co.yixiang.aop.log.Log;
-import co.yixiang.common.api.ApiCode;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.AppFromEnum;
-import co.yixiang.enums.RedisKeyEnum;
-import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.notify.NotifyService;
 import co.yixiang.modules.notify.NotifyType;
 import co.yixiang.modules.notify.SmsResult;
@@ -37,28 +30,19 @@ import co.yixiang.modules.security.security.vo.JwtUser;
 import co.yixiang.modules.security.service.OnlineUserService;
 import co.yixiang.modules.user.entity.YxSystemAttachment;
 import co.yixiang.modules.user.entity.YxUser;
-import co.yixiang.modules.user.entity.YxWechatUser;
 import co.yixiang.modules.user.service.YxSystemAttachmentService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxWechatUserService;
-import co.yixiang.modules.user.web.vo.YxUserQueryVo;
-import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.utils.OrderUtil;
-import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.CommonResponse;
-import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.chanjar.weixin.common.error.WxErrorException;
-import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -74,7 +58,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -101,7 +84,7 @@ public class AuthController {
     private final YxUserService userService;
     private final PasswordEncoder passwordEncoder;
     private final YxWechatUserService wechatUserService;
-    private final WxMaService wxMaService;
+
     private final NotifyService notifyService;
     private final YxSystemAttachmentService systemAttachmentService;
 
@@ -161,132 +144,7 @@ public class AuthController {
          * 2、目前登陆授权打通方式适用于新项目（也就是你yx_user、yx_wechat_user都是空的）
          * 3、如果你以前已经有数据请自行处理
          */
-
-        try {
-            WxMpService wxService = WxMpConfiguration.getWxMpService();
-            WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
-            WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
-            String openid = wxMpUser.getOpenId();
-
-            //如果开启了UnionId
-            if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
-                 openid = wxMpUser.getUnionId();
-            }
-            YxUser yxUser = userService.findByName(openid);
-
-            String username = "";
-            if(ObjectUtil.isNull(yxUser)){
-                //过滤掉表情
-                String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickname());
-                log.info("昵称：{}", nickname);
-                //用户保存
-                YxUser user = new YxUser();
-                user.setAccount(nickname);
-                //如果开启了UnionId
-                if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
-                    username = wxMpUser.getUnionId();
-                    user.setUsername(wxMpUser.getUnionId());
-                }else{
-                    username = wxMpUser.getOpenId();
-                    user.setUsername(wxMpUser.getOpenId());
-                }
-                user.setPassword(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
-                user.setPwd(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
-                user.setPhone("");
-                user.setUserType(AppFromEnum.WECHAT.getValue());
-                user.setLoginType(AppFromEnum.WECHAT.getValue());
-                user.setAddTime(OrderUtil.getSecondTimestampTwo());
-                user.setLastTime(OrderUtil.getSecondTimestampTwo());
-                user.setNickname(nickname);
-                user.setAvatar(wxMpUser.getHeadImgUrl());
-                user.setNowMoney(BigDecimal.ZERO);
-                user.setBrokeragePrice(BigDecimal.ZERO);
-                user.setIntegral(BigDecimal.ZERO);
-
-                userService.save(user);
-
-
-                //保存微信用户
-                YxWechatUser yxWechatUser = new YxWechatUser();
-                yxWechatUser.setAddTime(OrderUtil.getSecondTimestampTwo());
-                yxWechatUser.setNickname(nickname);
-                yxWechatUser.setOpenid(wxMpUser.getOpenId());
-                int sub = 0;
-                if (ObjectUtil.isNotNull(wxMpUser.getSubscribe()) && wxMpUser.getSubscribe()) sub = 1;
-                yxWechatUser.setSubscribe(sub);
-                yxWechatUser.setSex(wxMpUser.getSex());
-                yxWechatUser.setLanguage(wxMpUser.getLanguage());
-                yxWechatUser.setCity(wxMpUser.getCity());
-                yxWechatUser.setProvince(wxMpUser.getProvince());
-                yxWechatUser.setCountry(wxMpUser.getCountry());
-                yxWechatUser.setHeadimgurl(wxMpUser.getHeadImgUrl());
-                if (ObjectUtil.isNotNull(wxMpUser.getSubscribeTime())) {
-                    yxWechatUser.setSubscribeTime(wxMpUser.getSubscribeTime().intValue());
-                }
-                if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
-                    yxWechatUser.setUnionid(wxMpUser.getUnionId());
-                }
-                if (StrUtil.isNotEmpty(wxMpUser.getRemark())) {
-                    yxWechatUser.setUnionid(wxMpUser.getRemark());
-                }
-                if (ObjectUtil.isNotEmpty(wxMpUser.getGroupId())) {
-                    yxWechatUser.setGroupid(wxMpUser.getGroupId());
-                }
-                yxWechatUser.setUid(user.getUid());
-
-                wechatUserService.save(yxWechatUser);
-
-            }else{
-                username = yxUser.getUsername();
-                if(StrUtil.isNotBlank(wxMpUser.getOpenId()) || StrUtil.isNotBlank(wxMpUser.getUnionId())){
-                    YxWechatUser wechatUser = new YxWechatUser();
-                    wechatUser.setUid(yxUser.getUid());
-                    wechatUser.setUnionid(wxMpUser.getUnionId());
-                    wechatUser.setOpenid(wxMpUser.getOpenId());
-
-                    wechatUserService.updateById(wechatUser);
-                }
-            }
-
-
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(username,
-                            ShopConstants.YSHOP_DEFAULT_PWD);
-
-            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            // 生成令牌
-            String token = tokenProvider.createToken(authentication);
-            final JwtUser jwtUserT = (JwtUser) authentication.getPrincipal();
-            // 保存在线信息
-            onlineUserService.save(jwtUserT, token, request);
-
-            Date expiresTime = tokenProvider.getExpirationDateFromToken(token);
-            String expiresTimeStr = DateUtil.formatDateTime(expiresTime);
-
-            Map<String, String> map = new LinkedHashMap<>();
-            map.put("token", token);
-            map.put("expires_time", expiresTimeStr);
-
-            if (singleLogin) {
-                //踢掉之前已经登录的token
-                onlineUserService.checkLoginOnUser(jwtUserT.getUsername(), token);
-            }
-
-            //设置推广关系
-            if (StrUtil.isNotEmpty(spread) && !spread.equals("NaN")) {
-                userService.setSpread(Integer.valueOf(spread),
-                        jwtUserT.getId().intValue());
-            }
-
-            // 返回 token
-            return ApiResult.ok(map);
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-            return ApiResult.fail("授权失败");
-        }
-
+        return ApiResult.ok(userService.authLogin(code,spread,request));
     }
 
 
@@ -304,135 +162,8 @@ public class AuthController {
          * 2、目前登陆授权打通方式适用于新项目（也就是你yx_user、yx_wechat_user都是空的）
          * 3、如果你以前已经有数据请自行处理
          */
-        String code = loginParam.getCode();
-        String encryptedData = loginParam.getEncryptedData();
-        String iv = loginParam.getIv();
-        String spread = loginParam.getSpread();
-        try {
-            //读取redis配置
-            String appId = RedisUtil.get(RedisKeyEnum.WXAPP_APPID.getValue());
-            String secret = RedisUtil.get(RedisKeyEnum.WXAPP_SECRET.getValue());
-            if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
-                throw new ErrorRequestException("请先配置小程序");
-            }
-            WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
-            wxMaConfig.setAppid(appId);
-            wxMaConfig.setSecret(secret);
+       return ApiResult.ok(userService.wxappAuth(loginParam,request)) ;
 
-            wxMaService.setWxMaConfig(wxMaConfig);
-            WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-            String openid = session.getOpenid();
-            //如果开启了UnionId
-            if (StrUtil.isNotBlank(session.getUnionid())) {
-                openid = session.getUnionid();
-            }
-
-            YxUser yxUser = userService.findByName(openid);
-            String username = "";
-            if(ObjectUtil.isNull(yxUser)){
-
-                WxMaUserInfo wxMpUser = wxMaService.getUserService()
-                        .getUserInfo(session.getSessionKey(), encryptedData, iv);
-                //过滤掉表情
-                String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickName());
-                //用户保存
-                YxUser user = new YxUser();
-                user.setAccount(nickname);
-
-                //如果开启了UnionId
-                if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
-                    username = wxMpUser.getUnionId();
-                    user.setUsername(wxMpUser.getUnionId());
-                }else{
-                    username = wxMpUser.getOpenId();
-                    user.setUsername(wxMpUser.getOpenId());
-                }
-                user.setPassword(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
-                user.setPwd(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
-                user.setPhone("");
-                user.setUserType(AppFromEnum.ROUNTINE.getValue());
-                user.setAddTime(OrderUtil.getSecondTimestampTwo());
-                user.setLastTime(OrderUtil.getSecondTimestampTwo());
-                user.setNickname(nickname);
-                user.setAvatar(wxMpUser.getAvatarUrl());
-                user.setNowMoney(BigDecimal.ZERO);
-                user.setBrokeragePrice(BigDecimal.ZERO);
-                user.setIntegral(BigDecimal.ZERO);
-
-                userService.save(user);
-
-
-                //保存微信用户
-                YxWechatUser yxWechatUser = new YxWechatUser();
-                // System.out.println("wxMpUser:"+wxMpUser);
-                yxWechatUser.setAddTime(OrderUtil.getSecondTimestampTwo());
-                yxWechatUser.setNickname(nickname);
-                yxWechatUser.setRoutineOpenid(wxMpUser.getOpenId());
-                int sub = 0;
-                yxWechatUser.setSubscribe(sub);
-                yxWechatUser.setSex(Integer.valueOf(wxMpUser.getGender()));
-                yxWechatUser.setLanguage(wxMpUser.getLanguage());
-                yxWechatUser.setCity(wxMpUser.getCity());
-                yxWechatUser.setProvince(wxMpUser.getProvince());
-                yxWechatUser.setCountry(wxMpUser.getCountry());
-                yxWechatUser.setHeadimgurl(wxMpUser.getAvatarUrl());
-                if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
-                    yxWechatUser.setUnionid(wxMpUser.getUnionId());
-                }
-                yxWechatUser.setUid(user.getUid());
-
-                wechatUserService.save(yxWechatUser);
-
-            }else{
-                username = yxUser.getUsername();
-                if(StrUtil.isNotBlank(session.getOpenid()) || StrUtil.isNotBlank(session.getUnionid())){
-                    YxWechatUser wechatUser = new YxWechatUser();
-                    wechatUser.setUid(yxUser.getUid());
-                    wechatUser.setUnionid(session.getUnionid());
-                    wechatUser.setRoutineOpenid(session.getOpenid());
-
-                    wechatUserService.updateById(wechatUser);
-                }
-            }
-
-
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(username,
-                            ShopConstants.YSHOP_DEFAULT_PWD);
-
-            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            // 生成令牌
-            String token = tokenProvider.createToken(authentication);
-            final JwtUser jwtUserT = (JwtUser) authentication.getPrincipal();
-            // 保存在线信息
-            onlineUserService.save(jwtUserT, token, request);
-
-            Date expiresTime = tokenProvider.getExpirationDateFromToken(token);
-            String expiresTimeStr = DateUtil.formatDateTime(expiresTime);
-
-
-            Map<String, String> map = new LinkedHashMap<>();
-            map.put("token", token);
-            map.put("expires_time", expiresTimeStr);
-
-            if (singleLogin) {
-                //踢掉之前已经登录的token
-                onlineUserService.checkLoginOnUser(jwtUserT.getUsername(), token);
-            }
-
-            //设置推广关系
-            if (StrUtil.isNotEmpty(spread)) {
-                userService.setSpread(Integer.valueOf(spread),
-                        jwtUserT.getId().intValue());
-            }
-
-            // 返回 token
-            return ApiResult.ok(map);
-        } catch (WxErrorException e) {
-            log.error(e.getMessage(), e);
-            return ApiResult.fail(e.toString());
-        }
     }
 
 

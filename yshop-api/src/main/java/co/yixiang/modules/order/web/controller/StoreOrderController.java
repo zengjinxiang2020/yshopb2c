@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018-2019
+ * Copyright (C) 2018-2020
  * All rights reserved, Designed By www.yixiang.co
  * 注意：
  * 本软件为www.yixiang.co开发研制，未经购买不得使用
@@ -13,17 +13,15 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import co.yixiang.annotation.AnonymousAccess;
-import co.yixiang.aop.log.Log;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
-import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.enums.RedisKeyEnum;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.ErrorRequestException;
-import co.yixiang.express.ExpressService;
-import co.yixiang.express.dao.ExpressInfo;
+import co.yixiang.tools.express.ExpressService;
+import co.yixiang.tools.express.dao.ExpressInfo;
 import co.yixiang.modules.activity.entity.YxStoreBargainUser;
 import co.yixiang.modules.activity.service.YxStoreBargainUserService;
 import co.yixiang.modules.activity.service.YxStorePinkService;

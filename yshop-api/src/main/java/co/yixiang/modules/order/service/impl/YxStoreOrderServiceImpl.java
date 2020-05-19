@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018-2019
+ * Copyright (C) 2018-2020
  * All rights reserved, Designed By www.yixiang.co
  * 注意：
  * 本软件为www.yixiang.co开发研制，未经购买不得使用
@@ -16,8 +16,8 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.constant.ShopConstants;
-import co.yixiang.domain.AlipayConfig;
-import co.yixiang.domain.vo.TradeVo;
+import co.yixiang.tools.domain.AlipayConfig;
+import co.yixiang.tools.domain.vo.TradeVo;
 import co.yixiang.enums.*;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.service.*;
@@ -59,7 +59,7 @@ import co.yixiang.modules.user.web.vo.YxWechatUserQueryVo;
 import co.yixiang.mp.service.YxPayService;
 import co.yixiang.mp.service.YxTemplateService;
 import co.yixiang.mp.service.YxMiniPayService;
-import co.yixiang.service.AlipayService;
+import co.yixiang.tools.service.AlipayConfigService;
 import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -142,7 +142,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Autowired
     private YxExpressService expressService;
     @Autowired
-    private AlipayService alipayService;
+    private AlipayConfigService alipayService;
     @Autowired
     private YxSystemStoreService systemStoreService;
 
