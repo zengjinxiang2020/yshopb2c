@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
  Navicat Premium Data Transfer
 
@@ -6236,4 +6235,3 @@ CREATE TABLE `yx_wechat_user`  (
 INSERT INTO `yx_wechat_user` VALUES (1, NULL, NULL, NULL, 'hupeng', '', 0, '', '', '', '', NULL, 0, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'wechat');
 
 SET FOREIGN_KEY_CHECKS = 1;
->>>>>>> featrue/mp
