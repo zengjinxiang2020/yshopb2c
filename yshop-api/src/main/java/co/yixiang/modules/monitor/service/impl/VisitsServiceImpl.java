@@ -1,20 +1,13 @@
-/**
- * Copyright (C) 2018-2020
- * All rights reserved, Designed By www.yixiang.co
- * 注意：
- * 本软件为www.yixiang.co开发研制，未经购买不得使用
- * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
- * 一经发现盗用、分享等行为，将追究法律责任，后果自负
- */
 package co.yixiang.modules.monitor.service.impl;
 
-import co.yixiang.modules.monitor.domain.Visits;
-import co.yixiang.modules.monitor.repository.VisitsRepository;
-import co.yixiang.modules.monitor.service.VisitsService;
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.logging.service.mapper.LogMapper;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import co.yixiang.modules.monitor.domain.Visits;
+import co.yixiang.modules.monitor.service.VisitsService;
+import co.yixiang.modules.monitor.service.mapper.VisitsMapper;
 import co.yixiang.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,47 +17,60 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+/**
+ * @author hupeng
+ * @date 2020-05-20
+ */
 @Slf4j
 @Service
-@AllArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class VisitsServiceImpl implements VisitsService {
+public class VisitsServiceImpl extends BaseServiceImpl<VisitsMapper, Visits> implements VisitsService {
 
-    private final VisitsRepository visitsRepository;
+
     private final LogMapper logMapper;
+
+    private final VisitsMapper visitsMapper;
+
+    public VisitsServiceImpl(LogMapper logMapper, VisitsMapper visitsMapper) {
+        this.logMapper = logMapper;
+        this.visitsMapper = visitsMapper;
+    }
+
 
     @Override
     public void save() {
         LocalDate localDate = LocalDate.now();
-        Visits visits = visitsRepository.findByDate(localDate.toString());
+        Visits visits = this.getOne(new QueryWrapper<Visits>().lambda()
+        .eq(Visits::getDate,localDate.toString()));
         if(visits == null){
             visits = new Visits();
             visits.setWeekDay(StringUtils.getWeekDay());
             visits.setPvCounts(1L);
             visits.setIpCounts(1L);
             visits.setDate(localDate.toString());
-            visitsRepository.save(visits);
+            this.save(visits);
         }
     }
 
     @Override
     public void count(HttpServletRequest request) {
         LocalDate localDate = LocalDate.now();
-        Visits visits = visitsRepository.findByDate(localDate.toString());
+        Visits visits = this.getOne(new QueryWrapper<Visits>().lambda()
+                .eq(Visits::getDate,localDate.toString()));
         visits.setPvCounts(visits.getPvCounts()+1);
         long ipCounts = logMapper.findIp(localDate.toString(), localDate.plusDays(1).toString());
         visits.setIpCounts(ipCounts);
-        visitsRepository.save(visits);
+        this.saveOrUpdate(visits);
     }
 
     @Override
     public Object get() {
-        Map map = new HashMap();
+        Map<String,Object> map = new HashMap<>(4);
         LocalDate localDate = LocalDate.now();
-        Visits visits = visitsRepository.findByDate(localDate.toString());
-        List<Visits> list = visitsRepository.findAllVisits(localDate.minusDays(6).toString(),localDate.plusDays(1).toString());
+        Visits visits = this.getOne(new QueryWrapper<Visits>().lambda()
+                .eq(Visits::getDate,localDate.toString()));
+        List<Visits> list = visitsMapper.findAllVisits(localDate.minusDays(6).toString(),localDate.plusDays(1).toString());
 
         long recentVisits = 0, recentIp = 0;
         for (Visits data : list) {
@@ -80,12 +86,12 @@ public class VisitsServiceImpl implements VisitsService {
 
     @Override
     public Object getChartData() {
-        Map map = new HashMap();
-        LocalDate localDate = LocalDate.now();
-        List<Visits> list = visitsRepository.findAllVisits(localDate.minusDays(6).toString(),localDate.plusDays(1).toString());
-        map.put("weekDays",list.stream().map(Visits::getWeekDay).collect(Collectors.toList()));
-        map.put("visitsData",list.stream().map(Visits::getPvCounts).collect(Collectors.toList()));
-        map.put("ipData",list.stream().map(Visits::getIpCounts).collect(Collectors.toList()));
+        Map<String,Object> map = new HashMap<>(3);
+       LocalDate localDate = LocalDate.now();
+//        List<Visits> list = visitsRepository.findAllVisits(localDate.minusDays(6).toString(),localDate.plusDays(1).toString());
+//        map.put("weekDays",list.stream().map(Visits::getWeekDay).collect(Collectors.toList()));
+//        map.put("visitsData",list.stream().map(Visits::getPvCounts).collect(Collectors.toList()));
+//        map.put("ipData",list.stream().map(Visits::getIpCounts).collect(Collectors.toList()));
         return map;
     }
 }
