@@ -10,7 +10,6 @@ import co.yixiang.modules.shop.domain.YxStoreCart;
 import co.yixiang.modules.shop.service.dto.CountDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

@@ -44,9 +44,6 @@ import org.springframework.transaction.annotation.Transactional;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.QueryHelp;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;

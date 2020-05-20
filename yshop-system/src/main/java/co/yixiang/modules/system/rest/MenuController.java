@@ -104,23 +104,8 @@ public class MenuController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
-        Menu menu = menuService.getOne(new QueryWrapper<Menu>().eq("name",resources.getName()));
-        if(menu != null){
-            throw new EntityExistException(Menu.class,"name",resources.getName());
-        }
-        if(StringUtils.isNotBlank(resources.getComponentName())){
-            menu = menuService.getOne(new QueryWrapper<Menu>().eq("component_name",resources.getComponentName()));
-            if(menu != null){
-                throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
-            }
-        }
-        if(resources.getIFrame()){
-            String http = "http://", https = "https://";
-            if (!(resources.getPath().toLowerCase().startsWith(http)||resources.getPath().toLowerCase().startsWith(https))) {
-                throw new BadRequestException("外链必须以http://或者https://开头");
-            }
-        }
-        return new ResponseEntity<>(menuService.save(resources),HttpStatus.CREATED);
+
+        return new ResponseEntity<>(menuService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改菜单")

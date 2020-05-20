@@ -104,4 +104,6 @@ public interface MenuService  extends BaseService<Menu>{
      * @param resources /
      */
     void update(Menu resources);
+
+    Object create(Menu resources);
 }

@@ -30,7 +30,9 @@ import co.yixiang.modules.system.service.MenuService;
 import co.yixiang.modules.system.service.dto.MenuDto;
 import co.yixiang.modules.system.service.dto.MenuQueryCriteria;
 import co.yixiang.modules.system.service.mapper.MenuMapper;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +60,7 @@ import java.util.stream.Collectors;
 */
 @Service
 @AllArgsConstructor
-//@CacheConfig(cacheNames = "menu")
+@CacheConfig(cacheNames = "menu")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implements MenuService {
 
@@ -67,7 +69,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
     private final RoleMapper roleMapper;
 
     @Override
-    //@Cacheable
+    @Cacheable
     public Map<String, Object> queryAll(MenuQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
         PageInfo<Menu> page = new PageInfo<>(queryAll(criteria));
@@ -79,7 +81,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
 
 
     @Override
-    //@Cacheable
+    @Cacheable
     public List<Menu> queryAll(MenuQueryCriteria criteria){
         return baseMapper.selectList(QueryHelpPlus.getPredicate(Menu.class, criteria));
     }
@@ -204,6 +206,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
      * @return /
      */
     @Override
+    @Cacheable(key = "'tree'")
     public Object getMenuTree(List<Menu> menus) {
         List<Map<String,Object>> list = new LinkedList<>();
         menus.forEach(menu -> {
@@ -249,6 +252,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
      * @return /
      */
     @Override
+    @Cacheable(key = "'pid:'+#p0")
     public List<Menu> findByPid(long pid) {
         return menuMapper.findByPid(pid);
     }
@@ -276,6 +280,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
      * @param menuSet /
      */
     @Override
+    @CacheEvict(allEntries = true)
     public void delete(Set<Menu> menuSet) {
         for (Menu menu : menuSet) {
             roleMapper.untiedMenu(menu.getId());
@@ -289,6 +294,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
      * @param resources /
      */
     @Override
+    @CacheEvict(allEntries = true)
     public void update(Menu resources) {
         if(resources.getId().equals(resources.getPid())) {
             throw new BadRequestException("上级不能为自己");
@@ -328,5 +334,26 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
         menu.setPermission(resources.getPermission());
         menu.setType(resources.getType());
         this.saveOrUpdate(menu);
+    }
+
+    @Override
+    @CacheEvict(allEntries = true)
+    public MenuDto create(Menu resources) {
+        if(this.getOne(lambdaQuery().eq(Menu::getName,resources.getName())) != null){
+            throw new EntityExistException(Menu.class,"name",resources.getName());
+        }
+        if(StringUtils.isNotBlank(resources.getComponentName())){
+            if(this.getOne(lambdaQuery().eq(Menu::getComponentName,resources.getComponentName())) != null){
+                throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
+            }
+        }
+        if(resources.getIFrame()){
+            String http = "http://", https = "https://";
+            if (!(resources.getPath().toLowerCase().startsWith(http)||resources.getPath().toLowerCase().startsWith(https))) {
+                throw new BadRequestException("外链必须以http://或者https://开头");
+            }
+        }
+        this.save(resources);
+        return generator.convert(resources,MenuDto.class);
     }
 }

@@ -10,8 +10,6 @@ import co.yixiang.modules.shop.domain.YxUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
