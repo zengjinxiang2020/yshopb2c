@@ -1,8 +1,6 @@
 package co.yixiang.modules.monitor.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -30,7 +28,6 @@ public class Visits {
     @Column(name = "ip_counts")
     private Long ipCounts;
 
-    @CreationTimestamp
     @Column(name = "create_time")
     private Timestamp createTime;
 

@@ -3,12 +3,7 @@ package co.yixiang.modules.shop.web.param;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
 import co.yixiang.common.web.param.QueryParam;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.validation.constraints.NotBlank;
-
 /**
  * <p>
  * 门店自提 查询参数对象
