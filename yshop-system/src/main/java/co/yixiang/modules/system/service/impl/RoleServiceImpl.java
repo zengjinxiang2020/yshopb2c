@@ -271,4 +271,14 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Set<Long> ids) {
+        for (Long id : ids) {
+            rolesMenusService.lambdaUpdate().eq(RolesMenus::getRoleId, id).remove();
+            rolesDeptsService.lambdaUpdate().eq(RolesDepts::getRoleId,id).remove();
+        }
+        this.removeByIds(ids);
+    }
+
 }

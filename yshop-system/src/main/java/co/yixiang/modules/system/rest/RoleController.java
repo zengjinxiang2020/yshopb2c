@@ -140,9 +140,9 @@ public class RoleController {
             getLevels(role.getLevel());
         }
         try {
-            roleService.removeByIds(ids);
+            roleService.delete(ids);
         } catch (Throwable e){
-            ThrowableUtil.throwForeignKeyException(e, "所选角色存在用户关联，请取消关联后再试");
+            throw new BadRequestException("所选角色存在用户关联，请取消关联后再试");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

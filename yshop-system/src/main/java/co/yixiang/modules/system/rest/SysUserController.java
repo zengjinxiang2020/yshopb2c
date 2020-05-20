@@ -166,7 +166,7 @@ public class SysUserController {
                 throw new BadRequestException("角色权限不足，不能删除：" + userService.findByName(SecurityUtils.getUsername()).getUsername());
             }
         }
-        userService.removeByIds(ids);
+        userService.delete(ids);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

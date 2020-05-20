@@ -20,6 +20,7 @@ import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.SecurityUtils;
 import co.yixiang.utils.StringUtils;
 import co.yixiang.utils.ValidationUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
@@ -72,7 +73,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
     private final RedisUtils redisUtils;
     private final UsersRolesService usersRolesService;
 
-    public SysUserServiceImpl(IGenerator generator, SysUserMapper userMapper, UserAvatarService userAvatarService, JobService jobService, DeptService deptService, RoleService roleService, RoleMapper roleMapper, RedisUtils redisUtils, UsersRolesService usersRolesService) {
+    public SysUserServiceImpl(IGenerator generator, SysUserMapper userMapper, UserAvatarService userAvatarService, JobService jobService, DeptService deptService,  RoleMapper roleMapper, RedisUtils redisUtils, UsersRolesService usersRolesService) {
         this.generator = generator;
         this.userMapper = userMapper;
         this.userAvatarService = userAvatarService;
@@ -269,6 +270,15 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
         user.setNickName(resources.getNickName());
         user.setSex(resources.getSex());
         this.saveOrUpdate(user);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Set<Long> ids) {
+        for (Long id : ids) {
+            usersRolesService.lambdaUpdate().eq(UsersRoles ::getUserId,id).remove();
+        }
+        this.removeByIds(ids);
     }
 
 }

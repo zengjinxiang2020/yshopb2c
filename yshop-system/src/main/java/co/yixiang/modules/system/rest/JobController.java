@@ -98,7 +98,7 @@ public class JobController {
         try {
             jobService.removeByIds(ids);
         }catch (Throwable e){
-            ThrowableUtil.throwForeignKeyException(e, "所选岗位存在用户关联，请取消关联后再试");
+            throw new BadRequestException( "所选岗位存在用户关联，请取消关联后再试");
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -26,7 +26,7 @@ public class UserQueryCriteria{
     @Query
     private Long id;
 
-    @Query(propName = "id", type = Query.Type.IN, joinName = "dept")
+    @Query(propName = "deptId", type = Query.Type.IN)
     private Set<Long> deptIds;
 
     @Query(blurry = "email,username,nickName")

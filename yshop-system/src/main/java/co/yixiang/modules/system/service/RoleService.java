@@ -107,4 +107,6 @@ public interface RoleService  extends BaseService<Role>{
      * @return 权限信息
      */
     Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user);
+
+    void delete(Set<Long> ids);
 }

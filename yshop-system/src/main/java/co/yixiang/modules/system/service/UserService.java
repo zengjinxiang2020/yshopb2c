@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;
 import java.util.List;
 import java.io.IOException;
+import java.util.Set;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -88,4 +89,5 @@ public interface UserService  extends BaseService<User>{
      */
     void update(User resources);
 
+    void delete(Set<Long> ids);
 }
