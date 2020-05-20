@@ -2,7 +2,6 @@ package co.yixiang.modules.monitor.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.monitor.domain.Visits;
-import co.yixiang.modules.system.domain.Dept;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
