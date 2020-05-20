@@ -48,7 +48,7 @@ public class RedisKeyInitialization {
             }
             log.info("---------------redisKey初始化成功---------------");
         }catch (Exception e){
-            log.info("redisKey初始化失败: {}",e);
+            log.error("redisKey初始化失败: {}",e);
         }
 
     }
