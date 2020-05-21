@@ -6,6 +6,7 @@
 package co.yixiang.modules.shop.rest;
 
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxStoreCategory;
@@ -15,6 +16,7 @@ import co.yixiang.modules.shop.service.dto.YxStoreCategoryQueryCriteria;
 import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +67,7 @@ public class StoreCategoryController {
     @Log("新增商品分类")
     @ApiOperation(value = "新增商品分类")
     @PostMapping(value = "/yxStoreCategory")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PreAuthorize("@el.check('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxStoreCategory resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
@@ -78,6 +81,7 @@ public class StoreCategoryController {
 
     @Log("修改商品分类")
     @ApiOperation(value = "修改商品分类")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PutMapping(value = "/yxStoreCategory")
     @PreAuthorize("@el.check('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreCategory resources){
@@ -91,6 +95,7 @@ public class StoreCategoryController {
 
     @Log("删除商品分类")
     @ApiOperation(value = "删除商品分类")
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @DeleteMapping(value = "/yxStoreCategory/{id}")
     @PreAuthorize("@el.check('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_DELETE')")
     public ResponseEntity delete(@PathVariable String id){
