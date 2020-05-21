@@ -25,14 +25,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,25 +42,17 @@ import java.util.stream.Collectors;
 @SuppressWarnings({"unchecked","all"})
 public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, ColumnConfig> implements GeneratorService {
 
-    @PersistenceContext
-    private EntityManager em;
-
 
     @Override
     public Object getTables() {
-        // 使用预编译防止sql注入
-        String sql = "select table_name ,create_time , engine, table_collation, table_comment from information_schema.tables " +
-                "where table_schema = (select database()) " +
-                "order by create_time desc";
-        Query query = em.createNativeQuery(sql);
-        return query.getResultList();
+        return baseMapper.selectTables();
     }
 
     @Override
     public Object getTables(String name, Integer page, Integer size) {
         IPage<TableInfo> pages = null;
         Page<TableInfo> pageModel = new Page<>(page, size);
-        pages = baseMapper.selectTables(pageModel,name);
+        pages = baseMapper.selectTablePage(pageModel,name);
         Integer totalElements = 0;
         return PageUtil.toPage(pages.getRecords(),pages.getTotal());
     }
@@ -84,39 +72,19 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
 
     @Override
     public List<ColumnConfig> query(String tableName){
-        // 使用预编译防止sql注入
-/*        String sql = "select column_name, is_nullable, data_type, column_comment, column_key, extra from information_schema.columns " +
-                "where table_name = ? and table_schema = (select database()) order by ordinal_position";
-        Query query = em.createNativeQuery(sql);
-        query.setParameter(1,tableName);
-        List result = query.getResultList();
         List<ColumnConfig> columnInfos = new ArrayList<>();
-        for (Object obj : result) {
-            Object[] arr = (Object[]) obj;
+        List<Map<String,Object>> result = baseMapper.queryByTableName(tableName);
+        for (Map<String,Object> map : result) {
+
             columnInfos.add(
                     new ColumnConfig(
                             tableName,
-                            arr[0].toString(),
-                            "NO".equals(arr[1]),
-                            arr[2].toString(),
-                            ObjectUtil.isNotNull(arr[3]) ? arr[3].toString() : null,
-                            ObjectUtil.isNotNull(arr[4]) ? arr[4].toString() : null,
-                            ObjectUtil.isNotNull(arr[5]) ? arr[5].toString() : null)
-            );
-        }*/
-        List<ColumnConfig> columnInfos = new ArrayList<>();
-        List result = baseMapper.queryByTableName(tableName);
-        for (Object obj : result) {
-            Object[] arr = (Object[]) obj;
-            columnInfos.add(
-                    new ColumnConfig(
-                            tableName,
-                            arr[0].toString(),
-                            "NO".equals(arr[1]),
-                            arr[2].toString(),
-                            ObjectUtil.isNotNull(arr[3]) ? arr[3].toString() : null,
-                            ObjectUtil.isNotNull(arr[4]) ? arr[4].toString() : null,
-                            ObjectUtil.isNotNull(arr[5]) ? arr[5].toString() : null)
+                            map.get("column_name").toString(),
+                            "NO".equals(map.get("is_nullable").toString()),
+                            map.get("data_type").toString(),
+                            ObjectUtil.isNotNull( map.get("column_comment")) ?  map.get("column_comment").toString() : null,
+                            ObjectUtil.isNotNull(map.get("column_key")) ? map.get("column_key").toString() : null,
+                            ObjectUtil.isNotNull(map.get("extra")) ? map.get("extra").toString() : null)
             );
         }
         return columnInfos;
