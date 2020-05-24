@@ -172,7 +172,7 @@ public class PictureServiceImpl extends BaseServiceImpl<PictureMapper, Picture> 
             if(this.getOne(new QueryWrapper<Picture>().eq("url",picture.getUrl()))==null){
                 picture.setSize(FileUtil.getSize(Integer.parseInt(picture.getSize())));
                 picture.setUsername("System Sync");
-                picture.setMd5code("");
+                picture.setMd5code(null);
                 this.save(picture);
             }
         }
