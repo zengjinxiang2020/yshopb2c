@@ -31,15 +31,15 @@ public interface SysUserMapper extends CoreMapper<User> {
      * @param password 密码
      * @param lastPasswordResetTime /
      */
-    @Update("update `user` set password = password+${password} , last_password_reset_time = lastPasswordResetTime+${lastPasswordResetTime} where username = #{username}")
-    void updatePass( @Param("password") String password,@Param("lastPasswordResetTime") Date lastPasswordResetTime, @Param("username") String username);
+    @Update("update `user` set password = #{password} , last_password_reset_time = #{lastPasswordResetTime} where username = #{username}")
+    void updatePass( @Param("password") String password,@Param("lastPasswordResetTime") String lastPasswordResetTime, @Param("username") String username);
 
     /**
      * 修改邮箱
      * @param username 用户名
      * @param email 邮箱
      */
-    @Update("update `user` set email = email+ ${email} where username = #{username}")
+    @Update("update `user` set email = #{email} where username = #{username}")
     void updateEmail(@Param("email") String email, @Param("username") String username);
 
 }

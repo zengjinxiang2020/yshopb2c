@@ -79,6 +79,8 @@ public class EmailConfigServiceImpl extends BaseServiceImpl<EmailConfigMapper, E
         account.setFrom(emailConfig.getUser()+"<"+emailConfig.getFromUser()+">");
         // ssl方式发送
         account.setSslEnable(true);
+        // 使用STARTTLS安全连接
+        account.setStarttlsEnable(true);
         String content = emailVo.getContent();
         // 发送
         try {

@@ -8,6 +8,7 @@
 */
 package co.yixiang.modules.system.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import co.yixiang.exception.EntityExistException;
 import co.yixiang.modules.system.domain.Role;
 import co.yixiang.modules.system.domain.User;
@@ -20,7 +21,6 @@ import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.SecurityUtils;
 import co.yixiang.utils.StringUtils;
 import co.yixiang.utils.ValidationUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
@@ -154,7 +154,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
      */
     @Override
     public void updatePass(String username, String encryptPassword) {
-        userMapper.updatePass(encryptPassword,new Date(),username);
+        userMapper.updatePass(encryptPassword, DateUtil.format(new Date(),"yyyy-MM-dd HH:mm:ss"),username);
     }
 
     /**
