@@ -135,6 +135,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
     @Override
     public YxStoreProduct saveProduct(YxStoreProduct storeProduct) {
+        if (storeProduct.getStoreCategory().getId() == null) {
+            throw new BadRequestException("分类名称不能为空");
+        }
         storeProduct.setCateId(storeProduct.getStoreCategory().getId().toString());
         this.save(storeProduct);
         return storeProduct;
