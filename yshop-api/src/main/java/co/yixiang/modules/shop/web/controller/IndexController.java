@@ -14,12 +14,12 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.constant.ShopConstants;
-import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
 import co.yixiang.modules.shop.web.param.YxSystemStoreQueryParam;
 import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
+import co.yixiang.mp.config.ShopKeyUtils;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
@@ -29,7 +29,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -84,7 +83,7 @@ public class IndexController {
         //滚动
         map.put("roll",systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_ROLL_NEWS));
 
-        map.put("mapKey",RedisUtil.get(RedisKeyEnum.TENGXUN_MAP_KEY.getValue()));
+        map.put("mapKey",RedisUtil.get(ShopKeyUtils.getTengXunMapKey()));
 
         return ApiResult.ok(map);
     }

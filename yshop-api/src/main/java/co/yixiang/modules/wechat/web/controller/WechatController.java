@@ -12,6 +12,7 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.modules.order.entity.YxStoreOrder;
@@ -72,9 +73,9 @@ public class WechatController extends BaseController {
     @ApiOperation(value = "微信分享配置",notes = "微信分享配置")
     public ApiResult<Object> share() {
         Map<String,Object> map = new LinkedHashMap<>();
-        map.put("img",systemConfigService.getData("wechat_share_img"));
-        map.put("title",systemConfigService.getData("wechat_share_title"));
-        map.put("synopsis",systemConfigService.getData("wechat_share_synopsis"));
+        map.put("img",systemConfigService.getData(SystemConfigConstants.WECHAT_SHARE_IMG));
+        map.put("title",systemConfigService.getData(SystemConfigConstants.WECHAT_SHARE_TITLE));
+        map.put("synopsis",systemConfigService.getData(SystemConfigConstants.WECHAT_SHARE_SYNOPSIS));
         Map<String,Object> mapt = new LinkedHashMap<>();
         mapt.put("data",map);
         return ApiResult.ok(mapt);

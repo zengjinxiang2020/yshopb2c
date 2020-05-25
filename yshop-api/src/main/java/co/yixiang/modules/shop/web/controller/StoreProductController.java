@@ -13,6 +13,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import co.yixiang.annotation.AnonymousAccess;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
@@ -122,11 +123,11 @@ public class StoreProductController extends BaseController {
 
         YxStoreProduct storeProduct = storeProductService.getProductInfo(id);
         // 海报
-        String siteUrl = systemConfigService.getData("site_url");
+        String siteUrl = systemConfigService.getData(SystemConfigConstants.SITE_URL);
         if(StrUtil.isEmpty(siteUrl)){
             return ApiResult.fail("未配置h5地址");
         }
-        String apiUrl = systemConfigService.getData("api_url");
+        String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
         if(StrUtil.isEmpty(apiUrl)){
             return ApiResult.fail("未配置api地址");
         }
@@ -190,11 +191,11 @@ public class StoreProductController extends BaseController {
         int uid = SecurityUtils.getUserId().intValue();
         ProductDTO productDTO = storeProductService.goodsDetail(id,0,uid,latitude,longitude);
         // 海报
-//        String siteUrl = systemConfigService.getData("site_url");
+//        String siteUrl = systemConfigService.getData(SystemConfigConstants.SITE_URL);
 //        if(StrUtil.isEmpty(siteUrl)){
 //            return ApiResult.fail("未配置h5地址");
 //        }
-//        String apiUrl = systemConfigService.getData("api_url");
+//        String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
 //        if(StrUtil.isEmpty(apiUrl)){
 //            return ApiResult.fail("未配置api地址");
 //        }

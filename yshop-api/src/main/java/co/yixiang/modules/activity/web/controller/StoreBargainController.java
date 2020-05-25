@@ -16,6 +16,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.http.HttpUtil;
 import co.yixiang.annotation.AnonymousAccess;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
@@ -34,6 +35,7 @@ import co.yixiang.modules.user.entity.YxSystemAttachment;
 import co.yixiang.modules.user.service.YxSystemAttachmentService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
+import co.yixiang.mp.config.ShopKeyUtils;
 import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -268,11 +270,11 @@ public class StoreBargainController extends BaseController {
         Integer bargainId = jsonObject.getInteger("bargainId");
         if(ObjectUtil.isNull(bargainId)) return ApiResult.fail("参数有误");
 
-        String siteUrl = systemConfigService.getData("site_url");
+        String siteUrl = systemConfigService.getData(SystemConfigConstants.SITE_URL);
         if(StrUtil.isEmpty(siteUrl)){
             return ApiResult.fail("未配置h5地址");
         }
-        String apiUrl = systemConfigService.getData("api_url");
+        String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
         if(StrUtil.isEmpty(apiUrl)){
             return ApiResult.fail("未配置api地址");
         }

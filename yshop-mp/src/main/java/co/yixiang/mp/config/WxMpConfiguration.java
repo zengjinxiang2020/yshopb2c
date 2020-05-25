@@ -5,9 +5,6 @@
  */
 package co.yixiang.mp.config;
 
-import cn.hutool.core.util.StrUtil;
-import co.yixiang.constant.ShopConstants;
-import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.mp.handler.*;
 import co.yixiang.utils.RedisUtil;
 import com.google.common.collect.Maps;
@@ -72,21 +69,21 @@ public class WxMpConfiguration {
      */
     public static WxMpService getWxMpService() {
 
-        WxMpService wxMpService = mpServices.get(ShopConstants.YSHOP_WEIXIN_MP_SERVICE);
+        WxMpService wxMpService = mpServices.get(ShopKeyUtils.getYshopWeiXinMpSevice());
         //增加一个redis标识
-        if(wxMpService == null || RedisUtil.get(ShopConstants.YSHOP_WEIXIN_MP_SERVICE) == null) {
+        if(wxMpService == null || RedisUtil.get(ShopKeyUtils.getYshopWeiXinMpSevice()) == null) {
             WxMpDefaultConfigImpl configStorage = new WxMpDefaultConfigImpl();
-            configStorage.setAppId(RedisUtil.get(RedisKeyEnum.WECHAT_APPID.getValue()));
-            configStorage.setSecret(RedisUtil.get(RedisKeyEnum.WECHAT_APPSECRET.getValue()));
-            configStorage.setToken(RedisUtil.get(RedisKeyEnum.WECHAT_TOKEN.getValue()));
-            configStorage.setAesKey(RedisUtil.get(RedisKeyEnum.WECHAT_ENCODINGAESKEY.getValue()));
+            configStorage.setAppId(RedisUtil.get(ShopKeyUtils.getWechatAppId()));
+            configStorage.setSecret(RedisUtil.get(ShopKeyUtils.getWechatAppSecret()));
+            configStorage.setToken(RedisUtil.get(ShopKeyUtils.getWechatToken()));
+            configStorage.setAesKey(RedisUtil.get(ShopKeyUtils.getWechatEncodingAESKey()));
             wxMpService = new WxMpServiceImpl();
             wxMpService.setWxMpConfigStorage(configStorage);
-            mpServices.put(ShopConstants.YSHOP_WEIXIN_MP_SERVICE, wxMpService);
-            routers.put(ShopConstants.YSHOP_WEIXIN_MP_SERVICE, newRouter(wxMpService));
+            mpServices.put(ShopKeyUtils.getYshopWeiXinMpSevice(), wxMpService);
+            routers.put(ShopKeyUtils.getYshopWeiXinMpSevice(), newRouter(wxMpService));
 
             //增加标识
-            RedisUtil.set(ShopConstants.YSHOP_WEIXIN_MP_SERVICE,"yshop");
+            RedisUtil.set(ShopKeyUtils.getYshopWeiXinMpSevice(),"yshop");
         }
         return wxMpService;
     }
@@ -95,16 +92,16 @@ public class WxMpConfiguration {
      * 移除WxMpService
      */
     public static void removeWxMpService(){
-        RedisUtil.del(ShopConstants.YSHOP_WEIXIN_MP_SERVICE);
-        mpServices.remove(ShopConstants.YSHOP_WEIXIN_MP_SERVICE);
-        routers.remove(ShopConstants.YSHOP_WEIXIN_MP_SERVICE);
+        RedisUtil.del(ShopKeyUtils.getYshopWeiXinMpSevice());
+        mpServices.remove(ShopKeyUtils.getYshopWeiXinMpSevice());
+        routers.remove(ShopKeyUtils.getYshopWeiXinMpSevice());
     }
 
     /**
      *  获取WxMpMessageRouter
      */
     public static WxMpMessageRouter getWxMpMessageRouter() {
-        WxMpMessageRouter wxMpMessageRouter = routers.get(ShopConstants.YSHOP_WEIXIN_MP_SERVICE);
+        WxMpMessageRouter wxMpMessageRouter = routers.get(ShopKeyUtils.getYshopWeiXinMpSevice());
         return wxMpMessageRouter;
     }
 

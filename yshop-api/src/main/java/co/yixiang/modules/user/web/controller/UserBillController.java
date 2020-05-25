@@ -14,6 +14,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
@@ -78,7 +79,7 @@ public class UserBillController extends BaseController {
         int uid = SecurityUtils.getUserId().intValue();
 
         //判断分销类型
-        String statu = systemConfigService.getData("store_brokerage_statu");
+        String statu = systemConfigService.getData(SystemConfigConstants.STORE_BROKERAGE_STATU);
         YxUserQueryVo userQueryVo = yxUserService.getYxUserById(uid);
         if(StrUtil.isNotEmpty(statu)){
             if(Integer.valueOf(statu) == 1){
@@ -124,11 +125,11 @@ public class UserBillController extends BaseController {
     public ApiResult<Object> spreadBanner(@RequestParam(value = "",required=false) String from){
         int uid = SecurityUtils.getUserId().intValue();
         YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
-        String siteUrl = systemConfigService.getData("site_url");
+        String siteUrl = systemConfigService.getData(SystemConfigConstants.SITE_URL);
         if(StrUtil.isEmpty(siteUrl)){
             return ApiResult.fail("未配置h5地址");
         }
-        String apiUrl = systemConfigService.getData("api_url");
+        String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
         if(StrUtil.isEmpty(apiUrl)){
             return ApiResult.fail("未配置api地址");
         }

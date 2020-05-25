@@ -11,6 +11,7 @@ package co.yixiang.modules.user.web.controller;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.service.YxUserExtractService;
 import co.yixiang.modules.user.service.YxUserService;
@@ -61,7 +62,7 @@ public class UserExtractController extends BaseController {
         YxUserQueryVo userInfo = userService.getYxUserById(uid);
         Map<String,Object> map = new LinkedHashMap<>();
         map.put("commissionCount",userInfo.getBrokeragePrice());
-        map.put("minPrice",systemConfigService.getData("user_extract_min_price"));
+        map.put("minPrice",systemConfigService.getData(SystemConfigConstants.USER_EXTRACT_MIN_PRICE));
         return ApiResult.ok(map);
     }
 
