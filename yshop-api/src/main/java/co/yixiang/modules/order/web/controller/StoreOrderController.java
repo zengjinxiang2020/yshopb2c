@@ -13,12 +13,12 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import co.yixiang.annotation.AnonymousAccess;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.PayTypeEnum;
-import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.tools.express.ExpressService;
 import co.yixiang.tools.express.dao.ExpressInfo;
@@ -129,9 +129,9 @@ public class StoreOrderController extends BaseController {
                 .beUsableCoupon(uid,priceGroup.getTotalPrice()));
         //积分抵扣
         OtherDTO other = new OtherDTO();
-        other.setIntegralRatio(systemConfigService.getData("integral_ratio"));
-        other.setIntegralFull(systemConfigService.getData("integral_full"));
-        other.setIntegralMax(systemConfigService.getData("integral_max"));
+        other.setIntegralRatio(systemConfigService.getData(SystemConfigConstants.INTERGRAL_RATIO));
+        other.setIntegralFull(systemConfigService.getData(SystemConfigConstants.INTERGRAL_FULL));
+        other.setIntegralMax(systemConfigService.getData(SystemConfigConstants.INTERGRAL_MAX));
 
         //拼团 砍价 秒杀
         int combinationId = 0;
@@ -454,9 +454,9 @@ public class StoreOrderController extends BaseController {
 
         //门店
         if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(storeOrder.getShippingType())){
-            String mapKey = RedisUtil.get(RedisKeyEnum.TENGXUN_MAP_KEY.getValue());
+            String mapKey = RedisUtil.get(SystemConfigConstants.TENGXUN_MAP_KEY);
             if(StrUtil.isBlank(mapKey)) return ApiResult.fail("请配置腾讯地图key");
-            String apiUrl = systemConfigService.getData("api_url");
+            String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
             if(StrUtil.isEmpty(apiUrl)){
                 return ApiResult.fail("未配置api地址");
             }

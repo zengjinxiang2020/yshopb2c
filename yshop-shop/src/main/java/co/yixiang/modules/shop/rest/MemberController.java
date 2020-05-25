@@ -6,6 +6,7 @@
 package co.yixiang.modules.shop.rest;
 
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.shop.domain.YxUser;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
@@ -47,7 +48,7 @@ public class MemberController {
     public ResponseEntity getYxUsers(YxUserQueryCriteria criteria, Pageable pageable){
         if(ObjectUtil.isNotNull(criteria.getIsPromoter())){
             if(criteria.getIsPromoter() == 1){
-                String key = yxSystemConfigService.findByKey("store_brokerage_statu")
+                String key = yxSystemConfigService.findByKey(SystemConfigConstants.STORE_BROKERAGE_STATU)
                         .getValue();
                 if(Integer.valueOf(key) == 2){
                     return new ResponseEntity(null,HttpStatus.OK);

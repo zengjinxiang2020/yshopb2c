@@ -19,6 +19,7 @@ import co.yixiang.modules.shop.web.param.YxSystemStoreQueryParam;
 import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.mp.config.ShopKeyUtils;
 import co.yixiang.utils.LocationUtils;
 import co.yixiang.utils.RedisUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -76,7 +77,7 @@ public class YxSystemStoreServiceImpl extends BaseServiceImpl<YxSystemStoreMappe
                 .orderByDesc("id")
                 .last("limit 1"));
         if(yxSystemStore == null) return null;
-        String mention = RedisUtil.get("store_self_mention");
+        String mention = RedisUtil.get(ShopKeyUtils.getStoreSelfMention());
         if(mention == null || Integer.valueOf(mention) == 2) return null;
         YxSystemStoreQueryVo systemStoreQueryVo = storeMap.toDto(yxSystemStore);
         if(StrUtil.isNotEmpty(latitude) && StrUtil.isNotEmpty(longitude)){

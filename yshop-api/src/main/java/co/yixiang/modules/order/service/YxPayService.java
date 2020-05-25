@@ -41,7 +41,7 @@
 //    public WxPayMpOrderResult wxPay(String orderId, String openId, String body,
 //                                    Integer totalFee,int type) throws WxPayException {
 //
-//        String apiUrl = systemConfigService.getData("api_url");
+//        String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
 //        if (StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
 //
 //        WxPayService wxPayService = WxPayConfiguration.getPayService();
@@ -79,7 +79,7 @@
 //    public WxPayMwebOrderResult wxH5Pay(String orderId, String body,
 //                                        Integer totalFee,int type) throws WxPayException {
 //
-//        String apiUrl = systemConfigService.getData("api_url");
+//        String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
 //        if (StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
 //
 //        WxPayService wxPayService = WxPayConfiguration.getPayService();
@@ -110,7 +110,7 @@
 //     * @throws WxPayException
 //     */
 //    public void refundOrder(String orderId, Integer totalFee) throws WxPayException {
-//        String apiUrl = systemConfigService.getData("api_url");
+//        String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
 //        if (StrUtil.isBlank(apiUrl)) throw new ErrorRequestException("请配置api地址");
 //
 //        WxPayService wxPayService = WxPayConfiguration.getPayService();

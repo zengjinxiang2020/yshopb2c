@@ -16,6 +16,7 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.tools.domain.AlipayConfig;
 import co.yixiang.tools.domain.vo.TradeVo;
 import co.yixiang.enums.*;
@@ -1565,11 +1566,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Override
     public PriceGroupDTO getOrderPriceGroup(List<YxStoreCartQueryVo> cartInfo) {
 
-        String storePostageStr = systemConfigService.getData("store_postage");//邮费基础价
+        String storePostageStr = systemConfigService.getData(SystemConfigConstants.STORE_POSTAGE);//邮费基础价
         Double storePostage = 0d;
         if(StrUtil.isNotEmpty(storePostageStr)) storePostage = Double.valueOf(storePostageStr);
 
-        String storeFreePostageStr = systemConfigService.getData("store_free_postage");//满额包邮
+        String storeFreePostageStr = systemConfigService.getData(SystemConfigConstants.STORE_FREE_POSTAGE);//满额包邮
         Double storeFreePostage = 0d;
         if(StrUtil.isNotEmpty(storeFreePostageStr)) storeFreePostage = Double.valueOf(storeFreePostageStr);
 

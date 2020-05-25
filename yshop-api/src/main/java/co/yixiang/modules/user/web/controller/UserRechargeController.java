@@ -15,6 +15,7 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
@@ -84,7 +85,7 @@ public class UserRechargeController extends BaseController {
     @ApiOperation(value = "公众号充值/H5充值",notes = "公众号充值/H5充值",response = ApiResult.class)
     public ApiResult<Map<String,Object>> add(@Valid @RequestBody RechargeParam param){
         int uid = SecurityUtils.getUserId().intValue();
-        String money = systemConfigService.getData("store_user_min_recharge");
+        String money = systemConfigService.getData(SystemConfigConstants.STORE_USER_MIN_RECHARGE);
         Double newMoney = 0d;
         if(StrUtil.isNotEmpty(money)) newMoney = Double.valueOf(money);
         if(newMoney > param.getPrice())  throw new ErrorRequestException("充值金额不能低于"+newMoney);

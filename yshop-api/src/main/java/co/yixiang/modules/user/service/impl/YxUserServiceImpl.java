@@ -16,12 +16,11 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.common.api.ApiResult;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.enums.AppFromEnum;
-import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.order.service.YxStoreOrderService;
@@ -46,6 +45,7 @@ import co.yixiang.modules.user.web.dto.PromUserDTO;
 import co.yixiang.modules.user.web.param.PromParam;
 import co.yixiang.modules.user.web.param.YxUserQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
+import co.yixiang.mp.config.ShopKeyUtils;
 import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
@@ -177,9 +177,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
 
         //获取后台分销类型  1 指定分销 2 人人分销
         int storeBrokerageStatus = 1;
-        if(StrUtil.isNotEmpty(systemConfigService.getData("store_brokerage_statu"))){
+        if(StrUtil.isNotEmpty(systemConfigService.getData(SystemConfigConstants.STORE_BROKERAGE_STATU))){
             storeBrokerageStatus = Integer.valueOf(systemConfigService
-                    .getData("store_brokerage_statu"));
+                    .getData(SystemConfigConstants.STORE_BROKERAGE_STATU));
         }
 
         //指定分销 判断 上级是否时推广员  如果不是推广员直接跳转二级返佣
@@ -192,7 +192,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
         }
 
         //获取后台一级返佣比例
-        String storeBrokerageRatioStr = systemConfigService.getData("store_brokerage_ratio");
+        String storeBrokerageRatioStr = systemConfigService.getData(SystemConfigConstants.STORE_BROKERAGE_RATIO);
         int storeBrokerageRatio = 0;
         if(StrUtil.isNotEmpty(storeBrokerageRatioStr)){
             storeBrokerageRatio = Integer.valueOf(storeBrokerageRatioStr);
@@ -268,9 +268,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
 
         //获取后台分销类型  1 指定分销 2 人人分销
         int storeBrokerageStatus = 1;
-        if(StrUtil.isNotEmpty(systemConfigService.getData("store_brokerage_statu"))){
+        if(StrUtil.isNotEmpty(systemConfigService.getData(SystemConfigConstants.STORE_BROKERAGE_STATU))){
             storeBrokerageStatus = Integer.valueOf(systemConfigService
-                    .getData("store_brokerage_statu"));
+                    .getData(SystemConfigConstants.STORE_BROKERAGE_STATU));
         }
         //指定分销 判断 上上级是否时推广员  如果不是推广员直接返回
         YxUserQueryVo preUser = getYxUserById(userInfoTwo.getSpreadUid());
@@ -282,7 +282,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
         }
 
         //获取二级返佣比例
-        String storeBrokerageTwoStr = systemConfigService.getData("store_brokerage_two");
+        String storeBrokerageTwoStr = systemConfigService.getData(SystemConfigConstants.STORE_BROKERAGE_TWO);
         int storeBrokerageTwo = 0;
         if(StrUtil.isNotEmpty(storeBrokerageTwoStr)){
             storeBrokerageTwo = Integer.valueOf(storeBrokerageTwoStr);
@@ -437,7 +437,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
 
         //1-指定分销 2-人人分销
         int storeBrokerageStatus = Integer.valueOf(systemConfigService
-                .getData("store_brokerage_statu"));
+                .getData(SystemConfigConstants.STORE_BROKERAGE_STATU));
         //如果是指定分销，如果 推广人不是分销员不能形成关系
         if(storeBrokerageStatus == 1 && userInfoT.getIsPromoter() == 0){
             return true;
@@ -483,7 +483,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
         userQueryVo.setOrderStatusNum(orderService.orderData((int)id));
         userQueryVo.setCouponCount(storeCouponUserService.getUserValidCouponCount((int)id));
         //判断分销类型
-        String statu = systemConfigService.getData("store_brokerage_statu");
+        String statu = systemConfigService.getData(SystemConfigConstants.STORE_BROKERAGE_STATU);
         if(StrUtil.isNotEmpty(statu)){
             userQueryVo.setStatu(Integer.valueOf(statu));
         }else{
@@ -647,8 +647,8 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
         String spread = loginParam.getSpread();
         try {
             //读取redis配置
-            String appId = RedisUtil.get(RedisKeyEnum.WXAPP_APPID.getValue());
-            String secret = RedisUtil.get(RedisKeyEnum.WXAPP_SECRET.getValue());
+            String appId = RedisUtil.get(ShopKeyUtils.getWxAppAppId());
+            String secret = RedisUtil.get(ShopKeyUtils.getWxAppSecret());
             if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
                 throw new ErrorRequestException("请先配置小程序");
             }

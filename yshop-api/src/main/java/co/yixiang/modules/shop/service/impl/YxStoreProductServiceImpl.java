@@ -14,7 +14,6 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.enums.CommonEnum;
 import co.yixiang.enums.ProductEnum;
-import co.yixiang.enums.RedisKeyEnum;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.entity.YxStoreProduct;
 import co.yixiang.modules.shop.entity.YxStoreProductAttrValue;
@@ -27,17 +26,16 @@ import co.yixiang.modules.shop.web.param.YxStoreProductQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
 import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.mp.config.ShopKeyUtils;
 import co.yixiang.utils.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -173,7 +171,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
 
         //门店
         productDTO.setSystemStore(systemStoreService.getStoreInfo(latitude,longitude));
-        productDTO.setMapKey(RedisUtil.get(RedisKeyEnum.TENGXUN_MAP_KEY.getValue()));
+        productDTO.setMapKey(RedisUtil.get(ShopKeyUtils.getTengXunMapKey()));
 
         return productDTO;
     }
