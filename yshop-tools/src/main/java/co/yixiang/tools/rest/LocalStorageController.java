@@ -19,6 +19,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 
@@ -56,8 +58,8 @@ public class LocalStorageController {
     @Log("新增文件")
     @ApiOperation("新增文件")
     @PreAuthorize("@el.check('admin','localStorage:add')")
-    public ResponseEntity<Object> create(@Validated @RequestBody LocalStorage resources){
-        return new ResponseEntity<>(localStorageService.save(resources),HttpStatus.CREATED);
+    public ResponseEntity<Object> create(@RequestParam String name, @RequestParam("file") MultipartFile file){
+        return new ResponseEntity<>(localStorageService.create(name,file),HttpStatus.CREATED);
     }
 
     @PutMapping
@@ -65,7 +67,7 @@ public class LocalStorageController {
     @ApiOperation("修改文件")
     @PreAuthorize("@el.check('admin','localStorage:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody LocalStorage resources){
-        localStorageService.updateById(resources);
+        localStorageService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

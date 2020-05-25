@@ -137,8 +137,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
      */
     @Override
     public UserDto findByName(String userName) {
-      User user =   this.getOne(new QueryWrapper<User>().lambda()
-                .eq(User::getUsername,userName));
+      User user =  userMapper.findByName(userName);
         //用户所属岗位
         user.setJob(jobService.getById(user.getJobId()));
         //用户所属部门
@@ -164,18 +163,23 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
      */
     @Override
     public void updateAvatar(MultipartFile multipartFile) {
-        User user = this.getOne(new QueryWrapper<User>().eq("username",SecurityUtils.getUsername()));
-        UserAvatar userAvatar = user.getUserAvatar();
+        User user = this.getOne(new QueryWrapper<User>().lambda()
+                .eq(User::getUsername,SecurityUtils.getUsername()));
+        UserAvatar userAvatar =  userAvatarService.getOne(new QueryWrapper<UserAvatar>().lambda()
+                .eq(UserAvatar::getId,user.getId()));
         String oldPath = "";
         if(userAvatar != null){
             oldPath = userAvatar.getPath();
         }
         File file = FileUtil.upload(multipartFile, avatar);
         assert file != null;
-        UserAvatar saveUserAvatar = new UserAvatar(userAvatar,file.getName(), file.getPath(), FileUtil.getSize(multipartFile.getSize()));
-        userAvatarService.save(saveUserAvatar);
-        user.setUserAvatar(saveUserAvatar);
-        this.save(user);
+        //UserAvatar saveUserAvatar = new UserAvatar(userAvatar,file.getName(), file.getPath(), FileUtil.getSize(multipartFile.getSize()));
+        userAvatar.setRealName(file.getName());
+        userAvatar.setPath(file.getPath());
+        userAvatar.setSize(FileUtil.getSize(multipartFile.getSize()));
+        userAvatarService.saveOrUpdate(userAvatar);
+        user.setAvatarId(userAvatar.getId());
+        this.saveOrUpdate(user);
         if(StringUtils.isNotBlank(oldPath)){
             FileUtil.del(oldPath);
         }

@@ -46,7 +46,7 @@ public class User implements Serializable {
 
     /** 用户头像 */
     @TableField(exist = false)
-    private UserAvatar userAvatar;
+    private String avatar;
 
     /** 用户角色 */
     @TableField(exist = false)

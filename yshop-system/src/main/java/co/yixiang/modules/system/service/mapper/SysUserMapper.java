@@ -12,6 +12,7 @@ import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.system.domain.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
@@ -41,5 +42,13 @@ public interface SysUserMapper extends CoreMapper<User> {
      */
     @Update("update `user` set email = #{email} where username = #{username}")
     void updateEmail(@Param("email") String email, @Param("username") String username);
+
+    /**
+     * 根据用户名查询用户信息
+     * @param userName 用户名
+     */
+    @Select("SELECT u.id,u.nick_name,u.sex,u.dept_id,u.enabled,u.create_time,u.phone,u.email,u.job_id ,u.`password` ,u.username,ua.real_name avatar FROM `user` " +
+            " u LEFT JOIN user_avatar ua ON u.avatar_id = ua.id  WHERE u.username = #{username}")
+    User findByName(String userName);
 
 }

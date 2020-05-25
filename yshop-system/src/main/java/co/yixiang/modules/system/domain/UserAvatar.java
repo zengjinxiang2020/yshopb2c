@@ -46,13 +46,6 @@ public class UserAvatar implements Serializable {
     @TableField(fill= FieldFill.INSERT)
     private Timestamp createTime;
 
-    public UserAvatar(UserAvatar userAvatar,String realName, String path, String size) {
-        this.id = ObjectUtil.isNotEmpty(userAvatar) ? userAvatar.getId() : null;
-        this.realName = realName;
-        this.path = path;
-        this.size = size;
-    }
-
 
     public void copy(UserAvatar source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

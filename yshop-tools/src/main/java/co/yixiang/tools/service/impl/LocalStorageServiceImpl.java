@@ -101,7 +101,7 @@ public class LocalStorageServiceImpl extends BaseServiceImpl<LocalStorageMapper,
                     SecurityUtils.getUsername()
             );
 
-            return generator.convert(localStorage,LocalStorageDto.class);
+            return generator.convert(this.save(localStorage),LocalStorageDto.class);
         }catch (Exception e){
             FileUtil.del(file);
             throw e;

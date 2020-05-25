@@ -15,4 +15,7 @@ import co.yixiang.annotation.Query;
 */
 @Data
 public class YxMaterialQueryCriteria{
+
+    @Query
+    private String groupId;
 }
