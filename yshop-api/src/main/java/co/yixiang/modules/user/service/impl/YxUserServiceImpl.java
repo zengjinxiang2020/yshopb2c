@@ -32,15 +32,9 @@ import co.yixiang.modules.security.service.OnlineUserService;
 import co.yixiang.modules.shop.service.YxStoreCouponUserService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.YxSystemStoreStaffService;
-import co.yixiang.modules.user.entity.YxUser;
-import co.yixiang.modules.user.entity.YxUserBill;
-import co.yixiang.modules.user.entity.YxUserLevel;
-import co.yixiang.modules.user.entity.YxWechatUser;
+import co.yixiang.modules.user.entity.*;
 import co.yixiang.modules.user.mapper.YxUserMapper;
-import co.yixiang.modules.user.service.YxUserBillService;
-import co.yixiang.modules.user.service.YxUserLevelService;
-import co.yixiang.modules.user.service.YxUserService;
-import co.yixiang.modules.user.service.YxWechatUserService;
+import co.yixiang.modules.user.service.*;
 import co.yixiang.modules.user.web.dto.PromUserDTO;
 import co.yixiang.modules.user.web.param.PromParam;
 import co.yixiang.modules.user.web.param.YxUserQueryParam;
@@ -101,6 +95,8 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
     @Autowired
     private YxUserLevelService userLevelService;
     @Autowired
+    private YxSystemUserLevelService systemUserLevelService;
+    @Autowired
     private YxStoreCouponUserService storeCouponUserService;
     @Autowired
     private YxSystemStoreStaffService systemStoreStaffService;
@@ -134,8 +130,10 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
         wrapper.eq("is_del",0).eq("status",1)
                 .eq("uid",uid).orderByDesc("grade").last("limit 1");
         YxUserLevel userLevel = userLevelService.getOne(wrapper);
+        YxSystemUserLevel systemUserLevel = new YxSystemUserLevel();
+        if(ObjectUtil.isNotNull(userLevel))  systemUserLevel=  systemUserLevelService.getById(userLevel.getLevelId());
         int discount = 100;
-        if(ObjectUtil.isNotNull(userLevel)) discount = userLevel.getDiscount();
+        if(ObjectUtil.isNotNull(userLevel)) discount = systemUserLevel.getDiscount().intValue();
         return NumberUtil.mul(NumberUtil.div(discount,100),price);
     }
 
