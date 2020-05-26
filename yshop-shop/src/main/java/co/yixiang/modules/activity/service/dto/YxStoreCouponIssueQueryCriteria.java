@@ -16,6 +16,7 @@ import co.yixiang.annotation.Query;
 @Data
 public class YxStoreCouponIssueQueryCriteria{
 
+    @Query
     private Integer isDel;
 
 }
