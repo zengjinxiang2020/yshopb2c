@@ -8,11 +8,11 @@
  */
 package co.yixiang.modules.user.service;
 
-import co.yixiang.modules.user.entity.YxUserTaskFinish;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.user.entity.YxUserTaskFinish;
 import co.yixiang.modules.user.web.param.YxUserTaskFinishQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserTaskFinishQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 

@@ -1,22 +1,15 @@
 package co.yixiang.modules.user.mapper;
 
-import co.yixiang.modules.user.entity.YxUserBill;
-import co.yixiang.modules.user.web.dto.BillDTO;
-import co.yixiang.modules.user.web.dto.SignDTO;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import co.yixiang.modules.user.entity.YxUserSign;
 import co.yixiang.modules.user.web.param.YxUserSignQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserSignQueryVo;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * <p>

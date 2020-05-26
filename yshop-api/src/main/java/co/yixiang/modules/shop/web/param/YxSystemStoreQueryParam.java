@@ -1,9 +1,9 @@
 package co.yixiang.modules.shop.web.param;
 
+import co.yixiang.common.web.param.QueryParam;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import co.yixiang.common.web.param.QueryParam;
 /**
  * <p>
  * 门店自提 查询参数对象

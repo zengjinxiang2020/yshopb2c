@@ -1,9 +1,8 @@
 package co.yixiang.modules.shop.service;
 
 import co.yixiang.modules.shop.entity.YxStoreProduct;
-import co.yixiang.modules.shop.web.dto.ProductDTO;
 
-import java.awt.*;
+import java.awt.FontFormatException;
 import java.io.IOException;
 
 public interface CreatShareProductService {

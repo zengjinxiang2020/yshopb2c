@@ -8,38 +8,54 @@ package co.yixiang.modules.shop.service.impl;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.utils.QueryHelpPlus;
+import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.shop.domain.YxStoreProduct;
-import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.domain.YxStoreProductAttr;
 import co.yixiang.modules.shop.domain.YxStoreProductAttrResult;
 import co.yixiang.modules.shop.domain.YxStoreProductAttrValue;
-import co.yixiang.modules.shop.service.*;
-import co.yixiang.modules.shop.service.dto.*;
-import co.yixiang.utils.*;
+import co.yixiang.modules.shop.service.YxStoreCategoryService;
+import co.yixiang.modules.shop.service.YxStoreProductAttrResultService;
+import co.yixiang.modules.shop.service.YxStoreProductAttrService;
+import co.yixiang.modules.shop.service.YxStoreProductAttrValueService;
+import co.yixiang.modules.shop.service.YxStoreProductService;
+import co.yixiang.modules.shop.service.dto.DetailDto;
+import co.yixiang.modules.shop.service.dto.FromatDetailDto;
+import co.yixiang.modules.shop.service.dto.ProductFormatDto;
+import co.yixiang.modules.shop.service.dto.YxStoreProductDto;
+import co.yixiang.modules.shop.service.dto.YxStoreProductQueryCriteria;
+import co.yixiang.modules.shop.service.mapper.StoreProductMapper;
+import co.yixiang.utils.FileUtil;
+import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.AllArgsConstructor;
-import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageInfo;
-import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.modules.shop.service.mapper.StoreProductMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 // 默认不使用缓存
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Pageable;
-
-import java.math.BigDecimal;
-import java.util.*;
-import java.io.IOException;
-import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletResponse;
 
 /**
 * @author hupeng

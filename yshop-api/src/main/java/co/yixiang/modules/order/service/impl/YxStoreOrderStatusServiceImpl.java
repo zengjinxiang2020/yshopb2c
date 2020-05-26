@@ -8,10 +8,10 @@
  */
 package co.yixiang.modules.order.service.impl;
 
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.order.entity.YxStoreOrderStatus;
 import co.yixiang.modules.order.mapper.YxStoreOrderStatusMapper;
 import co.yixiang.modules.order.service.YxStoreOrderStatusService;
-import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.utils.OrderUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

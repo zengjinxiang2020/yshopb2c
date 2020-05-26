@@ -8,11 +8,11 @@
  */
 package co.yixiang.modules.manage.service;
 
-import co.yixiang.modules.manage.entity.YxExpress;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.manage.entity.YxExpress;
 import co.yixiang.modules.manage.web.param.YxExpressQueryParam;
 import co.yixiang.modules.manage.web.vo.YxExpressQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 

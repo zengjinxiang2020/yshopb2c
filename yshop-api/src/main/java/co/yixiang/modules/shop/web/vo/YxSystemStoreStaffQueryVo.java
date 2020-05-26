@@ -6,8 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-import java.util.Date;
-
 /**
  * <p>
  * 门店店员表 查询结果对象

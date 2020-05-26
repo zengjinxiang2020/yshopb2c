@@ -9,6 +9,8 @@
 package co.yixiang.modules.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.entity.YxSystemUserLevel;
 import co.yixiang.modules.user.entity.YxUserLevel;
 import co.yixiang.modules.user.mapper.YxSystemUserLevelMapper;
@@ -21,19 +23,15 @@ import co.yixiang.modules.user.web.dto.UserLevelDTO;
 import co.yixiang.modules.user.web.dto.UserLevelInfoDTO;
 import co.yixiang.modules.user.web.param.YxSystemUserLevelQueryParam;
 import co.yixiang.modules.user.web.vo.YxSystemUserLevelQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
 import java.util.List;
 

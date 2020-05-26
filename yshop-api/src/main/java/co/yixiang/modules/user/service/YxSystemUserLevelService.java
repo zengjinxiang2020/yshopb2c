@@ -8,12 +8,12 @@
  */
 package co.yixiang.modules.user.service;
 
-import co.yixiang.modules.user.entity.YxSystemUserLevel;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.user.entity.YxSystemUserLevel;
 import co.yixiang.modules.user.web.dto.UserLevelDTO;
 import co.yixiang.modules.user.web.param.YxSystemUserLevelQueryParam;
 import co.yixiang.modules.user.web.vo.YxSystemUserLevelQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 import java.util.List;

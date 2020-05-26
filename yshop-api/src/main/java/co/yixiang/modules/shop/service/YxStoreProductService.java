@@ -8,12 +8,12 @@
  */
 package co.yixiang.modules.shop.service;
 
-import co.yixiang.modules.shop.entity.YxStoreProduct;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.shop.entity.YxStoreProduct;
 import co.yixiang.modules.shop.web.dto.ProductDTO;
 import co.yixiang.modules.shop.web.param.YxStoreProductQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 import java.util.List;

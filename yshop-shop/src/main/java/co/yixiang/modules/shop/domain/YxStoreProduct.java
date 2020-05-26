@@ -4,18 +4,20 @@
 
  */
 package co.yixiang.modules.shop.domain;
-import co.yixiang.annotation.Query;
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
+
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
 * @author hupeng

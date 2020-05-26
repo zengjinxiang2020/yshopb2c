@@ -9,6 +9,8 @@
 package co.yixiang.modules.activity.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.activity.entity.YxStoreBargainUser;
 import co.yixiang.modules.activity.entity.YxStoreBargainUserHelp;
 import co.yixiang.modules.activity.mapper.YxStoreBargainUserHelpMapper;
@@ -17,21 +19,17 @@ import co.yixiang.modules.activity.service.YxStoreBargainUserHelpService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserService;
 import co.yixiang.modules.activity.web.param.YxStoreBargainUserHelpQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreBargainUserHelpQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.web.vo.YxUserQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

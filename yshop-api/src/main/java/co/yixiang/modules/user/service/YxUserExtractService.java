@@ -8,12 +8,12 @@
  */
 package co.yixiang.modules.user.service;
 
-import co.yixiang.modules.user.entity.YxUserExtract;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.user.entity.YxUserExtract;
 import co.yixiang.modules.user.web.param.UserExtParam;
 import co.yixiang.modules.user.web.param.YxUserExtractQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserExtractQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 

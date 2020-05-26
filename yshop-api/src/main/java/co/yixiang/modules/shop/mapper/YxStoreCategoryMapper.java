@@ -1,11 +1,11 @@
 package co.yixiang.modules.shop.mapper;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import co.yixiang.modules.shop.entity.YxStoreCategory;
 import co.yixiang.modules.shop.web.param.YxStoreCategoryQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreCategoryQueryVo;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

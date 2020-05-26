@@ -1,9 +1,6 @@
 package co.yixiang.modules.user.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @ClassName BillDTO

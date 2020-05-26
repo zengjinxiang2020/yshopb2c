@@ -6,8 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-import java.util.Date;
-
 /**
  * <p>
  * 等级任务设置 查询结果对象

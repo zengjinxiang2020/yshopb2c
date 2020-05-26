@@ -8,11 +8,11 @@
  */
 package co.yixiang.modules.activity.service;
 
-import co.yixiang.modules.activity.entity.YxStoreBargainUser;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.activity.entity.YxStoreBargainUser;
 import co.yixiang.modules.activity.web.param.YxStoreBargainUserQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreBargainUserQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 import java.util.List;

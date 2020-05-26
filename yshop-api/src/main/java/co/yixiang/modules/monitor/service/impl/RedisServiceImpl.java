@@ -11,7 +11,6 @@ package co.yixiang.modules.monitor.service.impl;
 import co.yixiang.modules.monitor.domain.vo.RedisVo;
 import co.yixiang.modules.monitor.service.RedisService;
 import co.yixiang.utils.PageUtil;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

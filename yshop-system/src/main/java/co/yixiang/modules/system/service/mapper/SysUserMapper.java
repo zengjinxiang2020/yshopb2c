@@ -16,8 +16,6 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
-
 /**
 * @author hupeng
 * @date 2020-05-14

@@ -6,7 +6,6 @@
 package co.yixiang.mp.service;
 
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.mp.config.ShopKeyUtils;
 import co.yixiang.mp.config.WxPayConfiguration;
@@ -20,10 +19,7 @@ import com.github.binarywang.wxpay.bean.request.WxPayUnifiedOrderRequest;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
 
 /**
  * @ClassName 公众号支付YxPayService

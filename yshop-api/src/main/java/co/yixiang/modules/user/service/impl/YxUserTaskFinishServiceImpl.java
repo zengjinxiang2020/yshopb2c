@@ -8,23 +8,23 @@
  */
 package co.yixiang.modules.user.service.impl;
 
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.entity.YxUserTaskFinish;
 import co.yixiang.modules.user.mapper.YxUserTaskFinishMapper;
 import co.yixiang.modules.user.service.YxUserTaskFinishService;
 import co.yixiang.modules.user.web.param.YxUserTaskFinishQueryParam;
 import co.yixiang.modules.user.web.vo.YxUserTaskFinishQueryVo;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.io.Serializable;
 
 

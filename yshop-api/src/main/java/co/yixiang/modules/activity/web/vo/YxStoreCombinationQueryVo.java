@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;

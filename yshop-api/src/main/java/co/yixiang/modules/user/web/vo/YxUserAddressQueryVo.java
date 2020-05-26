@@ -6,8 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-import java.util.Date;
-
 /**
  * <p>
  * 用户地址表 查询结果对象

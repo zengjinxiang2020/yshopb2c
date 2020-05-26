@@ -1,6 +1,5 @@
 package co.yixiang.modules.user.web.dto;
 
-import co.yixiang.modules.user.entity.YxSystemUserLevel;
 import co.yixiang.modules.user.web.vo.YxSystemUserLevelQueryVo;
 import lombok.Data;
 

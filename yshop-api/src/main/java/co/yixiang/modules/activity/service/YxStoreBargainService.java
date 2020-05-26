@@ -8,14 +8,14 @@
  */
 package co.yixiang.modules.activity.service;
 
-import co.yixiang.modules.activity.entity.YxStoreBargain;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.activity.entity.YxStoreBargain;
 import co.yixiang.modules.activity.web.dto.BargainCountDTO;
 import co.yixiang.modules.activity.web.dto.BargainDTO;
 import co.yixiang.modules.activity.web.dto.TopCountDTO;
 import co.yixiang.modules.activity.web.param.YxStoreBargainQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreBargainQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 import java.util.List;

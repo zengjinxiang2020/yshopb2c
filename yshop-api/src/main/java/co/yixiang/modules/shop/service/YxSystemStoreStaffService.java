@@ -1,10 +1,10 @@
 package co.yixiang.modules.shop.service;
 
-import co.yixiang.modules.shop.entity.YxSystemStoreStaff;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.shop.entity.YxSystemStoreStaff;
 import co.yixiang.modules.shop.web.param.YxSystemStoreStaffQueryParam;
 import co.yixiang.modules.shop.web.vo.YxSystemStoreStaffQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 

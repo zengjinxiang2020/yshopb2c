@@ -6,8 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-import java.util.Date;
-
 /**
  * <p>
  * 签到记录表 查询结果对象

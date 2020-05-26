@@ -1,6 +1,5 @@
 package co.yixiang.modules.wechat.web.param;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

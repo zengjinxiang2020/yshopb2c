@@ -8,13 +8,13 @@
  */
 package co.yixiang.modules.user.service;
 
-import co.yixiang.modules.user.entity.YxSystemUserTask;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.common.web.vo.Paging;
+import co.yixiang.modules.user.entity.YxSystemUserTask;
 import co.yixiang.modules.user.web.dto.TaskDTO;
 import co.yixiang.modules.user.web.dto.UserLevelInfoDTO;
 import co.yixiang.modules.user.web.param.YxSystemUserTaskQueryParam;
 import co.yixiang.modules.user.web.vo.YxSystemUserTaskQueryVo;
-import co.yixiang.common.web.vo.Paging;
 
 import java.io.Serializable;
 import java.util.List;

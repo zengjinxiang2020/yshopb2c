@@ -5,11 +5,10 @@
  */
 package co.yixiang.gen.service.mapper;
 
-import co.yixiang.gen.domain.ColumnConfig;
 import co.yixiang.common.mapper.CoreMapper;
+import co.yixiang.gen.domain.ColumnConfig;
 import co.yixiang.gen.domain.vo.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
