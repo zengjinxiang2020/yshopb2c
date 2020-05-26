@@ -122,7 +122,7 @@ public class UserBillController extends BaseController {
      */
     @GetMapping("/spread/banner")
     @ApiOperation(value = "分销二维码海报生成",notes = "分销二维码海报生成")
-    public ApiResult<Object> spreadBanner(@RequestParam(value = "",required=false) String from){
+    public ApiResult<Object> spreadBanner(@RequestParam(value = "",required=false) String form){
         int uid = SecurityUtils.getUserId().intValue();
         YxUserQueryVo userInfo = yxUserService.getYxUserById(uid);
         String siteUrl = systemConfigService.getData(SystemConfigConstants.SITE_URL);
@@ -136,8 +136,8 @@ public class UserBillController extends BaseController {
 
         String spreadUrl = "";
         //app类型
-        if(StrUtil.isNotBlank(from) && AppFromEnum.APP.getValue().equals(from)){
-            String spreadPicName = uid + "_"+from+"_user_spread.jpg";
+        if(StrUtil.isNotBlank(form) && AppFromEnum.APP.getValue().equals(form)){
+            String spreadPicName = uid + "_"+form+"_user_spread.jpg";
             String fileDir = path+"qrcode"+File.separator;
             String spreadPicPath = fileDir+spreadPicName;
 
