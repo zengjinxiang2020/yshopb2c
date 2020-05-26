@@ -17,6 +17,7 @@ import co.yixiang.tools.service.LocalStorageService;
 import co.yixiang.tools.service.dto.LocalStorageDto;
 import co.yixiang.tools.service.dto.LocalStorageQueryCriteria;
 import co.yixiang.tools.service.mapper.LocalStorageMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -100,8 +101,8 @@ public class LocalStorageServiceImpl extends BaseServiceImpl<LocalStorageMapper,
                     FileUtil.getSize(multipartFile.getSize()),
                     SecurityUtils.getUsername()
             );
-
-            return generator.convert(this.save(localStorage),LocalStorageDto.class);
+            this.save(localStorage);
+            return generator.convert(localStorage,LocalStorageDto.class);
         }catch (Exception e){
             FileUtil.del(file);
             throw e;
@@ -135,5 +136,12 @@ public class LocalStorageServiceImpl extends BaseServiceImpl<LocalStorageMapper,
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public void updateLocalStorage(LocalStorageDto resources) {
+        LocalStorage localStorage = this.getById(resources.getId());
+        BeanUtils.copyProperties(resources,localStorage);
+        this.saveOrUpdate(localStorage);
     }
 }

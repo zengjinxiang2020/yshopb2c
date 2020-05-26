@@ -66,8 +66,8 @@ public class LocalStorageController {
     @Log("修改文件")
     @ApiOperation("修改文件")
     @PreAuthorize("@el.check('admin','localStorage:edit')")
-    public ResponseEntity<Object> update(@Validated @RequestBody LocalStorage resources){
-        localStorageService.saveOrUpdate(resources);
+    public ResponseEntity<Object> update(@Validated @RequestBody LocalStorageDto resources){
+        localStorageService.updateLocalStorage(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

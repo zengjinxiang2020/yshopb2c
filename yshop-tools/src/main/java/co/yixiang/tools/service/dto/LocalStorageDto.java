@@ -23,6 +23,8 @@ public class LocalStorageDto implements Serializable {
 
     private String suffix;
 
+    private String path;
+
     private String type;
 
     private String size;

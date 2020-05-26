@@ -66,4 +66,10 @@ public interface LocalStorageService  extends BaseService<LocalStorage>{
      * @throws IOException /
      */
     void download(List<LocalStorageDto> localStorageDtos, HttpServletResponse response) throws IOException;
+
+    /**
+     * 修改文件
+     * @param resources
+     */
+    void updateLocalStorage(LocalStorageDto resources);
 }
