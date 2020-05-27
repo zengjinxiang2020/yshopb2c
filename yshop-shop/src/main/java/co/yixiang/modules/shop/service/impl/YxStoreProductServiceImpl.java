@@ -148,6 +148,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         if (storeProduct.getStoreCategory().getId() == null) {
             throw new BadRequestException("分类名称不能为空");
         }
+        boolean check = yxStoreCategoryService
+                .checkProductCategory(storeProduct.getStoreCategory().getId());
+        if(!check) throw new BadRequestException("商品分类必选选择二级");
         storeProduct.setCateId(storeProduct.getStoreCategory().getId().toString());
         this.save(storeProduct);
         return storeProduct;
@@ -300,6 +303,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     @Override
     public void updateProduct(YxStoreProduct resources) {
         if(resources.getStoreCategory() == null || resources.getStoreCategory().getId() == null) throw new BadRequestException("请选择分类");
+        boolean check = yxStoreCategoryService
+                .checkProductCategory(resources.getStoreCategory().getId());
+        if(!check) throw new BadRequestException("商品分类必选选择二级");
         resources.setCateId(resources.getStoreCategory().getId().toString());
         this.saveOrUpdate(resources);
     }

@@ -49,4 +49,6 @@ public interface YxStoreCategoryService  extends BaseService<YxStoreCategory>{
 
 
     boolean checkCategory(int pid);
+
+    boolean checkProductCategory(int id);
 }

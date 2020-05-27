@@ -143,6 +143,7 @@ public class YxStoreCategoryServiceImpl extends BaseServiceImpl<StoreCategoryMap
      * @param pid 父级id
      * @return boolean
      */
+    @Override
     public boolean checkCategory(int pid){
         if(pid == 0) return true;
         YxStoreCategory yxStoreCategory =  this.getOne(Wrappers.<YxStoreCategory>lambdaQuery()
@@ -152,13 +153,18 @@ public class YxStoreCategoryServiceImpl extends BaseServiceImpl<StoreCategoryMap
         return true;
     }
 
-//    public boolean checkCategory(int id,int pid){
-//        YxStoreCategory yxStoreCategory =  this.getOne(Wrappers.<YxStoreCategory>lambdaQuery()
-//                .eq(YxStoreCategory::getPid,pid));
-//
-//        // DateUtil.format()
-//
-//        return true;
-//    }
+    /**
+     * 检测商品分类必选选择二级
+     * @param id 分类id
+     * @return boolean
+     */
+    public boolean checkProductCategory(int id){
+        YxStoreCategory yxStoreCategory =  this.getOne(Wrappers.<YxStoreCategory>lambdaQuery()
+                .eq(YxStoreCategory::getId,id));
+
+        if(yxStoreCategory.getPid() == 0) return false;
+
+        return true;
+    }
 
 }
