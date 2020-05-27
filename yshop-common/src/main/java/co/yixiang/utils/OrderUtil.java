@@ -20,6 +20,32 @@ import java.util.Random;
  **/
 public class OrderUtil {
 
+
+    /**
+     * 返回活动状态
+     * @param starTime 开始时间
+     * @param endTime 结束时间
+     * @param status  0-关闭 其他表示相反
+     * @return String
+     */
+    public static String checkActivityStatus(int starTime,int endTime,int status){
+        int nowTime = OrderUtil.getSecondTimestampTwo();
+
+        if(status == 0) return "关闭";
+
+
+        if(starTime > nowTime){
+            return "活动未开始";
+        }else if(endTime < nowTime){
+            return "活动已结束";
+        }else if(endTime > nowTime && starTime < nowTime){
+            return "正在进行中";
+        }
+
+        return "未知";
+
+    }
+
     /**
      * 生成邀请码
      *
