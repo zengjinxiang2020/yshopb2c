@@ -43,13 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 // 默认不使用缓存
@@ -241,6 +235,29 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         if(attrGroup.isEmpty() || valueGroup.isEmpty()){
             throw new BadRequestException("请设置至少一个属性!");
         }
+
+        //如果设置sku 处理价格与库存
+
+        ////取最小价格
+        BigDecimal minPrice = valueGroup
+                .stream()
+                .map(YxStoreProductAttrValue::getPrice)
+                .min(Comparator.naturalOrder())
+                .orElse(BigDecimal.ZERO);
+
+        //计算库存
+        Integer stock = valueGroup
+                .stream()
+                .map(YxStoreProductAttrValue::getStock)
+                .reduce(Integer::sum)
+                .orElse(0);
+
+        YxStoreProduct yxStoreProduct = YxStoreProduct.builder()
+                .stock(stock)
+                .price(minPrice)
+                .id(id)
+                .build();
+        this.updateById(yxStoreProduct);
 
         //插入之前清空
         clearProductAttr(id,false);
