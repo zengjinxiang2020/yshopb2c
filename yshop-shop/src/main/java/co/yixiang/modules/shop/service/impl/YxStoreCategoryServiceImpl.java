@@ -5,6 +5,7 @@
  */
 package co.yixiang.modules.shop.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
@@ -14,6 +15,7 @@ import co.yixiang.modules.shop.service.dto.YxStoreCategoryDto;
 import co.yixiang.modules.shop.service.dto.YxStoreCategoryQueryCriteria;
 import co.yixiang.modules.shop.service.mapper.StoreCategoryMapper;
 import co.yixiang.utils.FileUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -134,4 +136,29 @@ public class YxStoreCategoryServiceImpl extends BaseServiceImpl<StoreCategoryMap
         map.put("content",CollectionUtils.isEmpty(trees)?categoryDTOS:trees);
         return map;
     }
+
+
+    /**
+     * 检测分类是否操过二级
+     * @param pid 父级id
+     * @return boolean
+     */
+    public boolean checkCategory(int pid){
+        if(pid == 0) return true;
+        YxStoreCategory yxStoreCategory =  this.getOne(Wrappers.<YxStoreCategory>lambdaQuery()
+                        .eq(YxStoreCategory::getId,pid));
+        if(yxStoreCategory.getPid() > 0) return false;
+
+        return true;
+    }
+
+//    public boolean checkCategory(int id,int pid){
+//        YxStoreCategory yxStoreCategory =  this.getOne(Wrappers.<YxStoreCategory>lambdaQuery()
+//                .eq(YxStoreCategory::getPid,pid));
+//
+//        // DateUtil.format()
+//
+//        return true;
+//    }
+
 }

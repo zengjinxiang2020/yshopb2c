@@ -46,4 +46,7 @@ public interface YxStoreCategoryService  extends BaseService<YxStoreCategory>{
     void download(List<YxStoreCategoryDto> all, HttpServletResponse response) throws IOException;
 
     Object buildTree(List<YxStoreCategoryDto> categoryDTOList);
+
+
+    boolean checkCategory(int pid);
 }

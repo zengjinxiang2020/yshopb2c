@@ -14,6 +14,7 @@ import co.yixiang.modules.shop.service.YxStoreCategoryService;
 import co.yixiang.modules.shop.service.dto.YxStoreCategoryDto;
 import co.yixiang.modules.shop.service.dto.YxStoreCategoryQueryCriteria;
 import co.yixiang.utils.OrderUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cache.annotation.CacheEvict;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Wrapper;
 import java.util.List;
 
 /**
@@ -82,6 +84,12 @@ public class StoreCategoryController {
             throw new BadRequestException("子分类图片必传");
         }
 
+
+        boolean checkResult = yxStoreCategoryService.checkCategory(resources.getPid());
+
+        if(!checkResult) throw new BadRequestException("分类最多能添加2级哦");
+
+
         resources.setAddTime(OrderUtil.getSecondTimestampTwo());
         return new ResponseEntity(yxStoreCategoryService.save(resources),HttpStatus.CREATED);
     }
@@ -96,6 +104,10 @@ public class StoreCategoryController {
         if(resources.getPid() > 0 && StrUtil.isBlank(resources.getPic())) {
             throw new BadRequestException("子分类图片必传");
         }
+        boolean checkResult = yxStoreCategoryService.checkCategory(resources.getPid());
+
+        if(!checkResult) throw new BadRequestException("分类最多能添加2级哦");
+        
         yxStoreCategoryService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
