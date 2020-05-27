@@ -247,10 +247,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
 
         //保存属性
-        yxStoreProductAttrService.saveBatch(attrGroup);
+        yxStoreProductAttrService.saveOrUpdateBatch(attrGroup);
 
         //保存值
-        yxStoreProductAttrValueService.saveBatch(valueGroup);
+        yxStoreProductAttrValueService.saveOrUpdateBatch(valueGroup);
 
         Map<String,Object> map = new LinkedHashMap<>();
         map.put("attr",jsonObject.get("items"));
@@ -267,9 +267,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         yxStoreProductAttrResult.setResult(JSON.toJSONString(map));
         yxStoreProductAttrResult.setChangeTime(OrderUtil.getSecondTimestampTwo());
 
-        yxStoreProductAttrService.remove(new QueryWrapper<YxStoreProductAttr>().eq("product_id",id));
+        yxStoreProductAttrResultService.remove(new QueryWrapper<YxStoreProductAttrResult>().eq("product_id",id));
 
-        yxStoreProductAttrResultService.save(yxStoreProductAttrResult);
+        yxStoreProductAttrResultService.saveOrUpdate(yxStoreProductAttrResult);
     }
 
     @Override
