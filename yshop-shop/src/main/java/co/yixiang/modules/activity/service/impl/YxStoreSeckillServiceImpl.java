@@ -52,20 +52,10 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
         getPage(pageable);
         PageInfo<YxStoreSeckill> page = new PageInfo<>(queryAll(criteria));
         List<YxStoreSeckillDto> storeSeckillDTOS = generator.convert(page.getList(),YxStoreSeckillDto.class);
-        int nowTime = OrderUtil.getSecondTimestampTwo();
         for (YxStoreSeckillDto storeSeckillDTO : storeSeckillDTOS){
-            if(storeSeckillDTO.getStatus() > 0){
-                if(storeSeckillDTO.getStartTime() > nowTime){
-                    storeSeckillDTO.setStatusStr("活动未开始");
-                }else if(storeSeckillDTO.getStopTime() < nowTime){
-                    storeSeckillDTO.setStatusStr("活动已结束");
-                }else if(storeSeckillDTO.getStopTime() > nowTime && storeSeckillDTO.getStartTime() < nowTime){
-                    storeSeckillDTO.setStatusStr("正在进行中");
-                }
-            }else {
-                storeSeckillDTO.setStatusStr("关闭");
-            }
-
+            String statusStr = OrderUtil.checkActivityStatus(storeSeckillDTO.getStartTime(),
+                    storeSeckillDTO.getStopTime(), storeSeckillDTO.getStatus());
+            storeSeckillDTO.setStatusStr(statusStr);
         }
         Map<String,Object> map = new LinkedHashMap<>(2);
         map.put("content",storeSeckillDTOS);

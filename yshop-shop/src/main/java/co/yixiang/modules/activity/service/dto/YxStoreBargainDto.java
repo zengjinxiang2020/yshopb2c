@@ -114,4 +114,6 @@ public class YxStoreBargainDto implements Serializable {
     private Timestamp endTimeDate;
 
     private Timestamp startTimeDate;
+
+    private String statusStr;
 }
