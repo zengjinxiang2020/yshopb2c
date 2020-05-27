@@ -17,12 +17,7 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.constant.SystemConfigConstants;
-import co.yixiang.enums.AppFromEnum;
-import co.yixiang.enums.BillDetailEnum;
-import co.yixiang.enums.BillEnum;
-import co.yixiang.enums.OrderCountEnum;
-import co.yixiang.enums.OrderInfoEnum;
-import co.yixiang.enums.OrderStatusEnum;
+import co.yixiang.enums.*;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.service.YxStoreBargainService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserService;
@@ -685,8 +680,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
     @Override
     public List<YxStoreOrderQueryVo> orderList(int uid, int type, int page, int limit) {
         QueryWrapper<YxStoreOrder> wrapper= new QueryWrapper<>();
-        if(uid > 0) wrapper.eq("uid",uid);
-        wrapper.eq("is_del",0).orderByDesc("add_time");
+        if(uid > 0) {
+            wrapper.eq("uid",uid);
+        }else{
+            wrapper.eq("shipping_type", OrderInfoEnum.SHIPPIING_TYPE_1.getValue());
+        }
+        wrapper.eq("is_del",CommonEnum.DEL_STATUS_0.getValue()).orderByDesc("add_time");
 
         switch (OrderStatusEnum.toType(type)){
             case STATUS_0://未支付
