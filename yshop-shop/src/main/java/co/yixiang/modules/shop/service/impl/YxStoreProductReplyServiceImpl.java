@@ -69,14 +69,11 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProduct
     //@Cacheable
     public List<YxStoreProductReply> queryAll(YxStoreProductReplyQueryCriteria criteria){
         List<YxStoreProductReply> storeProductReplyList =  baseMapper.selectList(QueryHelpPlus.getPredicate(YxStoreProductReply.class, criteria));
-        List<YxStoreProductReply> storeProductReplys = storeProductReplyList.stream().map(i ->{
-            YxStoreProductReply yxStoreProductReply = new YxStoreProductReply();
-            BeanUtils.copyProperties(i,yxStoreProductReply);
+        storeProductReplyList.forEach(yxStoreProductReply->{
             yxStoreProductReply.setUser(yxUserService.getById(yxStoreProductReply.getUid()));;
             yxStoreProductReply.setStoreProduct(yxStoreProductService.getById(yxStoreProductReply.getProductId()));
-            return yxStoreProductReply;
-        }).collect(Collectors.toList());
-        return storeProductReplys;
+        });
+        return storeProductReplyList;
     }
 
 
