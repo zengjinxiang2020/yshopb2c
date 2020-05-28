@@ -88,13 +88,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     //@Cacheable
     public List<YxStoreProduct> queryAll(YxStoreProductQueryCriteria criteria){
         List<YxStoreProduct> yxStoreProductList = baseMapper.selectList(QueryHelpPlus.getPredicate(YxStoreProduct.class, criteria));
-        List<YxStoreProduct> storeProductList  = yxStoreProductList.stream().map(i ->{
-            YxStoreProduct yxStoreProduct = new YxStoreProduct();
-            BeanUtils.copyProperties(i,yxStoreProduct);
-            yxStoreProduct.setStoreCategory(yxStoreCategoryService.getById(i.getCateId()));
-            return yxStoreProduct;
-        }).collect(Collectors.toList());
-        return storeProductList;
+        yxStoreProductList.forEach(yxStoreProduct ->{
+            yxStoreProduct.setStoreCategory(yxStoreCategoryService.getById(yxStoreProduct.getCateId()));
+        });
+        return yxStoreProductList;
     }
 
 
