@@ -104,6 +104,11 @@ public class StoreCategoryController {
         if(resources.getPid() > 0 && StrUtil.isBlank(resources.getPic())) {
             throw new BadRequestException("子分类图片必传");
         }
+
+        if(resources.getId().equals(resources.getPid())){
+            throw new BadRequestException("自己不能选择自己哦");
+        }
+
         boolean checkResult = yxStoreCategoryService.checkCategory(resources.getPid());
 
         if(!checkResult) throw new BadRequestException("分类最多能添加2级哦");
