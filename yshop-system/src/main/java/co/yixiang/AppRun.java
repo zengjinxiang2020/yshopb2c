@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SpringBootApplication
 @EnableTransactionManagement
+@MapperScan({"co.yixiang.*.mapper"})
 public class AppRun {
 
     public static void main(String[] args) {
