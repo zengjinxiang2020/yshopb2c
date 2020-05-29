@@ -28,8 +28,8 @@ public interface ColumnInfoMapper extends CoreMapper<ColumnConfig> {
     @Select("<script>select table_name ,create_time , engine, table_collation, table_comment from information_schema.tables " +
             "where table_schema = (select database()) order by create_time desc</script>")
     List<TableInfo> selectTables();
-    @Select("select column_name, is_nullable, data_type, column_comment, column_key, extra from information_schema.columns " +
-            "where table_name = #{name} and table_schema = (select database()) order by ordinal_position")
+    @Select("SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE, COLUMN_COMMENT, COLUMN_KEY, EXTRA FROM INFORMATION_SCHEMA.COLUMNS " +
+            "WHERE TABLE_NAME = #{name} AND TABLE_SCHEMA = (SELECT DATABASE()) ORDER BY ORDINAL_POSITION")
     List<Map<String,Object>> queryByTableName(@Param("name") String name);
 
 }

@@ -80,12 +80,12 @@ public class GeneratorServiceImpl extends BaseServiceImpl<ColumnInfoMapper, Colu
             columnInfos.add(
                     new ColumnConfig(
                             tableName,
-                            map.get("column_name").toString(),
-                            "NO".equals(map.get("is_nullable").toString()),
-                            map.get("data_type").toString(),
-                            ObjectUtil.isNotNull( map.get("column_comment")) ?  map.get("column_comment").toString() : null,
-                            ObjectUtil.isNotNull(map.get("column_key")) ? map.get("column_key").toString() : null,
-                            ObjectUtil.isNotNull(map.get("extra")) ? map.get("extra").toString() : null)
+                            map.get("COLUMN_NAME").toString(),
+                            "NO".equals(map.get("IS_NULLABLE").toString()),
+                            map.get("DATA_TYPE").toString(),
+                            ObjectUtil.isNotNull( map.get("COLUMN_COMMENT")) ?  map.get("COLUMN_COMMENT").toString() : null,
+                            ObjectUtil.isNotNull(map.get("COLUMN_KEY")) ? map.get("COLUMN_KEY").toString() : null,
+                            ObjectUtil.isNotNull(map.get("EXTRA")) ? map.get("EXTRA").toString() : null)
             );
         }
         return columnInfos;
