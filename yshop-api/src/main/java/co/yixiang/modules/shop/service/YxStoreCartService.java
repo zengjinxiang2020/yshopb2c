@@ -44,5 +44,16 @@ public interface YxStoreCartService extends BaseService<YxStoreCart> {
      */
     YxStoreCartQueryVo getYxStoreCartById(Serializable id);
 
-
+    /**
+     * 验证产品库存是否足够
+     * @param uid  用户ID
+     * @param productId  产品ID
+     * @param cartNum 购买数量
+     * @param productAttrUnique  商品属性Unique
+     * @param combinationId  拼团产品ID
+     * @param seckillId      秒杀产品ID
+     * @param bargainId   砍价产品ID
+     */
+    void checkProductStock(int uid, int productId, int cartNum, String productAttrUnique,
+                           int combinationId, int seckillId, int bargainId);
 }

@@ -54,11 +54,7 @@ import co.yixiang.modules.shop.entity.YxStoreCart;
 import co.yixiang.modules.shop.entity.YxStoreCouponUser;
 import co.yixiang.modules.shop.mapper.YxStoreCartMapper;
 import co.yixiang.modules.shop.mapper.YxStoreCouponUserMapper;
-import co.yixiang.modules.shop.service.YxStoreCouponUserService;
-import co.yixiang.modules.shop.service.YxStoreProductReplyService;
-import co.yixiang.modules.shop.service.YxStoreProductService;
-import co.yixiang.modules.shop.service.YxSystemConfigService;
-import co.yixiang.modules.shop.service.YxSystemStoreService;
+import co.yixiang.modules.shop.service.*;
 import co.yixiang.modules.shop.web.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.shop.web.vo.YxSystemStoreQueryVo;
 import co.yixiang.modules.user.entity.YxUser;
@@ -172,7 +168,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
 
     @Autowired
     private OrderMap orderMap;
-
+    @Autowired
+    private YxStoreCartService yxStoreCartService;
     //@Autowired
     //private MqProducer mqProducer;
 
@@ -1255,6 +1252,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<YxStoreOrderMapper,
         int bargainId = 0;
 
         for (YxStoreCartQueryVo cart : cartInfo) {
+            yxStoreCartService.checkProductStock(uid,cart.getProductId(),cart.getCartNum(),
+                    cart.getProductAttrUnique(), cart.getCombinationId(),cart.getSeckillId(),cart.getBargainId());
+
+
             combinationId = cart.getCombinationId();
             seckillId = cart.getSeckillId();
             bargainId = cart.getBargainId();

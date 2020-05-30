@@ -268,51 +268,8 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
     @Override
     public int addCart(int uid, int productId, int cartNum, String productAttrUnique,
                        String type, int isNew, int combinationId, int seckillId, int bargainId) {
-        //todo 拼团
-        if(combinationId > 0){
-            boolean isStock = storeCombinationService.judgeCombinationStock(combinationId
-                    ,cartNum);
-            if(!isStock) throw new ErrorRequestException("该产品库存不足");
 
-            YxStoreCombination storeCombination = storeCombinationService.getCombination(combinationId);
-            if(ObjectUtil.isNull(storeCombination)) throw new ErrorRequestException("该产品已下架或删除");
-        }else if(seckillId > 0){//秒杀
-            YxStoreSeckill yxStoreSeckill = storeSeckillService.getSeckill(seckillId);
-            if(ObjectUtil.isNull(yxStoreSeckill)){
-                throw new ErrorRequestException("该产品已下架或删除");
-            }
-            if(yxStoreSeckill.getStock() < cartNum){
-                throw new ErrorRequestException("该产品库存不足");
-            }
-            int  seckillOrderCount = storeOrderService.count(new QueryWrapper<YxStoreOrder>()
-                            .eq("uid", uid).eq("paid",1).eq("seckill_id",seckillId));
-            if(yxStoreSeckill.getNum() <= seckillOrderCount || yxStoreSeckill.getNum() < cartNum){
-                throw new ErrorRequestException("每人限购:"+yxStoreSeckill.getNum()+"件");
-            }
-
-        }else if(bargainId > 0){//砍价
-            YxStoreBargain yxStoreBargain = storeBargainService.getBargain(bargainId);
-            if(ObjectUtil.isNull(yxStoreBargain)){
-                throw new ErrorRequestException("该产品已下架或删除");
-            }
-            if(yxStoreBargain.getStock() < cartNum){
-                throw new ErrorRequestException("该产品库存不足");
-            }
-
-        }else{
-            YxStoreProductQueryVo productQueryVo = productService
-                    .getYxStoreProductById(productId);
-            if(ObjectUtil.isNull(productQueryVo)){
-                throw new ErrorRequestException("该产品已下架或删除");
-            }
-
-            int stock = productService.getProductStock(productId,productAttrUnique);
-            if(stock < cartNum){
-                throw new ErrorRequestException("该产品库存不足"+cartNum);
-            }
-        }
-
-
+        checkProductStock(uid,productId,cartNum,productAttrUnique,combinationId,seckillId,bargainId);
         QueryWrapper<YxStoreCart> wrapper = new QueryWrapper<>();
         wrapper.eq("uid",uid).eq("type",type).eq("is_pay",0).eq("is_del",0)
                 .eq("product_id",productId)
@@ -365,6 +322,53 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<YxStoreCartMapper, Y
         return yxStoreCartMapper.getYxStoreCartById(id);
     }
 
+    @Override
+    public void checkProductStock(int uid, int productId, int cartNum, String productAttrUnique, int combinationId, int seckillId, int bargainId) {
+        //todo 拼团
+        if(combinationId > 0){
+            boolean isStock = storeCombinationService.judgeCombinationStock(combinationId
+                    ,cartNum);
+            if(!isStock) throw new ErrorRequestException("该产品库存不足");
+
+            YxStoreCombination storeCombination = storeCombinationService.getCombination(combinationId);
+            if(ObjectUtil.isNull(storeCombination)) throw new ErrorRequestException("该产品已下架或删除");
+        }else if(seckillId > 0){//秒杀
+            YxStoreSeckill yxStoreSeckill = storeSeckillService.getSeckill(seckillId);
+            if(ObjectUtil.isNull(yxStoreSeckill)){
+                throw new ErrorRequestException("该产品已下架或删除");
+            }
+            if(yxStoreSeckill.getStock() < cartNum){
+                throw new ErrorRequestException("该产品库存不足");
+            }
+            int  seckillOrderCount = storeOrderService.count(new QueryWrapper<YxStoreOrder>()
+                    .eq("uid", uid).eq("paid",1).eq("seckill_id",seckillId));
+            if(yxStoreSeckill.getNum() <= seckillOrderCount || yxStoreSeckill.getNum() < cartNum){
+                throw new ErrorRequestException("每人限购:"+yxStoreSeckill.getNum()+"件");
+            }
+
+        }else if(bargainId > 0){//砍价
+            YxStoreBargain yxStoreBargain = storeBargainService.getBargain(bargainId);
+            if(ObjectUtil.isNull(yxStoreBargain)){
+                throw new ErrorRequestException("该产品已下架或删除");
+            }
+            if(yxStoreBargain.getStock() < cartNum){
+                throw new ErrorRequestException("该产品库存不足");
+            }
+
+        }else{
+            YxStoreProductQueryVo productQueryVo = productService
+                    .getYxStoreProductById(productId);
+            if(ObjectUtil.isNull(productQueryVo)){
+                throw new ErrorRequestException("该产品已下架或删除");
+            }
+
+            int stock = productService.getProductStock(productId,productAttrUnique);
+            if(stock < cartNum){
+                throw new ErrorRequestException(productQueryVo.getStoreName()+"库存不足"+cartNum);
+            }
+        }
+
+    }
 
 
 }
