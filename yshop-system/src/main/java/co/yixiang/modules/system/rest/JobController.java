@@ -81,6 +81,7 @@ public class JobController {
         if (resources.getId() != null) {
             throw new BadRequestException("A new "+ ENTITY_NAME +" cannot already have an ID");
         }
+        resources.setDeptId(resources.getDept().getId());
         return new ResponseEntity<>(jobService.save(resources),HttpStatus.CREATED);
     }
 
