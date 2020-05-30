@@ -94,7 +94,7 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
     @Override
     public boolean judgeCombinationStock(int combinationId, int cartNum) {
         YxStoreCombinationQueryVo queryVo = getYxStoreCombinationById(combinationId);
-        if(queryVo.getStock() > cartNum){
+        if(queryVo.getStock() >= cartNum){
             return true;
         }
         return false;
