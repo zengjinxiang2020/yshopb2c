@@ -150,7 +150,7 @@ public class SysUserController {
     @Log("修改用户：个人中心")
     @ApiOperation("修改用户：个人中心")
     @PutMapping(value = "center")
-    public ResponseEntity<Object> center(@Validated @RequestBody User resources){
+    public ResponseEntity<Object> center(@Validated(User.Update.class) @RequestBody User resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         UserDto userDto = userService.findByName(SecurityUtils.getUsername());
         if(!resources.getId().equals(userDto.getId())){
