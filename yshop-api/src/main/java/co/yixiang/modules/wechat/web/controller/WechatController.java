@@ -22,6 +22,7 @@ import co.yixiang.modules.user.entity.YxUserRecharge;
 import co.yixiang.modules.user.service.YxUserRechargeService;
 import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.mp.config.WxPayConfiguration;
+import co.yixiang.utils.BigNum;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.notify.WxPayRefundNotifyResult;
@@ -159,7 +160,7 @@ public class WechatController extends BaseController {
             WxPayService wxPayService = WxPayConfiguration.getPayService();
             WxPayRefundNotifyResult result = wxPayService.parseRefundNotifyResult(xmlData);
             String orderId = result.getReqInfo().getOutTradeNo();
-            Integer refundFee = result.getReqInfo().getRefundFee()/100;
+            BigDecimal refundFee = BigNum.div(result.getReqInfo().getRefundFee(), 100);
             YxStoreOrderQueryVo orderInfo = orderService.getOrderInfo(orderId,0);
             if(orderInfo.getRefundStatus() == 2){
                 return WxPayNotifyResponse.success("处理成功!");
@@ -168,16 +169,14 @@ public class WechatController extends BaseController {
             //修改状态
             storeOrder.setId(orderInfo.getId());
             storeOrder.setRefundStatus(2);
-            storeOrder.setRefundPrice(BigDecimal.valueOf(refundFee));
+            storeOrder.setRefundPrice(refundFee);
             orderService.updateById(storeOrder);
             return WxPayNotifyResponse.success("处理成功!");
-        } catch (WxPayException e) {
+        } catch (WxPayException | IllegalAccessException e) {
             log.error(e.getMessage());
             return WxPayNotifyResponse.fail(e.getMessage());
         }
     }
-
-
     /**
      * 微信验证消息
      */
