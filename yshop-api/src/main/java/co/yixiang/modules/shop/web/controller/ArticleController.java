@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * <p>
  * 文章 前端控制器
@@ -61,7 +63,7 @@ public class ArticleController extends BaseController {
     @AnonymousAccess
     @GetMapping("/list")
     @ApiOperation(value = "文章列表",notes = "文章列表",response = YxArticleQueryVo.class)
-    public ApiResult<Paging<YxArticleQueryVo>> getYxArticlePageList(YxArticleQueryParam queryParam){
+    public ApiResult<List<YxArticleQueryVo>> getYxArticlePageList(YxArticleQueryParam queryParam){
         Paging<YxArticleQueryVo> paging = articleService.getYxArticlePageList(queryParam);
         return ApiResult.ok(paging.getRecords());
     }

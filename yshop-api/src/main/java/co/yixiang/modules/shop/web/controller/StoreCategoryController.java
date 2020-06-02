@@ -14,6 +14,7 @@ import co.yixiang.common.web.controller.BaseController;
 import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.shop.service.YxStoreCategoryService;
 import co.yixiang.modules.shop.web.vo.YxStoreCategoryQueryVo;
+import co.yixiang.utils.CateDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * <p>
@@ -45,7 +48,7 @@ public class StoreCategoryController extends BaseController {
     @AnonymousAccess
     @GetMapping("/category")
     @ApiOperation(value = "商品分类列表",notes = "商品分类列表")
-    public ApiResult<Paging<YxStoreCategoryQueryVo>> getYxStoreCategoryPageList(){
+    public ApiResult<List<CateDTO>> getYxStoreCategoryPageList(){
         return ApiResult.ok(yxStoreCategoryService.getList());
     }
 

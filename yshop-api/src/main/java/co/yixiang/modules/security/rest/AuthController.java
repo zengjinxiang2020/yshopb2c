@@ -97,7 +97,7 @@ public class AuthController {
     @ApiOperation("H5/APP登录授权")
     @AnonymousAccess
     @PostMapping(value = "/login")
-    public ApiResult<Map<String, String>> login(@Validated @RequestBody AuthUser authUser,
+    public ApiResult< Map<String, Object>> login(@Validated @RequestBody AuthUser authUser,
                                                 HttpServletRequest request) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(authUser.getUsername(), authUser.getPassword());

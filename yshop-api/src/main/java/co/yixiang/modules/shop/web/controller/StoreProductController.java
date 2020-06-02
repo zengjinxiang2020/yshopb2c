@@ -26,9 +26,11 @@ import co.yixiang.modules.shop.service.YxStoreProductReplyService;
 import co.yixiang.modules.shop.service.YxStoreProductService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.web.dto.ProductDTO;
+import co.yixiang.modules.shop.web.dto.ReplyCountDTO;
 import co.yixiang.modules.shop.web.param.YxStoreProductQueryParam;
 import co.yixiang.modules.shop.web.param.YxStoreProductRelationQueryParam;
 import co.yixiang.modules.shop.web.vo.YxStoreProductQueryVo;
+import co.yixiang.modules.shop.web.vo.YxStoreProductReplyQueryVo;
 import co.yixiang.modules.user.entity.YxSystemAttachment;
 import co.yixiang.modules.user.service.YxSystemAttachmentService;
 import co.yixiang.modules.user.service.YxUserService;
@@ -281,8 +283,8 @@ public class StoreProductController extends BaseController {
      */
     @GetMapping("/reply/list/{id}")
     @ApiOperation(value = "获取产品评论",notes = "获取产品评论")
-    public ApiResult<Object> replyList(@PathVariable Integer id,
-                                       YxStoreProductQueryParam queryParam){
+    public ApiResult<List<YxStoreProductReplyQueryVo>> replyList(@PathVariable Integer id,
+                                                                 YxStoreProductQueryParam queryParam){
         return ApiResult.ok(replyService.getReplyList(id,Integer.valueOf(queryParam.getType()),
                 queryParam.getPage().intValue(),queryParam.getLimit().intValue()));
     }
@@ -292,7 +294,7 @@ public class StoreProductController extends BaseController {
      */
     @GetMapping("/reply/config/{id}")
     @ApiOperation(value = "获取产品评论数据",notes = "获取产品评论数据")
-    public ApiResult<Object> replyCount(@PathVariable Integer id){
+    public ApiResult<ReplyCountDTO> replyCount(@PathVariable Integer id){
         return ApiResult.ok(replyService.getReplyCount(id));
     }
 

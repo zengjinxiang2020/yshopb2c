@@ -41,27 +41,27 @@ public class ApiResult<T> implements Serializable {
 
     }
 
-    public static ApiResult result(boolean flag){
+    public static  <T> ApiResult<T>  result(boolean flag){
         if (flag){
             return ok();
         }
         return fail("");
     }
 
-    public static ApiResult result(ApiCode apiCode){
+    public static <T> ApiResult<T> result(ApiCode apiCode){
         return result(apiCode,null);
     }
 
-    public static ApiResult result(ApiCode apiCode,Object data){
+    public static <T> ApiResult<T> result(ApiCode apiCode,T data){
         return result(apiCode,null,data);
     }
 
-    public static ApiResult result(ApiCode apiCode,String msg,Object data){
+    public static <T> ApiResult<T> result(ApiCode apiCode,String msg,T data){
         String message = apiCode.getMsg();
         if (StringUtils.isNotBlank(msg)){
             message = msg;
         }
-        return ApiResult.builder()
+        return (ApiResult<T>) ApiResult.builder()
                 .status(apiCode.getCode())
                 .msg(message)
                 .data(data)
@@ -69,34 +69,34 @@ public class ApiResult<T> implements Serializable {
                 .build();
     }
 
-    public static ApiResult ok(){
+    public static <T> ApiResult<T> ok(){
         return ok(null);
     }
 
-    public static ApiResult ok(Object data){
+    public static <T> ApiResult<T> ok(T data){
         return result(ApiCode.SUCCESS,data);
     }
 
-    public static ApiResult ok(Object data,String msg){
+    public static <T> ApiResult<T> ok(T data,String msg){
         return result(ApiCode.SUCCESS,msg,data);
     }
 
-    public static ApiResult ok(String key,Object value){
-        Map<String,Object> map = new HashMap<>();
-        map.put(key,value);
-        return ok(map);
-    }
+//    public static <T> ApiResult<T> ok(String key,T value){
+//        Map<String,T> map = new HashMap<>();
+//        map.put(key,value);
+//        return ok(map);
+//    }
 
-    public static ApiResult fail(ApiCode apiCode){
+    public static <T> ApiResult<T> fail(ApiCode apiCode){
         return result(apiCode,null);
     }
 
-    public static ApiResult fail(String msg){
+    public static <T> ApiResult<T> fail(String msg){
         return result(ApiCode.FAIL,msg,null);
 
     }
 
-    public static ApiResult fail(ApiCode apiCode,Object data){
+    public static <T> ApiResult<T> fail(ApiCode apiCode,T data){
         if (ApiCode.SUCCESS == apiCode){
             throw new RuntimeException("失败结果状态码不能为" + ApiCode.SUCCESS.getCode());
         }
@@ -104,10 +104,10 @@ public class ApiResult<T> implements Serializable {
 
     }
 
-    public static ApiResult fail(String key,Object value){
-        Map<String,Object> map = new HashMap<>();
-        map.put(key,value);
-        return result(ApiCode.FAIL,map);
-    }
+//    public static <T> ApiResult<T> fail(String key,T value){
+//        Map<String,T> map = new HashMap<>();
+//        map.put(key,value);
+//        return result(ApiCode.FAIL,map);
+//    }
 
 }

@@ -111,7 +111,7 @@ public class IndexController {
     @AnonymousAccess
     @GetMapping("/citys")
     @ApiOperation(value = "获取城市json",notes = "获取城市json")
-    public ApiResult<String> cityJson(){
+    public ApiResult<JSONObject> cityJson(){
         String path = "city.json";
         String name = "city.json";
         try {

@@ -201,7 +201,7 @@ public class StoreOrderController extends BaseController {
      */
     @PostMapping("/order/create/{key}")
     @ApiOperation(value = "订单创建",notes = "订单创建")
-    public ApiResult<ConfirmOrderDTO> create(@Valid @RequestBody OrderParam param,
+    public ApiResult<Map<String,Object>> create(@Valid @RequestBody OrderParam param,
                                              @PathVariable String key){
 
         Map<String,Object> map = new LinkedHashMap<>();
@@ -359,7 +359,7 @@ public class StoreOrderController extends BaseController {
     @Log(value = "订单支付",type = 1)
     @PostMapping("/order/pay")
     @ApiOperation(value = "订单支付",notes = "订单支付")
-    public ApiResult<ConfirmOrderDTO> pay(@Valid @RequestBody PayParam param){
+    public ApiResult<Map<String,Object>> pay(@Valid @RequestBody PayParam param){
 
         Map<String,Object> map = new LinkedHashMap<>();
         int uid = SecurityUtils.getUserId().intValue();

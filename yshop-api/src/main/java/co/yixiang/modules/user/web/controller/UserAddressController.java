@@ -35,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -129,7 +130,7 @@ public class UserAddressController extends BaseController {
     @Log(value = "查看地址",type = 1)
     @GetMapping("/address/list")
     @ApiOperation(value = "用户地址列表",notes = "用户地址列表",response = YxUserAddressQueryVo.class)
-    public ApiResult<Paging<YxUserAddressQueryVo>> getYxUserAddressPageList(YxUserAddressQueryParam queryParam){
+    public ApiResult<List<YxUserAddressQueryVo>> getYxUserAddressPageList(YxUserAddressQueryParam queryParam){
         int uid = SecurityUtils.getUserId().intValue();
         queryParam.setUid(uid);
         queryParam.setIsDel(0);

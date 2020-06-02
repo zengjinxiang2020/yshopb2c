@@ -26,6 +26,7 @@ import co.yixiang.modules.activity.entity.YxStoreBargainUserHelp;
 import co.yixiang.modules.activity.service.YxStoreBargainService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserHelpService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserService;
+import co.yixiang.modules.activity.web.dto.BargainDTO;
 import co.yixiang.modules.activity.web.param.YxStoreBargainQueryParam;
 import co.yixiang.modules.activity.web.param.YxStoreBargainUserQueryParam;
 import co.yixiang.modules.activity.web.vo.YxStoreBargainQueryVo;
@@ -111,7 +112,7 @@ public class StoreBargainController extends BaseController {
     @Log(value = "查看砍价产品",type = 1)
     @GetMapping("/bargain/detail/{id}")
     @ApiOperation(value = "砍价详情",notes = "砍价详情",response = YxStoreBargainQueryVo.class)
-    public ApiResult<YxStoreBargainQueryVo> getYxStoreBargain(@PathVariable Integer id){
+    public ApiResult<BargainDTO> getYxStoreBargain(@PathVariable Integer id){
         if(ObjectUtil.isNull(id)) return ApiResult.fail("参数错误");
         int uid = SecurityUtils.getUserId().intValue();
         return ApiResult.ok(storeBargainService.getDetail(id,uid));

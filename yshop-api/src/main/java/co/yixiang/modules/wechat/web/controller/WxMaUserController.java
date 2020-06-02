@@ -88,7 +88,7 @@ public class WxMaUserController {
 
     @PostMapping("/wxapp/binding")
     @ApiOperation(value = "小程序绑定手机号", notes = "小程序绑定手机号")
-    public ApiResult<String> phone(@Validated @RequestBody WxPhoneParam param) {
+    public ApiResult<Map<String,Object>> phone(@Validated @RequestBody WxPhoneParam param) {
 
         int uid = SecurityUtils.getUserId().intValue();
         YxUserQueryVo userQueryVo = userService.getYxUserById(uid);
