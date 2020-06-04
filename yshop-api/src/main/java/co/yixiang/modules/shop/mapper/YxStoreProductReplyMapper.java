@@ -29,7 +29,7 @@ public interface YxStoreProductReplyMapper extends BaseMapper<YxStoreProductRepl
             "A.merchant_reply_time as merchantReplyTime,A.pics as pictures,A.add_time as addTime," +
             "B.nickname,B.avatar,C.cart_info as cartInfo" +
             " from yx_store_product_reply A left join yx_user B " +
-            "on A.uid = B.uid left join yx_store_order_cart_info C on A.unique = C.unique" +
+            "on A.uid = B.uid left join yx_store_order_cart_info C on A.`unique` = C.`unique`" +
             " where A.product_id=#{productId} and A.is_del=0 and A.reply_type='product' " +
             "order by A.add_time DESC limit 1")
     YxStoreProductReplyQueryVo getReply(int productId);
@@ -39,7 +39,7 @@ public interface YxStoreProductReplyMapper extends BaseMapper<YxStoreProductRepl
             "A.merchant_reply_time as merchantReplyTime,A.pics as pictures,A.add_time as addTime," +
             "B.nickname,B.avatar,C.cart_info as cartInfo" +
             " from yx_store_product_reply A left join yx_user B " +
-            "on A.uid = B.uid left join yx_store_order_cart_info C on A.unique = C.unique" +
+            "on A.uid = B.uid left join yx_store_order_cart_info C on A.`unique` = C.`unique`" +
             " where A.product_id=#{productId} and A.is_del=0 and A.reply_type='product' " +
             "<if test='type == 1'>and A.product_score = 5</if>" +
             "<if test='type == 2'>and A.product_score &lt; 5 and A.product_score &gt; 2</if>" +
