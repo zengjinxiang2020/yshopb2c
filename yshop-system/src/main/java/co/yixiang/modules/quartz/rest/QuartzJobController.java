@@ -15,6 +15,7 @@ import co.yixiang.modules.quartz.service.dto.QuartzJobDto;
 import co.yixiang.modules.quartz.service.dto.QuartzJobQueryCriteria;
 import co.yixiang.modules.quartz.service.dto.QuartzLogDto;
 import co.yixiang.modules.quartz.service.dto.QuartzLogQueryCriteria;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -121,7 +122,8 @@ public class QuartzJobController {
     @PreAuthorize("@el.check('admin','timing:edit')")
     public ResponseEntity<Object> updateIsPause(@PathVariable Long id){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        quartzJobService.updateIsPause(quartzJobService.getOne(new QueryWrapper<QuartzJob>().eq("uid",id)));
+        quartzJobService.updateIsPause(quartzJobService.getOne(new LambdaQueryWrapper<QuartzJob>()
+                .eq(QuartzJob::getId,id)));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
