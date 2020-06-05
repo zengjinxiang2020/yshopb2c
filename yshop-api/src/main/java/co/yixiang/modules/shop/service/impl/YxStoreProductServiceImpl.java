@@ -196,7 +196,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<YxStoreProductMap
         }
         //关键字搜索
         if(StrUtil.isNotEmpty(productQueryParam.getKeyword())){
-            wrapper.like("store_name",productQueryParam.getKeyword());
+            wrapper.like("keyword",productQueryParam.getKeyword());
         }
 
         //新品搜索
