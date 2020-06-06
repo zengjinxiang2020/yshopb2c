@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import static co.yixiang.utils.FileUtil.transformStyle;
+
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CreatShareProductServiceImpl implements CreatShareProductService {
@@ -48,7 +50,7 @@ public class CreatShareProductServiceImpl implements CreatShareProductService {
             //读取互联网图片
             BufferedImage priductUrl = null;
             try {
-                priductUrl = ImageIO.read(new URL(productDTO.getImage()));
+                priductUrl = ImageIO.read(new URL(transformStyle(productDTO.getImage())));
             } catch (IOException e) {
                 e.printStackTrace();
             }
