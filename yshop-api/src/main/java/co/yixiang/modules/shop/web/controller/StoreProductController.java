@@ -169,7 +169,7 @@ public class StoreProductController extends BaseController {
                         FileUtil.file(fileDir+name));
             }else{//如果类型是h5
                 //生成二维码
-                QrCodeUtil.generate(siteUrl+"detail/"+id+"?spread="+uid, 180, 180,
+                QrCodeUtil.generate(siteUrl+"/detail/"+id+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
             systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
