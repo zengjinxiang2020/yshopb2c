@@ -74,7 +74,7 @@ import java.util.Map;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class AuthController {
 
-    @Value("${single.login:true}")
+    @Value("${single.login}")
     private Boolean singleLogin;
     @Value("${yshop.notify.sms.enable}")
     private Boolean enableSms;

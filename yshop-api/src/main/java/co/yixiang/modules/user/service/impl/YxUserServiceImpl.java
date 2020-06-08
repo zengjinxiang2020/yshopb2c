@@ -124,7 +124,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<YxUserMapper, YxUser> imp
     private WxMaService wxMaService;
     @Autowired
     private YxWechatUserService wechatUserService;
-    @Value("${single.login:true}")
+    @Value("${single.login}")
     private Boolean singleLogin;
     @Value("${yshop.notify.sms.enable}")
     private Boolean enableSms;
