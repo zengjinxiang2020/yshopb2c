@@ -91,6 +91,7 @@ public class JobController {
     @PreAuthorize("@el.check('admin','job:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody Job resources){
         //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
+        resources.setDeptId(resources.getDept().getId());
         jobService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

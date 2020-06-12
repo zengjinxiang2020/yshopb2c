@@ -259,6 +259,25 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
         if(user2!=null&&!user.getId().equals(user2.getId())){
             throw new EntityExistException(User.class,"email",resources.getEmail());
         }
+        user.setUsername(resources.getUsername());
+        user.setEmail(resources.getEmail());
+        user.setEnabled(resources.getEnabled());
+        user.setDeptId(resources.getDept().getId());
+        user.setJobId(resources.getJob().getId());
+        user.setPhone(resources.getPhone());
+        user.setNickName(resources.getNickName());
+        user.setSex(resources.getSex());
+        boolean result = this.saveOrUpdate(user);
+        usersRolesService.lambdaUpdate().eq(UsersRoles ::getUserId,resources.getId()).remove();
+        UsersRoles usersRoles = new UsersRoles();
+        usersRoles.setUserId(resources.getId());
+        Set<Role> set = resources.getRoles();
+        for (Role roleIds : set ) {
+            usersRoles.setRoleId(roleIds.getId());
+        }
+        if (result) {
+            usersRolesService.save(usersRoles);
+        }
 
         // 如果用户的角色改变了，需要手动清理下缓存
         if (!resources.getRoles().equals(user.getRoles())) {
@@ -267,17 +286,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
             key = "role::findByUsers_Id:" + user.getId();
             redisUtils.del(key);
         }
-
-        user.setUsername(resources.getUsername());
-        user.setEmail(resources.getEmail());
-        user.setEnabled(resources.getEnabled());
-        user.setRoles(resources.getRoles());
-        user.setDept(resources.getDept());
-        user.setJob(resources.getJob());
-        user.setPhone(resources.getPhone());
-        user.setNickName(resources.getNickName());
-        user.setSex(resources.getSex());
-        this.saveOrUpdate(user);
     }
 
     @Override
