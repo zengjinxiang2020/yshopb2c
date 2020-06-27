@@ -1,12 +1,16 @@
 /**
  * Copyright (C) 2018-2020
  * All rights reserved, Designed By www.yixiang.co
-
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
  */
 package co.yixiang.modules.shop.rest;
 
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.logging.aop.log.Log;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.shop.domain.YxSystemStore;
 import co.yixiang.modules.shop.domain.YxSystemStoreStaff;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
@@ -93,12 +97,12 @@ public class SystemStoreStaffController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除门店店员")
     @ApiOperation("删除门店店员")
     @PreAuthorize("@el.check('yxSystemStoreStaff:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         yxSystemStoreStaffService.removeByIds(new ArrayList<>(Arrays.asList(ids)));
         return new ResponseEntity<>(HttpStatus.OK);
     }

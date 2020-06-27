@@ -1,7 +1,10 @@
 /**
  * Copyright (C) 2018-2020
  * All rights reserved, Designed By www.yixiang.co
-
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
  */
 package co.yixiang.modules.shop.rest;
 
@@ -9,6 +12,7 @@ import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.logging.aop.log.Log;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.shop.domain.YxSystemConfig;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.dto.YxSystemConfigQueryCriteria;
@@ -51,16 +55,16 @@ public class SystemConfigController {
     @GetMapping(value = "/yxSystemConfig")
     @PreAuthorize("@el.check('admin','YXSYSTEMCONFIG_ALL','YXSYSTEMCONFIG_SELECT')")
     public ResponseEntity getYxSystemConfigs(YxSystemConfigQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(yxSystemConfigService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(yxSystemConfigService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @ForbidSubmit
     @Log("新增或修改")
     @ApiOperation(value = "新增或修改")
     @PostMapping(value = "/yxSystemConfig")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PreAuthorize("@el.check('admin','YXSYSTEMCONFIG_ALL','YXSYSTEMCONFIG_CREATE')")
     public ResponseEntity create(@RequestBody String jsonStr){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         jsonObject.forEach(
                 (key,value)->{
@@ -76,6 +80,9 @@ public class SystemConfigController {
                     }
                     if(SystemConfigConstants.WXPAY_MCHID.equals(key) || SystemConfigConstants.WXAPP_APPID.equals(key)){
                         WxPayConfiguration.removeWxPayService();
+                    }
+                    if(SystemConfigConstants.EXP_APPID.equals(key)){
+                        RedisUtil.del(ShopConstants.YSHOP_EXPRESS_SERVICE);
                     }
                     RedisUtil.set(key,value.toString(),0);
                     if(ObjectUtil.isNull(yxSystemConfig)){

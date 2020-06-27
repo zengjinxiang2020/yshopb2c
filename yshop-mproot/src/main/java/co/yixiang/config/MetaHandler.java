@@ -16,9 +16,11 @@ package co.yixiang.config;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
+import org.springframework.core.annotation.OrderUtils;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 处理新增和更新的基础数据填充，配合BaseEntity和MyBatisPlusConfig使用
@@ -56,6 +58,10 @@ public class MetaHandler implements MetaObjectHandler {
             if (metaObject.hasSetter("delFlag")) {
                 log.debug("自动插入 delFlag");
                 this.setFieldValByName("delFlag", false, metaObject);
+            }
+            if(metaObject.hasSetter("addTime")){
+                String timestamp = String.valueOf(new Date().getTime()/1000);
+                this.setFieldValByName("addTime", Integer.valueOf(timestamp), metaObject);
             }
         } catch (Exception e) {
             log.error("自动注入失败:{}", e);

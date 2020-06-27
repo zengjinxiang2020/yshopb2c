@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("unchecked")
 public class RedisUtil {
     private static RedisTemplate<String,Object> redisTemplate = SpringContextUtils
             .getBean("redisTemplate",RedisTemplate.class);

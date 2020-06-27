@@ -56,14 +56,17 @@ CMS，CRM，OA等等本版本本身属于独立后台商城管理系统;
 
 #### 项目结构
 项目采用分模块开发方式
-- yshop-api       移动端API模块
-- yshop-mp        微信相关模块
+- yshop-app       移动端API模块（H5+uniapp端的API）
+- yshop-admin     管理后台模块
+- yshop-weixin    微信相关模块
+- yshop-mall      商城公共模块
+- yshop-shop      后台商城模块
+- yshop-message   消息队列模块
 - yshop-common    公共模块
-- yshop-system    后台模块
 - yshop-logging   日志模块
 - yshop-tools     第三方工具模块
 - yshop-generator 代码生成模块
-- yshop-shop      商城模块
+- yshop-mproot    mybatisPlus配置模块
 
 #### 系统预览
 <table>

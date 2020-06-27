@@ -7,18 +7,20 @@
     <groupId>co.yixiang</groupId>
     <artifactId>yshop</artifactId>
     <packaging>pom</packaging>
-    <version>2.2</version>
+    <version>3.0-alpha</version>
 
     <modules>
         <module>yshop-common</module>
         <module>yshop-logging</module>
-        <module>yshop-system</module>
+        <module>yshop-admin</module>
         <module>yshop-tools</module>
         <module>yshop-generator</module>
-        <module>yshop-api</module>
-        <module>yshop-mp</module>
+        <module>yshop-app</module>
+        <module>yshop-weixin</module>
         <module>yshop-shop</module>
         <module>yshop-mproot</module>
+        <module>yshop-mall</module>
+        <module>yshop-message</module>
     </modules>
 
     <name>YSHOP商城管理系统</name>
@@ -54,10 +56,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -72,6 +71,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.lettuce</groupId>
+                    <artifactId>lettuce-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>2.9.1</version>
         </dependency>
 
         <!--Spring boot end-->

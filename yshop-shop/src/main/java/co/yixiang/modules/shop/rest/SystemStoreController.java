@@ -11,13 +11,14 @@ import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.logging.aop.log.Log;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.shop.domain.YxSystemStore;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreDto;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreQueryCriteria;
-import co.yixiang.mp.config.ShopKeyUtils;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
+import co.yixiang.utils.ShopKeyUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
@@ -95,32 +96,31 @@ public class SystemStoreController {
         return new ResponseEntity<>(json,HttpStatus.CREATED);
     }
 
+    @ForbidSubmit
     @PostMapping
     @Log("新增门店")
     @ApiOperation("新增门店")
     @PreAuthorize("@el.check('yxSystemStore:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody YxSystemStore resources){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        resources.setAddTime(OrderUtil.getSecondTimestampTwo());
         return new ResponseEntity<>(yxSystemStoreService.save(resources),HttpStatus.CREATED);
     }
 
+    @ForbidSubmit
     @PutMapping
     @Log("修改门店")
     @ApiOperation("修改门店")
     @PreAuthorize("@el.check('yxSystemStore:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody YxSystemStore resources){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         yxSystemStoreService.saveOrUpdate(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除门店")
     @ApiOperation("删除门店")
     @PreAuthorize("@el.check('yxSystemStore:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         yxSystemStoreService.removeByIds(new ArrayList<>(Arrays.asList(ids)));
         return new ResponseEntity<>(HttpStatus.OK);
     }

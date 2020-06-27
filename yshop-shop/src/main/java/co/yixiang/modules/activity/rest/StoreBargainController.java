@@ -1,15 +1,20 @@
 /**
  * Copyright (C) 2018-2020
  * All rights reserved, Designed By www.yixiang.co
-
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
  */
 package co.yixiang.modules.activity.rest;
 
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.api.YshopException;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreBargain;
 import co.yixiang.modules.activity.service.YxStoreBargainService;
 import co.yixiang.modules.activity.service.dto.YxStoreBargainQueryCriteria;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,7 +51,7 @@ public class StoreBargainController {
     @GetMapping(value = "/yxStoreBargain")
     @PreAuthorize("@el.check('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_SELECT')")
     public ResponseEntity getYxStoreBargains(YxStoreBargainQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(yxStoreBargainService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(yxStoreBargainService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
 
@@ -56,30 +61,26 @@ public class StoreBargainController {
     @PutMapping(value = "/yxStoreBargain")
     @PreAuthorize("@el.check('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreBargain resources){
-
-        if(ObjectUtil.isNotNull(resources.getStartTimeDate())){
-            resources.setStartTime(OrderUtil.
-                    dateToTimestamp(resources.getStartTimeDate()));
+        if(resources.getBargainMinPrice().compareTo(resources.getBargainMaxPrice()) >= 0){
+            throw new YshopException("单次砍最低价不能高于单次砍最高价");
         }
-        if(ObjectUtil.isNotNull(resources.getEndTimeDate())){
-            resources.setStopTime(OrderUtil.
-                    dateToTimestamp(resources.getEndTimeDate()));
+        if(resources.getMinPrice().compareTo(resources.getPrice()) >= 0){
+            throw new YshopException("允许砍到最低价不能高于砍价金额");
         }
         if(ObjectUtil.isNull(resources.getId())){
-            resources.setAddTime(OrderUtil.getSecondTimestampTwo());
-            return new ResponseEntity(yxStoreBargainService.save(resources),HttpStatus.CREATED);
+            return new ResponseEntity<>(yxStoreBargainService.save(resources),HttpStatus.CREATED);
         }else{
             yxStoreBargainService.saveOrUpdate(resources);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
     }
 
+    @ForbidSubmit
     @Log("删除砍价")
     @ApiOperation(value = "删除砍价")
     @DeleteMapping(value = "/yxStoreBargain/{id}")
     @PreAuthorize("@el.check('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         yxStoreBargainService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }

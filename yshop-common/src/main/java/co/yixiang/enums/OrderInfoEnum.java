@@ -38,6 +38,9 @@ public enum OrderInfoEnum {
 	PINK_STATUS_2(2,"已完成"),
 	PINK_STATUS_3(3,"未完成"),
 
+	PINK_REFUND_STATUS_0(0,"拼团正常"),
+	PINK_REFUND_STATUS_1(1,"拼团已退款"),
+
 	CANCEL_STATUS_0(0,"正常"),
 	CANCEL_STATUS_1(1,"已取消"),
 

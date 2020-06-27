@@ -1,7 +1,10 @@
 /**
  * Copyright (C) 2018-2020
  * All rights reserved, Designed By www.yixiang.co
-
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
  */
 package co.yixiang.utils;
 
@@ -15,12 +18,7 @@ import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,7 +36,7 @@ public class RedisUtils {
         this.redisTemplate = redisTemplate;
     }
 
-    // =============================common============================
+    // =============================commonold============================
 
     /**
      * 指定缓存失效时间
@@ -162,6 +160,10 @@ public class RedisUtils {
      */
     public Object get(String key) {
         return key == null ? null : redisTemplate.opsForValue().get(key);
+    }
+
+    public String getY(String key){
+        return key == null ? "" : redisTemplate.opsForValue().get(key).toString();
     }
 
     /**

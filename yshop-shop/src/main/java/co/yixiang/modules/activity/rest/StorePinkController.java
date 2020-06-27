@@ -38,7 +38,7 @@ public class StorePinkController {
     @GetMapping(value = "/yxStorePink")
     @PreAuthorize("@el.check('admin','YXSTOREPINK_ALL','YXSTOREPINK_SELECT')")
     public ResponseEntity getYxStorePinks(YxStorePinkQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(yxStorePinkService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(yxStorePinkService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
 

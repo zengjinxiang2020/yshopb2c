@@ -23,6 +23,9 @@ public enum BillDetailEnum {
 	TYPE_5("pay_product_refund","退款"),
 	TYPE_6("system_add","系统添加"),
 	TYPE_7("system_sub","系统减少"),
+	TYPE_8("deduction","减去"),
+	TYPE_9("gain","奖励"),
+	TYPE_10("sign","签到"),
 
 
 	CATEGORY_1("now_money","金额"),

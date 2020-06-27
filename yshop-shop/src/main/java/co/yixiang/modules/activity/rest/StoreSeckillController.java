@@ -10,6 +10,7 @@ import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreSeckill;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.service.dto.YxStoreSeckillQueryCriteria;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,7 +47,7 @@ public class StoreSeckillController {
     @GetMapping(value = "/yxStoreSeckill")
     @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_SELECT')")
     public ResponseEntity getYxStoreSeckills(YxStoreSeckillQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(yxStoreSeckillService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(yxStoreSeckillService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
 
@@ -56,29 +57,20 @@ public class StoreSeckillController {
     @PutMapping(value = "/yxStoreSeckill")
     @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreSeckill resources){
-        if(ObjectUtil.isNotNull(resources.getStartTimeDate())){
-            resources.setStartTime(OrderUtil.
-                    dateToTimestamp(resources.getStartTimeDate()));
-        }
-        if(ObjectUtil.isNotNull(resources.getEndTimeDate())){
-            resources.setStopTime(OrderUtil.
-                    dateToTimestamp(resources.getEndTimeDate()));
-        }
         if(ObjectUtil.isNull(resources.getId())){
-            resources.setAddTime(String.valueOf(OrderUtil.getSecondTimestampTwo()));
-            return new ResponseEntity(yxStoreSeckillService.save(resources),HttpStatus.CREATED);
+            return new ResponseEntity<>(yxStoreSeckillService.save(resources),HttpStatus.CREATED);
         }else{
             yxStoreSeckillService.saveOrUpdate(resources);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
     }
 
+    @ForbidSubmit
     @Log("删除")
     @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxStoreSeckill/{id}")
     @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         yxStoreSeckillService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }

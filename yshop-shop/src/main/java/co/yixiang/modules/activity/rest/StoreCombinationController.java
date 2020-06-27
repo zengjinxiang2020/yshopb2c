@@ -10,6 +10,7 @@ import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreCombination;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.dto.YxStoreCombinationQueryCriteria;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -49,8 +50,7 @@ public class StoreCombinationController {
     @GetMapping(value = "/yxStoreCombination")
     @PreAuthorize("@el.check('admin','YXSTORECOMBINATION_ALL','YXSTORECOMBINATION_SELECT')")
     public ResponseEntity getYxStoreCombinations(YxStoreCombinationQueryCriteria criteria, Pageable pageable){
-        criteria.setIsDel(0);
-        return new ResponseEntity(yxStoreCombinationService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(yxStoreCombinationService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
 
@@ -60,17 +60,8 @@ public class StoreCombinationController {
     @PutMapping(value = "/yxStoreCombination")
     @PreAuthorize("@el.check('admin','YXSTORECOMBINATION_ALL','YXSTORECOMBINATION_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreCombination resources){
-        if(ObjectUtil.isNotNull(resources.getStartTimeDate())){
-            resources.setStartTime(OrderUtil.
-                    dateToTimestamp(resources.getStartTimeDate()));
-        }
-        if(ObjectUtil.isNotNull(resources.getEndTimeDate())){
-            resources.setStopTime(OrderUtil.
-                    dateToTimestamp(resources.getEndTimeDate()));
-        }
         if(ObjectUtil.isNull(resources.getId())){
-            resources.setAddTime(String.valueOf(OrderUtil.getSecondTimestampTwo()));
-            return new ResponseEntity(yxStoreCombinationService.save(resources),HttpStatus.CREATED);
+            return new ResponseEntity<>(yxStoreCombinationService.save(resources),HttpStatus.CREATED);
         }else{
             yxStoreCombinationService.saveOrUpdate(resources);
             return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -78,27 +69,23 @@ public class StoreCombinationController {
 
     }
 
+    @ForbidSubmit
     @ApiOperation(value = "开启关闭")
     @PostMapping(value = "/yxStoreCombination/onsale/{id}")
-    public ResponseEntity onSale(@PathVariable Integer id,@RequestBody String jsonStr){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
+    public ResponseEntity onSale(@PathVariable Long id,@RequestBody String jsonStr){
         JSONObject jsonObject = JSON.parseObject(jsonStr);
-        int status = Integer.valueOf(jsonObject.get("status").toString());
-        //System.out.println(status);
+        Integer status = jsonObject.getInteger("status");
         yxStoreCombinationService.onSale(id,status);
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    @ForbidSubmit
     @Log("删除拼团")
     @ApiOperation(value = "删除拼团")
     @DeleteMapping(value = "/yxStoreCombination/{id}")
     @PreAuthorize("@el.check('admin','YXSTORECOMBINATION_ALL','YXSTORECOMBINATION_DELETE')")
-    public ResponseEntity delete(@PathVariable Integer id){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        YxStoreCombination combination = new YxStoreCombination();
-        combination.setIsDel(1);
-        combination.setId(id);
-        yxStoreCombinationService.saveOrUpdate(combination);
+    public ResponseEntity delete(@PathVariable Long id){
+        yxStoreCombinationService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

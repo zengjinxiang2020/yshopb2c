@@ -40,6 +40,7 @@ import java.util.Map;
  * @author hupeng
  * @date 2018-11-24
  */
+@SuppressWarnings("unchecked")
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class LogServiceImpl extends BaseServiceImpl<LogMapper, co.yixiang.logging.domain.Log>  implements LogService {

@@ -102,7 +102,7 @@ public class LocalStorageServiceImpl extends BaseServiceImpl<LocalStorageMapper,
                     file.getPath(),
                     type,
                     FileUtil.getSize(multipartFile.getSize()),
-                    SecurityUtils.getUsername()
+                    "yshop"
             );
             this.save(localStorage);
             return generator.convert(localStorage,LocalStorageDto.class);

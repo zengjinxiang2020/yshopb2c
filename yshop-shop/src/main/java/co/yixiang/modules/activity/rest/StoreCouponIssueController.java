@@ -10,6 +10,7 @@ import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreCouponIssue;
 import co.yixiang.modules.activity.service.YxStoreCouponIssueService;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponIssueQueryCriteria;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,8 +48,7 @@ public class StoreCouponIssueController {
     @GetMapping(value = "/yxStoreCouponIssue")
     @PreAuthorize("@el.check('admin','YXSTORECOUPONISSUE_ALL','YXSTORECOUPONISSUE_SELECT')")
     public ResponseEntity getYxStoreCouponIssues(YxStoreCouponIssueQueryCriteria criteria, Pageable pageable){
-        criteria.setIsDel(0);
-        return new ResponseEntity(yxStoreCouponIssueService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(yxStoreCouponIssueService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @Log("发布")
@@ -56,19 +56,10 @@ public class StoreCouponIssueController {
     @PostMapping(value = "/yxStoreCouponIssue")
     @PreAuthorize("@el.check('admin','YXSTORECOUPONISSUE_ALL','YXSTORECOUPONISSUE_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxStoreCouponIssue resources){
-        if(ObjectUtil.isNotNull(resources.getStartTimeDate())){
-            resources.setStartTime(OrderUtil.
-                    dateToTimestamp(resources.getStartTimeDate()));
-        }
-        if(ObjectUtil.isNotNull(resources.getEndTimeDate())){
-            resources.setEndTime(OrderUtil.
-                    dateToTimestamp(resources.getEndTimeDate()));
-        }
         if(resources.getTotalCount() > 0) {
             resources.setRemainCount(resources.getTotalCount());
         }
-        resources.setAddTime(OrderUtil.getSecondTimestampTwo());
-        return new ResponseEntity(yxStoreCouponIssueService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(yxStoreCouponIssueService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改状态")
@@ -80,16 +71,13 @@ public class StoreCouponIssueController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除")
     @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxStoreCouponIssue/{id}")
     @PreAuthorize("@el.check('admin','YXSTORECOUPONISSUE_ALL','YXSTORECOUPONISSUE_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        YxStoreCouponIssue resources = new YxStoreCouponIssue();
-        resources.setId(id);
-        resources.setIsDel(1);
-        yxStoreCouponIssueService.saveOrUpdate(resources);
+        yxStoreCouponIssueService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

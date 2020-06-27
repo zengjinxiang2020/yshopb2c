@@ -9,6 +9,7 @@ import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreCoupon;
 import co.yixiang.modules.activity.service.YxStoreCouponService;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponQueryCriteria;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,7 +47,7 @@ public class StoreCouponController {
     @GetMapping(value = "/yxStoreCoupon")
     @PreAuthorize("@el.check('admin','YXSTORECOUPON_ALL','YXSTORECOUPON_SELECT')")
     public ResponseEntity getYxStoreCoupons(YxStoreCouponQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(yxStoreCouponService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity<>(yxStoreCouponService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @Log("新增")
@@ -54,8 +55,7 @@ public class StoreCouponController {
     @PostMapping(value = "/yxStoreCoupon")
     @PreAuthorize("@el.check('admin','YXSTORECOUPON_ALL','YXSTORECOUPON_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxStoreCoupon resources){
-        resources.setAddTime(OrderUtil.getSecondTimestampTwo());
-        return new ResponseEntity(yxStoreCouponService.save(resources),HttpStatus.CREATED);
+        return new ResponseEntity<>(yxStoreCouponService.save(resources),HttpStatus.CREATED);
     }
 
     @Log("修改")
@@ -67,16 +67,13 @@ public class StoreCouponController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除")
     @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxStoreCoupon/{id}")
     @PreAuthorize("@el.check('admin','YXSTORECOUPON_ALL','YXSTORECOUPON_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
-        YxStoreCoupon resources = new YxStoreCoupon();
-        resources.setId(id);
-        resources.setIsDel(1);
-        yxStoreCouponService.saveOrUpdate(resources);
+        yxStoreCouponService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

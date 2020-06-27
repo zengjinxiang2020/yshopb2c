@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.logging.aop.log.Log;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.shop.domain.YxSystemGroupData;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.shop.service.dto.YxSystemGroupDataQueryCriteria;
@@ -59,42 +60,18 @@ public class SystemGroupDataController {
         Pageable pageableT = PageRequest.of(pageable.getPageNumber(),
                 pageable.getPageSize(),
                 sort);
-        return new ResponseEntity(yxSystemGroupDataService.queryAll(criteria,pageableT),HttpStatus.OK);
+        return new ResponseEntity<>(yxSystemGroupDataService.queryAll(criteria,pageableT),HttpStatus.OK);
     }
 
+    @ForbidSubmit
     @Log("新增数据配置")
     @ApiOperation(value = "新增数据配置")
     @PostMapping(value = "/yxSystemGroupData")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PreAuthorize("@el.check('admin','YXSYSTEMGROUPDATA_ALL','YXSYSTEMGROUPDATA_CREATE')")
     public ResponseEntity create(@RequestBody String jsonStr){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         JSONObject jsonObject = JSON.parseObject(jsonStr);
-
-        if(ObjectUtil.isNotNull(jsonObject.get("name"))){
-            if(StrUtil.isEmpty(jsonObject.get("name").toString())){
-                throw new BadRequestException("名称必须填写");
-            }
-        }
-
-        if(ObjectUtil.isNotNull(jsonObject.get("title"))){
-            if(StrUtil.isEmpty(jsonObject.get("title").toString())){
-                throw new BadRequestException("标题必须填写");
-            }
-        }
-
-        if(ObjectUtil.isNotNull(jsonObject.get("info"))){
-            if(StrUtil.isEmpty(jsonObject.get("info").toString())){
-                throw new BadRequestException("简介必须填写");
-            }
-        }
-
-        if(ObjectUtil.isNotNull(jsonObject.get("pic"))){
-            if(StrUtil.isEmpty(jsonObject.get("pic").toString())){
-                throw new BadRequestException("图片必须上传");
-            }
-        }
-
+        this.checkParam(jsonObject);
 
         YxSystemGroupData yxSystemGroupData = new YxSystemGroupData();
         yxSystemGroupData.setGroupName(jsonObject.get("groupName").toString());
@@ -102,36 +79,20 @@ public class SystemGroupDataController {
         yxSystemGroupData.setValue(jsonObject.toJSONString());
         yxSystemGroupData.setStatus(jsonObject.getInteger("status"));
         yxSystemGroupData.setSort(jsonObject.getInteger("sort"));
-        yxSystemGroupData.setAddTime(OrderUtil.getSecondTimestampTwo());
 
-        return new ResponseEntity(yxSystemGroupDataService.save(yxSystemGroupData),HttpStatus.CREATED);
+
+        return new ResponseEntity<>(yxSystemGroupDataService.save(yxSystemGroupData),HttpStatus.CREATED);
     }
 
+    @ForbidSubmit
     @Log("修改数据配置")
     @ApiOperation(value = "修改数据配置")
     @PutMapping(value = "/yxSystemGroupData")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PreAuthorize("@el.check('admin','YXSYSTEMGROUPDATA_ALL','YXSYSTEMGROUPDATA_EDIT')")
     public ResponseEntity update(@RequestBody String jsonStr){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         JSONObject jsonObject = JSON.parseObject(jsonStr);
-        if(ObjectUtil.isNotNull(jsonObject.get("name"))){
-            if(StrUtil.isEmpty(jsonObject.get("name").toString())){
-                throw new BadRequestException("名称必须填写");
-            }
-        }
-
-        if(ObjectUtil.isNotNull(jsonObject.get("title"))){
-            if(StrUtil.isEmpty(jsonObject.get("title").toString())){
-                throw new BadRequestException("标题必须填写");
-            }
-        }
-
-        if(ObjectUtil.isNotNull(jsonObject.get("pic"))){
-            if(StrUtil.isEmpty(jsonObject.get("pic").toString())){
-                throw new BadRequestException("图片必须上传");
-            }
-        }
+        this.checkParam(jsonObject);
 
         YxSystemGroupData yxSystemGroupData = new YxSystemGroupData();
 
@@ -156,13 +117,45 @@ public class SystemGroupDataController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除数据配置")
     @ApiOperation(value = "删除数据配置")
     @DeleteMapping(value = "/yxSystemGroupData/{id}")
     @PreAuthorize("@el.check('admin','YXSYSTEMGROUPDATA_ALL','YXSYSTEMGROUPDATA_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
-        //if(StrUtil.isNotEmpty("22")) throw new BadRequestException("演示环境禁止操作");
         yxSystemGroupDataService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    /**
+     * 检测参数
+     * @param jsonObject
+     */
+    private void checkParam(JSONObject jsonObject){
+        if(ObjectUtil.isNotNull(jsonObject.get("name"))){
+            if(StrUtil.isEmpty(jsonObject.getString("name"))){
+                throw new BadRequestException("名称必须填写");
+            }
+        }
+
+        if(ObjectUtil.isNotNull(jsonObject.get("title"))){
+            if(StrUtil.isEmpty(jsonObject.getString("title"))){
+                throw new BadRequestException("标题必须填写");
+            }
+        }
+
+        if(ObjectUtil.isNotNull(jsonObject.get("pic"))){
+            if(StrUtil.isEmpty(jsonObject.getString("pic"))){
+                throw new BadRequestException("图片必须上传");
+            }
+        }
+
+
+        if(ObjectUtil.isNotNull(jsonObject.get("info"))){
+            if(StrUtil.isEmpty(jsonObject.getString("info"))){
+                throw new BadRequestException("简介必须填写");
+            }
+        }
+
     }
 }

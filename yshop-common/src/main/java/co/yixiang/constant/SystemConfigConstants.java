@@ -45,5 +45,6 @@ public class SystemConfigConstants {
     public final static String WXPAY_MCHID="wxpay_mchId";
     public final static String WXPAY_MCHKEY="wxpay_mchKey";
     public final static String WX_NATIVE_APP_APPID="wx_native_app_appId";
+    public final static String EXP_APPID = "exp_appId";
 
 }

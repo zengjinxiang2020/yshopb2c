@@ -5,11 +5,13 @@
  */
 package co.yixiang.logging.domain;
 
+import co.yixiang.domain.BaseDomain;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
@@ -20,9 +22,10 @@ import java.sql.Timestamp;
  * @date 2018-11-24
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @TableName("log")
 @NoArgsConstructor
-public class Log  implements Serializable {
+public class Log extends BaseDomain {
 
     @TableId
     private Long id;
@@ -64,9 +67,6 @@ public class Log  implements Serializable {
     /** 异常详细  */
     private byte[] exceptionDetail;
 
-    /** 创建日期 */
-    @TableField(fill = FieldFill.INSERT)
-    private Timestamp createTime;
 
     public Log(String logType, Long time) {
         this.logType = logType;

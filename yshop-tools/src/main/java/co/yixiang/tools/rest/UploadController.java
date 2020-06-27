@@ -7,10 +7,13 @@ package co.yixiang.tools.rest;
 
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
+import co.yixiang.api.YshopException;
+import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.tools.domain.QiniuContent;
 import co.yixiang.tools.service.LocalStorageService;
 import co.yixiang.tools.service.QiNiuService;
 import co.yixiang.tools.service.dto.LocalStorageDto;
+import co.yixiang.utils.RedisUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,25 +38,33 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class UploadController {
 
-    @Value("${file.localUrl}")
-    private String localUrl;
-
     private final LocalStorageService localStorageService;
-
     private final QiNiuService qiNiuService;
+    private final RedisUtils redisUtils;
 
-    public UploadController(LocalStorageService localStorageService, QiNiuService qiNiuService) {
+    public UploadController(LocalStorageService localStorageService, QiNiuService qiNiuService,
+                            RedisUtils redisUtils) {
         this.localStorageService = localStorageService;
         this.qiNiuService = qiNiuService;
+        this.redisUtils = redisUtils;
     }
 
 
     @ApiOperation("上传文件")
     @PostMapping
-    @AnonymousAccess
-    public ResponseEntity<Object> create(@RequestParam(defaultValue = "") String name, @RequestParam("file") MultipartFile[] files) {
+    public ResponseEntity<Object> create(@RequestParam(defaultValue = "") String name,
+                                         @RequestParam(defaultValue = "") String type,
+                                         @RequestParam("file") MultipartFile[] files) {
+        String localUrl = redisUtils.getY("admin_api_url");
+        if(StrUtil.isBlank(type)){
+            localUrl = redisUtils.getY("api_url") + "/api";
+        }
+        String mode = redisUtils.getY("file_store_mode");
         StringBuilder url = new StringBuilder();
-        if (StrUtil.isNotEmpty(localUrl)) { //存在走本地
+        if (ShopCommonEnum.STORE_MODE_1.getValue().toString().equals(mode)) { //存在走本地
+            if(StrUtil.isBlank(localUrl)){
+                throw new YshopException("本地上传,请先登陆系统配置后台/移动端API地址");
+            }
             for (MultipartFile file : files) {
                 LocalStorageDto localStorageDTO = localStorageService.create(name, file);
                 if ("".equals(url.toString())) {

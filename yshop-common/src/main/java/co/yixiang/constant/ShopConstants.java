@@ -77,6 +77,11 @@ public interface ShopConstants {
 	String YSHOP_REDIS_INDEX_KEY = "yshop:index_data";
 
 	/**
+	 * 配置列表缓存
+	 */
+	String YSHOP_REDIS_CONFIG_DATAS = "yshop:config_datas";
+
+	/**
 	 * 充值方案
 	 */
 	String YSHOP_RECHARGE_PRICE_WAYS = "yshop_recharge_price_ways";
@@ -127,6 +132,34 @@ public interface ShopConstants {
 	 */
 	String YSHOP_ORDER_PRINT_COUNT_DETAIL = "order_print_count_detail";
 
+	/**
+	 * 短信验证码长度
+	 */
+	int YSHOP_SMS_SIZE = 6;
+
+	/**
+	 * 短信缓存时间
+	 */
+	long YSHOP_SMS_REDIS_TIME = 600L;
+
+	//零标识
+	String YSHOP_ZERO =  "0";
+
+	//业务标识标识
+	String YSHOP_ONE =  "1";
+
+	//目前完成任务数量是3
+	int TASK_FINISH_COUNT = 3;
+
+	int YSHOP_ONE_NUM = 1;
+
+	String YSHOP_ORDER_CACHE_KEY = "yshop:order";
+
+	long YSHOP_ORDER_CACHE_TIME = 600L;
+
+	String WECHAT_MENUS =  "wechat_menus";
+
+	String YSHOP_EXPRESS_SERVICE = "yshop_express_service";
 
 
 }

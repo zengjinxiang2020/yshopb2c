@@ -13,6 +13,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.Base64Utils;
 
+import java.io.Serializable;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ import java.util.Map;
  * <p>
  * 快递鸟即时查询API http://www.kdniao.com/api-track
  */
-public class ExpressService {
+public class ExpressService implements Serializable {
 
     private final Log logger = LogFactory.getLog(ExpressService.class);
     //请求url
