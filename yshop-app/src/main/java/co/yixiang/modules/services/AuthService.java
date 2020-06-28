@@ -77,11 +77,12 @@ public class AuthService {
 
             wxMaService.setWxMaConfig(wxMaConfig);
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-
-            String openid = session.getOpenid();
+            WxMaUserInfo wxMpUser = wxMaService.getUserService()
+                    .getUserInfo(session.getSessionKey(), encryptedData, iv);
+            String openid = wxMpUser.getOpenId();
             //如果开启了UnionId
-            if (StrUtil.isNotBlank(session.getUnionid())) {
-                openid = session.getUnionid();
+            if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
+                openid = wxMpUser.getUnionId();
             }
 
             YxUser yxUser = userService.getOne(Wrappers.<YxUser>lambdaQuery()
@@ -90,8 +91,7 @@ public class AuthService {
             long uid = 0;
             if (ObjectUtil.isNull(yxUser)) {
 
-                WxMaUserInfo wxMpUser = wxMaService.getUserService()
-                        .getUserInfo(session.getSessionKey(), encryptedData, iv);
+
                 //过滤掉表情
                 String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickName());
                 String ip = IpUtil.getRequestIp();
@@ -126,10 +126,10 @@ public class AuthService {
             } else {
                 uid = yxUser.getUid();
                 WechatUserDto wechatUser = JSON.parseObject(yxUser.getWxProfile(), WechatUserDto.class);
-                if ((StrUtil.isBlank(wechatUser.getOpenid()) && StrUtil.isNotBlank(session.getOpenid()))
-                        || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(session.getUnionid()))) {
-                    wechatUser.setRoutineOpenid(session.getOpenid());
-                    wechatUser.setUnionId(session.getUnionid());
+                if ((StrUtil.isBlank(wechatUser.getOpenid()) && StrUtil.isNotBlank(wxMpUser.getOpenId()))
+                        || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(wxMpUser.getUnionId()))) {
+                    wechatUser.setRoutineOpenid(wxMpUser.getOpenId());
+                    wechatUser.setUnionId(wxMpUser.getUnionId());
 
                     yxUser.setWxProfile(JSON.toJSONString(wechatUser));
                     userService.updateById(yxUser);
