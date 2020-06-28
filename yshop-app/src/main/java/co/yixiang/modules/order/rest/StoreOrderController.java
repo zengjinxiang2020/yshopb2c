@@ -19,7 +19,7 @@ import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.OrderLogEnum;
 import co.yixiang.modules.order.domain.YxStoreOrder;
-import co.yixiang.modules.order.dto.OrderExtendDTO;
+import co.yixiang.modules.order.dto.OrderExtendDto;
 import co.yixiang.modules.order.param.*;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.vo.ComputeVo;
@@ -137,7 +137,7 @@ public class StoreOrderController {
 
         String orderId = order.getOrderId();
 
-        OrderExtendDTO orderDTO = new OrderExtendDTO();
+        OrderExtendDto orderDTO = new OrderExtendDto();
         orderDTO.setKey(key);
         orderDTO.setOrderId(orderId);
         map.put("status",OrderLogEnum.CREATE_ORDER_SUCCESS.getValue());
@@ -176,7 +176,7 @@ public class StoreOrderController {
 
         String orderId = storeOrder.getOrderId();
 
-        OrderExtendDTO orderDTO = new OrderExtendDTO();
+        OrderExtendDto orderDTO = new OrderExtendDto();
         orderDTO.setOrderId(orderId);
         map.put("status","SUCCESS");
         map.put("result",orderDTO);

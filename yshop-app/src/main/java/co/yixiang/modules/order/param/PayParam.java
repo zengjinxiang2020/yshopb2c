@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * @ClassName PayDTO
+ * @ClassName PayDto
  * @Author hupeng <610796224@qq.com>
  * @Date 2019/11/7
  **/

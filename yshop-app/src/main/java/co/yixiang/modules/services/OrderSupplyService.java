@@ -11,7 +11,6 @@ package co.yixiang.modules.services;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
 import co.yixiang.enums.*;
 import co.yixiang.modules.activity.domain.YxStoreBargainUser;
@@ -20,9 +19,9 @@ import co.yixiang.modules.activity.service.YxStorePinkService;
 import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.domain.YxStoreOrderCartInfo;
+import co.yixiang.modules.order.dto.OrderExtendDto;
 import co.yixiang.modules.order.service.dto.ProductAttrDto;
 import co.yixiang.modules.order.vo.OrderCartInfoVo;
-import co.yixiang.modules.order.dto.OrderExtendDTO;
 import co.yixiang.modules.order.service.dto.ProductDto;
 import co.yixiang.modules.order.param.ComputeOrderParam;
 import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
@@ -106,7 +105,7 @@ public class OrderSupplyService {
         YxStoreOrderQueryVo storeOrder = storeOrderService.getOrderInfo(key,uid);
         if(ObjectUtil.isNotNull(storeOrder)){
 
-            OrderExtendDTO orderExtendDTO = OrderExtendDTO.builder()
+            OrderExtendDto orderExtendDTO = OrderExtendDto.builder()
                     .key(key)
                     .orderId(storeOrder.getOrderId())
                     .build();
@@ -135,14 +134,14 @@ public class OrderSupplyService {
                 YxStoreOrder yxStoreOrder = storeOrderService.getOrderPink(pinkId,uid);
                 if(yxStoreOrder != null){
                     map.put("status",OrderLogEnum.PINK_ORDER_FAIL_1.getValue());
-                    OrderExtendDTO orderExtendDTO = new OrderExtendDTO();
+                    OrderExtendDto orderExtendDTO = new OrderExtendDto();
                     orderExtendDTO.setOrderId(yxStoreOrder.getOrderId());
                     map.put("result",orderExtendDTO);
                     map.put("msg",OrderLogEnum.PINK_ORDER_FAIL_1.getDesc());
                 }
                 if(yxStoreOrder != null && storePinkService.getIsPinkUid(pinkId,uid)){
                     map.put("status",OrderLogEnum.PINK_ORDER_FAIL_2.getValue());
-                    OrderExtendDTO orderExtendDTO = new OrderExtendDTO();
+                    OrderExtendDto orderExtendDTO = new OrderExtendDto();
                     orderExtendDTO.setOrderId(yxStoreOrder.getOrderId());
                     map.put("result",orderExtendDTO);
                     map.put("msg",OrderLogEnum.PINK_ORDER_FAIL_2.getDesc());
@@ -165,8 +164,8 @@ public class OrderSupplyService {
      * @param orderDTO orderDTO
      * @return map
      */
-    public Map<String, Object> goPay(Map<String, Object> map,String orderId, Long uid,String payType,
-                                      String from,OrderExtendDTO orderDTO){
+    public Map<String, Object> goPay(Map<String, Object> map, String orderId, Long uid, String payType,
+                                     String from, OrderExtendDto orderDTO){
         switch (PayTypeEnum.toType(payType)){
             case WEIXIN:
                 Map<String,String> jsConfig = new HashMap<>();
