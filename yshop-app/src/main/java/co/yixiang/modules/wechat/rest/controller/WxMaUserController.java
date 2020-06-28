@@ -6,7 +6,7 @@
 // * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
 // * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 // */
-//package co.yixiang.modules.wechat.web.rest;
+//package co.yixiang.modules.wechat.rest.rest;
 //
 //import cn.binarywang.wx.miniapp.api.WxMaService;
 //import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
@@ -18,9 +18,9 @@
 //import co.yixiang.modules.user.entity.YxUser;
 //import co.yixiang.modules.user.service.YxUserService;
 //import co.yixiang.modules.user.service.YxWechatUserService;
-//import co.yixiang.modules.user.web.vo.YxUserQueryVo;
-//import co.yixiang.modules.wechat.web.param.BindPhoneParam;
-//import co.yixiang.modules.wechat.web.param.WxPhoneParam;
+//import co.yixiang.modules.user.rest.vo.YxUserQueryVo;
+//import co.yixiang.modules.wechat.rest.param.BindPhoneParam;
+//import co.yixiang.modules.wechat.rest.param.WxPhoneParam;
 //import co.yixiang.mp.config.ShopKeyUtils;
 //import co.yixiang.utils.RedisUtil;
 //import co.yixiang.utils.RedisUtils;
@@ -31,9 +31,9 @@
 //import me.chanjar.weixin.commonold.error.WxErrorException;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.validation.annotation.Validated;
-//import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RestController;
+//import org.springframework.rest.bind.annotation.PostMapping;
+//import org.springframework.rest.bind.annotation.RequestBody;
+//import org.springframework.rest.bind.annotation.RestController;
 //
 //import java.util.LinkedHashMap;
 //import java.util.Map;

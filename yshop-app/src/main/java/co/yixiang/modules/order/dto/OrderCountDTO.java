@@ -1,4 +1,4 @@
-//package co.yixiang.modules.order.web.dto;
+//package co.yixiang.modules.order.rest.dto;
 //
 //import lombok.Data;
 //

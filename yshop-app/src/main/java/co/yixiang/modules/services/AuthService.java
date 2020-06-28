@@ -80,6 +80,7 @@ public class AuthService {
             WxMaUserInfo wxMpUser = wxMaService.getUserService()
                     .getUserInfo(session.getSessionKey(), encryptedData, iv);
             String openid = wxMpUser.getOpenId();
+            long uid = 0;
             //如果开启了UnionId
             if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
                 openid = wxMpUser.getUnionId();
@@ -88,7 +89,6 @@ public class AuthService {
             YxUser yxUser = userService.getOne(Wrappers.<YxUser>lambdaQuery()
                     .eq(YxUser::getUsername, openid),false);
 
-            long uid = 0;
             if (ObjectUtil.isNull(yxUser)) {
 
 

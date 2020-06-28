@@ -1,4 +1,4 @@
-package co.yixiang.modules.wechat.web.param;
+package co.yixiang.modules.wechat.rest.param;
 
 import co.yixiang.common.web.param.QueryParam;
 import io.swagger.annotations.ApiModel;

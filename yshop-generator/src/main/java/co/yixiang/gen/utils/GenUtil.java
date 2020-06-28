@@ -129,7 +129,7 @@ public class GenUtil {
         templates = getFrontTemplateNames();
         for (String templateName : templates) {
             Template template = engine.getTemplate("generator/front/"+templateName+".ftl");
-            String path = tempPath + "yshop-web"  + File.separator;
+            String path = tempPath + "yshop-rest"  + File.separator;
             String apiPath = path + "src" + File.separator + "api" + File.separator;
             String srcPath = path + "src" + File.separator + "views" + File.separator + genMap.get("changeClassName").toString() + File.separator;
             String filePath = getFrontFilePath(templateName, apiPath, srcPath, genMap.get("changeClassName").toString());

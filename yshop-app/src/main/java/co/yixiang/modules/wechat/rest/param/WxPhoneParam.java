@@ -1,4 +1,4 @@
-package co.yixiang.modules.wechat.web.param;
+package co.yixiang.modules.wechat.rest.param;
 
 import lombok.Getter;
 import lombok.Setter;

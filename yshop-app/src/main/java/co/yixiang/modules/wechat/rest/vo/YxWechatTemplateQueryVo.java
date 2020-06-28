@@ -1,30 +1,25 @@
-package co.yixiang.modules.wechat.entity;
+package co.yixiang.modules.wechat.rest.vo;
 
-import co.yixiang.common.entity.BaseEntity;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
  * <p>
- * 微信模板
+ * 微信模板 查询结果对象
  * </p>
  *
  * @author hupeng
- * @since 2019-12-10
+ * @date 2019-12-10
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ApiModel(value = "YxWechatTemplate对象", description = "微信模板")
-public class YxWechatTemplate extends BaseEntity {
-
+@ApiModel(value = "YxWechatTemplateQueryVo对象", description = "微信模板查询参数")
+public class YxWechatTemplateQueryVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "模板id")
-    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     @ApiModelProperty(value = "模板编号")

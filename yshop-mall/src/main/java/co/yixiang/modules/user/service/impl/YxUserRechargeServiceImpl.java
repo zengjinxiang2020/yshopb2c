@@ -83,20 +83,13 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<UserRechargeMappe
 
         //最终充值金额
         BigDecimal newPrice = NumberUtil.add(userRecharge.getPrice(),user.getNowMoney());
-       // newPrice = NumberUtil.add(userRecharge.getGivePrice(),newPrice);
+
+
         //增加流水
-        YxUserBill userBill = new YxUserBill();
-        userBill.setUid(userRecharge.getUid());
-        userBill.setTitle("用户余额充值");
-        userBill.setLinkId(userRecharge.getId().toString());
-        userBill.setCategory(BillDetailEnum.CATEGORY_1.getValue());
-        userBill.setType(BillDetailEnum.TYPE_1.getValue());
-        userBill.setNumber(userRecharge.getPrice());
-        userBill.setBalance(newPrice);
-        userBill.setMark("成功充值余额"+userRecharge.getPrice());
-        userBill.setStatus(BillEnum.STATUS_1.getValue());
-        userBill.setPm(BillEnum.PM_1.getValue());
-        billService.save(userBill);
+        billService.income(userRecharge.getUid(),"用户余额充值",BillDetailEnum.CATEGORY_1.getValue(),
+                BillDetailEnum.TYPE_1.getValue(),userRecharge.getPrice().doubleValue(),newPrice.doubleValue(),
+                "成功充值余额"+userRecharge.getPrice(),userRecharge.getId().toString());
+
 
         //update 余额
         user.setNowMoney(newPrice);
