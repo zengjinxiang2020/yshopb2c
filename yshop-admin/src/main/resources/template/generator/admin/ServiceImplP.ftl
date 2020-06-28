@@ -18,12 +18,12 @@ import co.yixiang.exception.EntityExistException;
         </#if>
     </#list>
 </#if>
-import co.yixiang.commonold.service.impl.BaseServiceImpl;
+import co.yixiang.common.service.impl.BaseServiceImpl;
 import lombok.AllArgsConstructor;
 import co.yixiang.dozer.service.IGenerator;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import co.yixiang.commonold.utils.QueryHelpPlus;
+import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.utils.ValidationUtil;
 import co.yixiang.utils.FileUtil;
 import ${package}.service.${className}Service;

@@ -6,18 +6,16 @@
 * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
-package ${package}.service.mapper;
+package co.yixiang.modules.product.service.dto;
 
-import co.yixiang.common.mapper.CoreMapper;
-import ${package}.domain.${className};
-import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
+import lombok.Data;
+import java.util.List;
+import co.yixiang.annotation.Query;
 
 /**
-* @author ${author}
-* @date ${date}
+* @author hupeng
+* @date 2020-06-28
 */
-@Repository
-public interface ${className}Mapper extends CoreMapper<${className}> {
-
+@Data
+public class YxStoreProductRuleQueryCriteria{
 }

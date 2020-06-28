@@ -147,19 +147,6 @@ public class UserController {
         return ApiResult.ok(map);
     }
 
-//    /**
-//     * 获取活动状态
-//     */
-//    @GetMapping("/user/activity")
-//    @ApiOperation(value = "获取活动状态",notes = "获取活动状态")
-//    @Deprecated
-//    public ApiResult<Object> activity(){
-//        Map<String,Object> map = new LinkedHashMap<>();
-//        map.put("is_bargin",false);
-//        map.put("is_pink",false);
-//        map.put("is_seckill",false);
-//        return ApiResult.ok(map);
-//    }
 
     /**
      * 签到用户信息
