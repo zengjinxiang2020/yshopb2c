@@ -8,6 +8,7 @@
 */
 package co.yixiang.modules.system.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -33,6 +34,7 @@ public class DeptDto implements Serializable {
     /** 状态 */
     private Boolean enabled;
 
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<DeptDto> children;
 
     /** 创建日期 */
