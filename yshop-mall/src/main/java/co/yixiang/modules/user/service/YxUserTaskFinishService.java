@@ -10,11 +10,7 @@ package co.yixiang.modules.user.service;
 
 
 import co.yixiang.common.service.BaseService;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.domain.YxUserTaskFinish;
-import co.yixiang.modules.user.vo.YxUserTaskFinishQueryVo;
-
-import java.io.Serializable;
 
 /**
  * <p>

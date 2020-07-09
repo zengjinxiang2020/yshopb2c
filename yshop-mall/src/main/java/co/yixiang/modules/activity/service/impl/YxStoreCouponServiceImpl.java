@@ -8,6 +8,7 @@
  */
 package co.yixiang.modules.activity.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
@@ -16,6 +17,8 @@ import co.yixiang.modules.activity.service.YxStoreCouponService;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponDto;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponQueryCriteria;
 import co.yixiang.modules.activity.service.mapper.YxStoreCouponMapper;
+import co.yixiang.modules.product.domain.YxStoreProduct;
+import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
@@ -26,11 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 /**
@@ -43,6 +42,7 @@ import java.util.Map;
 public class YxStoreCouponServiceImpl extends BaseServiceImpl<YxStoreCouponMapper, YxStoreCoupon> implements YxStoreCouponService {
 
     private final IGenerator generator;
+    private final YxStoreProductService storeProductService;
 
     @Override
     //@Cacheable
@@ -50,7 +50,16 @@ public class YxStoreCouponServiceImpl extends BaseServiceImpl<YxStoreCouponMappe
         getPage(pageable);
         PageInfo<YxStoreCoupon> page = new PageInfo<>(queryAll(criteria));
         Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxStoreCouponDto.class));
+        List<YxStoreCouponDto> storeCouponDtos = generator.convert(page.getList(), YxStoreCouponDto.class);
+        for (YxStoreCouponDto storeCouponDto : storeCouponDtos) {
+            if(StrUtil.isNotBlank(storeCouponDto.getProductId())){
+                List<YxStoreProduct> storeProducts = storeProductService.lambdaQuery()
+                        .in(YxStoreProduct::getId, Arrays.asList(storeCouponDto.getProductId().split(",")))
+                        .list();
+                storeCouponDto.setProduct(storeProducts);
+            }
+        }
+        map.put("content", storeCouponDtos);
         map.put("totalElements", page.getTotal());
         return map;
     }

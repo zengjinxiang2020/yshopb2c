@@ -6,8 +6,8 @@
 package co.yixiang.modules.security.security;
 
 import co.yixiang.modules.security.config.SecurityProperties;
-import co.yixiang.modules.security.security.vo.OnlineUser;
 import co.yixiang.modules.security.service.OnlineUserService;
+import co.yixiang.modules.user.vo.OnlineUser;
 import co.yixiang.utils.SpringContextHolder;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;

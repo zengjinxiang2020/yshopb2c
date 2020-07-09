@@ -9,7 +9,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -19,6 +22,9 @@ import java.io.Serializable;
 */
 
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @TableName("yx_store_product_attr")
 public class YxStoreProductAttr implements Serializable {
 

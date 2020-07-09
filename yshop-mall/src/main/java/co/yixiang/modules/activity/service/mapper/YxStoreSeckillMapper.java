@@ -33,6 +33,6 @@ public interface YxStoreSeckillMapper extends CoreMapper<YxStoreSeckill> {
     @Select("SELECT c.id,c.image,c.price,c.title as storeName,c.is_show as isShow,c.cost," +
             "c.is_postage as isPostage,c.postage,c.sales,c.stock,c.is_del as isDel" +
             " FROM yx_store_seckill c " +
-            " WHERE c.id = #{id} ")
+            " WHERE c.id = #{id} and c.is_del = 0 ")
     YxStoreProductQueryVo seckillInfo(Long id);
 }

@@ -16,7 +16,6 @@ import co.yixiang.modules.shop.service.YxMaterialService;
 import co.yixiang.modules.shop.service.dto.YxMaterialDto;
 import co.yixiang.modules.shop.service.dto.YxMaterialQueryCriteria;
 import co.yixiang.modules.shop.service.mapper.MaterialMapper;
-import co.yixiang.utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -24,9 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;

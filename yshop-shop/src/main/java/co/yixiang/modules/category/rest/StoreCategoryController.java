@@ -18,6 +18,8 @@ import co.yixiang.modules.category.domain.YxStoreCategory;
 import co.yixiang.modules.category.service.YxStoreCategoryService;
 import co.yixiang.modules.category.service.dto.YxStoreCategoryDto;
 import co.yixiang.modules.category.service.dto.YxStoreCategoryQueryCriteria;
+import co.yixiang.modules.product.domain.YxStoreProduct;
+import co.yixiang.modules.product.service.YxStoreProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cache.annotation.CacheEvict;
@@ -43,10 +45,13 @@ public class StoreCategoryController {
 
 
     private final YxStoreCategoryService yxStoreCategoryService;
+    private final YxStoreProductService yxStoreProductService;
 
 
-    public StoreCategoryController(YxStoreCategoryService yxStoreCategoryService) {
+    public StoreCategoryController(YxStoreCategoryService yxStoreCategoryService,
+                                   YxStoreProductService yxStoreProductService) {
         this.yxStoreCategoryService = yxStoreCategoryService;
+        this.yxStoreProductService = yxStoreProductService;
     }
 
     @Log("导出数据")
@@ -116,8 +121,27 @@ public class StoreCategoryController {
     public ResponseEntity delete(@PathVariable String id){
         String[] ids = id.split(",");
         for (String newId: ids) {
+            this.delCheck(Integer.valueOf(newId));
             yxStoreCategoryService.removeById(Integer.valueOf(newId));
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+
+    /**
+     * 检测删除分类
+     * @param id 分类id
+     */
+    private void delCheck(Integer id){
+        int count = yxStoreCategoryService.lambdaQuery()
+                .eq(YxStoreCategory::getPid,id)
+                .count();
+        if(count > 0) throw new YshopException("请先删除子分类");
+
+        int countP = yxStoreProductService.lambdaQuery()
+                .eq(YxStoreProduct::getCateId,id)
+                .count();
+
+        if(countP > 0) throw new YshopException("当前分类下有商品不可删除");
     }
 }

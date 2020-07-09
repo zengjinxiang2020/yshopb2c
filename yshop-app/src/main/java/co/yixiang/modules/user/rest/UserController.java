@@ -87,26 +87,7 @@ public class UserController {
         return ApiResult.ok(map);
     }
 
-//    /**
-//     * 个人中心
-//     */
-//    @GetMapping("/user")
-//    @ApiOperation(value = "个人中心",notes = "个人中心")
-//    public ApiResult<Object> user(){
-//        int uid = SecurityUtils.getUserId().intValue();
-//        YxUserQueryVo yxUserQueryVo = yxUserService.getNewYxUserById(uid);
-//
-//
-//        if(yxUserQueryVo.getLevel() > 0) {
-//            yxUserQueryVo.setVip(true);
-//            YxSystemUserLevelQueryVo systemUserLevelQueryVo = systemUserLevelService
-//                    .getYxSystemUserLevelById(yxUserQueryVo.getLevel());
-//            yxUserQueryVo.setVipIcon(systemUserLevelQueryVo.getIcon());
-//            yxUserQueryVo.setVipId(yxUserQueryVo.getLevel());
-//            yxUserQueryVo.setVipName(systemUserLevelQueryVo.getName());
-//        }
-//        return ApiResult.ok(yxUserQueryVo);
-//    }
+
 
     /**
      * 订单统计数据

@@ -13,8 +13,6 @@ import co.yixiang.modules.user.domain.YxUserAddress;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
-
 /**
  * <p>
  * 用户地址表 Mapper 接口

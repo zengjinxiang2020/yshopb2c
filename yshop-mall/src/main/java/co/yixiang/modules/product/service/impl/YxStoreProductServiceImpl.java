@@ -8,7 +8,11 @@
  */
 package co.yixiang.modules.product.service.impl;
 
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
@@ -16,37 +20,30 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
-import co.yixiang.enums.CommonEnum;
-import co.yixiang.enums.ProductEnum;
-import co.yixiang.enums.ShopCommonEnum;
-import co.yixiang.enums.SortEnum;
-import co.yixiang.exception.BadRequestException;
-
+import co.yixiang.enums.*;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.category.service.YxStoreCategoryService;
 import co.yixiang.modules.product.domain.YxStoreProduct;
-import co.yixiang.modules.product.domain.YxStoreProductAttr;
-import co.yixiang.modules.product.domain.YxStoreProductAttrResult;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
 import co.yixiang.modules.product.param.YxStoreProductQueryParam;
 import co.yixiang.modules.product.service.*;
 import co.yixiang.modules.product.service.dto.*;
-import co.yixiang.modules.product.service.mapper.StoreProductAttrValueMapper;
 import co.yixiang.modules.product.service.mapper.StoreProductMapper;
 import co.yixiang.modules.product.vo.ProductVo;
 import co.yixiang.modules.product.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
 import co.yixiang.modules.product.vo.YxStoreProductReplyQueryVo;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
+import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.ShopKeyUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,8 +73,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
     @Autowired
     private StoreProductMapper storeProductMapper;
-    @Autowired
-    private StoreProductAttrValueMapper storeProductAttrValueMapper;
+
 
     @Autowired
     private YxStoreCategoryService yxStoreCategoryService;
@@ -86,8 +82,6 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     @Autowired
     private YxStoreProductAttrValueService yxStoreProductAttrValueService;
     @Autowired
-    private YxStoreProductAttrResultService yxStoreProductAttrResultService;
-    @Autowired
     private YxUserService userService;
     @Autowired
     private YxStoreProductReplyService replyService;
@@ -95,6 +89,8 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     private YxStoreProductRelationService relationService;
     @Autowired
     private YxSystemStoreService systemStoreService;
+    @Autowired
+    private YxShippingTemplatesService shippingTemplatesService;
 
 
 
@@ -154,18 +150,21 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
 
     /**
-     * 返回商品库存
+     * 返回普通商品库存
      * @param productId 商品id
      * @param unique sku唯一值
      * @return int
      */
     @Override
     public int getProductStock(Long productId, String unique) {
-        if(StrUtil.isEmpty(unique)){
-            return this.getById(productId).getStock();
-        }else{
-            return yxStoreProductAttrService.uniqueByStock(unique);
-        }
+        YxStoreProductAttrValue storeProductAttrValue = yxStoreProductAttrValueService
+                .getOne(Wrappers.<YxStoreProductAttrValue>lambdaQuery()
+                        .eq(YxStoreProductAttrValue::getUnique, unique)
+                        .eq(YxStoreProductAttrValue::getProductId, productId));
+
+        if (storeProductAttrValue == null) return 0;
+
+        return storeProductAttrValue.getStock();
 
     }
 
@@ -240,13 +239,12 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         if(ObjectUtil.isNull(storeProduct)){
             throw new ErrorRequestException("商品不存在或已下架");
         }
-        Map<String, Object> returnMap = yxStoreProductAttrService.getProductAttrDetail(id,0,0);
+
+        //获取商品sku
+        Map<String, Object> returnMap = yxStoreProductAttrService.getProductAttrDetail(id);
         ProductVo productVo = new ProductVo();
         YxStoreProductQueryVo storeProductQueryVo  = generator.convert(storeProduct,YxStoreProductQueryVo.class);
 
-        //处理库存
-        Integer newStock = storeProductAttrValueMapper.sumStock(id);
-        if(newStock != null)  storeProductQueryVo.setStock(newStock);
 
         //设置VIP价格
         double vipPrice = userService.setLevelPrice(
@@ -269,7 +267,19 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         String replyPer = replyService.replyPer(id);
         productVo.setReplyChance(replyPer);
 
+        //获取运费模板名称
+        String storeFreePostage = RedisUtil.get("store_free_postage");
+        String tempName = "";
+        if(StrUtil.isBlank(storeFreePostage)
+                || !NumberUtil.isNumber(storeFreePostage)
+                || Integer.valueOf(storeFreePostage) == 0){
+            tempName = "全国包邮";
+        }else{
+            tempName = shippingTemplatesService.getById(storeProduct.getTempId()).getName();
+        }
+        productVo.setTempName(tempName);
 
+        //设置商品相关信息
         productVo.setStoreInfo(storeProductQueryVo);
         productVo.setProductAttr((List<YxStoreProductAttrQueryVo>)returnMap.get("productAttr"));
         productVo.setProductValue((Map<String, YxStoreProductAttrValue>)returnMap.get("productValue"));
@@ -309,7 +319,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                 break;
             case TYPE_4:
                 wrapper.lambda().eq(YxStoreProduct::getIsBenefit,
-                        ShopCommonEnum.IS_STATUS_1.getValue()); //// 促销单品
+                        ShopCommonEnum.IS_STATUS_1.getValue()); //// 猜你喜欢
                 break;
             case TYPE_2:
                 wrapper.lambda().eq(YxStoreProduct::getIsHot,
@@ -398,29 +408,8 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         FileUtil.downloadExcel(list, response);
     }
 
-    /**
-     * 新增商品
-     * @param storeProduct storeProduct
-     * @return  YxStoreProduct
-     */
-    @Override
-    public YxStoreProduct saveProduct(YxStoreProduct storeProduct) {
-        if (storeProduct.getStoreCategory().getId() == null) {
-            throw new BadRequestException("分类名称不能为空");
-        }
-        boolean check = yxStoreCategoryService
-                .checkProductCategory(storeProduct.getStoreCategory().getId());
-        if(!check) throw new BadRequestException("商品分类必选选择二级");
-        storeProduct.setCateId(storeProduct.getStoreCategory().getId().toString());
-        this.save(storeProduct);
-        return storeProduct;
-    }
 
-//    @Override
-//    public void recovery(Integer id) {
-//        storeProductMapper.updateDel(0,id);
-//        storeProductMapper.updateOnsale(0,id);
-//    }
+
 
     /**
      * 商品上架下架
@@ -437,192 +426,310 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         storeProductMapper.updateOnsale(status,id);
     }
 
+
+
     /**
-     * 组合sku
-     * @param id 商品di
-     * @param jsonStr 属性json
-     * @return list
+     * 新增/保存商品
+     * @param storeProductDto 商品
      */
     @Override
-    public List<ProductFormatDto> isFormatAttr(Long id, String jsonStr) {
-        if(ObjectUtil.isNull(id)) throw new YshopException("产品不存在");
+    public void insertAndEditYxStoreProduct(StoreProductDto storeProductDto)
+    {
 
-        YxStoreProductDto yxStoreProductDTO = generator.convert(this.getById(id),YxStoreProductDto.class);
-        DetailDto detailDTO = this.attrFormat(jsonStr);
-        List<ProductFormatDto> newList = new ArrayList<>();
-        for (Map<String, Map<String,String>> map : detailDTO.getRes()) {
-            ProductFormatDto productFormatDTO = new ProductFormatDto();
-            productFormatDTO.setDetail(map.get("detail"));
-            productFormatDTO.setCost(yxStoreProductDTO.getCost().doubleValue());
-            productFormatDTO.setPrice(yxStoreProductDTO.getPrice().doubleValue());
-            productFormatDTO.setSales(yxStoreProductDTO.getSales());
-            productFormatDTO.setPic(yxStoreProductDTO.getImage());
-            productFormatDTO.setCheck(false);
-            newList.add(productFormatDTO);
+        ProductResultDto resultDTO = this.computedProduct(storeProductDto.getAttrs());
+
+        //添加商品
+        YxStoreProduct yxStoreProduct = new YxStoreProduct();
+        BeanUtil.copyProperties(storeProductDto,yxStoreProduct,"sliderImage");
+        if(storeProductDto.getSliderImage().isEmpty()) throw new YshopException("请上传轮播图");
+
+        yxStoreProduct.setPrice(BigDecimal.valueOf(resultDTO.getMinPrice()));
+        yxStoreProduct.setOtPrice(BigDecimal.valueOf(resultDTO.getMinOtPrice()));
+        yxStoreProduct.setCost(BigDecimal.valueOf(resultDTO.getMinCost()));
+        yxStoreProduct.setStock(resultDTO.getStock());
+        yxStoreProduct.setSliderImage(String.join(",", storeProductDto.getSliderImage()));
+
+
+
+        this.saveOrUpdate(yxStoreProduct);
+
+        //属性处理
+        //处理单sKu
+        if(SpecTypeEnum.TYPE_0.getValue().equals(storeProductDto.getSpecType())){
+            FromatDetailDto fromatDetailDto = FromatDetailDto.builder()
+                    .value("规格")
+                    .detailValue("")
+                    .attrHidden("")
+                    .detail(ListUtil.toList("默认"))
+                    .build();
+            List<Map<String,Object>> attrs = storeProductDto.getAttrs();
+            Map<String,Object> map = attrs.get(0);
+            map.put("value1","规格");
+            map.put("detail", MapUtil.of(new String[][] {
+                    {"规格", "默认"}
+            }));
+            yxStoreProductAttrService.insertYxStoreProductAttr(ListUtil.toList(fromatDetailDto),
+                    ListUtil.toList(map),yxStoreProduct.getId());
+        }else{
+            yxStoreProductAttrService.insertYxStoreProductAttr(storeProductDto.getItems(),
+                    storeProductDto.getAttrs(),yxStoreProduct.getId());
         }
-        return newList;
+
+
+
     }
 
+
+
+
+
     /**
-     * 保存sku
+     * 获取生成的属性
      * @param id 商品id
-     * @param jsonStr sku json
+     * @param jsonStr jsonStr
+     * @return map
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void createProductAttr(long id, String jsonStr) {
+    public Map<String,Object> getFormatAttr(Long id, String jsonStr) {
         JSONObject jsonObject = JSON.parseObject(jsonStr);
-        List<FromatDetailDto> attrList = JSON.parseArray(
-                jsonObject.get("items").toString(),
+        Map<String,Object> resultMap = new LinkedHashMap<>(3);
+
+        if(jsonObject == null || jsonObject.get("attrs") == null || jsonObject.getJSONArray("attrs").isEmpty()){
+            resultMap.put("attr",new ArrayList<>());
+            resultMap.put("value",new ArrayList<>());
+            resultMap.put("header",new ArrayList<>());
+            return resultMap;
+        }
+
+
+
+        List<FromatDetailDto> fromatDetailDTOList = JSON.parseArray(jsonObject.get("attrs").toString(),
                 FromatDetailDto.class);
-        List<ProductFormatDto> valueList = JSON.parseArray(
-                jsonObject.get("attrs").toString(),
-                ProductFormatDto.class);
 
+        //fromatDetailDTOList
+        DetailDto detailDto = this.attrFormat(fromatDetailDTOList);
 
-        List<YxStoreProductAttr> attrGroup = new ArrayList<>();
-        for (FromatDetailDto fromatDetailDTO : attrList) {
-            YxStoreProductAttr  yxStoreProductAttr = new YxStoreProductAttr();
-            yxStoreProductAttr.setProductId(id);
-            yxStoreProductAttr.setAttrName(fromatDetailDTO.getValue());
-            yxStoreProductAttr.setAttrValues(StrUtil.
-                    join(",",fromatDetailDTO.getDetail()));
-            attrGroup.add(yxStoreProductAttr);
+        List<Map<String,Object>> headerMapList = null;
+        List<Map<String,Object>> valueMapList = new ArrayList<>();
+        String align = "center";
+        Map<String,Object> headerMap = new LinkedHashMap<>();
+        for (Map<String, Map<String,String>> map : detailDto.getRes()) {
+            Map<String,String> detail = map.get("detail");
+            String[] detailArr =  detail.values().toArray(new String[]{});
+            Arrays.sort(detailArr);
+
+            String sku = String.join(",",detailArr);
+
+            Map<String,Object> valueMap = new LinkedHashMap<>();
+
+            List<String> detailKeys =
+                    detail.entrySet()
+                            .stream()
+                            .map(Map.Entry::getKey)
+                            .collect(Collectors.toList());
+
+            int i = 0;
+            headerMapList = new ArrayList<>();
+            for (String title : detailKeys){
+                headerMap.put("title",title);
+                headerMap.put("minWidth","130");
+                headerMap.put("align",align);
+                headerMap.put("key", "value" + (i+1));
+                headerMap.put("slot", "value" + (i+1));
+                headerMapList.add(ObjectUtil.clone(headerMap));
+                i++;
+            }
+
+            String[] detailValues = detail.values().toArray(new String[]{});
+            for (int j = 0; j < detailValues.length; j++) {
+                String key = "value" + (j + 1);
+                valueMap.put(key,detailValues[j]);
+            }
+
+            valueMap.put("detail",detail);
+            valueMap.put("pic","");
+            valueMap.put("price",0);
+            valueMap.put("cost",0);
+            valueMap.put("ot_price",0);
+            valueMap.put("stock",0);
+            valueMap.put("bar_code","");
+            valueMap.put("weight",0);
+            valueMap.put("volume",0);
+            valueMap.put("brokerage",0);
+            valueMap.put("brokerage_two",0);
+            if(id > 0){
+                YxStoreProductAttrValue storeProductAttrValue = yxStoreProductAttrValueService
+                        .getOne(Wrappers.<YxStoreProductAttrValue>lambdaQuery()
+                                .eq(YxStoreProductAttrValue::getProductId,id)
+                                .eq(YxStoreProductAttrValue::getSku,sku));
+                if(storeProductAttrValue != null){
+                    valueMap.put("pic",storeProductAttrValue.getImage());
+                    valueMap.put("price",storeProductAttrValue.getPrice());
+                    valueMap.put("cost",storeProductAttrValue.getCost());
+                    valueMap.put("ot_price",storeProductAttrValue.getOtPrice());
+                    valueMap.put("stock",storeProductAttrValue.getStock());
+                    valueMap.put("bar_code",storeProductAttrValue.getBarCode());
+                    valueMap.put("weight",storeProductAttrValue.getWeight());
+                    valueMap.put("volume",storeProductAttrValue.getVolume());
+                    valueMap.put("brokerage",storeProductAttrValue.getBrokerage());
+                    valueMap.put("brokerage_two",storeProductAttrValue.getBrokerageTwo());
+                }
+            }
+
+            valueMapList.add(ObjectUtil.clone(valueMap));
+
         }
 
+        this.addMap(headerMap,headerMapList,align);
 
-        List<YxStoreProductAttrValue> valueGroup = new ArrayList<>();
-        for (ProductFormatDto productFormatDTO : valueList) {
-            YxStoreProductAttrValue yxStoreProductAttrValue = new YxStoreProductAttrValue();
-            yxStoreProductAttrValue.setProductId(id);
-            List<String> stringList = productFormatDTO.getDetail().values()
-                    .stream().collect(Collectors.toList());
-            Collections.sort(stringList);
-            yxStoreProductAttrValue.setSku(StrUtil.
-                    join(",",stringList));
-            yxStoreProductAttrValue.setPrice(BigDecimal.valueOf(productFormatDTO.getPrice()));
-            yxStoreProductAttrValue.setCost(BigDecimal.valueOf(productFormatDTO.getCost()));
-            yxStoreProductAttrValue.setStock(productFormatDTO.getSales());
-            yxStoreProductAttrValue.setUnique(IdUtil.simpleUUID());
-            yxStoreProductAttrValue.setImage(productFormatDTO.getPic());
 
-            valueGroup.add(yxStoreProductAttrValue);
-        }
+        resultMap.put("attr",fromatDetailDTOList);
+        resultMap.put("value",valueMapList);
+        resultMap.put("header",headerMapList);
 
-        if(attrGroup.isEmpty() || valueGroup.isEmpty()){
-            throw new BadRequestException("请设置至少一个属性!");
-        }
+        return resultMap;
+    }
 
-        //如果设置sku 处理价格与库存
 
-        ////取最小价格
-        BigDecimal minPrice = valueGroup
+
+
+
+
+    /**
+     * 计算产品数据
+     * @param attrs attrs
+     * @return ProductResultDto
+     */
+    private ProductResultDto computedProduct(List<Map<String,Object>> attrs){
+        //取最小价格
+        Double minPrice = ListMapToListBean(attrs)
                 .stream()
-                .map(YxStoreProductAttrValue::getPrice)
+                .map(ProductFormatDto::getPrice)
                 .min(Comparator.naturalOrder())
-                .orElse(BigDecimal.ZERO);
+                .orElse(0d);
 
-        //计算库存
-        Integer stock = valueGroup
+        Double minOtPrice = ListMapToListBean(attrs)
                 .stream()
-                .map(YxStoreProductAttrValue::getStock)
+                .map(ProductFormatDto::getOtPrice)
+                .min(Comparator.naturalOrder())
+                .orElse(0d);
+
+        Double minCost = ListMapToListBean(attrs)
+                .stream()
+                .map(ProductFormatDto::getCost)
+                .min(Comparator.naturalOrder())
+                .orElse(0d);
+        //计算库存
+        Integer stock = ListMapToListBean(attrs)
+                .stream()
+                .map(ProductFormatDto::getStock)
                 .reduce(Integer::sum)
                 .orElse(0);
 
-        YxStoreProduct yxStoreProduct = YxStoreProduct.builder()
+        if(stock <= 0) throw new YshopException("库存不能低于0");
+
+        return ProductResultDto.builder()
+                .minPrice(minPrice)
+                .minOtPrice(minOtPrice)
+                .minCost(minCost)
                 .stock(stock)
-                .price(minPrice)
-                .id(id)
                 .build();
-        this.updateById(yxStoreProduct);
-
-        //插入之前清空
-        this.clearProductAttr(id,true);
-
-
-        //保存属性
-        yxStoreProductAttrService.saveOrUpdateBatch(attrGroup);
-
-        //保存值
-        yxStoreProductAttrValueService.saveOrUpdateBatch(valueGroup);
-
-        Map<String,Object> map = new LinkedHashMap<>();
-        map.put("attr",jsonObject.get("items"));
-        map.put("value",jsonObject.get("attrs"));
-
-        //保存结果
-        this.setResult(map,id);
     }
 
     /**
-     * 保存sku
-     * @param map sku map组合值
-     * @param id 商品di
+     * mapTobean
+     * @param listMap listMap
+     * @return list
      */
-    @Transactional(rollbackFor = Exception.class)
-    public void setResult(Map<String, Object> map,long id) {
-        YxStoreProductAttrResult yxStoreProductAttrResult = new YxStoreProductAttrResult();
-        yxStoreProductAttrResult.setProductId(id);
-        yxStoreProductAttrResult.setResult(JSON.toJSONString(map));
-        yxStoreProductAttrResult.setChangeTime(new Date());
-
-
-        yxStoreProductAttrResultService.saveOrUpdate(yxStoreProductAttrResult);
-    }
-
-    /**
-     * 获取产品属性
-     * @param id 商品id
-     * @return json
-     */
-    @Override
-    public String getStoreProductAttrResult(Long id) {
-        YxStoreProductAttrResult yxStoreProductAttrResult = yxStoreProductAttrResultService
-                .getOne(new QueryWrapper<YxStoreProductAttrResult>().lambda()
-                        .eq(YxStoreProductAttrResult::getProductId,id));
-        if(ObjectUtil.isNull(yxStoreProductAttrResult)) return "";
-        return  yxStoreProductAttrResult.getResult();
-    }
-
-    @Override
-    public void updateProduct(YxStoreProduct resources) {
-        if(resources.getStoreCategory() == null || resources.getStoreCategory().getId() == null) throw new BadRequestException("请选择分类");
-        boolean check = yxStoreCategoryService
-                .checkProductCategory(resources.getStoreCategory().getId());
-        if(!check) throw new BadRequestException("商品分类必选选择二级");
-        resources.setCateId(resources.getStoreCategory().getId().toString());
-        this.saveOrUpdate(resources);
-    }
-
-
-
-    /**
-     * 删除属性值
-     * @param id 商品id
-     * @param isActice boolean
-     */
-    public void clearProductAttr(long id,boolean isActice) {
-        if(ObjectUtil.isNull(id)) throw new BadRequestException("产品不存在");
-        yxStoreProductAttrService.remove(new QueryWrapper<YxStoreProductAttr>().lambda()
-                .eq(YxStoreProductAttr::getProductId,id));
-        yxStoreProductAttrValueService.remove(new QueryWrapper<YxStoreProductAttrValue>().lambda()
-                .eq(YxStoreProductAttrValue::getProductId,id));
-        if(isActice){
-            yxStoreProductAttrResultService.remove(new QueryWrapper<YxStoreProductAttrResult>().lambda()
-                    .eq(YxStoreProductAttrResult::getProductId,id));
+    private List<ProductFormatDto> ListMapToListBean(List<Map<String, Object>> listMap){
+        List<ProductFormatDto> list = new ArrayList<>();
+        // 循环遍历出map对象
+        for (Map<String, Object> m : listMap) {
+            list.add(BeanUtil.mapToBean(m,ProductFormatDto.class,true));
         }
+        return list;
     }
+
+    /**
+     * 增加表头
+     * @param headerMap headerMap
+     * @param headerMapList headerMapList
+     * @param align align
+     */
+    private void addMap(Map<String,Object> headerMap,List<Map<String,Object>> headerMapList,String align){
+        headerMap.put("title","图片");
+        headerMap.put("slot", "pic");
+        headerMap.put("align",align);
+        headerMap.put("minWidth",80);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        headerMap.put("title","售价");
+        headerMap.put("slot", "price");
+        headerMap.put("align",align);
+        headerMap.put("minWidth",120);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        headerMap.put("title","成本价");
+        headerMap.put("slot", "cost");
+        headerMap.put("align",align);
+        headerMap.put("minWidth",140);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        headerMap.put("title","原价");
+        headerMap.put("slot", "ot_price");
+        headerMap.put("align",align);
+        headerMap.put("minWidth",140);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        headerMap.put("title","库存");
+        headerMap.put("slot", "stock");
+        headerMap.put("align",align);
+        headerMap.put("minWidth",140);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        headerMap.put("title","产品编号");
+        headerMap.put("slot", "bar_code");
+        headerMap.put("align",align);
+        headerMap.put("minWidth",140);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        headerMap.put("title","重量(KG)");
+        headerMap.put("slot", "weight");
+        headerMap.put("align",align);
+        headerMap.put("minWidth",140);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        headerMap.put("title","体积(m³)");
+        headerMap.put("slot", "volume");
+        headerMap.put("align",align);
+        headerMap.put("minWidth",140);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        headerMap.put("title","操作");
+        headerMap.put("slot", "action");
+        headerMap.put("align",align);
+        headerMap.put("minWidth",70);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+    }
+
     /**
      * 组合规则属性算法
-     * @param jsonStr 属性json
+     * @param fromatDetailDTOList
      * @return DetailDto
      */
-    private DetailDto attrFormat(String jsonStr){
-        JSONObject jsonObject = JSON.parseObject(jsonStr);
-        List<FromatDetailDto> fromatDetailDTOList = JSON.parseArray(jsonObject.get("items").toString(),
-                FromatDetailDto.class);
+    private DetailDto attrFormat(List<FromatDetailDto> fromatDetailDTOList){
+
         List<String> data = new ArrayList<>();
-        List<Map<String,Map<String,String>>> res =new ArrayList<>();
+        List<Map<String,Map<String,String>>> res = new ArrayList<>();
+
+        fromatDetailDTOList.stream()
+                .map(FromatDetailDto::getDetail)
+                .forEach(i -> {
+                    if(i == null || i.isEmpty()) throw new YshopException("请至少添加一个规格值哦");
+                    String str = ArrayUtil.join(i.toArray(),",");
+                    if(str.contains("-")) throw new YshopException("规格值里包含'-',请重新添加");
+                });
+
         if(fromatDetailDTOList.size() > 1){
             for (int i=0; i < fromatDetailDTOList.size() - 1;i++){
                 if(i == 0) data = fromatDetailDTOList.get(i).getDetail();
@@ -637,13 +744,14 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                             rep2 = v + "-"
                                     + fromatDetailDTOList.get(i+1).getValue() + "_" + g;
                         }
+
                         tmp.add(rep2);
+
                         if(i == fromatDetailDTOList.size() - 2){
                             Map<String,Map<String,String>> rep4 = new LinkedHashMap<>();
                             Map<String,String> reptemp = new LinkedHashMap<>();
                             for (String h : Arrays.asList(rep2.split("-"))) {
                                 List<String> rep3 = Arrays.asList(h.split("_"));
-
                                 if(rep3.size() > 1){
                                     reptemp.put(rep3.get(0),rep3.get(1));
                                 }else{
@@ -651,27 +759,25 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                                 }
                             }
                             rep4.put("detail",reptemp);
+
                             res.add(rep4);
                         }
                     }
+
                 }
-                //System.out.println("tmp:"+tmp);
+
                 if(!tmp.isEmpty()){
                     data = tmp;
                 }
             }
         }else{
             List<String> dataArr = new ArrayList<>();
-
             for (FromatDetailDto fromatDetailDTO : fromatDetailDTOList) {
-
                 for (String str : fromatDetailDTO.getDetail()) {
                     Map<String,Map<String,String>> map2 = new LinkedHashMap<>();
-                    //List<Map<String,String>> list1 = new ArrayList<>();
                     dataArr.add(fromatDetailDTO.getValue()+"_"+str);
                     Map<String,String> map1 = new LinkedHashMap<>();
                     map1.put(fromatDetailDTO.getValue(),str);
-                    //list1.add(map1);
                     map2.put("detail",map1);
                     res.add(map2);
                 }
@@ -679,9 +785,12 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             String s = StrUtil.join("-",dataArr);
             data.add(s);
         }
-        DetailDto detailDTO = new DetailDto();
-        detailDTO.setData(data);
-        detailDTO.setRes(res);
-        return detailDTO;
+
+        DetailDto detailDto = new DetailDto();
+        detailDto.setData(data);
+        detailDto.setRes(res);
+
+        return detailDto;
     }
+
 }

@@ -45,6 +45,8 @@ public class YxUserAddress extends BaseDomain {
     @ApiModelProperty(value = "收货人所在市")
     private String city;
 
+    private Integer cityId;
+
     @ApiModelProperty(value = "收货人所在区")
     private String district;
 

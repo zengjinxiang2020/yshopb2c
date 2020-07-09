@@ -21,10 +21,10 @@ import java.util.List;
 public class YxStoreProductAttrQueryVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private Integer id;
+    private Long id;
 
     @ApiModelProperty(value = "商品ID")
-    private Integer productId;
+    private Long productId;
 
     @ApiModelProperty(value = "属性名")
     private String attrName;

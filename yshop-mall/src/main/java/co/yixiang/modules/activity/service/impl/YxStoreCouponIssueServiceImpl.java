@@ -14,8 +14,6 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.CouponEnum;
-import co.yixiang.enums.ShopCommonEnum;
-import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.domain.YxStoreCouponIssue;
 import co.yixiang.modules.activity.domain.YxStoreCouponIssueUser;
 import co.yixiang.modules.activity.service.YxStoreCouponIssueService;
@@ -24,10 +22,8 @@ import co.yixiang.modules.activity.service.YxStoreCouponUserService;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponIssueDto;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponIssueQueryCriteria;
 import co.yixiang.modules.activity.service.mapper.YxStoreCouponIssueMapper;
-import co.yixiang.modules.activity.service.mapper.YxStoreCouponIssueUserMapper;
 import co.yixiang.modules.activity.vo.YxStoreCouponIssueQueryVo;
 import co.yixiang.utils.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
@@ -101,10 +97,12 @@ public class YxStoreCouponIssueServiceImpl extends BaseServiceImpl<YxStoreCoupon
      * @return list
      */
     @Override
-    public List<YxStoreCouponIssueQueryVo> getCouponList(int page, int limit, Long uid) {
+    public List<YxStoreCouponIssueQueryVo> getCouponList(int page, int limit, Long uid,Long productId,Integer type) {
         Page<YxStoreCouponIssue> pageModel = new Page<>(page, limit);
+
+        if(type == null) type = CouponEnum.TYPE_0.getValue();
         List<YxStoreCouponIssueQueryVo> list = yxStoreCouponIssueMapper
-                .selecCoupontList(pageModel);
+                .selecCoupontList(pageModel,type,productId);
         for (YxStoreCouponIssueQueryVo couponIssue : list) {
             int count = this.couponCount(couponIssue.getId(),uid);
             if(count > 0){

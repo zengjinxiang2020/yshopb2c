@@ -10,6 +10,7 @@ package co.yixiang.modules.shop.rest;
 
 
 import co.yixiang.logging.aop.log.Log;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.shop.domain.YxMaterial;
 import co.yixiang.modules.shop.service.YxMaterialService;
 import co.yixiang.modules.shop.service.dto.YxMaterialQueryCriteria;
@@ -69,6 +70,7 @@ public class MaterialController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除素材管理")
     @ApiOperation("删除素材管理")
     @DeleteMapping(value = "/{id}")

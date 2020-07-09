@@ -6,9 +6,9 @@ spring:
     druid:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      url: jdbc:log4jdbc:mysql://localhost:3306/yshop?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
-      username: root
-      password: root
+      url: jdbc:log4jdbc:mysql://localhost:3306/yshop3?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+      username: yshop3
+      password:
 
       # 初始化配置
       initial-size: 3
@@ -41,10 +41,10 @@ spring:
 
   redis:
     #数据库索引
-    database: 0
+    database: 2
     host: 127.0.0.1
     port: 6379
-    password: root
+    password:
     #连接超时时间
     timeout: 5000
 
@@ -79,15 +79,15 @@ generator:
 
 #是否开启 swagger-ui，生产环境默认不开启
 swagger:
-  enabled: false
+  enabled: true
   title: yshop商城管理后台API
   serverUrl: http://127.0.0.1:8000
   version: 3.0
 
 
 file:
-  path: D:\upload\file\
-  avatar: D:\upload\avatar\
+  path: /home/yshop/file/
+  avatar: /home/yshop/avatar/
   # 文件大小 /M
   maxSize: 100
   avatarMaxSize: 5

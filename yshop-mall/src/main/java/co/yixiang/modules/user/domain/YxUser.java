@@ -8,10 +8,9 @@ package co.yixiang.modules.user.domain;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import co.yixiang.domain.BaseDomain;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import co.yixiang.modules.user.service.dto.WechatUserDto;
+import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -31,6 +30,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Accessors(chain = true)
 @ToString
+@TableName(value = "yx_user",autoResultMap = true)
 public class YxUser extends BaseDomain {
 
     /** 用户id */
@@ -156,7 +156,8 @@ public class YxUser extends BaseDomain {
     private String loginType;
 
     /** 微信用户json信息 */
-    private String wxProfile;
+    @TableField(typeHandler = FastjsonTypeHandler.class)
+    private WechatUserDto wxProfile;
 
 
     public void copy(YxUser source){

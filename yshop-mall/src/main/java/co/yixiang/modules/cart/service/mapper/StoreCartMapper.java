@@ -11,7 +11,6 @@ package co.yixiang.modules.cart.service.mapper;
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.cart.domain.YxStoreCart;
 import co.yixiang.modules.order.service.dto.CountDto;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;

@@ -9,6 +9,7 @@
 package co.yixiang.modules.shop.rest;
 
 import co.yixiang.logging.aop.log.Log;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.shop.domain.YxMaterialGroup;
 import co.yixiang.modules.shop.service.YxMaterialGroupService;
 import co.yixiang.modules.shop.service.dto.YxMaterialGroupQueryCriteria;
@@ -58,6 +59,7 @@ public class MaterialGroupController {
         return new ResponseEntity<>(yxMaterialGroupService.save(resources),HttpStatus.CREATED);
     }
 
+    @ForbidSubmit
     @PutMapping
     @Log("修改素材分组")
     @ApiOperation("修改素材分组")
@@ -66,6 +68,7 @@ public class MaterialGroupController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除素材分组")
     @ApiOperation("删除素材分组")
     @DeleteMapping(value = "/{id}")

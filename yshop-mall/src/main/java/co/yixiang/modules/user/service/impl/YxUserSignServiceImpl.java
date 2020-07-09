@@ -11,15 +11,12 @@ package co.yixiang.modules.user.service.impl;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
-
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.BillDetailEnum;
-import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
-
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.domain.YxUserBill;
 import co.yixiang.modules.user.domain.YxUserSign;
@@ -27,22 +24,17 @@ import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserLevelService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.YxUserSignService;
-
-import co.yixiang.modules.user.vo.SignVo;
 import co.yixiang.modules.user.service.mapper.UserBillMapper;
 import co.yixiang.modules.user.service.mapper.YxUserSignMapper;
+import co.yixiang.modules.user.vo.SignVo;
 import co.yixiang.modules.user.vo.YxUserQueryVo;
-import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;

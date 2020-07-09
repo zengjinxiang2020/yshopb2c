@@ -15,21 +15,28 @@ import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
+import co.yixiang.common.util.CityTreeUtil;
 import co.yixiang.common.web.param.IdParam;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.logging.aop.log.Log;
+import co.yixiang.modules.template.domain.YxSystemCity;
+import co.yixiang.modules.template.service.YxSystemCityService;
 import co.yixiang.modules.user.domain.YxUserAddress;
 import co.yixiang.modules.user.service.YxUserAddressService;
 import co.yixiang.modules.user.param.AddressParam;
 import co.yixiang.modules.user.param.YxUserAddressQueryParam;
+import co.yixiang.modules.user.vo.CityVo;
 import co.yixiang.modules.user.vo.YxUserAddressQueryVo;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.SecurityUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -52,6 +59,31 @@ import java.util.Map;
 public class UserAddressController {
 
     private final YxUserAddressService userAddressService;
+    private final YxSystemCityService systemCityService;
+
+
+    @Cacheable(cacheNames = ShopConstants.YSHOP_REDIS_CITY_KEY)
+    @GetMapping("/city_list")
+    @ApiOperation(value = "城市列表",notes = "城市列表")
+    public ApiResult<List<CityVo>> getTest() {
+        List<YxSystemCity> yxSystemCities = systemCityService.list();
+
+        List<CityVo> cityVOS = Lists.newArrayList();
+
+        for (YxSystemCity systemCity : yxSystemCities){
+            CityVo cityVO = new CityVo();
+
+            cityVO.setV(systemCity.getCityId());
+            cityVO.setN(systemCity.getName());
+            cityVO.setPid(systemCity.getParentId());
+
+            cityVOS.add(cityVO);
+        }
+
+
+        return ApiResult.ok(CityTreeUtil.list2TreeConverter(cityVOS, 0));
+
+    }
 
     /**
     * 添加或修改地址

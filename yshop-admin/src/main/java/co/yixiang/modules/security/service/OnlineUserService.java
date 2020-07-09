@@ -5,9 +5,10 @@
  */
 package co.yixiang.modules.security.service;
 
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.security.config.SecurityProperties;
 import co.yixiang.modules.security.security.vo.JwtUser;
-import co.yixiang.modules.security.security.vo.OnlineUser;
+import co.yixiang.modules.user.vo.OnlineUser;
 import co.yixiang.utils.EncryptUtils;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.PageUtil;
@@ -85,7 +86,7 @@ public class OnlineUserService {
     public List<OnlineUser> getAll(String filter,int type){
         List<String> keys = null;
         if(type == 1){
-            keys = redisUtils.scan("m-online-token*");
+            keys = redisUtils.scan(ShopConstants.YSHOP_APP_LOGIN_USER + "*");
         }else{
             keys = redisUtils.scan(properties.getOnlineKey() + "*");
         }
@@ -125,7 +126,7 @@ public class OnlineUserService {
      */
     public void kickOutT(String key) throws Exception {
 
-        String keyt = "m-online-token" + EncryptUtils.desDecrypt(key);
+        String keyt = ShopConstants.YSHOP_APP_LOGIN_USER + EncryptUtils.desDecrypt(key);
         redisUtils.del(keyt);
 
     }

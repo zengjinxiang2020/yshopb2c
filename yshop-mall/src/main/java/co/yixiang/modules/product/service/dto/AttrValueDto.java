@@ -10,5 +10,5 @@ import lombok.Data;
 @Data
 public class AttrValueDto {
     private String attr;
-    private Boolean check;
+    private Boolean check = false;
 }

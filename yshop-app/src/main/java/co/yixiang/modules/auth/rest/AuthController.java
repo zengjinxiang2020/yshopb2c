@@ -12,7 +12,9 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import co.yixiang.api.ApiCode;
 import co.yixiang.api.ApiResult;
+import co.yixiang.api.UnAuthenticatedException;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.enums.SmsTypeEnum;
 import co.yixiang.common.util.JwtToken;
@@ -35,9 +37,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -57,16 +62,21 @@ public class AuthController {
     private final RedisUtils redisUtil;
     private final AuthService authService;
 
+    @Value("${single.login:false}")
+    private Boolean singleLogin;
+
+
 
     /**
      * 小程序登陆接口
      */
     @PostMapping("/wxapp/auth")
     @ApiOperation(value = "小程序登陆", notes = "小程序登陆")
-    public ApiResult<Map<String, Object>> login(@Validated @RequestBody LoginParam loginParam) {
+    public ApiResult<Map<String, Object>> login(@Validated @RequestBody LoginParam loginParam,
+                                                HttpServletRequest request) {
 
-            long uid = authService.wxappLogin(loginParam);
-            String token =  JwtToken.makeToken(uid);
+            YxUser yxUser = authService.wxappLogin(loginParam);
+            String token =  JwtToken.makeToken(yxUser.getUid());
             String expiresTimeStr = JwtToken.getExpireTime(token);
 
             // 返回 token
@@ -74,6 +84,12 @@ public class AuthController {
 
             map.put("token", token);
             map.put("expires_time", expiresTimeStr);
+
+            // 保存在线信息
+            authService.save(yxUser, token, request);
+            if(singleLogin){
+                authService.checkLoginOnUser(yxUser.getUsername(),token);
+            }
 
 
             return ApiResult.ok(map).setMsg("登陆成功");
@@ -86,11 +102,14 @@ public class AuthController {
     @GetMapping("/wechat/auth")
     @ApiOperation(value = "微信公众号授权", notes = "微信公众号授权")
     public ApiResult<Map<String, Object>> authLogin(@RequestParam(value = "code") String code,
-                                                    @RequestParam(value = "spread") String spread) {
+                                                    @RequestParam(value = "spread") String spread,
+                                                    HttpServletRequest request) {
 
-            long uid = authService.wechatLogin(code,spread);
-            String token =  JwtToken.makeToken(uid);
+            YxUser yxUser = authService.wechatLogin(code,spread);
+            String token =  JwtToken.makeToken(yxUser.getUid());
             String expiresTimeStr = JwtToken.getExpireTime(token);
+
+
 
             // 返回 token
             Map<String, Object> map = new HashMap<String, Object>(2) {{
@@ -98,6 +117,11 @@ public class AuthController {
                 put("expires_time", expiresTimeStr);
             }};
 
+            // 保存在线信息
+            authService.save(yxUser, token, request);
+            if(singleLogin){
+                authService.checkLoginOnUser(yxUser.getUsername(),token);
+            }
 
             return ApiResult.ok(map).setMsg("登陆成功");
 
@@ -107,7 +131,7 @@ public class AuthController {
 
     @ApiOperation("H5登录授权")
     @PostMapping(value = "/login")
-    public ApiResult<Map<String, Object>> login(@Validated @RequestBody HLoginParam loginDTO) {
+    public ApiResult<Map<String, Object>> login(@Validated @RequestBody HLoginParam loginDTO,HttpServletRequest request) {
         YxUser yxUser = userService.getOne(Wrappers.<YxUser>lambdaQuery()
                 .eq(YxUser::getUsername,loginDTO.getUsername())
                 .eq(YxUser::getPassword,SecureUtil.md5(loginDTO.getPassword())),false);
@@ -116,6 +140,9 @@ public class AuthController {
 
         String token =  JwtToken.makeToken(yxUser.getUid());
         String expiresTimeStr = JwtToken.getExpireTime(token);
+
+        // 保存在线信息
+        authService.save(yxUser, token, request);
         // 返回 token
         Map<String, Object> map = new HashMap<String, Object>(2) {{
             put("token", token);
@@ -123,6 +150,11 @@ public class AuthController {
         }};
 
         userService.setSpread(loginDTO.getSpread(),yxUser.getUid());
+
+        if(singleLogin){
+            //踢掉之前已经登录的token
+            authService.checkLoginOnUser(yxUser.getUsername(),token);
+        }
 
         return ApiResult.ok(map).setMsg("登陆成功");
     }
@@ -192,7 +224,11 @@ public class AuthController {
 
     @ApiOperation(value = "退出登录", notes = "退出登录")
     @PostMapping(value = "/auth/logout")
-    public ApiResult<String> logout() {
+    public ApiResult<String> logout(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        String[] tokens = bearerToken.split(" ");
+        String token = tokens[1];
+        authService.logout(token);
         return ApiResult.ok("退出成功");
     }
 

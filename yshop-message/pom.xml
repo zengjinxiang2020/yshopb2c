@@ -5,12 +5,25 @@
     <parent>
         <artifactId>yshop</artifactId>
         <groupId>co.yixiang</groupId>
-        <version>3.0-alpha</version>
+        <version>3.0-RC2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>yshop-message</artifactId>
     <name>消息队列模块</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>co.yixiang</groupId>
+            <artifactId>yshop-mall</artifactId>
+            <version>3.0-RC2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+            <version>2.0.4</version>
+        </dependency>
+    </dependencies>
 
 
 </project>

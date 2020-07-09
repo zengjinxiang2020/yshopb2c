@@ -11,10 +11,8 @@ package co.yixiang.modules.user.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.ShopCommonEnum;
-import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.user.domain.YxUserAddress;
 import co.yixiang.modules.user.param.AddressParam;
 import co.yixiang.modules.user.service.YxUserAddressService;
@@ -22,14 +20,12 @@ import co.yixiang.modules.user.service.mapper.YxUserAddressMapper;
 import co.yixiang.modules.user.vo.YxUserAddressQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.List;
 
 
@@ -77,6 +73,7 @@ public class YxUserAddressServiceImpl extends BaseServiceImpl<YxUserAddressMappe
     public Long addAndEdit(Long uid,AddressParam param){
         YxUserAddress userAddress = YxUserAddress.builder()
                 .city(param.getAddress().getCity())
+                .cityId(param.getAddress().getCityId())
                 .district(param.getAddress().getDistrict())
                 .province(param.getAddress().getProvince())
                 .detail(param.getDetail())

@@ -6,9 +6,7 @@
 package co.yixiang.modules.wechat.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-
 import co.yixiang.modules.wechat.domain.YxWechatReply;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**

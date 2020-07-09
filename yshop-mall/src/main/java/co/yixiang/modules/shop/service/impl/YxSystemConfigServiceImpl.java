@@ -8,6 +8,7 @@
  */
 package co.yixiang.modules.shop.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
@@ -17,6 +18,7 @@ import co.yixiang.modules.shop.service.dto.YxSystemConfigDto;
 import co.yixiang.modules.shop.service.dto.YxSystemConfigQueryCriteria;
 import co.yixiang.modules.shop.service.mapper.SystemConfigMapper;
 import co.yixiang.utils.FileUtil;
+import co.yixiang.utils.RedisUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
@@ -43,11 +45,20 @@ import java.util.Map;
 public class YxSystemConfigServiceImpl extends BaseServiceImpl<SystemConfigMapper, YxSystemConfig> implements YxSystemConfigService {
 
     private final IGenerator generator;
+    private final RedisUtils redisUtils;
 
+    /**
+     * 获取配置值
+     * @param name 配置名
+     * @return string
+     */
     @Override
     public String getData(String name) {
+        String result = redisUtils.getY(name);
+        if(StrUtil.isNotBlank(result)) return result;
+
         QueryWrapper<YxSystemConfig> wrapper = new QueryWrapper<>();
-        wrapper.eq("menu_name",name);
+        wrapper.lambda().eq(YxSystemConfig::getMenuName,name);
         YxSystemConfig systemConfig = this.baseMapper.selectOne(wrapper);
         if(systemConfig == null) return "";
         return systemConfig.getValue();

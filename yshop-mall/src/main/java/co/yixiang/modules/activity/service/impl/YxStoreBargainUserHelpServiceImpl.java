@@ -9,34 +9,23 @@
 package co.yixiang.modules.activity.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
-
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.modules.activity.domain.YxStoreBargainUser;
 import co.yixiang.modules.activity.domain.YxStoreBargainUserHelp;
 import co.yixiang.modules.activity.service.YxStoreBargainUserHelpService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserService;
-
 import co.yixiang.modules.activity.service.mapper.YxStoreBargainUserHelpMapper;
 import co.yixiang.modules.activity.vo.YxStoreBargainUserHelpQueryVo;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
-
-import co.yixiang.modules.user.vo.YxUserQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

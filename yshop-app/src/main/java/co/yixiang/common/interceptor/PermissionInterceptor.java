@@ -13,8 +13,10 @@ import co.yixiang.api.ApiCode;
 import co.yixiang.api.UnAuthenticatedException;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.util.JwtToken;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.utils.RedisUtils;
 import com.auth0.jwt.interfaces.Claim;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -36,6 +38,9 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private YxUserService userService;
+
+    @Autowired
+    private RedisUtils redisUtils;
 
     public PermissionInterceptor() {
         super();
@@ -61,9 +66,16 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
             throw new UnAuthenticatedException(ApiCode.UNAUTHORIZED);
         }
         String token = tokens[1];
+
+        //检测用户是否被踢出
+        if(redisUtils.get(ShopConstants.YSHOP_APP_LOGIN_USER + token) == null){
+            throw new UnAuthenticatedException(ApiCode.UNAUTHORIZED);
+        }
+
         Optional<Map<String, Claim>> optionalMap = JwtToken.getClaims(token);
         Map<String, Claim> map = optionalMap
                 .orElseThrow(() -> new UnAuthenticatedException(ApiCode.UNAUTHORIZED));
+
 
         boolean valid = this.hasPermission(authCheck.get(), map);
         if(valid){

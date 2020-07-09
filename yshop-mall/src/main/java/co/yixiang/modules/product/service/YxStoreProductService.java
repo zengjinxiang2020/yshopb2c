@@ -9,13 +9,12 @@
 package co.yixiang.modules.product.service;
 
 import co.yixiang.common.service.BaseService;
-
 import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.param.YxStoreProductQueryParam;
-import co.yixiang.modules.product.vo.ProductVo;
-import co.yixiang.modules.product.service.dto.ProductFormatDto;
+import co.yixiang.modules.product.service.dto.StoreProductDto;
 import co.yixiang.modules.product.service.dto.YxStoreProductDto;
 import co.yixiang.modules.product.service.dto.YxStoreProductQueryCriteria;
+import co.yixiang.modules.product.vo.ProductVo;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
 import org.springframework.data.domain.Pageable;
 
@@ -56,7 +55,7 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
     YxStoreProductQueryVo getStoreProductById(Long id);
 
     /**
-     * 返回商品库存
+     * 返回普通商品库存
      * @param productId 商品id
      * @param unique sku唯一值
      * @return int
@@ -80,6 +79,13 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
      */
     ProductVo goodsDetail(Long id, Long uid, String latitude, String longitude);
 
+    /**
+     * 商品列表
+     * @param page 页码
+     * @param limit 条数
+     * @param order ProductEnum
+     * @return List
+     */
     List<YxStoreProductQueryVo> getList(int page, int limit, int order);
 
     /**
@@ -105,12 +111,6 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
     */
     void download(List<YxStoreProductDto> all, HttpServletResponse response) throws IOException;
 
-    /**
-     * 新增商品
-     * @param storeProduct storeProduct
-     * @return  YxStoreProduct
-     */
-    YxStoreProduct saveProduct(YxStoreProduct storeProduct);
 
 
     /**
@@ -121,35 +121,20 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
     void onSale(Long id,Integer status);
 
     /**
-     * 组合sku
-     * @param id 商品di
-     * @param jsonStr 属性json
-     * @return list
-     */
-    List<ProductFormatDto> isFormatAttr(Long id, String jsonStr);
-
-    /**
-     * 保存sku
+     * 获取生成的属性
      * @param id 商品id
-     * @param jsonStr sku json
+     * @param jsonStr jsonStr
+     * @return map
      */
-    void createProductAttr(long id, String jsonStr);
+    Map<String,Object> getFormatAttr(Long id, String jsonStr);
 
-    /**
-     * 删除属性值
-     * @param id 商品id
-     * @param isActice boolean
-     */
-    void clearProductAttr(long id,boolean isActice);
+
 
 
     /**
-     * 获取产品属性
-     * @param id 商品id
-     * @return json
+     * 新增/保存商品
+     * @param storeProductDto 商品
      */
-    String getStoreProductAttrResult(Long id);
-
-    void updateProduct(YxStoreProduct resources);
+    void insertAndEditYxStoreProduct(StoreProductDto storeProductDto);
 
 }

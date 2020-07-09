@@ -10,9 +10,11 @@ package co.yixiang.modules.activity.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.PinkEnum;
@@ -46,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 
@@ -300,9 +303,10 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
                 storeOrderService.updateById(yxStoreOrder);
 
                 //开团加入队列
-//                String redisKey = String.valueOf(StrUtil.format("{}{}",
-//                        ShopConstants.REDIS_PINK_CANCEL_KEY, storePink.getId()));
-//                redisTemplate.opsForValue().set(redisKey, "1" , stopTime, TimeUnit.SECONDS);
+                String redisKey = String.valueOf(StrUtil.format("{}{}",
+                        ShopConstants.REDIS_PINK_CANCEL_KEY, storePink.getId()));
+                long expireTime = storeCombination.getEffectiveTime().longValue() * 3600;
+                redisTemplate.opsForValue().set(redisKey, "1" , expireTime, TimeUnit.SECONDS);
 
             }
 

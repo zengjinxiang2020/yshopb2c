@@ -40,7 +40,7 @@ public interface YxStoreCouponIssueService  extends BaseService<YxStoreCouponIss
      * @param uid  用户id
      * @return list
      */
-    List<YxStoreCouponIssueQueryVo> getCouponList(int page, int limit, Long uid);
+    List<YxStoreCouponIssueQueryVo> getCouponList(int page, int limit, Long uid,Long productId,Integer type);
 
     //int couponCount(int id, int uid);
 

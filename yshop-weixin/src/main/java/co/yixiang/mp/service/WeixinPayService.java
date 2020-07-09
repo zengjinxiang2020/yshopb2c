@@ -21,11 +21,8 @@ import co.yixiang.modules.user.service.YxUserRechargeService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
 import co.yixiang.mp.config.WxPayConfiguration;
-import co.yixiang.mp.utils.YshopUtils;
-import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.ShopKeyUtils;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.binarywang.wxpay.bean.entpay.EntPayRequest;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
@@ -98,7 +95,7 @@ public class WeixinPayService {
         if(yxUser == null) throw new YshopException("用户错误");
 
 
-        WechatUserDto wechatUserDto = YshopUtils.getWechtUser(yxUser.getWxProfile());
+        WechatUserDto wechatUserDto = yxUser.getWxProfile();
 
         WxPayService wxPayService = null;
         if(AppFromEnum.ROUNTINE.getValue().equals(from)){

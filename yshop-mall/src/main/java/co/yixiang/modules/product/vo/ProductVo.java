@@ -54,4 +54,6 @@ public class ProductVo{
 
     private Integer uid = 0;
 
+    private String tempName;
+
 }

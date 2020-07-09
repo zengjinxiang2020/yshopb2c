@@ -8,24 +8,34 @@
  */
 package co.yixiang.modules.product.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import co.yixiang.api.BusinessException;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
-
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.modules.product.domain.YxStoreProductAttr;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
+import co.yixiang.modules.product.service.YxStoreProductAttrResultService;
 import co.yixiang.modules.product.service.YxStoreProductAttrService;
+import co.yixiang.modules.product.service.YxStoreProductAttrValueService;
 import co.yixiang.modules.product.service.dto.AttrValueDto;
+import co.yixiang.modules.product.service.dto.FromatDetailDto;
+import co.yixiang.modules.product.service.dto.ProductFormatDto;
 import co.yixiang.modules.product.service.mapper.StoreProductAttrMapper;
 import co.yixiang.modules.product.service.mapper.StoreProductAttrValueMapper;
 import co.yixiang.modules.product.vo.YxStoreProductAttrQueryVo;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import lombok.AllArgsConstructor;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -33,13 +43,105 @@ import java.util.*;
 * @date 2020-05-12
 */
 @Service
-@AllArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductAttrMapper, YxStoreProductAttr> implements YxStoreProductAttrService {
 
-    private final IGenerator generator;
-    private final StoreProductAttrMapper yxStoreProductAttrMapper;
-    private final StoreProductAttrValueMapper yxStoreProductAttrValueMapper;
+    @Autowired
+    private IGenerator generator;
+
+    @Autowired
+    private StoreProductAttrMapper yxStoreProductAttrMapper;
+    @Autowired
+    private StoreProductAttrValueMapper yxStoreProductAttrValueMapper;
+
+    @Autowired
+    private YxStoreProductAttrValueService storeProductAttrValueService;
+    @Autowired
+    private YxStoreProductAttrResultService storeProductAttrResultService;
+
+    /**
+     * 新增商品属性
+     * @param items attr
+     * @param attrs value
+     * @param productId 商品id
+     */
+    @Override
+    @Transactional
+    public void insertYxStoreProductAttr(List<FromatDetailDto> items, List<Map<String,Object>> attrs,
+                                         Long productId)
+    {
+        List<YxStoreProductAttr> attrGroup = new ArrayList<>();
+        for (FromatDetailDto fromatDetailDto : items) {
+            YxStoreProductAttr  yxStoreProductAttr = YxStoreProductAttr.builder()
+                    .productId(productId)
+                    .attrName(fromatDetailDto.getValue())
+                    .attrValues(StrUtil.join(",",fromatDetailDto.getDetail()))
+                    .build();
+
+            attrGroup.add(yxStoreProductAttr);
+        }
+
+
+        List<YxStoreProductAttrValue> valueGroup = new ArrayList<>();
+        for (Map<String, Object> m : attrs) {
+            ProductFormatDto productFormatDto = BeanUtil.mapToBean(m,ProductFormatDto.class,true);
+//            List<String> stringList = productFormatDto.getDetail().values()
+//                    .stream()
+//                    .collect(Collectors.toList());
+            List<String> stringList = new ArrayList<>(productFormatDto.getDetail().values());
+            Collections.sort(stringList);
+
+            YxStoreProductAttrValue yxStoreProductAttrValue = YxStoreProductAttrValue.builder()
+                    .productId(productId)
+                    .sku(StrUtil.join(",",stringList))
+                    .price(BigDecimal.valueOf(productFormatDto.getPrice()))
+                    .cost(BigDecimal.valueOf(productFormatDto.getCost()))
+                    .otPrice(BigDecimal.valueOf(productFormatDto.getOtPrice()))
+                    .unique(IdUtil.simpleUUID())
+                    .image(productFormatDto.getPic())
+                    .barCode(productFormatDto.getBarCode())
+                    .weight(BigDecimal.valueOf(productFormatDto.getWeight()))
+                    .volume(BigDecimal.valueOf(productFormatDto.getVolume()))
+                    .brokerage(BigDecimal.valueOf(productFormatDto.getBrokerage()))
+                    .brokerageTwo(BigDecimal.valueOf(productFormatDto.getBrokerageTwo()))
+                    .stock(productFormatDto.getStock())
+                    .build();
+
+
+            valueGroup.add(yxStoreProductAttrValue);
+        }
+
+        if(attrGroup.isEmpty() || valueGroup.isEmpty()){
+            throw new BusinessException("请设置至少一个属性!");
+        }
+
+        //清理属性
+        this.clearProductAttr(productId);
+
+        //批量添加
+        this.saveBatch(attrGroup);
+        storeProductAttrValueService.saveBatch(valueGroup);
+
+        Map<String,Object> map = new LinkedHashMap<>();
+        map.put("attr",items);
+        map.put("value",attrs);
+
+        storeProductAttrResultService.insertYxStoreProductAttrResult(map,productId);
+    }
+
+    /**
+     * 删除YxStoreProductAttrValue表的属性
+     * @param productId 商品id
+     */
+    private void clearProductAttr(Long productId) {
+        if(ObjectUtil.isNull(productId)) throw new YshopException("产品不存在");
+
+        yxStoreProductAttrMapper.delete(Wrappers.<YxStoreProductAttr>lambdaQuery()
+                .eq(YxStoreProductAttr::getProductId,productId));
+        yxStoreProductAttrValueMapper.delete(Wrappers.<YxStoreProductAttrValue>lambdaQuery()
+                .eq(YxStoreProductAttrValue::getProductId,productId));
+
+    }
 
 
     /**
@@ -65,47 +167,40 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
         if(res == 0) throw new YshopException("商品库存不足");
     }
 
+
+
     /**
-     * 库存
-     * @param unique
-     * @return
+     * 更加sku 唯一值获取sku对象
+     * @param unique 唯一值
+     * @return YxStoreProductAttrValue
      */
     @Override
-    public int uniqueByStock(String unique) {
-        QueryWrapper<YxStoreProductAttrValue> wrapper = new QueryWrapper<>();
-        wrapper.eq("`unique`",unique);
-        return yxStoreProductAttrValueMapper.selectOne(wrapper).getStock();
-    }
-
-
-
-    @Override
     public YxStoreProductAttrValue uniqueByAttrInfo(String unique) {
-        QueryWrapper<YxStoreProductAttrValue> wrapper = new QueryWrapper<>();
-        wrapper.eq("`unique`",unique);
-        return yxStoreProductAttrValueMapper.selectOne(wrapper);
+        return yxStoreProductAttrValueMapper.selectOne(Wrappers.<YxStoreProductAttrValue>lambdaQuery()
+                .eq(YxStoreProductAttrValue::getUnique,unique));
     }
 
+
+    /**
+     * 获取商品sku属性
+     * @param productId 商品id
+     * @return map
+     */
     @Override
-    public Map<String, Object> getProductAttrDetail(long productId, long uid, int type) {
-        QueryWrapper<YxStoreProductAttr> wrapper = new QueryWrapper<>();
-        wrapper.eq("product_id",productId).orderByAsc("attr_values");
-        List<YxStoreProductAttr> storeProductAttrs = yxStoreProductAttrMapper
-                .selectList(wrapper);
+    public Map<String, Object> getProductAttrDetail(long productId) {
 
-        QueryWrapper<YxStoreProductAttrValue> wrapper2 = new QueryWrapper<>();
-        wrapper2.eq("product_id",productId);
-        List<YxStoreProductAttrValue>  productAttrValues = yxStoreProductAttrValueMapper
-                .selectList(wrapper2);
+        List<YxStoreProductAttr>  storeProductAttrs = yxStoreProductAttrMapper
+                .selectList(Wrappers.<YxStoreProductAttr>lambdaQuery()
+                        .eq(YxStoreProductAttr::getProductId,productId)
+                        .orderByAsc(YxStoreProductAttr::getAttrValues));
 
-        List<Map<String, YxStoreProductAttrValue>> mapList = new ArrayList<>();
+        List<YxStoreProductAttrValue>  productAttrValues = storeProductAttrValueService
+                .list(Wrappers.<YxStoreProductAttrValue>lambdaQuery()
+                        .eq(YxStoreProductAttrValue::getProductId,productId));
 
-        Map<String, YxStoreProductAttrValue> map = new LinkedHashMap<>();
-        for (YxStoreProductAttrValue value : productAttrValues) {
 
-            map.put(value.getSku(),value);
-            // mapList.add(map);
-        }
+        Map<String, YxStoreProductAttrValue> map = productAttrValues.stream()
+                .collect(Collectors.toMap(YxStoreProductAttrValue::getSku, p -> p));
 
         List<YxStoreProductAttrQueryVo> yxStoreProductAttrQueryVoList = new ArrayList<>();
 
@@ -115,8 +210,6 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
             for (String str : stringList) {
                 AttrValueDto attrValueDTO = new AttrValueDto();
                 attrValueDTO.setAttr(str);
-                attrValueDTO.setCheck(false);
-
                 attrValueDTOS.add(attrValueDTO);
             }
             YxStoreProductAttrQueryVo attrQueryVo = generator.convert(attr,YxStoreProductAttrQueryVo.class);
@@ -124,15 +217,12 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
             attrQueryVo.setAttrValueArr(stringList);
 
             yxStoreProductAttrQueryVoList.add(attrQueryVo);
-
         }
 
-
-        Map<String, Object> returnMap = new LinkedHashMap<>();
-
-
+        Map<String, Object> returnMap = new LinkedHashMap<>(2);
         returnMap.put("productAttr",yxStoreProductAttrQueryVoList);
         returnMap.put("productValue",map);
+
         return returnMap;
     }
 

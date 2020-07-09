@@ -9,12 +9,10 @@
 package co.yixiang.modules.product.service;
 
 
-
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.product.domain.YxStoreProductRelation;
 import co.yixiang.modules.product.vo.YxStoreProductRelationQueryVo;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**

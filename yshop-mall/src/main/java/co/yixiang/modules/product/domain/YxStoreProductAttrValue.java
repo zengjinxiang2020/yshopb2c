@@ -10,7 +10,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,7 +20,11 @@ import java.math.BigDecimal;
 * @date 2020-05-12
 */
 
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @TableName("yx_store_product_attr_value")
 public class YxStoreProductAttrValue implements Serializable {
 
@@ -59,6 +63,24 @@ public class YxStoreProductAttrValue implements Serializable {
 
     /** 成本价 */
     private BigDecimal cost;
+
+    /** 商品条码 */
+    private String barCode;
+
+    /** 原价 */
+    private BigDecimal otPrice;
+
+    /** 重量 */
+    private BigDecimal weight;
+
+    /** 体积 */
+    private BigDecimal volume;
+
+    /** 一级返佣 */
+    private BigDecimal brokerage;
+
+    /** 二级返佣 */
+    private BigDecimal brokerageTwo;
 
 
     public void copy(YxStoreProductAttrValue source){

@@ -155,7 +155,7 @@ public class StoreOrderController {
     @PostMapping(value = "/yxStoreOrder/refund")
     @PreAuthorize("@el.check('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")
     public ResponseEntity refund(@Validated @RequestBody YxStoreOrder resources) {
-        yxStoreOrderService.orderRefund(resources.getOrderId(),resources.getPayPrice().doubleValue(),
+        yxStoreOrderService.orderRefund(resources.getOrderId(),resources.getPayPrice(),
                 ShopCommonEnum.AGREE_1.getValue());
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

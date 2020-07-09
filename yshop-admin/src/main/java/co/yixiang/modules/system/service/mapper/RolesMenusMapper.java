@@ -10,7 +10,6 @@ package co.yixiang.modules.system.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.system.domain.RolesMenus;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Repository;
 * @date 2020-05-16
 */
 @Repository
-@Mapper
 public interface RolesMenusMapper extends CoreMapper<RolesMenus> {
 
 }

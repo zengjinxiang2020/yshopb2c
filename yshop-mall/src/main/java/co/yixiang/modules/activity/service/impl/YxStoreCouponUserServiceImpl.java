@@ -9,15 +9,14 @@
 package co.yixiang.modules.activity.service.impl;
 
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.NumberUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.CouponEnum;
 import co.yixiang.enums.CouponGetEnum;
-import co.yixiang.enums.OrderInfoEnum;
-import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.domain.YxStoreCoupon;
 import co.yixiang.modules.activity.domain.YxStoreCouponUser;
 import co.yixiang.modules.activity.service.YxStoreCouponService;
@@ -25,17 +24,17 @@ import co.yixiang.modules.activity.service.YxStoreCouponUserService;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponUserDto;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponUserQueryCriteria;
 import co.yixiang.modules.activity.service.mapper.YxStoreCouponUserMapper;
-
-import co.yixiang.modules.activity.vo.YxStoreCouponQueryVo;
+import co.yixiang.modules.activity.vo.StoreCouponUserVo;
 import co.yixiang.modules.activity.vo.YxStoreCouponUserQueryVo;
+import co.yixiang.modules.cart.service.YxStoreCartService;
+import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.pagehelper.PageInfo;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -43,7 +42,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -51,15 +52,22 @@ import java.util.*;
 * @date 2020-05-13
 */
 @Service
-@AllArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponUserMapper, YxStoreCouponUser> implements YxStoreCouponUserService {
 
-    private final IGenerator generator;
+    @Autowired
+    private IGenerator generator;
 
-    private final YxUserService userService;
-    private final YxStoreCouponUserMapper yxStoreCouponUserMapper;
-    private final YxStoreCouponService storeCouponService;
+
+    @Autowired
+    private YxStoreCouponUserMapper yxStoreCouponUserMapper;
+
+    @Autowired
+    private YxUserService userService;
+    @Autowired
+    private YxStoreCouponService storeCouponService;
+    @Autowired
+    private YxStoreCartService yxStoreCartService;
 
     /**
      * 获取当前用户优惠券数量
@@ -76,39 +84,55 @@ public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponU
     }
 
     /**
-     * 获取满足金额可用优惠券
-     * @param uid uid
-     * @param price 金额
+     * 获取满足条件的可用优惠券
+     * @param cartIds 购物车ids
      * @return list
      */
     @Override
-    public List<YxStoreCouponUserQueryVo> beUsableCouponList(Long uid, Double price) {
-        List<YxStoreCouponUser> couponUsers = this.lambdaQuery()
-                .eq(YxStoreCouponUser::getIsFail,CouponEnum.FALI_0.getValue())
-                .eq(YxStoreCouponUser::getStatus,CouponEnum.STATUS_0.getValue())
-                .le(YxStoreCouponUser::getUseMinPrice,price)
-                .eq(YxStoreCouponUser::getUid,uid)
-                .list();
-        return generator.convert(couponUsers,YxStoreCouponUserQueryVo.class);
+    public List<StoreCouponUserVo> beUsableCouponList(Long uid,String cartIds) {
+
+        Map<String, Object> cartGroup = yxStoreCartService.getUserProductCartList(uid,
+                cartIds, ShopConstants.YSHOP_ONE_NUM);
+
+        List<YxStoreCartQueryVo> cartInfo = (List<YxStoreCartQueryVo>)cartGroup.get("valid");
+
+        BigDecimal sumPrice = BigDecimal.ZERO;
+        for (YxStoreCartQueryVo storeCart : cartInfo) {
+            sumPrice = NumberUtil.add(sumPrice,NumberUtil.mul(storeCart.getCartNum(),storeCart.getTruePrice()));
+        }
+
+        List<String> productIds = cartInfo.stream()
+                .map(YxStoreCartQueryVo::getProductId)
+                .map(Object::toString)
+                .collect(Collectors.toList());
+
+
+        return this.getUsableCouponList(uid, sumPrice.doubleValue(), productIds);
     }
 
     /**
-     * 获取可用优惠券
+     * 获取下单时候满足的优惠券
      * @param uid uid
-     * @param price 金额
-     * @return YxStoreCouponUser
+     * @param price 总价格
+     * @param productIds list
+     * @return list
      */
     @Override
-    public YxStoreCouponUser beUsableCoupon(Long uid, double price) {
-        QueryWrapper<YxStoreCouponUser> wrapper= new QueryWrapper<>();
-        wrapper.lambda()
-                .eq(YxStoreCouponUser::getIsFail,CouponEnum.FALI_0.getValue())
-                .eq(YxStoreCouponUser::getStatus,CouponEnum.STATUS_0.getValue())
-                .le(YxStoreCouponUser::getUseMinPrice,price)
-                .eq(YxStoreCouponUser::getUid,uid)
-                .last("limit 1") ;
-        return this.getOne(wrapper);
+    public List<StoreCouponUserVo> getUsableCouponList(Long uid, double price, List<String> productIds) {
+        Date now = new Date();
+        List<StoreCouponUserVo> storeCouponUsers = yxStoreCouponUserMapper.selectCouponList(now, price, uid);
+        return storeCouponUsers.stream()
+                .filter(coupon ->
+                        CouponEnum.TYPE_2.getValue().equals(coupon.getType()) ||
+                                CouponEnum.TYPE_0.getValue().equals(coupon.getType())
+                                || (CouponEnum.TYPE_1.getValue().equals(coupon.getType())
+                                && isSame(Arrays.asList(coupon.getProductId().split(",")),productIds)))
+                .collect(Collectors.toList());
+
     }
+
+
+
 
     /**
      * 获取用户优惠券
@@ -200,6 +224,28 @@ public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponU
 
         this.save(storeCouponUser);
 
+    }
+
+
+    /**
+     * 判断两个list是否有相同值
+     * @param list1 list
+     * @param list2 list
+     * @return boolean
+     */
+    private boolean isSame(List<String> list1,List<String> list2){
+        if(list2.isEmpty()) return true;
+        list1 = new ArrayList<>(list1);
+        list2 = new ArrayList<>(list2);
+        list1.addAll(list2);
+        int total = list1.size();
+
+        List<String> newList = new ArrayList<>(new HashSet<>(list1));
+
+        int newTotal = newList.size();
+
+
+        return total > newTotal;
     }
 
 

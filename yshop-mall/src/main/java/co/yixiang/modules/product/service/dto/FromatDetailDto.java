@@ -5,7 +5,7 @@
  */
 package co.yixiang.modules.product.service.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
@@ -15,9 +15,13 @@ import java.util.List;
  * @Date 2019/10/12
  **/
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class FromatDetailDto {
-    private  boolean attrHidden;
+    private  String attrHidden;
 
     private  String detailValue;
 

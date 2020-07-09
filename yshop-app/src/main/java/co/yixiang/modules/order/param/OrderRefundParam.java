@@ -16,7 +16,7 @@ public class OrderRefundParam implements Serializable {
     @NotBlank(message = "订单编号错误")
     private String orderId;
     @NotNull(message = "退款金额必填")
-    private Double price;
+    private String price;
     @NotNull(message = "参数错误")
     private Integer type;
 }

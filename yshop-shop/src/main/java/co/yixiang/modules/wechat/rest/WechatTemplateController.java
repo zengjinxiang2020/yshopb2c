@@ -7,6 +7,7 @@ package co.yixiang.modules.wechat.rest;
 
 import co.yixiang.dozer.service.IGenerator;
 
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.wechat.domain.YxWechatTemplate;
 import co.yixiang.modules.wechat.service.YxWechatTemplateService;
 import co.yixiang.modules.wechat.service.dto.YxWechatTemplateDto;
@@ -19,13 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -60,6 +55,7 @@ public class WechatTemplateController {
         return new ResponseEntity<>(yxWechatTemplateService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @ForbidSubmit
     @PostMapping
     @ApiOperation("新增微信模板消息")
     @PreAuthorize("@el.check('admin','yxWechatTemplate:add')")
@@ -67,6 +63,7 @@ public class WechatTemplateController {
         return new ResponseEntity<>(yxWechatTemplateService.save(resources),HttpStatus.CREATED);
     }
 
+    @ForbidSubmit
     @PutMapping
     @ApiOperation("修改微信模板消息")
     @PreAuthorize("@el.check('admin','yxWechatTemplate:edit')")
@@ -75,13 +72,12 @@ public class WechatTemplateController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @ApiOperation("删除微信模板消息")
     @PreAuthorize("@el.check('admin','yxWechatTemplate:del')")
-    @DeleteMapping
-    public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
-        Arrays.asList(ids).forEach(id->{
-            yxWechatTemplateService.removeById(id);
-        });
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteAll(@PathVariable Integer id) {
+        yxWechatTemplateService.removeById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

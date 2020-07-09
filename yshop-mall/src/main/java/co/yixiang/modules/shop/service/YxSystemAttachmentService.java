@@ -12,8 +12,6 @@ package co.yixiang.modules.shop.service;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.shop.domain.YxSystemAttachment;
 
-import java.io.Serializable;
-
 /**
  * <p>
  * 附件管理表 服务类

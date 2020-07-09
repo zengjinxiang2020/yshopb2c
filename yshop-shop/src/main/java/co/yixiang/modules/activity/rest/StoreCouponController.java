@@ -5,6 +5,9 @@
  */
 package co.yixiang.modules.activity.rest;
 
+import cn.hutool.core.util.StrUtil;
+import co.yixiang.api.YshopException;
+import co.yixiang.enums.CouponEnum;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreCoupon;
 import co.yixiang.modules.activity.service.YxStoreCouponService;
@@ -55,6 +58,13 @@ public class StoreCouponController {
     @PostMapping(value = "/yxStoreCoupon")
     @PreAuthorize("@el.check('admin','YXSTORECOUPON_ALL','YXSTORECOUPON_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxStoreCoupon resources){
+        if(CouponEnum.TYPE_1.getValue().equals(resources.getType())
+                && StrUtil.isEmpty(resources.getProductId())){
+            throw new YshopException("请选择商品");
+        }
+        if(resources.getCouponPrice().compareTo(resources.getUseMinPrice()) >= 0) {
+            throw new YshopException("优惠券金额不能高于最低消费金额");
+        }
         return new ResponseEntity<>(yxStoreCouponService.save(resources),HttpStatus.CREATED);
     }
 
@@ -63,6 +73,13 @@ public class StoreCouponController {
     @PutMapping(value = "/yxStoreCoupon")
     @PreAuthorize("@el.check('admin','YXSTORECOUPON_ALL','YXSTORECOUPON_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreCoupon resources){
+        if(CouponEnum.TYPE_1.getValue().equals(resources.getType())
+                && StrUtil.isEmpty(resources.getProductId())){
+            throw new YshopException("请选择商品");
+        }
+        if(resources.getCouponPrice().compareTo(resources.getUseMinPrice()) >= 0) {
+            throw new YshopException("优惠券金额不能高于最低消费金额");
+        }
         yxStoreCouponService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

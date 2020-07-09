@@ -19,6 +19,7 @@ public class TemplateBean {
     private String price;
     private String deliveryName;
     private String deliveryId;
+    private String payType;
     private Long uid;
 
 }

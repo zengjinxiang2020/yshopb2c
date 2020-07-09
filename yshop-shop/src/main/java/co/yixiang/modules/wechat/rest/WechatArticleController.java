@@ -7,6 +7,7 @@ package co.yixiang.modules.wechat.rest;
 
 import cn.hutool.core.date.DateUtil;
 import co.yixiang.modules.aop.ForbidSubmit;
+import co.yixiang.modules.services.WechatArticleService;
 import co.yixiang.modules.wechat.domain.YxArticle;
 import co.yixiang.modules.wechat.service.YxArticleService;
 import co.yixiang.modules.wechat.service.dto.YxArticleDto;
@@ -40,9 +41,18 @@ import java.util.Date;
 public class WechatArticleController {
 
     private final YxArticleService yxArticleService;
+    private final WechatArticleService wechatArticleService;
 
-    public WechatArticleController(YxArticleService yxArticleService) {
+    public WechatArticleController(YxArticleService yxArticleService,WechatArticleService wechatArticleService) {
         this.yxArticleService = yxArticleService;
+        this.wechatArticleService = wechatArticleService;
+    }
+
+    @ApiOperation(value = "查询单条信息")
+    @GetMapping(value = "/yxArticle/info/{id}")
+    @PreAuthorize("@el.check('admin','YXARTICLE_ALL','YXARTICLE_GET')")
+    public ResponseEntity getInfo(@PathVariable Integer id){
+        return new ResponseEntity<>(yxArticleService.getById(id),HttpStatus.OK);
     }
 
     @ApiOperation(value = "查询")
@@ -86,7 +96,7 @@ public class WechatArticleController {
         YxArticleDto yxArticleDTO= new YxArticleDto();
         YxArticle yxArticle = yxArticleService.getById(id);
         BeanUtils.copyProperties(yxArticle,yxArticleDTO);
-        yxArticleService.uploadNews(yxArticleDTO);
+        wechatArticleService.publish(yxArticleDTO);
         return new ResponseEntity(HttpStatus.OK);
     }
 

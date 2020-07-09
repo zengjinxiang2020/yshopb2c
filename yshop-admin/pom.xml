@@ -5,7 +5,7 @@
     <parent>
         <artifactId>yshop</artifactId>
         <groupId>co.yixiang</groupId>
-        <version>3.0-alpha</version>
+        <version>3.0-RC2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>co.yixiang</groupId>
             <artifactId>yshop-generator</artifactId>
-            <version>3.0-alpha</version>
+            <version>3.0-RC2</version>
             <exclusions>
                 <exclusion>
                     <groupId>co.yixiang</groupId>
@@ -31,8 +31,19 @@
         </dependency>
         <dependency>
             <groupId>co.yixiang</groupId>
+            <artifactId>yshop-message</artifactId>
+            <version>3.0-RC2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>co.yixiang</groupId>
+                    <artifactId>yshop-mall</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>co.yixiang</groupId>
             <artifactId>yshop-shop</artifactId>
-            <version>3.0-alpha</version>
+            <version>3.0-RC2</version>
         </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

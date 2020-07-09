@@ -8,17 +8,33 @@
  */
 package co.yixiang.modules.product.rest;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.enums.ShopCommonEnum;
+import co.yixiang.enums.SpecTypeEnum;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.aop.ForbidSubmit;
+import co.yixiang.modules.category.domain.YxStoreCategory;
+import co.yixiang.modules.category.service.YxStoreCategoryService;
 import co.yixiang.modules.product.domain.YxStoreProduct;
+import co.yixiang.modules.product.domain.YxStoreProductAttrResult;
+import co.yixiang.modules.product.service.YxStoreProductAttrResultService;
+import co.yixiang.modules.product.service.YxStoreProductReplyService;
+import co.yixiang.modules.product.service.YxStoreProductRuleService;
 import co.yixiang.modules.product.service.YxStoreProductService;
+import co.yixiang.modules.product.service.dto.ProductDto;
+import co.yixiang.modules.product.service.dto.ProductFormatDto;
+import co.yixiang.modules.product.service.dto.StoreProductDto;
 import co.yixiang.modules.product.service.dto.YxStoreProductQueryCriteria;
+import co.yixiang.modules.template.domain.YxShippingTemplates;
+import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,6 +42,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 /**
 * @author hupeng
@@ -36,10 +54,24 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api")
 public class StoreProductController {
 
-    private final YxStoreProductService yxStoreProductService;
+    private static List<Map<String,Object>> cateList = new ArrayList<>();
 
-    public StoreProductController(YxStoreProductService yxStoreProductService) {
+    private final YxStoreProductService yxStoreProductService;
+    private final YxStoreCategoryService yxStoreCategoryService;
+    private final YxShippingTemplatesService yxShippingTemplatesService;
+    private final YxStoreProductRuleService yxStoreProductRuleService;
+    private final YxStoreProductAttrResultService yxStoreProductAttrResultService;
+
+    public StoreProductController(YxStoreProductService yxStoreProductService,
+                                  YxStoreCategoryService yxStoreCategoryService,
+                                  YxShippingTemplatesService yxShippingTemplatesService,
+                                  YxStoreProductRuleService yxStoreProductRuleService,
+                                  YxStoreProductAttrResultService yxStoreProductAttrResultService) {
         this.yxStoreProductService = yxStoreProductService;
+        this.yxStoreCategoryService = yxStoreCategoryService;
+        this.yxShippingTemplatesService = yxShippingTemplatesService;
+        this.yxStoreProductRuleService = yxStoreProductRuleService;
+        this.yxStoreProductAttrResultService = yxStoreProductAttrResultService;
     }
 
     @Log("查询商品")
@@ -51,25 +83,16 @@ public class StoreProductController {
     }
 
     @ForbidSubmit
-    @Log("新增商品")
-    @ApiOperation(value = "新增商品")
+    @Log("新增/修改商品")
+    @ApiOperation(value = "新增/修改商品")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
-    @PostMapping(value = "/yxStoreProduct")
+    @PostMapping(value = "/yxStoreProduct/addOrSave")
     @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_CREATE')")
-    public ResponseEntity create(@Validated @RequestBody YxStoreProduct resources){
-        return new ResponseEntity<>(yxStoreProductService.saveProduct(resources),HttpStatus.CREATED);
+    public ResponseEntity create(@Validated @RequestBody StoreProductDto storeProductDto){
+        yxStoreProductService.insertAndEditYxStoreProduct(storeProductDto);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @ForbidSubmit
-    @Log("修改商品")
-    @ApiOperation(value = "修改商品")
-    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
-    @PutMapping(value = "/yxStoreProduct")
-    @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_EDIT')")
-    public ResponseEntity update(@Validated @RequestBody YxStoreProduct resources){
-        yxStoreProductService.updateProduct(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
-    }
 
     @ForbidSubmit
     @Log("删除商品")
@@ -82,15 +105,7 @@ public class StoreProductController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @ApiOperation(value = "恢复数据")
-    @Deprecated
-    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
-    @DeleteMapping(value = "/yxStoreProduct/recovery/{id}")
-    @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_DELETE')")
-    public ResponseEntity recovery(@PathVariable Integer id){
-//        yxStoreProductService.recovery(id);
-        return new ResponseEntity(HttpStatus.OK);
-    }
+
 
     @ApiOperation(value = "商品上架/下架")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
@@ -105,36 +120,116 @@ public class StoreProductController {
     @ApiOperation(value = "生成属性")
     @PostMapping(value = "/yxStoreProduct/isFormatAttr/{id}")
     public ResponseEntity isFormatAttr(@PathVariable Long id,@RequestBody String jsonStr){
-        return new ResponseEntity<>(yxStoreProductService.isFormatAttr(id,jsonStr),HttpStatus.OK);
+        return new ResponseEntity<>(yxStoreProductService.getFormatAttr(id,jsonStr),HttpStatus.OK);
     }
 
-    @ApiOperation(value = "设置保存属性")
-    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
-    @PostMapping(value = "/yxStoreProduct/setAttr/{id}")
-    public ResponseEntity setAttr(@PathVariable Long id,@RequestBody String jsonStr){
-        yxStoreProductService.createProductAttr(id,jsonStr);
-        return new ResponseEntity(HttpStatus.OK);
-    }
 
-    @ApiOperation(value = "清除属性")
-    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
-    @PostMapping(value = "/yxStoreProduct/clearAttr/{id}")
-    public ResponseEntity clearAttr(@PathVariable Long id){
-        yxStoreProductService.clearProductAttr(id,true);
-        return new ResponseEntity(HttpStatus.OK);
-    }
 
-    @ApiOperation(value = "获取属性")
-    @GetMapping(value = "/yxStoreProduct/attr/{id}")
-    public ResponseEntity attr(@PathVariable Long id){
-        String str = yxStoreProductService.getStoreProductAttrResult(id);
-        if(StrUtil.isEmpty(str)){
-            return new ResponseEntity(HttpStatus.OK);
+    @ApiOperation(value = "获取商品信息")
+    @GetMapping(value = "/yxStoreProduct/info/{id}")
+    public ResponseEntity info(@PathVariable Long id){
+        Map<String,Object> map = new LinkedHashMap<>(3);
+
+        //运费模板
+        List<YxShippingTemplates> shippingTemplatesList = yxShippingTemplatesService.list();
+        map.put("tempList", shippingTemplatesList);
+
+        //商品分类
+        List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
+                .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+                .list();
+        map.put("cateList", this.makeCate(storeCategories,0,1));
+
+        //商品规格
+        map.put("ruleList",yxStoreProductRuleService.list());
+
+
+        if(id == 0){
+            return new ResponseEntity<>(map,HttpStatus.OK);
         }
-        JSONObject jsonObject = JSON.parseObject(str);
 
-        return new ResponseEntity<>(jsonObject,HttpStatus.OK);
+        //处理商品详情
+        YxStoreProduct yxStoreProduct = yxStoreProductService.getById(id);
+        ProductDto productDto = new ProductDto();
+        BeanUtil.copyProperties(yxStoreProduct,productDto,"sliderImage");
+        productDto.setSliderImage(Arrays.asList(yxStoreProduct.getSliderImage().split(",")));
+        YxStoreProductAttrResult storeProductAttrResult = yxStoreProductAttrResultService
+                .getOne(Wrappers.<YxStoreProductAttrResult>lambdaQuery()
+                        .eq(YxStoreProductAttrResult::getProductId,id).last("limit 1"));
+        JSONObject result = JSON.parseObject(storeProductAttrResult.getResult());
+
+        if(SpecTypeEnum.TYPE_1.getValue().equals(yxStoreProduct.getSpecType())){
+            productDto.setAttr(new ProductFormatDto());
+            productDto.setAttrs(result.getObject("value",ArrayList.class));
+            productDto.setItems(result.getObject("attr",ArrayList.class));
+        }else{
+            Map<String,Object> mapAttr = (Map<String,Object>)result.getObject("value",ArrayList.class).get(0);
+            ProductFormatDto productFormatDto = ProductFormatDto.builder()
+                    .pic(mapAttr.get("pic").toString())
+                    .price(Double.valueOf(mapAttr.get("price").toString()))
+                    .cost(Double.valueOf(mapAttr.get("cost").toString()))
+                    .otPrice(Double.valueOf(mapAttr.get("ot_price").toString()))
+                    .stock(Integer.valueOf(mapAttr.get("stock").toString()))
+                    .barCode(mapAttr.get("bar_code").toString())
+                    .weight(Double.valueOf(mapAttr.get("weight").toString()))
+                    .volume(Double.valueOf(mapAttr.get("volume").toString()))
+                    .brokerage(Double.valueOf(mapAttr.get("brokerage").toString()))
+                    .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
+                    .build();
+            productDto.setAttr(productFormatDto);
+        }
+
+
+        map.put("productInfo",productDto);
+
+        return new ResponseEntity<>(map,HttpStatus.OK);
     }
+
+
+    /**
+     *  分类递归
+     * @param data 分类列表
+     * @param pid 附件id
+     * @param level d等级
+     * @return list
+     */
+    private List<Map<String,Object>> makeCate(List<YxStoreCategory> data, int pid, int level)
+    {
+        String html = "|-----";
+        String newHtml = "";
+
+
+        if(cateList.size() == data.size()){
+            return cateList;
+        }
+
+        for (int i = 0; i < data.size(); i++) {
+            YxStoreCategory storeCategory = data.get(i);
+            int catePid =  storeCategory.getPid();
+            Map<String,Object> map = new HashMap<>();
+            if(catePid == pid){
+                newHtml = String.join("", Collections.nCopies(level,html));
+                map.put("value",storeCategory.getId());
+                map.put("label",newHtml + storeCategory.getCateName());
+                if(storeCategory.getPid() == 0){
+                    map.put("disabled",0);
+                }else{
+                    map.put("disabled",1);
+                }
+                cateList.add(map);
+                data.remove(i);
+
+                i--;
+                this.makeCate(data,storeCategory.getId(),level + 1);
+            }
+        }
+
+
+        return cateList;
+    }
+
+
+
 
 
 

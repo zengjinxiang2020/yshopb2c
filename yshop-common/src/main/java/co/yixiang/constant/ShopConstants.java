@@ -161,5 +161,9 @@ public interface ShopConstants {
 
 	String YSHOP_EXPRESS_SERVICE = "yshop_express_service";
 
+	String YSHOP_REDIS_SYS_CITY_KEY = "yshop:city_list";
 
+	String YSHOP_REDIS_CITY_KEY = "yshop:city";
+
+	String YSHOP_APP_LOGIN_USER = "app-online-token";
 }

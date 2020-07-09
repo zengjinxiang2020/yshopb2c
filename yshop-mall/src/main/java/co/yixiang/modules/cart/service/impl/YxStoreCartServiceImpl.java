@@ -166,11 +166,11 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
 
         for (YxStoreCart storeCart : carts) {
             YxStoreProductQueryVo storeProduct = null;
-            if(storeCart.getCombinationId() > 0){
+            if(storeCart.getCombinationId() != null && storeCart.getCombinationId() > 0){
                 storeProduct = ObjectUtil.clone(storeCombinationMapper.combinatiionInfo(storeCart.getCombinationId()));
-            }else if(storeCart.getSeckillId() > 0){
+            }else if(storeCart.getSeckillId() != null && storeCart.getSeckillId() > 0){
                 storeProduct = ObjectUtil.clone(storeSeckillMapper.seckillInfo(storeCart.getSeckillId()));
-            }else if(storeCart.getBargainId() > 0){
+            }else if(storeCart.getBargainId() != null && storeCart.getBargainId() > 0){
                 storeProduct = ObjectUtil.clone(yxStoreBargainMapper.bargainInfo(storeCart.getBargainId()));
             }else{
                 //必须得重新克隆创建一个新对象
@@ -181,12 +181,8 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
             YxStoreCartQueryVo storeCartQueryVo = generator.convert(storeCart,YxStoreCartQueryVo.class);
 
             if(ObjectUtil.isNull(storeProduct)){
-                YxStoreCart yxStoreCart = new YxStoreCart();
-                yxStoreCart.setIsDel(1);
-                yxStoreCartMapper.update(yxStoreCart,
-                        new QueryWrapper<YxStoreCart>()
-                                .lambda().eq(YxStoreCart::getId,storeCart.getId()));
-            }else if(storeProduct.getIsShow() == 0 || storeProduct.getStock() == 0){
+                this.removeById(storeCart.getId());
+            }else if(ShopCommonEnum.SHOW_0.getValue().equals(storeProduct.getIsShow()) || storeProduct.getStock() == 0){
                 storeCartQueryVo.setProductInfo(storeProduct);
                 invalid.add(storeCartQueryVo);
             }else{
@@ -208,14 +204,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
                                 || storeCart.getBargainId() > 0){
                             vipPrice = storeProduct.getPrice().doubleValue();
                         }
-//                        double vipPrice = 0d;
-//                        if(storeCart.getCombinationId() > 0 || storeCart.getSeckillId() > 0
-//                                || storeCart.getBargainId() > 0){
-//                            vipPrice = productAttrValue.getPrice().doubleValue();
-//                        }else{
-//                            vipPrice = userService.setLevelPrice(
-//                                    productAttrValue.getPrice().doubleValue(),uid);
-//                        }
+
                         storeCartQueryVo.setTruePrice(vipPrice);
                         //设置会员价
                         storeCartQueryVo.setVipTruePrice(productAttrValue.getPrice()

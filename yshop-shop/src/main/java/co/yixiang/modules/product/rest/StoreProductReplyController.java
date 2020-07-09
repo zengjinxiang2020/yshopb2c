@@ -8,6 +8,7 @@
  */
 package co.yixiang.modules.product.rest;
 
+import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.product.domain.YxStoreProductReply;
@@ -27,6 +28,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
 
 /**
 * @author hupeng
@@ -59,7 +62,9 @@ public class StoreProductReplyController {
     @PutMapping(value = "/yxStoreProductReply")
     @PreAuthorize("@el.check('admin','YXSTOREPRODUCTREPLY_ALL','YXSTOREPRODUCTREPLY_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreProductReply resources){
-        yxStoreProductReplyService.save(resources);
+        resources.setMerchantReplyTime(new Date());
+        resources.setIsReply(ShopCommonEnum.REPLY_1.getValue());
+        yxStoreProductReplyService.updateById(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

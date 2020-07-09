@@ -15,11 +15,9 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.BillDetailEnum;
-import co.yixiang.enums.BillEnum;
 import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.exception.BadRequestException;
-import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.domain.YxUserExtract;
 import co.yixiang.modules.activity.param.UserExtParam;
 import co.yixiang.modules.activity.service.YxUserExtractService;
@@ -27,14 +25,9 @@ import co.yixiang.modules.activity.service.dto.YxUserExtractDto;
 import co.yixiang.modules.activity.service.dto.YxUserExtractQueryCriteria;
 import co.yixiang.modules.activity.service.mapper.YxUserExtractMapper;
 import co.yixiang.modules.user.domain.YxUser;
-import co.yixiang.modules.user.domain.YxUserBill;
 import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserService;
-import co.yixiang.modules.user.service.dto.YxUserDto;
-import co.yixiang.modules.user.vo.YxUserQueryVo;
 import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.OrderUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -209,8 +202,7 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
                     mark,resources.getId().toString());
 
             //返回提现金额
-            userService.incBrokeragePrice(resources.getExtractPrice().doubleValue()
-                    ,resources.getUid());
+            userService.incBrokeragePrice(resources.getExtractPrice(),resources.getUid());
 
             resources.setFailTime(new Date());
 

@@ -17,7 +17,6 @@ import co.yixiang.modules.wechat.domain.YxWechatTemplate;
 import co.yixiang.modules.wechat.service.YxWechatTemplateService;
 import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.mp.enums.WechatTempateEnum;
-import co.yixiang.mp.utils.YshopUtils;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.ShopKeyUtils;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -199,9 +198,8 @@ public class WeixinTemplateService {
     private String getUserOpenid(Long uid){
         YxUser yxUser = userService.getById(uid);
         if(yxUser == null) return "";
-        if(StrUtil.isBlank(yxUser.getWxProfile())) return "";
 
-        WechatUserDto wechatUserDto = YshopUtils.getWechtUser(yxUser.getWxProfile());
+        WechatUserDto wechatUserDto = yxUser.getWxProfile();
         if(wechatUserDto == null) return "";
         if(StrUtil.isBlank(wechatUserDto.getOpenid())) return "";
         return wechatUserDto.getOpenid();

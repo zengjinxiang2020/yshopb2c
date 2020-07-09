@@ -11,7 +11,6 @@ package co.yixiang.modules.category.service.impl;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
-
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.category.domain.YxStoreCategory;
 import co.yixiang.modules.category.service.YxStoreCategoryService;
@@ -34,13 +33,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 

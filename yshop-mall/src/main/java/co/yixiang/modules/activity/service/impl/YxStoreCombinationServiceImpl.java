@@ -19,20 +19,18 @@ import co.yixiang.modules.activity.domain.YxStoreVisit;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
 import co.yixiang.modules.activity.service.dto.PinkAllDto;
-import co.yixiang.modules.activity.service.dto.PinkDto;
-import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.service.dto.YxStoreCombinationDto;
 import co.yixiang.modules.activity.service.dto.YxStoreCombinationQueryCriteria;
 import co.yixiang.modules.activity.service.mapper.YxStoreCombinationMapper;
 import co.yixiang.modules.activity.service.mapper.YxStorePinkMapper;
 import co.yixiang.modules.activity.service.mapper.YxStoreVisitMapper;
+import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
 import co.yixiang.modules.product.service.YxStoreProductReplyService;
 import co.yixiang.utils.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,17 +48,19 @@ import java.util.*;
 * @date 2020-05-13
 */
 @Service
-@AllArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombinationMapper, YxStoreCombination> implements YxStoreCombinationService {
 
-    private final IGenerator generator;
-    private final YxStorePinkMapper yxStorePinkMapper;
-    private final YxStoreVisitMapper yxStoreVisitMapper;
+    @Autowired
+    private IGenerator generator;
+
+    @Autowired
+    private YxStorePinkMapper yxStorePinkMapper;
+    @Autowired
+    private YxStoreVisitMapper yxStoreVisitMapper;
 
     @Autowired
     private YxStoreCombinationMapper yxStoreCombinationMapper;
-
     @Autowired
     private YxStoreProductReplyService replyService;
     @Autowired

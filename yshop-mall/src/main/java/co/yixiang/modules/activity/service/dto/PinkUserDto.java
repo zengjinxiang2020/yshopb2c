@@ -3,7 +3,6 @@ package co.yixiang.modules.activity.service.dto;
 import co.yixiang.modules.activity.domain.YxStorePink;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

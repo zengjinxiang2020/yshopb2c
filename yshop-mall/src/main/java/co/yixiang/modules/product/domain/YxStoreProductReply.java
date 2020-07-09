@@ -14,7 +14,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -74,6 +74,7 @@ public class YxStoreProductReply extends BaseDomain {
 
 
     /** 管理员回复内容 */
+    @NotBlank(message = "回复内容不能为空")
     private String merchantReplyContent;
 
 

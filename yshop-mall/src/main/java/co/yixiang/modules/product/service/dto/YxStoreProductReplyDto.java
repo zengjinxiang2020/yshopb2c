@@ -60,7 +60,7 @@ public class YxStoreProductReplyDto implements Serializable {
     private String merchantReplyContent;
 
     // 管理员回复时间
-    private Integer merchantReplyTime;
+    private Date merchantReplyTime;
 
     // 0未回复1已回复
     private Integer isReply;

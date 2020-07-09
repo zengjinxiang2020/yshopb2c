@@ -16,7 +16,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -35,13 +34,13 @@ public class YxStoreProductRule extends BaseDomain {
 
 
     /** 规格名称 */
-    @NotBlank
+    @NotBlank(message = "请输入规则名称")
     private String ruleName;
 
 
     /** 规格值 */
     @TableField(typeHandler = FastjsonTypeHandler.class)
-    @NotNull
+    @NotNull(message = "规格名称/值必填")
     private JSONArray ruleValue;
 
 

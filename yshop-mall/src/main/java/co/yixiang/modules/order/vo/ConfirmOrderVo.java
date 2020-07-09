@@ -1,6 +1,7 @@
 package co.yixiang.modules.order.vo;
 
 import co.yixiang.modules.activity.domain.YxStoreCouponUser;
+import co.yixiang.modules.activity.vo.StoreCouponUserVo;
 import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.service.dto.PriceGroupDto;
 
@@ -58,7 +59,7 @@ public class ConfirmOrderVo implements Serializable {
     private YxSystemStoreQueryVo systemStore;
 
 
-    private YxStoreCouponUser usableCoupon;
+    private StoreCouponUserVo usableCoupon;
 
     private YxUserQueryVo userInfo;
 

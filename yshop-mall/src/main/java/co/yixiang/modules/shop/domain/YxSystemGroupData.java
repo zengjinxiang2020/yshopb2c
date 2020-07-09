@@ -12,8 +12,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
-import java.io.Serializable;
-
 /**
 * @author hupeng
 * @date 2020-05-12

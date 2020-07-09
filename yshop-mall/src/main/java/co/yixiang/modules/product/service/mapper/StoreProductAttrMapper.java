@@ -9,9 +9,7 @@
 package co.yixiang.modules.product.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-
 import co.yixiang.modules.product.domain.YxStoreProductAttr;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**

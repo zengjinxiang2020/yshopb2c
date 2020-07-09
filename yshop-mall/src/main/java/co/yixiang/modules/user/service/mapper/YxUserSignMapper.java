@@ -11,13 +11,7 @@ package co.yixiang.modules.user.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.user.domain.YxUserSign;
-import co.yixiang.modules.user.vo.YxUserSignQueryVo;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
-import java.io.Serializable;
 
 /**
  * <p>

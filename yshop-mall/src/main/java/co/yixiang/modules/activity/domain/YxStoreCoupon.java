@@ -17,7 +17,6 @@ import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -66,6 +65,10 @@ public class YxStoreCoupon extends BaseDomain {
 
     /** 状态（0：关闭，1：开启） */
     private Integer status;
+
+    private Integer type;
+
+    private String productId;
 
 
 

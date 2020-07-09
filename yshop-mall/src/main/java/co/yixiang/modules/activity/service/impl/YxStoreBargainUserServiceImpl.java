@@ -10,35 +10,24 @@ package co.yixiang.modules.activity.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
-
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.OrderInfoEnum;
-import co.yixiang.exception.ErrorRequestException;
-
 import co.yixiang.modules.activity.domain.YxStoreBargain;
 import co.yixiang.modules.activity.domain.YxStoreBargainUser;
 import co.yixiang.modules.activity.domain.YxStoreBargainUserHelp;
 import co.yixiang.modules.activity.service.YxStoreBargainService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserHelpService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserService;
-
 import co.yixiang.modules.activity.service.mapper.YxStoreBargainUserMapper;
-import co.yixiang.modules.activity.vo.YxStoreBargainQueryVo;
 import co.yixiang.modules.activity.vo.YxStoreBargainUserQueryVo;
-import co.yixiang.utils.OrderUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -74,8 +63,8 @@ public class YxStoreBargainUserServiceImpl extends BaseServiceImpl<YxStoreBargai
      * @param uid 用户id
      */
     @Override
-    public void setBargainUserStatus(Integer bargainId, Integer uid) {
-        YxStoreBargainUser storeBargainUser = getBargainUserInfo(bargainId.longValue(),uid.longValue());
+    public void setBargainUserStatus(Long bargainId, Long uid) {
+        YxStoreBargainUser storeBargainUser = getBargainUserInfo(bargainId.longValue(),uid);
         if(ObjectUtil.isNull(storeBargainUser)) return;
 
         if(storeBargainUser.getStatus() != 1) return;

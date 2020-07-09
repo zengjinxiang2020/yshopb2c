@@ -14,8 +14,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -38,6 +36,8 @@ public class YxStoreCouponIssue extends BaseDomain {
 
     /** 优惠券ID */
     private Integer cid;
+
+    private Integer ctype;
 
 
     /** 优惠券领取开启时间 */

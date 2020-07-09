@@ -11,16 +11,11 @@ package co.yixiang.modules.wechat.service.impl;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
-import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.wechat.domain.YxArticle;
 import co.yixiang.modules.wechat.service.YxArticleService;
-import co.yixiang.modules.wechat.service.mapper.ArticleMapper;
-
-
 import co.yixiang.modules.wechat.service.dto.YxArticleDto;
 import co.yixiang.modules.wechat.service.dto.YxArticleQueryCriteria;
-
-
+import co.yixiang.modules.wechat.service.mapper.ArticleMapper;
 import co.yixiang.modules.wechat.vo.YxArticleQueryVo;
 import co.yixiang.utils.FileUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -28,7 +23,6 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -142,101 +136,7 @@ public class YxArticleServiceImpl extends BaseServiceImpl<ArticleMapper, YxArtic
         FileUtil.downloadExcel(list, response);
     }
 
-    @Override
-    public void uploadNews(YxArticleDto yxArticleDTO){
 
-    }
 
-//    @Override
-//    public void uploadNews(YxArticleDto wxNewsArticleItem) throws WxErrorException {
-//
-//        WxMpService wxMpService = WxMpConfiguration.getWxMpService();
-//
-//        WxMpMaterialNews wxMpMaterialNews = new WxMpMaterialNews();
-//
-//
-//        WxMpMaterialNews.WxMpMaterialNewsArticle article = new WxMpMaterialNews.WxMpMaterialNewsArticle();
-//
-//        WxMpMaterialUploadResult wxMpMaterialUploadResult = uploadPhotoToWx( wxMpService,
-//                wxNewsArticleItem.getImageInput() );
-//        wxNewsArticleItem.setThumbMediaId( wxMpMaterialUploadResult.getMediaId() );
-//
-//        article.setAuthor( wxNewsArticleItem.getAuthor() );
-//
-//
-//        //处理content
-//        String content = processContent(wxMpService, wxNewsArticleItem.getContent());
-//        System.out.println(content);
-//        article.setContent( content );
-//        article.setContentSourceUrl( wxNewsArticleItem.getUrl() );
-//        article.setDigest( wxNewsArticleItem.getSynopsis() );
-//        article.setShowCoverPic( true );
-//        article.setThumbMediaId( wxNewsArticleItem.getThumbMediaId() );
-//        article.setTitle( wxNewsArticleItem.getTitle() );
-//        //TODO 暂时注释掉，测试号没有留言权限
-//        //article.setNeedOpenComment( wxNewsArticleItem );
-//        //article.setOnlyFansCanComment( wxNewsArticleItem );
-//        wxMpMaterialNews.addArticle( article );
-//
-//        log.info( "wxMpMaterialNews : {}", JSONUtil.toJsonStr( wxMpMaterialNews ) );
-//
-//        WxMpMaterialUploadResult wxMpMaterialUploadResult1 = wxMpService.getMaterialService()
-//                .materialNewsUpload( wxMpMaterialNews );
-//
-//        //推送开始
-//        WxMpMassTagMessage massMessage = new WxMpMassTagMessage();
-//        massMessage.setMsgType(WxConsts.MassMsgType.MPNEWS);
-//        massMessage.setMediaId(wxMpMaterialUploadResult1.getMediaId());
-//        massMessage.setSendAll(true);
-//
-//        WxMpMassSendResult massResult = wxMpService.getMassMessageService()
-//                .massGroupMessageSend(massMessage);
-//        if(!massResult.getErrorCode().equals("0")) {
-//            log.info("error:"+massResult.getErrorMsg());
-//            throw new ErrorRequestException("发送失败");
-//        }
-//
-//        log.info( "massResult : {}", JSONUtil.toJsonStr( massResult ) );
-//
-//        log.info( "wxMpMaterialUploadResult : {}", JSONUtil.toJsonStr( wxMpMaterialUploadResult1 ) );
-//    }
-//
-//
-//    private WxMpMaterialUploadResult uploadPhotoToWx(WxMpService wxMpService, String picPath) throws WxErrorException {
-//        WxMpMaterial wxMpMaterial = new WxMpMaterial();
-//
-//        String filename = String.valueOf( (int)System.currentTimeMillis() ) + ".png";
-//        String downloadPath = uploadDirStr + filename;
-//        long size = HttpUtil.downloadFile(picPath, cn.hutool.core.io.FileUtil.file(downloadPath));
-//        picPath = downloadPath;
-//        File picFile = new File( picPath );
-//        wxMpMaterial.setFile( picFile );
-//        wxMpMaterial.setName( picFile.getName() );
-//        log.info( "picFile name : {}", picFile.getName() );
-//        WxMpMaterialUploadResult wxMpMaterialUploadResult = wxMpService.getMaterialService().materialFileUpload( WxConsts.MediaFileType.IMAGE, wxMpMaterial );
-//        log.info( "wxMpMaterialUploadResult : {}", JSONUtil.toJsonStr( wxMpMaterialUploadResult ) );
-//        return wxMpMaterialUploadResult;
-//    }
-//
-//    private String processContent(WxMpService wxMpService,String content) throws WxErrorException {
-//        if(StringUtils.isBlank( content )){
-//            return content;
-//        }
-//        String imgReg = "<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>";
-//        List<String> imgList = ReUtil.findAllGroup1( imgReg,content);
-//        for (int j = 0; j < imgList.size(); j++) {
-//            String imgSrc = imgList.get( j );
-//            String filepath = URLUtils.getParam( imgSrc,"filepath" );
-//
-//            if(StringUtils.isBlank( filepath )){//网络图片URL，需下载到本地
-//                String filename = String.valueOf( System.currentTimeMillis() ) + ".png";
-//                String downloadPath = uploadDirStr + filename;
-//                long size = HttpUtil.downloadFile(imgSrc, cn.hutool.core.io.FileUtil.file(downloadPath));
-//                filepath = downloadPath;
-//            }
-//            WxMediaImgUploadResult wxMediaImgUploadResult = wxMpService.getMaterialService().mediaImgUpload( new File(filepath) );
-//            content = StringUtils.replace( content,imgList.get( j ),wxMediaImgUploadResult.getUrl());
-//        }
-//        return content;
-//    }
+
 }

@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,7 +144,7 @@ public class ShoperController {
     @PostMapping("/admin/order/refund")
     @ApiOperation(value = "订单退款",notes = "订单退款")
     public ApiResult<Boolean> orderRefund(@Validated @RequestBody OrderRefundParam param){
-        storeOrderService.orderRefund(param.getOrderId(),param.getPrice(),param.getType());
+        storeOrderService.orderRefund(param.getOrderId(),new BigDecimal(param.getPrice()),param.getType());
         return ApiResult.ok();
     }
 

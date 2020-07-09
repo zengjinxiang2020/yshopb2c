@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -37,9 +38,13 @@ public interface YxUserService  extends BaseService<YxUser>{
      */
     Double[] getUserMoney(Long uid);
 
+    /**
+     * 一级返佣
+     * @param order 订单
+     */
     void backOrderBrokerage(YxStoreOrderQueryVo order);
 
-    //boolean backOrderBrokerageTwo(YxStoreOrderQueryVo order);
+
 
     /**
      * 统计分销人员
@@ -78,7 +83,7 @@ public interface YxUserService  extends BaseService<YxUser>{
      * @param uid uid
      * @param payPrice 金额
      */
-    void decPrice(Long uid,double payPrice);
+    void decPrice(Long uid, BigDecimal payPrice);
 
    // YxUser findByName(String name);
 
@@ -87,7 +92,7 @@ public interface YxUserService  extends BaseService<YxUser>{
      * @param uid y用户id
      * @param price 金额
      */
-    void incMoney(Long uid,double price);
+    void incMoney(Long uid,BigDecimal price);
 
     /**
      * 增加积分
@@ -125,7 +130,21 @@ public interface YxUserService  extends BaseService<YxUser>{
      */
     double setLevelPrice(double price, long uid);
 
+    /**
+     * 设置推广关系
+     * @param spread 上级人
+     * @param uid 本人
+     */
     void setSpread(String spread, long uid);
+
+
+    /**
+     * 查看下级
+     * @param uid uid
+     * @param grade 等级
+     * @return list
+     */
+    List<PromUserDto> querySpread(Long uid, Integer grade);
 
     /**
     * 查询数据分页
@@ -168,7 +187,7 @@ public interface YxUserService  extends BaseService<YxUser>{
      * @param price 金额
      * @param uid 用户id
      */
-    void incBrokeragePrice(double price, Long uid);
+    void incBrokeragePrice(BigDecimal price, Long uid);
 
 
 }

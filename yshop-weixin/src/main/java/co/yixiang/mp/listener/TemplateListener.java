@@ -9,6 +9,7 @@
 package co.yixiang.mp.listener;
 
 
+import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.event.TemplateBean;
 import co.yixiang.event.TemplateEvent;
 import co.yixiang.event.TemplateListenEnum;
@@ -56,9 +57,11 @@ public class TemplateListener implements SmartApplicationListener {
 				break;
 			case TYPE_2:
 				//处理退款与消息
-				BigDecimal bigDecimal = new BigDecimal("100");
-				int payPrice = bigDecimal.multiply(new BigDecimal(templateBean.getPrice())).intValue();
-				weixinPayService.refundOrder(templateBean.getOrderId(),payPrice);
+				if(PayTypeEnum.WEIXIN.getValue().equals(templateBean.getPayType())){
+					BigDecimal bigDecimal = new BigDecimal("100");
+					int payPrice = bigDecimal.multiply(new BigDecimal(templateBean.getPrice())).intValue();
+					weixinPayService.refundOrder(templateBean.getOrderId(),payPrice);
+				}
 
 				weixinTemplateService.refundSuccessNotice(templateBean.getOrderId(),templateBean.getPrice(),
 						templateBean.getUid(),templateBean.getTime());

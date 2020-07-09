@@ -9,14 +9,10 @@
 package co.yixiang.modules.activity.service;
 
 
-
 import co.yixiang.common.service.BaseService;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.activity.domain.YxStoreBargainUser;
 import co.yixiang.modules.activity.vo.YxStoreBargainUserQueryVo;
-import io.swagger.models.auth.In;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -29,7 +25,12 @@ import java.util.List;
  */
 public interface YxStoreBargainUserService extends BaseService<YxStoreBargainUser> {
 
-    void setBargainUserStatus(Integer bargainId, Integer uid);
+    /**
+     * 修改用户砍价状态
+     * @param bargainId 砍价产品id
+     * @param uid 用户id
+     */
+    void setBargainUserStatus(Long bargainId, Long uid);
 
     /**
      * 砍价取消

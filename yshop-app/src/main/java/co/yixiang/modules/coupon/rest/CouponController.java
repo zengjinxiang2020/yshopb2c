@@ -9,7 +9,6 @@
 package co.yixiang.modules.coupon.rest;
 
 import cn.hutool.core.util.NumberUtil;
-import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.aop.NoRepeatSubmit;
@@ -17,6 +16,8 @@ import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.modules.activity.service.YxStoreCouponIssueService;
 import co.yixiang.modules.activity.service.YxStoreCouponUserService;
+import co.yixiang.modules.activity.vo.StoreCouponUserVo;
+import co.yixiang.modules.activity.vo.YxStoreCouponIssueQueryVo;
 import co.yixiang.modules.activity.vo.YxStoreCouponUserQueryVo;
 import co.yixiang.modules.coupon.param.YxStoreCouponQueryParam;
 import io.swagger.annotations.Api;
@@ -52,10 +53,12 @@ public class CouponController {
     @AuthCheck
     @GetMapping("/coupons")
     @ApiOperation(value = "可领取优惠券列表",notes = "可领取优惠券列表")
-    public ApiResult<Object> getList(@RequestParam(value = "page",defaultValue = "1") int page,
-                                     @RequestParam(value = "limit",defaultValue = "10") int limit){
+    public ApiResult<List<YxStoreCouponIssueQueryVo>> getList(@RequestParam(value = "page",defaultValue = "1") int page,
+                                                               @RequestParam(value = "limit",defaultValue = "10") int limit,
+                                                               @RequestParam(value = "productId",required = false) Long productId,
+                                                               @RequestParam(value = "type",required = false) Integer type){
         Long uid = LocalUser.getUser().getUid();
-        return ApiResult.ok(couponIssueService.getCouponList(page, limit,uid));
+        return ApiResult.ok(couponIssueService.getCouponList(page, limit,uid,productId,type));
     }
 
     /**
@@ -91,12 +94,11 @@ public class CouponController {
      * 优惠券 订单获取
      */
     @AuthCheck
-    @GetMapping("/coupons/order/{price}")
+    @GetMapping("/coupons/order/{cartIds}")
     @ApiOperation(value = "优惠券订单获取",notes = "优惠券订单获取")
-    public ApiResult<List<YxStoreCouponUserQueryVo>> orderCoupon(@PathVariable String price){
-        if(StrUtil.isBlank(price) || !NumberUtil.isNumber(price)) throw new YshopException("参数非法");
+    public ApiResult<List<StoreCouponUserVo>> orderCoupon(@PathVariable String cartIds){
         Long uid = LocalUser.getUser().getUid();
-        return ApiResult.ok(storeCouponUserService.beUsableCouponList(uid,Double.valueOf(price)));
+        return ApiResult.ok(storeCouponUserService.beUsableCouponList(uid,cartIds));
     }
 
 

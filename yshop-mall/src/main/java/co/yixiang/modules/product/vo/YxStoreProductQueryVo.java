@@ -127,4 +127,13 @@ public class YxStoreProductQueryVo implements Serializable {
 
     private BigDecimal giveIntegral;
 
+    private Integer tempId;
+
+    /** 是否单独分佣 */
+    private Integer isSub;
+
+    /** 规格 0单 1多 */
+    private Integer specType;
+
+
 }

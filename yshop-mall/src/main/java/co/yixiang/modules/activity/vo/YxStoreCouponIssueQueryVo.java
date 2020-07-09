@@ -26,6 +26,10 @@ public class YxStoreCouponIssueQueryVo implements Serializable {
     @ApiModelProperty(value = "优惠券ID")
     private Integer cid;
 
+    private String cname;
+
+    private Integer ctype;
+
     @ApiModelProperty(value = "优惠券领取开启时间")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date startTime;

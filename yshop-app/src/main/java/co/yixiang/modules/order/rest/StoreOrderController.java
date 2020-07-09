@@ -103,7 +103,8 @@ public class StoreOrderController {
         ComputeVo computeVo = storeOrderService.computedOrder(yxUser,key,
                 param.getCouponId(),
                 param.getUseIntegral(),
-                param.getShippingType());
+                param.getShippingType(),
+                param.getAddressId());
 
         map.put("result",computeVo);
         map.put("status",OrderLogEnum.NONE_ORDER.getValue());

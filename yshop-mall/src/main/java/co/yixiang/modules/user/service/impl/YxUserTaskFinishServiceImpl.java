@@ -10,22 +10,13 @@ package co.yixiang.modules.user.service.impl;
 
 
 import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.user.domain.YxUserTaskFinish;
 import co.yixiang.modules.user.service.YxUserTaskFinishService;
 import co.yixiang.modules.user.service.mapper.YxUserTaskFinishMapper;
-import co.yixiang.modules.user.vo.YxUserTaskFinishQueryVo;
-import co.yixiang.utils.OrderUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.Serializable;
 
 
 /**

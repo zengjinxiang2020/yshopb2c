@@ -15,7 +15,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
 
 import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
@@ -184,8 +183,11 @@ public class YxStoreProduct extends BaseDomain {
     private String codePath;
 
 
-    /** 淘宝京东1688类型 */
-    private String soureLink;
+    private Integer tempId;
+
+    private Integer specType;
+
+    private Integer isSub;
 
     @TableField(exist = false)
     private YxStoreCategory storeCategory;

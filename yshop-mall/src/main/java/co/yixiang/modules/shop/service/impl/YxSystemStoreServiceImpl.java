@@ -14,6 +14,7 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.CommonEnum;
+import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.product.vo.YxSystemStoreQueryVo;
 import co.yixiang.modules.shop.domain.YxSystemStore;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
@@ -89,16 +90,14 @@ public class YxSystemStoreServiceImpl extends BaseServiceImpl<SystemStoreMapper,
      */
     @Override
     public YxSystemStoreQueryVo getStoreInfo(String latitude,String longitude) {
-        YxSystemStore systemStore = new YxSystemStore();
-        systemStore.setIsShow(CommonEnum.SHOW_STATUS_1.getValue());
         YxSystemStore yxSystemStore = systemStoreMapper.selectOne(
-                Wrappers
-                        .query(systemStore)
-                        .orderByDesc("id")
+                Wrappers.<YxSystemStore>lambdaQuery()
+                        .eq(YxSystemStore::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+                        .orderByDesc(YxSystemStore::getId)
                         .last("limit 1"));
         if(yxSystemStore == null) return null;
         String mention = RedisUtil.get(ShopKeyUtils.getStoreSelfMention());
-        if(mention == null || Integer.valueOf(mention) == 2) return null;
+        if(StrUtil.isBlank(mention) || ShopCommonEnum.ENABLE_2.getValue().toString().equals(mention)) return null;
         YxSystemStoreQueryVo systemStoreQueryVo = generator.convert(yxSystemStore,YxSystemStoreQueryVo.class);
         if(StrUtil.isNotEmpty(latitude) && StrUtil.isNotEmpty(longitude)){
             double distance = LocationUtils.getDistance(Double.valueOf(latitude),Double.valueOf(longitude),

@@ -5,12 +5,14 @@
  */
 package co.yixiang.modules.activity.service.dto;
 
+import co.yixiang.modules.product.domain.YxStoreProduct;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
 * @author hupeng
@@ -42,6 +44,12 @@ public class YxStoreCouponDto implements Serializable {
 
     // 状态（0：关闭，1：开启）
     private Integer status;
+
+    private Integer type;
+
+    private String productId;
+
+    private List<YxStoreProduct> product;
 
     // 兑换项目添加时间
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

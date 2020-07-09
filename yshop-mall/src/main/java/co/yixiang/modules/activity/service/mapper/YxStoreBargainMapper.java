@@ -11,7 +11,6 @@ package co.yixiang.modules.activity.service.mapper;
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.activity.domain.YxStoreBargain;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -35,7 +34,7 @@ public interface YxStoreBargainMapper extends CoreMapper<YxStoreBargain> {
             "c.title as storeName,c.status as isShow,c.cost," +
             "c.is_postage as isPostage,c.postage,c.sales,c.stock,c.is_del as isDel" +
             " FROM yx_store_bargain c " +
-            " WHERE c.id = #{id} ")
+            " WHERE c.id = #{id} and c.is_del = 0")
     YxStoreProductQueryVo bargainInfo(Long id);
 
     @Select("select IFNULL(sum(look),0)" +

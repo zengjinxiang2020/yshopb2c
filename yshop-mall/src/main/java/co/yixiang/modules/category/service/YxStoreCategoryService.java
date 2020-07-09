@@ -59,8 +59,17 @@ public interface YxStoreCategoryService  extends BaseService<YxStoreCategory>{
      */
     Map<String,Object> buildTree(List<YxStoreCategoryDto> categoryDTOS);
 
-
+    /**
+     * 检测分类是否操过二级
+     * @param pid 父级id
+     * @return boolean
+     */
     boolean checkCategory(int pid);
 
+    /**
+     * 检测商品分类必选选择二级
+     * @param id 分类id
+     * @return boolean
+     */
     boolean checkProductCategory(int id);
 }

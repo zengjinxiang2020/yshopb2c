@@ -28,4 +28,8 @@ public class YxUserQueryCriteria{
 
     @Query
     private String userType;
+
+    private Long uid;
+
+    private Integer grade;
 }

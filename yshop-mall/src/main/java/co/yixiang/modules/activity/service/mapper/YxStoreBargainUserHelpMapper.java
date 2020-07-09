@@ -11,14 +11,7 @@ package co.yixiang.modules.activity.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.activity.domain.YxStoreBargainUserHelp;
-import co.yixiang.modules.activity.vo.YxStoreBargainUserHelpQueryVo;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
-import java.io.Serializable;
 
 /**
  * <p>

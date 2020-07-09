@@ -5,7 +5,8 @@
  */
 package co.yixiang.modules.product.service.dto;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 import java.util.Map;
 
@@ -15,22 +16,40 @@ import java.util.Map;
  * @Date 2019/10/12
  **/
 
-@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class ProductFormatDto {
 
-    private Double price;
+    @JsonProperty("bar_code")
+    private String barCode = "";
 
-    private Double cost;
+    private Double brokerage = 0d;
 
-    private int sales;
+    @JsonProperty("brokerage_two")
+    private Double brokerageTwo = 0d;
 
-    private String pic;
+    private Double price = 0d;
 
-   // private Map<String, List<Map<String,String>>> detail;
+    @JsonProperty("ot_price")
+    private Double otPrice = 0d;
 
-    //private List<Map<String, String>> detail;
+    private Double cost = 0d;
+
+    private Integer stock = 0;
+
+    private String pic = "";
+
+    private String value1 = "";
+
+    private String value2 = "";
+
+    private Double volume = 0d;
+
+    private Double weight = 0d;
+
     private Map<String, String> detail;
-    private Boolean check;
-
 
 }

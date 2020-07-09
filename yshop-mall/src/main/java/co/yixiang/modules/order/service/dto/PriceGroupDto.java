@@ -2,6 +2,8 @@ package co.yixiang.modules.order.service.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @ClassName PriceGroup
  * @Author hupeng <610796224@qq.com>
@@ -10,10 +12,10 @@ import lombok.Data;
 @Data
 public class PriceGroupDto {
 
-    private Double costPrice;
-    private Double storeFreePostage;
-    private Double storePostage;
-    private Double totalPrice;
-    private Double vipPrice;
+    private BigDecimal costPrice;
+    private BigDecimal storeFreePostage;
+    private BigDecimal storePostage;
+    private BigDecimal totalPrice;
+    private BigDecimal vipPrice;
 
 }

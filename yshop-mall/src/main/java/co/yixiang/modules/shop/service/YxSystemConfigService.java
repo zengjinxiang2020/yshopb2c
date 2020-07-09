@@ -25,6 +25,11 @@ import java.util.Map;
 */
 public interface YxSystemConfigService  extends BaseService<YxSystemConfig>{
 
+    /**
+     * 获取配置值
+     * @param name 配置名
+     * @return string
+     */
     String getData(String name);
 
     /**

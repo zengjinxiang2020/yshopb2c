@@ -7,8 +7,10 @@
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
 package co.yixiang.modules.product.rest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.product.domain.YxStoreProductRule;
 import co.yixiang.modules.product.service.YxStoreProductRuleService;
 import co.yixiang.modules.product.service.dto.YxStoreProductRuleDto;
@@ -56,31 +58,30 @@ public class StoreProductRuleController {
         return new ResponseEntity<>(yxStoreProductRuleService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @PostMapping
-    @Log("新增sku规则")
-    @ApiOperation("新增sku规则")
+
+    @PostMapping("/save/{id}")
+    @Log("新增/修改sku规则")
+    @ApiOperation("新增/修改sku规则")
     @PreAuthorize("@el.check('admin','yxStoreProductRule:add')")
-    public ResponseEntity<Object> create(@Validated @RequestBody YxStoreProductRule resources){
-        return new ResponseEntity<>(yxStoreProductRuleService.save(resources),HttpStatus.CREATED);
+    public ResponseEntity<Object> create(@Validated @RequestBody YxStoreProductRule resources,@PathVariable Integer id){
+        if(id != null && id > 0){
+            resources.setId(id);
+            yxStoreProductRuleService.updateById(resources);
+        }else{
+            yxStoreProductRuleService.save(resources);
+        }
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping
-    @Log("修改sku规则")
-    @ApiOperation("修改sku规则")
-    @PreAuthorize("@el.check('admin','yxStoreProductRule:edit')")
-    public ResponseEntity<Object> update(@Validated @RequestBody YxStoreProductRule resources){
-        yxStoreProductRuleService.updateById(resources);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 
+    @ForbidSubmit
     @Log("删除sku规则")
     @ApiOperation("删除sku规则")
     @PreAuthorize("@el.check('admin','yxStoreProductRule:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
-        Arrays.asList(ids).forEach(id->{
-            yxStoreProductRuleService.removeById(id);
-        });
+        yxStoreProductRuleService.removeByIds(new ArrayList<>(Arrays.asList(ids)));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

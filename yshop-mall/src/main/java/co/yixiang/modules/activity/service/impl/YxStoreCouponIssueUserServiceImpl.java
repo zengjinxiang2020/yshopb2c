@@ -17,7 +17,6 @@ import co.yixiang.modules.activity.service.dto.YxStoreCouponIssueUserDto;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponIssueUserQueryCriteria;
 import co.yixiang.modules.activity.service.mapper.YxStoreCouponIssueUserMapper;
 import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.OrderUtil;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;

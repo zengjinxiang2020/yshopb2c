@@ -15,6 +15,6 @@ import java.io.Serializable;
 public class OrderPriceParam implements Serializable {
     @NotBlank(message = "订单编号错误")
     private String orderId;
-    @NotNull(message = "修改价格必填")
-    private Double price;
+    @NotBlank(message = "修改价格必填")
+    private String price;
 }

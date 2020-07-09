@@ -9,17 +9,19 @@
 package co.yixiang.modules.order.service;
 
 import co.yixiang.common.service.BaseService;
-
-import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.domain.YxStoreOrder;
-import co.yixiang.modules.order.param.*;
-import co.yixiang.modules.order.service.dto.*;
+import co.yixiang.modules.order.param.OrderParam;
+import co.yixiang.modules.order.service.dto.OrderCountDto;
+import co.yixiang.modules.order.service.dto.OrderTimeDataDto;
+import co.yixiang.modules.order.service.dto.YxStoreOrderDto;
+import co.yixiang.modules.order.service.dto.YxStoreOrderQueryCriteria;
 import co.yixiang.modules.order.vo.*;
 import co.yixiang.modules.user.domain.YxUser;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +51,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      */
     ConfirmOrderVo confirmOrder(YxUser yxUser, String cartIds);
 
-//    Map<String,Object> chartCount(int cate,int type);
+
 
     /**
      * 确认订单退款
@@ -57,7 +59,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      * @param price 金额
      * @param type ShopCommonEnum
      */
-    void orderRefund(String orderId,Double price,Integer type);
+    void orderRefund(String orderId, BigDecimal price, Integer type);
 
     /**
      * 订单发货
@@ -73,7 +75,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      * @param orderId 单号
      * @param price 价格
      */
-    void editOrderPrice(String orderId,Double price);
+    void editOrderPrice(String orderId,String price);
 
     /**
      * 订单每月统计数据
@@ -105,7 +107,6 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      */
     void cancelOrder(String orderId,Long uid);
 
-    void cancelOrderByTask(int id);
 
     /**
      * 申请退款
@@ -166,6 +167,11 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      */
     YxStoreOrderQueryVo handleOrder(YxStoreOrderQueryVo order);
 
+    /**
+     * 支付成功后操作
+     * @param orderId 订单号
+     * @param payType 支付方式
+     */
     void paySuccess(String orderId,String payType);
 
     /**
@@ -175,17 +181,10 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      */
     void yuePay(String orderId,Long uid);
 
-//    WxPayMpOrderResult wxAppPay(String orderId) throws WxPayException;
-//
-//    WxPayMpOrderResult wxPay(String orderId) throws WxPayException;
-//
-//    WxPayMwebOrderResult wxH5Pay(String orderId) throws WxPayException;
-//
-//    WxPayAppOrderResult appPay(String orderId) throws WxPayException;
+
 
     String aliPay(String orderId) throws Exception;
 
-    //void delCacheOrderInfo(int uid, String key);
 
     /**
      * 创建订单
@@ -206,7 +205,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      * @return ComputeVo
      */
     ComputeVo computedOrder(YxUser userInfo, String key, String couponId,
-                            String useIntegral, String shippingType);
+                            String useIntegral, String shippingType,String addressId);
 
     /**
      * 订单信息
@@ -217,7 +216,6 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
     YxStoreOrderQueryVo getOrderInfo(String unique, Long uid);
 
 
-    Double getOrderSumPrice(List<YxStoreCartQueryVo> cartInfo,String key);
 
 
 

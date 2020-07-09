@@ -9,11 +9,9 @@
 package co.yixiang.modules.product.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-
 import co.yixiang.modules.product.domain.YxStoreProductReply;
 import co.yixiang.modules.product.vo.YxStoreProductReplyQueryVo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;

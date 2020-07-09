@@ -14,7 +14,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 /**
 * @author hupeng
@@ -38,7 +37,6 @@ public class YxExpress extends BaseDomain {
 
     /** 快递公司全称 */
     @NotBlank(message = "请输入快递公司名称")
-
     private String name;
 
 

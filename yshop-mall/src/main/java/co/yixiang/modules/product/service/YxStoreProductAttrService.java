@@ -11,7 +11,9 @@ package co.yixiang.modules.product.service;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.product.domain.YxStoreProductAttr;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
+import co.yixiang.modules.product.service.dto.FromatDetailDto;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -37,9 +39,27 @@ public interface YxStoreProductAttrService  extends BaseService<YxStoreProductAt
      */
     void decProductAttrStock(int num, Long productId, String unique);
 
-    int uniqueByStock(String unique);
 
+    /**
+     * 更加sku 唯一值获取sku对象
+     * @param unique 唯一值
+     * @return YxStoreProductAttrValue
+     */
     YxStoreProductAttrValue uniqueByAttrInfo(String unique);
 
-    Map<String, Object> getProductAttrDetail(long productId, long uid, int type);
+    /**
+     * 获取商品sku属性
+     * @param productId 商品id
+     * @return map
+     */
+    Map<String, Object> getProductAttrDetail(long productId);
+
+    /**
+     * 新增商品属性
+     * @param items attr
+     * @param attrs value
+     * @param productId 商品id
+     */
+    void insertYxStoreProductAttr(List<FromatDetailDto> items, List<Map<String,Object>> attrs,
+                                  Long productId);
 }

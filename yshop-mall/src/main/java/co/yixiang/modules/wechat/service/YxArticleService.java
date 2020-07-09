@@ -68,5 +68,5 @@ public interface YxArticleService  extends BaseService<YxArticle>{
     */
     void download(List<YxArticleDto> all, HttpServletResponse response) throws IOException;
 
-    void uploadNews(YxArticleDto yxArticleDTO);
+
 }

@@ -14,7 +14,6 @@ import co.yixiang.modules.user.domain.YxUserAddress;
 import co.yixiang.modules.user.param.AddressParam;
 import co.yixiang.modules.user.vo.YxUserAddressQueryVo;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**

@@ -26,6 +26,8 @@ public class YxStoreCouponIssueDto implements Serializable {
     /** 优惠券ID */
     private Integer cid;
 
+    private Integer ctype;
+
     /** 优惠券领取开启时间 */
     private Date startTime;
 

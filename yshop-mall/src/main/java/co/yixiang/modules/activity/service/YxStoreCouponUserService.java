@@ -12,6 +12,7 @@ import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.activity.domain.YxStoreCouponUser;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponUserDto;
 import co.yixiang.modules.activity.service.dto.YxStoreCouponUserQueryCriteria;
+import co.yixiang.modules.activity.vo.StoreCouponUserVo;
 import co.yixiang.modules.activity.vo.YxStoreCouponUserQueryVo;
 import org.springframework.data.domain.Pageable;
 
@@ -45,22 +46,22 @@ public interface YxStoreCouponUserService  extends BaseService<YxStoreCouponUser
 
 
     /**
-     * 获取满足金额可用优惠券
-     * @param uid uid
-     * @param price 金额
+     * 获取满足条件的可用优惠券
+     * @param cartIds 购物车ids
      * @return list
      */
-    List<YxStoreCouponUserQueryVo> beUsableCouponList(Long uid,Double price);
+    List<StoreCouponUserVo> beUsableCouponList(Long uid,String cartIds);
 
     /**
-     * 获取可用优惠券
+     * 获取下单时候满足的优惠券
      * @param uid uid
-     * @param price 金额
-     * @return YxStoreCouponUser
+     * @param price 总价格
+     * @param productIds list
+     * @return list
      */
-    YxStoreCouponUser beUsableCoupon(Long uid,double price);
+    List<StoreCouponUserVo> getUsableCouponList(Long uid, double price, List<String> productIds);
 
-   // void checkInvalidCoupon(int uid);
+
 
     /**
      * 获取用户优惠券

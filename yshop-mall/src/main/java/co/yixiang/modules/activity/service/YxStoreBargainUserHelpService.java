@@ -9,13 +9,10 @@
 package co.yixiang.modules.activity.service;
 
 
-
 import co.yixiang.common.service.BaseService;
-import co.yixiang.common.web.vo.Paging;
 import co.yixiang.modules.activity.domain.YxStoreBargainUserHelp;
 import co.yixiang.modules.activity.vo.YxStoreBargainUserHelpQueryVo;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**

@@ -9,9 +9,7 @@
 package co.yixiang.modules.order.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-
 import co.yixiang.modules.order.domain.YxStoreOrderStatus;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**

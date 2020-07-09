@@ -18,6 +18,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -46,7 +47,7 @@ public interface UserMapper extends CoreMapper<YxUser> {
 
     @Update("update yx_user set now_money=now_money-#{payPrice}" +
             " where uid=#{uid}")
-    int decPrice(@Param("payPrice") double payPrice,@Param("uid") Long uid);
+    int decPrice(@Param("payPrice") BigDecimal payPrice, @Param("uid") Long uid);
 //
 //    @Update("update yx_user set brokerage_price=brokerage_price+#{brokeragePrice}" +
 //            " where uid=#{uid}")
@@ -58,7 +59,7 @@ public interface UserMapper extends CoreMapper<YxUser> {
 
     @Update("update yx_user set now_money=now_money+#{price}" +
             " where uid=#{uid}")
-    int incMoney(@Param("uid") Long uid,double price);
+    int incMoney(@Param("uid") Long uid,BigDecimal price);
 
     @Update("update yx_user set integral=integral-#{integral}" +
             " where uid=#{uid}")
@@ -75,6 +76,6 @@ public interface UserMapper extends CoreMapper<YxUser> {
     void updateMoney(@Param("money") double money, @Param("id") long id);
 
     @Update("update yx_user set brokerage_price = brokerage_price+ ${price} where uid = #{id}")
-    void incBrokeragePrice(@Param("price")double price,@Param("id") Long id);
+    void incBrokeragePrice(@Param("price") BigDecimal price,@Param("id") Long id);
 
 }

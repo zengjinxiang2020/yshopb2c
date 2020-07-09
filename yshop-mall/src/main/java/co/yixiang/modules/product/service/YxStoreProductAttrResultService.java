@@ -11,6 +11,8 @@ package co.yixiang.modules.product.service;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.product.domain.YxStoreProductAttrResult;
 
+import java.util.Map;
+
 
 /**
 * @author hupeng
@@ -18,4 +20,10 @@ import co.yixiang.modules.product.domain.YxStoreProductAttrResult;
 */
 public interface YxStoreProductAttrResultService  extends BaseService<YxStoreProductAttrResult>{
 
+    /**
+     * 新增商品属性详情
+     * @param map map
+     * @param productId 商品id
+     */
+    void insertYxStoreProductAttrResult(Map<String, Object> map, Long productId);
 }
