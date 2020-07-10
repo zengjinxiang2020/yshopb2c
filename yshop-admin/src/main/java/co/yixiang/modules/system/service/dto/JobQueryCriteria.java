@@ -30,7 +30,7 @@ public class JobQueryCriteria {
     @Query
     private Long deptId;
 
-    @Query(propName = "deptIds",  type = Query.Type.IN)
+    @Query(propName = "deptId",  type = Query.Type.IN)
     private Set<Long> deptIds;
 
     @Query(type = Query.Type.BETWEEN)

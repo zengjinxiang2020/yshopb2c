@@ -50,14 +50,14 @@ public class WechatArticleController {
 
     @ApiOperation(value = "查询单条信息")
     @GetMapping(value = "/yxArticle/info/{id}")
-    @PreAuthorize("@el.check('admin','YXARTICLE_ALL','YXARTICLE_GET')")
+    @PreAuthorize("hasAnyRole('admin','YXARTICLE_ALL','YXARTICLE_GET')")
     public ResponseEntity getInfo(@PathVariable Integer id){
         return new ResponseEntity<>(yxArticleService.getById(id),HttpStatus.OK);
     }
 
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxArticle")
-    @PreAuthorize("@el.check('admin','YXARTICLE_ALL','YXARTICLE_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXARTICLE_ALL','YXARTICLE_SELECT')")
     public ResponseEntity getYxArticles(YxArticleQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(yxArticleService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -65,7 +65,7 @@ public class WechatArticleController {
 
     @ApiOperation(value = "新增")
     @PostMapping(value = "/yxArticle")
-    @PreAuthorize("@el.check('admin','YXARTICLE_ALL','YXARTICLE_CREATE')")
+    @PreAuthorize("hasAnyRole('admin','YXARTICLE_ALL','YXARTICLE_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxArticle resources){
         return new ResponseEntity<>(yxArticleService.save(resources),HttpStatus.CREATED);
     }
@@ -73,7 +73,7 @@ public class WechatArticleController {
 
     @ApiOperation(value = "修改")
     @PutMapping(value = "/yxArticle")
-    @PreAuthorize("@el.check('admin','YXARTICLE_ALL','YXARTICLE_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXARTICLE_ALL','YXARTICLE_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxArticle resources){
         yxArticleService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -82,7 +82,7 @@ public class WechatArticleController {
     @ForbidSubmit
     @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxArticle/{id}")
-    @PreAuthorize("@el.check('admin','YXARTICLE_ALL','YXARTICLE_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXARTICLE_ALL','YXARTICLE_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         yxArticleService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
@@ -91,7 +91,7 @@ public class WechatArticleController {
     @ForbidSubmit
     @ApiOperation(value = "发布文章")
     @GetMapping(value = "/yxArticle/publish/{id}")
-    @PreAuthorize("@el.check('admin','YXARTICLE_ALL','YXARTICLE_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXARTICLE_ALL','YXARTICLE_DELETE')")
     public ResponseEntity publish(@PathVariable Integer id)  throws Exception{
         YxArticleDto yxArticleDTO= new YxArticleDto();
         YxArticle yxArticle = yxArticleService.getById(id);

@@ -50,7 +50,7 @@ public class StoreProductReplyController {
     @Log("查询")
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxStoreProductReply")
-    @PreAuthorize("@el.check('admin','YXSTOREPRODUCTREPLY_ALL','YXSTOREPRODUCTREPLY_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREPRODUCTREPLY_ALL','YXSTOREPRODUCTREPLY_SELECT')")
     public ResponseEntity getYxStoreProductReplys(YxStoreProductReplyQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(yxStoreProductReplyService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -60,7 +60,7 @@ public class StoreProductReplyController {
     @Log("修改")
     @ApiOperation(value = "修改")
     @PutMapping(value = "/yxStoreProductReply")
-    @PreAuthorize("@el.check('admin','YXSTOREPRODUCTREPLY_ALL','YXSTOREPRODUCTREPLY_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREPRODUCTREPLY_ALL','YXSTOREPRODUCTREPLY_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreProductReply resources){
         resources.setMerchantReplyTime(new Date());
         resources.setIsReply(ShopCommonEnum.REPLY_1.getValue());
@@ -72,7 +72,7 @@ public class StoreProductReplyController {
     @Log("删除")
     @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxStoreProductReply/{id}")
-    @PreAuthorize("@el.check('admin','YXSTOREPRODUCTREPLY_ALL','YXSTOREPRODUCTREPLY_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREPRODUCTREPLY_ALL','YXSTOREPRODUCTREPLY_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
         yxStoreProductReplyService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);

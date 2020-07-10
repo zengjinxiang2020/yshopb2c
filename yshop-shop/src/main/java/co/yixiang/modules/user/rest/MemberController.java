@@ -43,7 +43,7 @@ public class MemberController {
     @Log("查看下级")
     @ApiOperation(value = "查看下级")
     @PostMapping(value = "/yxUser/spread")
-    @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXUSER_ALL','YXUSER_EDIT')")
     public ResponseEntity getSpread(@RequestBody YxUserQueryCriteria criteria){
         return new ResponseEntity<>(yxUserService.querySpread(criteria.getUid(),criteria.getGrade()),
                 HttpStatus.OK);
@@ -52,7 +52,7 @@ public class MemberController {
     @Log("查询用户")
     @ApiOperation(value = "查询用户")
     @GetMapping(value = "/yxUser")
-    @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXUSER_ALL','YXUSER_SELECT')")
     public ResponseEntity getYxUsers(YxUserQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(yxUserService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -61,7 +61,7 @@ public class MemberController {
     @Log("修改用户")
     @ApiOperation(value = "修改用户")
     @PutMapping(value = "/yxUser")
-    @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXUSER_ALL','YXUSER_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxUser resources){
         yxUserService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -71,7 +71,7 @@ public class MemberController {
     @Log("删除用户")
     @ApiOperation(value = "删除用户")
     @DeleteMapping(value = "/yxUser/{uid}")
-    @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXUSER_ALL','YXUSER_DELETE')")
     public ResponseEntity delete(@PathVariable Integer uid){
         yxUserService.removeById(uid);
         return new ResponseEntity(HttpStatus.OK);
@@ -89,7 +89,7 @@ public class MemberController {
 
     @ApiOperation(value = "修改余额")
     @PostMapping(value = "/yxUser/money")
-    @PreAuthorize("@el.check('admin','YXUSER_ALL','YXUSER_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXUSER_ALL','YXUSER_EDIT')")
     public ResponseEntity updatePrice(@Validated @RequestBody UserMoneyDto param){
         yxUserService.updateMoney(param);
         return new ResponseEntity(HttpStatus.NO_CONTENT);

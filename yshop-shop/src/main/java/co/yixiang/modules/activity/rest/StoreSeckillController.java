@@ -45,7 +45,7 @@ public class StoreSeckillController {
     @Log("列表")
     @ApiOperation(value = "列表")
     @GetMapping(value = "/yxStoreSeckill")
-    @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_SELECT')")
     public ResponseEntity getYxStoreSeckills(YxStoreSeckillQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(yxStoreSeckillService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -55,7 +55,7 @@ public class StoreSeckillController {
     @Log("发布")
     @ApiOperation(value = "发布")
     @PutMapping(value = "/yxStoreSeckill")
-    @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreSeckill resources){
         if(ObjectUtil.isNull(resources.getId())){
             return new ResponseEntity<>(yxStoreSeckillService.save(resources),HttpStatus.CREATED);
@@ -69,7 +69,7 @@ public class StoreSeckillController {
     @Log("删除")
     @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxStoreSeckill/{id}")
-    @PreAuthorize("@el.check('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         yxStoreSeckillService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);

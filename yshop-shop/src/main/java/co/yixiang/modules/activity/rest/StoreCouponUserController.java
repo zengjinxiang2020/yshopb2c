@@ -39,7 +39,7 @@ public class StoreCouponUserController {
     @Log("查询Y")
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxStoreCouponUser")
-    @PreAuthorize("@el.check('admin','YXSTORECOUPONUSER_ALL','YXSTORECOUPONUSER_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORECOUPONUSER_ALL','YXSTORECOUPONUSER_SELECT')")
     public ResponseEntity getYxStoreCouponUsers(YxStoreCouponUserQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(yxStoreCouponUserService.queryAll(criteria,pageable),HttpStatus.OK);
     }

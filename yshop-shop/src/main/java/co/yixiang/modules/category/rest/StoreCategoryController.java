@@ -66,7 +66,7 @@ public class StoreCategoryController {
     @Log("查询商品分类")
     @ApiOperation(value = "查询商品分类")
     @GetMapping(value = "/yxStoreCategory")
-    @PreAuthorize("@el.check('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_SELECT')")
     public ResponseEntity getYxStoreCategorys(YxStoreCategoryQueryCriteria criteria, Pageable pageable){
         List<YxStoreCategoryDto> categoryDTOList = yxStoreCategoryService.queryAll(criteria);
         return new ResponseEntity<>(yxStoreCategoryService.buildTree(categoryDTOList),HttpStatus.OK);
@@ -77,7 +77,7 @@ public class StoreCategoryController {
     @ApiOperation(value = "新增商品分类")
     @PostMapping(value = "/yxStoreCategory")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
-    @PreAuthorize("@el.check('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_CREATE')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxStoreCategory resources){
         if(resources.getPid() != null && resources.getPid() > 0 && StrUtil.isBlank(resources.getPic())) {
             throw new YshopException("子分类图片必传");
@@ -94,7 +94,7 @@ public class StoreCategoryController {
     @ApiOperation(value = "修改商品分类")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PutMapping(value = "/yxStoreCategory")
-    @PreAuthorize("@el.check('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreCategory resources){
         if(resources.getPid() != null && resources.getPid() > 0 && StrUtil.isBlank(resources.getPic())) {
             throw new YshopException("子分类图片必传");
@@ -107,7 +107,7 @@ public class StoreCategoryController {
         boolean checkResult = yxStoreCategoryService.checkCategory(resources.getPid());
 
         if(!checkResult) throw new YshopException("分类最多能添加2级哦");
-        
+
         yxStoreCategoryService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -117,7 +117,7 @@ public class StoreCategoryController {
     @ApiOperation(value = "删除商品分类")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @DeleteMapping(value = "/yxStoreCategory/{id}")
-    @PreAuthorize("@el.check('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORECATEGORY_ALL','YXSTORECATEGORY_DELETE')")
     public ResponseEntity delete(@PathVariable String id){
         String[] ids = id.split(",");
         for (String newId: ids) {

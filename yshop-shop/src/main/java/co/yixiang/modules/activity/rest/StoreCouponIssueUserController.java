@@ -47,7 +47,7 @@ public class StoreCouponIssueUserController {
     @Log("查询")
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxStoreCouponIssueUser")
-    @PreAuthorize("@el.check('admin','YXSTORECOUPONISSUEUSER_ALL','YXSTORECOUPONISSUEUSER_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORECOUPONISSUEUSER_ALL','YXSTORECOUPONISSUEUSER_SELECT')")
     public ResponseEntity getYxStoreCouponIssueUsers(YxStoreCouponIssueUserQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(yxStoreCouponIssueUserService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class StoreCouponIssueUserController {
     @Log("删除")
     @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxStoreCouponIssueUser/{id}")
-    @PreAuthorize("@el.check('admin','YXSTORECOUPONISSUEUSER_ALL','YXSTORECOUPONISSUEUSER_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXSTORECOUPONISSUEUSER_ALL','YXSTORECOUPONISSUEUSER_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         yxStoreCouponIssueUserService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
