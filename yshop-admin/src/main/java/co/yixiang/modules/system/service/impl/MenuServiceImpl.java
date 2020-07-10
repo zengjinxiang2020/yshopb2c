@@ -313,7 +313,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
             throw new EntityExistException(Menu.class,"name",resources.getName());
         }
 
-        if(StringUtils.isNotBlank(resources.getComponentName())){
+        if(StringUtils.isNotBlank(resources.getComponentName())&&resources.getType()!=0){
             int menuCount = this.lambdaQuery().eq(Menu::getComponentName,resources.getComponentName()).count();
             if(menuCount > 1) throw new YshopException("请保持菜单组件名称唯一");
             menu1 = this.getOne(new QueryWrapper<Menu>().lambda()
