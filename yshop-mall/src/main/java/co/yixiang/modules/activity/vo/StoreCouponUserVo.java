@@ -32,7 +32,7 @@ public class StoreCouponUserVo implements Serializable
     private Double useMinPrice;
 
     /** 优惠券结束时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date endTime;
 
     private Integer type;

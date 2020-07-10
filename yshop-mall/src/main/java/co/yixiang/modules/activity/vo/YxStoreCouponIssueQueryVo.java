@@ -31,11 +31,11 @@ public class YxStoreCouponIssueQueryVo implements Serializable {
     private Integer ctype;
 
     @ApiModelProperty(value = "优惠券领取开启时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date startTime;
 
     @ApiModelProperty(value = "优惠券领取结束时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
     private Date endTime;
 
     @ApiModelProperty(value = "优惠券领取数量")

@@ -413,6 +413,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * @return YxStoreOrder
      */
     @Override
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     public YxStoreOrder createOrder(YxUser userInfo, String key, OrderParam param) {
 
         ComputeVo computeVo =  this.computedOrder(userInfo,key,param.getCouponId(),

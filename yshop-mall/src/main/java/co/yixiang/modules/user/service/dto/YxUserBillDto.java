@@ -50,7 +50,7 @@ public class YxUserBillDto implements Serializable {
     private String mark;
 
     /** 添加时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
     /** 0 = 带确定 1 = 有效 -1 = 无效 */
