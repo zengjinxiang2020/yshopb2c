@@ -9,6 +9,7 @@
 package co.yixiang.modules.system.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
@@ -141,12 +142,14 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
      */
     @Override
     public UserDto findByName(String userName) {
-      User user =  userMapper.findByName(userName);
+        User user = userMapper.findByName(userName);
+
+        if(user == null) throw new YshopException("当前用户不存在");
         //用户所属岗位
         user.setJob(jobService.getById(user.getJobId()));
         //用户所属部门
         user.setDept(deptService.getById(user.getDeptId()));
-        return generator.convert(user,UserDto.class);
+        return generator.convert(user, UserDto.class);
     }
 
     /**
