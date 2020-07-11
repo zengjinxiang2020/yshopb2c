@@ -121,6 +121,24 @@ public class QuartzJobServiceImpl extends BaseServiceImpl<QuartzJobMapper, Quart
         this.saveOrUpdate(quartzJob);
     }
 
+    @Override
+    public boolean save(QuartzJob quartzJob) {
+        if (quartzJob.getIsPause()) {
+            quartzManage.pauseJob(quartzJob);
+        }
+        return retBool(baseMapper.insert(quartzJob));
+    }
+
+    @Override
+    public boolean updateById(QuartzJob quartzJob) {
+        if (quartzJob.getIsPause()) {
+            quartzManage.pauseJob(quartzJob);
+        } else {
+            quartzManage.resumeJob(quartzJob);
+        }
+        return retBool(baseMapper.updateById(quartzJob));
+    }
+
     /**
      * 立即执行定时任务
      *

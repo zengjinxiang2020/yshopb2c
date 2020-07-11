@@ -49,7 +49,7 @@ public class WechatMenuController {
 
     @ApiOperation(value = "查询菜单")
     @GetMapping(value = "/YxWechatMenu")
-    @PreAuthorize("@el.check('admin','YxWechatMenu_ALL','YxWechatMenu_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YxWechatMenu_ALL','YxWechatMenu_SELECT')")
     public ResponseEntity getYxWechatMenus(){
         return new ResponseEntity(YxWechatMenuService.getOne(new QueryWrapper<YxWechatMenu>().lambda()
                 .eq(YxWechatMenu::getKey,ShopConstants.WECHAT_MENUS)),HttpStatus.OK);
@@ -58,7 +58,7 @@ public class WechatMenuController {
     @ForbidSubmit
     @ApiOperation(value = "创建菜单")
     @PostMapping(value = "/YxWechatMenu")
-    @PreAuthorize("@el.check('admin','YxWechatMenu_ALL','YxWechatMenu_CREATE')")
+    @PreAuthorize("hasAnyRole('admin','YxWechatMenu_ALL','YxWechatMenu_CREATE')")
     public ResponseEntity create( @RequestBody String jsonStr){
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         String jsonButton = jsonObject.get("buttons").toString();

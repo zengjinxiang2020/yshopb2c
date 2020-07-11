@@ -41,7 +41,7 @@ public class UserExtractController {
     @Log("查询")
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxUserExtract")
-    @PreAuthorize("@el.check('admin','YXUSEREXTRACT_ALL','YXUSEREXTRACT_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXUSEREXTRACT_ALL','YXUSEREXTRACT_SELECT')")
     public ResponseEntity getYxUserExtracts(YxUserExtractQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(yxUserExtractService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -51,7 +51,7 @@ public class UserExtractController {
     @Log("修改审核")
     @ApiOperation(value = "修改审核")
     @PutMapping(value = "/yxUserExtract")
-    @PreAuthorize("@el.check('admin','YXUSEREXTRACT_ALL','YXUSEREXTRACT_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXUSEREXTRACT_ALL','YXUSEREXTRACT_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxUserExtract resources){
         yxUserExtractService.doExtract(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);

@@ -45,7 +45,7 @@ public class SystemUserLevelController {
     @Log("查询")
     @ApiOperation(value = "查询")
     @GetMapping(value = "/yxSystemUserLevel")
-    @PreAuthorize("@el.check('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_SELECT')")
     public ResponseEntity getYxSystemUserLevels(YxSystemUserLevelQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(yxSystemUserLevelService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -54,7 +54,7 @@ public class SystemUserLevelController {
     @Log("新增")
     @ApiOperation(value = "新增")
     @PostMapping(value = "/yxSystemUserLevel")
-    @PreAuthorize("@el.check('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_CREATE')")
+    @PreAuthorize("hasAnyRole('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_CREATE')")
     public ResponseEntity create(@Validated @RequestBody YxSystemUserLevel resources){
         return new ResponseEntity<>(yxSystemUserLevelService.save(resources),HttpStatus.CREATED);
     }
@@ -63,7 +63,7 @@ public class SystemUserLevelController {
     @Log("修改")
     @ApiOperation(value = "修改")
     @PutMapping(value = "/yxSystemUserLevel")
-    @PreAuthorize("@el.check('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxSystemUserLevel resources){
         yxSystemUserLevelService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -73,7 +73,7 @@ public class SystemUserLevelController {
     @Log("删除")
     @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxSystemUserLevel/{id}")
-    @PreAuthorize("@el.check('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXSYSTEMUSERLEVEL_ALL','YXSYSTEMUSERLEVEL_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         yxSystemUserLevelService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);

@@ -77,7 +77,7 @@ public class StoreProductController {
     @Log("查询商品")
     @ApiOperation(value = "查询商品")
     @GetMapping(value = "/yxStoreProduct")
-    @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_SELECT')")
     public ResponseEntity getYxStoreProducts(YxStoreProductQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(yxStoreProductService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -87,7 +87,7 @@ public class StoreProductController {
     @ApiOperation(value = "新增/修改商品")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @PostMapping(value = "/yxStoreProduct/addOrSave")
-    @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_CREATE')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_CREATE')")
     public ResponseEntity create(@Validated @RequestBody StoreProductDto storeProductDto){
         yxStoreProductService.insertAndEditYxStoreProduct(storeProductDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -99,7 +99,7 @@ public class StoreProductController {
     @ApiOperation(value = "删除商品")
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @DeleteMapping(value = "/yxStoreProduct/{id}")
-    @PreAuthorize("@el.check('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
         yxStoreProductService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);

@@ -113,7 +113,7 @@ public class QuartzJobController {
     @PutMapping
     @PreAuthorize("@el.check('admin','timing:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody QuartzJob resources){
-        quartzJobService.saveOrUpdate(resources);
+        quartzJobService.updateById(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

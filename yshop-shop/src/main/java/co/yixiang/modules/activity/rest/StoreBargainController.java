@@ -49,7 +49,7 @@ public class StoreBargainController {
     @Log("查询砍价")
     @ApiOperation(value = "查询砍价")
     @GetMapping(value = "/yxStoreBargain")
-    @PreAuthorize("@el.check('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_SELECT')")
     public ResponseEntity getYxStoreBargains(YxStoreBargainQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(yxStoreBargainService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -59,7 +59,7 @@ public class StoreBargainController {
     @Log("修改砍价")
     @ApiOperation(value = "修改砍价")
     @PutMapping(value = "/yxStoreBargain")
-    @PreAuthorize("@el.check('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_EDIT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreBargain resources){
         if(resources.getBargainMinPrice().compareTo(resources.getBargainMaxPrice()) >= 0){
             throw new YshopException("单次砍最低价不能高于单次砍最高价");
@@ -79,7 +79,7 @@ public class StoreBargainController {
     @Log("删除砍价")
     @ApiOperation(value = "删除砍价")
     @DeleteMapping(value = "/yxStoreBargain/{id}")
-    @PreAuthorize("@el.check('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_DELETE')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREBARGAIN_ALL','YXSTOREBARGAIN_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         yxStoreBargainService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
