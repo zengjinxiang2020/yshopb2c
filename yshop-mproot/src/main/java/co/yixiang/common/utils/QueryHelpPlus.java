@@ -13,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Zheng Jie
@@ -105,8 +102,8 @@ public class QueryHelpPlus {
                             List<Object> UNIX_TIMESTAMP = new ArrayList<>((List<Object>)val);
                             if(!UNIX_TIMESTAMP.isEmpty()){
                                 SimpleDateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                long time1 = fm.parse(UNIX_TIMESTAMP.get(0).toString()).getTime()/1000;
-                                long time2 = fm.parse(UNIX_TIMESTAMP.get(1).toString()).getTime()/1000;
+                                Date time1 = fm.parse(UNIX_TIMESTAMP.get(0).toString());
+                                Date time2 = fm.parse(UNIX_TIMESTAMP.get(1).toString());
                                 queryWrapper.between(finalAttributeName, time1, time2);
                             }
                             break;

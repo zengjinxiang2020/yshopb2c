@@ -19,7 +19,7 @@ public class YxStoreOrderQueryCriteria{
 
     // 模糊
     @Query(type = Query.Type.UNIX_TIMESTAMP)
-    private List<String> addTime;
+    private List<String> createTime;
 
 
     // 模糊
