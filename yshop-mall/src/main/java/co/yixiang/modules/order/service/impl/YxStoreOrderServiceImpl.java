@@ -25,14 +25,11 @@ import co.yixiang.enums.*;
 import co.yixiang.event.TemplateBean;
 import co.yixiang.event.TemplateEvent;
 import co.yixiang.event.TemplateListenEnum;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.EntityExistException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.domain.YxStoreCouponUser;
 import co.yixiang.modules.activity.domain.YxStorePink;
 import co.yixiang.modules.activity.service.*;
-
-import co.yixiang.modules.activity.service.mapper.YxStoreCouponUserMapper;
 import co.yixiang.modules.activity.vo.StoreCouponUserVo;
 import co.yixiang.modules.cart.domain.YxStoreCart;
 import co.yixiang.modules.cart.service.YxStoreCartService;
@@ -41,8 +38,7 @@ import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.domain.YxExpress;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.domain.YxStoreOrderCartInfo;
-import co.yixiang.modules.order.domain.YxStoreOrderStatus;
-import co.yixiang.modules.order.param.*;
+import co.yixiang.modules.order.param.OrderParam;
 import co.yixiang.modules.order.service.YxExpressService;
 import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
 import co.yixiang.modules.order.service.YxStoreOrderService;
@@ -50,16 +46,13 @@ import co.yixiang.modules.order.service.YxStoreOrderStatusService;
 import co.yixiang.modules.order.service.dto.*;
 import co.yixiang.modules.order.service.mapper.StoreOrderMapper;
 import co.yixiang.modules.order.vo.*;
-import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.domain.YxStoreProductReply;
 import co.yixiang.modules.product.service.YxStoreProductReplyService;
 import co.yixiang.modules.product.service.YxStoreProductService;
-import co.yixiang.modules.product.service.mapper.StoreProductMapper;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
 import co.yixiang.modules.shop.domain.YxSystemStore;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
-
 import co.yixiang.modules.shop.service.YxSystemStoreStaffService;
 import co.yixiang.modules.template.domain.YxShippingTemplates;
 import co.yixiang.modules.template.domain.YxShippingTemplatesFree;
@@ -69,11 +62,11 @@ import co.yixiang.modules.template.service.YxShippingTemplatesRegionService;
 import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.domain.YxUserAddress;
-import co.yixiang.modules.user.domain.YxUserBill;
-import co.yixiang.modules.user.service.*;
+import co.yixiang.modules.user.service.YxUserAddressService;
+import co.yixiang.modules.user.service.YxUserBillService;
+import co.yixiang.modules.user.service.YxUserLevelService;
+import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.YxUserDto;
-import co.yixiang.modules.user.service.mapper.UserMapper;
-
 import co.yixiang.modules.user.vo.YxUserQueryVo;
 import co.yixiang.tools.domain.AlipayConfig;
 import co.yixiang.tools.domain.vo.TradeVo;
@@ -84,7 +77,6 @@ import co.yixiang.utils.RedisUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -118,39 +110,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
     @Autowired
     private IGenerator generator;
-   // private YxUserService userService;
-    @Autowired
-    private UserMapper userMapper;
+
+
     @Autowired
     private YxStorePinkService storePinkService;
-
     @Autowired
     private YxStoreOrderCartInfoService storeOrderCartInfoService;
-
-    @Autowired
-    private YxUserBillService yxUserBillService;
-
-    @Autowired
-    private YxStoreOrderStatusService yxStoreOrderStatusService;
-//    private final YxPayService payService;
-//    private final YxMiniPayService miniPayService;
-   // private final YxSystemStoreService systemStoreService;
-
     @Autowired
     private YxStoreCartService storeCartService;
-
-
-
-    @Autowired
-    private StoreOrderMapper yxStoreOrderMapper;
-    @Autowired
-    private StoreCartMapper storeCartMapper;
-
-
-    @Autowired
-    private YxSystemConfigService systemConfigService;
-    @Autowired
-    private RedisUtils redisUtils;
     @Autowired
     private YxUserAddressService userAddressService;
     @Autowired
@@ -159,8 +126,6 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     private YxStoreOrderStatusService orderStatusService;
     @Autowired
     private YxUserBillService billService;
-    @Autowired
-    private YxStoreProductReplyService storeProductReplyService;
     @Autowired
     private YxStoreCouponUserService couponUserService;
     @Autowired
@@ -195,15 +160,26 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     private YxShippingTemplatesRegionService shippingTemplatesRegionService;
     @Autowired
     private YxShippingTemplatesFreeService shippingTemplatesFreeService;
+    @Autowired
+    private YxSystemConfigService systemConfigService;
+    @Autowired
+    private YxUserLevelService userLevelService;
+
+
+    @Autowired
+    private StoreOrderMapper yxStoreOrderMapper;
+    @Autowired
+    private StoreCartMapper storeCartMapper;
+
+
+    @Autowired
+    private RedisUtils redisUtils;
+
     //@Autowired
     //private MqProducer mqProducer;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-
-
-    @Autowired
-    private YxUserLevelService userLevelService;
 
     @Autowired
     private ApplicationEventPublisher publisher;
