@@ -366,7 +366,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
 
         //如果分销没开启直接返回
         String open = systemConfigService.getData(SystemConfigConstants.STORE_BROKERAGE_OPEN);
-        if(StrUtil.isNotBlank(open) || ShopCommonEnum.ENABLE_2.getValue().toString().equals(open)) return;
+        if(StrUtil.isBlank(open) || ShopCommonEnum.ENABLE_2.getValue().toString().equals(open)) return;
         //当前用户信息
         YxUser userInfo = this.getById(uid);
         if(ObjectUtil.isNull(userInfo)) return;
