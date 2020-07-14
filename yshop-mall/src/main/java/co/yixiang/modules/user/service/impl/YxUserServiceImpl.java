@@ -81,8 +81,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
     @Autowired
     private UserBillMapper userBillMapper;
 
-    @Autowired
-    private YxUserBillService yxUserBillService;
+
     @Autowired
     private YxSystemUserLevelService systemUserLevelService;
     @Autowired

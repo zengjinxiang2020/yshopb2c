@@ -28,6 +28,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -43,16 +44,17 @@ import java.util.*;
 * @date 2020-05-13
 */
 @Service
-@AllArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMapper, YxStoreSeckill> implements YxStoreSeckillService {
 
-    private final IGenerator generator;
+    @Autowired
+    private IGenerator generator;
 
-    private final YxStoreSeckillMapper yxStoreSeckillMapper;
+    @Autowired
+    private YxStoreSeckillMapper yxStoreSeckillMapper;
 
-
-    private final YxStoreProductReplyService replyService;
+    @Autowired
+    private YxStoreProductReplyService replyService;
 
 
     /**

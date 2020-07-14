@@ -9,6 +9,7 @@
 package co.yixiang.modules.user.rest;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.bean.LocalUser;
@@ -16,6 +17,7 @@ import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.BillDetailEnum;
+import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.domain.YxSystemGroupData;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.shop.service.dto.YxSystemGroupDataQueryCriteria;
@@ -26,6 +28,7 @@ import co.yixiang.modules.user.service.YxUserRechargeService;
 import co.yixiang.mp.service.WeixinPayService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
 import io.swagger.annotations.Api;
@@ -108,6 +111,29 @@ public class UserRechargeController {
             WxPayMwebOrderResult result = (WxPayMwebOrderResult)weixinPayService
                     .unifyPay(orderSn,param.getFrom(), BillDetailEnum.TYPE_1.getValue(),"H5充值");
             map.put("data",result.getMwebUrl());
+        }else if(AppFromEnum.ROUNTINE.getValue().equals(param.getFrom())){
+            WxPayMpOrderResult wxPayMpOrderResult = (WxPayMpOrderResult)weixinPayService
+                    .unifyPay(orderSn,param.getFrom(), BillDetailEnum.TYPE_1.getValue(),"小程序充值");
+            Map<String,String> jsConfig = new HashMap<>();
+            jsConfig.put("timeStamp",wxPayMpOrderResult.getTimeStamp());
+            jsConfig.put("appId",wxPayMpOrderResult.getAppId());
+            jsConfig.put("paySign",wxPayMpOrderResult.getPaySign());
+            jsConfig.put("nonceStr",wxPayMpOrderResult.getNonceStr());
+            jsConfig.put("package",wxPayMpOrderResult.getPackageValue());
+            jsConfig.put("signType",wxPayMpOrderResult.getSignType());
+            map.put("data",jsConfig);
+        }else if(AppFromEnum.APP.getValue().equals(param.getFrom())){
+            WxPayAppOrderResult wxPayAppOrderResult = (WxPayAppOrderResult)weixinPayService
+                    .unifyPay(orderSn,param.getFrom(), BillDetailEnum.TYPE_1.getValue(),"app充值");
+            Map<String,String> jsConfig = new HashMap<>();
+            jsConfig.put("partnerid",wxPayAppOrderResult.getPartnerId());
+            jsConfig.put("appid",wxPayAppOrderResult.getAppId());
+            jsConfig.put("prepayid",wxPayAppOrderResult.getPrepayId());
+            jsConfig.put("package",wxPayAppOrderResult.getPackageValue());
+            jsConfig.put("noncestr",wxPayAppOrderResult.getNonceStr());
+            jsConfig.put("timestamp",wxPayAppOrderResult.getTimeStamp());
+            jsConfig.put("sign",wxPayAppOrderResult.getSign());
+            map.put("data",jsConfig);
         }else{
             WxPayMpOrderResult result = (WxPayMpOrderResult)weixinPayService
                     .unifyPay(orderSn,param.getFrom(), BillDetailEnum.TYPE_1.getValue(),"公众号充值");

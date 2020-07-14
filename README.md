@@ -24,7 +24,7 @@ yshop基于当前流行技术组合的前后端分离商城系统： SpringBoot2
 - 可以具体查看演示地址查看当前版本已经完成的功能，不再絮叨啦
 
 #### 项目结构
-项目采用分模块开发方式
+yshop3.0项目采用分模块开发方式
 - yshop-app       移动端API模块（H5+uniapp端的API）
 - yshop-admin     管理后台模块
 - yshop-weixin    微信相关模块

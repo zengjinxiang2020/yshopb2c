@@ -191,6 +191,7 @@ public class OrderSupplyService {
                     jsConfig.put("package",wxPayMpOrderResult.getPackageValue());
                     jsConfig.put("signType",wxPayMpOrderResult.getSignType());
                     orderDTO.setJsConfig(jsConfig);
+                    map.put("payMsg","订单创建成功");
                     map.put("result",orderDTO);
                     return map;
                 }else if(AppFromEnum.APP.getValue().equals(from)){//app支付
@@ -206,6 +207,7 @@ public class OrderSupplyService {
                     jsConfig.put("sign",wxPayAppOrderResult.getSign());
                     orderDTO.setJsConfig(jsConfig);
                     map.put("result",orderDTO);
+                    map.put("payMsg","订单创建成功");
                     return map;
                 }else{//公众号
                     map.put("status","WECHAT_PAY");

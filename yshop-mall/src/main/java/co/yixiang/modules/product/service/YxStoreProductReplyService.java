@@ -35,6 +35,11 @@ public interface YxStoreProductReplyService  extends BaseService<YxStoreProductR
      */
     ReplyCountVo getReplyCount(long productId);
 
+    /**
+     * 处理评价
+     * @param replyQueryVo replyQueryVo
+     * @return YxStoreProductReplyQueryVo
+     */
     YxStoreProductReplyQueryVo handleReply(YxStoreProductReplyQueryVo replyQueryVo);
 
     /**

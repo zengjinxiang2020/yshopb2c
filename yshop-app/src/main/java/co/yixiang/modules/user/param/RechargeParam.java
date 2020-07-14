@@ -3,9 +3,7 @@ package co.yixiang.modules.user.param;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -22,8 +20,8 @@ public class RechargeParam  implements Serializable {
 
     private String from;
 
-    @NotNull(message = "金额必填")
-    @Min(value = 1,message = "充值金额不能低于1")
+    //@NotNull(message = "金额必填")
+   // @Min(value = 1,message = "充值金额不能低于1")
     private Double price;
 
     @JsonProperty(value = "paid_price")

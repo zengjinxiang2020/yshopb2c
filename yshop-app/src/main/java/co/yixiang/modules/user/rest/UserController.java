@@ -190,15 +190,13 @@ public class UserController {
     }
 
 
+    @AuthCheck
     @PostMapping("/user/edit")
     @ApiOperation(value = "用户修改信息",notes = "用修改信息")
     public ApiResult<Object> edit(@Validated @RequestBody UserEditParam param){
-        int uid = SecurityUtils.getUserId().intValue();
-
-        YxUser yxUser = new YxUser();
+        YxUser yxUser = LocalUser.getUser();
         yxUser.setAvatar(param.getAvatar());
         yxUser.setNickname(param.getNickname());
-        yxUser.setUid(Long.valueOf(String.valueOf(uid)));
 
         yxUserService.updateById(yxUser);
 

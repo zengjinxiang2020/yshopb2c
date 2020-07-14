@@ -109,8 +109,8 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProduct
 
     /**
      * 处理评价
-     * @param replyQueryVo
-     * @return
+     * @param replyQueryVo replyQueryVo
+     * @return YxStoreProductReplyQueryVo
      */
     @Override
     public YxStoreProductReplyQueryVo handleReply(YxStoreProductReplyQueryVo replyQueryVo) {

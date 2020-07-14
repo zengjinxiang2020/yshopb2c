@@ -132,7 +132,7 @@ public class AuthService {
                 //构建微信用户
                 WechatUserDto wechatUserDTO = WechatUserDto.builder()
                         .nickname(nickname)
-                        .openid(wxMpUser.getOpenId())
+                        .routineOpenid(wxMpUser.getOpenId())
                         .unionId(wxMpUser.getUnionId())
                         .sex(Integer.valueOf(wxMpUser.getGender()))
                         .language(wxMpUser.getLanguage())
@@ -151,7 +151,7 @@ public class AuthService {
             } else {
                 returnUser = yxUser;
                 WechatUserDto wechatUser =yxUser.getWxProfile();
-                if ((StrUtil.isBlank(wechatUser.getOpenid()) && StrUtil.isNotBlank(wxMpUser.getOpenId()))
+                if ((StrUtil.isBlank(wechatUser.getRoutineOpenid()) && StrUtil.isNotBlank(wxMpUser.getOpenId()))
                         || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(wxMpUser.getUnionId()))) {
                     wechatUser.setRoutineOpenid(wxMpUser.getOpenId());
                     wechatUser.setUnionId(wxMpUser.getUnionId());
@@ -244,6 +244,8 @@ public class AuthService {
             }
 
             userService.setSpread(spread,returnUser.getUid());
+
+            log.error("spread:{}",spread);
 
             return returnUser;
 
