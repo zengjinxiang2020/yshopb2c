@@ -3217,10 +3217,10 @@ CREATE TABLE `yx_store_bargain`  (
 -- Records of yx_store_bargain
 -- ----------------------------
 INSERT INTO `yx_store_bargain` VALUES (2, 24, '砍价测试01', 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '张', 100, 1, 'https://image.dayouqiantu.cn/5ca05103ad634.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '2020-06-20 10:57:33', '2020-06-26 10:57:37', '70gA4彩色打印复印', 10.00, 0.01, 1, 2.00, 0.01, 1, 1, '<p style=\"text-align: center;\">7<strong>文件请传QQ2412733099，</strong></p><p style=\"text-align: center;\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\"text-align: center;\"><strong>手机/微信：13733990583</strong></p><p style=\"text-align: center;\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\"text-align: center;\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\"text-align: center;\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\"text-align: center;\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\"text-align: center;\"><strong>更大量请联系店主报价，</strong></p><p style=\"text-align: center;\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\"text-align: center;\"><strong>付款时直接抵扣</strong></p><p style=\"text-align: center;\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\"text-align: center;\"><img src=\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\" style=\"max-width:100%;\"><strong><br></strong></p><p style=\"text-align: center;\"><br></p>', 0.00, '70gA4彩色打印复印', 0.50, 0, 0, 0, '2020-06-20 10:57:49', NULL, 1, 0.00, '<p>这里是规则</p>', 110, 5);
-INSERT INTO `yx_store_bargain` VALUES (3, 24, '砍价活动2', 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '张', 99, 2, 'https://image.dayouqiantu.cn/5ca05103ad634.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg,http://localhost:8000/file/pic/05ea40b831858a8cf423aa709840507c-20200228083801500.png', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '70gA4彩色打印复印', 0.01, 0.01, 1, 10.00, 0.01, 1, 1, '<p style=\"text-align: center;\">7<strong>文件请传QQ2412733099，</strong></p><p style=\"text-align: center;\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\"text-align: center;\"><strong>手机/微信：13733990583</strong></p><p style=\"text-align: center;\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\"text-align: center;\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\"text-align: center;\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\"text-align: center;\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\"text-align: center;\"><strong>更大量请联系店主报价，</strong></p><p style=\"text-align: center;\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\"text-align: center;\"><strong>付款时直接抵扣</strong></p><p style=\"text-align: center;\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\"text-align: center;\"><img src=\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\" style=\"max-width:100%;\"><strong><br></strong></p><p style=\"text-align: center;\"><br></p>', 0.00, '70gA4彩色打印复印', 0.50, 0, 0, 0, '0000-00-00 00:00:00', NULL, 1, 0.00, '<p>444444</p>', 34, 1);
-INSERT INTO `yx_store_bargain` VALUES (4, 28, '9999', 'http://localhost:8000/file/pic/资讯-20200311043727918.png', '张', 0, 0, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, 0.01, NULL, 1, NULL, NULL, 1, 1, '<p>999999</p>', 0.00, '333', 0.00, 0, 0, 1, '0000-00-00 00:00:00', NULL, 0, 0.00, '<p>33333</p>', 0, 0);
-INSERT INTO `yx_store_bargain` VALUES (5, 28, '9999', 'http://localhost:8000/file/pic/资讯-20200311043727918.png', '张', 1, 0, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, 0.01, 1.00, 1, 1.00, 1.00, 1, 1, '<p>999999</p>', 0.00, '', 0.00, 0, 0, 1, '0000-00-00 00:00:00', NULL, 0, 0.00, '<p>7777</p>', 0, 0);
-INSERT INTO `yx_store_bargain` VALUES (6, 27, '9999', 'http://localhost:8000/file/pic/资讯-20200311043727918.png', '9', 2, 0, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, 0.01, 1.00, 1, 1.00, 1.00, 1, 1, '<p>999999</p>', 0.00, '999', 0.00, 0, 0, 1, '0000-00-00 00:00:00', NULL, 0, 0.00, '<p>666</p>', 0, 0);
+INSERT INTO `yx_store_bargain` VALUES (3, 24, '砍价活动2', 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '张', 99, 2, 'https://image.dayouqiantu.cn/5ca05103ad634.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg,http://localhost:8000/file/pic/05ea40b831858a8cf423aa709840507c-20200228083801500.png', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '70gA4彩色打印复印', 0.01, 0.01, 1, 10.00, 0.01, 1, 1, '<p style=\"text-align: center;\">7<strong>文件请传QQ2412733099，</strong></p><p style=\"text-align: center;\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\"text-align: center;\"><strong>手机/微信：13733990583</strong></p><p style=\"text-align: center;\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\"text-align: center;\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\"text-align: center;\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\"text-align: center;\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\"text-align: center;\"><strong>更大量请联系店主报价，</strong></p><p style=\"text-align: center;\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\"text-align: center;\"><strong>付款时直接抵扣</strong></p><p style=\"text-align: center;\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\"text-align: center;\"><img src=\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\" style=\"max-width:100%;\"><strong><br></strong></p><p style=\"text-align: center;\"><br></p>', 0.00, '70gA4彩色打印复印', 0.50, 0, 0, 0, '2020-06-25 18:54:35', NULL, 1, 0.00, '<p>444444</p>', 34, 1);
+INSERT INTO `yx_store_bargain` VALUES (4, 28, '9999', 'http://localhost:8000/file/pic/资讯-20200311043727918.png', '张', 0, 0, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', '2020-06-25 18:54:35', '2020-06-25 18:54:35', NULL, 0.01, NULL, 1, NULL, NULL, 1, 1, '<p>999999</p>', 0.00, '333', 0.00, 0, 0, 1, '2020-06-25 18:54:35', NULL, 0, 0.00, '<p>33333</p>', 0, 0);
+INSERT INTO `yx_store_bargain` VALUES (5, 28, '9999', 'http://localhost:8000/file/pic/资讯-20200311043727918.png', '张', 1, 0, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', '2020-06-25 18:54:35', '2020-06-25 18:54:35', NULL, 0.01, 1.00, 1, 1.00, 1.00, 1, 1, '<p>999999</p>', 0.00, '', 0.00, 0, 0, 1, '2020-06-25 18:54:35', NULL, 0, 0.00, '<p>7777</p>', 0, 0);
+INSERT INTO `yx_store_bargain` VALUES (6, 27, '9999', 'http://localhost:8000/file/pic/资讯-20200311043727918.png', '9', 2, 0, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', '2020-06-25 18:54:35', '2020-06-25 18:54:35', NULL, 0.01, 1.00, 1, 1.00, 1.00, 1, 1, '<p>999999</p>', 0.00, '999', 0.00, 0, 0, 1, '2020-06-25 18:54:35', NULL, 0, 0.00, '<p>666</p>', 0, 0);
 INSERT INTO `yx_store_bargain` VALUES (7, 19, '70gA4黑白打印复印', 'https://image.dayouqiantu.cn/5ca011a1cd487.jpg', '张', 112, 56, 'https://image.dayouqiantu.cn/5ca01c7fc9238.jpg,https://image.dayouqiantu.cn/5ca01c7676042.jpg', '2020-06-25 23:23:10', '2020-06-30 00:00:00', NULL, 4.01, 1.00, 1, 2.00, 1.00, 1, 1, '<p style=\"text-align: center;\"><strong>文件请传QQ2412733099，</strong></p><p style=\"text-align: center;\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\"text-align: center;\"><strong>手机/微信：13733990583</strong></p><p style=\"text-align: center;\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\"text-align: center;\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\"text-align: center;\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\"text-align: center;\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\"text-align: center;\"><strong>更大量请联系店主报价，</strong></p><p style=\"text-align: center;\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\"text-align: center;\"><strong>付款时直接抵扣</strong></p><p style=\"text-align: center;\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\"text-align: left;\"><strong><br></strong></p><p><br></p><p>&nbsp; &nbsp;&nbsp;<img src=\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\" style=\"max-width: 100%;\"><br></p>', 0.00, '打印复印资料A4黑白彩色印刷画册书本装订图文数码快印服务', 0.20, 1, 1, 0, '2020-06-25 23:23:24', '2020-06-25 23:29:01', 1, 0.00, '<p>5555</p>', 0, 0);
 
 -- ----------------------------
@@ -3371,13 +3371,13 @@ CREATE TABLE `yx_store_category`  (
 -- ----------------------------
 -- Records of yx_store_category
 -- ----------------------------
-INSERT INTO `yx_store_category` VALUES (1, 0, '图文广告', 1, '', 1, '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_store_category` VALUES (2, 1, '写真', 1, 'http://localhost:8000/file/pic/资讯-20200311043727918.png', 1, '0000-00-00 00:00:00', NULL, 1);
-INSERT INTO `yx_store_category` VALUES (3, 1, '平面设计', 1, 'http://localhost:8000/file/pic/资讯-20200311043727918.png', 1, '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_store_category` VALUES (5, 1, '名片', 1, 'http://localhost:8000/file/pic/砍价-20200311043720679.png', 1, '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_store_category` VALUES (6, 0, '666', 1, '', 1, '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_store_category` VALUES (7, 0, '99995', 1, '', 1, '0000-00-00 00:00:00', NULL, 1);
-INSERT INTO `yx_store_category` VALUES (8, 7, '8888', 1, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', 1, '0000-00-00 00:00:00', NULL, 1);
+INSERT INTO `yx_store_category` VALUES (1, 0, '图文广告', 1, '', 1, '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_store_category` VALUES (2, 1, '写真', 1, 'http://localhost:8000/file/pic/资讯-20200311043727918.png', 1, '2020-06-25 18:54:35', NULL, 1);
+INSERT INTO `yx_store_category` VALUES (3, 1, '平面设计', 1, 'http://localhost:8000/file/pic/资讯-20200311043727918.png', 1, '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_store_category` VALUES (5, 1, '名片', 1, 'http://localhost:8000/file/pic/砍价-20200311043720679.png', 1, '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_store_category` VALUES (6, 0, '666', 1, '', 1, '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_store_category` VALUES (7, 0, '99995', 1, '', 1, '2020-06-25 18:54:35', NULL, 1);
+INSERT INTO `yx_store_category` VALUES (8, 7, '8888', 1, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', 1, '2020-06-25 18:54:35', NULL, 1);
 INSERT INTO `yx_store_category` VALUES (9, 0, '3333', 1, '', 1, '2020-06-25 17:11:45', NULL, 0);
 
 -- ----------------------------
@@ -3453,7 +3453,7 @@ CREATE TABLE `yx_store_coupon`  (
 -- ----------------------------
 -- Records of yx_store_coupon
 -- ----------------------------
-INSERT INTO `yx_store_coupon` VALUES (1, '双十一优惠券', 0, 5.00, 100.00, 20, 0, 1, NULL, 0, '2020-06-21 13:45:51', '0000-00-00 00:00:00', 0);
+INSERT INTO `yx_store_coupon` VALUES (1, '双十一优惠券', 0, 5.00, 100.00, 20, 0, 1, NULL, 0, '2020-06-21 13:45:51', '2020-06-25 18:54:35', 0);
 INSERT INTO `yx_store_coupon` VALUES (2, '5555', 0, 0.00, 0.00, 1, 0, 1, NULL, 0, '2020-06-25 19:30:55', NULL, 1);
 INSERT INTO `yx_store_coupon` VALUES (3, '6666', 0, 2.00, 10.00, 10, 0, 1, NULL, 0, '2020-06-25 22:48:47', NULL, 0);
 INSERT INTO `yx_store_coupon` VALUES (4, '商品券', 0, 1.00, 10.00, 80, 0, 1, '29', 1, '2020-07-02 17:30:49', '2020-07-05 14:46:37', 0);
@@ -3544,7 +3544,7 @@ CREATE TABLE `yx_store_coupon_user`  (
 -- Records of yx_store_coupon_user
 -- ----------------------------
 INSERT INTO `yx_store_coupon_user` VALUES (2, 4, 12, '商品券', 1.00, 10.00, '2020-07-05 14:47:19', '2020-07-07 16:51:27', '2020-09-23 14:47:19', '2020-07-07 16:51:27', 'get', 1, 0, 0);
-INSERT INTO `yx_store_coupon_user` VALUES (3, 1, 12, '双十一优惠券', 5.00, 100.00, '2020-07-05 14:53:05', NULL, '2020-07-25 14:53:05', '0000-00-00 00:00:00', 'get', 0, 0, 0);
+INSERT INTO `yx_store_coupon_user` VALUES (3, 1, 12, '双十一优惠券', 5.00, 100.00, '2020-07-05 14:53:05', NULL, '2020-07-25 14:53:05', '2020-06-25 18:54:35', 'get', 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_order
@@ -3948,7 +3948,7 @@ CREATE TABLE `yx_store_seckill`  (
 -- ----------------------------
 -- Records of yx_store_seckill
 -- ----------------------------
-INSERT INTO `yx_store_seckill` VALUES (32, 21, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca05103ad634.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg,http://pic.dayouqiantu.cn/2.jpeg', '70gA3彩色打印复印', '70gA3彩色打印复印', 0.01, 0.00, 1.00, 0.00, 0, 272, 73, '张', 0.00, '<p style=\"text-align: center;\">7<strong>文件请传QQ2412733099，</strong></p><p style=\"text-align: center;\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\"text-align: center;\"><strong>手机/微信：13733990583</strong></p><p style=\"text-align: center;\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\"text-align: center;\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\"text-align: center;\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\"text-align: center;\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\"text-align: center;\"><strong>更大量请联系店主报价，</strong></p><p style=\"text-align: center;\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\"text-align: center;\"><strong>付款时直接抵扣</strong></p><p style=\"text-align: center;\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\"text-align: center;\"><img src=\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\" style=\"max-width:100%;\"><strong><br></strong></p><p style=\"text-align: center;\"><br></p>', '2020-06-20', '2020-06-27', '2020-06-20 17:05:14', '0000-00-00 00:00:00', 1, 0, 0, 0, 10, 1, 214);
+INSERT INTO `yx_store_seckill` VALUES (32, 21, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca05103ad634.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg,http://pic.dayouqiantu.cn/2.jpeg', '70gA3彩色打印复印', '70gA3彩色打印复印', 0.01, 0.00, 1.00, 0.00, 0, 272, 73, '张', 0.00, '<p style=\"text-align: center;\">7<strong>文件请传QQ2412733099，</strong></p><p style=\"text-align: center;\"><strong>718504558或2412733099@qq.com邮箱，</strong></p><p style=\"text-align: center;\"><strong>手机/微信：13733990583</strong></p><p style=\"text-align: center;\"><strong>量大请联系店主，一定让您满意而归</strong></p><p style=\"text-align: center;\"><strong>&nbsp; &nbsp;实体店面经营 保质保量</strong></p><p style=\"text-align: center;\"><strong>A4黑白2毛/张，量大1毛/张，</strong></p><p style=\"text-align: center;\"><strong>A3黑白双面5毛/张，量大3毛/张，</strong></p><p style=\"text-align: center;\"><strong>更大量请联系店主报价，</strong></p><p style=\"text-align: center;\"><strong>每消费1元可积1分，1分抵现金1毛，</strong></p><p style=\"text-align: center;\"><strong>付款时直接抵扣</strong></p><p style=\"text-align: center;\"><strong>（如此优惠的基础上还可积分，积分抵现金）</strong></p><p style=\"text-align: center;\"><img src=\"https://image.dayouqiantu.cn/5ca03007150f1.jpg\" style=\"max-width:100%;\"><strong><br></strong></p><p style=\"text-align: center;\"><br></p>', '2020-06-20', '2020-06-27', '2020-06-20 17:05:14', '2020-06-25 18:54:35', 1, 0, 0, 0, 10, 1, 214);
 INSERT INTO `yx_store_seckill` VALUES (33, 24, 'https://image.dayouqiantu.cn/5ca011a1cd487.jpg', 'https://image.dayouqiantu.cn/5ca011a1cd487.jpg', '彩色打印', '彩色打印', 0.01, 0.00, 1.00, 0.00, 0, 10, 10, '张', 0.00, '<p>彩色打印</p>', '2020-06-25', '2020-06-29', '2020-06-25 23:18:13', NULL, 1, 0, 1, 0, 1, 1, 214);
 INSERT INTO `yx_store_seckill` VALUES (34, 29, 'https://image.dayouqiantu.cn/5ca0786c5d2c1.jpg', 'https://image.dayouqiantu.cn/5ca0786c5d2c1.jpg,https://image.dayouqiantu.cn/5ca081af6183f.jpg', '喷绘写真', '喷绘写真', 0.01, 0.00, 10.00, 0.00, 0, 331, 0, '平方', 0.00, '<p>喷绘写真</p>', '2020-07-05', '2020-07-15', '2020-07-05 12:24:17', NULL, 1, 0, 1, 0, 1, 1, 210);
 
@@ -8036,46 +8036,46 @@ CREATE TABLE `yx_system_group_data`  (
 -- ----------------------------
 -- Records of yx_system_group_data
 -- ----------------------------
-INSERT INTO `yx_system_group_data` VALUES (177, 'yshop_home_banner', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5c9f05aee5059.jpg\"],\"name\":\"banner2\",\"id\":177,\"pic\":\"https://image.dayouqiantu.cn/5c9f05aee5059.jpg\",\"sort\":1,\"url\":\"wwww\",\"status\":1}', '0000-00-00 00:00:00', NULL, 1, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (180, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5e85bfa61251d.png\"],\"uniapp_url\":\"/pages/shop/GoodsClass/index\",\"name\":\"全部商品\",\"id\":180,\"pic\":\"https://image.dayouqiantu.cn/yixiang/20200607/b2cc439a8768472d872197953a93b174png\",\"sort\":9,\"url\":\"/goods_list\",\"wxapp_url\":\"/pages/shop/GoodsClass/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 9, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (182, 'yshop_home_roll_news', '{\"uniapp_url\":\"/pages/shop/news/NewsList/index\",\"id\":182,\"pic\":\"https://i.loli.net/2019/10/18/DqOUgNf7wjuFpPT.png\",\"sort\":2,\"title\":\"分销、拼团、商户功能上线啦！\",\"url\":\"/news_list\",\"info\":\"yshop3.0\",\"wxapp_url\":\"/pages/shop/news/NewsList/main\",\"status\":1}', '0000-00-00 00:00:00', '2020-06-27 15:47:38', 2, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (183, 'yshop_hot_search', '{\"id\":183,\"title\":\"照片\"}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (184, 'yshop_hot_search', '{\"id\":184,\"title\":\"springboot\"}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (187, 'yshop_home_roll_news', '{\"uniapp_url\":\"/pages/shop/news/NewsList/index\",\"id\":187,\"sort\":1,\"url\":\"/news_list\",\"info\":\"yshop基于springboot2+Mybatisplus+jwt商城系统\",\"wxapp_url\":\"/pages/shop/news/NewsList/main\",\"status\":1}', '0000-00-00 00:00:00', '2020-06-27 15:47:22', 4, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (188, 'yshop_hot_search', '{\"id\":188,\"title\":\"打印\"}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (189, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5dec896eeb25a.png\"],\"uniapp_url\":\"/pages/user/UserVip/index\",\"name\":\"会员中心\",\"id\":189,\"pic\":\"https://image.dayouqiantu.cn/5dec896eeb25a.png\",\"sort\":9,\"url\":\"/user/vip\",\"wxapp_url\":\"/pages/user/UserVip/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 9, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (190, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428984d64d.png\"],\"uniapp_url\":\"/pages/user/coupon/UserCoupon/index\",\"name\":\"优惠券\",\"id\":190,\"pic\":\"https://image.dayouqiantu.cn/5db428984d64d.png\",\"sort\":8,\"url\":\"/user/get_coupon\",\"wxapp_url\":\"/pages/user/coupon/UserCoupon/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 8, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (191, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428a8d3ab0.png\"],\"uniapp_url\":\"/pages/shop/GoodsCollection/index\",\"name\":\"收藏商品\",\"id\":191,\"pic\":\"https://image.dayouqiantu.cn/5db428a8d3ab0.png\",\"sort\":7,\"url\":\"/collection\",\"wxapp_url\":\"/pages/shop/GoodsCollection/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 7, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (192, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428bd61b73.png\"],\"uniapp_url\":\"/pages/user/address/AddressManagement/index\",\"name\":\"地址管理\",\"id\":192,\"pic\":\"https://image.dayouqiantu.cn/5db428bd61b73.png\",\"sort\":6,\"url\":\"/user/add_manage\",\"wxapp_url\":\"/pages/user/address/AddressManagement/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 6, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (193, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428e28dd48.png\"],\"uniapp_url\":\"/pages/user/promotion/UserPromotion/index\",\"name\":\"我的推广\",\"id\":193,\"pic\":\"https://image.dayouqiantu.cn/5db428e28dd48.png\",\"sort\":5,\"url\":\"/user/user_promotion\",\"wxapp_url\":\"/pages/user/promotion/UserPromotion/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 5, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (194, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db42a4208c55.png\"],\"uniapp_url\":\"/pages/user/UserAccount/index\",\"name\":\"我的余额\",\"id\":194,\"pic\":\"https://image.dayouqiantu.cn/5db42a4208c55.png\",\"sort\":4,\"url\":\"/user/account\",\"wxapp_url\":\"/pages/user/UserAccount/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 4, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (195, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428f410462.png\"],\"uniapp_url\":\"/pages/user/signIn/Integral/index\",\"name\":\"我的积分\",\"id\":195,\"pic\":\"https://image.dayouqiantu.cn/5db428f410462.png\",\"sort\":3,\"url\":\"/user/integral\",\"wxapp_url\":\"/pages/user/signIn/Integral/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 3, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (196, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/news.png\"],\"uniapp_url\":\"/pages/shop/news/NewsList/index\",\"name\":\"图文资讯\",\"id\":196,\"pic\":\"https://image.dayouqiantu.cn/news.png\",\"sort\":8,\"url\":\"/news_list\",\"wxapp_url\":\"/pages/shop/news/NewsList/main\",\"status\":1}', '0000-00-00 00:00:00', '2020-06-26 18:26:24', 8, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (197, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5e4e939507b5e.png\"],\"uniapp_url\":\"/pages/shop/GoodsCollection/index\",\"name\":\"我的收藏\",\"id\":197,\"pic\":\"https://image.dayouqiantu.cn/yixiang/20200607/9283accb1c704a75aee5aac08a1a6219png\",\"sort\":7,\"url\":\"/collection\",\"wxapp_url\":\"/pages/shop/GoodsCollection/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 7, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (199, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/coupon.png\"],\"uniapp_url\":\"/pages/user/coupon/GetCoupon/index\",\"name\":\"优惠券\",\"id\":199,\"pic\":\"https://image.dayouqiantu.cn/coupon.png\",\"sort\":6,\"url\":\"/user/get_coupon\",\"wxapp_url\":\"/pages/user/coupon/GetCoupon/main\",\"status\":1}', '0000-00-00 00:00:00', '2020-06-26 18:26:36', 6, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (200, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/pink.png\"],\"uniapp_url\":\"/pages/activity/GoodsGroup/index\",\"name\":\"拼团专区\",\"id\":200,\"pic\":\"https://image.dayouqiantu.cn/pink.png\",\"sort\":5,\"url\":\"/activity/group\",\"wxapp_url\":\"/pages/activity/GoodsGroup/main\",\"status\":1}', '0000-00-00 00:00:00', '2020-06-26 18:26:45', 5, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (201, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5ddb7a37d58d9.png\"],\"uniapp_url\":\"/pages/orderAdmin/OrderIndex/index\",\"name\":\"商户管理\",\"id\":201,\"pic\":\"https://image.dayouqiantu.cn/5ddb7a37d58d9.png\",\"sort\":2,\"url\":\"/customer/index\",\"wxapp_url\":\"/pages/orderAdmin/OrderIndex/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 2, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (202, 'yshop_sign_day_num', '{\"sign_num\":\"10\",\"id\":205,\"day\":\"第一天\"}', '0000-00-00 00:00:00', NULL, 9, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (203, 'yshop_sign_day_num', '{\"sign_num\":\"20\",\"id\":\"\",\"day\":\"第二天\"}', '0000-00-00 00:00:00', NULL, 8, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (204, 'yshop_sign_day_num', '{\"sign_num\":\"30\",\"id\":\"\",\"day\":\"第三天\"}', '0000-00-00 00:00:00', NULL, 7, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (205, 'yshop_sign_day_num', '{\"addTime\":\"\",\"sign_num\":\"40\",\"id\":\"\",\"sort\":\"\",\"value\":\"\",\"day\":\"第四天\",\"status\":\"\"}', '0000-00-00 00:00:00', NULL, 6, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (206, 'yshop_sign_day_num', '{\"addTime\":\"\",\"sign_num\":\"50\",\"id\":\"\",\"sort\":\"\",\"value\":\"\",\"day\":\"第五天\",\"status\":\"\"}', '0000-00-00 00:00:00', NULL, 5, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (207, 'yshop_sign_day_num', '{\"addTime\":\"\",\"sign_num\":\"60\",\"id\":\"\",\"sort\":\"\",\"value\":\"\",\"day\":\"第六天\",\"status\":\"\"}', '0000-00-00 00:00:00', NULL, 4, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (208, 'yshop_sign_day_num', '{\"addTime\":\"\",\"sign_num\":\"100\",\"id\":\"\",\"sort\":\"\",\"value\":\"\",\"day\":\"奖励\",\"status\":\"\"}', '0000-00-00 00:00:00', NULL, 3, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (209, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/sign.png\"],\"uniapp_url\":\"/pages/user/signIn/Sign/index\",\"name\":\"积分签到\",\"id\":209,\"pic\":\"https://image.dayouqiantu.cn/sign.png\",\"sort\":4,\"url\":\"/user/sign\",\"wxapp_url\":\"/pages/user/signIn/Sign/main\",\"status\":1}', '0000-00-00 00:00:00', '2020-06-26 18:26:56', 4, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (210, 'yshop_seckill_time', '{\"continued\":2,\"id\":\"\",\"time\":5}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (211, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"3\",\"id\":\"\",\"sort\":\"\",\"time\":\"7\",\"value\":\"\",\"status\":\"\"}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (212, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"2\",\"id\":\"\",\"sort\":\"\",\"time\":\"10\",\"value\":\"\",\"status\":\"\"}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (213, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"3\",\"id\":\"\",\"sort\":\"\",\"time\":\"12\",\"value\":\"\",\"status\":\"\"}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (214, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"4\",\"id\":\"\",\"sort\":\"\",\"time\":\"15\",\"value\":\"\",\"status\":\"\"}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (215, 'yshop_seckill_time', '{\"continued\":\"2\",\"id\":223,\"time\":\"19\"}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (216, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/sekill.png\"],\"uniapp_url\":\"/pages/activity/GoodsSeckill/index\",\"name\":\"秒杀专区\",\"id\":216,\"pic\":\"https://image.dayouqiantu.cn/sekill.png\",\"sort\":3,\"url\":\"/activity/goods_seckill\",\"wxapp_url\":\"/pages/activity/GoodsSeckill/main\",\"status\":1}', '0000-00-00 00:00:00', '2020-06-26 18:27:06', 3, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (217, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/bargin.png\"],\"uniapp_url\":\"/pages/activity/GoodsBargain/index\",\"name\":\"砍价专区\",\"id\":217,\"pic\":\"https://image.dayouqiantu.cn/bargin.png\",\"sort\":2,\"url\":\"/activity/bargain\",\"wxapp_url\":\"/pages/activity/GoodsBargain/main\",\"status\":1}', '0000-00-00 00:00:00', '2020-06-26 18:27:16', 2, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (218, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5dfd7b748e053.png\"],\"uniapp_url\":\"/pages/activity/BargainRecord/index\",\"name\":\"砍价记录\",\"id\":218,\"pic\":\"https://image.dayouqiantu.cn/5dfd7b748e053.png\",\"sort\":1,\"url\":\"/activity/bargain/record\",\"wxapp_url\":\"/pages/activity/BargainRecord/main\",\"status\":1}', '0000-00-00 00:00:00', NULL, 1, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (219, 'yshop_home_banner', '{\"name\":\"222\",\"id\":\"\",\"pic\":\"https://image.dayouqiantu.cn/5c9f117f624ee.jpg\",\"sort\":\"\",\"url\":\"/\",\"status\":\"\"}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (221, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5e60da498cfdd.png\"],\"name\":\"订单核销\",\"id\":230,\"pic\":\"https://image.dayouqiantu.cn/5e60da498cfdd.png\",\"sort\":0,\"url\":\"/order/order_cancellation\",\"wxapp_url\":\"\",\"status\":1}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (222, 'yshop_recharge_price_ways', '{\"give_price\":\"10\",\"price\":\"100\",\"id\":\"\",\"sort\":0,\"status\":1}', '0000-00-00 00:00:00', NULL, 1, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (223, 'yshop_recharge_price_ways', '{\"give_price\":\"1\",\"price\":1,\"id\":\"\",\"sort\":0,\"status\":1}', '0000-00-00 00:00:00', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (177, 'yshop_home_banner', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5c9f05aee5059.jpg\"],\"name\":\"banner2\",\"id\":177,\"pic\":\"https://image.dayouqiantu.cn/5c9f05aee5059.jpg\",\"sort\":1,\"url\":\"wwww\",\"status\":1}', '2020-06-25 18:54:35', NULL, 1, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (180, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5e85bfa61251d.png\"],\"uniapp_url\":\"/pages/shop/GoodsClass/index\",\"name\":\"全部商品\",\"id\":180,\"pic\":\"https://image.dayouqiantu.cn/yixiang/20200607/b2cc439a8768472d872197953a93b174png\",\"sort\":9,\"url\":\"/goods_list\",\"wxapp_url\":\"/pages/shop/GoodsClass/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 9, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (182, 'yshop_home_roll_news', '{\"uniapp_url\":\"/pages/shop/news/NewsList/index\",\"id\":182,\"pic\":\"https://i.loli.net/2019/10/18/DqOUgNf7wjuFpPT.png\",\"sort\":2,\"title\":\"分销、拼团、商户功能上线啦！\",\"url\":\"/news_list\",\"info\":\"yshop3.0\",\"wxapp_url\":\"/pages/shop/news/NewsList/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-27 15:47:38', 2, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (183, 'yshop_hot_search', '{\"id\":183,\"title\":\"照片\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (184, 'yshop_hot_search', '{\"id\":184,\"title\":\"springboot\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (187, 'yshop_home_roll_news', '{\"uniapp_url\":\"/pages/shop/news/NewsList/index\",\"id\":187,\"sort\":1,\"url\":\"/news_list\",\"info\":\"yshop基于springboot2+Mybatisplus+jwt商城系统\",\"wxapp_url\":\"/pages/shop/news/NewsList/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-27 15:47:22', 4, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (188, 'yshop_hot_search', '{\"id\":188,\"title\":\"打印\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (189, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5dec896eeb25a.png\"],\"uniapp_url\":\"/pages/user/UserVip/index\",\"name\":\"会员中心\",\"id\":189,\"pic\":\"https://image.dayouqiantu.cn/5dec896eeb25a.png\",\"sort\":9,\"url\":\"/user/vip\",\"wxapp_url\":\"/pages/user/UserVip/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 9, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (190, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428984d64d.png\"],\"uniapp_url\":\"/pages/user/coupon/UserCoupon/index\",\"name\":\"优惠券\",\"id\":190,\"pic\":\"https://image.dayouqiantu.cn/5db428984d64d.png\",\"sort\":8,\"url\":\"/user/get_coupon\",\"wxapp_url\":\"/pages/user/coupon/UserCoupon/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 8, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (191, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428a8d3ab0.png\"],\"uniapp_url\":\"/pages/shop/GoodsCollection/index\",\"name\":\"收藏商品\",\"id\":191,\"pic\":\"https://image.dayouqiantu.cn/5db428a8d3ab0.png\",\"sort\":7,\"url\":\"/collection\",\"wxapp_url\":\"/pages/shop/GoodsCollection/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 7, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (192, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428bd61b73.png\"],\"uniapp_url\":\"/pages/user/address/AddressManagement/index\",\"name\":\"地址管理\",\"id\":192,\"pic\":\"https://image.dayouqiantu.cn/5db428bd61b73.png\",\"sort\":6,\"url\":\"/user/add_manage\",\"wxapp_url\":\"/pages/user/address/AddressManagement/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 6, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (193, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428e28dd48.png\"],\"uniapp_url\":\"/pages/user/promotion/UserPromotion/index\",\"name\":\"我的推广\",\"id\":193,\"pic\":\"https://image.dayouqiantu.cn/5db428e28dd48.png\",\"sort\":5,\"url\":\"/user/user_promotion\",\"wxapp_url\":\"/pages/user/promotion/UserPromotion/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 5, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (194, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db42a4208c55.png\"],\"uniapp_url\":\"/pages/user/UserAccount/index\",\"name\":\"我的余额\",\"id\":194,\"pic\":\"https://image.dayouqiantu.cn/5db42a4208c55.png\",\"sort\":4,\"url\":\"/user/account\",\"wxapp_url\":\"/pages/user/UserAccount/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 4, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (195, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5db428f410462.png\"],\"uniapp_url\":\"/pages/user/signIn/Integral/index\",\"name\":\"我的积分\",\"id\":195,\"pic\":\"https://image.dayouqiantu.cn/5db428f410462.png\",\"sort\":3,\"url\":\"/user/integral\",\"wxapp_url\":\"/pages/user/signIn/Integral/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 3, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (196, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/news.png\"],\"uniapp_url\":\"/pages/shop/news/NewsList/index\",\"name\":\"图文资讯\",\"id\":196,\"pic\":\"https://image.dayouqiantu.cn/news.png\",\"sort\":8,\"url\":\"/news_list\",\"wxapp_url\":\"/pages/shop/news/NewsList/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-26 18:26:24', 8, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (197, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5e4e939507b5e.png\"],\"uniapp_url\":\"/pages/shop/GoodsCollection/index\",\"name\":\"我的收藏\",\"id\":197,\"pic\":\"https://image.dayouqiantu.cn/yixiang/20200607/9283accb1c704a75aee5aac08a1a6219png\",\"sort\":7,\"url\":\"/collection\",\"wxapp_url\":\"/pages/shop/GoodsCollection/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 7, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (199, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/coupon.png\"],\"uniapp_url\":\"/pages/user/coupon/GetCoupon/index\",\"name\":\"优惠券\",\"id\":199,\"pic\":\"https://image.dayouqiantu.cn/coupon.png\",\"sort\":6,\"url\":\"/user/get_coupon\",\"wxapp_url\":\"/pages/user/coupon/GetCoupon/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-26 18:26:36', 6, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (200, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/pink.png\"],\"uniapp_url\":\"/pages/activity/GoodsGroup/index\",\"name\":\"拼团专区\",\"id\":200,\"pic\":\"https://image.dayouqiantu.cn/pink.png\",\"sort\":5,\"url\":\"/activity/group\",\"wxapp_url\":\"/pages/activity/GoodsGroup/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-26 18:26:45', 5, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (201, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5ddb7a37d58d9.png\"],\"uniapp_url\":\"/pages/orderAdmin/OrderIndex/index\",\"name\":\"商户管理\",\"id\":201,\"pic\":\"https://image.dayouqiantu.cn/5ddb7a37d58d9.png\",\"sort\":2,\"url\":\"/customer/index\",\"wxapp_url\":\"/pages/orderAdmin/OrderIndex/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 2, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (202, 'yshop_sign_day_num', '{\"sign_num\":\"10\",\"id\":205,\"day\":\"第一天\"}', '2020-06-25 18:54:35', NULL, 9, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (203, 'yshop_sign_day_num', '{\"sign_num\":\"20\",\"id\":\"\",\"day\":\"第二天\"}', '2020-06-25 18:54:35', NULL, 8, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (204, 'yshop_sign_day_num', '{\"sign_num\":\"30\",\"id\":\"\",\"day\":\"第三天\"}', '2020-06-25 18:54:35', NULL, 7, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (205, 'yshop_sign_day_num', '{\"addTime\":\"\",\"sign_num\":\"40\",\"id\":\"\",\"sort\":\"\",\"value\":\"\",\"day\":\"第四天\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 6, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (206, 'yshop_sign_day_num', '{\"addTime\":\"\",\"sign_num\":\"50\",\"id\":\"\",\"sort\":\"\",\"value\":\"\",\"day\":\"第五天\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 5, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (207, 'yshop_sign_day_num', '{\"addTime\":\"\",\"sign_num\":\"60\",\"id\":\"\",\"sort\":\"\",\"value\":\"\",\"day\":\"第六天\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 4, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (208, 'yshop_sign_day_num', '{\"addTime\":\"\",\"sign_num\":\"100\",\"id\":\"\",\"sort\":\"\",\"value\":\"\",\"day\":\"奖励\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 3, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (209, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/sign.png\"],\"uniapp_url\":\"/pages/user/signIn/Sign/index\",\"name\":\"积分签到\",\"id\":209,\"pic\":\"https://image.dayouqiantu.cn/sign.png\",\"sort\":4,\"url\":\"/user/sign\",\"wxapp_url\":\"/pages/user/signIn/Sign/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-26 18:26:56', 4, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (210, 'yshop_seckill_time', '{\"continued\":2,\"id\":\"\",\"time\":5}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (211, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"3\",\"id\":\"\",\"sort\":\"\",\"time\":\"7\",\"value\":\"\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (212, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"2\",\"id\":\"\",\"sort\":\"\",\"time\":\"10\",\"value\":\"\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (213, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"3\",\"id\":\"\",\"sort\":\"\",\"time\":\"12\",\"value\":\"\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (214, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"4\",\"id\":\"\",\"sort\":\"\",\"time\":\"15\",\"value\":\"\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (215, 'yshop_seckill_time', '{\"continued\":\"2\",\"id\":223,\"time\":\"19\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (216, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/sekill.png\"],\"uniapp_url\":\"/pages/activity/GoodsSeckill/index\",\"name\":\"秒杀专区\",\"id\":216,\"pic\":\"https://image.dayouqiantu.cn/sekill.png\",\"sort\":3,\"url\":\"/activity/goods_seckill\",\"wxapp_url\":\"/pages/activity/GoodsSeckill/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-26 18:27:06', 3, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (217, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/bargin.png\"],\"uniapp_url\":\"/pages/activity/GoodsBargain/index\",\"name\":\"砍价专区\",\"id\":217,\"pic\":\"https://image.dayouqiantu.cn/bargin.png\",\"sort\":2,\"url\":\"/activity/bargain\",\"wxapp_url\":\"/pages/activity/GoodsBargain/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-26 18:27:16', 2, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (218, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5dfd7b748e053.png\"],\"uniapp_url\":\"/pages/activity/BargainRecord/index\",\"name\":\"砍价记录\",\"id\":218,\"pic\":\"https://image.dayouqiantu.cn/5dfd7b748e053.png\",\"sort\":1,\"url\":\"/activity/bargain/record\",\"wxapp_url\":\"/pages/activity/BargainRecord/main\",\"status\":1}', '2020-06-25 18:54:35', NULL, 1, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (219, 'yshop_home_banner', '{\"name\":\"222\",\"id\":\"\",\"pic\":\"https://image.dayouqiantu.cn/5c9f117f624ee.jpg\",\"sort\":\"\",\"url\":\"/\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (221, 'yshop_my_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/5e60da498cfdd.png\"],\"name\":\"订单核销\",\"id\":230,\"pic\":\"https://image.dayouqiantu.cn/5e60da498cfdd.png\",\"sort\":0,\"url\":\"/order/order_cancellation\",\"wxapp_url\":\"\",\"status\":1}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (222, 'yshop_recharge_price_ways', '{\"give_price\":\"10\",\"price\":\"100\",\"id\":\"\",\"sort\":0,\"status\":1}', '2020-06-25 18:54:35', NULL, 1, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (223, 'yshop_recharge_price_ways', '{\"give_price\":\"1\",\"price\":1,\"id\":\"\",\"sort\":0,\"status\":1}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
 
 -- ----------------------------
 -- Table structure for yx_system_store
@@ -8108,9 +8108,9 @@ CREATE TABLE `yx_system_store`  (
 -- ----------------------------
 -- Records of yx_system_store
 -- ----------------------------
-INSERT INTO `yx_system_store` VALUES (3, 'yshop店铺', 'springboot商城', '15136175234', '河南省漯河市', '', 'https://image.dayouqiantu.cn/noMeal_tt.png', '33.54528', '113.9202', '2020-03-09 - 2020-04-30', '11:33:49 - 19:33:49', '0000-00-00 00:00:00', NULL, 0, 0, '2020-03-04 19:33:49', '2020-03-04 11:33:49', '2020-04-30 00:00:00', '2020-03-09 00:00:00');
-INSERT INTO `yx_system_store` VALUES (4, '信阳门店', '信阳门店', '15136275234', '河南省信阳市', '', 'https://image.dayouqiantu.cn/noMeal_tt.png', '32.11683', '114.05857', '2020-03-21 - 2020-03-31', '17:11:13 - 20:11:13', '0000-00-00 00:00:00', NULL, 1, 0, '2020-03-21 20:11:13', '2020-03-21 17:11:13', '2020-03-31 00:00:00', '2020-03-21 00:00:00');
-INSERT INTO `yx_system_store` VALUES (5, '郑州门店', '郑州门店', '15136175246', '河南省郑州', '', 'https://image.dayouqiantu.cn/noMeal_tt.png', '34.72468', '113.6401', '2020-03-21 - 2020-03-31', '17:11:13 - 20:11:15', '0000-00-00 00:00:00', '2020-06-26 10:51:21', 1, 1, '2020-03-21 20:11:15', '2020-03-21 17:11:13', '2020-03-31 00:00:00', '2020-03-21 00:00:00');
+INSERT INTO `yx_system_store` VALUES (3, 'yshop店铺', 'springboot商城', '15136175234', '河南省漯河市', '', 'https://image.dayouqiantu.cn/noMeal_tt.png', '33.54528', '113.9202', '2020-03-09 - 2020-04-30', '11:33:49 - 19:33:49', '2020-06-25 18:54:35', NULL, 0, 0, '2020-03-04 19:33:49', '2020-03-04 11:33:49', '2020-04-30 00:00:00', '2020-03-09 00:00:00');
+INSERT INTO `yx_system_store` VALUES (4, '信阳门店', '信阳门店', '15136275234', '河南省信阳市', '', 'https://image.dayouqiantu.cn/noMeal_tt.png', '32.11683', '114.05857', '2020-03-21 - 2020-03-31', '17:11:13 - 20:11:13', '2020-06-25 18:54:35', NULL, 1, 0, '2020-03-21 20:11:13', '2020-03-21 17:11:13', '2020-03-31 00:00:00', '2020-03-21 00:00:00');
+INSERT INTO `yx_system_store` VALUES (5, '郑州门店', '郑州门店', '15136175246', '河南省郑州', '', 'https://image.dayouqiantu.cn/noMeal_tt.png', '34.72468', '113.6401', '2020-03-21 - 2020-03-31', '17:11:13 - 20:11:15', '2020-06-25 18:54:35', '2020-06-26 10:51:21', 1, 1, '2020-03-21 20:11:15', '2020-03-21 17:11:13', '2020-03-31 00:00:00', '2020-03-21 00:00:00');
 
 -- ----------------------------
 -- Table structure for yx_system_store_staff
@@ -8136,9 +8136,9 @@ CREATE TABLE `yx_system_store_staff`  (
 -- ----------------------------
 -- Records of yx_system_store_staff
 -- ----------------------------
-INSERT INTO `yx_system_store_staff` VALUES (2, 12, '会敲代码的喵2', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', 4, '信阳门店', 'tttt', '15136175423', 1, 1, '0000-00-00 00:00:00', NULL, 1);
-INSERT INTO `yx_system_store_staff` VALUES (3, 11, '会敲代码的喵88', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', 5, '郑州门店', 'tttt', '16136175234', 1, 1, '0000-00-00 00:00:00', NULL, 1);
-INSERT INTO `yx_system_store_staff` VALUES (4, 19, '15136175528', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', 5, '郑州门店', '111', '15136175246', 1, 1, '0000-00-00 00:00:00', NULL, 0);
+INSERT INTO `yx_system_store_staff` VALUES (2, 12, '会敲代码的喵2', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', 4, '信阳门店', 'tttt', '15136175423', 1, 1, '2020-06-25 18:54:35', NULL, 1);
+INSERT INTO `yx_system_store_staff` VALUES (3, 11, '会敲代码的喵88', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', 5, '郑州门店', 'tttt', '16136175234', 1, 1, '2020-06-25 18:54:35', NULL, 1);
+INSERT INTO `yx_system_store_staff` VALUES (4, 19, '15136175528', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', 5, '郑州门店', '111', '15136175246', 1, 1, '2020-06-25 18:54:35', NULL, 0);
 INSERT INTO `yx_system_store_staff` VALUES (5, 20, '15136171112', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', 4, '信阳门店', '444', '44444', 1, 1, NULL, '2020-06-26 10:56:09', 0);
 INSERT INTO `yx_system_store_staff` VALUES (6, 21, '15136175234', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', 4, '信阳门店', '5555', '555555', 1, 1, '2020-06-26 10:53:46', NULL, 0);
 
@@ -8169,14 +8169,14 @@ CREATE TABLE `yx_system_user_level`  (
 -- ----------------------------
 -- Records of yx_system_user_level
 -- ----------------------------
-INSERT INTO `yx_system_user_level` VALUES (1, 0, '普通会员', 20.00, 0, 1, 0, 1, 1, 99.00, 'http://pic.dayouqiantu.cn/5c9ccca8cd632.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8bc1e0.png', '普通会员', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_level` VALUES (2, 0, '青铜会员', 0.00, 0, 1, 0, 1, 2, 98.00, 'http://pic.dayouqiantu.cn/5c9ccca904016.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8f0a30.png', '青铜会员', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_level` VALUES (3, 0, '黄铜会员', 0.00, 0, 1, 0, 1, 3, 95.00, 'http://pic.dayouqiantu.cn/5c9ccca8b27f1.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8e9365.png', '黄铜会员', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_level` VALUES (4, 0, '白银会员', 0.00, 0, 1, 0, 1, 4, 94.00, 'http://pic.dayouqiantu.cn/5c9ccca8d6ae1.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8a27f0.png', '白银会员', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_level` VALUES (5, 0, '黄金会员', 0.00, 0, 1, 0, 1, 5, 90.00, 'http://pic.dayouqiantu.cn/5c9ccca8b27f1.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8aa5b9.png', '黄金会员', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_level` VALUES (6, 0, '钻石会员', 0.00, 0, 1, 0, 1, 6, 88.00, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', 'http://pic.dayouqiantu.cn/5c9ccca90d2d3.png', '钻石会员', '0000-00-00 00:00:00', NULL, 1);
-INSERT INTO `yx_system_user_level` VALUES (8, 0, '444', 0.00, 4, 1, 0, 1, 4, 4.00, 'http://localhost:8000/file/pic/资讯-20200311043727918.png', 'http://localhost:8000/file/pic/05ea40b831858a8cf423aa709840507c-20200311043711341.png', '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_level` VALUES (9, 0, '777', 0.00, 0, 1, 0, 1, 33, 8.00, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', 'http://localhost:8000/file/pic/资讯-20200311043727918.png', '', '0000-00-00 00:00:00', NULL, 1);
+INSERT INTO `yx_system_user_level` VALUES (1, 0, '普通会员', 20.00, 0, 1, 0, 1, 1, 99.00, 'http://pic.dayouqiantu.cn/5c9ccca8cd632.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8bc1e0.png', '普通会员', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_level` VALUES (2, 0, '青铜会员', 0.00, 0, 1, 0, 1, 2, 98.00, 'http://pic.dayouqiantu.cn/5c9ccca904016.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8f0a30.png', '青铜会员', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_level` VALUES (3, 0, '黄铜会员', 0.00, 0, 1, 0, 1, 3, 95.00, 'http://pic.dayouqiantu.cn/5c9ccca8b27f1.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8e9365.png', '黄铜会员', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_level` VALUES (4, 0, '白银会员', 0.00, 0, 1, 0, 1, 4, 94.00, 'http://pic.dayouqiantu.cn/5c9ccca8d6ae1.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8a27f0.png', '白银会员', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_level` VALUES (5, 0, '黄金会员', 0.00, 0, 1, 0, 1, 5, 90.00, 'http://pic.dayouqiantu.cn/5c9ccca8b27f1.jpg', 'http://pic.dayouqiantu.cn/5c9ccca8aa5b9.png', '黄金会员', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_level` VALUES (6, 0, '钻石会员', 0.00, 0, 1, 0, 1, 6, 88.00, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', 'http://pic.dayouqiantu.cn/5c9ccca90d2d3.png', '钻石会员', '2020-06-25 18:54:35', NULL, 1);
+INSERT INTO `yx_system_user_level` VALUES (8, 0, '444', 0.00, 4, 1, 0, 1, 4, 4.00, 'http://localhost:8000/file/pic/资讯-20200311043727918.png', 'http://localhost:8000/file/pic/05ea40b831858a8cf423aa709840507c-20200311043711341.png', '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_level` VALUES (9, 0, '777', 0.00, 0, 1, 0, 1, 33, 8.00, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', 'http://localhost:8000/file/pic/资讯-20200311043727918.png', '', '2020-06-25 18:54:35', NULL, 1);
 INSERT INTO `yx_system_user_level` VALUES (10, 0, '5555', 0.00, 0, 1, 0, 1, 0, 7.50, 'http://127.0.0.1:8000/file/pic/20200527164543489004.png', 'http://127.0.0.1:8000/file/pic/20200527164543489004.png', '', '2020-06-25 18:51:00', NULL, 0);
 
 -- ----------------------------
@@ -8203,24 +8203,24 @@ CREATE TABLE `yx_system_user_task`  (
 -- ----------------------------
 -- Records of yx_system_user_task
 -- ----------------------------
-INSERT INTO `yx_system_user_task` VALUES (1, '满足积分20分', '积分数', 'SatisfactionIntegral', 20, 1, 0, 1, 1, '', '0000-00-00 00:00:00', '2020-06-25 18:54:35', 0);
-INSERT INTO `yx_system_user_task` VALUES (2, '消费满100元', '消费金额', 'ConsumptionAmount', 100, 1, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (3, '满足积分200分', '积分数', 'SatisfactionIntegral', 200, 2, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (4, '累计签到20天', '累计签到', 'CumulativeAttendance', 20, 2, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (5, '满足积分500分', '积分数', 'SatisfactionIntegral', 500, 3, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (6, '累计签到30天', '累计签到', 'CumulativeAttendance', 30, 3, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (7, '满足积分1000分', '积分数', 'SatisfactionIntegral', 1000, 4, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (8, '累计签到10天', '累计签到', 'CumulativeAttendance', 10, 4, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (9, '满足积分1200分', '积分数', 'SatisfactionIntegral', 1200, 5, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (10, '累计签到60天', '累计签到', 'CumulativeAttendance', 60, 5, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (11, '消费满10000元', '消费次数', 'ConsumptionAmount', 10000, 5, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (12, '满足积分2000分', '积分数', 'SatisfactionIntegral', 2000, 6, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (13, '消费满10000元', '消费次数', 'ConsumptionAmount', 10000, 6, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (14, '累计签到100天', '累计签到', 'CumulativeAttendance', 100, 6, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (15, '消费满1000元', '消费金额', 'ConsumptionAmount', 1000, 4, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (16, '累计签到2天', '累计签到', 'CumulativeAttendance', 2, 1, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (17, '消费满100元', '消费次数', 'ConsumptionAmount', 100, 2, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_system_user_task` VALUES (18, '消费满1000元', '消费金额', 'ConsumptionAmount', 1000, 3, 0, 1, 1, '', '0000-00-00 00:00:00', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (1, '满足积分20分', '积分数', 'SatisfactionIntegral', 20, 1, 0, 1, 1, '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', 0);
+INSERT INTO `yx_system_user_task` VALUES (2, '消费满100元', '消费金额', 'ConsumptionAmount', 100, 1, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (3, '满足积分200分', '积分数', 'SatisfactionIntegral', 200, 2, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (4, '累计签到20天', '累计签到', 'CumulativeAttendance', 20, 2, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (5, '满足积分500分', '积分数', 'SatisfactionIntegral', 500, 3, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (6, '累计签到30天', '累计签到', 'CumulativeAttendance', 30, 3, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (7, '满足积分1000分', '积分数', 'SatisfactionIntegral', 1000, 4, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (8, '累计签到10天', '累计签到', 'CumulativeAttendance', 10, 4, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (9, '满足积分1200分', '积分数', 'SatisfactionIntegral', 1200, 5, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (10, '累计签到60天', '累计签到', 'CumulativeAttendance', 60, 5, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (11, '消费满10000元', '消费次数', 'ConsumptionAmount', 10000, 5, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (12, '满足积分2000分', '积分数', 'SatisfactionIntegral', 2000, 6, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (13, '消费满10000元', '消费次数', 'ConsumptionAmount', 10000, 6, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (14, '累计签到100天', '累计签到', 'CumulativeAttendance', 100, 6, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (15, '消费满1000元', '消费金额', 'ConsumptionAmount', 1000, 4, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (16, '累计签到2天', '累计签到', 'CumulativeAttendance', 2, 1, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (17, '消费满100元', '消费次数', 'ConsumptionAmount', 100, 2, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_system_user_task` VALUES (18, '消费满1000元', '消费金额', 'ConsumptionAmount', 1000, 3, 0, 1, 1, '', '2020-06-25 18:54:35', NULL, 0);
 
 -- ----------------------------
 -- Table structure for yx_user
@@ -8271,15 +8271,15 @@ CREATE TABLE `yx_user`  (
 -- ----------------------------
 -- Records of yx_user
 -- ----------------------------
-INSERT INTO `yx_user` VALUES (11, 'hupeng', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵88', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175246', '', '0000-00-00 00:00:00', '2020-07-08 16:09:22', '', 7196.91, 55.86, 999.06, 1, 1, 1, 21, '2020-06-20 14:46:47', 'h5', 0, 48, 4, '', 1, '', NULL, 0);
-INSERT INTO `yx_user` VALUES (12, '15136175246', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵2', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175246', '', '0000-00-00 00:00:00', '2020-07-08 15:11:48', '', 8688.71, 28.00, 0.00, 2, 1, 1, 11, '0000-00-00 00:00:00', 'h5', 0, 23, 0, '', 1, '', NULL, 0);
-INSERT INTO `yx_user` VALUES (14, '15136175247', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175247', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175247', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 9200.00, 0.00, 2.00, 0, 1, 0, 11, '0000-00-00 00:00:00', 'h5', 0, 5, 0, '', 0, '', NULL, 0);
-INSERT INTO `yx_user` VALUES (15, '15136175249', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175249', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175249', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0.00, 0.00, 0.00, 0, 1, 0, 0, '0000-00-00 00:00:00', 'h5', 0, 0, 0, '', 0, '', NULL, 0);
-INSERT INTO `yx_user` VALUES (18, '15136175523', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175523', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175523', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0.00, 0.00, 0.00, 0, 1, 0, 0, '0000-00-00 00:00:00', 'h5', 0, 0, 0, '', 0, '', NULL, 0);
-INSERT INTO `yx_user` VALUES (19, '15136175528', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175528', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175528', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 0.00, 0.00, 0.00, 0, 1, 0, 11, '0000-00-00 00:00:00', 'h5', 0, 0, 0, '', 0, '', NULL, 0);
-INSERT INTO `yx_user` VALUES (20, '15136171112', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136171112', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', '15136171112', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 99.00, 0.00, 0.00, 0, 1, 0, 11, '0000-00-00 00:00:00', 'h5', 1, 0, 0, '', 0, '', NULL, 0);
-INSERT INTO `yx_user` VALUES (21, '15136175234', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175234', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', '15136175234', '127.0.0.1', '2020-06-14 09:21:58', '2020-07-09 13:29:06', '127.0.0.1', 10960.70, 1027.86, 31.00, 2, 1, 1, 0, '0000-00-00 00:00:00', 'h5', 0, 6, 1, '', 1, '', NULL, 0);
-INSERT INTO `yx_user` VALUES (25, 'o41F5txV5oZVvprIQdJMRmzB_fd0', NULL, '', 0, '', '', 0, 0, '会敲代码的喵', 'http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqbE0lXfgiagWtVetehzyfia3iaBxF0UTibMDTjicftYRYJ0G2pRZjlSB8rCtwRZ3ia9EYd3ZadK9wVWBTw/132', NULL, '127.0.0.1', '2020-07-06 15:20:51', '2020-07-06 15:53:31', '127.0.0.1', 978.00, 0.00, 0.00, 0, 1, 0, 0, '0000-00-00 00:00:00', 'wechat', 0, 2, 0, '', 0, '', '{\"sex\": 1, \"city\": \"信阳\", \"openid\": \"o41F5txV5oZVvprIQdJMRmzB_fd0\", \"country\": \"中国\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"会敲代码的喵\", \"province\": \"河南\", \"subscribe\": null, \"headimgurl\": \"http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqbE0lXfgiagWtVetehzyfia3iaBxF0UTibMDTjicftYRYJ0G2pRZjlSB8rCtwRZ3ia9EYd3ZadK9wVWBTw/132\", \"routineOpenid\": \"\", \"subscribeTime\": null}', 0);
+INSERT INTO `yx_user` VALUES (11, 'hupeng', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵88', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175246', '', '2020-06-25 18:54:35', '2020-07-08 16:09:22', '', 7196.91, 55.86, 999.06, 1, 1, 1, 21, '2020-06-20 14:46:47', 'h5', 0, 48, 4, '', 1, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (12, '15136175246', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵2', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175246', '', '2020-06-25 18:54:35', '2020-07-08 15:11:48', '', 8688.71, 28.00, 0.00, 2, 1, 1, 11, '2020-06-25 18:54:35', 'h5', 0, 23, 0, '', 1, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (14, '15136175247', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175247', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175247', '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '', 9200.00, 0.00, 2.00, 0, 1, 0, 11, '2020-06-25 18:54:35', 'h5', 0, 5, 0, '', 0, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (15, '15136175249', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175249', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175249', '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '', 0.00, 0.00, 0.00, 0, 1, 0, 0, '2020-06-25 18:54:35', 'h5', 0, 0, 0, '', 0, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (18, '15136175523', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175523', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175523', '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '', 0.00, 0.00, 0.00, 0, 1, 0, 0, '2020-06-25 18:54:35', 'h5', 0, 0, 0, '', 0, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (19, '15136175528', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175528', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175528', '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '', 0.00, 0.00, 0.00, 0, 1, 0, 11, '2020-06-25 18:54:35', 'h5', 0, 0, 0, '', 0, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (20, '15136171112', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136171112', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', '15136171112', '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '', 99.00, 0.00, 0.00, 0, 1, 0, 11, '2020-06-25 18:54:35', 'h5', 1, 0, 0, '', 0, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (21, '15136175234', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175234', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', '15136175234', '127.0.0.1', '2020-06-14 09:21:58', '2020-07-09 13:29:06', '127.0.0.1', 10960.70, 1027.86, 31.00, 2, 1, 1, 0, '2020-06-25 18:54:35', 'h5', 0, 6, 1, '', 1, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (25, 'o41F5txV5oZVvprIQdJMRmzB_fd0', NULL, '', 0, '', '', 0, 0, '会敲代码的喵', 'http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqbE0lXfgiagWtVetehzyfia3iaBxF0UTibMDTjicftYRYJ0G2pRZjlSB8rCtwRZ3ia9EYd3ZadK9wVWBTw/132', NULL, '127.0.0.1', '2020-07-06 15:20:51', '2020-07-06 15:53:31', '127.0.0.1', 978.00, 0.00, 0.00, 0, 1, 0, 0, '2020-06-25 18:54:35', 'wechat', 0, 2, 0, '', 0, '', '{\"sex\": 1, \"city\": \"信阳\", \"openid\": \"o41F5txV5oZVvprIQdJMRmzB_fd0\", \"country\": \"中国\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"会敲代码的喵\", \"province\": \"河南\", \"subscribe\": null, \"headimgurl\": \"http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqbE0lXfgiagWtVetehzyfia3iaBxF0UTibMDTjicftYRYJ0G2pRZjlSB8rCtwRZ3ia9EYd3ZadK9wVWBTw/132\", \"routineOpenid\": \"\", \"subscribeTime\": null}', 0);
 
 -- ----------------------------
 -- Table structure for yx_user_address
@@ -8346,7 +8346,7 @@ CREATE TABLE `yx_user_bill`  (
 -- ----------------------------
 -- Records of yx_user_bill
 -- ----------------------------
-INSERT INTO `yx_user_bill` VALUES (1, 11, '1', 0, '购买商品', 'now_money', 'pay_product', 119.80, 7381.31, '余额支付', '0000-00-00 00:00:00', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (1, 11, '1', 0, '购买商品', 'now_money', 'pay_product', 119.80, 7381.31, '余额支付', '2020-06-25 18:54:35', NULL, 1, 0);
 INSERT INTO `yx_user_bill` VALUES (7, 21, '', 1, '签到奖励', 'integral', 'sign', 10.00, 0.00, '', '2020-06-20 19:14:44', NULL, 1, 0);
 INSERT INTO `yx_user_bill` VALUES (8, 21, '', 1, '签到奖励', 'integral', 'sign', 20.00, 10.00, '', '2020-06-21 11:20:20', NULL, 1, 0);
 INSERT INTO `yx_user_bill` VALUES (9, 21, '0', 0, '购买商品', 'now_money', 'pay_product', 1.10, 9997.80, '余额支付1.10元购买商品', '2020-06-23 10:41:09', NULL, 1, 0);
@@ -8454,7 +8454,7 @@ CREATE TABLE `yx_user_extract`  (
 -- ----------------------------
 -- Records of yx_user_extract
 -- ----------------------------
-INSERT INTO `yx_user_extract` VALUES (1, 11, '会敲代码的喵', 'weixin', '0', '', '', 1.00, NULL, 5.00, '失败了', '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, -1, 'hu', 0);
+INSERT INTO `yx_user_extract` VALUES (1, 11, '会敲代码的喵', 'weixin', '0', '', '', 1.00, NULL, 5.00, '失败了', '2020-06-25 18:54:35', '2020-06-25 18:54:35', NULL, -1, 'hu', 0);
 INSERT INTO `yx_user_extract` VALUES (2, 21, '15136175234', 'weixin', '0', '', '', 11.00, NULL, 989.00, '777777777', '2020-06-26 10:37:51', '2020-06-24 16:01:23', '2020-06-26 10:37:51', -1, '2222', 0);
 
 -- ----------------------------
@@ -8493,7 +8493,7 @@ CREATE TABLE `yx_user_level`  (
 -- ----------------------------
 -- Records of yx_user_level
 -- ----------------------------
-INSERT INTO `yx_user_level` VALUES (4, 11, 1, 1, 0, 1, 0, 1, '恭喜你成为了普通会员', 0, 0, '0000-00-00 00:00:00', NULL, 99);
+INSERT INTO `yx_user_level` VALUES (4, 11, 1, 1, 0, 1, 0, 1, '恭喜你成为了普通会员', 0, 0, '2020-06-25 18:54:35', NULL, 99);
 INSERT INTO `yx_user_level` VALUES (5, 21, 1, 1, 0, 1, 0, 1, '恭喜你成为了普通会员', 0, 0, '2020-06-24 18:35:01', NULL, 99);
 INSERT INTO `yx_user_level` VALUES (6, 21, 1, 1, 0, 1, 0, 1, '恭喜你成为了普通会员', 0, 0, '2020-06-24 18:35:47', NULL, 99);
 INSERT INTO `yx_user_level` VALUES (7, 21, 1, 1, 0, 1, 0, 1, '恭喜你成为了普通会员', 0, 0, '2020-06-24 18:35:58', NULL, 99);
@@ -8528,21 +8528,21 @@ CREATE TABLE `yx_user_recharge`  (
 -- ----------------------------
 -- Records of yx_user_recharge
 -- ----------------------------
-INSERT INTO `yx_user_recharge` VALUES (1, 11, 'hupeng', '1234428298159718400', 200.00, 0.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (2, 11, '会敲代码的喵88', '1235853569362493440', 110.00, 0.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (3, 11, '会敲代码的喵88', '1235874304738983936', 111.00, 0.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (4, 11, '会敲代码的喵88', '1235874561447165952', 111.00, 0.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (5, 11, '会敲代码的喵88', '1235874725738053632', 111.00, 0.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (6, 11, '会敲代码的喵88', '1235875114126409728', 1111.00, 0.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (7, 11, '会敲代码的喵88', '1235876251080589312', 1111.00, 0.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (8, 11, '会敲代码的喵88', '1242024244678754304', 100.00, 10.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (9, 11, '会敲代码的喵88', '1242024501730869248', 111.00, 111.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (10, 11, '会敲代码的喵88', '1242025322262560768', 222.00, 0.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (11, 11, '会敲代码的喵88', '1246020207407792128', 1.00, 1.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (12, 11, '会敲代码的喵88', '1246379540565983232', 10.00, 100.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (13, 11, '会敲代码的喵88', '1246379584941719552', 1.00, 1.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (14, 11, '会敲代码的喵88', '1246383201052524544', 10.00, 100.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
-INSERT INTO `yx_user_recharge` VALUES (15, 11, '会敲代码的喵88', '1246383225413042176', 10.00, 100.00, 'weixin', 0, NULL, '0000-00-00 00:00:00', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (1, 11, 'hupeng', '1234428298159718400', 200.00, 0.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (2, 11, '会敲代码的喵88', '1235853569362493440', 110.00, 0.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (3, 11, '会敲代码的喵88', '1235874304738983936', 111.00, 0.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (4, 11, '会敲代码的喵88', '1235874561447165952', 111.00, 0.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (5, 11, '会敲代码的喵88', '1235874725738053632', 111.00, 0.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (6, 11, '会敲代码的喵88', '1235875114126409728', 1111.00, 0.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (7, 11, '会敲代码的喵88', '1235876251080589312', 1111.00, 0.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (8, 11, '会敲代码的喵88', '1242024244678754304', 100.00, 10.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (9, 11, '会敲代码的喵88', '1242024501730869248', 111.00, 111.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (10, 11, '会敲代码的喵88', '1242025322262560768', 222.00, 0.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (11, 11, '会敲代码的喵88', '1246020207407792128', 1.00, 1.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (12, 11, '会敲代码的喵88', '1246379540565983232', 10.00, 100.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (13, 11, '会敲代码的喵88', '1246379584941719552', 1.00, 1.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (14, 11, '会敲代码的喵88', '1246383201052524544', 10.00, 100.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (15, 11, '会敲代码的喵88', '1246383225413042176', 10.00, 100.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
 INSERT INTO `yx_user_recharge` VALUES (16, 21, '15136175234', '1275713928260747264', 100.00, 10.00, 'weixin', 0, NULL, '2020-06-24 16:54:37', NULL, 0.00, 0);
 INSERT INTO `yx_user_recharge` VALUES (17, 25, '会敲代码的喵', '1280045779569868800', 100.00, 10.00, 'weixin', 0, NULL, '2020-07-06 15:47:51', NULL, 0.00, 0);
 
@@ -8588,10 +8588,10 @@ CREATE TABLE `yx_user_task_finish`  (
 -- ----------------------------
 -- Records of yx_user_task_finish
 -- ----------------------------
-INSERT INTO `yx_user_task_finish` VALUES (1, 2, 11, 0, '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_user_task_finish` VALUES (2, 17, 11, 0, '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_user_task_finish` VALUES (3, 1, 21, 0, '0000-00-00 00:00:00', NULL, 0);
-INSERT INTO `yx_user_task_finish` VALUES (4, 16, 21, 0, '0000-00-00 00:00:00', NULL, 0);
+INSERT INTO `yx_user_task_finish` VALUES (1, 2, 11, 0, '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_user_task_finish` VALUES (2, 17, 11, 0, '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_user_task_finish` VALUES (3, 1, 21, 0, '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_user_task_finish` VALUES (4, 16, 21, 0, '2020-06-25 18:54:35', NULL, 0);
 INSERT INTO `yx_user_task_finish` VALUES (5, 2, 21, 0, '2020-06-24 18:34:54', NULL, 0);
 INSERT INTO `yx_user_task_finish` VALUES (6, 17, 21, 0, '2020-06-24 18:35:45', NULL, 0);
 
@@ -8672,9 +8672,9 @@ CREATE TABLE `yx_wechat_template`  (
 -- ----------------------------
 -- Records of yx_wechat_template
 -- ----------------------------
-INSERT INTO `yx_wechat_template` VALUES (3, 'delivery_success', '订单发货提醒', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n物流公司：{{keyword2.DATA}}\n物流单号：{{keyword3.DATA}}\n{{remark.DATA}}', 'NyrkeQ5TDFDq0GV0wkNA9L39GzPHfzbQqVLnbA5OTsY', '0000-00-00 00:00:00', '2020-07-06 15:52:09', 1, 1);
-INSERT INTO `yx_wechat_template` VALUES (13, 'pay_success', '订单支付成功通知', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n支付金额：{{keyword2.DATA}}\n{{remark.DATA}}', 'r6PWTcAOQodoyz0GT_0NCoFxssBT4ZB7AJqVdTdRvfA', '0000-00-00 00:00:00', '2020-07-06 15:51:39', 1, 0);
-INSERT INTO `yx_wechat_template` VALUES (14, 'recharge_success', '帐户资金变动提醒', '{{first.DATA}}\n变动类型：{{keyword1.DATA}}\n变动时间：{{keyword2.DATA}}\n变动金额：{{keyword3.DATA}}\n{{remark.DATA}}', 'ePF4RS3ONCEuS9AuPyqZ2Th_B-HZ6E1CIpnJRt7ACwI', '0000-00-00 00:00:00', '2020-07-06 15:51:54', 1, 0);
+INSERT INTO `yx_wechat_template` VALUES (3, 'delivery_success', '订单发货提醒', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n物流公司：{{keyword2.DATA}}\n物流单号：{{keyword3.DATA}}\n{{remark.DATA}}', 'NyrkeQ5TDFDq0GV0wkNA9L39GzPHfzbQqVLnbA5OTsY', '2020-06-25 18:54:35', '2020-07-06 15:52:09', 1, 1);
+INSERT INTO `yx_wechat_template` VALUES (13, 'pay_success', '订单支付成功通知', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n支付金额：{{keyword2.DATA}}\n{{remark.DATA}}', 'r6PWTcAOQodoyz0GT_0NCoFxssBT4ZB7AJqVdTdRvfA', '2020-06-25 18:54:35', '2020-07-06 15:51:39', 1, 0);
+INSERT INTO `yx_wechat_template` VALUES (14, 'recharge_success', '帐户资金变动提醒', '{{first.DATA}}\n变动类型：{{keyword1.DATA}}\n变动时间：{{keyword2.DATA}}\n变动金额：{{keyword3.DATA}}\n{{remark.DATA}}', 'ePF4RS3ONCEuS9AuPyqZ2Th_B-HZ6E1CIpnJRt7ACwI', '2020-06-25 18:54:35', '2020-07-06 15:51:54', 1, 0);
 INSERT INTO `yx_wechat_template` VALUES (15, 'refund_success', '退款进度通知', '', 'jaDVkOdbbk01WcWSxp1_liEQen44-euhj7shxjDvLIc', '2020-07-06 15:53:10', NULL, 0, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
