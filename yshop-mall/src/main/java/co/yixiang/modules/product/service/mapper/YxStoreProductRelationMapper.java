@@ -33,7 +33,7 @@ public interface YxStoreProductRelationMapper extends CoreMapper<YxStoreProductR
     @Select("select B.id pid,A.category,B.store_name as storeName,B.price," +
             "B.ot_price as otPrice,B.sales,B.image,B.is_show as isShow" +
             " from yx_store_product_relation A left join yx_store_product B " +
-            "on A.product_id = B.id where A.uid=#{uid} and A.is_del = 0")
+            "on A.product_id = B.id where A.uid=#{uid} and A.is_del = 0 and B.is_del = 0")
     List<YxStoreProductRelationQueryVo> selectList(Page page, @Param("uid") Long uid);
 
 
