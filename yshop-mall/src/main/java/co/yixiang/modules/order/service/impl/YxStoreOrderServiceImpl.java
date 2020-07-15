@@ -1702,6 +1702,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                     .collect(Collectors.toList());
 
 
+
+
+
+
             //获取商品用到的运费模板
             List<YxShippingTemplates> shippingTemplatesList = shippingTemplatesService
                     .list(Wrappers.<YxShippingTemplates>lambdaQuery()
@@ -1728,6 +1732,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             Map<Integer, TemplateDto> templateDTOMap = new HashMap<>();
             for (YxStoreCartQueryVo storeCartVO : cartInfo){
                 Integer tempId = storeCartVO.getProductInfo().getTempId();
+
+                //处理拼团等营销商品没有设置运费模板
+                if(tempId == null) return storePostage;
 
                 //根据模板类型获取相应的数量
                 double num = 0d;
