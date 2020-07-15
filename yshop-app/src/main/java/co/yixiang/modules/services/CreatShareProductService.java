@@ -149,17 +149,6 @@ public class CreatShareProductService {
             String spreadPicPath = fileDir+spreadPicName;
 
             YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
-//            InputStream stream =  getClass().getClassLoader().getResourceAsStream("fx.jpg");
-//            InputStream streamT =  getClass().getClassLoader()
-//                    .getResourceAsStream("simsunb.ttf");
-//            File newFile = new File("fx.jpg");
-//            File newFileT = new File("simsunb.ttf");
-//            try {
-//                FileUtils.copyInputStreamToFile(stream, newFile);
-//                FileUtils.copyInputStreamToFile(streamT, newFileT);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
             if(ObjectUtil.isNull(attachmentT)){
                 try {
                     Font font =  Font.createFont(Font.TRUETYPE_FONT, newFileT);
@@ -232,17 +221,6 @@ public class CreatShareProductService {
             String spreadPicPath = fileDir+spreadPicName;
 
             YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
-//            InputStream stream =  getClass().getClassLoader().getResourceAsStream("fx.jpg");
-//            InputStream streamT =  getClass().getClassLoader()
-//                    .getResourceAsStream("simsunb.ttf");
-//            File newFile = new File("fx.jpg");
-//            File newFileT = new File("simsunb.ttf");
-//            try {
-//                FileUtils.copyInputStreamToFile(stream, newFile);
-//                FileUtils.copyInputStreamToFile(streamT, newFileT);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
             if(ObjectUtil.isNull(attachmentT)){
                 try {
 
@@ -464,8 +442,9 @@ public class CreatShareProductService {
 
                 spreadUrl = apiUrl + "/api/file/qrcode/"+spreadPicName;
             } catch (Exception e) {
+                e.printStackTrace();
                 log.error(e.getMessage());
-                throw new YshopException(e.getMessage());
+                throw new YshopException("生成失败");
             }
         }else{
             spreadUrl = apiUrl + "/api/file/" + attachmentT.getSattDir();

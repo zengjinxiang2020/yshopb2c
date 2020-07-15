@@ -24,4 +24,6 @@ public class YxStoreBargainUserQueryParam extends QueryParam {
     @NotBlank(message = "参数错误")
     private String bargainUserUid;
 
+    private String bargainId;
+
 }
