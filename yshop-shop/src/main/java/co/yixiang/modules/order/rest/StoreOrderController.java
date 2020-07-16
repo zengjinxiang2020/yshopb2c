@@ -107,7 +107,7 @@ public class StoreOrderController {
 
     @ApiOperation(value = "查询订单")
     @GetMapping(value = "/yxStoreOrder")
-    @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_SELECT')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_SELECT','YXEXPRESS_SELECT')")
     public ResponseEntity getYxStoreOrders(YxStoreOrderQueryCriteria criteria,
                                            Pageable pageable,
                                            @RequestParam(name = "orderStatus") String orderStatus,
@@ -222,7 +222,7 @@ public class StoreOrderController {
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/yxStoreOrder/download")
-    @PreAuthorize("@el.check('admin','cate:list')")
+    @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_SELECT')")
     public void download(HttpServletResponse response,
                          YxStoreOrderQueryCriteria criteria,
                          Pageable pageable,

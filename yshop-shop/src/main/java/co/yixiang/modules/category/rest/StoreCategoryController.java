@@ -57,7 +57,7 @@ public class StoreCategoryController {
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/yxStoreCategory/download")
-    @PreAuthorize("@el.check('admin','cate:list')")
+    @PreAuthorize("@el.check('admin','YXSTORECATEGORY_SELECT')")
     public void download(HttpServletResponse response, YxStoreCategoryQueryCriteria criteria) throws IOException {
         yxStoreCategoryService.download(yxStoreCategoryService.queryAll(criteria), response);
     }
