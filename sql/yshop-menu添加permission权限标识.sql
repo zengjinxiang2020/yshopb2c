@@ -1,4 +1,18 @@
+/*
+ Navicat Premium Data Transfer
 
+ Source Server         : localhost_3306
+ Source Server Type    : MySQL
+ Source Server Version : 50717
+ Source Host           : localhost:3306
+ Source Schema         : yxshopv3
+
+ Target Server Type    : MySQL
+ Target Server Version : 50717
+ File Encoding         : 65001
+
+ Date: 16/07/2020 20:11:40
+*/
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
@@ -31,7 +45,7 @@ CREATE TABLE `menu`  (
 -- ----------------------------
 -- Records of menu
 -- ----------------------------
-INSERT INTO `menu` VALUES (1, b'0', '系统管理', NULL, 0, 99, 'system', 'system', b'0', b'0', NULL, '2018-12-18 15:11:29', NULL, 1, '2020-06-29 17:44:24', 0);
+INSERT INTO `menu` VALUES (1, b'0', '系统管理', NULL, 0, 99, 'system', 'system', b'0', b'0', NULL, '2018-12-18 15:11:29', NULL, 1, '2020-07-16 20:05:34', 0);
 INSERT INTO `menu` VALUES (2, b'0', '用户管理', 'system/user/index', 1, 2, 'peoples', 'user', b'0', b'0', 'User', '2018-12-18 15:14:44', 'user:list', 1, NULL, 0);
 INSERT INTO `menu` VALUES (3, b'0', '角色管理', 'system/role/index', 1, 3, 'role', 'role', b'0', b'0', 'Role', '2018-12-18 15:16:07', 'roles:list', 1, NULL, 0);
 INSERT INTO `menu` VALUES (5, b'0', '菜单管理', 'system/menu/index', 1, 5, 'menu', 'menu', b'0', b'0', 'Menu', '2018-12-18 15:17:28', 'menu:list', 1, NULL, 0);
@@ -210,9 +224,9 @@ INSERT INTO `menu` VALUES (233, b'0', '商品规格', 'shop/storeProductRule/ind
 INSERT INTO `menu` VALUES (234, b'0', '运费模板', 'shop/shippingTemplates/index', 40, 14, 'exit-fullscreen', 'shippingTemplates', b'0', b'0', 'ShippingTemplates', '2020-06-29 17:16:06', 'yxShippingTemplates:list', 1, '2020-07-10 16:57:13', 0);
 INSERT INTO `menu` VALUES (235, b'0', '图文添加', 'wechat/article/form', 48, 36, 'article', 'artadd', b'0', b'1', 'Artadd', '2020-07-01 18:50:35', NULL, 1, '2020-07-02 11:24:45', 0);
 INSERT INTO `menu` VALUES (236, b'0', '图文编辑', 'wechat/article/form', 48, 37, 'alipay', 'artadd/:id', b'0', b'1', 'Editadd', '2020-07-02 11:24:39', NULL, 1, NULL, 0);
-INSERT INTO `menu` VALUES (237, b'0', '规格新增、修改', NULL, 233, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-28 16:35:00', 'yxStoreProductRule:add', 1, '2020-07-10 16:21:48', 0);
-INSERT INTO `menu` VALUES (238, b'0', '规格删除', NULL, 233, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-28 16:35:00', 'yxStoreProductRule:del', 1, '2020-07-10 16:21:48', 0);
-INSERT INTO `menu` VALUES (240, b'0', '新增、修改模板', NULL, 234, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-29 17:16:06', 'yxShippingTemplates:add', 1, '2020-07-10 16:57:13', 0);
-INSERT INTO `menu` VALUES (241, b'0', '删除模板', NULL, 234, 2, NULL, NULL, b'0', b'0', NULL, '2020-06-29 17:16:06', 'yxShippingTemplates:del', 1, '2020-07-10 16:57:13', 0);
+INSERT INTO `menu` VALUES (237, b'0', '规格新增、修改', NULL, 233, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-28 16:35:00', 'yxStoreProductRule:add', 2, '2020-07-16 20:09:03', 0);
+INSERT INTO `menu` VALUES (238, b'0', '规格删除', NULL, 233, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-28 16:35:00', 'yxStoreProductRule:del', 2, '2020-07-16 20:08:57', 0);
+INSERT INTO `menu` VALUES (240, b'0', '新增、修改模板', NULL, 234, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-29 17:16:06', 'yxShippingTemplates:add', 2, '2020-07-16 20:09:11', 0);
+INSERT INTO `menu` VALUES (241, b'0', '删除模板', NULL, 234, 2, NULL, NULL, b'0', b'0', NULL, '2020-06-29 17:16:06', 'yxShippingTemplates:del', 2, '2020-07-16 20:09:16', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
