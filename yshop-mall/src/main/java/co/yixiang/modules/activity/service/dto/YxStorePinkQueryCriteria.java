@@ -15,5 +15,5 @@ import lombok.Data;
 @Data
 public class YxStorePinkQueryCriteria{
     @Query
-    private Integer kId;
+    private Integer cid;
 }
