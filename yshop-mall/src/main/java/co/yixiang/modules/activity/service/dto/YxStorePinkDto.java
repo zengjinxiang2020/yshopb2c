@@ -5,10 +5,12 @@
  */
 package co.yixiang.modules.activity.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
 * @author hupeng
@@ -47,7 +49,11 @@ public class YxStorePinkDto implements Serializable {
     private BigDecimal price;
 
     /** 开始时间 */
-    private String addTime;
+    @JsonFormat(
+            pattern = "yyyy年MM月dd日HH时mm分",
+            timezone = "GMT+8"
+    )
+    private Date createTime;
 
     private String stopTime;
 
@@ -62,4 +68,18 @@ public class YxStorePinkDto implements Serializable {
 
     /** 状态1进行中2已完成3未完成 */
     private Integer status;
+
+    private String nickname;
+
+    private String phone;
+
+    private String userImg;
+
+    private String product;
+
+    private String image;
+    /**
+     * 参团人数
+     */
+    private int countPeople;
 }

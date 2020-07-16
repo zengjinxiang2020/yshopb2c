@@ -32,9 +32,11 @@ import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.vo.YxStoreOrderQueryVo;
+import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.vo.YxUserQueryVo;
 import co.yixiang.utils.FileUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.pagehelper.PageInfo;
@@ -62,22 +64,20 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
 
     @Autowired
     private IGenerator generator;
-
     @Autowired
     private YxStorePinkMapper yxStorePinkMapper;
     @Autowired
     private YxStoreCombinationMapper yxStoreCombinationMapper;
-
     @Autowired
     private YxStoreCombinationService combinationService;
     @Autowired
     private YxStoreOrderService storeOrderService;
     @Autowired
     private YxUserService userService;
-
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
-
+    @Autowired
+    private YxUserService yxUserService;
 
 
     /**
@@ -603,7 +603,18 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         getPage(pageable);
         PageInfo<YxStorePink> page = new PageInfo<>(queryAll(criteria));
         Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxStorePinkDto.class));
+        List<YxStorePinkDto> yxStorePinkDtos = generator.convert(page.getList(), YxStorePinkDto.class);
+        yxStorePinkDtos.forEach(i ->{
+            YxUser yxUser = yxUserService.getById(i.getUid());
+            YxStoreCombination storeCombination = combinationService.getById(i.getCid());
+            i.setNickname(yxUser.getNickname());
+            i.setPhone(yxUser.getPhone());
+            i.setUserImg(yxUser.getAvatar());
+            i.setProduct(storeCombination.getTitle());
+            i.setImage(storeCombination.getImage());
+            i.setCountPeople( this.count(new LambdaQueryWrapper<YxStorePink>().eq(YxStorePink::getCid,i.getCid())));
+        });
+        map.put("content", yxStorePinkDtos);
         map.put("totalElements", page.getTotal());
         return map;
     }
@@ -630,7 +641,6 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
             map.put("产品id", yxStorePink.getPid());
             map.put("拼图总人数", yxStorePink.getPeople());
             map.put("拼团产品单价", yxStorePink.getPrice());
-            map.put("开始时间", yxStorePink.getAddTime());
             map.put(" stopTime",  yxStorePink.getStopTime());
             map.put("团长id 0为团长", yxStorePink.getKId());
             map.put("是否发送模板消息0未发送1已发送", yxStorePink.getIsTpl());
