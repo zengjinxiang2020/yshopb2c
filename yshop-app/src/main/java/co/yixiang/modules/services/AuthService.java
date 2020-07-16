@@ -157,8 +157,10 @@ public class AuthService {
                     wechatUser.setUnionId(wxMpUser.getUnionId());
 
                     yxUser.setWxProfile(wechatUser);
-                    userService.updateById(yxUser);
+
                 }
+                yxUser.setUserType(AppFromEnum.ROUNTINE.getValue());
+                userService.updateById(yxUser);
             }
             userService.setSpread(spread, returnUser.getUid());
             return returnUser;
@@ -238,8 +240,10 @@ public class AuthService {
                     wechatUser.setUnionId(wxMpUser.getUnionId());
 
                     yxUser.setWxProfile(wechatUser);
-                    userService.updateById(yxUser);
                 }
+
+                yxUser.setUserType(AppFromEnum.WECHAT.getValue());
+                userService.updateById(yxUser);
 
             }
 
