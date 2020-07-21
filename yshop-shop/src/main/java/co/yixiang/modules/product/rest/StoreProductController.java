@@ -54,8 +54,6 @@ import java.util.*;
 @RequestMapping("api")
 public class StoreProductController {
 
-    private static List<Map<String,Object>> cateList = new ArrayList<>();
-
     private final YxStoreProductService yxStoreProductService;
     private final YxStoreCategoryService yxStoreCategoryService;
     private final YxShippingTemplatesService yxShippingTemplatesService;
@@ -138,7 +136,9 @@ public class StoreProductController {
         List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
                 .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
                 .list();
-        map.put("cateList", this.makeCate(storeCategories,0,1));
+
+        List<Map<String,Object>> cateList = new ArrayList<>();
+        map.put("cateList", this.makeCate(storeCategories,cateList,0,1));
 
         //商品规格
         map.put("ruleList",yxStoreProductRuleService.list());
@@ -193,15 +193,10 @@ public class StoreProductController {
      * @param level d等级
      * @return list
      */
-    private List<Map<String,Object>> makeCate(List<YxStoreCategory> data, int pid, int level)
+    private List<Map<String,Object>> makeCate(List<YxStoreCategory> data,List<Map<String,Object>> cateList,int pid, int level)
     {
         String html = "|-----";
         String newHtml = "";
-
-
-        if(cateList.size() == data.size()){
-            return cateList;
-        }
 
         for (int i = 0; i < data.size(); i++) {
             YxStoreCategory storeCategory = data.get(i);
@@ -220,7 +215,7 @@ public class StoreProductController {
                 data.remove(i);
 
                 i--;
-                this.makeCate(data,storeCategory.getId(),level + 1);
+                this.makeCate(data,cateList,storeCategory.getId(),level + 1);
             }
         }
 
