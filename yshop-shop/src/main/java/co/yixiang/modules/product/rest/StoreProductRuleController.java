@@ -62,7 +62,7 @@ public class StoreProductRuleController {
     @PostMapping("/save/{id}")
     @Log("新增/修改sku规则")
     @ApiOperation("新增/修改sku规则")
-    @PreAuthorize("@el.check('admin','yxStoreProductRule:add')")
+    @PreAuthorize("hasAnyRole('admin','yxStoreProductRule:add','yxStoreProductRule:edit')")
     public ResponseEntity<Object> create(@Validated @RequestBody YxStoreProductRule resources,@PathVariable Integer id){
         if(id != null && id > 0){
             resources.setId(id);

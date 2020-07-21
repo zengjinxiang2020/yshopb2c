@@ -69,7 +69,7 @@ public class ShippingTemplatesController {
     @PostMapping("/save/{id}")
     @Log("新增/保存运费模板")
     @ApiOperation("新增/保存运费模板")
-    @PreAuthorize("@el.check('admin','yxShippingTemplates:add')")
+    @PreAuthorize("hasAnyRole('admin','yxShippingTemplates:add','yxShippingTemplates:edit')")
     public ResponseEntity<Object> create(@PathVariable Integer id,
                                          @Validated @RequestBody ShippingTemplatesDto shippingTemplatesDto){
         yxShippingTemplatesService.addAndUpdate(id,shippingTemplatesDto);
