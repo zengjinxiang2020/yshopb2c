@@ -1,5 +1,7 @@
 package co.yixiang.modules.wechat.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -21,9 +23,6 @@ public class YxArticleQueryVo implements Serializable {
 
     @ApiModelProperty(value = "文章管理ID")
     private Integer id;
-
-    @ApiModelProperty(value = "分类id")
-    private String cid;
 
     @ApiModelProperty(value = "文章标题")
     private String title;
@@ -56,25 +55,9 @@ public class YxArticleQueryVo implements Serializable {
     private Boolean status;
 
     @ApiModelProperty(value = "添加时间")
-    private String addTime;
-
-    @ApiModelProperty(value = "是否隐藏")
-    private Boolean hide;
-
-    @ApiModelProperty(value = "管理员id")
-    private Integer adminId;
-
-    @ApiModelProperty(value = "商户id")
-    private Integer merId;
-
-    @ApiModelProperty(value = "产品关联id")
-    private Integer productId;
-
-    @ApiModelProperty(value = "是否热门(小程序)")
-    private Integer isHot;
-
-    @ApiModelProperty(value = "是否轮播图(小程序)")
-    private Integer isBanner;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    @JsonProperty(value = "addTime")
+    private String createTime;
 
     private String content;
 
