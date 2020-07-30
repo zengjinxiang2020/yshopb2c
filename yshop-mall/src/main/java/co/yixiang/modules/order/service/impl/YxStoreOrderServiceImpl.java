@@ -605,6 +605,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         YxUserQueryVo userQueryVo = userService.getYxUserById(orderQueryVo.getUid());
         if(ObjectUtil.isNull(userQueryVo)) throw new YshopException("用户不存在");
 
+        if(OrderInfoEnum.REFUND_STATUS_2.getValue().equals(orderQueryVo.getRefundStatus())){
+            throw new YshopException("订单已经退款了哦！");
+        }
+
         if(orderQueryVo.getPayPrice().compareTo(price) < 0) throw new YshopException("退款金额不正确");
 
         YxStoreOrder storeOrder = new YxStoreOrder();
