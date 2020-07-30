@@ -9,6 +9,8 @@
 package co.yixiang.modules.user.service.impl;
 
 
+import cn.hutool.Hutool;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.dozer.service.IGenerator;
@@ -18,6 +20,7 @@ import co.yixiang.modules.user.param.AddressParam;
 import co.yixiang.modules.user.service.YxUserAddressService;
 import co.yixiang.modules.user.service.mapper.YxUserAddressMapper;
 import co.yixiang.modules.user.vo.YxUserAddressQueryVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -84,6 +87,14 @@ public class YxUserAddressServiceImpl extends BaseServiceImpl<YxUserAddressMappe
                 .build();
         if("true".equals(param.getIs_default())){
             userAddress.setIsDefault(ShopCommonEnum.DEFAULT_1.getValue());
+            //新增地址如果是默认，把之前的状态改掉
+            List<YxUserAddress> userAddresss = this.list(new LambdaQueryWrapper<YxUserAddress>().eq(YxUserAddress::getIsDefault,ShopCommonEnum.DEFAULT_1.getValue()));
+           if(CollectionUtil.isNotEmpty(userAddresss)){
+               userAddresss.forEach(i ->{
+                   i.setIsDefault(ShopCommonEnum.DEFAULT_0.getValue());
+               });
+               this.saveOrUpdateBatch(userAddresss);
+           }
         }else{
             userAddress.setIsDefault(ShopCommonEnum.DEFAULT_0.getValue());
         }
