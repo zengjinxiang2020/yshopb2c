@@ -1,5 +1,6 @@
 package co.yixiang.modules.user.param;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import java.io.Serializable;
  * @Date 2019/10/28
  **/
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AddressParam  implements Serializable {
     private String id;
     @NotBlank

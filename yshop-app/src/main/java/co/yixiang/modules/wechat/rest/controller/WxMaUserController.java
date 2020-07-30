@@ -14,7 +14,9 @@ import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
+import co.yixiang.api.YshopException;
 import co.yixiang.common.bean.LocalUser;
+import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.user.domain.YxUser;
@@ -53,52 +55,46 @@ public class WxMaUserController {
     private final RedisUtils redisUtils;
 
 
-
+    @AuthCheck
     @PostMapping("/binding")
     @ApiOperation(value = "公众号绑定手机号", notes = "公众号绑定手机号")
     public ApiResult<String> verify(@Validated @RequestBody BindPhoneParam param) {
-
         Object codeObj = redisUtils.get("code_" + param.getPhone());
         if(codeObj == null){
             return ApiResult.fail("请先获取验证码");
         }
         String code = codeObj.toString();
 
-
         if (!StrUtil.equals(code, param.getCaptcha())) {
             return ApiResult.fail("验证码错误");
         }
         YxUser user = LocalUser.getUser();
-        YxUserQueryVo userQueryVo = userService.getYxUserById(user.getUid());
-        if(StrUtil.isNotBlank(userQueryVo.getPhone())){
+        if(StrUtil.isNotBlank(user.getPhone())){
             return ApiResult.fail("您的账号已经绑定过手机号码");
         }
 
-        YxUser yxUser = new YxUser();
-        yxUser.setPhone(param.getPhone());
-        yxUser.setUid(user.getUid());
-        userService.updateById(yxUser);
+        user.setPhone(param.getPhone());
+        userService.updateById(user);
 
         return ApiResult.ok("绑定成功");
 
     }
 
 
-
+    @AuthCheck
     @PostMapping("/wxapp/binding")
     @ApiOperation(value = "小程序绑定手机号", notes = "小程序绑定手机号")
     public ApiResult<Map<String,Object>> phone(@Validated @RequestBody WxPhoneParam param) {
         YxUser user = LocalUser.getUser();
-        YxUserQueryVo userQueryVo = userService.getYxUserById(user.getUid());
-        if(StrUtil.isNotBlank(userQueryVo.getPhone())){
-            throw new BadRequestException("您的账号已经绑定过手机号码");
+        if(StrUtil.isNotBlank(user.getPhone())){
+            throw new YshopException("您的账号已经绑定过手机号码");
         }
 
         //读取redis配置
-        String appId = RedisUtil.get(ShopKeyUtils.getWxAppAppId());
-        String secret = RedisUtil.get(ShopKeyUtils.getWxAppSecret());
+        String appId = redisUtils.getY(ShopKeyUtils.getWxAppAppId());
+        String secret = redisUtils.getY(ShopKeyUtils.getWxAppSecret());
         if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
-            throw new ErrorRequestException("请先配置小程序");
+            throw new YshopException("请先配置小程序");
         }
         WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
         wxMaConfig.setAppid(appId);
@@ -114,13 +110,11 @@ public class WxMaUserController {
                     .getPhoneNoInfo(session.getSessionKey(), param.getEncryptedData(), param.getIv());
 
             phone = phoneNoInfo.getPhoneNumber();
-            YxUser yxUser = new YxUser();
-            yxUser.setPhone(phone);
-            yxUser.setUid(user.getUid());
-            userService.updateById(yxUser);
+            user.setPhone(phone);
+            userService.updateById(user);
         } catch (WxErrorException e) {
-            throw new BadRequestException(e.getMessage());
-            //e.printStackTrace();
+            e.printStackTrace();
+            throw new YshopException("绑定失败");
         }
         Map<String,Object> map = new LinkedHashMap<>();
         map.put("phone",phone);
