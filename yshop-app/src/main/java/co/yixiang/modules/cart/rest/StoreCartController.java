@@ -8,6 +8,7 @@
  */
 package co.yixiang.modules.cart.rest;
 
+import co.yixiang.annotation.Limit;
 import co.yixiang.api.ApiResult;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
@@ -66,6 +67,7 @@ public class StoreCartController {
     @AuthCheck
     @PostMapping("/cart/add")
     @ApiOperation(value = "添加购物车",notes = "添加购物车")
+    @Limit(key = "cart_limit", period = 60, count = 30, name = "cartLimit", prefix = "yshop")
     public ApiResult<Map<String,Object>> add(@Validated @RequestBody CartParam cartParam){
         Map<String,Object> map = new LinkedHashMap<>();
         Long uid = LocalUser.getUser().getUid();
