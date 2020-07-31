@@ -77,7 +77,14 @@ public class StoreProductController {
     @GetMapping(value = "/yxStoreProduct")
     @PreAuthorize("hasAnyRole('admin','YXSTOREPRODUCT_ALL','YXSTOREPRODUCT_SELECT')")
     public ResponseEntity getYxStoreProducts(YxStoreProductQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(yxStoreProductService.queryAll(criteria,pageable),HttpStatus.OK);
+        //商品分类
+        List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
+                .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+                .list();
+        List<Map<String,Object>> cateList = new ArrayList<>();
+        Map<String, Object> queryAll = yxStoreProductService.queryAll(criteria, pageable);
+        queryAll.put("cateList", this.makeCate(storeCategories,cateList,0,1));
+        return new ResponseEntity<>(queryAll,HttpStatus.OK);
     }
 
     @ForbidSubmit

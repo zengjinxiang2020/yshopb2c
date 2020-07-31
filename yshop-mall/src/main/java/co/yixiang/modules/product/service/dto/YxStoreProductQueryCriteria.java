@@ -25,4 +25,7 @@ public class YxStoreProductQueryCriteria{
 
     @Query
     private Integer isShow;
+
+    @Query
+    private Integer cateId;
 }
