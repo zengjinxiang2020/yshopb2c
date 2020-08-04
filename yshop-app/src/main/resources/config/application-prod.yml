@@ -62,7 +62,9 @@ spring:
     # spring cache 缓存类型为redis  也可以是其他的实现
     type: redis
 
-
+# 是否限制单用户登录
+single:
+  login: false
 
 yshop:
   security:
