@@ -338,7 +338,8 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
                     .one();
             if(storeCombination == null) throw new YshopException("该产品已下架或删除");
             if(storeCombination.getStock() < cartNum) throw new YshopException("该产品库存不足");
-        }else if(seckillId != null && seckillId > 0){//秒杀
+            //秒杀
+        }else if(seckillId != null && seckillId > 0){
             YxStoreSeckill yxStoreSeckill = storeSeckillService
                     .lambdaQuery().eq(YxStoreSeckill::getId,seckillId)
                     .eq(YxStoreSeckill::getIsShow, ShopCommonEnum.SHOW_1.getValue())
@@ -358,10 +359,10 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
             if(yxStoreSeckill.getNum() <= seckillOrderCount || yxStoreSeckill.getNum() < cartNum){
                 throw new YshopException("每人限购:"+yxStoreSeckill.getNum()+"件");
             }
-
-        }else if(bargainId != null && bargainId > 0){//砍价
+            //砍价
+        }else if(bargainId != null && bargainId > 0){
             YxStoreBargain yxStoreBargain = storeBargainService
-                    .lambdaQuery().eq(YxStoreBargain::getId,seckillId)
+                    .lambdaQuery().eq(YxStoreBargain::getId,bargainId)
                     .eq(YxStoreBargain::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
                     .le(YxStoreBargain::getStartTime,now)
                     .ge(YxStoreBargain::getStopTime,now)
