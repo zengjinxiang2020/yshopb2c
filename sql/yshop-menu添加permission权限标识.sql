@@ -11,7 +11,7 @@
  Target Server Version : 50717
  File Encoding         : 65001
 
- Date: 16/07/2020 20:11:40
+ Date: 06/08/2020 23:18:31
 */
 
 SET NAMES utf8mb4;
@@ -53,7 +53,7 @@ INSERT INTO `menu` VALUES (6, b'0', '系统监控', NULL, 0, 100, 'monitor', 'mo
 INSERT INTO `menu` VALUES (7, b'0', '操作日志', 'monitor/log/index', 6, 11, 'log', 'logs', b'1', b'0', 'Log', '2018-12-18 15:18:26', 'log:list', 1, NULL, 0);
 INSERT INTO `menu` VALUES (9, b'0', 'SQL监控', 'monitor/sql/index', 6, 14, 'sqlMonitor', 'druid', b'0', b'0', 'Sql', '2018-12-18 15:19:34', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (14, b'0', '邮件工具', 'tools/email/index', 36, 24, 'email', 'email', b'0', b'0', 'Email', '2018-12-27 10:13:09', NULL, 1, NULL, 0);
-INSERT INTO `menu` VALUES (18, b'0', '存储管理', 'tools/storage/index', 36, 23, 'qiniu', 'storage', b'0', b'0', 'Storage', '2018-12-31 11:12:15', 'storage:list', 1, NULL, 0);
+INSERT INTO `menu` VALUES (18, b'0', '存储管理', 'tools/storage/index', 36, 23, 'qiniu', 'storage', b'0', b'0', 'Storage', '2018-12-31 11:12:15', 'storage:list', 1, '2020-08-06 22:57:28', 0);
 INSERT INTO `menu` VALUES (19, b'0', '支付宝工具', 'tools/aliPay/index', 36, 27, 'alipay', 'aliPay', b'0', b'0', 'AliPay', '2018-12-31 14:52:38', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (28, b'0', '定时任务', 'system/timing/index', 36, 21, 'timing', 'timing', b'0', b'0', 'Timing', '2019-01-07 20:34:40', 'timing:list', 1, NULL, 0);
 INSERT INTO `menu` VALUES (30, b'0', '代码生成', 'generator/index', 36, 22, 'dev', 'generator', b'0', b'0', 'GeneratorIndex', '2019-01-11 15:45:55', NULL, 1, NULL, 0);
@@ -64,7 +64,7 @@ INSERT INTO `menu` VALUES (37, b'0', '岗位管理', 'system/job/index', 1, 7, '
 INSERT INTO `menu` VALUES (39, b'0', '字典管理', 'system/dict/index', 1, 8, 'dictionary', 'dict', b'0', b'0', 'Dict', '2019-04-10 11:49:04', 'dict:list', 1, NULL, 0);
 INSERT INTO `menu` VALUES (40, b'0', '商品管理', '', 0, 1, 'shop', 'shop', b'1', b'0', '', '2019-10-03 17:40:19', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (41, b'0', '商品分类', 'shop/cate/index', 40, 11, 'icon', 'cate', b'0', b'0', 'Cate', '2019-10-03 17:42:35', 'YXSTORECATEGORY_ALL,YXSTORECATEGORY_SELECT', 1, NULL, 0);
-INSERT INTO `menu` VALUES (45, b'0', '管理商品', 'shop/goods/tab', 40, 12, 'develop', 'goods', b'1', b'0', 'Goods', '2019-10-04 15:34:35', 'YXSTOREPRODUCT_SELECT,YXSTORECATEGORY_ALL,YXSTORECATEGORY_SELECT', 1, NULL, 0);
+INSERT INTO `menu` VALUES (45, b'0', '管理商品', 'shop/goods/tab', 40, 12, 'develop', 'goods', b'1', b'0', 'Goods', '2019-10-04 15:34:35', 'YXSTOREPRODUCT_SELECT,YXSTORECATEGORY_ALL,YXSTORECATEGORY_SELECT,YXSYSTEMGROUPDATA_SELECT', 1, '2020-08-06 23:01:36', 0);
 INSERT INTO `menu` VALUES (46, b'0', '会员管理', '', 0, 2, 'peoples', 'member', b'0', b'0', '', '2019-10-06 16:18:05', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (47, b'0', '会员', 'shop/user/index', 46, 21, 'peoples', 'member', b'0', b'0', 'Member', '2019-10-06 16:20:17', 'YXUSER_SELECT', 1, NULL, 0);
 INSERT INTO `menu` VALUES (48, b'0', '微信管理', '', 0, 14, 'weixin', 'wechat', b'0', b'0', '', '2019-10-06 18:28:54', NULL, 1, '2020-06-26 15:18:32', 0);
@@ -84,12 +84,12 @@ INSERT INTO `menu` VALUES (62, b'0', '评论管理', 'shop/reply/index', 53, 42,
 INSERT INTO `menu` VALUES (63, b'0', '营销管理', '', 0, 6, 'yingxiao', 'activity', b'0', b'0', '', '2019-11-09 14:17:42', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (64, b'0', '优惠券制作', 'activity/coupon/index', 229, 61, 'coupon', 'coupon', b'0', b'0', 'Coupon', '2019-11-09 14:18:58', 'YXSTORECOUPON_SELECT', 1, '2020-06-26 15:16:40', 0);
 INSERT INTO `menu` VALUES (65, b'0', '已发布优惠券', 'activity/couponissue/index', 229, 62, 'coupon2', 'couponissue', b'0', b'0', 'Couponissue', '2019-11-09 14:20:35', 'YXSTORECOUPONISSUE_SELECT', 1, '2020-06-26 15:16:48', 0);
-INSERT INTO `menu` VALUES (66, b'0', '优惠券领取记录', 'activity/storecouponuser/index', 229, 63, 'log', 'couponuser', b'0', b'0', 'Couponuser', '2019-11-09 14:21:35', 'YXSTORECOUPONUSER_SELECT', 1, '2020-06-26 15:16:57', 0);
-INSERT INTO `menu` VALUES (68, b'0', '积分配置', 'wechat/config/point', 227, 59, 'configure', 'pointConfig', b'0', b'0', 'PointConfig', '2019-11-10 18:45:55', 'YXSYSTEMCONFIG_SELECT', 1, '2020-06-26 15:01:33', 0);
+INSERT INTO `menu` VALUES (66, b'0', '优惠券领取记录', 'activity/storecouponuser/index', 229, 63, 'log', 'couponuser', b'0', b'0', 'Couponuser', '2019-11-09 14:21:35', 'YXSTORECOUPONUSER_SELECT,YXSTORECOUPONUSER_SELECT', 1, '2020-08-06 23:11:10', 0);
+INSERT INTO `menu` VALUES (68, b'0', '积分配置', 'wechat/config/point', 227, 59, 'configure', 'pointConfig', b'0', b'0', 'PointConfig', '2019-11-10 18:45:55', 'YXSYSTEMCONFIG_SELECT,YXSYSTEMCONFIG_SELECT', 1, '2020-08-06 23:09:31', 0);
 INSERT INTO `menu` VALUES (69, b'0', '分销管理', '', 0, 7, 'fenxiao', 'promoter', b'0', b'0', '', '2019-11-11 10:42:16', NULL, 1, NULL, 0);
-INSERT INTO `menu` VALUES (70, b'0', '分销配置', 'wechat/config/promoter', 69, 71, 'configure', 'promoterconfig', b'0', b'0', 'Promoterconfig', '2019-11-11 10:48:37', 'YXSYSTEMCONFIG_SELECT', 1, NULL, 0);
+INSERT INTO `menu` VALUES (70, b'0', '分销配置', 'wechat/config/promoter', 69, 71, 'configure', 'promoterconfig', b'0', b'0', 'Promoterconfig', '2019-11-11 10:48:37', 'YXSYSTEMCONFIG_SELECT,YXSYSTEMCONFIG_SELECT', 1, '2020-08-06 23:12:31', 0);
 INSERT INTO `menu` VALUES (71, b'0', '分销员', 'shop/user/aindex', 69, 72, 'user', 'agent', b'0', b'0', 'Agent', '2019-11-13 18:32:00', 'YXUSER_SELECT', 1, NULL, 1);
-INSERT INTO `menu` VALUES (72, b'0', '提现管理', 'activity/extract/index', 176, 81, 'tixian', 'extract', b'0', b'0', 'Extract', '2019-11-14 10:49:39', 'YXUSEREXTRACT_SELECT', 1, NULL, 0);
+INSERT INTO `menu` VALUES (72, b'0', '提现管理', 'activity/extract/index', 176, 81, 'tixian', 'extract', b'0', b'0', 'Extract', '2019-11-14 10:49:39', 'YXUSEREXTRACT_SELECT,YXUSEREXTRACT_SELECT', 1, '2020-08-06 23:07:28', 0);
 INSERT INTO `menu` VALUES (73, b'0', '拼团产品', 'activity/combination/index', 63, 64, 'peoples', 'combination', b'0', b'0', 'Combination', '2019-11-18 14:23:04', 'YXSTORECOMBINATION_SELECT', 1, NULL, 0);
 INSERT INTO `menu` VALUES (74, b'0', '拼团列表', 'activity/combinlist/index', 63, 65, 'list', 'pink', b'0', b'0', 'Pink', '2019-11-21 19:35:58', 'YXSTOREPINK_SELECT', 1, NULL, 0);
 INSERT INTO `menu` VALUES (75, b'0', '微信支付配置', 'wechat/config/pay', 48, 35, 'wxpay', 'wxpayconfig', b'0', b'0', 'Wxpayconfig', '2019-11-28 17:06:22', 'YXSYSTEMCONFIG_ALL', 1, NULL, 0);
@@ -113,7 +113,7 @@ INSERT INTO `menu` VALUES (120, b'0', '商品删除', NULL, 45, 4, NULL, NULL, b
 INSERT INTO `menu` VALUES (121, b'0', '在线用户', 'monitor/online/index', 6, 10, 'Steve-Jobs', 'online', b'0', b'0', 'OnlineUser', '2020-01-06 22:46:43', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (122, b'0', '浏览记录', 'monitor/log/mlog', 40, 13, 'log', 'viewlog', b'0', b'0', 'Viewlog', '2020-01-07 13:17:21', NULL, 1, NULL, 1);
 INSERT INTO `menu` VALUES (123, b'0', '后台接口文档', 'tools/swagger/index', 36, 31, 'swagger', 'swagger2', b'0', b'0', 'Swagger', '2020-01-07 18:05:52', NULL, 1, NULL, 0);
-INSERT INTO `menu` VALUES (124, b'0', '在线会员', 'monitor/online/indext', 46, 25, 'Steve-Jobs', 'onlinet', b'0', b'0', 'OnlineMember', '2020-01-13 10:53:07', NULL, 1, NULL, 0);
+INSERT INTO `menu` VALUES (124, b'0', '在线会员', 'monitor/online/indext', 46, 25, 'Steve-Jobs', 'onlinet', b'0', b'0', 'OnlineMember', '2020-01-13 10:53:07', 'auth_online', 1, '2020-08-06 22:50:49', 0);
 INSERT INTO `menu` VALUES (125, b'0', '邮费配置', 'wechat/config/postage', 55, 58, 'configure', 'postageConfig', b'0', b'0', 'PostageConfig', '2020-02-13 15:38:24', 'YXSYSTEMCONFIG_SELECT', 1, NULL, 1);
 INSERT INTO `menu` VALUES (126, b'0', '编辑', NULL, 54, 1, NULL, NULL, b'0', b'0', NULL, '2020-02-14 21:05:28', 'YXSTOREORDER_EDIT', 2, NULL, 0);
 INSERT INTO `menu` VALUES (127, b'0', '用户新增', NULL, 2, 2, NULL, NULL, b'0', b'0', NULL, '2020-02-14 21:12:21', 'user:add', 2, NULL, 0);
@@ -167,7 +167,7 @@ INSERT INTO `menu` VALUES (176, b'0', '财务管理', NULL, 0, 8, 'price', 'pric
 INSERT INTO `menu` VALUES (177, b'0', '充值管理', 'shop/recharge/index', 176, 82, 'rec', 'recharge', b'0', b'0', 'Recharge', '2020-03-02 23:05:26', 'yxUserRecharge:list', 1, NULL, 0);
 INSERT INTO `menu` VALUES (178, b'0', '门店管理', NULL, 0, 9, 'store', 'store', b'0', b'0', NULL, '2020-03-03 17:27:53', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (179, b'0', '门店列表', 'shop/store/index', 178, 92, 'edit', 'storeinfo', b'0', b'0', 'Storeinfo', '2020-03-03 17:29:09', 'yxSystemStore:list', 1, NULL, 0);
-INSERT INTO `menu` VALUES (180, b'0', '门店配置', 'shop/store/set', 178, 91, 'configure', 'storeset', b'0', b'0', 'Storeset', '2020-03-04 13:09:54', 'YXSYSTEMCONFIG_SELECT', 1, NULL, 0);
+INSERT INTO `menu` VALUES (180, b'0', '门店配置', 'shop/store/set', 178, 91, 'configure', 'storeset', b'0', b'0', 'Storeset', '2020-03-04 13:09:54', 'YXSYSTEMCONFIG_SELECT,YXSYSTEMCONFIG_SELECT', 1, '2020-08-06 23:05:23', 0);
 INSERT INTO `menu` VALUES (181, b'0', '核销订单', 'shop/order/indext', 178, 95, 'order', 'ordert', b'0', b'0', 'Ordert', '2020-03-05 17:04:12', 'YXSTOREORDER_SELECT', 1, NULL, 0);
 INSERT INTO `menu` VALUES (182, b'0', '充值金额配置', 'shop/set/recharge', 176, 83, 'money', 'rechargeset', b'0', b'0', 'Rechargeset', '2020-03-21 14:24:05', 'YXSYSTEMGROUPDATA_ALL,YXSYSTEMGROUPDATA_SELECT', 1, '2020-06-26 15:11:06', 0);
 INSERT INTO `menu` VALUES (183, b'0', '店员列表', 'shop/storestaff/index', 178, 94, 'peoples', 'staff', b'0', b'0', 'Staff', '2020-03-22 14:11:36', 'yxSystemStoreStaff:list', 1, NULL, 0);
@@ -213,9 +213,9 @@ INSERT INTO `menu` VALUES (222, b'0', '编辑核销订单', NULL, 181, 1, NULL, 
 INSERT INTO `menu` VALUES (223, b'0', '新增店员', NULL, 183, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-14 22:11:13', 'yxSystemStoreStaff:add', 2, NULL, 0);
 INSERT INTO `menu` VALUES (224, b'0', '修改店员', NULL, 183, 2, NULL, NULL, b'0', b'0', NULL, '2020-06-14 22:11:37', 'yxSystemStoreStaff:edit', 2, NULL, 0);
 INSERT INTO `menu` VALUES (225, b'0', '删除店员', NULL, 183, 3, NULL, NULL, b'0', b'0', NULL, '2020-06-14 22:11:59', 'yxSystemStoreStaff:del', 2, NULL, 0);
-INSERT INTO `menu` VALUES (226, b'0', '分销记录', 'shop/user/brobill', 69, 72, 'log', 'prolog', b'0', b'0', 'Prolog', '2020-06-26 14:52:30', 'YXUSERBILL_ALL,YXUSERBILL_SELECT', 1, '2020-06-26 14:54:33', 0);
+INSERT INTO `menu` VALUES (226, b'0', '分销记录', 'shop/user/brobill', 69, 72, 'log', 'prolog', b'0', b'0', 'Prolog', '2020-06-26 14:52:30', 'YXUSERBILL_ALL,YXUSERBILL_SELECT,YXUSERBILL_SELECT', 1, '2020-08-06 23:12:57', 0);
 INSERT INTO `menu` VALUES (227, b'0', '积分管理', NULL, 0, 10, 'Sign', 'syspoints', b'0', b'0', '-', '2020-06-26 15:00:59', NULL, 1, '2020-06-26 15:06:11', 0);
-INSERT INTO `menu` VALUES (228, b'0', '积分记录', 'shop/user/pobill', 227, 60, 'log', 'pobill', b'0', b'0', 'Pobill', '2020-06-26 15:04:17', 'YXUSERBILL_ALL,YXUSERBILL_SELECT', 1, NULL, 0);
+INSERT INTO `menu` VALUES (228, b'0', '积分记录', 'shop/user/pobill', 227, 60, 'log', 'pobill', b'0', b'0', 'Pobill', '2020-06-26 15:04:17', 'YXUSERBILL_ALL,YXUSERBILL_SELECT,YXUSERBILL_SELECT', 1, '2020-08-06 23:09:57', 0);
 INSERT INTO `menu` VALUES (229, b'0', '电子券管理', NULL, 0, 5, 'coupon', 'syscoupon', b'0', b'0', '', '2020-06-26 15:15:47', NULL, 1, '2020-06-26 15:22:16', 0);
 INSERT INTO `menu` VALUES (230, b'0', '商城系统配置', 'wechat/config/shop', 55, 59, 'shop', 'shopconfig', b'0', b'0', 'Shopconfig', '2020-06-26 15:45:32', 'YXSYSTEMCONFIG_SELECT', 1, '2020-07-04 18:50:34', 0);
 INSERT INTO `menu` VALUES (231, b'0', '阿里云短信', 'wechat/config/sms', 55, 60, 'sys-tools', 'smsconfig', b'0', b'0', 'Smsconfig', '2020-06-26 16:06:08', 'YXSYSTEMCONFIG_SELECT', 1, NULL, 0);
@@ -228,6 +228,5 @@ INSERT INTO `menu` VALUES (237, b'0', '规格新增、修改', NULL, 233, 1, NUL
 INSERT INTO `menu` VALUES (238, b'0', '规格删除', NULL, 233, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-28 16:35:00', 'yxStoreProductRule:del', 2, '2020-07-16 20:08:57', 0);
 INSERT INTO `menu` VALUES (240, b'0', '新增、修改模板', NULL, 234, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-29 17:16:06', 'yxShippingTemplates:add', 2, '2020-07-16 20:09:11', 0);
 INSERT INTO `menu` VALUES (241, b'0', '删除模板', NULL, 234, 2, NULL, NULL, b'0', b'0', NULL, '2020-06-29 17:16:06', 'yxShippingTemplates:del', 2, '2020-07-16 20:09:16', 0);
-INSERT INTO `menu` VALUES (242, b'0', '浏览记录', 'monitor/log/mlog', 40, 15, 'log', 'viewlog', b'0', b'0', 'Viewlog', '2020-07-31 09:47:11', 'log:list', 1, '2020-07-31 09:49:39', 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
