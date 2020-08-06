@@ -42,7 +42,7 @@ public class OnlineController {
 
     @ApiOperation("查询在线用户")
     @GetMapping
-    @PreAuthorize("@el.check()")
+    @PreAuthorize("@el.check('auth_online')")
     public ResponseEntity<Object> getAll(@RequestParam(value = "filter",defaultValue = "") String filter,
                                          @RequestParam(value = "type",defaultValue = "0") int type,
                                          Pageable pageable){
