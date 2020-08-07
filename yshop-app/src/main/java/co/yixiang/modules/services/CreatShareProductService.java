@@ -682,10 +682,10 @@ public class CreatShareProductService {
             }
             g.drawImage(priductUrl.getScaledInstance(750,590,Image.SCALE_DEFAULT),0,0,null);
 
-            File newFileT = new File("Alibaba-PuHuiTi-Regular.otf");
+            File newFileT = new File("simsunb.ttf");
             if(!newFileT.exists()){
                 InputStream streamT =  getClass().getClassLoader()
-                        .getResourceAsStream("Alibaba-PuHuiTi-Regular.otf");
+                        .getResourceAsStream("simsunb.ttf");
                 FileUtils.copyInputStreamToFile(streamT, newFileT);
             }
             Font font =  Font.createFont(Font.TRUETYPE_FONT, newFileT);
