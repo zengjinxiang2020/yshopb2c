@@ -69,7 +69,9 @@ yshop:
     jwt-key: yshopmini
     token-expired-in: 86400000
 
-
+# 是否限制单用户登录
+single:
+  login: false
 
 
 #是否开启 swagger-ui

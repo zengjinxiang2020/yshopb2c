@@ -49,7 +49,7 @@ public class LocalStorageController {
     @Log("导出数据")
     @ApiOperation("导出数据")
     @GetMapping(value = "/download")
-    @PreAuthorize("@el.check('admin','localStorage:list')")
+    @PreAuthorize("@el.check('admin','storage:list')")
     public void download(HttpServletResponse response, LocalStorageQueryCriteria criteria) throws IOException {
         localStorageService.download(generator.convert(localStorageService.queryAll(criteria), LocalStorageDto.class), response);
     }
@@ -57,7 +57,7 @@ public class LocalStorageController {
     @GetMapping
     @Log("查询文件")
     @ApiOperation("查询文件")
-    @PreAuthorize("@el.check('admin','localStorage:list')")
+    @PreAuthorize("@el.check('admin','storage:list')")
     public ResponseEntity<Object> getLocalStorages(LocalStorageQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(localStorageService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -65,7 +65,7 @@ public class LocalStorageController {
     @PostMapping
     @Log("新增文件")
     @ApiOperation("新增文件")
-    @PreAuthorize("@el.check('admin','localStorage:add')")
+    @PreAuthorize("@el.check('admin','storage:add')")
     public ResponseEntity<Object> create(@RequestParam String name, @RequestParam("file") MultipartFile file){
         return new ResponseEntity<>(localStorageService.create(name,file),HttpStatus.CREATED);
     }
@@ -73,7 +73,7 @@ public class LocalStorageController {
     @PutMapping
     @Log("修改文件")
     @ApiOperation("修改文件")
-    @PreAuthorize("@el.check('admin','localStorage:edit')")
+    @PreAuthorize("@el.check('admin','storage:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody LocalStorageDto resources){
         localStorageService.updateLocalStorage(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -81,7 +81,7 @@ public class LocalStorageController {
 
     @Log("删除文件")
     @ApiOperation("删除文件")
-    @PreAuthorize("@el.check('admin','localStorage:del')")
+    @PreAuthorize("@el.check('admin','storage:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Long[] ids) {
         Arrays.asList(ids).forEach(id->{

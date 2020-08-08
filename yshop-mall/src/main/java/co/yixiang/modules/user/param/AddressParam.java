@@ -19,6 +19,7 @@ public class AddressParam  implements Serializable {
     private String real_name;
     private String post_code;
     private String is_default;
+    private String wx_export;
     @NotBlank
     private String detail;
     @NotBlank

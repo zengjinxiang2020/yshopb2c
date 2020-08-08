@@ -1664,7 +1664,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
 
         //如果设置满包邮0 表示全局包邮，如果设置大于0表示满这价格包邮，否则走运费模板算法
-        if(storeFreePostage.compareTo(BigDecimal.ZERO) != 0 || totalPrice.compareTo(storeFreePostage) <= 0){
+        if(storeFreePostage.compareTo(BigDecimal.ZERO) != 0 && totalPrice.compareTo(storeFreePostage) <= 0){
             storePostage =  this.handlePostage(cartInfo,userAddress);
         }
 

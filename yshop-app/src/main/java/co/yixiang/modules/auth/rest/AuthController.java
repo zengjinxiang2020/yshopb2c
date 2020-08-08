@@ -62,7 +62,7 @@ public class AuthController {
     private final RedisUtils redisUtil;
     private final AuthService authService;
 
-    @Value("${single.login:false}")
+    @Value("${single.login}")
     private Boolean singleLogin;
 
 

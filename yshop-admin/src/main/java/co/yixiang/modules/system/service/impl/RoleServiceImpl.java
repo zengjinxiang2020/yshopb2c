@@ -1,22 +1,18 @@
 /**
-* Copyright (C) 2018-2020
-* All rights reserved, Designed By www.yixiang.co
-* 注意：
-* 本软件为www.yixiang.co开发研制，未经购买不得使用
-* 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
-* 一经发现盗用、分享等行为，将追究法律责任，后果自负
-*/
+ * Copyright (C) 2018-2020
+ * All rights reserved, Designed By www.yixiang.co
+ * 注意：
+ * 本软件为www.yixiang.co开发研制，未经购买不得使用
+ * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
+ * 一经发现盗用、分享等行为，将追究法律责任，后果自负
+ */
 package co.yixiang.modules.system.service.impl;
 
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.EntityExistException;
-import co.yixiang.modules.system.domain.Dept;
-import co.yixiang.modules.system.domain.Menu;
-import co.yixiang.modules.system.domain.Role;
-import co.yixiang.modules.system.domain.RolesDepts;
-import co.yixiang.modules.system.domain.RolesMenus;
+import co.yixiang.modules.system.domain.*;
 import co.yixiang.modules.system.service.RoleService;
 import co.yixiang.modules.system.service.RolesDeptsService;
 import co.yixiang.modules.system.service.RolesMenusService;
@@ -42,14 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 // 默认不使用缓存
@@ -58,9 +47,9 @@ import java.util.stream.Collectors;
 //import org.springframework.cache.annotation.Cacheable;
 
 /**
-* @author hupeng
-* @date 2020-05-14
-*/
+ * @author hupeng
+ * @date 2020-05-14
+ */
 @Service
 @AllArgsConstructor
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
@@ -71,7 +60,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     private final MenuMapper menuMapper;
     private final DeptMapper deptMapper;
     private final RolesMenusService rolesMenusService;
-    private final  RolesDeptsService rolesDeptsService;
+    private final RolesDeptsService rolesDeptsService;
 
     @Override
     public Map<String, Object> queryAll(RoleQueryCriteria criteria, Pageable pageable) {
@@ -90,15 +79,15 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
      * @return Object
      */
     @Override
-    public Object queryAlls(RoleQueryCriteria criteria,Pageable pageable) {
-        List<Role> roleList =  baseMapper.selectList(QueryHelpPlus.getPredicate(Role.class, criteria));
+    public Object queryAlls(RoleQueryCriteria criteria, Pageable pageable) {
+        List<Role> roleList = baseMapper.selectList(QueryHelpPlus.getPredicate(Role.class, criteria));
         return roleList;
     }
 
 
     @Override
-    public List<Role> queryAll(RoleQueryCriteria criteria){
-        List<Role> roleList =  baseMapper.selectList(QueryHelpPlus.getPredicate(Role.class, criteria));
+    public List<Role> queryAll(RoleQueryCriteria criteria) {
+        List<Role> roleList = baseMapper.selectList(QueryHelpPlus.getPredicate(Role.class, criteria));
         for (Role role : roleList) {
             role.setMenus(menuMapper.findMenuByRoleId(role.getId()));
             role.setDepts(deptMapper.findDeptByRoleId(role.getId()));
@@ -111,7 +100,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     public void download(List<RoleDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (RoleDto role : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
+            Map<String, Object> map = new LinkedHashMap<>();
             map.put("名称", role.getName());
             map.put("备注", role.getRemark());
             map.put("数据权限", role.getDataScope());
@@ -133,7 +122,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Override
     public List<RoleSmallDto> findByUsersId(Long id) {
         List<Role> roles = roleMapper.selectListByUserId(id);
-        return generator.convert(roles,RoleSmallDto.class);
+        return generator.convert(roles, RoleSmallDto.class);
     }
 
     /**
@@ -174,14 +163,14 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     @Override
 //    @CacheEvict(allEntries = true)
     public void updateMenu(Role resources, RoleDto roleDto) {
-        if(resources.getMenus().size()>0){
-            List<RolesMenus> rolesMenusList = resources.getMenus().stream().map(i ->{
+        if (resources.getMenus().size() > 0) {
+            List<RolesMenus> rolesMenusList = resources.getMenus().stream().map(i -> {
                 RolesMenus rolesMenus = new RolesMenus();
                 rolesMenus.setRoleId(resources.getId());
                 rolesMenus.setMenuId(i.getId());
                 return rolesMenus;
             }).collect(Collectors.toList());
-            rolesMenusService.remove(new LambdaQueryWrapper<RolesMenus>().eq(RolesMenus::getRoleId,resources.getId()));
+            rolesMenusService.remove(new LambdaQueryWrapper<RolesMenus>().eq(RolesMenus::getRoleId, resources.getId()));
             rolesMenusService.saveBatch(rolesMenusList);
         }
     }
@@ -191,16 +180,16 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
 //    @CacheEvict(allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public RoleDto create(Role resources) {
-        if(this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName,resources.getName())) != null){
-            throw new EntityExistException(Role.class,"username",resources.getName());
+        if (this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName, resources.getName())) != null) {
+            throw new EntityExistException(Role.class, "username", resources.getName());
         }
 
-        if(this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName,resources.getName())) != null){
-            throw new EntityExistException(Role.class,"username",resources.getName());
+        if (this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName, resources.getName())) != null) {
+            throw new EntityExistException(Role.class, "username", resources.getName());
         }
         this.save(resources);
-        if(resources.getDepts().size()>0){
-            List<RolesDepts> rolesDeptsList = resources.getDepts().stream().map(i ->{
+        if (resources.getDepts().size() > 0) {
+            List<RolesDepts> rolesDeptsList = resources.getDepts().stream().map(i -> {
                 RolesDepts rolesDepts = new RolesDepts();
                 rolesDepts.setRoleId(resources.getId());
                 rolesDepts.setDeptId(i.getId());
@@ -208,7 +197,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
             }).collect(Collectors.toList());
             rolesDeptsService.saveBatch(rolesDeptsList);
         }
-        return generator.convert(resources,RoleDto.class);
+        return generator.convert(resources, RoleDto.class);
     }
 
     @Override
@@ -217,32 +206,33 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     public void update(Role resources) {
         Role role = this.getById(resources.getId());
 
-        Role role1 = this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName,resources.getName()));
+        Role role1 = this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getName, resources.getName()));
 
-        if(role1 != null && !role1.getId().equals(role.getId())){
-            throw new EntityExistException(Role.class,"username",resources.getName());
+        if (role1 != null && !role1.getId().equals(role.getId())) {
+            throw new EntityExistException(Role.class, "username", resources.getName());
         }
-        role1 = this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getPermission,resources.getPermission()));
-        if(role1 != null && !role1.getId().equals(role.getId())){
-            throw new EntityExistException(Role.class,"permission",resources.getPermission());
+        role1 = this.getOne(new QueryWrapper<Role>().lambda().eq(Role::getPermission, resources.getPermission()));
+        if (role1 != null && !role1.getId().equals(role.getId())) {
+            throw new EntityExistException(Role.class, "permission", resources.getPermission());
         }
         role.setName(resources.getName());
         role.setRemark(resources.getRemark());
         role.setDataScope(resources.getDataScope());
-        if(resources.getDepts().size()>0){
-            List<RolesDepts> rolesDeptsList = resources.getDepts().stream().map(i ->{
+        if (resources.getDepts().size() > 0) {
+            List<RolesDepts> rolesDeptsList = resources.getDepts().stream().map(i -> {
                 RolesDepts rolesDepts = new RolesDepts();
                 rolesDepts.setRoleId(resources.getId());
                 rolesDepts.setDeptId(i.getId());
                 return rolesDepts;
             }).collect(Collectors.toList());
-            rolesDeptsService.remove(new LambdaQueryWrapper<RolesDepts>().eq(RolesDepts::getRoleId,resources.getId()));
+            rolesDeptsService.remove(new LambdaQueryWrapper<RolesDepts>().eq(RolesDepts::getRoleId, resources.getId()));
             rolesDeptsService.saveBatch(rolesDeptsList);
         }
         role.setLevel(resources.getLevel());
         role.setPermission(resources.getPermission());
         this.saveOrUpdate(role);
     }
+
     /**
      * 获取用户权限信息
      *
@@ -260,11 +250,20 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
             role.setDepts(deptSet);
         }
         Set<String> permissions = roles.stream().filter(role -> StringUtils.isNotBlank(role.getPermission())).map(Role::getPermission).collect(Collectors.toSet());
-        permissions.addAll(
-                roles.stream().flatMap(role -> role.getMenus().stream())
-                        .filter(menu -> StringUtils.isNotBlank(menu.getPermission()))
-                        .map(Menu::getPermission).collect(Collectors.toSet())
-        );
+//        permissions.addAll(
+//                roles.stream().flatMap(role -> role.getMenus().stream())
+//                        .filter(menu -> StringUtils.isNotBlank(menu.getPermission()))
+//                        .map(Menu::getPermission).collect(Collectors.toSet())
+//        );
+        roles.stream().flatMap(role -> role.getMenus().stream())
+                .filter(menu -> StringUtils.isNotBlank(menu.getPermission()))
+                .forEach(menu -> {
+                    // 添加基于Permission的权限信息
+                    for (String permission : StringUtils.split(menu.getPermission(), ",")) {
+                        permissions.add(permission);
+                    }
+                });
+
         return permissions.stream().map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
@@ -274,7 +273,7 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleMapper, Role> implement
     public void delete(Set<Long> ids) {
         for (Long id : ids) {
             rolesMenusService.lambdaUpdate().eq(RolesMenus::getRoleId, id).remove();
-            rolesDeptsService.lambdaUpdate().eq(RolesDepts::getRoleId,id).remove();
+            rolesDeptsService.lambdaUpdate().eq(RolesDepts::getRoleId, id).remove();
         }
         this.removeByIds(ids);
     }
