@@ -42,7 +42,7 @@ public class WxPayConfiguration {
 	 * @return
 	 */
 	public static WxPayService getPayService(PayMethodEnum payMethodEnum) {
-		WxPayService wxPayService = payServices.get(ShopKeyUtils.getYshopWeiXinPayService());
+		WxPayService wxPayService = payServices.get(ShopKeyUtils.getYshopWeiXinPayService()+payMethodEnum.getValue());
 		if(wxPayService == null || redisUtils.get(ShopKeyUtils.getYshopWeiXinPayService()) == null) {
 			WxPayConfig payConfig = new WxPayConfig();
 			switch (payMethodEnum){
@@ -64,7 +64,7 @@ public class WxPayConfiguration {
 			payConfig.setUseSandboxEnv(false);
 			wxPayService = new WxPayServiceImpl();
 			wxPayService.setConfig(payConfig);
-			payServices.put(ShopKeyUtils.getYshopWeiXinPayService(), wxPayService);
+			payServices.put(ShopKeyUtils.getYshopWeiXinPayService()+payMethodEnum.getValue(), wxPayService);
 
 			//增加标识
 			redisUtils.set(ShopKeyUtils.getYshopWeiXinPayService(),"yshop");
