@@ -3,6 +3,7 @@ package co.yixiang.modules.user.param;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
@@ -14,7 +15,9 @@ import java.io.Serializable;
 public class UserEditParam implements Serializable {
     @NotBlank(message = "请上传头像")
     private String avatar;
+
     @NotBlank(message = "请填写昵称")
+    @Size(min = 1, max = 60,message = "长度超过了限制")
     private String nickname;
 
 
