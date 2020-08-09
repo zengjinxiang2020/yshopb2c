@@ -105,7 +105,7 @@ import java.util.stream.Collectors;
 */
 @Slf4j
 @Service
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, YxStoreOrder> implements YxStoreOrderService {
 
     @Autowired
@@ -1449,7 +1449,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * 减库存增加销量
      * @param cartInfo 购物车
      */
-    private void deStockIncSale(List<YxStoreCartQueryVo> cartInfo) {
+    public void deStockIncSale(List<YxStoreCartQueryVo> cartInfo) {
         for (YxStoreCartQueryVo storeCartVO : cartInfo) {
             Long combinationId = storeCartVO.getCombinationId();
             Long seckillId = storeCartVO.getSeckillId();
