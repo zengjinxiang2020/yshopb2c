@@ -183,7 +183,7 @@ public class WeixinTemplateService {
      * @return url
      */
     private String getSiteUrl(){
-        String apiUrl = redisUtils.getY(ShopKeyUtils.getApiUrl());
+        String apiUrl = redisUtils.getY(ShopKeyUtils.getSiteUrl());
         if(StrUtil.isBlank(apiUrl)){
             return "";
         }
