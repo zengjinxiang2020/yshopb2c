@@ -28,7 +28,7 @@ public interface StoreProductAttrValueMapper extends CoreMapper<YxStoreProductAt
     Integer sumStock(long productId);
 
     @Update("update yx_store_product_attr_value set stock=stock-#{num}, sales=sales+#{num}" +
-            " where product_id=#{productId} and `unique`=#{unique} and stock > #{num}")
+            " where product_id=#{productId} and `unique`=#{unique} and stock >= #{num}")
     int decStockIncSales(@Param("num") int num, @Param("productId") Long productId,
                          @Param("unique")  String unique);
 
