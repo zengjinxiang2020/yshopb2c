@@ -673,6 +673,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         YxExpress expressQueryVo = expressService.getById(Integer.valueOf(deliveryName));
         if(ObjectUtil.isNull(expressQueryVo)) throw new YshopException("请后台先添加快递公司");
 
+        //判断拼团产品
+        if(orderQueryVo.getPinkId() != null && orderQueryVo.getPinkId() >0 ){
+            YxStorePink pink = pinkService.getById(orderQueryVo.getPinkId());
+            if(!OrderInfoEnum.PINK_STATUS_2.getValue().equals(pink.getStatus())){
+                throw new YshopException("拼团未成功不能发货");
+            }
+        }
+
         YxStoreOrder storeOrder = YxStoreOrder.builder()
                 .id(orderQueryVo.getId())
                 .status(OrderInfoEnum.STATUS_1.getValue())
