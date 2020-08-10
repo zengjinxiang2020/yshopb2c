@@ -37,6 +37,8 @@ public class SystemConfigConstants {
     public final static String WECHAT_SHARE_TITLE="wechat_share_title";
     public final static String WECHAT_SOURCEID="wechat_sourceid";
     public final static String WECHAT_TOKEN="wechat_token";
+    public final static String WECHAT_MA_TOKEN="wechat_ma_token";
+    public final static String WECHAT_MA_ENCODINGAESKEY="wechat_ma_encodingaeskey";
     public final static String WECHAT_TYPE="wechat_type";
     public final static String WXAPP_APPID="wxapp_appId";
     public final static String WXAPP_SECRET="wxapp_secret";

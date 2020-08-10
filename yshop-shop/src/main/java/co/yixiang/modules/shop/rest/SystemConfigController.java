@@ -16,6 +16,7 @@ import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.shop.domain.YxSystemConfig;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.dto.YxSystemConfigQueryCriteria;
+import co.yixiang.mp.config.WxMaConfiguration;
 import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.mp.config.WxPayConfiguration;
 import co.yixiang.utils.RedisUtil;
@@ -77,6 +78,7 @@ public class SystemConfigController {
                     if(SystemConfigConstants.WECHAT_APPID.equals(key)){
                         WxMpConfiguration.removeWxMpService();
                         WxPayConfiguration.removeWxPayService();
+                        WxMaConfiguration.removeWxMaService();
                     }
                     if(SystemConfigConstants.WXPAY_MCHID.equals(key) || SystemConfigConstants.WXAPP_APPID.equals(key)){
                         WxPayConfiguration.removeWxPayService();

@@ -146,11 +146,35 @@ public class ShopKeyUtils {
     }
 
     /**
+     * 微信公众号验证token
+     */
+    public static  String getWechatMaToken(){
+        String wechatToken= SystemConfigConstants.WECHAT_MA_TOKEN;
+        return  wechatToken+getExtendValue();
+    }
+    /**
+     * 微信公众号 EncodingAESKey
+     */
+    public static  String getWechatMaEncodingAESKey(){
+        String wechatEncodingAESKey= SystemConfigConstants.WECHAT_MA_ENCODINGAESKEY;
+        return  wechatEncodingAESKey+getExtendValue();
+    }
+
+    /**
      * 支付appId
      */
     public static  String getWxNativeAppAppId(){
         String wxNativeAppAppId= SystemConfigConstants.WX_NATIVE_APP_APPID;
         return  wxNativeAppAppId+getExtendValue();
+    }
+
+    /**
+     * 微信小程序service
+     * @return
+     */
+    public static String getYshopWeiXinMaSevice() {
+        String yshopWeiXinMaSevice= ShopConstants.YSHOP_WEIXIN_MA_SERVICE;
+        return  yshopWeiXinMaSevice+getExtendValue();
     }
 
 }

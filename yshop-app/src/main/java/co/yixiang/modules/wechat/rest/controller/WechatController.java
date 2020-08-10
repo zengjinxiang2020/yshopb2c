@@ -8,6 +8,7 @@
  */
 package co.yixiang.modules.wechat.rest.controller;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
 import co.yixiang.annotation.AnonymousAccess;
 
 import co.yixiang.api.ApiResult;
@@ -25,6 +26,7 @@ import co.yixiang.modules.shop.service.YxSystemConfigService;
 
 import co.yixiang.modules.user.domain.YxUserRecharge;
 import co.yixiang.modules.user.service.YxUserRechargeService;
+import co.yixiang.mp.config.WxMaConfiguration;
 import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.mp.config.WxPayConfiguration;
 import co.yixiang.utils.BigNum;
@@ -111,6 +113,17 @@ public class WechatController {
     }
 
 
+    /**
+     * 微信小程序接口能力配置
+     */
+    @GetMapping("/wxapp/config")
+    @ApiOperation(value = "微信小程序接口能力配置",notes = "微信小程序接口能力配置")
+    public boolean wxAppConfig(@RequestParam(value = "signature") String signature,
+                                                     @RequestParam(value = "timestamp") String timestamp,
+                                                     @RequestParam(value = "nonce") String nonce) throws WxErrorException {
+        WxMaService wxService = WxMaConfiguration.getWxMaService();
+        return wxService.checkSignature(timestamp,nonce,signature);
+    }
 
     /**
      * 微信支付/充值回调

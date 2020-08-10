@@ -53,8 +53,10 @@ public interface ShopConstants {
 	 * 微信公众号service
 	 */
 	String YSHOP_WEIXIN_MP_SERVICE = "yshop_weixin_mp_service";
-
-
+	/**
+	 * 微信小程序service
+	 */
+	String YSHOP_WEIXIN_MA_SERVICE = "yshop_weixin_ma_service";
 
 	/**
 	 * 商城默认密码
@@ -166,4 +168,6 @@ public interface ShopConstants {
 	String YSHOP_REDIS_CITY_KEY = "yshop:city";
 
 	String YSHOP_APP_LOGIN_USER = "app-online-token";
+
+
 }
