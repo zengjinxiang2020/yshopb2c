@@ -12,6 +12,8 @@ import co.yixiang.utils.ShopKeyUtils;
 import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+
+import javax.annotation.PostConstruct;
 import java.util.Map;
 
 /**
@@ -42,12 +44,13 @@ public class WxMaConfiguration {
             config.setSecret(RedisUtil.get(ShopKeyUtils.getWxAppSecret()));
             config.setToken(RedisUtil.get(ShopKeyUtils.getWechatMaToken()));
             config.setAesKey(RedisUtil.get(ShopKeyUtils.getWechatMaEncodingAESKey()));
-            WxMaService service = new WxMaServiceImpl();
+            wxMaService = new WxMaServiceImpl();
+            wxMaService.setWxMaConfig(config);
             maServices.put(ShopKeyUtils.getYshopWeiXinMaSevice(), wxMaService);
             routers.put(ShopKeyUtils.getYshopWeiXinMaSevice(), newRouter(wxMaService));
             //增加标识
             redisUtils.set(ShopKeyUtils.getYshopWeiXinMaSevice(),"yshop");
-            service.setWxMaConfig(config);
+
         }
         return wxMaService;
     }

@@ -17,8 +17,19 @@ public class WxMaLiveInfo implements Serializable {
     @Data
     public static class RoomInfo implements Serializable {
         private static final long serialVersionUID = 7745775280267417154L;
+        /**
+         * 直播间名字，最短3个汉字，最长17个汉字，1个汉字相当于2个字符
+         */
         private String name;
+        /**
+         * 直播房间id
+         */
         private Integer roomid;
+        /**
+         * 背景图，填入mediaID（mediaID获取后，三天内有效）；图片mediaID的获取，
+         * 请参考以下文档： https://developers.weixin.qq.com/doc/offiaccount/Asset_Management/New_temporary_materials.html；
+         * 直播间背景图，图片规则：建议像素1080*1920，大小不超过2M
+         */
         private String coverImg;
         private String shareImg;
         private Integer liveStatus;
