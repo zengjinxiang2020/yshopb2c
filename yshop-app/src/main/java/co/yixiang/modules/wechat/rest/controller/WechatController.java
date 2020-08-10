@@ -121,6 +121,8 @@ public class WechatController {
     public String renotify(@RequestBody String xmlData) {
         try {
             WxPayService wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WECHAT);
+            if(wxPayService == null) wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WXAPP);
+            if(wxPayService == null) wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.APP);
             WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
             String orderId = notifyResult.getOutTradeNo();
             String attach = notifyResult.getAttach();
@@ -158,6 +160,8 @@ public class WechatController {
     public String parseRefundNotifyResult(@RequestBody String xmlData) {
         try {
             WxPayService wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WECHAT);
+            if(wxPayService == null) wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WXAPP);
+            if(wxPayService == null) wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.APP);
             WxPayRefundNotifyResult result = wxPayService.parseRefundNotifyResult(xmlData);
             String orderId = result.getReqInfo().getOutTradeNo();
             BigDecimal refundFee = BigNum.div(result.getReqInfo().getRefundFee(), 100);
