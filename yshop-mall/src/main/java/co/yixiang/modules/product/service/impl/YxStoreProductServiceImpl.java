@@ -21,6 +21,7 @@ import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.*;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.category.service.YxStoreCategoryService;
 import co.yixiang.modules.product.domain.YxStoreProduct;
@@ -34,6 +35,7 @@ import co.yixiang.modules.product.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
 import co.yixiang.modules.product.vo.YxStoreProductReplyQueryVo;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
+import co.yixiang.modules.template.domain.YxShippingTemplates;
 import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.FileUtil;
@@ -275,7 +277,13 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                 || Integer.valueOf(storeFreePostage) == 0){
             tempName = "全国包邮";
         }else{
-            tempName = shippingTemplatesService.getById(storeProduct.getTempId()).getName();
+            YxShippingTemplates shippingTemplates = shippingTemplatesService.getById(storeProduct.getTempId());
+            if(ObjectUtil.isNotNull(shippingTemplates)){
+                tempName = shippingTemplates.getName();
+            }else {
+                throw new BadRequestException("请配置运费模板");
+            }
+
         }
         productVo.setTempName(tempName);
 
