@@ -11,7 +11,10 @@ import java.util.Arrays;
 
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.aop.ForbidSubmit;
+import co.yixiang.modules.product.domain.YxStoreProduct;
+import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.modules.template.domain.YxShippingTemplates;
 import co.yixiang.modules.template.domain.YxSystemCity;
 import co.yixiang.modules.template.service.YxShippingTemplatesService;
@@ -47,6 +50,7 @@ public class ShippingTemplatesController {
     private final YxShippingTemplatesService yxShippingTemplatesService;
     private final YxSystemCityService yxSystemCityService;
     private final IGenerator generator;
+    private final YxStoreProductService yxStoreProductService;
 
 
     @Log("导出数据")
@@ -83,7 +87,13 @@ public class ShippingTemplatesController {
     @PreAuthorize("@el.check('admin','yxShippingTemplates:del')")
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Integer[] ids) {
+        List<YxStoreProduct> productList = yxStoreProductService.list();
         Arrays.asList(ids).forEach(id->{
+            for (YxStoreProduct yxStoreProduct : productList) {
+                if(id==yxStoreProduct.getTempId()){
+                    throw new BadRequestException("运费模板存在商品关联，请删除对应商品");
+                }
+            }
             yxShippingTemplatesService.removeById(id);
         });
         return new ResponseEntity<>(HttpStatus.OK);
