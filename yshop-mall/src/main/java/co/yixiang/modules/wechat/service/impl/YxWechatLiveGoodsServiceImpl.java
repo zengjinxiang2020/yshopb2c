@@ -9,6 +9,7 @@
 package co.yixiang.modules.wechat.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import co.yixiang.exception.BadRequestException;
@@ -87,13 +88,50 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         }
         return true;
     }
+
+    @Override
+    public void removegoods(Long id) {
+        this.removeById(id);
+        try {
+            wxMaLiveGoodsService.deleteGoods(id.intValue());
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updategoods(YxWechatLiveGoods resources) {
+        YxWechatLiveGoods wechatLiveGoods = this.getById(resources.getGoodsId());
+        try {
+        WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+            if(ObjectUtil.isNotEmpty(wechatLiveGoods)){
+                /** 审核状态 0：未审核，1：审核中，2:审核通过，3审核失败 */
+                if("2".equals(wechatLiveGoods.getAuditStatus())){
+                }else if("0".equals(wechatLiveGoods.getAuditStatus())){
+                    resources.setCoverImgUrl(uploadPhotoToWx(wxMaService,resources.getCoverImgeUrl()).getMediaId());
+                }else if("1".equals(wechatLiveGoods.getAuditStatus())){
+                    throw new BadRequestException("商品审核中不允许修改");
+                }
+            }
+            WxMaLiveInfo.Goods goods = generator.convert(resources, WxMaLiveInfo.Goods.class);
+            boolean wxMaLiveResult = wxMaLiveGoodsService.updateGoods(goods);
+            this.saveOrUpdate(resources);
+        } catch (WxErrorException e) {
+            throw new BadRequestException(e.toString());
+        }
+    }
+
     @Override
     //@Cacheable
     public Map<String, Object> queryAll(YxWechatLiveGoodsQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
         PageInfo<YxWechatLiveGoods> page = new PageInfo<>(queryAll(criteria));
         Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxWechatLiveGoodsDto.class));
+        List<YxWechatLiveGoodsDto> goodsDtos = generator.convert(page.getList(), YxWechatLiveGoodsDto.class);
+        goodsDtos.forEach(i ->{
+            i.setId(i.getGoodsId());
+        });
+        map.put("content",goodsDtos);
         map.put("totalElements", page.getTotal());
         return map;
     }

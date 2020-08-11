@@ -49,4 +49,8 @@ public interface YxWechatLiveGoodsService  extends BaseService<YxWechatLiveGoods
     boolean saveGoods(YxWechatLiveGoods resources);
 
     boolean synchroWxOlLive(List<Integer> goodsIds);
+
+    void removegoods(Long id);
+
+    void updategoods(YxWechatLiveGoods resources);
 }

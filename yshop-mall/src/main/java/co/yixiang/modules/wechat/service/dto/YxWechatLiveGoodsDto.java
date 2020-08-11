@@ -20,6 +20,9 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 @Data
 public class YxWechatLiveGoodsDto implements Serializable {
 
+
+    private Long id;
+
     /** 直播商品id */
     /** 防止精度丢失 */
     @JsonSerialize(using= ToStringSerializer.class)

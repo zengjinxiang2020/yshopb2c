@@ -9,12 +9,14 @@
 package co.yixiang.modules.wechat.rest;
 import java.util.Arrays;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.modules.wechat.service.WxMaLiveGoodsService;
 import lombok.AllArgsConstructor;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.wechat.domain.YxWechatLiveGoods;
 import co.yixiang.modules.wechat.service.YxWechatLiveGoodsService;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsQueryCriteria;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsDto;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,7 @@ public class YxWechatLiveGoodsController {
 
     private final YxWechatLiveGoodsService yxWechatLiveGoodsService;
     private final IGenerator generator;
-
+    private final WxMaLiveGoodsService wxMaLiveGoodsService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")
@@ -68,7 +70,7 @@ public class YxWechatLiveGoodsController {
     @ApiOperation("修改yxWechatLiveGoods")
     @PreAuthorize("@el.check('admin','yxWechatLiveGoods:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody YxWechatLiveGoods resources){
-        yxWechatLiveGoodsService.updateById(resources);
+        yxWechatLiveGoodsService.updategoods(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -78,7 +80,7 @@ public class YxWechatLiveGoodsController {
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Long[] ids) {
         Arrays.asList(ids).forEach(id->{
-            yxWechatLiveGoodsService.removeById(id);
+                yxWechatLiveGoodsService.removegoods(id);
         });
         return new ResponseEntity<>(HttpStatus.OK);
     }

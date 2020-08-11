@@ -11,6 +11,7 @@ package co.yixiang.modules.wechat.service.impl;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.wechat.domain.YxWechatLive;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.dozer.service.IGenerator;
@@ -96,7 +97,11 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         PageInfo<YxWechatLive> page = new PageInfo<>(queryAll(criteria));
         Map<String, Object> map = new LinkedHashMap<>(2);
 //            List<WxMaLiveResult.RoomInfo> liveInfos = wxMaLiveService.getLiveInfos();
-            map.put("content", generator.convert(page.getList(), YxWechatLiveDto.class));
+        List<YxWechatLiveDto> liveDtos = generator.convert(page.getList(), YxWechatLiveDto.class);
+        liveDtos.forEach(i ->{
+            i.setId(i.getRoomid());
+        });
+        map.put("content",liveDtos);
             map.put("totalElements", page.getTotal());
         return map;
     }
@@ -115,6 +120,7 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
             this.save(resources);
         } catch (WxErrorException e) {
             e.printStackTrace();
+            throw new BadRequestException(e.toString());
         }
         return false;
     }
