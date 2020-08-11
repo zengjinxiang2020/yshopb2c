@@ -16,7 +16,7 @@ import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.shop.domain.YxSystemConfig;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.dto.YxSystemConfigQueryCriteria;
-import co.yixiang.mp.config.WxMaConfiguration;
+import co.yixiang.tools.config.WxMaConfiguration;
 import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.mp.config.WxPayConfiguration;
 import co.yixiang.utils.RedisUtil;

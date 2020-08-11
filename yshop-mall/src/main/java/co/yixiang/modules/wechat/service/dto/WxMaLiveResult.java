@@ -1,4 +1,4 @@
-package co.yixiang.mp.bean;
+package co.yixiang.modules.wechat.service.dto;
 
 import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
 import com.google.gson.annotations.SerializedName;

@@ -1,19 +1,26 @@
-package co.yixiang.mp.service.impl;
+package co.yixiang.modules.wechat.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
-import co.yixiang.mp.bean.WxMaLiveInfo;
-import co.yixiang.mp.bean.WxMaLiveResult;
-import co.yixiang.mp.config.WxMaConfiguration;
-import co.yixiang.mp.service.WxMaLiveService;
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONUtil;
+import co.yixiang.modules.wechat.service.WxMaLiveService;
+import co.yixiang.modules.wechat.service.dto.WxMaLiveInfo;
+import co.yixiang.modules.wechat.service.dto.WxMaLiveResult;
+import co.yixiang.tools.config.WxMaConfiguration;
 import co.yixiang.utils.GsonParser;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.WxType;
+import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
 import me.chanjar.weixin.common.error.WxError;
 import me.chanjar.weixin.common.error.WxErrorException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,27 +34,40 @@ import java.util.Map;
  * @author <a href="https://github.com/yjwang3300300">yjwang</a>
  */
 @Slf4j
-@AllArgsConstructor
+@Service
 public class WxMaLiveServiceImpl implements WxMaLiveService {
 
-
+    @Value("${file.path}")
+    private String uploadDirStr;
     @Override
     public Integer createRoom(WxMaLiveInfo.RoomInfo roomInfo) throws WxErrorException {
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
-        String responseContent = wxMaService.post(CREATE_ROOM, WxMaGsonBuilder.create().toJson(roomInfo));
+        String responseContent = wxMaService.post(WxMaLiveService.CREATE_ROOM, WxMaGsonBuilder.create().toJson(roomInfo));
         JsonObject jsonObject = GsonParser.parse(responseContent);
         if (jsonObject.get("errcode").getAsInt() != 0) {
             throw new WxErrorException(WxError.fromJson(responseContent, WxType.MiniApp));
         }
         return jsonObject.get("roomId").getAsInt();
     }
-
+    /**
+     * 获取直播房间列表.（分页）
+     *
+     * @param start 起始拉取房间，start = 0 表示从第 1 个房间开始拉取
+     * @param limit 每次拉取的个数上限，不要设置过大，建议 100 以内
+     * @return .
+     * @throws WxErrorException .
+     */
     @Override
     public WxMaLiveResult getLiveInfo(Integer start, Integer limit) throws WxErrorException {
         JsonObject jsonObject = getLiveInfo(start, limit, null);
         return WxMaLiveResult.fromJson(jsonObject.toString());
     }
-
+    /**
+     * 获取所有直播间信息（没有分页直接获取全部）
+     *
+     * @return .
+     * @throws WxErrorException .
+     */
     @Override
     public List<WxMaLiveResult.RoomInfo> getLiveInfos() throws WxErrorException {
         List<WxMaLiveResult.RoomInfo> results = new ArrayList<>();
@@ -96,7 +116,7 @@ public class WxMaLiveServiceImpl implements WxMaLiveService {
         map.put("roomId", roomId);
         map.put("ids", goodsIds);
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
-        String responseContent = wxMaService.post(ADD_GOODS, WxMaGsonBuilder.create().toJson(map));
+        String responseContent = wxMaService.post(WxMaLiveService.ADD_GOODS, WxMaGsonBuilder.create().toJson(map));
         JsonObject jsonObject = GsonParser.parse(responseContent);
         if (jsonObject.get("errcode").getAsInt() != 0) {
             throw new WxErrorException(WxError.fromJson(responseContent, WxType.MiniApp));
@@ -111,11 +131,13 @@ public class WxMaLiveServiceImpl implements WxMaLiveService {
         map.put("start", start);
         map.put("limit", limit);
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
-        String responseContent = wxMaService.post(GET_LIVE_INFO, WxMaGsonBuilder.create().toJson(map));
+        String responseContent = wxMaService.post(WxMaLiveService.GET_LIVE_INFO, WxMaGsonBuilder.create().toJson(map));
         JsonObject jsonObject = GsonParser.parse(responseContent);
         if (jsonObject.get("errcode").getAsInt() != 0) {
             throw new WxErrorException(WxError.fromJson(responseContent, WxType.MiniApp));
         }
         return jsonObject;
     }
+
+
 }

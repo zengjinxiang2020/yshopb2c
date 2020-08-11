@@ -26,7 +26,7 @@ import co.yixiang.modules.shop.service.YxSystemConfigService;
 
 import co.yixiang.modules.user.domain.YxUserRecharge;
 import co.yixiang.modules.user.service.YxUserRechargeService;
-import co.yixiang.mp.config.WxMaConfiguration;
+import co.yixiang.tools.config.WxMaConfiguration;
 import co.yixiang.mp.config.WxMpConfiguration;
 import co.yixiang.mp.config.WxPayConfiguration;
 import co.yixiang.utils.BigNum;

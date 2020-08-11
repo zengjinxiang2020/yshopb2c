@@ -1,7 +1,7 @@
-package co.yixiang.mp.service;
+package co.yixiang.modules.wechat.service;
 
-import co.yixiang.mp.bean.WxMaLiveInfo;
-import co.yixiang.mp.bean.WxMaLiveResult;
+import co.yixiang.modules.wechat.service.dto.WxMaLiveInfo;
+import co.yixiang.modules.wechat.service.dto.WxMaLiveResult;
 import me.chanjar.weixin.common.error.WxErrorException;
 
 import java.util.List;

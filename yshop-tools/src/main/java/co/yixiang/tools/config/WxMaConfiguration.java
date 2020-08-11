@@ -1,11 +1,10 @@
-package co.yixiang.mp.config;
+package co.yixiang.tools.config;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.binarywang.wx.miniapp.message.WxMaMessageHandler;
 import cn.binarywang.wx.miniapp.message.WxMaMessageRouter;
-import co.yixiang.mp.handler.LogHandler;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.ShopKeyUtils;
@@ -29,7 +28,7 @@ public class WxMaConfiguration {
         return routers.get(appid);
     }
     @Autowired
-    public WxMaConfiguration(RedisUtils redisUtils, LogHandler logHandler) {
+    public WxMaConfiguration(RedisUtils redisUtils) {
         this.redisUtils = redisUtils;
         this.wxMaMessageHandler = wxMaMessageHandler;
     }
