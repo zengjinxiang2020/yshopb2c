@@ -8,9 +8,9 @@
 */
 package co.yixiang.modules.wechat.service;
 import co.yixiang.common.service.BaseService;
-import co.yixiang.modules.wechat.domain.YxWechatLive;
-import co.yixiang.modules.wechat.service.dto.YxWechatLiveDto;
-import co.yixiang.modules.wechat.service.dto.YxWechatLiveQueryCriteria;
+import co.yixiang.modules.wechat.domain.YxWechatLiveGoods;
+import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsDto;
+import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsQueryCriteria;
 import org.springframework.data.domain.Pageable;
 import java.util.Map;
 import java.util.List;
@@ -19,32 +19,24 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
 * @author hupeng
-* @date 2020-08-10
+* @date 2020-08-11
 */
-public interface YxWechatLiveService  extends BaseService<YxWechatLive>{
+public interface YxWechatLiveGoodsService  extends BaseService<YxWechatLiveGoods>{
 
-
-
-
-
-    boolean synchroWxOlLive();
 /**
     * 查询数据分页
     * @param criteria 条件
     * @param pageable 分页参数
     * @return Map<String,Object>
     */
-    Map<String,Object> queryAll(YxWechatLiveQueryCriteria criteria, Pageable pageable);
+    Map<String,Object> queryAll(YxWechatLiveGoodsQueryCriteria criteria, Pageable pageable);
 
     /**
     * 查询所有数据不分页
     * @param criteria 条件参数
-    * @return List<YxWechatLiveDto>
+    * @return List<YxWechatLiveGoodsDto>
     */
-    List<YxWechatLive> queryAll(YxWechatLiveQueryCriteria criteria);
-
-
-    boolean saveLive(YxWechatLive resources);
+    List<YxWechatLiveGoods> queryAll(YxWechatLiveGoodsQueryCriteria criteria);
 
     /**
     * 导出数据
@@ -52,5 +44,9 @@ public interface YxWechatLiveService  extends BaseService<YxWechatLive>{
     * @param response /
     * @throws IOException /
     */
-    void download(List<YxWechatLiveDto> all, HttpServletResponse response) throws IOException;
+    void download(List<YxWechatLiveGoodsDto> all, HttpServletResponse response) throws IOException;
+
+    boolean saveGoods(YxWechatLiveGoods resources);
+
+    boolean synchroWxOlLive(List<Integer> goodsIds);
 }

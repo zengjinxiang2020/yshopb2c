@@ -17,3 +17,5 @@
 
 INSERT INTO `menu` VALUES (242, b'0', '直播管理', 'wechat/live/index', 48, 999, 'weixin', 'wxlive', b'0', b'0', 'Wxlive', '2020-08-10 17:20:54', NULL, 1, NULL, 0);
 
+INSERT INTO `menu` VALUES
+(243, b'0', '直播商品管理', 'wechat/goods/index', 48, 999, 'weixin', 'wxlivegoods', b'0', b'0', 'WxliveGoods', '2020-08-10 17:20:54', NULL, 1, NULL, 0);

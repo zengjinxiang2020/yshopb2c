@@ -16,6 +16,7 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.modules.wechat.service.WxMaLiveService;
 import co.yixiang.modules.wechat.service.dto.WxMaLiveInfo;
+import co.yixiang.modules.wechat.service.dto.WxMaLiveResult;
 import co.yixiang.tools.config.WxMaConfiguration;
 import co.yixiang.utils.DateUtils;
 import co.yixiang.utils.OrderUtil;
@@ -68,14 +69,35 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         this.wxMaLiveService = wxMaLiveService;
     }
 
+    /**
+     * 同步直播间
+     * @return
+     */
+    //@Cacheable
+    public boolean synchroWxOlLive() {
+        try {
+            List<WxMaLiveResult.RoomInfo> liveInfos = wxMaLiveService.getLiveInfos();
+            List<YxWechatLive> convert = generator.convert(liveInfos, YxWechatLive.class);
+            convert.forEach(i ->{
+                i.setAnchorImge(i.getAnchorImg());
+                i.setCoverImge(i.getCoverImg());
+                i.setShareImge(i.getShareImg());
+            });
+            this.saveOrUpdateBatch(convert);
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
     @Override
     //@Cacheable
     public Map<String, Object> queryAll(YxWechatLiveQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
         PageInfo<YxWechatLive> page = new PageInfo<>(queryAll(criteria));
         Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), YxWechatLiveDto.class));
-        map.put("totalElements", page.getTotal());
+//            List<WxMaLiveResult.RoomInfo> liveInfos = wxMaLiveService.getLiveInfos();
+            map.put("content", generator.convert(page.getList(), YxWechatLiveDto.class));
+            map.put("totalElements", page.getTotal());
         return map;
     }
     @Override

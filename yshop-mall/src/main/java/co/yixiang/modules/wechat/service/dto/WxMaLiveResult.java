@@ -20,7 +20,13 @@ public class WxMaLiveResult implements Serializable {
     private Integer errcode;
     private String errmsg;
     private Integer total;
+    /**
+     * 审核单ID
+     */
     private Integer auditId;
+    /**
+     * 商品ID
+     */
     private Integer goodsId;
     private List<Goods> goods;
 
@@ -84,7 +90,7 @@ public class WxMaLiveResult implements Serializable {
         private static final long serialVersionUID = 7745775280267417154L;
         private String name;
         @SerializedName("roomid")
-        private Integer roomId;
+        private Integer roomid;
         @SerializedName("cover_img")
         private String coverImg;
         @SerializedName("share_img")

@@ -82,4 +82,12 @@ public class YxWechatLiveController {
         });
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
+    @ApiOperation("同步数据")
+    @GetMapping("/synchro")
+    public ResponseEntity<Object> synchroWxOlLive() {
+        yxWechatLiveService.synchroWxOlLive();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
