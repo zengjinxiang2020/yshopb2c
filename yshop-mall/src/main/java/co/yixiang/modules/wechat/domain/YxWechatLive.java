@@ -7,6 +7,7 @@
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
 package co.yixiang.modules.wechat.domain;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
@@ -26,7 +27,7 @@ import java.util.Date;
 public class YxWechatLive implements Serializable {
 
     /** 直播间id */
-    @TableId
+    @TableId(type = IdType.INPUT)
     private Long roomid;
 
 

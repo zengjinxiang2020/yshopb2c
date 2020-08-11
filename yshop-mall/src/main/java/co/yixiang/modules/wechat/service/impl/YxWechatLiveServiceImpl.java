@@ -110,14 +110,14 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         for (YxWechatLiveDto yxWechatLive : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("直播间标题", yxWechatLive.getName());
-            map.put("背景图", yxWechatLive.getCoverImg());
-            map.put("分享图片", yxWechatLive.getShareImg());
+            map.put("背景图", yxWechatLive.getCoverImge());
+            map.put("分享图片", yxWechatLive.getShareImge());
             map.put("直播间状态", yxWechatLive.getLiveStatus());
             map.put("开始时间", yxWechatLive.getStartTime());
             map.put("预计结束时间", yxWechatLive.getEndTime());
             map.put("主播昵称", yxWechatLive.getAnchorName());
             map.put("主播微信号", yxWechatLive.getAnchorWechat());
-            map.put("主播头像", yxWechatLive.getAnchorImg());
+            map.put("主播头像", yxWechatLive.getAnchorImge());
             map.put("直播间类型 1：推流 0：手机直播", yxWechatLive.getType());
             map.put("横屏、竖屏 【1：横屏，0：竖屏】", yxWechatLive.getScreenType());
             map.put("是否关闭货架 【0：开启，1：关闭】", yxWechatLive.getCloseLike());

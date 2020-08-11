@@ -23,16 +23,16 @@ public class YxWechatLiveDto implements Serializable {
     /** 直播间id */
     /** 防止精度丢失 */
     @JsonSerialize(using= ToStringSerializer.class)
-    private Long roomId;
+    private Long roomid;
 
     /** 直播间标题 */
     private String name;
 
     /** 背景图 */
-    private String coverImg;
+    private String coverImge;
 
     /** 分享图片 */
-    private String shareImg;
+    private String shareImge;
 
     /** 直播间状态 */
     private Integer liveStatus;
@@ -50,7 +50,7 @@ public class YxWechatLiveDto implements Serializable {
     private String anchorWechat;
 
     /** 主播头像 */
-    private String anchorImg;
+    private String anchorImge;
 
     /** 直播间类型 1：推流 0：手机直播 */
     private Integer type;
