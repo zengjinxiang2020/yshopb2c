@@ -46,11 +46,29 @@ public interface YxWechatLiveGoodsService  extends BaseService<YxWechatLiveGoods
     */
     void download(List<YxWechatLiveGoodsDto> all, HttpServletResponse response) throws IOException;
 
+    /**
+     * 保存直播商品信息
+     * @param resources
+     * @return
+     */
     boolean saveGoods(YxWechatLiveGoods resources);
 
+    /**
+     * 同步商品更新审核状态
+     * @param goodsIds
+     * @return
+     */
     boolean synchroWxOlLive(List<Integer> goodsIds);
 
-    void removegoods(Long id);
+    /**
+     * 根据id删除直播商品信息
+     * @param id
+     */
+    void removeGoods(Long id);
 
-    void updategoods(YxWechatLiveGoods resources);
+    /**
+     * 更新直播商品信息
+     * @param resources
+     */
+    void updateGoods(YxWechatLiveGoods resources);
 }

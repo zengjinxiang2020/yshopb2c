@@ -26,9 +26,13 @@ public interface YxWechatLiveService  extends BaseService<YxWechatLive>{
 
 
 
-
+    /**
+     * 同步直播间
+     * @return
+     */
     boolean synchroWxOlLive();
-/**
+
+    /**
     * 查询数据分页
     * @param criteria 条件
     * @param pageable 分页参数

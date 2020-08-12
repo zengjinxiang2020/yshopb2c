@@ -12,8 +12,8 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+import co.yixiang.enums.LiveGoodsEnum;
 import co.yixiang.exception.BadRequestException;
-import co.yixiang.modules.wechat.domain.YxWechatLive;
 import co.yixiang.modules.wechat.domain.YxWechatLiveGoods;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.dozer.service.IGenerator;
@@ -75,6 +75,7 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
      * @return
      */
     //@Cacheable
+    @Override
     public boolean synchroWxOlLive(List<Integer> goodsIds) {
         try {
             WxMaLiveResult liveInfos = wxMaLiveGoodsService.getGoodsWareHouse(goodsIds);
@@ -90,7 +91,7 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
     }
 
     @Override
-    public void removegoods(Long id) {
+    public void removeGoods(Long id) {
         this.removeById(id);
         try {
             wxMaLiveGoodsService.deleteGoods(id.intValue());
@@ -99,17 +100,22 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         }
     }
 
+
+    /**
+     * 更新直播商品信息
+     * @param resources
+     */
     @Override
-    public void updategoods(YxWechatLiveGoods resources) {
+    public void updateGoods(YxWechatLiveGoods resources) {
         YxWechatLiveGoods wechatLiveGoods = this.getById(resources.getGoodsId());
         try {
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
             if(ObjectUtil.isNotEmpty(wechatLiveGoods)){
                 /** 审核状态 0：未审核，1：审核中，2:审核通过，3审核失败 */
-                if("2".equals(wechatLiveGoods.getAuditStatus())){
-                }else if("0".equals(wechatLiveGoods.getAuditStatus())){
+                if(LiveGoodsEnum.IS_Audit_2.getValue().equals(wechatLiveGoods.getAuditStatus())){
+                }else if(LiveGoodsEnum.IS_Audit_0.getValue().equals(wechatLiveGoods.getAuditStatus())){
                     resources.setCoverImgUrl(uploadPhotoToWx(wxMaService,resources.getCoverImgeUrl()).getMediaId());
-                }else if("1".equals(wechatLiveGoods.getAuditStatus())){
+                }else if(LiveGoodsEnum.IS_Audit_1.getValue().equals(wechatLiveGoods.getAuditStatus())){
                     throw new BadRequestException("商品审核中不允许修改");
                 }
             }
@@ -121,6 +127,12 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         }
     }
 
+    /**
+     * 查询数据分页
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return Map<String,Object>
+     */
     @Override
     //@Cacheable
     public Map<String, Object> queryAll(YxWechatLiveGoodsQueryCriteria criteria, Pageable pageable) {
@@ -136,14 +148,23 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         return map;
     }
 
-
+    /**
+     * 查询所有数据不分页
+     * @param criteria 条件参数
+     * @return List<YxWechatLiveGoodsDto>
+     */
     @Override
     //@Cacheable
     public List<YxWechatLiveGoods> queryAll(YxWechatLiveGoodsQueryCriteria criteria){
         return baseMapper.selectList(QueryHelpPlus.getPredicate(YxWechatLiveGoods.class, criteria));
     }
 
-
+    /**
+     * 导出数据
+     * @param all 待导出的数据
+     * @param response /
+     * @throws IOException /
+     */
     @Override
     public void download(List<YxWechatLiveGoodsDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -164,6 +185,11 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         FileUtil.downloadExcel(list, response);
     }
 
+    /**
+     * 保存直播商品信息
+     * @param resources
+     * @return
+     */
     @Override
     public boolean saveGoods(YxWechatLiveGoods resources) {
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
@@ -188,7 +214,7 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
      * @throws WxErrorException
      */
     private WxMediaUploadResult uploadPhotoToWx(WxMaService wxMaService, String picPath) throws WxErrorException {
-        String filename = String.valueOf( (int)System.currentTimeMillis() ) + ".png";
+        String filename = (int) System.currentTimeMillis() + ".png";
         String downloadPath = uploadDirStr + filename;
         long size = HttpUtil.downloadFile(picPath, cn.hutool.core.io.FileUtil.file(downloadPath));
         picPath = downloadPath;

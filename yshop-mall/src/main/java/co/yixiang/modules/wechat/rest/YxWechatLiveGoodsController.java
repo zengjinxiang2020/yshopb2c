@@ -70,7 +70,7 @@ public class YxWechatLiveGoodsController {
     @ApiOperation("修改yxWechatLiveGoods")
     @PreAuthorize("@el.check('admin','yxWechatLiveGoods:edit')")
     public ResponseEntity<Object> update(@Validated @RequestBody YxWechatLiveGoods resources){
-        yxWechatLiveGoodsService.updategoods(resources);
+        yxWechatLiveGoodsService.updateGoods(resources);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -80,7 +80,7 @@ public class YxWechatLiveGoodsController {
     @DeleteMapping
     public ResponseEntity<Object> deleteAll(@RequestBody Long[] ids) {
         Arrays.asList(ids).forEach(id->{
-                yxWechatLiveGoodsService.removegoods(id);
+                yxWechatLiveGoodsService.removeGoods(id);
         });
         return new ResponseEntity<>(HttpStatus.OK);
     }

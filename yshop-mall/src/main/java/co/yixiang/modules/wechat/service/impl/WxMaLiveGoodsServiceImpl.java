@@ -146,7 +146,7 @@ public class WxMaLiveGoodsServiceImpl implements WxMaLiveGoodsService {
      * @throws WxErrorException
      */
     private WxMediaUploadResult uploadPhotoToWx(WxMaService wxMaService, String picPath) throws WxErrorException {
-        String filename = String.valueOf( (int)System.currentTimeMillis() ) + ".png";
+        String filename = (int) System.currentTimeMillis() + ".png";
         String downloadPath = uploadDirStr + filename;
         long size = HttpUtil.downloadFile(picPath, cn.hutool.core.io.FileUtil.file(downloadPath));
         picPath = downloadPath;

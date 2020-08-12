@@ -101,7 +101,7 @@ public class YxWechatReplyServiceImpl extends BaseServiceImpl<WechatReplyMapper,
     @Override
     public void upDate(YxWechatReply resources) {
         YxWechatReply yxWechatReply = this.getById(resources.getId());
-        YxWechatReply yxWechatReply1 = null;
+        YxWechatReply yxWechatReply1;
         yxWechatReply1 = this.isExist(resources.getKey());
         if(yxWechatReply1 != null && !yxWechatReply1.getId().equals(yxWechatReply.getId())){
             throw new EntityExistException(YxWechatReply.class,"key",resources.getKey());
