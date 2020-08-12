@@ -80,9 +80,6 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         try {
             WxMaLiveResult liveInfos = wxMaLiveGoodsService.getGoodsWareHouse(goodsIds);
             List<YxWechatLiveGoods> convert = generator.convert(liveInfos.getGoods(), YxWechatLiveGoods.class);
-            convert.forEach(i ->{
-                i.setCoverImgeUrl(i.getCoverImgUrl());
-            });
             this.saveOrUpdateBatch(convert);
         } catch (WxErrorException e) {
             e.printStackTrace();
@@ -178,7 +175,7 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
             map.put(" price2",  yxWechatLiveGoods.getPrice2());
             map.put("商品名称", yxWechatLiveGoods.getName());
             map.put("1, 2：表示是为api添加商品，否则是直播控制台添加的商品", yxWechatLiveGoods.getThirdPartyTag());
-            map.put("审核单id", yxWechatLiveGoods.getAuditid());
+            map.put("审核单id", yxWechatLiveGoods.getAuditId());
             map.put("审核状态 0：未审核，1：审核中，2:审核通过，3审核失败", yxWechatLiveGoods.getAuditStatus());
             list.add(map);
         }

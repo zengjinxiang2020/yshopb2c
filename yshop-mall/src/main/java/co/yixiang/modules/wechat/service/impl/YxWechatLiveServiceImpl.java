@@ -15,18 +15,18 @@ import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.wechat.domain.YxWechatLive;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.modules.wechat.domain.YxWechatLiveGoods;
 import co.yixiang.modules.wechat.service.WxMaLiveService;
-import co.yixiang.modules.wechat.service.dto.WxMaLiveInfo;
-import co.yixiang.modules.wechat.service.dto.WxMaLiveResult;
+import co.yixiang.modules.wechat.service.YxWechatLiveGoodsService;
+import co.yixiang.modules.wechat.service.dto.*;
 import co.yixiang.tools.config.WxMaConfiguration;
-import co.yixiang.utils.DateUtils;
 import co.yixiang.utils.OrderUtil;
+import co.yixiang.utils.StringUtils;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.modules.wechat.service.YxWechatLiveService;
-import co.yixiang.modules.wechat.service.dto.YxWechatLiveDto;
-import co.yixiang.modules.wechat.service.dto.YxWechatLiveQueryCriteria;
 import co.yixiang.modules.wechat.service.mapper.YxWechatLiveMapper;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -43,12 +43,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
 
 import java.io.File;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 /**
 * @author hupeng
@@ -64,10 +61,12 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
     @Value("${file.path}")
     private String uploadDirStr;
     private final WxMaLiveService wxMaLiveService;
+    private final YxWechatLiveGoodsService wechatLiveGoodsService;
 
-    public YxWechatLiveServiceImpl(IGenerator generator, WxMaLiveService wxMaLiveService) {
+    public YxWechatLiveServiceImpl(IGenerator generator, WxMaLiveService wxMaLiveService, YxWechatLiveGoodsService wechatLiveGoodsService) {
         this.generator = generator;
         this.wxMaLiveService = wxMaLiveService;
+        this.wechatLiveGoodsService = wechatLiveGoodsService;
     }
 
     /**
@@ -80,11 +79,6 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         try {
             List<WxMaLiveResult.RoomInfo> liveInfos = wxMaLiveService.getLiveInfos();
             List<YxWechatLive> convert = generator.convert(liveInfos, YxWechatLive.class);
-            convert.forEach(i ->{
-                i.setAnchorImge(i.getAnchorImg());
-                i.setCoverImge(i.getCoverImg());
-                i.setShareImge(i.getShareImg());
-            });
             this.saveOrUpdateBatch(convert);
         } catch (WxErrorException e) {
             e.printStackTrace();
@@ -99,7 +93,14 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         Map<String, Object> map = new LinkedHashMap<>(2);
 //            List<WxMaLiveResult.RoomInfo> liveInfos = wxMaLiveService.getLiveInfos();
         List<YxWechatLiveDto> liveDtos = generator.convert(page.getList(), YxWechatLiveDto.class);
+        //获取所有商品
         liveDtos.forEach(i ->{
+            if(StringUtils.isNotBlank(i.getProductId())){
+                List<YxWechatLiveGoodsDto> wechatLiveGoodsDtos = generator.convert(
+                        wechatLiveGoodsService.list(new LambdaQueryWrapper<YxWechatLiveGoods>().in(YxWechatLiveGoods::getGoodsId,i.getProductId().split(",")))
+                        ,YxWechatLiveGoodsDto.class);
+                i.setProduct(wechatLiveGoodsDtos);
+            }
             i.setId(i.getRoomid());
         });
         map.put("content",liveDtos);
@@ -118,6 +119,15 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
             WxMaLiveInfo.RoomInfo roomInfo = generator.convert(resources, WxMaLiveInfo.RoomInfo.class);
             Integer status = wxMaLiveService.createRoom(roomInfo);
             resources.setRoomid(Long.valueOf(status));
+            if(StringUtils.isNotBlank(resources.getProductId())){
+                String[] productIds = resources.getProductId().split(",");
+                List<Integer> pids = new ArrayList<>();
+                for (String productId : productIds) {
+                    pids.add(Integer.valueOf(productId));
+                }
+                //添加商品
+                wxMaLiveService.addGoodsToRoom(status, pids);
+            }
             this.save(resources);
         } catch (WxErrorException e) {
             e.printStackTrace();

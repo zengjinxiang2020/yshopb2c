@@ -10,6 +10,8 @@ package co.yixiang.modules.wechat.service.dto;
 
 import lombok.Data;
 import java.io.Serializable;
+import java.util.List;
+
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
@@ -62,9 +64,17 @@ public class YxWechatLiveDto implements Serializable {
     /** 横屏、竖屏 【1：横屏，0：竖屏】 */
     private Integer screenType;
 
-    /** 是否关闭货架 【0：开启，1：关闭】 */
+    /** 是否关闭点赞 【0：开启，1：关闭】 */
     private Integer closeLike;
 
     /** 是否关闭评论 【0：开启，1：关闭】 */
     private Integer closeComment;
+
+    /** 是否关闭货架 【0：开启，1：关闭】 */
+    private Integer closeGoods;
+    /**
+     * 关联商品id多个，隔开
+     */
+    private String productId;
+    private List<YxWechatLiveGoodsDto> product;
 }

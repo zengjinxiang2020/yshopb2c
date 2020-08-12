@@ -119,6 +119,7 @@ public class YxWechatLive implements Serializable {
     @NotNull
     private Integer closeComment;
 
+    private String productId;
 
     public void copy(YxWechatLive source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

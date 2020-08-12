@@ -51,7 +51,7 @@ public class YxWechatLiveGoodsDto implements Serializable {
     private String thirdPartyTag;
 
     /** 审核单id */
-    private Long auditid;
+    private Long auditId;
 
     /** 审核状态 0：未审核，1：审核中，2:审核通过，3审核失败 */
     private Integer auditStatus;
