@@ -2,13 +2,18 @@ package co.yixiang.tools.config;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
+import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
+import cn.binarywang.wx.miniapp.bean.WxMaTemplateData;
+import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.binarywang.wx.miniapp.message.WxMaMessageHandler;
 import cn.binarywang.wx.miniapp.message.WxMaMessageRouter;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.ShopKeyUtils;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import me.chanjar.weixin.common.api.WxConsts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,6 +29,7 @@ public class WxMaConfiguration {
     private static Map<String, WxMaMessageRouter> routers = Maps.newHashMap();
     private static RedisUtils redisUtils;
     private static WxMaMessageHandler wxMaMessageHandler;
+
     public static WxMaMessageRouter getRouter(String appid) {
         return routers.get(appid);
     }
@@ -63,11 +69,20 @@ public class WxMaConfiguration {
     }
     private static WxMaMessageRouter newRouter(WxMaService service) {
         final WxMaMessageRouter router = new WxMaMessageRouter(service);
-        router.rule().handler(wxMaMessageHandler).next();
+        router
+                .rule().handler(wxMaMessageHandler).next()
+                .rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(WxConsts.EventType.SUBSCRIBE).handler(templateMsgHandler).end();
         return router;
     }
-
-
-
+    private static final WxMaMessageHandler templateMsgHandler = (wxMessage, context, service, sessionManager) -> {
+        service.getMsgService().sendSubscribeMsg(WxMaSubscribeMessage.builder()
+                .templateId("此处更换为自己的模板id")
+                .page("")
+                .data(Lists.newArrayList(
+                        new WxMaSubscribeMessage.Data("keyword1", "339208499")))
+                .toUser(wxMessage.getFromUser())
+                .build());
+        return null;
+    };
 }
 

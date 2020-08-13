@@ -13,6 +13,7 @@ import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.event.TemplateBean;
 import co.yixiang.event.TemplateEvent;
 import co.yixiang.event.TemplateListenEnum;
+import co.yixiang.mp.service.WeiXinSubscribeService;
 import co.yixiang.mp.service.WeixinPayService;
 import co.yixiang.mp.service.WeixinTemplateService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,8 @@ public class TemplateListener implements SmartApplicationListener {
 	private WeixinTemplateService weixinTemplateService;
 	@Autowired
 	private WeixinPayService weixinPayService;
+	@Autowired
+	private WeiXinSubscribeService weiXinSubscribeService;
 
 	@Override
 	public boolean supportsEventType(Class<? extends ApplicationEvent> aClass) {
@@ -49,10 +52,12 @@ public class TemplateListener implements SmartApplicationListener {
 		TemplateEvent templateEvent = (TemplateEvent) applicationEvent;
 		//获取注册用户对象信息
 		TemplateBean templateBean = templateEvent.getTemplateBean();
-		log.info("模板事件类型：{}"+templateBean.getTemplateType());
+		log.info("模板事件类型：{}",templateBean.getTemplateType());
 		switch (TemplateListenEnum.toType(templateBean.getTemplateType())){
 			case TYPE_1:
 				weixinTemplateService.paySuccessNotice(templateBean.getOrderId()
+						,templateBean.getPrice(),templateBean.getUid());
+				weiXinSubscribeService.paySuccessNotice(templateBean.getOrderId()
 						,templateBean.getPrice(),templateBean.getUid());
 				break;
 			case TYPE_2:

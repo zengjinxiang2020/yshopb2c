@@ -75,8 +75,17 @@ logging:
 yshop:
   #相关配置
   version: 3.0
-
-
+  #小程序订阅消息配置
+  subscribe:
+    subscribeMaps:
+      #付款成功
+      pay_success: W5r2c2kzhbq8uxStkPAVx_sk-5aapMFCqe7b7KU5jXI
+      #发货成功
+      delivery-success: 2CB_1UyQrbnlyjJa5syraqJ3cfztPPDOAHe3DEXpMjg
+      #退款成功
+      refund_success:
+      #充值成功
+      recharge_success:
 
 # 防止XSS攻击
 xss:

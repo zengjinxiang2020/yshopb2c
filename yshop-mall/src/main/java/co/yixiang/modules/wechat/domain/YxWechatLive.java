@@ -57,8 +57,9 @@ public class YxWechatLive implements Serializable {
     /** 主播头像 */
     private String anchorImge;
 
-
-
+    /**
+     * 101：直播中，102：未开始，103已结束，104禁播，105：暂停，106：异常，107：已过期
+     */
     /** 直播间状态 */
     private Integer liveStatus;
 

@@ -117,12 +117,17 @@ public class WechatController {
      * 微信小程序接口能力配置
      */
     @GetMapping("/wxapp/config")
-    @ApiOperation(value = "微信小程序接口能力配置",notes = "微信小程序接口能力配置")
-    public boolean wxAppConfig(@RequestParam(value = "signature") String signature,
+    @ApiOperation(value = "微信小程序接口能力配置",notes = "微信小程序接口能力配置",produces = "text/plain;charset=utf-8")
+    public String wxAppConfig(@RequestParam(value = "signature") String signature,
                                                      @RequestParam(value = "timestamp") String timestamp,
-                                                     @RequestParam(value = "nonce") String nonce) throws WxErrorException {
+                                                     @RequestParam(value = "nonce") String nonce,
+                               @RequestParam(name = "echostr", required = false) String echostr) throws WxErrorException {
         WxMaService wxService = WxMaConfiguration.getWxMaService();
-        return wxService.checkSignature(timestamp,nonce,signature);
+
+        if( wxService.checkSignature(timestamp,nonce,signature)){
+            return echostr;
+        }
+        return "false";
     }
 
     /**
