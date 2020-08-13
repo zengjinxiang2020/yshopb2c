@@ -16,6 +16,7 @@ import co.yixiang.modules.system.service.dto.RoleSmallDto;
 import co.yixiang.modules.system.service.dto.UserDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -107,7 +108,7 @@ public interface RoleService  extends BaseService<Role>{
      * @param user 用户信息
      * @return 权限信息
      */
-    Collection<GrantedAuthority> mapToGrantedAuthorities(UserDto user);
+    Collection<SimpleGrantedAuthority> mapToGrantedAuthorities(UserDto user);
 
     void delete(Set<Long> ids);
 }

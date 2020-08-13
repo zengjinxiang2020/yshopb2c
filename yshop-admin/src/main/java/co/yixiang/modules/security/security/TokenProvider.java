@@ -1,8 +1,9 @@
-/**
+package co.yixiang.modules.security.security; /**
  * Copyright (C) 2018-2020
  * All rights reserved, Designed By www.yixiang.co
 
- */
+ *//*
+
 package co.yixiang.modules.security.security;
 
 import co.yixiang.modules.security.config.SecurityProperties;
@@ -30,9 +31,11 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+*/
 /**
  * @author /
- */
+ *//*
+
 @Slf4j
 @Component
 public class TokenProvider implements InitializingBean {
@@ -112,3 +115,4 @@ public class TokenProvider implements InitializingBean {
       return null;
    }
 }
+*/
