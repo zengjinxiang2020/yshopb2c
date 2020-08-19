@@ -121,11 +121,16 @@ public class StoreProductController {
         yxStoreProductService.onSale(id,status);
         return new ResponseEntity(HttpStatus.OK);
     }
+    @ApiOperation(value = "生成属性（添加活动产品专用）")
+    @PostMapping(value = "/yxStoreProduct/isFormatAttrForActivity/{id}")
+    public ResponseEntity isFormatAttrForActivity(@PathVariable Long id,@RequestBody String jsonStr){
+        return new ResponseEntity<>(yxStoreProductService.getFormatAttr(id,jsonStr,true),HttpStatus.OK);
+    }
 
     @ApiOperation(value = "生成属性")
     @PostMapping(value = "/yxStoreProduct/isFormatAttr/{id}")
     public ResponseEntity isFormatAttr(@PathVariable Long id,@RequestBody String jsonStr){
-        return new ResponseEntity<>(yxStoreProductService.getFormatAttr(id,jsonStr),HttpStatus.OK);
+        return new ResponseEntity<>(yxStoreProductService.getFormatAttr(id,jsonStr,false),HttpStatus.OK);
     }
 
 

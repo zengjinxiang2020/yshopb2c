@@ -8,14 +8,19 @@ package co.yixiang.modules.activity.domain;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import co.yixiang.domain.BaseDomain;
+import co.yixiang.modules.product.service.dto.FromatDetailDto;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author hupeng
@@ -105,14 +110,6 @@ public class YxStoreCombination extends BaseDomain {
     private Integer merUse;
 
 
-    /** 是否包邮1是0否 */
-    private Integer isPostage;
-
-
-    /** 邮费 */
-    private BigDecimal postage;
-
-
     /** 拼团内容 */
     @NotBlank(message = "请填写详情")
     private String description;
@@ -145,10 +142,23 @@ public class YxStoreCombination extends BaseDomain {
     /** 单位名 */
     private String unitName;
 
+    private Integer specType;
+
+    /** 运费模板ID */
+    @JsonProperty("temp_id")
+    private Long tempId;
+    //属性项目
+    @TableField(exist = false)
+    private List<FromatDetailDto> items;
+
+    //sku结果集
+    @TableField(exist = false)
+    private List<Map<String,Object>> attrs;
 
 
 
     public void copy(YxStoreCombination source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
+
 }

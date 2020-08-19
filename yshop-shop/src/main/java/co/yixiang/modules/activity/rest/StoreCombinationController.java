@@ -5,15 +5,25 @@
  */
 package co.yixiang.modules.activity.rest;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.enums.SpecTypeEnum;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreCombination;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
+import co.yixiang.modules.activity.service.dto.YxStoreCombinationDto;
 import co.yixiang.modules.activity.service.dto.YxStoreCombinationQueryCriteria;
 import co.yixiang.modules.aop.ForbidSubmit;
-import co.yixiang.utils.OrderUtil;
+import co.yixiang.modules.product.domain.YxStoreProductAttrResult;
+import co.yixiang.modules.product.service.YxStoreProductAttrResultService;
+import co.yixiang.modules.product.service.YxStoreProductRuleService;
+import co.yixiang.modules.product.service.dto.ProductDto;
+import co.yixiang.modules.product.service.dto.ProductFormatDto;
+import co.yixiang.modules.template.domain.YxShippingTemplates;
+import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +40,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.*;
+
 /**
 * @author hupeng
 * @date 2019-11-18
@@ -40,9 +52,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class StoreCombinationController {
 
     private final YxStoreCombinationService yxStoreCombinationService;
-
-    public StoreCombinationController(YxStoreCombinationService yxStoreCombinationService) {
+    private final YxShippingTemplatesService yxShippingTemplatesService;
+    private final YxStoreProductRuleService yxStoreProductRuleService;
+    private final YxStoreProductAttrResultService yxStoreProductAttrResultService;
+    public StoreCombinationController(YxStoreCombinationService yxStoreCombinationService, YxShippingTemplatesService yxShippingTemplatesService, YxStoreProductRuleService yxStoreProductRuleService, YxStoreProductAttrResultService yxStoreProductAttrResultService) {
         this.yxStoreCombinationService = yxStoreCombinationService;
+        this.yxShippingTemplatesService = yxShippingTemplatesService;
+        this.yxStoreProductRuleService = yxStoreProductRuleService;
+        this.yxStoreProductAttrResultService = yxStoreProductAttrResultService;
     }
 
     @Log("查询拼团")
@@ -54,7 +71,79 @@ public class StoreCombinationController {
     }
 
 
+    @Log("新增拼团")
+    @ApiOperation(value = "新增拼团")
+    @PostMapping(value = "/yxStoreCombination")
+    @PreAuthorize("hasAnyRole('admin','YXSTORECOMBINATION_ALL','YXSTORECOMBINATION_EDIT')")
+    public ResponseEntity add(@Validated @RequestBody YxStoreCombinationDto resources){
+            return new ResponseEntity<>(yxStoreCombinationService.saveCombination(resources),HttpStatus.CREATED);
+    }
 
+    @ApiOperation(value = "获取商品信息")
+    @GetMapping(value = "/yxStoreCombination/info/{id}")
+    public ResponseEntity info(@PathVariable Long id){
+        Map<String,Object> map = new LinkedHashMap<>(3);
+
+        //运费模板
+        List<YxShippingTemplates> shippingTemplatesList = yxShippingTemplatesService.list();
+        map.put("tempList", shippingTemplatesList);
+
+//        //商品分类
+//        List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
+//                .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+//                .list();
+
+//        List<Map<String,Object>> cateList = new ArrayList<>();
+//        map.put("cateList", this.makeCate(storeCategories,cateList,0,1));
+
+        //商品规格
+        map.put("ruleList",yxStoreProductRuleService.list());
+
+
+        if(id == 0){
+            return new ResponseEntity<>(map,HttpStatus.OK);
+        }
+
+        //处理商品详情
+        YxStoreCombination yxStoreCombination = yxStoreCombinationService.getById(id);
+        YxStoreCombinationDto productDto = new YxStoreCombinationDto();
+        BeanUtil.copyProperties(yxStoreCombination,productDto,"images");
+        productDto.setSliderImage(Arrays.asList(yxStoreCombination.getImages().split(",")));
+        YxStoreProductAttrResult storeProductAttrResult = yxStoreProductAttrResultService
+                .getOne(Wrappers.<YxStoreProductAttrResult>lambdaQuery()
+                        .eq(YxStoreProductAttrResult::getProductId,yxStoreCombination.getProductId()).last("limit 1"));
+        JSONObject result = JSON.parseObject(storeProductAttrResult.getResult());
+
+        if(SpecTypeEnum.TYPE_1.getValue().equals(yxStoreCombination.getSpecType())){
+            productDto.setAttr(new ProductFormatDto());
+            productDto.setAttrs(result.getObject("value",ArrayList.class));
+            productDto.setItems(result.getObject("attr",ArrayList.class));
+        }else{
+            Map<String,Object> mapAttr = (Map<String,Object>)result.getObject("value",ArrayList.class).get(0);
+            ProductFormatDto productFormatDto = ProductFormatDto.builder()
+                    .pic(mapAttr.get("pic").toString())
+                    .price(Double.valueOf(mapAttr.get("price").toString()))
+                    .pinkPrice(Double.valueOf(mapAttr.get("pink_price").toString()))
+                    .cost(Double.valueOf(mapAttr.get("cost").toString()))
+                    .otPrice(Double.valueOf(mapAttr.get("ot_price").toString()))
+                    .stock(Integer.valueOf(mapAttr.get("stock").toString()))
+                    .pinkStock(Integer.valueOf(mapAttr.get("pink_stock").toString()))
+                    .barCode(mapAttr.get("bar_code").toString())
+                    .weight(Double.valueOf(mapAttr.get("weight").toString()))
+                    .volume(Double.valueOf(mapAttr.get("volume").toString()))
+                    .brokerage(Double.valueOf(mapAttr.get("brokerage").toString()))
+                    .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
+                    .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
+                    .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
+                    .build();
+            productDto.setAttr(productFormatDto);
+        }
+
+
+        map.put("productInfo",productDto);
+
+        return new ResponseEntity<>(map,HttpStatus.OK);
+    }
     @Log("修改拼团")
     @ApiOperation(value = "新增/修改拼团")
     @PutMapping(value = "/yxStoreCombination")

@@ -126,7 +126,7 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
      * @param jsonStr jsonStr
      * @return map
      */
-    Map<String,Object> getFormatAttr(Long id, String jsonStr);
+    Map<String,Object> getFormatAttr(Long id, String jsonStr,boolean isActivity);
 
 
 

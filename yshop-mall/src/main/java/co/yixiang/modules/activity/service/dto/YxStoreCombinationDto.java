@@ -5,18 +5,28 @@
  */
 package co.yixiang.modules.activity.service.dto;
 
+import co.yixiang.modules.product.service.dto.FromatDetailDto;
+import co.yixiang.modules.product.service.dto.ProductFormatDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author hupeng
 * @date 2020-05-13
 */
-@Data
+@Getter
+@Setter
+@ToString
 public class YxStoreCombinationDto implements Serializable {
 
     private Long id;
@@ -30,8 +40,11 @@ public class YxStoreCombinationDto implements Serializable {
     // 推荐图
     private String image;
 
-    // 轮播图
     private String images;
+
+    /** 轮播图 */
+    @JsonProperty("slider_image")
+    private List<String> sliderImage;
 
     //参与人数
     private Integer countPeopleAll;
@@ -44,9 +57,6 @@ public class YxStoreCombinationDto implements Serializable {
 
     // 活动标题
     private String title;
-
-    // 活动属性
-    private String attr;
 
     // 参团人数
     private Integer people;
@@ -108,5 +118,16 @@ public class YxStoreCombinationDto implements Serializable {
 
     // 单位名
     private String unitName;
+
+    /** 规格 0单 1多 */
+    @JsonProperty("spec_type")
+    private Integer specType;
+
+    private ProductFormatDto attr;
+    //属性项目
+    private List<FromatDetailDto> items;
+
+    //sku结果集
+    private List<Map<String,Object>> attrs;
 
 }

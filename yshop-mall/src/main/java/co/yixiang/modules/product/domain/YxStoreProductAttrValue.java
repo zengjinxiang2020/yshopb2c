@@ -43,6 +43,11 @@ public class YxStoreProductAttrValue implements Serializable {
     /** 属性对应的库存 */
     private Integer stock;
 
+    /** 拼团库存属性对应的库存 */
+    private Integer pinkStock;
+
+    /** 秒杀库存属性对应的库存 */
+    private Integer seckillStock;
 
     /** 销量 */
     private Integer sales;
@@ -51,7 +56,11 @@ public class YxStoreProductAttrValue implements Serializable {
     /** 属性金额 */
     private BigDecimal price;
 
+    /** 拼团属性对应的金额 */
+    private BigDecimal pinkPrice;
 
+    /** 秒杀属性对应的金额 */
+    private BigDecimal seckillPrice;
     /** 图片 */
     private String image;
 

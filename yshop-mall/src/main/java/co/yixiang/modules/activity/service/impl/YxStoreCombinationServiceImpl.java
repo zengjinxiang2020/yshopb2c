@@ -8,11 +8,15 @@
  */
 package co.yixiang.modules.activity.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.map.MapUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.ShopCommonEnum;
+import co.yixiang.enums.SpecTypeEnum;
 import co.yixiang.modules.activity.domain.YxStoreCombination;
 import co.yixiang.modules.activity.domain.YxStorePink;
 import co.yixiang.modules.activity.domain.YxStoreVisit;
@@ -26,7 +30,13 @@ import co.yixiang.modules.activity.service.mapper.YxStorePinkMapper;
 import co.yixiang.modules.activity.service.mapper.YxStoreVisitMapper;
 import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
+import co.yixiang.modules.product.domain.YxStoreProduct;
+import co.yixiang.modules.product.service.YxStoreProductAttrService;
+import co.yixiang.modules.product.service.YxStoreProductAttrValueService;
 import co.yixiang.modules.product.service.YxStoreProductReplyService;
+import co.yixiang.modules.product.service.dto.FromatDetailDto;
+import co.yixiang.modules.product.service.dto.ProductFormatDto;
+import co.yixiang.modules.product.service.dto.ProductResultDto;
 import co.yixiang.utils.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -39,6 +49,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -48,7 +59,7 @@ import java.util.*;
 * @date 2020-05-13
 */
 @Service
-@Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombinationMapper, YxStoreCombination> implements YxStoreCombinationService {
 
     @Autowired
@@ -65,6 +76,10 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
     private YxStoreProductReplyService replyService;
     @Autowired
     private YxStorePinkService storePinkService;
+    @Autowired
+    private YxStoreProductAttrService yxStoreProductAttrService;
+    @Autowired
+    private YxStoreProductAttrValueService yxStoreProductAttrValueService;
 
 
     /**
@@ -213,7 +228,6 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
             map.put("推荐图", yxStoreCombination.getImage());
             map.put("轮播图", yxStoreCombination.getImages());
             map.put("活动标题", yxStoreCombination.getTitle());
-            map.put("活动属性", yxStoreCombination.getAttr());
             map.put("参团人数", yxStoreCombination.getPeople());
             map.put("简介", yxStoreCombination.getInfo());
             map.put("价格", yxStoreCombination.getPrice());
@@ -254,5 +268,100 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         yxStoreCombination.setIsShow(status);
         yxStoreCombination.setId(id);
         this.saveOrUpdate(yxStoreCombination);
+    }
+
+    @Override
+    public boolean saveCombination(YxStoreCombinationDto resources) {
+        ProductResultDto resultDTO = this.computedProduct(resources.getAttrs());
+
+        //添加商品
+        YxStoreCombination yxStoreCombination = new YxStoreCombination();
+        BeanUtil.copyProperties(resources,yxStoreCombination,"images");
+        if(resources.getImages().isEmpty()) throw new YshopException("请上传轮播图");
+
+        yxStoreCombination.setPrice(BigDecimal.valueOf(resultDTO.getMinPrice()));
+        yxStoreCombination.setCost(resultDTO.getMinCost().intValue());
+        yxStoreCombination.setStock(resultDTO.getStock());
+        yxStoreCombination.setImages(String.join(",", resources.getImages()));
+        this.saveOrUpdate(yxStoreCombination);
+
+        //属性处理
+        //处理单sKu
+        if(SpecTypeEnum.TYPE_0.getValue().equals(resources.getSpecType())){
+            FromatDetailDto fromatDetailDto = FromatDetailDto.builder()
+                    .value("规格")
+                    .detailValue("")
+                    .attrHidden("")
+                    .detail(ListUtil.toList("默认"))
+                    .build();
+            List<Map<String,Object>> attrs = resources.getAttrs();
+            Map<String,Object> map = attrs.get(0);
+            map.put("value1","规格");
+            map.put("detail", MapUtil.of(new String[][] {
+                    {"规格", "默认"}
+            }));
+            yxStoreProductAttrService.insertYxStoreProductAttr(ListUtil.toList(fromatDetailDto),
+                    ListUtil.toList(map),resources.getProductId());
+        }else{
+            yxStoreProductAttrService.insertYxStoreProductAttr(resources.getItems(),
+                    resources.getAttrs(),resources.getProductId());
+        }
+        return true;
+    }
+
+
+    /**
+     * 计算产品数据
+     * @param attrs attrs
+     * @return ProductResultDto
+     */
+    private ProductResultDto computedProduct(List<Map<String,Object>> attrs){
+        //取最小价格
+        Double minPrice = ListMapToListBean(attrs)
+                .stream()
+                .map(ProductFormatDto::getPrice)
+                .min(Comparator.naturalOrder())
+                .orElse(0d);
+
+        Double minOtPrice = ListMapToListBean(attrs)
+                .stream()
+                .map(ProductFormatDto::getOtPrice)
+                .min(Comparator.naturalOrder())
+                .orElse(0d);
+
+        Double minCost = ListMapToListBean(attrs)
+                .stream()
+                .map(ProductFormatDto::getCost)
+                .min(Comparator.naturalOrder())
+                .orElse(0d);
+        //计算库存
+        Integer stock = ListMapToListBean(attrs)
+                .stream()
+                .map(ProductFormatDto::getStock)
+                .reduce(Integer::sum)
+                .orElse(0);
+
+        if(stock <= 0) throw new YshopException("库存不能低于0");
+
+        return ProductResultDto.builder()
+                .minPrice(minPrice)
+                .minOtPrice(minOtPrice)
+                .minCost(minCost)
+                .stock(stock)
+                .build();
+    }
+
+    /**
+     * mapTobean
+     * @param listMap listMap
+     * @return list
+     */
+    private List<ProductFormatDto> ListMapToListBean(List<Map<String, Object>> listMap){
+        List<ProductFormatDto> list = new ArrayList<>();
+        // 循环遍历出map对象
+        for (Map<String, Object> m : listMap) {
+            list.add(BeanUtil.mapToBean(m,ProductFormatDto.class,true));
+        }
+        return list;
     }
 }

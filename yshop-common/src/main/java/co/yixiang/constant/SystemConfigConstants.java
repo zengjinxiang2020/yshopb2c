@@ -49,4 +49,8 @@ public class SystemConfigConstants {
     public final static String WX_NATIVE_APP_APPID="wx_native_app_appId";
     public final static String EXP_APPID = "exp_appId";
 
+
+    //播放状态变化事件，detail = {code}
+    public static final String BINDSTATECHANGE = "bindstatechange";
+
 }

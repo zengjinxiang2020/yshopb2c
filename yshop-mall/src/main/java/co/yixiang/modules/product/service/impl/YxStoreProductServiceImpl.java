@@ -498,7 +498,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
      * @return map
      */
     @Override
-    public Map<String,Object> getFormatAttr(Long id, String jsonStr) {
+    public Map<String,Object> getFormatAttr(Long id, String jsonStr,boolean isActivity) {
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         Map<String,Object> resultMap = new LinkedHashMap<>(3);
 
@@ -588,7 +588,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
         }
 
-        this.addMap(headerMap,headerMapList,align);
+        this.addMap(headerMap,headerMapList,align,isActivity);
 
 
         resultMap.put("attr",fromatDetailDTOList);
@@ -664,7 +664,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
      * @param headerMapList headerMapList
      * @param align align
      */
-    private void addMap(Map<String,Object> headerMap,List<Map<String,Object>> headerMapList,String align){
+    private void addMap(Map<String,Object> headerMap,List<Map<String,Object>> headerMapList,String align,boolean isActivity){
         headerMap.put("title","图片");
         headerMap.put("slot", "pic");
         headerMap.put("align",align);
@@ -711,7 +711,32 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         headerMap.put("slot", "volume");
         headerMap.put("align",align);
         headerMap.put("minWidth",140);
-        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        if(isActivity){
+            headerMap.put("title","拼团价");
+            headerMap.put("slot", "pinkPrice");
+            headerMap.put("align",align);
+            headerMap.put("minWidth",140);
+            headerMapList.add(ObjectUtil.clone(headerMap));
+
+            headerMap.put("title","拼团活动库存");
+            headerMap.put("slot", "pinkStock");
+            headerMap.put("align",align);
+            headerMap.put("minWidth",140);
+            headerMapList.add(ObjectUtil.clone(headerMap));
+
+            headerMap.put("title","秒杀价");
+            headerMap.put("slot", "seckillPrice");
+            headerMap.put("align",align);
+            headerMap.put("minWidth",140);
+            headerMapList.add(ObjectUtil.clone(headerMap));
+
+            headerMap.put("title","秒杀活动库存");
+            headerMap.put("slot", "seckillStock");
+            headerMap.put("align",align);
+            headerMap.put("minWidth",140);
+            headerMapList.add(ObjectUtil.clone(headerMap));
+        }
 
         headerMap.put("title","操作");
         headerMap.put("slot", "action");

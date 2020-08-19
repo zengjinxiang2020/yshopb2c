@@ -50,6 +50,14 @@ public class ProductFormatDto {
 
     private Double weight = 0d;
 
+    private Double pinkPrice = 0d;
+
+    private Integer pinkStock = 0;
+
+    private Double seckillPrice = 0d;
+
+    private Integer seckillStock = 0;
+
     private Map<String, String> detail;
 
 }

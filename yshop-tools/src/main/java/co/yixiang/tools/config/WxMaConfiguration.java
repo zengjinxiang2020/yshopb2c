@@ -8,6 +8,7 @@ import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
 import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.binarywang.wx.miniapp.message.WxMaMessageHandler;
 import cn.binarywang.wx.miniapp.message.WxMaMessageRouter;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.ShopKeyUtils;
@@ -71,17 +72,12 @@ public class WxMaConfiguration {
         final WxMaMessageRouter router = new WxMaMessageRouter(service);
         router
                 .rule().handler(wxMaMessageHandler).next()
-                .rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(WxConsts.EventType.SUBSCRIBE).handler(templateMsgHandler).end();
+                .rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(SystemConfigConstants.BINDSTATECHANGE).handler(bindstatechangeHandler).end();
         return router;
     }
-    private static final WxMaMessageHandler templateMsgHandler = (wxMessage, context, service, sessionManager) -> {
-        service.getMsgService().sendSubscribeMsg(WxMaSubscribeMessage.builder()
-                .templateId("此处更换为自己的模板id")
-                .page("")
-                .data(Lists.newArrayList(
-                        new WxMaSubscribeMessage.Data("keyword1", "339208499")))
-                .toUser(wxMessage.getFromUser())
-                .build());
+    private static final WxMaMessageHandler bindstatechangeHandler = (wxMessage, context, service, sessionManager) -> {
+        wxMessage.getFromUser();
+        wxMessage.getContent();
         return null;
     };
 }

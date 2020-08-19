@@ -92,4 +92,6 @@ public interface YxStoreCombinationService  extends BaseService<YxStoreCombinati
      * @param status ShopCommonEnum
      */
     void onSale(Long id, Integer status);
+
+    boolean saveCombination(YxStoreCombinationDto resources);
 }
