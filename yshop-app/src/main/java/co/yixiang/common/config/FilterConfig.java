@@ -1,7 +1,6 @@
 package co.yixiang.common.config;
 
 import cn.hutool.core.util.StrUtil;
-
 import co.yixiang.xss.XssFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;

@@ -11,7 +11,6 @@ import co.yixiang.modules.activity.domain.YxStoreSeckill;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.service.dto.YxStoreSeckillQueryCriteria;
 import co.yixiang.modules.aop.ForbidSubmit;
-import co.yixiang.utils.OrderUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Pageable;

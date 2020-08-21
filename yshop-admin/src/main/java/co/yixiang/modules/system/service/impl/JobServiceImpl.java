@@ -10,7 +10,6 @@ package co.yixiang.modules.system.service.impl;
 
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
-
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.modules.system.domain.Job;
 import co.yixiang.modules.system.service.DeptService;
@@ -18,7 +17,6 @@ import co.yixiang.modules.system.service.JobService;
 import co.yixiang.modules.system.service.dto.JobDto;
 import co.yixiang.modules.system.service.dto.JobQueryCriteria;
 import co.yixiang.modules.system.service.mapper.JobMapper;
-
 import co.yixiang.utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;

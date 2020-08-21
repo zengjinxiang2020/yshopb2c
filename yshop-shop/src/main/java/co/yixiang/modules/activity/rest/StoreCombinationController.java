@@ -17,7 +17,6 @@ import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.product.domain.YxStoreProductAttrResult;
 import co.yixiang.modules.product.service.YxStoreProductAttrResultService;
 import co.yixiang.modules.product.service.YxStoreProductRuleService;
-import co.yixiang.modules.product.service.dto.ProductDto;
 import co.yixiang.modules.product.service.dto.ProductFormatDto;
 import co.yixiang.modules.template.domain.YxShippingTemplates;
 import co.yixiang.modules.template.service.YxShippingTemplatesService;
@@ -40,7 +39,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author hupeng

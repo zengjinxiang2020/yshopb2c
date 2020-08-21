@@ -1,7 +1,11 @@
 package co.yixiang.modules.activity.service.dto;
 
 import co.yixiang.modules.activity.domain.YxStorePink;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 

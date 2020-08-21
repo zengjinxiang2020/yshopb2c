@@ -8,8 +8,6 @@ package co.yixiang.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.stream.Stream;
-
 /**
  * @author hupeng
  * 拼团相关枚举

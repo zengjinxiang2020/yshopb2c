@@ -10,14 +10,16 @@ package co.yixiang.modules.user.service.impl;
 
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.dozer.service.IGenerator;
-
 import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.enums.BillEnum;
 import co.yixiang.enums.BillInfoEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.user.domain.YxUserBill;
 import co.yixiang.modules.user.service.YxUserBillService;
-import co.yixiang.modules.user.service.dto.*;
+import co.yixiang.modules.user.service.dto.BillOrderDto;
+import co.yixiang.modules.user.service.dto.BillOrderRecordDto;
+import co.yixiang.modules.user.service.dto.YxUserBillDto;
+import co.yixiang.modules.user.service.dto.YxUserBillQueryCriteria;
 import co.yixiang.modules.user.service.mapper.UserBillMapper;
 import co.yixiang.modules.user.vo.BillVo;
 import co.yixiang.modules.user.vo.YxUserBillQueryVo;
@@ -36,7 +38,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**

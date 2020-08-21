@@ -5,7 +5,6 @@
  */
 package co.yixiang.modules.wechat.rest;
 
-import cn.hutool.core.date.DateUtil;
 import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.services.WechatArticleService;
 import co.yixiang.modules.wechat.domain.YxArticle;
@@ -28,8 +27,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 /**
 * @author hupeng

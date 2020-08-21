@@ -1,7 +1,6 @@
 package co.yixiang.modules.activity.vo;
 
 
-import co.yixiang.modules.activity.vo.YxStoreSeckillQueryVo;
 import co.yixiang.modules.product.vo.YxStoreProductReplyQueryVo;
 import lombok.Builder;
 import lombok.Data;

@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.NotBlank;
-
 /**
  * @ClassName ComputeOrderParam
  * @Author hupeng <610796224@qq.com>

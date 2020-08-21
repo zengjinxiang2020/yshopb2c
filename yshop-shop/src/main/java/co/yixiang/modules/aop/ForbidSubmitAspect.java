@@ -9,8 +9,6 @@
 package co.yixiang.modules.aop;
 
 
-import co.yixiang.api.BusinessException;
-import co.yixiang.api.YshopException;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

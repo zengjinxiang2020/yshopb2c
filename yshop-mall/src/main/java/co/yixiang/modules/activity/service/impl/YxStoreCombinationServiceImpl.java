@@ -30,7 +30,6 @@ import co.yixiang.modules.activity.service.mapper.YxStorePinkMapper;
 import co.yixiang.modules.activity.service.mapper.YxStoreVisitMapper;
 import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
-import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.service.YxStoreProductAttrService;
 import co.yixiang.modules.product.service.YxStoreProductAttrValueService;
 import co.yixiang.modules.product.service.YxStoreProductReplyService;
@@ -50,7 +49,12 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
 

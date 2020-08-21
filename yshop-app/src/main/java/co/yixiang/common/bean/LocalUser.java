@@ -10,6 +10,7 @@ package co.yixiang.common.bean;
 
 
 import co.yixiang.modules.user.domain.YxUser;
+
 import java.util.HashMap;
 import java.util.Map;
 

@@ -15,7 +15,6 @@ import co.yixiang.modules.system.service.dto.RoleQueryCriteria;
 import co.yixiang.modules.system.service.dto.RoleSmallDto;
 import co.yixiang.modules.system.service.dto.UserDto;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.servlet.http.HttpServletResponse;

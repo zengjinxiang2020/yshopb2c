@@ -1,10 +1,8 @@
 package co.yixiang.modules.order.vo;
 
-import co.yixiang.modules.activity.domain.YxStoreCouponUser;
 import co.yixiang.modules.activity.vo.StoreCouponUserVo;
 import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.service.dto.PriceGroupDto;
-
 import co.yixiang.modules.product.vo.YxSystemStoreQueryVo;
 import co.yixiang.modules.user.domain.YxUserAddress;
 import co.yixiang.modules.user.vo.YxUserQueryVo;

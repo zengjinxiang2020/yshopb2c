@@ -1,7 +1,6 @@
 package co.yixiang.modules.order.service.dto;
 
 import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
-
 import lombok.Data;
 
 import java.io.Serializable;

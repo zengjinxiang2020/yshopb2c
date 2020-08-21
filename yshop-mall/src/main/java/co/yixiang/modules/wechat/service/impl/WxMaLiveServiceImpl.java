@@ -2,25 +2,19 @@ package co.yixiang.modules.wechat.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
-import cn.hutool.http.HttpUtil;
-import cn.hutool.json.JSONUtil;
 import co.yixiang.modules.wechat.service.WxMaLiveService;
 import co.yixiang.modules.wechat.service.dto.WxMaLiveInfo;
 import co.yixiang.modules.wechat.service.dto.WxMaLiveResult;
 import co.yixiang.tools.config.WxMaConfiguration;
 import co.yixiang.utils.GsonParser;
 import com.google.gson.JsonObject;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.WxType;
-import me.chanjar.weixin.common.api.WxConsts;
-import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
 import me.chanjar.weixin.common.error.WxError;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -15,7 +15,6 @@ import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.order.service.mapper.StoreOrderMapper;
 import co.yixiang.modules.shop.domain.YxSystemUserLevel;
-
 import co.yixiang.modules.user.domain.YxSystemUserTask;
 import co.yixiang.modules.user.domain.YxUserTaskFinish;
 import co.yixiang.modules.user.service.YxSystemUserLevelService;

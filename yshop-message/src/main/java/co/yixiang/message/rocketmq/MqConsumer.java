@@ -8,18 +8,12 @@
  */
 package co.yixiang.message.rocketmq;
 
-import cn.hutool.core.util.ObjectUtil;
-
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * @ClassName 消费者

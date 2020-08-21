@@ -6,7 +6,6 @@
 package co.yixiang.modules.wechat.service;
 
 import co.yixiang.common.service.BaseService;
-
 import co.yixiang.modules.wechat.domain.YxWechatMenu;
 import co.yixiang.modules.wechat.service.dto.YxWechatMenuDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatMenuQueryCriteria;

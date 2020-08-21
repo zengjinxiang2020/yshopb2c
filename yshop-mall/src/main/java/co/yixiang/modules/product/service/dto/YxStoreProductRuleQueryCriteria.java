@@ -9,8 +9,6 @@
 package co.yixiang.modules.product.service.dto;
 
 import lombok.Data;
-import java.util.List;
-import co.yixiang.annotation.Query;
 
 /**
 * @author hupeng

@@ -6,16 +6,12 @@
 package co.yixiang.logging.domain;
 
 import co.yixiang.domain.BaseDomain;
-import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
-import java.sql.Timestamp;
 
 /**
  * @author hupeng

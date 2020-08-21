@@ -9,7 +9,6 @@
 package co.yixiang.modules.order.service;
 
 import co.yixiang.common.service.BaseService;
-
 import co.yixiang.modules.order.domain.YxStoreOrderStatus;
 import co.yixiang.modules.order.service.dto.YxStoreOrderStatusDto;
 import co.yixiang.modules.order.service.dto.YxStoreOrderStatusQueryCriteria;

@@ -9,9 +9,10 @@
 package co.yixiang.modules.user.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-
 import co.yixiang.modules.user.domain.YxUserBill;
-import co.yixiang.modules.user.service.dto.*;
+import co.yixiang.modules.user.service.dto.BillOrderRecordDto;
+import co.yixiang.modules.user.service.dto.MUserBillDto;
+import co.yixiang.modules.user.service.dto.YxUserBillDto;
 import co.yixiang.modules.user.vo.BillVo;
 import co.yixiang.modules.user.vo.SignVo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;

@@ -10,7 +10,6 @@ package co.yixiang.modules.user.service;
 
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.shop.domain.YxSystemUserLevel;
-
 import co.yixiang.modules.user.service.dto.UserLevelDto;
 import co.yixiang.modules.user.service.dto.YxSystemUserLevelDto;
 import co.yixiang.modules.user.service.dto.YxSystemUserLevelQueryCriteria;

@@ -12,12 +12,10 @@ import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
-
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.http.HttpUtil;
 import co.yixiang.api.YshopException;
-import co.yixiang.common.bean.LocalUser;
 import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.OrderInfoEnum;
@@ -38,7 +36,6 @@ import co.yixiang.modules.shop.service.YxSystemStoreService;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
-import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -57,7 +54,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Map;
 
 import static co.yixiang.utils.FileUtil.transformStyle;
 

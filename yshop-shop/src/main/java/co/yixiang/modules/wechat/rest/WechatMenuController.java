@@ -12,7 +12,6 @@ import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.wechat.domain.YxWechatMenu;
 import co.yixiang.modules.wechat.service.YxWechatMenuService;
 import co.yixiang.mp.config.WxMpConfiguration;
-
 import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;

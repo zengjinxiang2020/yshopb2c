@@ -9,7 +9,6 @@
 package co.yixiang.modules.order.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.service.dto.ChartDataDto;
 import co.yixiang.modules.order.vo.OrderDataVo;

@@ -6,7 +6,6 @@
 package co.yixiang.tools.rest;
 
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.api.YshopException;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.tools.domain.QiniuContent;
@@ -16,7 +15,6 @@ import co.yixiang.tools.service.dto.LocalStorageDto;
 import co.yixiang.utils.RedisUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

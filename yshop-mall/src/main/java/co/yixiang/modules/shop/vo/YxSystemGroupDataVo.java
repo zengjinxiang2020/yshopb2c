@@ -5,13 +5,9 @@
  */
 package co.yixiang.modules.shop.vo;
 
-import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.bean.copier.CopyOptions;
-import co.yixiang.domain.BaseDomain;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
 * @author hupeng

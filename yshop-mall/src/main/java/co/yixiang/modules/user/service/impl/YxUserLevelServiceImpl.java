@@ -10,7 +10,6 @@ package co.yixiang.modules.user.service.impl;
 
 import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
-
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.shop.domain.YxSystemUserLevel;
@@ -20,7 +19,6 @@ import co.yixiang.modules.user.service.YxSystemUserLevelService;
 import co.yixiang.modules.user.service.YxSystemUserTaskService;
 import co.yixiang.modules.user.service.YxUserLevelService;
 import co.yixiang.modules.user.service.YxUserService;
-
 import co.yixiang.modules.user.service.mapper.SystemUserTaskMapper;
 import co.yixiang.modules.user.service.mapper.YxUserLevelMapper;
 import co.yixiang.utils.OrderUtil;

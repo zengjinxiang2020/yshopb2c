@@ -12,43 +12,39 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
+import co.yixiang.common.service.impl.BaseServiceImpl;
+import co.yixiang.common.utils.QueryHelpPlus;
+import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.LiveGoodsEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.wechat.domain.YxWechatLiveGoods;
-import co.yixiang.common.service.impl.BaseServiceImpl;
-import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.modules.wechat.service.WxMaLiveGoodsService;
+import co.yixiang.modules.wechat.service.YxWechatLiveGoodsService;
 import co.yixiang.modules.wechat.service.dto.WxMaLiveInfo;
 import co.yixiang.modules.wechat.service.dto.WxMaLiveResult;
-import co.yixiang.tools.config.WxMaConfiguration;
-import com.github.pagehelper.PageInfo;
-import co.yixiang.common.utils.QueryHelpPlus;
-import co.yixiang.utils.FileUtil;
-import co.yixiang.modules.wechat.service.YxWechatLiveGoodsService;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsQueryCriteria;
 import co.yixiang.modules.wechat.service.mapper.YxWechatLiveGoodsMapper;
+import co.yixiang.tools.config.WxMaConfiguration;
+import co.yixiang.utils.FileUtil;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-// 默认不使用缓存
-//import org.springframework.cache.annotation.CacheConfig;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Pageable;
 
-import java.io.File;
-import java.util.List;
-import java.util.Map;
-import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author hupeng

@@ -1,13 +1,7 @@
 package co.yixiang.modules.product.vo;
 
-import co.yixiang.common.web.param.QueryParam;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
-import co.yixiang.modules.product.vo.YxStoreProductAttrQueryVo;
-import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
-import co.yixiang.modules.product.vo.YxStoreProductReplyQueryVo;
-import co.yixiang.modules.product.vo.YxSystemStoreQueryVo;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

@@ -16,7 +16,6 @@ import co.yixiang.modules.shop.domain.YxSystemStore;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreDto;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreQueryCriteria;
-import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.ShopKeyUtils;
 import com.alibaba.fastjson.JSON;

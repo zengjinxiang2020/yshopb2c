@@ -15,12 +15,14 @@ import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.shop.domain.YxSystemUserLevel;
-
 import co.yixiang.modules.user.domain.YxUserLevel;
 import co.yixiang.modules.user.service.YxSystemUserLevelService;
 import co.yixiang.modules.user.service.YxSystemUserTaskService;
 import co.yixiang.modules.user.service.YxUserLevelService;
-import co.yixiang.modules.user.service.dto.*;
+import co.yixiang.modules.user.service.dto.TaskDto;
+import co.yixiang.modules.user.service.dto.UserLevelDto;
+import co.yixiang.modules.user.service.dto.YxSystemUserLevelDto;
+import co.yixiang.modules.user.service.dto.YxSystemUserLevelQueryCriteria;
 import co.yixiang.modules.user.service.mapper.SystemUserLevelMapper;
 import co.yixiang.modules.user.vo.YxSystemUserLevelQueryVo;
 import co.yixiang.utils.FileUtil;

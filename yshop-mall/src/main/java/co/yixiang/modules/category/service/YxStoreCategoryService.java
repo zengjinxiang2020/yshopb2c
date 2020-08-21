@@ -9,7 +9,6 @@
 package co.yixiang.modules.category.service;
 
 import co.yixiang.common.service.BaseService;
-
 import co.yixiang.modules.category.domain.YxStoreCategory;
 import co.yixiang.modules.category.service.dto.YxStoreCategoryDto;
 import co.yixiang.modules.category.service.dto.YxStoreCategoryQueryCriteria;

@@ -10,9 +10,9 @@ package co.yixiang.modules.activity.service;
 
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.activity.domain.YxStoreCombination;
-import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.service.dto.YxStoreCombinationDto;
 import co.yixiang.modules.activity.service.dto.YxStoreCombinationQueryCriteria;
+import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
 import org.springframework.data.domain.Pageable;
 

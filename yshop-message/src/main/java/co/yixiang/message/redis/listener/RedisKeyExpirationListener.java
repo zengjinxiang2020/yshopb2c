@@ -10,10 +10,8 @@ package co.yixiang.message.redis.listener;
 
 
 import cn.hutool.core.util.StrUtil;
-
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.OrderInfoEnum;
-import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.message.redis.config.RedisConfigProperties;
 import co.yixiang.modules.activity.domain.YxStorePink;
 import co.yixiang.modules.activity.service.YxStorePinkService;

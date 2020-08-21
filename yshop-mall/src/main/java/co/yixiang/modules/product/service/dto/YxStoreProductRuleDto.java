@@ -10,8 +10,9 @@ package co.yixiang.modules.product.service.dto;
 
 import com.alibaba.fastjson.JSONArray;
 import lombok.Data;
-import java.sql.Timestamp;
+
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
 * @author hupeng

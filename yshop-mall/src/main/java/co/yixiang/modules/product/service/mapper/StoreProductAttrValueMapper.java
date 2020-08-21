@@ -9,7 +9,6 @@
 package co.yixiang.modules.product.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;

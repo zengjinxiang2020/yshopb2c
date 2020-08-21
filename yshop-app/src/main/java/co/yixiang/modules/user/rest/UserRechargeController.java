@@ -9,7 +9,6 @@
 package co.yixiang.modules.user.rest;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.bean.LocalUser;
@@ -17,7 +16,6 @@ import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.BillDetailEnum;
-import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.shop.domain.YxSystemGroupData;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.shop.service.dto.YxSystemGroupDataQueryCriteria;

@@ -9,7 +9,6 @@
 package co.yixiang.modules.user.service;
 
 import co.yixiang.common.service.BaseService;
-
 import co.yixiang.modules.order.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.dto.PromUserDto;

@@ -7,15 +7,14 @@
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
 package co.yixiang.modules.template.rest;
-import java.util.Arrays;
 
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.service.YxStoreProductService;
-import co.yixiang.modules.template.domain.YxShippingTemplates;
 import co.yixiang.modules.template.domain.YxSystemCity;
 import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.modules.template.service.YxSystemCityService;
@@ -23,19 +22,27 @@ import co.yixiang.modules.template.service.dto.ShippingTemplatesDto;
 import co.yixiang.modules.template.service.dto.YxShippingTemplatesDto;
 import co.yixiang.modules.template.service.dto.YxShippingTemplatesQueryCriteria;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import co.yixiang.logging.aop.log.Log;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import io.swagger.annotations.*;
-import java.io.IOException;
-import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
 * @author hupeng

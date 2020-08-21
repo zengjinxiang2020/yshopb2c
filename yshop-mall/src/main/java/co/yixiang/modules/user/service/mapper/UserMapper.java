@@ -9,7 +9,6 @@
 package co.yixiang.modules.user.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.dto.PromUserDto;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

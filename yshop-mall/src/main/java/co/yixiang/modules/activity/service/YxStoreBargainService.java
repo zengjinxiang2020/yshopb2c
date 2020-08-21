@@ -10,7 +10,8 @@ package co.yixiang.modules.activity.service;
 
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.activity.domain.YxStoreBargain;
-import co.yixiang.modules.activity.service.dto.*;
+import co.yixiang.modules.activity.service.dto.YxStoreBargainDto;
+import co.yixiang.modules.activity.service.dto.YxStoreBargainQueryCriteria;
 import co.yixiang.modules.activity.vo.BargainCountVo;
 import co.yixiang.modules.activity.vo.BargainVo;
 import co.yixiang.modules.activity.vo.TopCountVo;

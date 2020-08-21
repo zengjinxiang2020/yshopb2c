@@ -3,7 +3,6 @@ package co.yixiang.modules.monitor.config;
 import co.yixiang.modules.monitor.service.VisitsService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.stereotype.Component;
 
 /**
  * 初始化站点统计

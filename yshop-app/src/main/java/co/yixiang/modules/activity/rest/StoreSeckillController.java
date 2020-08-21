@@ -11,18 +11,16 @@ package co.yixiang.modules.activity.rest;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
-
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.constant.ShopConstants;
-import co.yixiang.modules.activity.service.dto.SeckillTimeDto;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
-
+import co.yixiang.modules.activity.service.dto.SeckillTimeDto;
+import co.yixiang.modules.activity.vo.SeckillConfigVo;
 import co.yixiang.modules.activity.vo.StoreSeckillVo;
 import co.yixiang.modules.activity.vo.YxStoreSeckillQueryVo;
-import co.yixiang.modules.activity.vo.SeckillConfigVo;
 import co.yixiang.modules.product.service.YxStoreProductRelationService;
 import co.yixiang.modules.shop.domain.YxSystemGroupData;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
@@ -35,7 +33,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -9,7 +9,6 @@
 package co.yixiang.modules.user.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-
 import co.yixiang.modules.user.domain.YxUserLevel;
 import co.yixiang.modules.user.service.dto.UserLevelInfoDto;
 import org.apache.ibatis.annotations.Select;

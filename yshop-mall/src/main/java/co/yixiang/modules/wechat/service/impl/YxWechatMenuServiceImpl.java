@@ -8,12 +8,10 @@ package co.yixiang.modules.wechat.service.impl;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
-
 import co.yixiang.modules.wechat.domain.YxWechatMenu;
 import co.yixiang.modules.wechat.service.YxWechatMenuService;
 import co.yixiang.modules.wechat.service.dto.YxWechatMenuDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatMenuQueryCriteria;
-
 import co.yixiang.modules.wechat.service.mapper.WechatMenuMapper;
 import co.yixiang.utils.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

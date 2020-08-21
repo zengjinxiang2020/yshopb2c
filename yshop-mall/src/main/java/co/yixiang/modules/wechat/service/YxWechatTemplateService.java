@@ -6,7 +6,6 @@
 package co.yixiang.modules.wechat.service;
 
 import co.yixiang.common.service.BaseService;
-
 import co.yixiang.modules.wechat.domain.YxWechatTemplate;
 import co.yixiang.modules.wechat.service.dto.YxWechatTemplateDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatTemplateQueryCriteria;

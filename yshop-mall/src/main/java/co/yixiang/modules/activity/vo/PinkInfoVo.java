@@ -1,8 +1,6 @@
 package co.yixiang.modules.activity.vo;
 
 
-import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
-import co.yixiang.modules.activity.vo.YxStorePinkQueryVo;
 import co.yixiang.modules.user.vo.YxUserQueryVo;
 import lombok.Builder;
 import lombok.Data;

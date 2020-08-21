@@ -8,12 +8,12 @@
 */
 package co.yixiang.modules.wechat.service.dto;
 
-import lombok.Data;
-import java.io.Serializable;
-import java.util.List;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
 * @author hupeng
