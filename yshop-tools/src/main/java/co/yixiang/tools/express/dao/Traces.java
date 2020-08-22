@@ -9,6 +9,7 @@
 package co.yixiang.tools.express.dao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Auto-generated: 2018-07-19 22:27:22
@@ -19,8 +20,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Traces {
 
     @JsonProperty("AcceptStation")
+    @ApiModelProperty(value = "描述")
     private String AcceptStation;
+
     @JsonProperty("AcceptTime")
+    @ApiModelProperty(value = "时间")
     private String AcceptTime;
 
     public String getAcceptStation() {

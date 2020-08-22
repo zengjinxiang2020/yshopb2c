@@ -31,6 +31,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -101,6 +103,10 @@ public class AuthController {
      * 微信公众号授权
      */
     @GetMapping("/wechat/auth")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "code", value = "微信授权code", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "spread", value = "分销绑定关系的ID", paramType = "query", dataType = "string")
+    })
     @ApiOperation(value = "微信公众号授权", notes = "微信公众号授权")
     public ApiResult<Map<String, Object>> authLogin(@RequestParam(value = "code") String code,
                                                     @RequestParam(value = "spread") String spread,

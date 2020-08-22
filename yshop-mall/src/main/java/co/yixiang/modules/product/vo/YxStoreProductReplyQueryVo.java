@@ -67,19 +67,20 @@ public class YxStoreProductReplyQueryVo implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
+    @ApiModelProperty(value = "评价星星数")
     private String star;
 
+    @ApiModelProperty(value = "用户昵称")
     private String nickname;
 
+    @ApiModelProperty(value = "用户头像")
     private String avatar;
 
+    @ApiModelProperty(value = "商品sku")
     private String sku;
-
-
 
     @JsonIgnore
     private String cartInfo;
-
 
 
 }

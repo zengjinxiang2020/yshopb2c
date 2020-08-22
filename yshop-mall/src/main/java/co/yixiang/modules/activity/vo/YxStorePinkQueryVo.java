@@ -26,7 +26,10 @@ public class YxStorePinkQueryVo implements Serializable {
     @ApiModelProperty(value = "用户id")
     private Long uid;
 
+    @ApiModelProperty(value = "用户昵称")
     private String nickname;
+
+    @ApiModelProperty(value = "用户头像")
     private String avatar;
 
     @ApiModelProperty(value = "订单id 生成")
@@ -56,6 +59,7 @@ public class YxStorePinkQueryVo implements Serializable {
     @ApiModelProperty(value = "开始时间")
     private Date createTime;
 
+    @ApiModelProperty(value = "结束时间")
     private Date stopTime;
 
     @ApiModelProperty(value = "团长id 0为团长")

@@ -10,6 +10,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,62 +38,81 @@ public class YxStoreProductAttrValue implements Serializable {
 
 
     /** 商品ID */
+    @ApiModelProperty(value = "商品ID")
     private Long productId;
 
 
     /** 商品属性索引值 (attr_value|attr_value[|....]) */
+    @ApiModelProperty(value = "商品属性索引值 (attr_value|attr_value[|....])")
     private String sku;
 
 
     /** 属性对应的库存 */
+    @ApiModelProperty(value = "属性对应的库存")
     private Integer stock;
 
     /** 拼团库存属性对应的库存 */
+    @ApiModelProperty(value = "拼团库存属性对应的库存")
     private Integer pinkStock;
 
     /** 秒杀库存属性对应的库存 */
+    @ApiModelProperty(value = "秒杀库存属性对应的库存")
     private Integer seckillStock;
 
     /** 销量 */
+    @ApiModelProperty(value = "销量")
     private Integer sales;
 
 
     /** 属性金额 */
+    @ApiModelProperty(value = "属性金额")
     private BigDecimal price;
 
     /** 拼团属性对应的金额 */
+    @ApiModelProperty(value = "拼团属性对应的金额")
     private BigDecimal pinkPrice;
 
     /** 秒杀属性对应的金额 */
+    @ApiModelProperty(value = "秒杀属性对应的金额")
     private BigDecimal seckillPrice;
+
     /** 图片 */
+    @ApiModelProperty(value = "属性对应的图片")
     private String image;
 
 
     /** 唯一值 */
      @TableField(value = "`unique`")
+     @ApiModelProperty(value = "唯一值")
     private String unique;
 
 
     /** 成本价 */
+    @ApiModelProperty(value = "成本价")
     private BigDecimal cost;
 
     /** 商品条码 */
+    @ApiModelProperty(value = "商品条码")
     private String barCode;
 
     /** 原价 */
+    @ApiModelProperty(value = "原价")
     private BigDecimal otPrice;
 
     /** 重量 */
+    @ApiModelProperty(value = "重量")
     private BigDecimal weight;
 
     /** 体积 */
+    @ApiModelProperty(value = "体积")
     private BigDecimal volume;
 
     /** 一级返佣 */
+    @ApiModelProperty(value = "一级返佣")
     private BigDecimal brokerage;
 
     /** 二级返佣 */
+    @ApiModelProperty(value = "二级返佣")
     private BigDecimal brokerageTwo;
 
 

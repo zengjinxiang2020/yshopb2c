@@ -184,10 +184,13 @@ public class YxStoreOrderQueryVo implements Serializable {
 
     private Integer isSystemDel;
 
+    @ApiModelProperty(value = "门店信息与二维码链接")
     private String code;
 
+    @ApiModelProperty(value = "腾讯地图key")
     private String mapKey;
 
+    @ApiModelProperty(value = "门店信息")
     private YxSystemStoreQueryVo systemStore;
 
 }

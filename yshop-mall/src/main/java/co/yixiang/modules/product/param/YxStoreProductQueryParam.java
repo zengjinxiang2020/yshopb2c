@@ -2,6 +2,7 @@ package co.yixiang.modules.product.param;
 
 import co.yixiang.common.web.param.QueryParam;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,10 +20,21 @@ import lombok.EqualsAndHashCode;
 public class YxStoreProductQueryParam extends QueryParam {
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "类别")
     private String type;
+
+    @ApiModelProperty(value = "分类ID")
     private String sid;
+
+    @ApiModelProperty(value = "是否新品")
     private String news;
+
+    @ApiModelProperty(value = "价格排序")
     private String priceOrder;
+
+    @ApiModelProperty(value = "销量排序")
     private String salesOrder;
+
+    @ApiModelProperty(value = "关键字")
     private String keyword;
 }

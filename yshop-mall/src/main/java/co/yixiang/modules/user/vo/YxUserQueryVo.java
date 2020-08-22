@@ -32,18 +32,25 @@ public class YxUserQueryVo implements Serializable {
     @ApiModelProperty(value = "用户账号")
     private String account;
 
+    @ApiModelProperty(value = "优惠券数量")
     private Integer couponCount = 0;
 
+    @ApiModelProperty(value = "订单详情数据")
     private UserOrderCountVo orderStatusNum;
+
 
     private Integer statu;
 
+    @ApiModelProperty(value = "总的签到天数")
     private Integer sumSignDay;
 
+    @ApiModelProperty(value = "当天是否签到")
     private Boolean isDaySign;
 
+    @ApiModelProperty(value = "昨天是否签到")
     private Boolean isYesterDaySign;
 
+    @ApiModelProperty(value = "核销权限")
     private Boolean checkStatus;
 
 
@@ -119,12 +126,16 @@ public class YxUserQueryVo implements Serializable {
     @ApiModelProperty(value = "用户登陆类型，h5,wechat,routine")
     private String loginType;
 
+    @ApiModelProperty(value = "是否会员")
     private Boolean vip;
 
+    @ApiModelProperty(value = "会员ID")
     private Integer vipId;
 
+    @ApiModelProperty(value = "会员图标")
     private String vipIcon;
 
+    @ApiModelProperty(value = "会员名称")
     private String vipName;
 
 }

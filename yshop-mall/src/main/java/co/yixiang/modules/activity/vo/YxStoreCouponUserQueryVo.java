@@ -41,6 +41,7 @@ public class YxStoreCouponUserQueryVo implements Serializable {
     private BigDecimal useMinPrice;
 
     @JsonFormat(pattern = "yyyy-MM-dd",timezone="GMT+8")
+    @ApiModelProperty(value = "优惠券创建时间")
     private Date createTime;
 
     @ApiModelProperty(value = "优惠券结束时间")
@@ -59,8 +60,10 @@ public class YxStoreCouponUserQueryVo implements Serializable {
     @ApiModelProperty(value = "是否有效")
     private Integer isFail;
 
+    @ApiModelProperty(value = "优惠券发放类型 0可用 1不可用")
     private Integer _type;
 
+    @ApiModelProperty(value = "优惠券发放显示文字")
     private String _msg;
 
 }

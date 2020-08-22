@@ -101,7 +101,8 @@ public class YxStoreSeckillQueryVo implements Serializable{
     @ApiModelProperty(value = "显示")
     private Integer isShow;
 
-    private Integer percent; //百分比
+    @ApiModelProperty(value = "百分比")
+    private Integer percent;
 
 
 

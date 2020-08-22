@@ -37,18 +37,25 @@ public class YxStoreProductRelationQueryVo implements Serializable {
     @ApiModelProperty(value = "添加时间")
     private Date createTime;
 
+    @ApiModelProperty(value = "产品图片")
     private String image;
 
+    @ApiModelProperty(value = "是否显示")
     private Integer isShow;
 
+    @ApiModelProperty(value = "原价")
     private Double otPrice;
 
+    @ApiModelProperty(value = "父ID")
     private Integer pid;
 
+    @ApiModelProperty(value = "产品价格")
     private Double price;
 
+    @ApiModelProperty(value = "产品销量")
     private Integer sales;
 
+    @ApiModelProperty(value = "商品名称")
     private String storeName;
 
 }

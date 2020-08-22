@@ -1,6 +1,7 @@
 package co.yixiang.modules.product.vo;
 
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class ProductVo{
 
     private List<YxStoreProductQueryVo> goodList = new ArrayList();
 
-
+    @ApiModelProperty(value = "商户ID，预留字段")
     private Integer merId = 0;
 
     private String priceName = "";
@@ -30,10 +31,13 @@ public class ProductVo{
 
     private Map<String, YxStoreProductAttrValue>  productValue = new LinkedHashMap<>();
 
+    @ApiModelProperty(value = "评论信息")
     private YxStoreProductReplyQueryVo reply;
 
+    @ApiModelProperty(value = "回复渠道")
     private String replyChance;
 
+    @ApiModelProperty(value = "回复数")
     private Integer replyCount = 0;
 
     //todo
@@ -41,13 +45,16 @@ public class ProductVo{
 
     private YxStoreProductQueryVo storeInfo;
 
+    @ApiModelProperty(value = "腾讯地图key")
     private String mapKey;
 
-    //门店
+    @ApiModelProperty(value = "门店信息")
     private YxSystemStoreQueryVo systemStore;
 
+    @ApiModelProperty(value = "用户ID")
     private Integer uid = 0;
 
+    @ApiModelProperty(value = "模版名称")
     private String tempName;
 
 }

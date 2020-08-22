@@ -2,6 +2,7 @@ package co.yixiang.modules.shop.param;
 
 import co.yixiang.common.web.param.QueryParam;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 /**
@@ -18,8 +19,10 @@ import lombok.EqualsAndHashCode;
 public class YxSystemStoreQueryParam extends QueryParam {
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "纬度")
     private String latitude;
 
+    @ApiModelProperty(value = "经度")
     private String longitude;
 
 }

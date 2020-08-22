@@ -27,6 +27,8 @@ import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.vo.YxUserBillQueryVo;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -92,6 +94,10 @@ public class UserBillController {
      */
     @AuthCheck
     @GetMapping("/integral/list")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "积分记录",notes = "积分记录")
     public ApiResult<List<YxUserBillQueryVo>> userInfo(@RequestParam(value = "page",defaultValue = "1") int page,
                                                        @RequestParam(value = "limit",defaultValue = "10") int limit){
@@ -106,6 +112,9 @@ public class UserBillController {
      */
     @AuthCheck
     @GetMapping("/spread/banner")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "form", value = "来源", paramType = "query", dataType = "string")
+    })
     @ApiOperation(value = "分销二维码海报生成",notes = "分销二维码海报生成")
     public ApiResult<List<Map<String,Object>>> spreadBanner(@RequestParam(value = "",required=false) String form){
         YxUser yxUser = LocalUser.getUser();
@@ -157,6 +166,11 @@ public class UserBillController {
      */
     @AuthCheck
     @GetMapping("/spread/commission/{type}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "type", value = "类型 0所有 1消费 2充值 3返佣 4提现 5签到积分 6退款 7系统增加 8系统减少", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "推广佣金明细",notes = "推广佣金明细")
     public ApiResult<Object> spreadCommission(@RequestParam(value = "page",defaultValue = "1") int page,
                                               @RequestParam(value = "limit",defaultValue = "10") int limit,

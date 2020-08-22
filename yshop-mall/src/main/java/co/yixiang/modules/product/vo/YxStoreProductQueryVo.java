@@ -44,11 +44,13 @@ public class YxStoreProductQueryVo implements Serializable {
         return image;
     }
 
+    @ApiModelProperty(value = "是否收藏")
     private Boolean userCollect = false;
 
+    @ApiModelProperty(value = "是否喜欢")
     private Boolean userLike = false;
 
-    @ApiModelProperty(value = "轮播图")
+    @ApiModelProperty(value = "轮播图，多个用,分割")
     private String sliderImage;
 
     private List<String> sliderImageArr;
@@ -123,16 +125,21 @@ public class YxStoreProductQueryVo implements Serializable {
     @ApiModelProperty(value = "浏览量")
     private Integer browse;
 
+    @ApiModelProperty(value = "状态（0：未上架，1：上架）")
     private Integer isShow;
 
+    @ApiModelProperty(value = "获得积分")
     private BigDecimal giveIntegral;
 
+    @ApiModelProperty(value = "运费模板ID")
     private Integer tempId;
 
     /** 是否单独分佣 */
+    @ApiModelProperty(value = "是否单独分佣")
     private Integer isSub;
 
     /** 规格 0单 1多 */
+    @ApiModelProperty(value = "规格 0单 1多 ")
     private Integer specType;
 
 

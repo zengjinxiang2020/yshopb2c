@@ -19,6 +19,7 @@ import java.io.Serializable;
 public class YxSystemStoreQueryVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "门店ID")
     private Integer id;
 
     @ApiModelProperty(value = "门店名称")
@@ -57,7 +58,7 @@ public class YxSystemStoreQueryVo implements Serializable {
     @ApiModelProperty(value = "每日营业开关时间")
     private String dayTime;
 
-
+    @ApiModelProperty(value = "距离")
     private String distance;
 
 }

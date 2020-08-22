@@ -44,6 +44,9 @@ import co.yixiang.tools.express.config.ExpressAutoConfiguration;
 import co.yixiang.tools.express.dao.ExpressInfo;
 import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -104,6 +107,9 @@ public class StoreOrderController {
      */
     @AuthCheck
     @PostMapping("/order/computed/{key}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "key", value = "唯一的key", paramType = "query", dataType = "string")
+    })
     @ApiOperation(value = "计算订单金额",notes = "计算订单金额")
     public ApiResult<Map<String,Object>> computedOrder(@Validated @RequestBody ComputeOrderParam param,
                                                        @PathVariable String key){
@@ -214,6 +220,11 @@ public class StoreOrderController {
      */
     @AuthCheck
     @GetMapping("/order/list")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "商品状态,默认为0未支付 1待发货 2待收货 3待评价 4已完成 5退款中 6已退款 7退款", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "订单列表",notes = "订单列表")
     public ApiResult<List<YxStoreOrderQueryVo>> orderList(@RequestParam(value = "type",defaultValue = "0") int type,
                                                           @RequestParam(value = "page",defaultValue = "1") int page,
@@ -228,6 +239,9 @@ public class StoreOrderController {
      */
     @AuthCheck
     @GetMapping("/order/detail/{key}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "key", value = "唯一的key", paramType = "query", dataType = "string")
+    })
     @ApiOperation(value = "订单详情",notes = "订单详情")
     public ApiResult<YxStoreOrderQueryVo> detail(@PathVariable String key){
         Long uid = LocalUser.getUser().getUid();

@@ -59,6 +59,7 @@ public class YxArticleQueryVo implements Serializable {
     @JsonProperty(value = "addTime")
     private String createTime;
 
+    @ApiModelProperty(value = "文章内容")
     private String content;
 
 }

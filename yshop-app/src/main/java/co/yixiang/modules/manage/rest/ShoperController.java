@@ -24,6 +24,8 @@ import co.yixiang.modules.order.vo.ShoperOrderTimeDataVo;
 import co.yixiang.modules.order.vo.UserOrderCountVo;
 import co.yixiang.modules.order.vo.YxStoreOrderQueryVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -75,6 +77,10 @@ public class ShoperController {
      */
     @AuthCheck
     @GetMapping("/admin/order/data")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "订单每月统计数据",notes = "订单每月统计数据")
     public ApiResult<List<OrderDataVo>> data(@RequestParam(value = "page",defaultValue = "1") int page,
                                              @RequestParam(value = "limit",defaultValue = "10") int limit){

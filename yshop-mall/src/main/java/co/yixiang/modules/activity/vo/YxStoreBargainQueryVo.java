@@ -102,7 +102,8 @@ public class YxStoreBargainQueryVo implements Serializable {
     @ApiModelProperty(value = "砍价产品分享量")
     private Integer share;
 
-    private Integer people; //参与人数
+    @ApiModelProperty(value = "砍价产品参与人数")
+    private Integer people;
 
 
 }

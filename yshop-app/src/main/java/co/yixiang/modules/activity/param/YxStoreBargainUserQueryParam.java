@@ -2,6 +2,7 @@ package co.yixiang.modules.activity.param;
 
 import co.yixiang.common.web.param.QueryParam;
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,8 +23,10 @@ public class YxStoreBargainUserQueryParam extends QueryParam {
     private static final long serialVersionUID = 1L;
 
     @NotBlank(message = "参数错误")
+    @ApiModelProperty(value = "砍价用户ID")
     private String bargainUserUid;
 
+    @ApiModelProperty(value = "砍价产品ID")
     private String bargainId;
 
 }

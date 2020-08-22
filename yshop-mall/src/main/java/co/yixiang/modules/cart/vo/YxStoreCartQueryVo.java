@@ -48,19 +48,25 @@ public class YxStoreCartQueryVo implements Serializable {
     @ApiModelProperty(value = "砍价id")
     private Long bargainId;
 
+    @ApiModelProperty(value = "商品信息")
     private YxStoreProductQueryVo productInfo;
 
-
+    @ApiModelProperty(value = "成本价")
     private Double costPrice;
 
+    @ApiModelProperty(value = "真实价格")
     private Double truePrice;
 
+    @ApiModelProperty(value = "真实库存")
     private Integer trueStock;
 
+    @ApiModelProperty(value = "vip真实价格")
     private Double vipTruePrice;
 
+    @ApiModelProperty(value = "唯一id")
     private String unique;
 
+    @ApiModelProperty(value = "是否回复")
     private Integer isReply;
 
 }

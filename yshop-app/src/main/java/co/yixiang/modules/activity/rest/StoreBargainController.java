@@ -38,6 +38,8 @@ import co.yixiang.modules.user.service.YxUserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +89,10 @@ public class StoreBargainController {
      * 砍价产品列表
      */
     @GetMapping("/bargain/list")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "砍价产品列表",notes = "砍价产品列表")
     public ApiResult<Object> getYxStoreBargainPageList(@RequestParam(value = "page",defaultValue = "1") int page,
                                                        @RequestParam(value = "limit",defaultValue = "10") int limit){
@@ -253,6 +259,10 @@ public class StoreBargainController {
      */
     @AuthCheck
     @GetMapping("/bargain/user/list")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "砍价列表(已参与)",notes = "砍价列表(已参与)")
     public ApiResult<List<YxStoreBargainUserQueryVo>> bargainUserList(
                                              @RequestParam(value = "page",defaultValue = "1") int page,

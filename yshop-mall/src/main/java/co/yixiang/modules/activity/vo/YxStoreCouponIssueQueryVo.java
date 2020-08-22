@@ -26,8 +26,10 @@ public class YxStoreCouponIssueQueryVo implements Serializable {
     @ApiModelProperty(value = "优惠券ID")
     private Integer cid;
 
+    @ApiModelProperty(value = "优惠券名称")
     private String cname;
 
+    @ApiModelProperty(value = "优惠券类别")
     private Integer ctype;
 
     @ApiModelProperty(value = "优惠券领取开启时间")
@@ -50,10 +52,13 @@ public class YxStoreCouponIssueQueryVo implements Serializable {
     @ApiModelProperty(value = "1 正常 0 未开启 -1 已无效")
     private Integer status;
 
+    @ApiModelProperty(value = "优惠券价格")
     private Double couponPrice;
 
+    @ApiModelProperty(value = "优惠券最低满多少能使用")
     private Double useMinPrice;
 
+    @ApiModelProperty(value = "优惠券是否使用")
     private Boolean isUse;
 
 }

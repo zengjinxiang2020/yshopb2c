@@ -1,5 +1,6 @@
 package co.yixiang.modules.order.param;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,8 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class ConfirmOrderParam {
+
     @NotBlank(message = "请提交购买的商品")
+    @ApiModelProperty(value = "购物车ID")
     private String cartId;
 }

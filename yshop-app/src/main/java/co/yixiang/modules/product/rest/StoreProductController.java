@@ -39,6 +39,8 @@ import co.yixiang.modules.shop.service.YxSystemAttachmentService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.domain.YxUser;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +89,9 @@ public class StoreProductController {
      * 获取首页更多产品
      */
     @GetMapping("/groom/list/{type}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "类型：1精品推荐，2热门榜单，3首发新品，4促销单品", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "获取首页更多产品",notes = "获取首页更多产品")
     public ApiResult<Map<String,Object>> moreGoodsList(@PathVariable Integer type){
         Map<String,Object> map = new LinkedHashMap<>();
@@ -127,6 +132,9 @@ public class StoreProductController {
      */
     @AuthCheck
     @GetMapping("/product/poster/{id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "商品ID", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "商品详情海报",notes = "商品详情海报")
     public ApiResult<String> prodoctPoster(@PathVariable Integer id) throws IOException, FontFormatException {
         YxUser userInfo = LocalUser.getUser();
@@ -192,6 +200,12 @@ public class StoreProductController {
      */
     @AuthCheck
     @GetMapping("/product/detail/{id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "商品ID", paramType = "query", dataType = "long",required = true),
+            @ApiImplicitParam(name = "latitude", value = "纬度", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "longitude", value = "经度", paramType = "query", dataType = "string"),
+            @ApiImplicitParam(name = "from", value = "来自:", paramType = "query", dataType = "string")
+    })
     @ApiOperation(value = "普通商品详情",notes = "普通商品详情")
     public ApiResult<ProductVo> detail(@PathVariable long id,
                                        @RequestParam(value = "",required=false) String latitude,
@@ -235,6 +249,12 @@ public class StoreProductController {
      * 获取产品评论
      */
     @GetMapping("/reply/list/{id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "商品ID", paramType = "query", dataType = "long",required = true),
+            @ApiImplicitParam(name = "type", value = "评论分数类型", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "获取产品评论",notes = "获取产品评论")
     public ApiResult<List<YxStoreProductReplyQueryVo>> replyList(@PathVariable Long id,
                                                                  @RequestParam(value = "type",defaultValue = "0") int type,
@@ -247,6 +267,9 @@ public class StoreProductController {
      * 获取产品评论数据
      */
     @GetMapping("/reply/config/{id}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "商品ID", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "获取产品评论数据",notes = "获取产品评论数据")
     public ApiResult<ReplyCountVo> replyCount(@PathVariable Integer id){
         return ApiResult.ok(replyService.getReplyCount(id));

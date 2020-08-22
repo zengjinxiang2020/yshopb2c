@@ -29,6 +29,8 @@ import co.yixiang.modules.user.vo.SignVo;
 import co.yixiang.modules.user.vo.YxUserQueryVo;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -107,6 +109,10 @@ public class UserController {
      */
     @AuthCheck
     @GetMapping("/collect/user")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "获取收藏产品",notes = "获取收藏产品")
     public ApiResult<List<YxStoreProductRelationQueryVo>> collectUser(@RequestParam(value = "page",defaultValue = "1") int page,
                                                                       @RequestParam(value = "limit",defaultValue = "10") int limit){
@@ -156,6 +162,10 @@ public class UserController {
      */
     @AuthCheck
     @GetMapping("/sign/list")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "签到列表",notes = "签到列表")
     public ApiResult<List<SignVo>> signList(@RequestParam(value = "page",defaultValue = "1") int page,
                                             @RequestParam(value = "limit",defaultValue = "10") int limit){
@@ -168,6 +178,10 @@ public class UserController {
      */
     @AuthCheck
     @GetMapping("/sign/month")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "签到列表（年月）",notes = "签到列表（年月）")
     public ApiResult<Object> signMonthList(@RequestParam(value = "page",defaultValue = "1") int page,
                                            @RequestParam(value = "limit",defaultValue = "10") int limit){

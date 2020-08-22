@@ -21,6 +21,8 @@ import co.yixiang.modules.activity.vo.YxStoreCouponIssueQueryVo;
 import co.yixiang.modules.activity.vo.YxStoreCouponUserQueryVo;
 import co.yixiang.modules.coupon.param.YxStoreCouponQueryParam;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +59,12 @@ public class CouponController {
      */
     @AuthCheck
     @GetMapping("/coupons")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "productId", value = "产品ID", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "type", value = "优惠券类型 0通用券 1商品券 2内部券", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "可领取优惠券列表",notes = "可领取优惠券列表")
     public ApiResult<List<YxStoreCouponIssueQueryVo>> getList(@RequestParam(value = "page",defaultValue = "1") int page,
                                                                @RequestParam(value = "limit",defaultValue = "10") int limit,
@@ -100,6 +108,9 @@ public class CouponController {
      */
     @AuthCheck
     @GetMapping("/coupons/order/{cartIds}")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "cartIds", value = "购物车ID,多个用,分割", paramType = "query", dataType = "int")
+    })
     @ApiOperation(value = "优惠券订单获取",notes = "优惠券订单获取")
     public ApiResult<List<StoreCouponUserVo>> orderCoupon(@PathVariable String cartIds){
         Long uid = LocalUser.getUser().getUid();
