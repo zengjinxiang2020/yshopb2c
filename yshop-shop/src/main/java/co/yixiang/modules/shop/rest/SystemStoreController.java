@@ -7,6 +7,7 @@ package co.yixiang.modules.shop.rest;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONUtil;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
@@ -92,7 +93,7 @@ public class SystemStoreController {
         String addr = jsonObject.getString("addr");
         String url = StrUtil.format("?address={}&key={}",addr,key);
         String json = HttpUtil.get(ShopConstants.QQ_MAP_URL+url);
-        return new ResponseEntity<>(json,HttpStatus.CREATED);
+        return new ResponseEntity<>(JSONUtil.parseObj(json),HttpStatus.CREATED);
     }
 
     @ForbidSubmit
