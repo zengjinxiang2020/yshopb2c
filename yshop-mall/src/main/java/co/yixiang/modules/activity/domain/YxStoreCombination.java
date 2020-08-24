@@ -62,9 +62,6 @@ public class YxStoreCombination extends BaseDomain {
     private String title;
 
 
-    /** 活动属性 */
-    private String attr;
-
 
     /** 参团人数 */
     @NotNull(message = "请输入拼团人数")

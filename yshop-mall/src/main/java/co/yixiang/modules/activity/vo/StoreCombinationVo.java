@@ -36,6 +36,7 @@ public class StoreCombinationVo implements Serializable {
 
     private Boolean userCollect = false;
 
+    private String tempName;
 
 
 }

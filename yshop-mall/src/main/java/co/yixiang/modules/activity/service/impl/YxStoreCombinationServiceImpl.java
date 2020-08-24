@@ -11,12 +11,16 @@ package co.yixiang.modules.activity.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.enums.SpecTypeEnum;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.activity.domain.YxStoreCombination;
 import co.yixiang.modules.activity.domain.YxStorePink;
 import co.yixiang.modules.activity.domain.YxStoreVisit;
@@ -36,7 +40,10 @@ import co.yixiang.modules.product.service.YxStoreProductReplyService;
 import co.yixiang.modules.product.service.dto.FromatDetailDto;
 import co.yixiang.modules.product.service.dto.ProductFormatDto;
 import co.yixiang.modules.product.service.dto.ProductResultDto;
+import co.yixiang.modules.template.domain.YxShippingTemplates;
+import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.utils.FileUtil;
+import co.yixiang.utils.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
@@ -84,6 +91,8 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
     private YxStoreProductAttrService yxStoreProductAttrService;
     @Autowired
     private YxStoreProductAttrValueService yxStoreProductAttrValueService;
+    @Autowired
+    private YxShippingTemplatesService shippingTemplatesService;
 
 
     /**
@@ -149,6 +158,8 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         if(storeCombination == null){
             throw new YshopException("拼团不存在或已下架");
         }
+        //获取商品sku
+        Map<String, Object> returnMap = yxStoreProductAttrService.getProductAttrDetail(storeCombination.getProductId());
 
         YxStoreCombinationQueryVo storeCombinationQueryVo = generator.convert(storeCombination,
                 YxStoreCombinationQueryVo.class);
@@ -157,12 +168,32 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
 
         storeCombinationVo.setStoreInfo(storeCombinationQueryVo);
 
-
+        //评价
         storeCombinationVo.setReply(replyService
                 .getReply(storeCombinationQueryVo.getProductId()));
         int replyCount = replyService.productReplyCount(storeCombinationQueryVo.getProductId());
+        //总条数
         storeCombinationVo.setReplyCount(replyCount);
+        //好评比例
         storeCombinationVo.setReplyChance(replyService.replyPer(storeCombinationQueryVo.getProductId()));
+
+        //获取运费模板名称
+        String storeFreePostage = RedisUtil.get("store_free_postage");
+        String tempName = "";
+        if(StrUtil.isBlank(storeFreePostage)
+                || !NumberUtil.isNumber(storeFreePostage)
+                || Integer.valueOf(storeFreePostage) == 0){
+            tempName = "全国包邮";
+        }else{
+            YxShippingTemplates shippingTemplates = shippingTemplatesService.getById(storeCombination.getTempId());
+            if(ObjectUtil.isNotNull(shippingTemplates)){
+                tempName = shippingTemplates.getName();
+            }else {
+                throw new BadRequestException("请配置运费模板");
+            }
+
+        }
+        storeCombinationVo.setTempName(tempName);
 
         PinkAllDto pinkAllDto = storePinkService.getPinkAll(id);
         storeCombinationVo.setPindAll(pinkAllDto.getPindAll());
