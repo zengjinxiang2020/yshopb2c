@@ -43,7 +43,7 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
      * @param productId 商品id
      * @param unique sku
      */
-    void decProductStock(int num, Long productId, String unique);
+    void decProductStock(int num, Long productId, String unique,Long activityId,String type);
 
     YxStoreProduct getProductInfo(int id);
 

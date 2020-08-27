@@ -37,7 +37,7 @@ public interface YxStoreProductAttrService  extends BaseService<YxStoreProductAt
      * @param productId 商品id
      * @param unique sku唯一值
      */
-    void decProductAttrStock(int num, Long productId, String unique);
+    void decProductAttrStock(int num, Long productId, String unique,String type);
 
 
     /**

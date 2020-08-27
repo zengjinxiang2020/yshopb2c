@@ -1492,20 +1492,21 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * @param cartInfo 购物车
      */
     public void deStockIncSale(List<YxStoreCartQueryVo> cartInfo) {
-        //todo 活动商品库存待处理
         for (YxStoreCartQueryVo storeCartVO : cartInfo) {
             Long combinationId = storeCartVO.getCombinationId();
             Long seckillId = storeCartVO.getSeckillId();
             Long bargainId = storeCartVO.getBargainId();
             if(combinationId != null && combinationId > 0){
-                combinationService.decStockIncSales(storeCartVO.getCartNum(),combinationId);
+                productService.decProductStock(storeCartVO.getCartNum(),storeCartVO.getProductId(),
+                        storeCartVO.getProductAttrUnique(),combinationId,"combination");
             }else if(seckillId != null && seckillId > 0){
-                storeSeckillService.decStockIncSales(storeCartVO.getCartNum(),seckillId);
+                productService.decProductStock(storeCartVO.getCartNum(),storeCartVO.getProductId(),
+                        storeCartVO.getProductAttrUnique(),combinationId,"seckill");
             }else if(bargainId != null && bargainId > 0){
                 storeBargainService.decStockIncSales(storeCartVO.getCartNum(),bargainId);
             } else {
                 productService.decProductStock(storeCartVO.getCartNum(),storeCartVO.getProductId(),
-                        storeCartVO.getProductAttrUnique());
+                        storeCartVO.getProductAttrUnique(),0l,"");
             }
         }
     }

@@ -171,8 +171,15 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
      * @param unique sku唯一值
      */
     @Override
-    public void decProductAttrStock(int num, Long productId, String unique) {
-        int res = yxStoreProductAttrValueMapper.decStockIncSales(num,productId,unique);
+    public void decProductAttrStock(int num, Long productId, String unique,String type) {
+        int res = 0;
+        if("combination".equals(type)){
+            res =  yxStoreProductAttrValueMapper.decCombinationStockIncSales(num,productId,unique);
+        }else if("seckill".equals(type)){
+            res =  yxStoreProductAttrValueMapper.decSeckillStockIncSales(num,productId,unique);
+        }else {
+            res =  yxStoreProductAttrValueMapper.decStockIncSales(num,productId,unique);
+        }
         if(res == 0) throw new YshopException("商品库存不足");
     }
 
