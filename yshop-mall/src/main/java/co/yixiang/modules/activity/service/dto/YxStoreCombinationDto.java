@@ -121,6 +121,9 @@ public class YxStoreCombinationDto implements Serializable {
     /** 规格 0单 1多 */
     @JsonProperty("spec_type")
     private Integer specType;
+    // 模板id
+    @JsonProperty("temp_id")
+    private Integer tempId;
 
     private ProductFormatDto attr;
     //属性项目

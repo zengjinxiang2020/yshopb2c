@@ -133,7 +133,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
 
         //普通商品库存
         int stock = productService.getProductStock(cart.getProductId()
-                ,cart.getProductAttrUnique());
+                ,cart.getProductAttrUnique(),"");
         if(stock < cartNum){
             throw new YshopException("该产品库存不足"+cartNum);
         }
@@ -335,34 +335,31 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
         Date now = new Date();
         //拼团
         if(combinationId != null && combinationId > 0){
-            YxStoreCombination storeCombination = storeCombinationService
-                    .lambdaQuery().eq(YxStoreCombination::getId,combinationId)
-                    .eq(YxStoreCombination::getIsShow, ShopCommonEnum.SHOW_1.getValue())
-                    .le(YxStoreCombination::getStartTime,now)
-                    .ge(YxStoreCombination::getStopTime,now)
+            YxStoreProduct product = productService
+                    .lambdaQuery().eq(YxStoreProduct::getId,productId)
+                    .eq(YxStoreProduct::getIsShow,ShopCommonEnum.SHOW_1.getValue())
                     .one();
-            if(storeCombination == null) throw new YshopException("该产品已下架或删除");
-            if(storeCombination.getStock() < cartNum) throw new YshopException("该产品库存不足");
-            //秒杀
-        }else if(seckillId != null && seckillId > 0){
-            YxStoreSeckill yxStoreSeckill = storeSeckillService
-                    .lambdaQuery().eq(YxStoreSeckill::getId,seckillId)
-                    .eq(YxStoreSeckill::getIsShow, ShopCommonEnum.SHOW_1.getValue())
-                    .le(YxStoreSeckill::getStartTime,now)
-                    .ge(YxStoreSeckill::getStopTime,now)
-                    .one();
-            if(yxStoreSeckill == null){
+            if(product == null){
                 throw new YshopException("该产品已下架或删除");
             }
-            if(yxStoreSeckill.getStock() < cartNum){
-                throw new YshopException("该产品库存不足");
+
+            int stock = productService.getProductStock(productId,productAttrUnique,"pink");
+            if(stock < cartNum){
+                throw new YshopException(product.getStoreName()+"库存不足"+cartNum);
             }
-            int  seckillOrderCount = storeOrderService.count(new QueryWrapper<YxStoreOrder>()
-                    .lambda().eq(YxStoreOrder::getUid, uid)
-                    .eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
-                    .eq(YxStoreOrder::getSeckillId,seckillId));
-            if(yxStoreSeckill.getNum() <= seckillOrderCount || yxStoreSeckill.getNum() < cartNum){
-                throw new YshopException("每人限购:"+yxStoreSeckill.getNum()+"件");
+            //秒杀
+        }else if(seckillId != null && seckillId > 0){
+            YxStoreProduct product = productService
+                    .lambdaQuery().eq(YxStoreProduct::getId,productId)
+                    .eq(YxStoreProduct::getIsShow,ShopCommonEnum.SHOW_1.getValue())
+                    .one();
+            if(product == null){
+                throw new YshopException("该产品已下架或删除");
+            }
+
+            int stock = productService.getProductStock(productId,productAttrUnique,"seckill");
+            if(stock < cartNum){
+                throw new YshopException(product.getStoreName()+"库存不足"+cartNum);
             }
             //砍价
         }else if(bargainId != null && bargainId > 0){
@@ -388,7 +385,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
                 throw new YshopException("该产品已下架或删除");
             }
 
-            int stock = productService.getProductStock(productId,productAttrUnique);
+            int stock = productService.getProductStock(productId,productAttrUnique,"");
             if(stock < cartNum){
                 throw new YshopException(product.getStoreName()+"库存不足"+cartNum);
             }

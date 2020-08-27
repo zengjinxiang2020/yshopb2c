@@ -107,6 +107,7 @@ public class YxStoreProductAttrValue implements Serializable {
     @ApiModelProperty(value = "体积")
     private BigDecimal volume;
 
+
     /** 一级返佣 */
     @ApiModelProperty(value = "一级返佣")
     private BigDecimal brokerage;

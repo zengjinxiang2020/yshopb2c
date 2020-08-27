@@ -1,11 +1,16 @@
 package co.yixiang.modules.activity.vo;
 
 import co.yixiang.modules.activity.service.dto.PinkDto;
+import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
+import co.yixiang.modules.product.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.product.vo.YxStoreProductReplyQueryVo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -38,5 +43,8 @@ public class StoreCombinationVo implements Serializable {
 
     private String tempName;
 
+    private List<YxStoreProductAttrQueryVo> productAttr = new ArrayList();
+
+    private Map<String, YxStoreProductAttrValue> productValue = new LinkedHashMap<>();
 
 }

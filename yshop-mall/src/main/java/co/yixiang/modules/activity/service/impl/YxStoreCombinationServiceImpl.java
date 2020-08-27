@@ -34,12 +34,14 @@ import co.yixiang.modules.activity.service.mapper.YxStorePinkMapper;
 import co.yixiang.modules.activity.service.mapper.YxStoreVisitMapper;
 import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
+import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
 import co.yixiang.modules.product.service.YxStoreProductAttrService;
 import co.yixiang.modules.product.service.YxStoreProductAttrValueService;
 import co.yixiang.modules.product.service.YxStoreProductReplyService;
 import co.yixiang.modules.product.service.dto.FromatDetailDto;
 import co.yixiang.modules.product.service.dto.ProductFormatDto;
 import co.yixiang.modules.product.service.dto.ProductResultDto;
+import co.yixiang.modules.product.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.template.domain.YxShippingTemplates;
 import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.utils.FileUtil;
@@ -200,7 +202,8 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         storeCombinationVo.setPink(pinkAllDto.getList());
         storeCombinationVo.setPinkOkList(storePinkService.getPinkOkList(uid));
         storeCombinationVo.setPinkOkSum(storePinkService.getPinkOkSumTotalNum());
-
+        storeCombinationVo.setProductAttr((List<YxStoreProductAttrQueryVo>)returnMap.get("productAttr"));
+        storeCombinationVo.setProductValue((Map<String, YxStoreProductAttrValue>)returnMap.get("productValue"));
         return storeCombinationVo;
     }
 

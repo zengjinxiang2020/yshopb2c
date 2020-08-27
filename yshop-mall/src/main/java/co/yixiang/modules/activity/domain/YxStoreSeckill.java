@@ -8,8 +8,11 @@ package co.yixiang.modules.activity.domain;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import co.yixiang.domain.BaseDomain;
+import co.yixiang.modules.product.service.dto.FromatDetailDto;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,6 +23,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author hupeng
@@ -141,7 +146,21 @@ public class YxStoreSeckill extends BaseDomain {
     /** 时间段id */
     @NotNull(message = "请选择开始时间")
     private Integer timeId;
+    /**
+     * 规格 0单 1多
+     */
+    private Integer specType;
 
+    /** 运费模板ID */
+    @JsonProperty("temp_id")
+    private Long tempId;
+    //属性项目
+    @TableField(exist = false)
+    private List<FromatDetailDto> items;
+
+    //sku结果集
+    @TableField(exist = false)
+    private List<Map<String,Object>> attrs;
 
     public void copy(YxStoreSeckill source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

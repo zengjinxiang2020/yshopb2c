@@ -45,7 +45,7 @@ public interface YxStoreSeckillService  extends BaseService<YxStoreSeckill>{
 
     /**
      * 产品详情
-     * @param id 砍价商品id
+     * @param id 秒杀商品id
      * @return StoreSeckillVo
      */
     StoreSeckillVo getDetail(Long id);
@@ -81,4 +81,6 @@ public interface YxStoreSeckillService  extends BaseService<YxStoreSeckill>{
     * @throws IOException /
     */
     void download(List<YxStoreSeckillDto> all, HttpServletResponse response) throws IOException;
+
+    boolean saveSeckill(YxStoreSeckillDto resources);
 }

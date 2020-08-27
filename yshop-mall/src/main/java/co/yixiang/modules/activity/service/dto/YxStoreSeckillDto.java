@@ -5,17 +5,27 @@
  */
 package co.yixiang.modules.activity.service.dto;
 
+import co.yixiang.modules.product.service.dto.FromatDetailDto;
+import co.yixiang.modules.product.service.dto.ProductFormatDto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author hupeng
 * @date 2020-05-13
 */
-@Data
+@Getter
+@Setter
+@ToString
 public class YxStoreSeckillDto implements Serializable {
 
 
@@ -30,6 +40,10 @@ public class YxStoreSeckillDto implements Serializable {
 
     // 轮播图
     private String images;
+
+    /** 轮播图 */
+    @JsonProperty("slider_image")
+    private List<String> sliderImage;
 
     // 活动标题
     private String title;
@@ -96,4 +110,18 @@ public class YxStoreSeckillDto implements Serializable {
     private String statusStr;
 
     private Integer timeId;
+    // 模板id
+    @JsonProperty("temp_id")
+    private Integer tempId;
+    /** 规格 0单 1多 */
+    @JsonProperty("spec_type")
+    private Integer specType;
+
+    private ProductFormatDto attr;
+    //属性项目
+    private List<FromatDetailDto> items;
+
+    //sku结果集
+    private List<Map<String,Object>> attrs;
+
 }

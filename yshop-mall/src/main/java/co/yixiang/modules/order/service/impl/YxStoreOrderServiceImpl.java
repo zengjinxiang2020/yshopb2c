@@ -1492,6 +1492,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * @param cartInfo 购物车
      */
     public void deStockIncSale(List<YxStoreCartQueryVo> cartInfo) {
+        //todo 活动商品库存待处理
         for (YxStoreCartQueryVo storeCartVO : cartInfo) {
             Long combinationId = storeCartVO.getCombinationId();
             Long seckillId = storeCartVO.getSeckillId();

@@ -60,7 +60,7 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
      * @param unique sku唯一值
      * @return int
      */
-    int getProductStock(Long productId, String unique);
+    int getProductStock(Long productId, String unique,String type);
 
     /**
      * 商品列表

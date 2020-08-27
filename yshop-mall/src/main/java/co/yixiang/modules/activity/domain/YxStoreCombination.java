@@ -143,6 +143,9 @@ public class YxStoreCombination extends BaseDomain {
     /** 单位名 */
     private String unitName;
 
+    /**
+     * 规格 0单 1多
+     */
     private Integer specType;
 
     /** 运费模板ID */

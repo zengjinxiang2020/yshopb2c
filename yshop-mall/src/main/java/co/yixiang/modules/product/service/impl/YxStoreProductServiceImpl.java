@@ -62,6 +62,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -178,14 +179,18 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
      * @return int
      */
     @Override
-    public int getProductStock(Long productId, String unique) {
+    public int getProductStock(Long productId, String unique, String type) {
         YxStoreProductAttrValue storeProductAttrValue = yxStoreProductAttrValueService
                 .getOne(Wrappers.<YxStoreProductAttrValue>lambdaQuery()
                         .eq(YxStoreProductAttrValue::getUnique, unique)
                         .eq(YxStoreProductAttrValue::getProductId, productId));
 
         if (storeProductAttrValue == null) return 0;
-
+        if("pink".equals(type)){
+            return storeProductAttrValue.getPinkStock();
+        }else if ("seckill".equals(type)){
+            return storeProductAttrValue.getSeckillStock();
+        }
         return storeProductAttrValue.getStock();
 
     }
@@ -573,7 +578,15 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                 String key = "value" + (j + 1);
                 valueMap.put(key,detailValues[j]);
             }
-
+//            /** 拼团属性对应的金额 */
+//            private BigDecimal pinkPrice;
+//
+//            /** 秒杀属性对应的金额 */
+//            private BigDecimal seckillPrice;
+//            /** 拼团库存属性对应的库存 */
+//            private Integer pinkStock;
+//
+//            private Integer seckillStock;
             valueMap.put("detail",detail);
             valueMap.put("pic","");
             valueMap.put("price",0);
@@ -585,6 +598,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             valueMap.put("volume",0);
             valueMap.put("brokerage",0);
             valueMap.put("brokerage_two",0);
+            valueMap.put("pink_price",0);
+            valueMap.put("seckill_price",0);
+            valueMap.put("pink_stock",0);
+            valueMap.put("seckill_stock",0);
             if(id > 0){
                 YxStoreProductAttrValue storeProductAttrValue = yxStoreProductAttrValueService
                         .getOne(Wrappers.<YxStoreProductAttrValue>lambdaQuery()
@@ -601,6 +618,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                     valueMap.put("volume",storeProductAttrValue.getVolume());
                     valueMap.put("brokerage",storeProductAttrValue.getBrokerage());
                     valueMap.put("brokerage_two",storeProductAttrValue.getBrokerageTwo());
+                    valueMap.put("pink_price",storeProductAttrValue.getPinkPrice());
+                    valueMap.put("seckill_price",storeProductAttrValue.getSeckillPrice());
+                    valueMap.put("pink_stock",storeProductAttrValue.getPinkStock());
+                    valueMap.put("seckill_stock",storeProductAttrValue.getSeckillStock());
                 }
             }
 
@@ -734,25 +755,25 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
         if(isActivity){
             headerMap.put("title","拼团价");
-            headerMap.put("slot", "pinkPrice");
+            headerMap.put("slot", "pink_price");
             headerMap.put("align",align);
             headerMap.put("minWidth",140);
             headerMapList.add(ObjectUtil.clone(headerMap));
 
             headerMap.put("title","拼团活动库存");
-            headerMap.put("slot", "pinkStock");
+            headerMap.put("slot", "pink_stock");
             headerMap.put("align",align);
             headerMap.put("minWidth",140);
             headerMapList.add(ObjectUtil.clone(headerMap));
 
             headerMap.put("title","秒杀价");
-            headerMap.put("slot", "seckillPrice");
+            headerMap.put("slot", "seckill_price");
             headerMap.put("align",align);
             headerMap.put("minWidth",140);
             headerMapList.add(ObjectUtil.clone(headerMap));
 
             headerMap.put("title","秒杀活动库存");
-            headerMap.put("slot", "seckillStock");
+            headerMap.put("slot", "seckill_stock");
             headerMap.put("align",align);
             headerMap.put("minWidth",140);
             headerMapList.add(ObjectUtil.clone(headerMap));

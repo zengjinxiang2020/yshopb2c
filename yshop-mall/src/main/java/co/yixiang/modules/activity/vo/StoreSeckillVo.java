@@ -1,12 +1,18 @@
 package co.yixiang.modules.activity.vo;
 
 
+import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
+import co.yixiang.modules.product.vo.YxStoreProductAttrQueryVo;
 import co.yixiang.modules.product.vo.YxStoreProductReplyQueryVo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -34,6 +40,11 @@ public class StoreSeckillVo implements Serializable {
     @ApiModelProperty(value = "秒杀产品用户是否收藏")
     private Boolean userCollect = false;
 
+    @ApiModelProperty(value = "模板名称")
+    private String tempName;
 
+    private List<YxStoreProductAttrQueryVo> productAttr = new ArrayList();
+
+    private Map<String, YxStoreProductAttrValue> productValue = new LinkedHashMap<>();
 
 }
