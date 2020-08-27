@@ -9,6 +9,8 @@
 package co.yixiang.modules.wechat.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaLiveInfo;
+import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
@@ -17,11 +19,8 @@ import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.wechat.domain.YxWechatLive;
 import co.yixiang.modules.wechat.domain.YxWechatLiveGoods;
-import co.yixiang.modules.wechat.service.WxMaLiveService;
 import co.yixiang.modules.wechat.service.YxWechatLiveGoodsService;
 import co.yixiang.modules.wechat.service.YxWechatLiveService;
-import co.yixiang.modules.wechat.service.dto.WxMaLiveInfo;
-import co.yixiang.modules.wechat.service.dto.WxMaLiveResult;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveQueryCriteria;
@@ -63,12 +62,10 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
     private final IGenerator generator;
     @Value("${file.path}")
     private String uploadDirStr;
-    private final WxMaLiveService wxMaLiveService;
     private final YxWechatLiveGoodsService wechatLiveGoodsService;
 
-    public YxWechatLiveServiceImpl(IGenerator generator, WxMaLiveService wxMaLiveService, YxWechatLiveGoodsService wechatLiveGoodsService) {
+    public YxWechatLiveServiceImpl(IGenerator generator, YxWechatLiveGoodsService wechatLiveGoodsService) {
         this.generator = generator;
-        this.wxMaLiveService = wxMaLiveService;
         this.wechatLiveGoodsService = wechatLiveGoodsService;
     }
 
@@ -80,7 +77,8 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
     @Override
     public boolean synchroWxOlLive() {
         try {
-            List<WxMaLiveResult.RoomInfo> liveInfos = wxMaLiveService.getLiveInfos();
+            WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+            List<WxMaLiveResult.RoomInfo> liveInfos = wxMaService.getLiveService().getLiveInfos();
             List<YxWechatLive> convert = generator.convert(liveInfos, YxWechatLive.class);
             this.saveOrUpdateBatch(convert);
         } catch (WxErrorException e) {
@@ -120,7 +118,7 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
             resources.setCoverImg(uploadPhotoToWx(wxMaService,resources.getCoverImge()).getMediaId());
             resources.setShareImg(uploadPhotoToWx(wxMaService,resources.getShareImge()).getMediaId());
             WxMaLiveInfo.RoomInfo roomInfo = generator.convert(resources, WxMaLiveInfo.RoomInfo.class);
-            Integer status = wxMaLiveService.createRoom(roomInfo);
+            Integer status = wxMaService.getLiveService().createRoom(roomInfo);
             resources.setRoomid(Long.valueOf(status));
             if(StringUtils.isNotBlank(resources.getProductId())){
                 String[] productIds = resources.getProductId().split(",");
@@ -129,7 +127,7 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
                     pids.add(Integer.valueOf(productId));
                 }
                 //添加商品
-                wxMaLiveService.addGoodsToRoom(status, pids);
+                wxMaService.getLiveService().addGoodsToRoom(status, pids);
             }
             this.save(resources);
         } catch (WxErrorException e) {

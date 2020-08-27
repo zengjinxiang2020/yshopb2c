@@ -180,8 +180,8 @@ public class AuthService {
     public YxUser wechatLogin(String code,String spread){
         try {
             WxMpService wxService = WxMpConfiguration.getWxMpService();
-            WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.oauth2getAccessToken(code);
-            WxMpUser wxMpUser = wxService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
+            WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.getOAuth2Service().getAccessToken(code);
+            WxMpUser wxMpUser = wxService.getOAuth2Service().getUserInfo(wxMpOAuth2AccessToken, null);
             String openid = wxMpUser.getOpenId();
 
             //如果开启了UnionId

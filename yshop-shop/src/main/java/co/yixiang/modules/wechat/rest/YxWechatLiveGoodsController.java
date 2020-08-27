@@ -11,7 +11,6 @@ package co.yixiang.modules.wechat.rest;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.wechat.domain.YxWechatLiveGoods;
-import co.yixiang.modules.wechat.service.WxMaLiveGoodsService;
 import co.yixiang.modules.wechat.service.YxWechatLiveGoodsService;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsQueryCriteria;
@@ -47,7 +46,6 @@ public class YxWechatLiveGoodsController {
 
     private final YxWechatLiveGoodsService yxWechatLiveGoodsService;
     private final IGenerator generator;
-    private final WxMaLiveGoodsService wxMaLiveGoodsService;
 
     @Log("导出数据")
     @ApiOperation("导出数据")

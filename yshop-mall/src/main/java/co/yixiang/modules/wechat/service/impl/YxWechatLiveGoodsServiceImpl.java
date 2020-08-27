@@ -9,6 +9,8 @@
 package co.yixiang.modules.wechat.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaLiveInfo;
+import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
@@ -18,10 +20,7 @@ import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.LiveGoodsEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.wechat.domain.YxWechatLiveGoods;
-import co.yixiang.modules.wechat.service.WxMaLiveGoodsService;
 import co.yixiang.modules.wechat.service.YxWechatLiveGoodsService;
-import co.yixiang.modules.wechat.service.dto.WxMaLiveInfo;
-import co.yixiang.modules.wechat.service.dto.WxMaLiveResult;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsQueryCriteria;
 import co.yixiang.modules.wechat.service.mapper.YxWechatLiveGoodsMapper;
@@ -59,10 +58,8 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
     private final IGenerator generator;
     @Value("${file.path}")
     private String uploadDirStr;
-    private final WxMaLiveGoodsService wxMaLiveGoodsService;
-    public YxWechatLiveGoodsServiceImpl(IGenerator generator, WxMaLiveGoodsService wxMaLiveGoodsService) {
+    public YxWechatLiveGoodsServiceImpl(IGenerator generator) {
         this.generator = generator;
-        this.wxMaLiveGoodsService = wxMaLiveGoodsService;
     }
 
 
@@ -74,7 +71,8 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
     @Override
     public boolean synchroWxOlLive(List<Integer> goodsIds) {
         try {
-            WxMaLiveResult liveInfos = wxMaLiveGoodsService.getGoodsWareHouse(goodsIds);
+            WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+            WxMaLiveResult liveInfos = wxMaService.getLiveGoodsService().getGoodsWareHouse(goodsIds);
             List<YxWechatLiveGoods> convert = generator.convert(liveInfos.getGoods(), YxWechatLiveGoods.class);
             this.saveOrUpdateBatch(convert);
         } catch (WxErrorException e) {
@@ -87,7 +85,8 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
     public void removeGoods(Long id) {
         this.removeById(id);
         try {
-            wxMaLiveGoodsService.deleteGoods(id.intValue());
+            WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+            wxMaService.getLiveGoodsService().deleteGoods(id.intValue());
         } catch (WxErrorException e) {
             e.printStackTrace();
         }
@@ -113,7 +112,7 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
                 }
             }
             WxMaLiveInfo.Goods goods = generator.convert(resources, WxMaLiveInfo.Goods.class);
-            boolean wxMaLiveResult = wxMaLiveGoodsService.updateGoods(goods);
+            boolean wxMaLiveResult = wxMaService.getLiveGoodsService().updateGoods(goods);
             this.saveOrUpdate(resources);
         } catch (WxErrorException e) {
             throw new BadRequestException(e.toString());
@@ -189,7 +188,7 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         try {
             resources.setCoverImgUrl(uploadPhotoToWx(wxMaService,resources.getCoverImgeUrl()).getMediaId());
             WxMaLiveInfo.Goods goods = generator.convert(resources, WxMaLiveInfo.Goods.class);
-            WxMaLiveResult wxMaLiveResult = wxMaLiveGoodsService.addGoods(goods);
+            WxMaLiveResult wxMaLiveResult = wxMaService.getLiveGoodsService().addGoods(goods);
             resources.setGoodsId(Long.valueOf(wxMaLiveResult.getGoodsId()));
             resources.setAuditId(Long.valueOf(wxMaLiveResult.getAuditId()));
             this.save(resources);

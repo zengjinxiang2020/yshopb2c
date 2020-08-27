@@ -1,8 +1,8 @@
 
 package co.yixiang.test;
 
-import co.yixiang.modules.wechat.service.dto.WxMaLiveInfo;
-import co.yixiang.modules.wechat.service.WxMaLiveService;
+import cn.binarywang.wx.miniapp.api.WxMaLiveService;
+import cn.binarywang.wx.miniapp.bean.WxMaLiveInfo;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
