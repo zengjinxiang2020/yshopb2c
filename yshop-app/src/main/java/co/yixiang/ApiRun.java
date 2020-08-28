@@ -1,6 +1,7 @@
 package co.yixiang;
 
 import co.yixiang.utils.SpringContextHolder;
+import com.binarywang.spring.starter.wxjava.miniapp.config.WxMaAutoConfiguration;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableCaching
 @MapperScan({"co.yixiang.modules.*.service.mapper"})
-@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })
+@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class , WxMaAutoConfiguration.class})
 public class ApiRun {
 
     public static void main(String[] args) {

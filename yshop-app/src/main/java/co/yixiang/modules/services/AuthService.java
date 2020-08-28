@@ -26,6 +26,7 @@ import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
 import co.yixiang.modules.user.vo.OnlineUser;
 import co.yixiang.mp.config.WxMpConfiguration;
+import co.yixiang.tools.config.WxMaConfiguration;
 import co.yixiang.utils.EncryptUtils;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.ShopKeyUtils;
@@ -61,9 +62,7 @@ public class AuthService {
 
     private final YxUserService userService;
     private final RedisUtils redisUtil;
-    private final WxMaService wxMaService;
     private final RedisUtils redisUtils;
-
     private static Integer expiredTimeIn;
 
 
@@ -93,11 +92,7 @@ public class AuthService {
             if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
                 throw new YshopException("请先配置小程序");
             }
-            WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
-            wxMaConfig.setAppid(appId);
-            wxMaConfig.setSecret(secret);
-
-            wxMaService.setWxMaConfig(wxMaConfig);
+            WxMaService wxMaService = WxMaConfiguration.getWxMaService();
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
             WxMaUserInfo wxMpUser = wxMaService.getUserService()
                     .getUserInfo(session.getSessionKey(), encryptedData, iv);

@@ -21,12 +21,15 @@ import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.wechat.rest.param.BindPhoneParam;
 import co.yixiang.modules.wechat.rest.param.WxPhoneParam;
+import co.yixiang.mp.config.WxMpConfiguration;
+import co.yixiang.tools.config.WxMaConfiguration;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.ShopKeyUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,7 +48,6 @@ import java.util.Map;
 @Api(value = "微信其他", tags = "微信:微信其他", description = "微信其他")
 public class WxMaUserController {
 
-    private final WxMaService wxMaService;
     private final YxUserService userService;
     private final RedisUtils redisUtils;
 
@@ -91,10 +93,7 @@ public class WxMaUserController {
         if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
             throw new YshopException("请先配置小程序");
         }
-        WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
-        wxMaConfig.setAppid(appId);
-        wxMaConfig.setSecret(secret);
-        wxMaService.setWxMaConfig(wxMaConfig);
+        WxMaService wxMaService = WxMaConfiguration.getWxMaService();
         String phone = "";
         try {
             WxMaJscode2SessionResult session = wxMaService.getUserService()
