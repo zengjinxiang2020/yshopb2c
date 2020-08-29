@@ -94,7 +94,9 @@ public class YxSystemUserTaskServiceImpl extends BaseServiceImpl<SystemUserTaskM
                 .list();
         List<Integer> taskIds = list.stream().map(YxSystemUserTask::getId)
                 .collect(Collectors.toList());
-        if(taskIds.isEmpty()) return 0;
+        if(taskIds.isEmpty()) {
+            return 0;
+        }
 
         int count = yxUserTaskFinishMapper.selectCount(Wrappers.<YxUserTaskFinish>lambdaQuery()
                 .in(YxUserTaskFinish::getTaskId,taskIds)
@@ -192,7 +194,9 @@ public class YxSystemUserTaskServiceImpl extends BaseServiceImpl<SystemUserTaskM
         List<YxSystemUserTaskDto> systemUserTaskDTOS = generator.convert(page.getList(),YxSystemUserTaskDto.class);
         for (YxSystemUserTaskDto systemUserTaskDTO : systemUserTaskDTOS) {
             YxSystemUserLevel userLevel=systemUserLevelService.getById(systemUserTaskDTO.getLevelId());
-            if(userLevel == null) continue;
+            if(userLevel == null) {
+                continue;
+            }
             systemUserTaskDTO.setLevalName(userLevel.getName());
         }
         Map<String, Object> map = new LinkedHashMap<>(2);

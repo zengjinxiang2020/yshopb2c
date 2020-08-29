@@ -96,7 +96,9 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
     @Override
     public void decStockIncSales(int num, Long seckillId) {
         int res = yxStoreSeckillMapper.decStockIncSales(num,seckillId);
-        if(res == 0) throw new YshopException("秒杀产品库存不足");
+        if(res == 0) {
+            throw new YshopException("秒杀产品库存不足");
+        }
     }
 
 //    @Override
@@ -245,7 +247,9 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
         //添加商品
         YxStoreSeckill yxStoreSeckill = new YxStoreSeckill();
         BeanUtil.copyProperties(resources,yxStoreSeckill,"images");
-        if(resources.getImages().isEmpty()) throw new YshopException("请上传轮播图");
+        if(resources.getImages().isEmpty()) {
+            throw new YshopException("请上传轮播图");
+        }
 
         yxStoreSeckill.setPrice(BigDecimal.valueOf(resultDTO.getMinPrice()));
         yxStoreSeckill.setCost(new BigDecimal(resultDTO.getMinCost()));
@@ -308,7 +312,9 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
                 .reduce(Integer::sum)
                 .orElse(0);
 
-        if(stock <= 0) throw new YshopException("库存不能低于0");
+        if(stock <= 0) {
+            throw new YshopException("库存不能低于0");
+        }
 
         return ProductResultDto.builder()
                 .minPrice(minPrice)

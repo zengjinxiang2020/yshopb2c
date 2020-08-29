@@ -131,8 +131,12 @@ public class StoreOrderController {
     @PutMapping(value = "/yxStoreOrder")
     @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")
     public ResponseEntity update(@Validated @RequestBody YxStoreOrder resources) {
-        if (StrUtil.isBlank(resources.getDeliveryName())) throw new BadRequestException("请选择快递公司");
-        if (StrUtil.isBlank(resources.getDeliveryId())) throw new BadRequestException("快递单号不能为空");
+        if (StrUtil.isBlank(resources.getDeliveryName())) {
+            throw new BadRequestException("请选择快递公司");
+        }
+        if (StrUtil.isBlank(resources.getDeliveryId())) {
+            throw new BadRequestException("快递单号不能为空");
+        }
 
         yxStoreOrderService.orderDelivery(resources.getOrderId(),resources.getDeliveryId(),
                 resources.getDeliveryName(),resources.getDeliveryType());
@@ -143,7 +147,9 @@ public class StoreOrderController {
     @PutMapping(value = "/yxStoreOrder/check")
     @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")
     public ResponseEntity check(@Validated @RequestBody YxStoreOrder resources) {
-        if (StrUtil.isBlank(resources.getVerifyCode())) throw new BadRequestException("核销码不能为空");
+        if (StrUtil.isBlank(resources.getVerifyCode())) {
+            throw new BadRequestException("核销码不能为空");
+        }
         YxStoreOrderDto storeOrderDTO = generator.convert(yxStoreOrderService.getById(resources.getId()),YxStoreOrderDto.class);
         if(!resources.getVerifyCode().equals(storeOrderDTO.getVerifyCode())){
             throw new BadRequestException("核销码不对");
@@ -185,8 +191,12 @@ public class StoreOrderController {
     @PostMapping(value = "/yxStoreOrder/edit")
     @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")
     public ResponseEntity editOrder(@RequestBody YxStoreOrder resources) {
-        if (ObjectUtil.isNull(resources.getPayPrice())) throw new BadRequestException("请输入支付金额");
-        if (resources.getPayPrice().doubleValue() < 0) throw new BadRequestException("金额不能低于0");
+        if (ObjectUtil.isNull(resources.getPayPrice())) {
+            throw new BadRequestException("请输入支付金额");
+        }
+        if (resources.getPayPrice().doubleValue() < 0) {
+            throw new BadRequestException("金额不能低于0");
+        }
         YxStoreOrderDto storeOrder = generator.convert(yxStoreOrderService.getById(resources.getId()),YxStoreOrderDto.class);
         //判断金额是否有变动,生成一个额外订单号去支付
         int res = NumberUtil.compare(storeOrder.getPayPrice().doubleValue(), resources.getPayPrice().doubleValue());
@@ -208,7 +218,9 @@ public class StoreOrderController {
     @PostMapping(value = "/yxStoreOrder/remark")
     @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")
     public ResponseEntity editOrderRemark(@RequestBody YxStoreOrder resources) {
-        if (StrUtil.isBlank(resources.getRemark())) throw new BadRequestException("请输入备注");
+        if (StrUtil.isBlank(resources.getRemark())) {
+            throw new BadRequestException("请输入备注");
+        }
         yxStoreOrderService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -223,7 +235,9 @@ public class StoreOrderController {
         ExpressService expressService = ExpressAutoConfiguration.expressService();
         ExpressInfo expressInfo = expressService.getExpressInfo(expressInfoDo.getOrderCode(),
                 expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode());
-        if(!expressInfo.isSuccess()) throw new BadRequestException(expressInfo.getReason());
+        if(!expressInfo.isSuccess()) {
+            throw new BadRequestException(expressInfo.getReason());
+        }
         return new ResponseEntity<>(expressInfo, HttpStatus.OK);
     }
 

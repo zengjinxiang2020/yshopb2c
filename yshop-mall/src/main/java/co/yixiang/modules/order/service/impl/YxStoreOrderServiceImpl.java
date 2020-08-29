@@ -289,7 +289,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 .getUsableCouponList(uid, priceGroup.getTotalPrice().doubleValue(), productIds);
 
         StoreCouponUserVo storeCouponUser = null;
-        if(storeCouponUsers != null && !storeCouponUsers.isEmpty()) storeCouponUser = storeCouponUsers.get(0);
+        if(storeCouponUsers != null && !storeCouponUsers.isEmpty()) {
+            storeCouponUser = storeCouponUsers.get(0);
+        }
 
         return ConfirmOrderVo.builder()
                 .addressInfo(userAddress)
@@ -365,7 +367,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         BigDecimal couponPrice = BigDecimal.ZERO;
         if(StrUtil.isNotBlank(couponId) && !ShopConstants.YSHOP_ZERO.equals(couponId)){//使用优惠券
             YxStoreCouponUser couponUser = couponUserService.getCoupon(Integer.valueOf(couponId),uid);
-            if(couponUser == null) throw new YshopException("使用优惠劵失败");
+            if(couponUser == null) {
+                throw new YshopException("使用优惠劵失败");
+            }
 
             if(couponUser.getUseMinPrice().compareTo(payPrice) > 0){
                 throw new YshopException("不满足优惠劵的使用条件");
@@ -401,7 +405,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             }
         }
 
-        if(payPrice.compareTo(BigDecimal.ZERO) <= 0) payPrice = BigDecimal.ZERO;
+        if(payPrice.compareTo(BigDecimal.ZERO) <= 0) {
+            payPrice = BigDecimal.ZERO;
+        }
 
         return ComputeVo.builder()
                 .totalPrice(cacheDTO.getPriceGroup().getTotalPrice())
@@ -434,9 +440,13 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         //处理选择门店与正常选择地址下单
         YxUserAddress userAddress = null;
         if(OrderInfoEnum.SHIPPIING_TYPE_1.getValue().equals(Integer.valueOf(param.getShippingType()))){
-            if(StrUtil.isEmpty(param.getAddressId())) throw new YshopException("请选择收货地址");
+            if(StrUtil.isEmpty(param.getAddressId())) {
+                throw new YshopException("请选择收货地址");
+            }
             userAddress = userAddressService.getById(param.getAddressId());
-            if(ObjectUtil.isNull(userAddress)) throw new YshopException("地址选择有误");
+            if(ObjectUtil.isNull(userAddress)) {
+                throw new YshopException("地址选择有误");
+            }
         }else{ //门店
             if(StrUtil.isBlank(param.getRealName()) || StrUtil.isBlank(param.getPhone())) {
                 throw new YshopException("请填写姓名和电话");
@@ -517,13 +527,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         //处理门店
         if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().toString().equals(param.getShippingType())){
             YxSystemStore systemStoreQueryVo = systemStoreService.getById(param.getStoreId());
-            if(systemStoreQueryVo == null ) throw new ErrorRequestException("暂无门店无法选择门店自提");
+            if(systemStoreQueryVo == null ) {
+                throw new ErrorRequestException("暂无门店无法选择门店自提");
+            }
             storeOrder.setVerifyCode(StrUtil.sub(orderSn,orderSn.length(),-12));
             storeOrder.setStoreId(systemStoreQueryVo.getId());
         }
 
         boolean res = this.save(storeOrder);
-        if(!res) throw new YshopException("订单生成失败");
+        if(!res) {
+            throw new YshopException("订单生成失败");
+        }
 
         //使用了积分扣积分
         if(computeVo.getUsedIntegral() > 0){
@@ -588,12 +602,16 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 .getOne(Wrappers.<YxStoreOrderCartInfo>lambdaQuery()
                         .eq(YxStoreOrderCartInfo::getUnique,unique));
 
-        if(ObjectUtil.isEmpty(orderCartInfo)) throw new YshopException("评价产品不存在");
+        if(ObjectUtil.isEmpty(orderCartInfo)) {
+            throw new YshopException("评价产品不存在");
+        }
 
         int count = productReplyService.count(Wrappers.<YxStoreProductReply>lambdaQuery()
                 .eq(YxStoreProductReply::getOid,orderCartInfo.getOid())
                 .eq(YxStoreProductReply::getProductId,orderCartInfo.getProductId()));
-        if(count > 0) throw new YshopException("该产品已评价");
+        if(count > 0) {
+            throw new YshopException("该产品已评价");
+        }
 
 
         YxStoreProductReply storeProductReply = YxStoreProductReply.builder()
@@ -634,16 +652,22 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     public void orderRefund(String orderId,BigDecimal price,Integer type) {
 
         YxStoreOrderQueryVo orderQueryVo = getOrderInfo(orderId,null);
-        if(ObjectUtil.isNull(orderQueryVo)) throw new YshopException("订单不存在");
+        if(ObjectUtil.isNull(orderQueryVo)) {
+            throw new YshopException("订单不存在");
+        }
 
         YxUserQueryVo userQueryVo = userService.getYxUserById(orderQueryVo.getUid());
-        if(ObjectUtil.isNull(userQueryVo)) throw new YshopException("用户不存在");
+        if(ObjectUtil.isNull(userQueryVo)) {
+            throw new YshopException("用户不存在");
+        }
 
         if(OrderInfoEnum.REFUND_STATUS_2.getValue().equals(orderQueryVo.getRefundStatus())){
             throw new YshopException("订单已经退款了哦！");
         }
 
-        if(orderQueryVo.getPayPrice().compareTo(price) < 0) throw new YshopException("退款金额不正确");
+        if(orderQueryVo.getPayPrice().compareTo(price) < 0) {
+            throw new YshopException("退款金额不正确");
+        }
 
         YxStoreOrder storeOrder = new YxStoreOrder();
         //修改状态
@@ -697,7 +721,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     public void orderDelivery(String orderId,String deliveryId,String deliveryName,String deliveryType) {
         YxStoreOrderQueryVo orderQueryVo = this.getOrderInfo(orderId,null);
-        if(ObjectUtil.isNull(orderQueryVo)) throw new YshopException("订单不存在");
+        if(ObjectUtil.isNull(orderQueryVo)) {
+            throw new YshopException("订单不存在");
+        }
 
         if(!OrderInfoEnum.STATUS_0.getValue().equals(orderQueryVo.getStatus()) ||
                 OrderInfoEnum.PAY_STATUS_0.getValue().equals( orderQueryVo.getPaid())){
@@ -705,7 +731,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         }
 
         YxExpress expressQueryVo = expressService.getById(Integer.valueOf(deliveryName));
-        if(ObjectUtil.isNull(expressQueryVo)) throw new YshopException("请后台先添加快递公司");
+        if(ObjectUtil.isNull(expressQueryVo)) {
+            throw new YshopException("请后台先添加快递公司");
+        }
 
         //判断拼团产品
         if(orderQueryVo.getPinkId() != null && orderQueryVo.getPinkId() >0 ){
@@ -759,10 +787,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     public void editOrderPrice(String orderId,String price) {
         YxStoreOrderQueryVo orderQueryVo = getOrderInfo(orderId,null);
-        if(ObjectUtil.isNull(orderQueryVo)) throw new YshopException("订单不存在");
+        if(ObjectUtil.isNull(orderQueryVo)) {
+            throw new YshopException("订单不存在");
+        }
 
 
-        if(orderQueryVo.getPayPrice().compareTo(new BigDecimal(price)) == 0) return;
+        if(orderQueryVo.getPayPrice().compareTo(new BigDecimal(price)) == 0) {
+            return;
+        }
 
 
         if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(orderQueryVo.getPaid())) {
@@ -811,7 +843,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     public void cancelOrder(String orderId, Long uid) {
         YxStoreOrderQueryVo order = this.getOrderInfo(orderId,uid);
-        if(ObjectUtil.isNull(order)) throw new YshopException("订单不存在");
+        if(ObjectUtil.isNull(order)) {
+            throw new YshopException("订单不存在");
+        }
 
         this.regressionIntegral(order);
 
@@ -834,7 +868,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     public void removeOrder(String orderId, Long uid) {
         YxStoreOrderQueryVo order = getOrderInfo(orderId,(long)uid);
-        if(order == null) throw new YshopException("订单不存在");
+        if(order == null) {
+            throw new YshopException("订单不存在");
+        }
         order = handleOrder(order);
         if(!OrderInfoEnum.STATUS_3.getValue().equals(order.getStatus())) {
             throw new YshopException("该订单无法删除");
@@ -857,7 +893,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     public void takeOrder(String orderId, Long uid) {
         YxStoreOrderQueryVo order = this.getOrderInfo(orderId,uid);
-        if(ObjectUtil.isNull(order)) throw new YshopException("订单不存在");
+        if(ObjectUtil.isNull(order)) {
+            throw new YshopException("订单不存在");
+        }
         order = handleOrder(order);
         if(!OrderStatusEnum.STATUS_2.getValue().toString().equals(order.get_status().get_type())) {
             throw new BusinessException("订单状态错误");
@@ -896,14 +934,20 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 .eq(YxStoreOrder::getVerifyCode,verifyCode)
                 .eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue()));
-        if(order == null) throw new YshopException("核销的订单不存在或未支付或已退款");
+        if(order == null) {
+            throw new YshopException("核销的订单不存在或未支付或已退款");
+        }
 
         if(uid != null){
             boolean checkStatus = systemStoreStaffService.checkStatus(uid,order.getStoreId());
-            if(!checkStatus) throw new YshopException("您没有当前店铺核销权限");
+            if(!checkStatus) {
+                throw new YshopException("您没有当前店铺核销权限");
+            }
         }
 
-        if(!OrderInfoEnum.STATUS_0.getValue().equals(order.getStatus()))  throw new YshopException("订单已经核销");
+        if(!OrderInfoEnum.STATUS_0.getValue().equals(order.getStatus())) {
+            throw new YshopException("订单已经核销");
+        }
 
         if(order.getCombinationId() != null && order.getCombinationId() > 0
                 && order.getPinkId() != null && order.getPinkId() > 0){
@@ -950,7 +994,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     public void orderApplyRefund(String explain,String Img,String text,String orderId, Long uid) {
         YxStoreOrderQueryVo order = getOrderInfo(orderId,uid);
-        if(order == null) throw new YshopException("订单不存在");
+        if(order == null) {
+            throw new YshopException("订单不存在");
+        }
 
         if(OrderInfoEnum.REFUND_STATUS_2.getValue().equals(order.getRefundStatus())){
             throw new YshopException("订单已退款");
@@ -958,7 +1004,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         if(OrderInfoEnum.REFUND_STATUS_1.getValue().equals(order.getRefundStatus())) {
             throw new YshopException("正在申请退款中");
         }
-        if(OrderInfoEnum.STATUS_1.getValue().equals(order.getStatus())) throw new YshopException("订单当前无法退款");
+        if(OrderInfoEnum.STATUS_1.getValue().equals(order.getStatus())) {
+            throw new YshopException("订单当前无法退款");
+        }
 
 
         YxStoreOrder storeOrder = new YxStoreOrder();
@@ -1174,7 +1222,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         //订单支付没有退款 数量
         QueryWrapper<YxStoreOrder> wrapperOne = new QueryWrapper<>();
-        if(uid != null) wrapperOne.lambda().eq(YxStoreOrder::getUid,uid);
+        if(uid != null) {
+            wrapperOne.lambda().eq(YxStoreOrder::getUid,uid);
+        }
         wrapperOne.lambda().eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue());
         Integer orderCount = yxStoreOrderMapper.selectCount(wrapperOne);
@@ -1184,7 +1234,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         //订单待支付 数量
         QueryWrapper<YxStoreOrder> wrapperTwo = new QueryWrapper<>();
-        if(uid != null) wrapperTwo.lambda().eq(YxStoreOrder::getUid,uid);
+        if(uid != null) {
+            wrapperTwo.lambda().eq(YxStoreOrder::getUid,uid);
+        }
         wrapperTwo.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_0.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_0.getValue());
@@ -1192,7 +1244,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         //订单待发货 数量
         QueryWrapper<YxStoreOrder> wrapperThree = new QueryWrapper<>();
-        if(uid != null) wrapperThree.lambda().eq(YxStoreOrder::getUid,uid);
+        if(uid != null) {
+            wrapperThree.lambda().eq(YxStoreOrder::getUid,uid);
+        }
         wrapperThree.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_0.getValue());
@@ -1200,7 +1254,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         //订单待收货 数量
         QueryWrapper<YxStoreOrder> wrapperFour = new QueryWrapper<>();
-        if(uid != null) wrapperFour.lambda().eq(YxStoreOrder::getUid,uid);
+        if(uid != null) {
+            wrapperFour.lambda().eq(YxStoreOrder::getUid,uid);
+        }
         wrapperFour.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_1.getValue());
@@ -1208,7 +1264,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         //订单待评价 数量
         QueryWrapper<YxStoreOrder> wrapperFive = new QueryWrapper<>();
-        if(uid != null) wrapperFive.lambda().eq(YxStoreOrder::getUid,uid);
+        if(uid != null) {
+            wrapperFive.lambda().eq(YxStoreOrder::getUid,uid);
+        }
         wrapperFive.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_2.getValue());
@@ -1216,7 +1274,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         //订单已完成 数量
         QueryWrapper<YxStoreOrder> wrapperSix= new QueryWrapper<>();
-        if(uid != null) wrapperSix.lambda().eq(YxStoreOrder::getUid,uid);
+        if(uid != null) {
+            wrapperSix.lambda().eq(YxStoreOrder::getUid,uid);
+        }
         wrapperSix.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_3.getValue());
@@ -1224,7 +1284,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         //订单退款
         QueryWrapper<YxStoreOrder> wrapperSeven= new QueryWrapper<>();
-        if(uid != null) wrapperSeven.lambda().eq(YxStoreOrder::getUid,uid);
+        if(uid != null) {
+            wrapperSeven.lambda().eq(YxStoreOrder::getUid,uid);
+        }
         String[] strArr = {"1","2"};
         wrapperSeven.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .in(YxStoreOrder::getRefundStatus,Arrays.asList(strArr));
@@ -1364,7 +1426,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         orderStatusService.create(orderInfo.getId(),OrderLogEnum.PAY_ORDER_SUCCESS.getValue(),
                 OrderLogEnum.PAY_ORDER_SUCCESS.getDesc());
         //拼团
-        if(orderInfo.getCombinationId() > 0) pinkService.createPink(orderInfo);
+        if(orderInfo.getCombinationId() > 0) {
+            pinkService.createPink(orderInfo);
+        }
 
         //砍价
         if(orderInfo.getBargainId() > 0) {
@@ -1374,7 +1438,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         YxUser userInfo = userService.getById(orderInfo.getUid());
         //增加流水
         String payTypeMsg = PayTypeEnum.WEIXIN.getDesc();
-        if(PayTypeEnum.YUE.getValue().equals(payType)) payTypeMsg = PayTypeEnum.YUE.getDesc();
+        if(PayTypeEnum.YUE.getValue().equals(payType)) {
+            payTypeMsg = PayTypeEnum.YUE.getDesc();
+        }
         billService.expend(userInfo.getUid(), "购买商品",
                 BillDetailEnum.CATEGORY_1.getValue(),
                 BillDetailEnum.TYPE_3.getValue(),
@@ -1403,12 +1469,20 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     public String aliPay(String orderId) throws Exception {
         AlipayConfig alipay = alipayService.find();
-        if(ObjectUtil.isNull(alipay)) throw new YshopException("请先配置支付宝");
+        if(ObjectUtil.isNull(alipay)) {
+            throw new YshopException("请先配置支付宝");
+        }
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,null);
-        if(ObjectUtil.isNull(orderInfo)) throw new YshopException("订单不存在");
-        if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(orderInfo.getPaid())) throw new YshopException("该订单已支付");
+        if(ObjectUtil.isNull(orderInfo)) {
+            throw new YshopException("订单不存在");
+        }
+        if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(orderInfo.getPaid())) {
+            throw new YshopException("该订单已支付");
+        }
 
-        if(orderInfo.getPayPrice().compareTo(BigDecimal.ZERO) <= 0) throw new YshopException("该支付无需支付");
+        if(orderInfo.getPayPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new YshopException("该支付无需支付");
+        }
         TradeVo trade = new TradeVo();
         trade.setOutTradeNo(orderId);
         String payUrl = alipayService.toPayAsWeb(alipay,trade);
@@ -1427,9 +1501,13 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     public void yuePay(String orderId, Long uid) {
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,uid);
-        if(ObjectUtil.isNull(orderInfo)) throw new YshopException("订单不存在");
+        if(ObjectUtil.isNull(orderInfo)) {
+            throw new YshopException("订单不存在");
+        }
 
-        if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(orderInfo.getPaid())) throw new YshopException("该订单已支付");
+        if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(orderInfo.getPaid())) {
+            throw new YshopException("该订单已支付");
+        }
 
         YxUserQueryVo userInfo = userService.getYxUserById(uid);
 
@@ -1459,7 +1537,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         wrapper.lambda().and(
                 i->i.eq(YxStoreOrder::getOrderId,unique).or().eq(YxStoreOrder::getUnique,unique).or()
                         .eq(YxStoreOrder::getExtendOrderId,unique));
-        if(uid != null) wrapper.lambda().eq(YxStoreOrder::getUid,uid);
+        if(uid != null) {
+            wrapper.lambda().eq(YxStoreOrder::getUid,uid);
+        }
 
         return generator.convert(yxStoreOrderMapper.selectOne(wrapper),YxStoreOrderQueryVo.class);
     }
@@ -1506,7 +1586,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 storeBargainService.decStockIncSales(storeCartVO.getCartNum(),bargainId);
             } else {
                 productService.decProductStock(storeCartVO.getCartNum(),storeCartVO.getProductId(),
-                        storeCartVO.getProductAttrUnique(),0l,"");
+                        storeCartVO.getProductAttrUnique(), 0L,"");
             }
         }
     }
@@ -1533,7 +1613,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     private BigDecimal getGainIntegral(List<YxStoreCartQueryVo> cartInfo){
         BigDecimal gainIntegral = BigDecimal.ZERO;
         for (YxStoreCartQueryVo cart : cartInfo) {
-            if(cart.getCombinationId() >0 || cart.getSeckillId() > 0 || cart.getBargainId() > 0) continue;
+            if(cart.getCombinationId() >0 || cart.getSeckillId() > 0 || cart.getBargainId() > 0) {
+                continue;
+            }
             BigDecimal cartInfoGainIntegral = BigDecimal.ZERO;
             Double gain = cart.getProductInfo().getGiveIntegral().doubleValue();
             if(gain > 0){
@@ -1614,7 +1696,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             return;
         }
 
-        if(order.getUseIntegral().compareTo(BigDecimal.ZERO) <= 0) return;
+        if(order.getUseIntegral().compareTo(BigDecimal.ZERO) <= 0) {
+            return;
+        }
 
         if(!OrderStatusEnum.STATUS_MINUS_2.getValue().equals(order.getStatus())
                 && !OrderInfoEnum.REFUND_STATUS_2.getValue().equals(order.getRefundStatus())
@@ -1651,7 +1735,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      */
     private CacheDto getCacheOrderInfo(Long uid, String key) {
         Object obj = redisUtils.get(ShopConstants.YSHOP_ORDER_CACHE_KEY + uid + key);
-        if(obj == null) return null;
+        if(obj == null) {
+            return null;
+        }
         return JSON.parseObject(obj.toString(), CacheDto.class);
     }
 
@@ -1733,7 +1819,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     private BigDecimal handlePostage(List<YxStoreCartQueryVo> cartInfo,YxUserAddress userAddress){
         BigDecimal storePostage = BigDecimal.ZERO;
         if(userAddress != null){
-            if(userAddress.getCityId() == null) return storePostage;
+            if(userAddress.getCityId() == null) {
+                return storePostage;
+            }
             //城市包括默认
             int cityId = userAddress.getCityId();
             List<Integer> citys = new ArrayList<>();
@@ -1782,7 +1870,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 Integer tempId = storeCartVO.getProductInfo().getTempId();
 
                 //处理拼团等营销商品没有设置运费模板
-                if(tempId == null) return storePostage;
+                if(tempId == null) {
+                    return storePostage;
+                }
 
                 //根据模板类型获取相应的数量
                 double num = 0d;
@@ -1832,7 +1922,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                         .le(YxShippingTemplatesFree::getNumber,mapValue.getNumber())
                         .le(YxShippingTemplatesFree::getPrice,mapValue.getPrice()));
                 //满足包邮条件剔除
-                if(count > 0) templateDTOMap.remove(mapKey);
+                if(count > 0) {
+                    templateDTOMap.remove(mapKey);
+                }
             }
 
             //处理区域邮费
@@ -1892,16 +1984,16 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     private BigDecimal getOrderSumPrice(List<YxStoreCartQueryVo> cartInfo, String key) {
         BigDecimal sumPrice = BigDecimal.ZERO;
 
-        if(key.equals("truePrice")){
+        if("truePrice".equals(key)){
             for (YxStoreCartQueryVo storeCart : cartInfo) {
                 sumPrice = NumberUtil.add(sumPrice,NumberUtil.mul(storeCart.getCartNum(),storeCart.getTruePrice()));
             }
-        }else if(key.equals("costPrice")){
+        }else if("costPrice".equals(key)){
             for (YxStoreCartQueryVo storeCart : cartInfo) {
                 sumPrice = NumberUtil.add(sumPrice,
                         NumberUtil.mul(storeCart.getCartNum(),storeCart.getCostPrice()));
             }
-        }else if(key.equals("vipTruePrice")){
+        }else if("vipTruePrice".equals(key)){
             for (YxStoreCartQueryVo storeCart : cartInfo) {
                 sumPrice = NumberUtil.add(sumPrice,
                         NumberUtil.mul(storeCart.getCartNum(),storeCart.getVipTruePrice()));
@@ -2195,7 +2287,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             str = "[砍价订单]";
         }
 
-        if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(shippingType)) str = "[核销订单]";
+        if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(shippingType)) {
+            str = "[核销订单]";
+        }
         return str;
     }
 

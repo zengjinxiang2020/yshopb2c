@@ -118,7 +118,7 @@ public class StoreSeckillController {
             SimpleDateFormat sdf = new SimpleDateFormat("HH");
             String nowTime = sdf.format(new Date());
             String index = nowTime.substring(0, 1);
-            int currentHour = index.equals("0") ? Integer.valueOf(nowTime.substring(1, 2)) : Integer.valueOf(nowTime);
+            int currentHour = "0".equals(index) ? Integer.valueOf(nowTime.substring(1, 2)) : Integer.valueOf(nowTime);
             SeckillTimeDto seckillTimeDto = new SeckillTimeDto();
             seckillTimeDto.setId(i.getId());
             //活动结束时间

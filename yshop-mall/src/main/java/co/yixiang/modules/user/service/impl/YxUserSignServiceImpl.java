@@ -79,10 +79,14 @@ public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxU
     @Override
     public int sign(YxUser yxUser) {
         List<JSONObject> list = systemGroupDataService.getDatas(ShopConstants.YSHOP_SIGN_DAY_NUM);
-        if(ObjectUtil.isNull(list) || list.isEmpty()) throw new YshopException("请先配置签到天数");
+        if(ObjectUtil.isNull(list) || list.isEmpty()) {
+            throw new YshopException("请先配置签到天数");
+        }
 
         boolean isDaySign = this.getToDayIsSign(yxUser.getUid());
-        if(isDaySign) throw new YshopException("已签到");
+        if(isDaySign) {
+            throw new YshopException("已签到");
+        }
         int signNumber = 0; //积分
         int userSignNum = yxUser.getSignNum(); //签到次数
         if(getYesterDayIsSign(yxUser.getUid())){
@@ -121,7 +125,9 @@ public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxU
                 .signNum(userSignNum)
                 .build();
         boolean res = yxUserService.updateById(user);
-        if(!res) throw new YshopException("签到失败");
+        if(!res) {
+            throw new YshopException("签到失败");
+        }
 
         //插入流水
         billService.income(yxUser.getUid(),title, BillDetailEnum.CATEGORY_2.getValue(),
@@ -162,7 +168,9 @@ public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxU
         userQueryVo.setSumSignDay(sumSignDay);
         userQueryVo.setIsDaySign(isDaySign);
         userQueryVo.setIsYesterDaySign(isYesterDaySign);
-        if(!isDaySign && !isYesterDaySign) userQueryVo.setSignNum(0);
+        if(!isDaySign && !isYesterDaySign) {
+            userQueryVo.setSignNum(0);
+        }
         return userQueryVo;
     }
 
@@ -176,7 +184,9 @@ public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxU
         int count = this.lambdaQuery().eq(YxUserSign::getUid,uid)
                 .ge(YxUserSign::getCreateTime,today)
                 .count();
-        if(count > 0) return true;
+        if(count > 0) {
+            return true;
+        }
         return false;
     }
 
@@ -193,7 +203,9 @@ public class YxUserSignServiceImpl extends BaseServiceImpl<YxUserSignMapper, YxU
                 .lt(YxUserSign::getCreateTime,today)
                 .ge(YxUserSign::getCreateTime,yesterday)
                 .count();
-        if(count > 0) return true;
+        if(count > 0) {
+            return true;
+        }
         return false;
     }
 

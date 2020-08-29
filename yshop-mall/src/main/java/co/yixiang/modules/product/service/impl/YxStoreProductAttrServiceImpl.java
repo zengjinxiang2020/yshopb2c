@@ -143,7 +143,9 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
      * @param productId 商品id
      */
     private void clearProductAttr(Long productId) {
-        if(ObjectUtil.isNull(productId)) throw new YshopException("产品不存在");
+        if(ObjectUtil.isNull(productId)) {
+            throw new YshopException("产品不存在");
+        }
 
         yxStoreProductAttrMapper.delete(Wrappers.<YxStoreProductAttr>lambdaQuery()
                 .eq(YxStoreProductAttr::getProductId,productId));
@@ -180,7 +182,9 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
         }else {
             res =  yxStoreProductAttrValueMapper.decStockIncSales(num,productId,unique);
         }
-        if(res == 0) throw new YshopException("商品库存不足");
+        if(res == 0) {
+            throw new YshopException("商品库存不足");
+        }
     }
 
 

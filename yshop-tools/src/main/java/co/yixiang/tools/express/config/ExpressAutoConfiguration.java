@@ -24,12 +24,14 @@ public class ExpressAutoConfiguration {
 
     @Autowired
     public ExpressAutoConfiguration(RedisUtils redisUtil) {
-        this.redisUtil = redisUtil;
+        ExpressAutoConfiguration.redisUtil = redisUtil;
     }
 
     public static ExpressService expressService() {
         ExpressService expressService = (ExpressService)redisUtil.get(ShopConstants.YSHOP_EXPRESS_SERVICE);
-        if(expressService != null) return expressService;
+        if(expressService != null) {
+            return expressService;
+        }
 
         ExpressProperties properties = new ExpressProperties();
         String enable = redisUtil.getY("exp_enable");

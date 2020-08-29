@@ -155,7 +155,9 @@ public class StoreOrderController {
         //创建订单
         YxStoreOrder order = storeOrderService.createOrder(yxUser,key,param);
 
-        if(ObjectUtil.isNull(order)) throw new YshopException("订单生成失败");
+        if(ObjectUtil.isNull(order)) {
+            throw new YshopException("订单生成失败");
+        }
 
         String orderId = order.getOrderId();
 
@@ -190,7 +192,9 @@ public class StoreOrderController {
         Long uid = LocalUser.getUser().getUid();
         YxStoreOrderQueryVo storeOrder = storeOrderService
                 .getOrderInfo(param.getUni(),uid);
-        if(ObjectUtil.isNull(storeOrder)) throw new YshopException("订单不存在");
+        if(ObjectUtil.isNull(storeOrder)) {
+            throw new YshopException("订单不存在");
+        }
 
         if(OrderInfoEnum.REFUND_STATUS_1.getValue().equals(storeOrder.getPaid())) {
             throw new YshopException("该订单已支付");
@@ -245,7 +249,9 @@ public class StoreOrderController {
     @ApiOperation(value = "订单详情",notes = "订单详情")
     public ApiResult<YxStoreOrderQueryVo> detail(@PathVariable String key){
         Long uid = LocalUser.getUser().getUid();
-        if(StrUtil.isEmpty(key)) throw new YshopException("参数错误");
+        if(StrUtil.isEmpty(key)) {
+            throw new YshopException("参数错误");
+        }
         YxStoreOrderQueryVo storeOrder = storeOrderService.getOrderInfo(key,uid);
         if(ObjectUtil.isNull(storeOrder)){
             throw new YshopException("订单不存在");
@@ -363,7 +369,9 @@ public class StoreOrderController {
         ExpressService expressService = ExpressAutoConfiguration.expressService();
         ExpressInfo expressInfo = expressService.getExpressInfo(expressInfoDo.getOrderCode(),
                 expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode());
-        if(!expressInfo.isSuccess()) throw new YshopException(expressInfo.getReason());
+        if(!expressInfo.isSuccess()) {
+            throw new YshopException(expressInfo.getReason());
+        }
         return ApiResult.ok(expressInfo);
     }
 
@@ -378,7 +386,9 @@ public class StoreOrderController {
         Long uid = LocalUser.getUser().getUid();
         YxStoreOrderQueryVo orderQueryVo = storeOrderService.verificOrder(param.getVerifyCode(),
                 param.getIsConfirm(),uid);
-        if(orderQueryVo != null)  return ApiResult.ok(orderQueryVo);
+        if(orderQueryVo != null) {
+            return ApiResult.ok(orderQueryVo);
+        }
 
         return ApiResult.ok("核销成功");
     }

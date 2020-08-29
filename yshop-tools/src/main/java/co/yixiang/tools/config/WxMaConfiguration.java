@@ -31,8 +31,7 @@ public class WxMaConfiguration {
     }
     @Autowired
     public WxMaConfiguration(RedisUtils redisUtils) {
-        this.redisUtils = redisUtils;
-        this.wxMaMessageHandler = wxMaMessageHandler;
+        WxMaConfiguration.redisUtils = redisUtils;
     }
 
     public static WxMaService getWxMaService() {
@@ -67,10 +66,10 @@ public class WxMaConfiguration {
         final WxMaMessageRouter router = new WxMaMessageRouter(service);
         router
                 .rule().handler(wxMaMessageHandler).next()
-                .rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(SystemConfigConstants.BINDSTATECHANGE).handler(bindstatechangeHandler).end();
+                .rule().async(false).msgType(WxConsts.XmlMsgType.EVENT).event(SystemConfigConstants.BINDSTATECHANGE).handler(BINDSTATECHANGE_HANDLER).end();
         return router;
     }
-    private static final WxMaMessageHandler bindstatechangeHandler = (wxMessage, context, service, sessionManager) -> {
+    private static final WxMaMessageHandler BINDSTATECHANGE_HANDLER = (wxMessage, context, service, sessionManager) -> {
         wxMessage.getFromUser();
         wxMessage.getContent();
         return null;

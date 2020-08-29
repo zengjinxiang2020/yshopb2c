@@ -68,15 +68,23 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
     @Override
     public void userExtract(YxUser userInfo, UserExtParam param) {
         BigDecimal extractPrice = userInfo.getBrokeragePrice();
-        if(extractPrice.compareTo(BigDecimal.ZERO) <= 0) throw new YshopException("提现佣金不足");
+        if(extractPrice.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new YshopException("提现佣金不足");
+        }
 
         double money = Double.valueOf(param.getMoney());
-        if( extractPrice.compareTo(BigDecimal.valueOf(money)) < 0) throw new YshopException("提现佣金不足");
+        if( extractPrice.compareTo(BigDecimal.valueOf(money)) < 0) {
+            throw new YshopException("提现佣金不足");
+        }
 
-        if(money <= 0) throw new YshopException("提现佣金大于0");
+        if(money <= 0) {
+            throw new YshopException("提现佣金大于0");
+        }
 
         double balance = NumberUtil.sub(extractPrice.doubleValue(),money);
-        if(balance < 0) balance = 0;
+        if(balance < 0) {
+            balance = 0;
+        }
 
         YxUserExtract userExtract = new YxUserExtract();
         userExtract.setUid(userInfo.getUid());
@@ -184,6 +192,7 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
      * 操作提现
      * @param resources YxUserExtract
      */
+    @Override
     public void doExtract(YxUserExtract resources){
         if(resources.getStatus() == null){
             throw new BadRequestException("请选择审核状态");

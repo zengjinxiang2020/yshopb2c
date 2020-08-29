@@ -176,7 +176,9 @@ public class UserBillController {
                                               @RequestParam(value = "limit",defaultValue = "10") int limit,
                                               @PathVariable String type){
         int newType = 0;
-        if(NumberUtil.isNumber(type)) newType = Integer.valueOf(type);
+        if(NumberUtil.isNumber(type)) {
+            newType = Integer.valueOf(type);
+        }
         Long uid = LocalUser.getUser().getUid();
         return ApiResult.ok(userBillService.getUserBillList(page,limit,uid,newType));
     }

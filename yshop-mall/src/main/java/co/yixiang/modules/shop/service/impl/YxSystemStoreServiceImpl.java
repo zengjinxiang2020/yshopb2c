@@ -94,9 +94,13 @@ public class YxSystemStoreServiceImpl extends BaseServiceImpl<SystemStoreMapper,
                         .eq(YxSystemStore::getIsShow, ShopCommonEnum.SHOW_1.getValue())
                         .orderByDesc(YxSystemStore::getId)
                         .last("limit 1"));
-        if(yxSystemStore == null) return null;
+        if(yxSystemStore == null) {
+            return null;
+        }
         String mention = RedisUtil.get(ShopKeyUtils.getStoreSelfMention());
-        if(StrUtil.isBlank(mention) || ShopCommonEnum.ENABLE_2.getValue().toString().equals(mention)) return null;
+        if(StrUtil.isBlank(mention) || ShopCommonEnum.ENABLE_2.getValue().toString().equals(mention)) {
+            return null;
+        }
         YxSystemStoreQueryVo systemStoreQueryVo = generator.convert(yxSystemStore,YxSystemStoreQueryVo.class);
         if(StrUtil.isNotEmpty(latitude) && StrUtil.isNotEmpty(longitude)){
             double distance = LocationUtils.getDistance(Double.valueOf(latitude),Double.valueOf(longitude),

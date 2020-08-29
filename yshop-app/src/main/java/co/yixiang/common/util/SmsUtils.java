@@ -34,7 +34,7 @@ public class SmsUtils {
 
     @Autowired
     public SmsUtils(RedisUtils redisUtils){
-        this.redisUtils = redisUtils;
+        SmsUtils.redisUtils = redisUtils;
     }
     /**
      * 发送短信

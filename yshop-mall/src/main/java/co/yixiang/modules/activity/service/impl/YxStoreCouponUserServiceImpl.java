@@ -179,7 +179,7 @@ public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponU
                 .selectList(Wrappers.<YxStoreCouponUser>lambdaQuery()
                         .eq(YxStoreCouponUser::getUid,uid));
         List<YxStoreCouponUserQueryVo> storeCouponUserQueryVoList = new ArrayList<>();
-        long nowTime = new Date().getTime();
+        long nowTime = System.currentTimeMillis();
         for (YxStoreCouponUser couponUser : storeCouponUsers) {
             YxStoreCouponUserQueryVo queryVo = generator.convert(couponUser,YxStoreCouponUserQueryVo.class);
             if(couponUser.getIsFail() == 1){
@@ -212,7 +212,9 @@ public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponU
     @Override
     public void addUserCoupon(Long uid, Integer cid) {
         YxStoreCoupon storeCoupon = storeCouponService.getById(cid);
-        if(storeCoupon == null) throw new YshopException("优惠劵不存在");
+        if(storeCoupon == null) {
+            throw new YshopException("优惠劵不存在");
+        }
 
         Date now = new Date();
 
@@ -240,7 +242,9 @@ public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponU
      * @return boolean
      */
     private boolean isSame(List<String> list1,List<String> list2){
-        if(list2.isEmpty()) return true;
+        if(list2.isEmpty()) {
+            return true;
+        }
         list1 = new ArrayList<>(list1);
         list2 = new ArrayList<>(list2);
         list1.addAll(list2);

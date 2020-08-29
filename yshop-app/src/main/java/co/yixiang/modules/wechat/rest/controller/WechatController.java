@@ -134,14 +134,20 @@ public class WechatController {
     public String renotify(@RequestBody String xmlData) {
         try {
             WxPayService wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WECHAT);
-            if(wxPayService == null) wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WXAPP);
-            if(wxPayService == null) wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.APP);
+            if(wxPayService == null) {
+                wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WXAPP);
+            }
+            if(wxPayService == null) {
+                wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.APP);
+            }
             WxPayOrderNotifyResult notifyResult = wxPayService.parseOrderNotifyResult(xmlData);
             String orderId = notifyResult.getOutTradeNo();
             String attach = notifyResult.getAttach();
             if(BillDetailEnum.TYPE_3.getValue().equals(attach)){
                 YxStoreOrderQueryVo orderInfo = orderService.getOrderInfo(orderId,null);
-                if(orderInfo == null) return WxPayNotifyResponse.success("处理成功!");
+                if(orderInfo == null) {
+                    return WxPayNotifyResponse.success("处理成功!");
+                }
                 if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(orderInfo.getPaid())){
                     return WxPayNotifyResponse.success("处理成功!");
                 }
@@ -149,7 +155,9 @@ public class WechatController {
             }else if(BillDetailEnum.TYPE_1.getValue().equals(attach)){
                 //处理充值
                 YxUserRecharge userRecharge = userRechargeService.getInfoByOrderId(orderId);
-                if(userRecharge == null) return WxPayNotifyResponse.success("处理成功!");
+                if(userRecharge == null) {
+                    return WxPayNotifyResponse.success("处理成功!");
+                }
                 if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(userRecharge.getPaid())){
                     return WxPayNotifyResponse.success("处理成功!");
                 }
@@ -173,8 +181,12 @@ public class WechatController {
     public String parseRefundNotifyResult(@RequestBody String xmlData) {
         try {
             WxPayService wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WECHAT);
-            if(wxPayService == null) wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WXAPP);
-            if(wxPayService == null) wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.APP);
+            if(wxPayService == null) {
+                wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WXAPP);
+            }
+            if(wxPayService == null) {
+                wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.APP);
+            }
             WxPayRefundNotifyResult result = wxPayService.parseRefundNotifyResult(xmlData);
             String orderId = result.getReqInfo().getOutTradeNo();
             BigDecimal refundFee = BigNum.div(result.getReqInfo().getRefundFee(), 100);
@@ -242,14 +254,18 @@ public class WechatController {
             // 明文传输的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromXml(requestBody);
             WxMpXmlOutMessage outMessage = this.route(inMessage);
-            if(outMessage == null) return;
+            if(outMessage == null) {
+                return;
+            }
             out = outMessage.toXml();;
         } else if ("aes".equalsIgnoreCase(encType)) {
             // aes加密的消息
             WxMpXmlMessage inMessage = WxMpXmlMessage.fromEncryptedXml(requestBody, wxService.getWxMpConfigStorage(),
                     timestamp, nonce, msgSignature);
             WxMpXmlOutMessage outMessage = this.route(inMessage);
-            if(outMessage == null) return;
+            if(outMessage == null) {
+                return;
+            }
 
             out = outMessage.toEncryptedXml(wxService.getWxMpConfigStorage());
         }

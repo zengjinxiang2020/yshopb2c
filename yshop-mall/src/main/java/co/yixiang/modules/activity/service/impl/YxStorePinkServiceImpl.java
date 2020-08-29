@@ -104,7 +104,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
                 .eq(YxStorePink::getStatus,OrderInfoEnum.REFUND_STATUS_1.getValue())
                 .gt(YxStorePink::getStopTime,new Date())
                 .one();
-        if(pink == null) throw new YshopException("拼团不存在或已经取消");
+        if(pink == null) {
+            throw new YshopException("拼团不存在或已经取消");
+        }
 
         PinkUserDto pinkUserDto = this.getPinkMemberAndPinK(pink);
         List<YxStorePink> pinkAll = pinkUserDto.getPinkAll();
@@ -156,6 +158,7 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
      * @param pink 拼团信息
      * @return int
      */
+    @Override
     public int surplusPeople(YxStorePink pink) {
         List<YxStorePink> listT = new ArrayList<>();
         if(pink.getKId() > 0){ //团长存在
@@ -178,7 +181,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
     @Override
     public PinkInfoVo pinkInfo(Long id, Long uid) {
         YxStorePink pink = this.getPinkUserOne(id);
-        if(ObjectUtil.isNull(pink)) throw new YshopException("拼团不存在");
+        if(ObjectUtil.isNull(pink)) {
+            throw new YshopException("拼团不存在");
+        }
         if( OrderInfoEnum.PINK_REFUND_STATUS_1.getValue().equals(pink.getIsRefund())){
             throw new YshopException("订单已退款");
         }
@@ -194,7 +199,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         List<Long> uidAll = pinkUserDto.getUidAll();
         int count = pinkUserDto.getCount();
 
-        if(count < 0) count = 0;
+        if(count < 0) {
+            count = 0;
+        }
         if(OrderInfoEnum.PINK_STATUS_2.getValue().equals(pinkT.getStatus())){
             pinkBool = PinkEnum.PINK_BOOL_1.getValue();
             isOk = PinkEnum.IS_OK_1.getValue();
@@ -213,14 +220,20 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         //团员是否在团
         if(ObjectUtil.isNotNull(pinkAll)){
             for (YxStorePink storePink : pinkAll) {
-                if(storePink.getUid().equals(uid)) userBool = PinkEnum.USER_BOOL_1.getValue();
+                if(storePink.getUid().equals(uid)) {
+                    userBool = PinkEnum.USER_BOOL_1.getValue();
+                }
             }
         }
         //团长
-        if(pinkT.getUid().equals(uid)) userBool = PinkEnum.USER_BOOL_1.getValue();
+        if(pinkT.getUid().equals(uid)) {
+            userBool = PinkEnum.USER_BOOL_1.getValue();
+        }
 
         YxStoreCombinationQueryVo storeCombinationQueryVo = yxStoreCombinationMapper.getCombDetail(pink.getCid());
-        if(ObjectUtil.isNull(storeCombinationQueryVo)) throw new YshopException("拼团不存在或已下架");
+        if(ObjectUtil.isNull(storeCombinationQueryVo)) {
+            throw new YshopException("拼团不存在或已下架");
+        }
 
         YxUserQueryVo userInfo = userService.getYxUserById(uid);
 
@@ -265,7 +278,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         order = storeOrderService.handleOrder(order);
         int pinkCount = yxStorePinkMapper.selectCount(Wrappers.<YxStorePink>lambdaQuery()
                 .eq(YxStorePink::getOrderId,order.getOrderId()));
-        if(pinkCount > 0) return;
+        if(pinkCount > 0) {
+            return;
+        }
         if(storeCombination != null){
             YxStorePink  storePink = YxStorePink.builder()
                     .uid(order.getUid())
@@ -285,7 +300,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
             storePink.setPeople(storeCombination.getPeople());
             storePink.setStopTime(stopTime);
             if(order.getPinkId() > 0){ //其他成员入团
-                if(this.getIsPinkUid(order.getPinkId(),order.getUid())) return;
+                if(this.getIsPinkUid(order.getPinkId(),order.getUid())) {
+                    return;
+                }
                 storePink.setKId(order.getPinkId());
                 storePink.setStopTime(null);
                 this.save(storePink);
@@ -434,7 +451,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         if(pink == null){
             pink = yxStorePinkMapper.selectOne(Wrappers.<YxStorePink>lambdaQuery()
                     .eq(YxStorePink::getKId,id).eq(YxStorePink::getUid,uid));
-            if(pink == null) return "";
+            if(pink == null) {
+                return "";
+            }
         }
         return pink.getOrderId();
     }
@@ -471,7 +490,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         int count = this.lambdaQuery().in(YxStorePink::getId,idAll)
                 .eq(YxStorePink::getIsRefund,OrderInfoEnum.PINK_REFUND_STATUS_1.getValue())
                 .count();
-        if(count == 0) return true;
+        if(count == 0) {
+            return true;
+        }
         return false;
     }
 

@@ -144,7 +144,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, User> imp
     public UserDto findByName(String userName) {
         User user = userMapper.findByName(userName);
 
-        if(user == null) throw new YshopException("当前用户不存在");
+        if(user == null) {
+            throw new YshopException("当前用户不存在");
+        }
         //用户所属岗位
         user.setJob(jobService.getById(user.getJobId()));
         //用户所属部门

@@ -34,7 +34,7 @@ public class WxPayConfiguration {
 
 	@Autowired
 	public WxPayConfiguration(RedisUtils redisUtils) {
-		this.redisUtils = redisUtils;
+		WxPayConfiguration.redisUtils = redisUtils;
 	}
 
 	/**

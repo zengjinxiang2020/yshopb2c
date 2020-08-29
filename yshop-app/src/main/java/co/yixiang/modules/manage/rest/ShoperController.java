@@ -106,7 +106,9 @@ public class ShoperController {
     @GetMapping("/admin/order/detail/{key}")
     @ApiOperation(value = "订单详情",notes = "订单详情")
     public ApiResult<YxStoreOrderQueryVo> orderDetail(@PathVariable String key){
-        if(StrUtil.isEmpty(key)) throw new YshopException("参数错误");
+        if(StrUtil.isEmpty(key)) {
+            throw new YshopException("参数错误");
+        }
         YxStoreOrderQueryVo storeOrder = storeOrderService.getOrderInfo(key,null);
         if(ObjectUtil.isNull(storeOrder)){
             throw new YshopException("订单不存在");

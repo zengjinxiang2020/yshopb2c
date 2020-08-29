@@ -72,21 +72,29 @@ public class WeixinPayService {
         long uid = 0;
         int payPrice = 0;
         BigDecimal bigDecimal = new BigDecimal(100);
-        if(BillDetailEnum.TYPE_3.getValue().equals(attach)){ //普通支付
+        //普通支付
+        if(BillDetailEnum.TYPE_3.getValue().equals(attach)){
             YxStoreOrderQueryVo orderInfo = storeOrderService.getOrderInfo(orderId,null);
-            if(ObjectUtil.isNull(orderInfo)) throw new YshopException("订单不存在");
+            if(ObjectUtil.isNull(orderInfo)) {
+                throw new YshopException("订单不存在");
+            }
             if(orderInfo.getPaid().equals(OrderInfoEnum.PAY_STATUS_1.getValue())) {
                 throw new YshopException("该订单已支付");
             }
 
-            if(orderInfo.getPayPrice().compareTo(BigDecimal.ZERO) <= 0) throw new YshopException("该支付无需支付");
+            if(orderInfo.getPayPrice().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new YshopException("该支付无需支付");
+            }
 
             uid = orderInfo.getUid().intValue();
-            payPrice = bigDecimal.multiply(orderInfo.getPayPrice()).intValue();//计算分
+            //计算分
+            payPrice = bigDecimal.multiply(orderInfo.getPayPrice()).intValue();
         }else{ //充值
             YxUserRecharge userRecharge = userRechargeService.getOne(Wrappers.<YxUserRecharge>lambdaQuery()
                     .eq(YxUserRecharge::getOrderId,orderId));
-            if(userRecharge == null) throw new BusinessException("充值订单不存在");
+            if(userRecharge == null) {
+                throw new BusinessException("充值订单不存在");
+            }
 
             if(userRecharge.getPaid().equals(OrderInfoEnum.PAY_STATUS_1.getValue())) {
                 throw new YshopException("该订单已支付");
@@ -97,7 +105,9 @@ public class WeixinPayService {
 
 
         YxUser yxUser = userService.getById(uid);
-        if(yxUser == null) throw new YshopException("用户错误");
+        if(yxUser == null) {
+            throw new YshopException("用户错误");
+        }
 
 
         WechatUserDto wechatUserDto = yxUser.getWxProfile();
@@ -151,15 +161,18 @@ public class WeixinPayService {
     public void refundOrder(String orderId, Integer totalFee) {
 
         YxStoreOrderQueryVo orderInfo = storeOrderService.getOrderInfo(orderId,null);
-        if(PayTypeEnum.YUE.getValue().equals(orderInfo.getPayType())) return;
+        if(PayTypeEnum.YUE.getValue().equals(orderInfo.getPayType())) {
+            return;
+        }
 
         WxPayService wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WECHAT);
         WxPayRefundRequest wxPayRefundRequest = new WxPayRefundRequest();
-
-        wxPayRefundRequest.setTotalFee(totalFee);//订单总金额
+        //订单总金额
+        wxPayRefundRequest.setTotalFee(totalFee);
         wxPayRefundRequest.setOutTradeNo(orderId);
         wxPayRefundRequest.setOutRefundNo(orderId);
-        wxPayRefundRequest.setRefundFee(totalFee);//退款金额
+        //退款金额
+        wxPayRefundRequest.setRefundFee(totalFee);
         wxPayRefundRequest.setNotifyUrl(this.getApiUrl() + "/api/notify/refund");
 
         try {

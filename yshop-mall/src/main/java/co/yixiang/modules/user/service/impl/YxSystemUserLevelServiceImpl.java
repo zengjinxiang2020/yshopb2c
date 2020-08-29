@@ -74,7 +74,9 @@ public class YxSystemUserLevelServiceImpl extends BaseServiceImpl<SystemUserLeve
 
         int grade = 0;
         for (YxSystemUserLevel userLevel : list) {
-            if(userLevel.getId() == levelId) grade = userLevel.getGrade();
+            if(userLevel.getId() == levelId) {
+                grade = userLevel.getGrade();
+            }
         }
 
         YxSystemUserLevel userLevel = this.lambdaQuery()
@@ -83,7 +85,9 @@ public class YxSystemUserLevelServiceImpl extends BaseServiceImpl<SystemUserLeve
                 .gt(YxSystemUserLevel::getGrade,grade)
                 .last("limit 1")
                 .one();
-        if(ObjectUtil.isNull(userLevel)) return 0;
+        if(ObjectUtil.isNull(userLevel)) {
+            return 0;
+        }
         return userLevel.getId();
     }
 
@@ -113,7 +117,9 @@ public class YxSystemUserLevelServiceImpl extends BaseServiceImpl<SystemUserLeve
 
         //会员等级列表
         List<YxSystemUserLevelQueryVo> list = this.getLevelListAndGrade(levelId);
-        if(list.isEmpty()) throw new YshopException("请后台设置会员等级");
+        if(list.isEmpty()) {
+            throw new YshopException("请后台设置会员等级");
+        }
 
         //任务列表
         TaskDto taskDTO = systemUserTaskService.getTaskList(list.get(0).getId(),uid);
@@ -138,7 +144,9 @@ public class YxSystemUserLevelServiceImpl extends BaseServiceImpl<SystemUserLeve
                 .list();
         List<YxSystemUserLevelQueryVo> newList = generator.convert(list,YxSystemUserLevelQueryVo.class);
         for (YxSystemUserLevelQueryVo userLevelQueryVo : newList) {
-            if(userLevelQueryVo.getId().compareTo(levelId) == 0) grade = userLevelQueryVo.getGrade();
+            if(userLevelQueryVo.getId().compareTo(levelId) == 0) {
+                grade = userLevelQueryVo.getGrade();
+            }
             if(grade.compareTo(userLevelQueryVo.getGrade()) < 0){
                 userLevelQueryVo.setIsClear(true); //不解锁
             }else{

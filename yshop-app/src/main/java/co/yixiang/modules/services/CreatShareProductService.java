@@ -79,7 +79,9 @@ public class CreatShareProductService {
         //门店
         if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(storeOrder.getShippingType())){
             String mapKey = RedisUtil.get(SystemConfigConstants.TENGXUN_MAP_KEY);
-            if(StrUtil.isBlank(mapKey)) throw new YshopException("请配置腾讯地图key");
+            if(StrUtil.isBlank(mapKey)) {
+                throw new YshopException("请配置腾讯地图key");
+            }
             String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
             if(StrUtil.isEmpty(apiUrl)){
                 throw new YshopException("未配置api地址");
@@ -463,9 +465,13 @@ public class CreatShareProductService {
                                       String apiUrl,String path){
         Long uid = userInfo.getUid();
         YxStorePink storePink = storePinkService.getById(pinkId);
-        if(ObjectUtil.isNull(storePink)) throw new YshopException("拼团不存在");
+        if(ObjectUtil.isNull(storePink)) {
+            throw new YshopException("拼团不存在");
+        }
         YxStoreCombination storeCombination = storeCombinationService.getById(storePink.getCid());
-        if(ObjectUtil.isNull(storeCombination)) throw new YshopException("拼团产品不存在");
+        if(ObjectUtil.isNull(storeCombination)) {
+            throw new YshopException("拼团产品不存在");
+        }
 
         String userType = userInfo.getUserType();
         if(StrUtil.isBlank(userType)) {

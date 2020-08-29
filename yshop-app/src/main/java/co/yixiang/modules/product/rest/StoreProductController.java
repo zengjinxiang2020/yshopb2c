@@ -225,7 +225,9 @@ public class StoreProductController {
     @ApiOperation(value = "添加收藏",notes = "添加收藏")
     public ApiResult<Boolean> collectAdd(@Validated @RequestBody YxStoreProductRelationQueryParam param){
         long uid = LocalUser.getUser().getUid();
-        if(!NumberUtil.isNumber(param.getId())) throw new YshopException("参数非法");
+        if(!NumberUtil.isNumber(param.getId())) {
+            throw new YshopException("参数非法");
+        }
         productRelationService.addRroductRelation(Long.valueOf(param.getId()),uid);
         return ApiResult.ok();
     }
@@ -239,7 +241,9 @@ public class StoreProductController {
     @ApiOperation(value = "取消收藏",notes = "取消收藏")
     public ApiResult<Boolean> collectDel(@Validated @RequestBody YxStoreProductRelationQueryParam param){
         long uid = LocalUser.getUser().getUid();
-        if(!NumberUtil.isNumber(param.getId())) throw new YshopException("参数非法");
+        if(!NumberUtil.isNumber(param.getId())) {
+            throw new YshopException("参数非法");
+        }
         productRelationService.delRroductRelation(Long.valueOf(param.getId()),
                 uid);
         return ApiResult.ok();

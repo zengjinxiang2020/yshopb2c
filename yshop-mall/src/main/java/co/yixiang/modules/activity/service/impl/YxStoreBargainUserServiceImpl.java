@@ -65,12 +65,18 @@ public class YxStoreBargainUserServiceImpl extends BaseServiceImpl<YxStoreBargai
     @Override
     public void setBargainUserStatus(Long bargainId, Long uid) {
         YxStoreBargainUser storeBargainUser = getBargainUserInfo(bargainId.longValue(),uid);
-        if(ObjectUtil.isNull(storeBargainUser)) return;
+        if(ObjectUtil.isNull(storeBargainUser)) {
+            return;
+        }
 
-        if(storeBargainUser.getStatus() != 1) return;
+        if(storeBargainUser.getStatus() != 1) {
+            return;
+        }
         double price = NumberUtil.sub(NumberUtil.sub(storeBargainUser.getBargainPrice(),
                 storeBargainUser.getBargainPriceMin()),storeBargainUser.getPrice()).doubleValue();
-        if(price > 0) return;
+        if(price > 0) {
+            return;
+        }
 
         storeBargainUser.setStatus(3);
 
@@ -85,7 +91,9 @@ public class YxStoreBargainUserServiceImpl extends BaseServiceImpl<YxStoreBargai
     @Override
     public void bargainCancel(Long bargainId, Long uid) {
         YxStoreBargainUser storeBargainUser = this.getBargainUserInfo(bargainId,uid);
-        if(ObjectUtil.isNull(storeBargainUser)) throw new YshopException("数据不存在");
+        if(ObjectUtil.isNull(storeBargainUser)) {
+            throw new YshopException("数据不存在");
+        }
         if(!OrderInfoEnum.BARGAIN_STATUS_1.getValue().equals(storeBargainUser.getStatus())){
             throw new YshopException("状态错误");
         }
@@ -125,7 +133,9 @@ public class YxStoreBargainUserServiceImpl extends BaseServiceImpl<YxStoreBargai
                 .eq(YxStoreBargainUserHelp::getBargainUserId,storeBargainUser.getId())
                 .eq(YxStoreBargainUserHelp::getUid,uid)
                 .count();
-        if(count == 0) return true;
+        if(count == 0) {
+            return true;
+        }
         return false;
     }
 
@@ -137,9 +147,13 @@ public class YxStoreBargainUserServiceImpl extends BaseServiceImpl<YxStoreBargai
     @Override
     public void setBargain(Long bargainId, Long uid) {
         YxStoreBargainUser storeBargainUser = this.getBargainUserInfo(bargainId,uid);
-        if(storeBargainUser != null) throw new YshopException("你已经参与了");
+        if(storeBargainUser != null) {
+            throw new YshopException("你已经参与了");
+        }
         YxStoreBargain storeBargain = storeBargainService.getById(bargainId);
-        if(storeBargain == null) throw new YshopException("砍价商品不存在");
+        if(storeBargain == null) {
+            throw new YshopException("砍价商品不存在");
+        }
         YxStoreBargainUser yxStoreBargainUser = YxStoreBargainUser
                 .builder()
                 .bargainId(bargainId)

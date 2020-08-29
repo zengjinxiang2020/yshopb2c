@@ -10,6 +10,7 @@ package co.yixiang.mp.service;
 
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
@@ -57,14 +58,16 @@ public class WeixinTemplateService {
     public void rechargeSuccessNotice(String time,String price,Long uid){
         String openid = this.getUserOpenid(uid);
 
-        if(StrUtil.isBlank(openid)) return;
+        if(StrUtil.isBlank(openid)) {
+            return;
+        }
 
         Map<String,String> map = new HashMap<>();
         map.put("first","您的账户金币发生变动，详情如下：");
         map.put("keyword1","充值");
         map.put("keyword2",time);
         map.put("keyword3",price);
-        map.put("remark","yshop为你服务！");
+        map.put("remark", ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.RECHARGE_SUCCESS.getValue());
         this.sendWxMpTemplateMessage( openid, tempId, this.getSiteUrl()+"/user/account",map);
     }
@@ -80,13 +83,16 @@ public class WeixinTemplateService {
 
         String openid = this.getUserOpenid(uid);
 
-        if(StrUtil.isBlank(openid)) return;
+        if(StrUtil.isBlank(openid)) {
+            return;
+        }
 
         Map<String,String> map = new HashMap<>();
         map.put("first","您的订单已支付成功，我们会尽快为您发货。");
-        map.put("keyword1",orderId);//订单号
+        //订单号
+        map.put("keyword1",orderId);
         map.put("keyword2",price);
-        map.put("remark","yshop为你服务！");
+        map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.PAY_SUCCESS.getValue());
         this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
     }
@@ -102,14 +108,17 @@ public class WeixinTemplateService {
 
         String openid = this.getUserOpenid(uid);
 
-        if(StrUtil.isBlank(openid)) return;
+        if(StrUtil.isBlank(openid)) {
+            return;
+        }
 
         Map<String,String> map = new HashMap<>();
         map.put("first","您的订单退款申请被通过，钱款将很快还至您的支付账户。");
-        map.put("keyword1",orderId);//订单号
+        //订单号
+        map.put("keyword1",orderId);
         map.put("keyword2",price);
         map.put("keyword3", time);
-        map.put("remark","yshop为你服务！");
+        map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.REFUND_SUCCESS.getValue());
         this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
     }
@@ -126,14 +135,16 @@ public class WeixinTemplateService {
 
         String openid = this.getUserOpenid(uid);
 
-        if(StrUtil.isEmpty(openid)) return;
+        if(StrUtil.isEmpty(openid)) {
+            return;
+        }
 
         Map<String,String> map = new HashMap<>();
         map.put("first","亲，宝贝已经启程了，好想快点来到你身边。");
         map.put("keyword2",deliveryName);
         map.put("keyword1",orderId);
         map.put("keyword3",deliveryId);
-        map.put("remark","yshop为你服务！");
+        map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.DELIVERY_SUCCESS.getValue());
         this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
     }
@@ -173,7 +184,9 @@ public class WeixinTemplateService {
         YxWechatTemplate yxWechatTemplate = yxWechatTemplateService.lambdaQuery()
                 .eq(YxWechatTemplate::getTempkey,key)
                 .one();
-        if (yxWechatTemplate == null) throw new YshopException("请后台配置key:" + key + "模板消息id");
+        if (yxWechatTemplate == null) {
+            throw new YshopException("请后台配置key:" + key + "模板消息id");
+        }
 
         return yxWechatTemplate.getTempid();
     }
@@ -197,11 +210,17 @@ public class WeixinTemplateService {
      */
     private String getUserOpenid(Long uid){
         YxUser yxUser = userService.getById(uid);
-        if(yxUser == null) return "";
+        if(yxUser == null) {
+            return "";
+        }
 
         WechatUserDto wechatUserDto = yxUser.getWxProfile();
-        if(wechatUserDto == null) return "";
-        if(StrUtil.isBlank(wechatUserDto.getOpenid())) return "";
+        if(wechatUserDto == null) {
+            return "";
+        }
+        if(StrUtil.isBlank(wechatUserDto.getOpenid())) {
+            return "";
+        }
         return wechatUserDto.getOpenid();
 
     }

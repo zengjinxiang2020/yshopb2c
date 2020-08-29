@@ -27,7 +27,7 @@ public class OrderUtil {
      * @return
      **/
     public static int getSecondTimestamp(){
-        String timestamp = String.valueOf(new Date().getTime()/1000);
+        String timestamp = String.valueOf(System.currentTimeMillis()/1000);
         return Integer.valueOf(timestamp);
     }
 
@@ -42,7 +42,9 @@ public class OrderUtil {
     public static String checkActivityStatus(Date starTime,Date endTime,Integer status){
         Date nowTime = new Date();
 
-        if(ShopCommonEnum.IS_STATUS_0.getValue().equals(status)) return "关闭";
+        if(ShopCommonEnum.IS_STATUS_0.getValue().equals(status)) {
+            return "关闭";
+        }
 
         if(DateUtil.compare(starTime,nowTime) > 0){
             return "活动未开始";
@@ -131,7 +133,7 @@ public class OrderUtil {
      * @return
      **/
     public static int getSecondTimestampTwo() {
-        String timestamp = String.valueOf(new Date().getTime() / 1000);
+        String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         return Integer.valueOf(timestamp);
     }
 

@@ -84,7 +84,7 @@ public class WechatArticleService {
 
         WxMpMassSendResult massResult = wxMpService.getMassMessageService()
                 .massGroupMessageSend(massMessage);
-        if(!massResult.getErrorCode().equals("0")) {
+        if(!"0".equals(massResult.getErrorCode())) {
             log.info("error:"+massResult.getErrorMsg());
             throw new ErrorRequestException("发送失败");
         }

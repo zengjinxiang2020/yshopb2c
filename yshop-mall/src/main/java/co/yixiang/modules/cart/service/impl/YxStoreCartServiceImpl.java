@@ -138,7 +138,9 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
             throw new YshopException("该产品库存不足"+cartNum);
         }
 
-        if(cartNum == cart.getCartNum()) return;
+        if(cartNum == cart.getCartNum()) {
+            return;
+        }
 
         YxStoreCart storeCart = new YxStoreCart();
         storeCart.setCartNum(cartNum);
@@ -162,8 +164,12 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
         wrapper.lambda().eq(YxStoreCart::getUid,uid)
                 .eq(YxStoreCart::getIsPay,OrderInfoEnum.PAY_STATUS_0.getValue())
                 .orderByDesc(YxStoreCart::getId);
-        if(status == null) wrapper.lambda().eq(YxStoreCart::getIsNew, CartTypeEnum.NEW_0.getValue());
-        if(StrUtil.isNotEmpty(cartIds)) wrapper.lambda().in(YxStoreCart::getId, Arrays.asList(cartIds.split(",")));
+        if(status == null) {
+            wrapper.lambda().eq(YxStoreCart::getIsNew, CartTypeEnum.NEW_0.getValue());
+        }
+        if(StrUtil.isNotEmpty(cartIds)) {
+            wrapper.lambda().in(YxStoreCart::getId, Arrays.asList(cartIds.split(",")));
+        }
         List<YxStoreCart> carts = yxStoreCartMapper.selectList(wrapper);
 
         List<YxStoreCartQueryVo> valid = new ArrayList<>();

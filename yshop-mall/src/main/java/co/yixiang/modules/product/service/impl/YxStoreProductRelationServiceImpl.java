@@ -62,7 +62,9 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
      */
     @Override
     public void addRroductRelation(long productId,long uid) {
-        if(isProductRelation(productId,uid)) throw new YshopException("已收藏");
+        if(isProductRelation(productId,uid)) {
+            throw new YshopException("已收藏");
+        }
         YxStoreProductRelation storeProductRelation = YxStoreProductRelation.builder()
                 .productId(productId)
                 .uid(uid)
@@ -81,7 +83,9 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
                 .eq(YxStoreProductRelation::getProductId,productId)
                 .eq(YxStoreProductRelation::getUid,uid)
                 .one();
-        if(productRelation == null) throw new YshopException("已取消");
+        if(productRelation == null) {
+            throw new YshopException("已取消");
+        }
 
 
         this.removeById(productRelation.getId());
@@ -100,7 +104,9 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
                 .selectCount(Wrappers.<YxStoreProductRelation>lambdaQuery()
                         .eq(YxStoreProductRelation::getUid,uid)
                         .eq(YxStoreProductRelation::getProductId,productId));
-        if(count > 0) return true;
+        if(count > 0) {
+            return true;
+        }
 
         return false;
     }

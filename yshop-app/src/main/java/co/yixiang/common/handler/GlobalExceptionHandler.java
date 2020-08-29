@@ -62,7 +62,9 @@ public class GlobalExceptionHandler {
 
         Collections.sort(list);
         String msg = "不能为空";
-        if(!list.isEmpty()) msg = list.get(0);
+        if(!list.isEmpty()) {
+            msg = list.get(0);
+        }
         log.error(getApiCodeString(ApiCode.PARAMETER_EXCEPTION) + ":" + JSON.toJSONString(list));
         return ApiResult.fail(ApiCode.PARAMETER_EXCEPTION.getCode(), msg);
     }

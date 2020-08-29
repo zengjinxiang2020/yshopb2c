@@ -96,7 +96,9 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
     @Override
     public void decStockIncSales(int num, Long bargainId) {
         int res = yxStoreBargainMapper.decStockIncSales(num,bargainId);
-        if(res == 0) throw new YshopException("砍价产品库存不足");
+        if(res == 0) {
+            throw new YshopException("砍价产品库存不足");
+        }
     }
 
 //    @Override
@@ -133,14 +135,18 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
             //用户剩余要砍掉的价格
             double surplusPrice = NumberUtil.sub(coverPrice,
                     storeBargainUser.getPrice()).doubleValue();
-            if(surplusPrice == 0) return;
+            if(surplusPrice == 0) {
+                return;
+            }
 
 
             //生成一个区间随机数
             random = OrderUtil.randomNumber(
                     storeBargain.getBargainMinPrice().doubleValue(),
                     storeBargain.getBargainMaxPrice().doubleValue());
-            if(random > surplusPrice) random = surplusPrice;
+            if(random > surplusPrice) {
+                random = surplusPrice;
+            }
         }
 
 
@@ -174,7 +180,9 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
      */
     @Override
     public TopCountVo topCount(Long bargainId) {
-        if(bargainId != null) this.addBargainShare(bargainId);
+        if(bargainId != null) {
+            this.addBargainShare(bargainId);
+        }
         return TopCountVo.builder()
                 .lookCount(yxStoreBargainMapper.lookCount())
                 .shareCount(yxStoreBargainMapper.shareCount())
@@ -214,7 +222,9 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
                 .eq(YxStoreBargainUserHelp::getUid,myUid)
                 .count();
 
-        if(helpCount > 0) userBargainStatus = false;
+        if(helpCount > 0) {
+            userBargainStatus = false;
+        }
 
 
         int count = storeBargainUserHelpService
@@ -268,7 +278,9 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
                 .ge(YxStoreBargain::getStopTime,now)
                 .one();
 
-        if(storeBargain == null) throw new YshopException("砍价已结束");
+        if(storeBargain == null) {
+            throw new YshopException("砍价已结束");
+        }
 
         this.addBargainLook(id);
 

@@ -55,12 +55,16 @@ public class YxSystemConfigServiceImpl extends BaseServiceImpl<SystemConfigMappe
     @Override
     public String getData(String name) {
         String result = redisUtils.getY(name);
-        if(StrUtil.isNotBlank(result)) return result;
+        if(StrUtil.isNotBlank(result)) {
+            return result;
+        }
 
         QueryWrapper<YxSystemConfig> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(YxSystemConfig::getMenuName,name);
         YxSystemConfig systemConfig = this.baseMapper.selectOne(wrapper);
-        if(systemConfig == null) return "";
+        if(systemConfig == null) {
+            return "";
+        }
         return systemConfig.getValue();
     }
 

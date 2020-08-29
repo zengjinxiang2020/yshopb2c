@@ -105,7 +105,9 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
     @Override
     public void decStockIncSales(int num, Long combinationId) {
         int res = yxStoreCombinationMapper.decStockIncSales(num,combinationId);
-        if(res == 0) throw new YshopException("拼团产品库存不足");
+        if(res == 0) {
+            throw new YshopException("拼团产品库存不足");
+        }
     }
 
     /**
@@ -315,7 +317,9 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         //添加商品
         YxStoreCombination yxStoreCombination = new YxStoreCombination();
         BeanUtil.copyProperties(resources,yxStoreCombination,"images");
-        if(resources.getImages().isEmpty()) throw new YshopException("请上传轮播图");
+        if(resources.getImages().isEmpty()) {
+            throw new YshopException("请上传轮播图");
+        }
 
         yxStoreCombination.setPrice(BigDecimal.valueOf(resultDTO.getMinPrice()));
         yxStoreCombination.setCost(resultDTO.getMinCost().intValue());
@@ -379,7 +383,9 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
                 .reduce(Integer::sum)
                 .orElse(0);
 
-        if(stock <= 0) throw new YshopException("库存不能低于0");
+        if(stock <= 0) {
+            throw new YshopException("库存不能低于0");
+        }
 
         return ProductResultDto.builder()
                 .minPrice(minPrice)

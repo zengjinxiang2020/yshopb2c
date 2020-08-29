@@ -68,7 +68,9 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
             levelId =  yxUserLevel.getLevelId();
         }
         int nextLevelId = systemUserLevelService.getNextLevelId(levelId);
-        if(nextLevelId == 0) return false;
+        if(nextLevelId == 0) {
+            return false;
+        }
 
         int finishCount = systemUserTaskService.getTaskComplete(nextLevelId,uid);
 
@@ -95,10 +97,16 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
                 .eq(YxUserLevel::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
                 .eq(YxUserLevel::getUid,uid)
                 .orderByDesc(YxUserLevel::getGrade);
-        if(grade != null) wrapper.lambda().lt(YxUserLevel::getGrade,grade);
+        if(grade != null) {
+            wrapper.lambda().lt(YxUserLevel::getGrade,grade);
+        }
         YxUserLevel userLevel = this.getOne(wrapper,false);
-        if(ObjectUtil.isNull(userLevel)) return null;
-        if(ShopCommonEnum.IS_FOREVER_1.getValue().equals(userLevel.getIsForever())) return userLevel;
+        if(ObjectUtil.isNull(userLevel)) {
+            return null;
+        }
+        if(ShopCommonEnum.IS_FOREVER_1.getValue().equals(userLevel.getIsForever())) {
+            return userLevel;
+        }
         int nowTime = OrderUtil.getSecondTimestampTwo();
         if(nowTime > userLevel.getValidTime()){
             if(ShopCommonEnum.IS_STATUS_1.getValue().equals(userLevel.getStatus())){
@@ -119,7 +127,9 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
     private void setUserLevel(Long uid, int levelId){
         YxSystemUserLevel systemUserLevelQueryVo = systemUserLevelService
                 .getById(levelId);
-        if(ObjectUtil.isNull(systemUserLevelQueryVo)) return;
+        if(ObjectUtil.isNull(systemUserLevelQueryVo)) {
+            return;
+        }
 
         int validTime = systemUserLevelQueryVo.getValidDate() * 86400;
 

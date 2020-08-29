@@ -88,7 +88,9 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
         Integer uid = map.get("uid").asInt();
         Integer scope = map.get("scope").asInt();
         YxUser user = userService.getById(uid);
-        if(user == null) throw new UnAuthenticatedException(ApiCode.NOT_PERMISSION);
+        if(user == null) {
+            throw new UnAuthenticatedException(ApiCode.NOT_PERMISSION);
+        }
         LocalUser.set(user, scope);
     }
 

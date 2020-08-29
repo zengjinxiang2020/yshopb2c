@@ -179,7 +179,9 @@ public class YxShippingTemplatesServiceImpl extends BaseServiceImpl<YxShippingTe
         }
 
 
-        if(shippingTemplatesFrees.isEmpty()) throw new YshopException("请添加包邮区域");
+        if(shippingTemplatesFrees.isEmpty()) {
+            throw new YshopException("请添加包邮区域");
+        }
 
         yxShippingTemplatesFreeService.saveBatch(shippingTemplatesFrees);
 
@@ -243,7 +245,9 @@ public class YxShippingTemplatesServiceImpl extends BaseServiceImpl<YxShippingTe
             }
         }
 
-        if(shippingTemplatesRegions.isEmpty()) throw new BusinessException("请添加区域");
+        if(shippingTemplatesRegions.isEmpty()) {
+            throw new BusinessException("请添加区域");
+        }
 
         yxShippingTemplatesRegionService.saveBatch(shippingTemplatesRegions);
 

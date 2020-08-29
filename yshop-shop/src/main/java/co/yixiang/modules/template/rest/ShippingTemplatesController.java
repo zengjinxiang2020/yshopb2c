@@ -97,7 +97,7 @@ public class ShippingTemplatesController {
         List<YxStoreProduct> productList = yxStoreProductService.list();
         Arrays.asList(ids).forEach(id->{
             for (YxStoreProduct yxStoreProduct : productList) {
-                if(id==yxStoreProduct.getTempId()){
+                if(id.equals(yxStoreProduct.getTempId())){
                     throw new BadRequestException("运费模板存在商品关联，请删除对应商品");
                 }
             }

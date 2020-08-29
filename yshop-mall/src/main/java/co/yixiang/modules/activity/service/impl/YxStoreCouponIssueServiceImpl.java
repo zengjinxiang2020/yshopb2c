@@ -68,10 +68,14 @@ public class YxStoreCouponIssueServiceImpl extends BaseServiceImpl<YxStoreCoupon
     public void issueUserCoupon(Integer id, Long uid) {
         YxStoreCouponIssueQueryVo couponIssueQueryVo = yxStoreCouponIssueMapper
                 .selectOne(id);
-        if(ObjectUtil.isNull(couponIssueQueryVo)) throw new YshopException("领取的优惠劵已领完或已过期");
+        if(ObjectUtil.isNull(couponIssueQueryVo)) {
+            throw new YshopException("领取的优惠劵已领完或已过期");
+        }
 
         int count = this.couponCount(id,uid);
-        if(count > 0) throw new YshopException("已领取过该优惠劵");
+        if(count > 0) {
+            throw new YshopException("已领取过该优惠劵");
+        }
 
         if(couponIssueQueryVo.getRemainCount() <= 0
                 && CouponEnum.PERMANENT_0.getValue().equals(couponIssueQueryVo.getIsPermanent())){
@@ -100,7 +104,9 @@ public class YxStoreCouponIssueServiceImpl extends BaseServiceImpl<YxStoreCoupon
     public List<YxStoreCouponIssueQueryVo> getCouponList(int page, int limit, Long uid,Long productId,Integer type) {
         Page<YxStoreCouponIssue> pageModel = new Page<>(page, limit);
 
-        if(type == null) type = CouponEnum.TYPE_0.getValue();
+        if(type == null) {
+            type = CouponEnum.TYPE_0.getValue();
+        }
         List<YxStoreCouponIssueQueryVo> list = yxStoreCouponIssueMapper
                 .selecCoupontList(pageModel,type,productId);
         for (YxStoreCouponIssueQueryVo couponIssue : list) {

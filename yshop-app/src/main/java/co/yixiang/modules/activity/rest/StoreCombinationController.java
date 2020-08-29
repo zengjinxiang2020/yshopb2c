@@ -91,7 +91,9 @@ public class StoreCombinationController {
     @GetMapping("/combination/detail/{id}")
     @ApiOperation(value = "拼团产品详情",notes = "拼团产品详情")
     public ApiResult<StoreCombinationVo> detail(@PathVariable Long id){
-        if(ObjectUtil.isNull(id)) throw new YshopException("参数错误");
+        if(ObjectUtil.isNull(id)) {
+            throw new YshopException("参数错误");
+        }
         Long uid = LocalUser.getUser().getUid();
         StoreCombinationVo storeCombinationVo = storeCombinationService.getDetail(id,uid);
         storeCombinationVo.setUserCollect(relationService
@@ -106,7 +108,9 @@ public class StoreCombinationController {
     @GetMapping("/combination/pink/{id}")
     @ApiOperation(value = "拼团明细",notes = "拼团明细")
     public ApiResult<PinkInfoVo> pink(@PathVariable Long id){
-        if(ObjectUtil.isNull(id)) throw new YshopException("参数错误");
+        if(ObjectUtil.isNull(id)) {
+            throw new YshopException("参数错误");
+        }
         Long uid = LocalUser.getUser().getUid();
         return ApiResult.ok(storePinkService.pinkInfo(id,uid));
     }

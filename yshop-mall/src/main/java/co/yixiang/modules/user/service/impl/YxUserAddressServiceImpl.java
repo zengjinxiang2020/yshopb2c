@@ -72,7 +72,8 @@ public class YxUserAddressServiceImpl extends BaseServiceImpl<YxUserAddressMappe
      * @param uid uid
      * @param param AddressParam
      */
-    public Long addAndEdit(Long uid,AddressParam param){
+    @Override
+    public Long addAndEdit(Long uid, AddressParam param){
         YxUserAddress userAddress = YxUserAddress.builder()
                 .city(param.getAddress().getCity())
                 .cityId(param.getAddress().getCityId())

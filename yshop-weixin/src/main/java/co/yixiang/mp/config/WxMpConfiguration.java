@@ -62,17 +62,17 @@ public class WxMpConfiguration {
                              MenuHandler menuHandler,MsgHandler msgHandler,UnsubscribeHandler unsubscribeHandler,
                              SubscribeHandler subscribeHandler,ScanHandler scanHandler,
                              RedisUtils redisUtils){
-        this.logHandler = logHandler;
-        this.nullHandler = nullHandler;
-        this.kfSessionHandler = kfSessionHandler;
-        this.storeCheckNotifyHandler = storeCheckNotifyHandler;
-        this.locationHandler = locationHandler;
-        this.menuHandler = menuHandler;
-        this.msgHandler = msgHandler;
-        this.unsubscribeHandler = unsubscribeHandler;
-        this.subscribeHandler = subscribeHandler;
-        this.scanHandler = scanHandler;
-        this.redisUtils = redisUtils;
+        WxMpConfiguration.logHandler = logHandler;
+        WxMpConfiguration.nullHandler = nullHandler;
+        WxMpConfiguration.kfSessionHandler = kfSessionHandler;
+        WxMpConfiguration.storeCheckNotifyHandler = storeCheckNotifyHandler;
+        WxMpConfiguration.locationHandler = locationHandler;
+        WxMpConfiguration.menuHandler = menuHandler;
+        WxMpConfiguration.msgHandler = msgHandler;
+        WxMpConfiguration.unsubscribeHandler = unsubscribeHandler;
+        WxMpConfiguration.subscribeHandler = subscribeHandler;
+        WxMpConfiguration.scanHandler = scanHandler;
+        WxMpConfiguration.redisUtils = redisUtils;
     }
 
 

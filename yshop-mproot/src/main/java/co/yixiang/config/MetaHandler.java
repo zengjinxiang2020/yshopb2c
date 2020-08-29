@@ -59,7 +59,7 @@ public class MetaHandler implements MetaObjectHandler {
                 this.setFieldValByName("delFlag", false, metaObject);
             }
             if(metaObject.hasSetter("addTime")){
-                String timestamp = String.valueOf(new Date().getTime()/1000);
+                String timestamp = String.valueOf(System.currentTimeMillis()/1000);
                 this.setFieldValByName("addTime", Integer.valueOf(timestamp), metaObject);
             }
         } catch (Exception e) {

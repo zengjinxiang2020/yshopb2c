@@ -106,7 +106,9 @@ public class StoreBargainController {
     @GetMapping("/bargain/detail/{id}")
     @ApiOperation(value = "砍价详情",notes = "砍价详情",response = YxStoreBargainQueryVo.class)
     public ApiResult<BargainVo> getYxStoreBargain(@PathVariable Long id){
-        if(ObjectUtil.isNull(id)) throw new YshopException("参数错误");
+        if(ObjectUtil.isNull(id)) {
+            throw new YshopException("参数错误");
+        }
         YxUser yxUser = LocalUser.getUser();
         return ApiResult.ok(storeBargainService.getDetail(id,yxUser));
     }
@@ -270,7 +272,9 @@ public class StoreBargainController {
         Long uid = LocalUser.getUser().getUid();
         List<YxStoreBargainUserQueryVo> yxStoreBargainUserQueryVos = storeBargainUserService
                 .bargainUserList(uid,page,limit);
-        if(yxStoreBargainUserQueryVos.isEmpty()) throw new YshopException("暂无参与砍价");
+        if(yxStoreBargainUserQueryVos.isEmpty()) {
+            throw new YshopException("暂无参与砍价");
+        }
         return ApiResult.ok(yxStoreBargainUserQueryVos);
     }
 

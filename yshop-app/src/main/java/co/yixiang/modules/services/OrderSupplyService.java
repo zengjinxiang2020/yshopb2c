@@ -105,7 +105,9 @@ public class OrderSupplyService {
      */
     public Map<String,Object> check(Long uid,String key, ComputeOrderParam param){
         Map<String,Object> map = Maps.newHashMap();
-        if(StrUtil.isBlank(key)) throw new YshopException("参数错误");
+        if(StrUtil.isBlank(key)) {
+            throw new YshopException("参数错误");
+        }
         YxStoreOrderQueryVo storeOrder = storeOrderService.getOrderInfo(key,uid);
         if(ObjectUtil.isNotNull(storeOrder)){
 
@@ -124,7 +126,9 @@ public class OrderSupplyService {
             if(bargainId > 0){
                 YxStoreBargainUser storeBargainUser = storeBargainUserService
                         .getBargainUserInfo(bargainId,uid);
-                if(storeBargainUser == null) throw new YshopException("砍价失败");
+                if(storeBargainUser == null) {
+                    throw new YshopException("砍价失败");
+                }
                 if(OrderInfoEnum.BARGAIN_STATUS_3.getValue().equals(storeBargainUser.getStatus())) {
                     throw new YshopException("砍价已支付");
                 }

@@ -151,7 +151,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             res = storeProductMapper.decStockIncSales(num,productId);
         }
 
-        if(res == 0) throw new YshopException("商品库存不足");
+        if(res == 0) {
+            throw new YshopException("商品库存不足");
+        }
     }
 
 
@@ -193,7 +195,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                         .eq(YxStoreProductAttrValue::getUnique, unique)
                         .eq(YxStoreProductAttrValue::getProductId, productId));
 
-        if (storeProductAttrValue == null) return 0;
+        if (storeProductAttrValue == null) {
+            return 0;
+        }
         if("pink".equals(type)){
             return storeProductAttrValue.getPinkStock();
         }else if ("seckill".equals(type)){
@@ -482,7 +486,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         //添加商品
         YxStoreProduct yxStoreProduct = new YxStoreProduct();
         BeanUtil.copyProperties(storeProductDto,yxStoreProduct,"sliderImage");
-        if(storeProductDto.getSliderImage().isEmpty()) throw new YshopException("请上传轮播图");
+        if(storeProductDto.getSliderImage().isEmpty()) {
+            throw new YshopException("请上传轮播图");
+        }
 
         yxStoreProduct.setPrice(BigDecimal.valueOf(resultDTO.getMinPrice()));
         yxStoreProduct.setOtPrice(BigDecimal.valueOf(resultDTO.getMinOtPrice()));
@@ -683,7 +689,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                 .reduce(Integer::sum)
                 .orElse(0);
 
-        if(stock <= 0) throw new YshopException("库存不能低于0");
+        if(stock <= 0) {
+            throw new YshopException("库存不能低于0");
+        }
 
         return ProductResultDto.builder()
                 .minPrice(minPrice)
@@ -807,14 +815,20 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         fromatDetailDTOList.stream()
                 .map(FromatDetailDto::getDetail)
                 .forEach(i -> {
-                    if(i == null || i.isEmpty()) throw new YshopException("请至少添加一个规格值哦");
+                    if(i == null || i.isEmpty()) {
+                        throw new YshopException("请至少添加一个规格值哦");
+                    }
                     String str = ArrayUtil.join(i.toArray(),",");
-                    if(str.contains("-")) throw new YshopException("规格值里包含'-',请重新添加");
+                    if(str.contains("-")) {
+                        throw new YshopException("规格值里包含'-',请重新添加");
+                    }
                 });
 
         if(fromatDetailDTOList.size() > 1){
             for (int i=0; i < fromatDetailDTOList.size() - 1;i++){
-                if(i == 0) data = fromatDetailDTOList.get(i).getDetail();
+                if(i == 0) {
+                    data = fromatDetailDTOList.get(i).getDetail();
+                }
                 List<String> tmp = new LinkedList<>();
                 for (String v : data) {
                     for (String g : fromatDetailDTOList.get(i+1).getDetail()) {

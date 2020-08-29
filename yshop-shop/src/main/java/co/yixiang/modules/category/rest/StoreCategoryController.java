@@ -90,7 +90,9 @@ public class StoreCategoryController {
         }
 
         boolean checkResult = yxStoreCategoryService.checkCategory(resources.getPid());
-        if(!checkResult) throw new YshopException("分类最多能添加2级哦");
+        if(!checkResult) {
+            throw new YshopException("分类最多能添加2级哦");
+        }
 
         return new ResponseEntity<>(yxStoreCategoryService.save(resources),HttpStatus.CREATED);
     }
@@ -112,7 +114,9 @@ public class StoreCategoryController {
 
         boolean checkResult = yxStoreCategoryService.checkCategory(resources.getPid());
 
-        if(!checkResult) throw new YshopException("分类最多能添加2级哦");
+        if(!checkResult) {
+            throw new YshopException("分类最多能添加2级哦");
+        }
 
         yxStoreCategoryService.saveOrUpdate(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -142,12 +146,16 @@ public class StoreCategoryController {
         int count = yxStoreCategoryService.lambdaQuery()
                 .eq(YxStoreCategory::getPid,id)
                 .count();
-        if(count > 0) throw new YshopException("请先删除子分类");
+        if(count > 0) {
+            throw new YshopException("请先删除子分类");
+        }
 
         int countP = yxStoreProductService.lambdaQuery()
                 .eq(YxStoreProduct::getCateId,id)
                 .count();
 
-        if(countP > 0) throw new YshopException("当前分类下有商品不可删除");
+        if(countP > 0) {
+            throw new YshopException("当前分类下有商品不可删除");
+        }
     }
 }

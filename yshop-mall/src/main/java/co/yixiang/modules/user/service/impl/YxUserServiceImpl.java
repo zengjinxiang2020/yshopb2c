@@ -167,9 +167,13 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
                 .collect(Collectors.toList());
 
         List<PromUserDto> list = new ArrayList<>();
-        if (userIds.isEmpty()) return list;
+        if (userIds.isEmpty()) {
+            return list;
+        }
 
-        if (StrUtil.isBlank(sort)) sort = "u.uid desc";
+        if (StrUtil.isBlank(sort)) {
+            sort = "u.uid desc";
+        }
 
         Page<YxUser> pageModel = new Page<>(page, limit);
         if (ShopCommonEnum.GRADE_0.getValue().equals(grade)) {//-级
@@ -181,7 +185,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
             List<Long> userIdsT = userListT.stream()
                     .map(YxUser::getUid)
                     .collect(Collectors.toList());
-            if (userIdsT.isEmpty()) return list;
+            if (userIdsT.isEmpty()) {
+                return list;
+            }
             list = yxUserMapper.getUserSpreadCountList(pageModel, userIdsT,
                     keyword, sort);
 
@@ -224,14 +230,18 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
     public void backOrderBrokerage(YxStoreOrderQueryVo order) {
         //如果分销没开启直接返回
         String open = systemConfigService.getData(SystemConfigConstants.STORE_BROKERAGE_OPEN);
-        if(StrUtil.isBlank(open) || ShopCommonEnum.ENABLE_2.getValue().toString().equals(open)) return;
+        if(StrUtil.isBlank(open) || ShopCommonEnum.ENABLE_2.getValue().toString().equals(open)) {
+            return;
+        }
 
 
         //获取购买商品的用户
         YxUser userInfo =  this.getById(order.getUid());
         System.out.println("userInfo:"+userInfo);
         //当前用户不存在 没有上级  直接返回
-        if(ObjectUtil.isNull(userInfo) || userInfo.getSpreadUid() == 0) return;
+        if(ObjectUtil.isNull(userInfo) || userInfo.getSpreadUid() == 0) {
+            return;
+        }
 
 
         YxUser preUser = this.getById(userInfo.getSpreadUid());
@@ -241,7 +251,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
 
         //返佣金额小于等于0 直接返回不返佣金
 
-        if(brokeragePrice.compareTo(BigDecimal.ZERO) <= 0) return;
+        if(brokeragePrice.compareTo(BigDecimal.ZERO) <= 0) {
+            return;
+        }
 
         //计算上级推广员返佣之后的金额
         double balance = NumberUtil.add(preUser.getBrokeragePrice(),brokeragePrice).doubleValue();
@@ -351,9 +363,13 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
                 .last("limit 1");
         YxUserLevel userLevel = userLevelService.getOne(wrapper);
         YxSystemUserLevel systemUserLevel = new YxSystemUserLevel();
-        if(ObjectUtil.isNotNull(userLevel))  systemUserLevel=  systemUserLevelService.getById(userLevel.getLevelId());
+        if(ObjectUtil.isNotNull(userLevel)) {
+            systemUserLevel=  systemUserLevelService.getById(userLevel.getLevelId());
+        }
         int discount = 100;
-        if(ObjectUtil.isNotNull(userLevel)) discount = systemUserLevel.getDiscount().intValue();
+        if(ObjectUtil.isNotNull(userLevel)) {
+            discount = systemUserLevel.getDiscount().intValue();
+        }
         return NumberUtil.mul(NumberUtil.div(discount,100),price);
     }
 
@@ -365,27 +381,43 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
      */
     @Override
     public void setSpread(String spread, long uid) {
-        if(StrUtil.isBlank(spread) || !NumberUtil.isNumber(spread)) return;
+        if(StrUtil.isBlank(spread) || !NumberUtil.isNumber(spread)) {
+            return;
+        }
 
         //如果分销没开启直接返回
         String open = systemConfigService.getData(SystemConfigConstants.STORE_BROKERAGE_OPEN);
-        if(StrUtil.isBlank(open) || ShopCommonEnum.ENABLE_2.getValue().toString().equals(open)) return;
+        if(StrUtil.isBlank(open) || ShopCommonEnum.ENABLE_2.getValue().toString().equals(open)) {
+            return;
+        }
         //当前用户信息
         YxUser userInfo = this.getById(uid);
-        if(ObjectUtil.isNull(userInfo)) return;
+        if(ObjectUtil.isNull(userInfo)) {
+            return;
+        }
 
         //当前用户有上级直接返回
-        if(userInfo.getSpreadUid() != null && userInfo.getSpreadUid() > 0) return;
+        if(userInfo.getSpreadUid() != null && userInfo.getSpreadUid() > 0) {
+            return;
+        }
         //没有推广编号直接返回
         long spreadInt = Long.valueOf(spread);
-        if(spreadInt == 0) return;
-        if(spreadInt == uid) return;
+        if(spreadInt == 0) {
+            return;
+        }
+        if(spreadInt == uid) {
+            return;
+        }
 
         //不能互相成为上下级
         YxUser userInfoT = this.getById(spreadInt);
-        if(ObjectUtil.isNull(userInfoT)) return;
+        if(ObjectUtil.isNull(userInfoT)) {
+            return;
+        }
 
-        if(userInfoT.getSpreadUid() == uid) return;
+        if(userInfoT.getSpreadUid() == uid) {
+            return;
+        }
 
         YxUser yxUser = YxUser.builder()
                 .spreadUid(spreadInt)
@@ -410,7 +442,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
         YxUser userInfoTwo = this.getById(userInfo.getSpreadUid());
 
         //上推广人不存在 或者 上推广人没有上级    直接返回
-        if(ObjectUtil.isNull(userInfoTwo) || userInfoTwo.getSpreadUid() == 0) return;
+        if(ObjectUtil.isNull(userInfoTwo) || userInfoTwo.getSpreadUid() == 0) {
+            return;
+        }
 
 
         //指定分销 判断 上上级是否时推广员  如果不是推广员直接返回
@@ -421,7 +455,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
         BigDecimal brokeragePrice = this.computeProductBrokerage(order,Brokerage.LEVEL_2);
 
         //返佣金额小于等于0 直接返回不返佣金
-        if(brokeragePrice.compareTo(BigDecimal.ZERO) <= 0) return;
+        if(brokeragePrice.compareTo(BigDecimal.ZERO) <= 0) {
+            return;
+        }
 
         //获取上上级推广员信息
         double balance = NumberUtil.add(preUser.getBrokeragePrice(),brokeragePrice).doubleValue();
@@ -627,7 +663,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
         }else{
             mark = "系统扣除了"+param.getMoney()+"余额";
             newMoney = NumberUtil.sub(yxUser.getNowMoney(),param.getMoney()).doubleValue();
-            if(newMoney < 0) newMoney = 0d;
+            if(newMoney < 0) {
+                newMoney = 0d;
+            }
             billService.expend(yxUser.getUid(), "系统减少余额",
                     BillDetailEnum.CATEGORY_1.getValue(),
                     BillDetailEnum.TYPE_7.getValue(),

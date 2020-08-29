@@ -98,7 +98,9 @@ public class UserRechargeController {
         Map<String,Object> map = new LinkedHashMap<>();
         map.put("type",param.getFrom());
         YxSystemGroupData systemGroupData = systemGroupDataService.getById(param.getRecharId());
-        if(systemGroupData == null) throw new YshopException("充值方案不存在");
+        if(systemGroupData == null) {
+            throw new YshopException("充值方案不存在");
+        }
 
         JSONObject jsonObject = JSON.parseObject(systemGroupData.getValue());
         String price = jsonObject.getString("price");

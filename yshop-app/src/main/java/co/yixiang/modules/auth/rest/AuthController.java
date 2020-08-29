@@ -143,7 +143,9 @@ public class AuthController {
                 .eq(YxUser::getUsername,loginDTO.getUsername())
                 .eq(YxUser::getPassword,SecureUtil.md5(loginDTO.getPassword())),false);
 
-        if(yxUser == null) throw new YshopException("账号或者密码不正确");
+        if(yxUser == null) {
+            throw new YshopException("账号或者密码不正确");
+        }
 
         String token =  JwtToken.makeToken(yxUser.getUid());
         String expiresTimeStr = JwtToken.getExpireTime(token);

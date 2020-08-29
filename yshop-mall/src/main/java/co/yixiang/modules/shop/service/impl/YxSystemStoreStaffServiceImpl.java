@@ -58,7 +58,9 @@ public class YxSystemStoreStaffServiceImpl extends BaseServiceImpl<SystemStoreSt
         YxSystemStoreStaff storeStaff = new YxSystemStoreStaff();
         storeStaff.setUid(uid);
         storeStaff.setVerifyStatus(ShopCommonEnum.IS_STATUS_1.getValue());
-        if(storeId != null) storeStaff.setStoreId(storeId);
+        if(storeId != null) {
+            storeStaff.setStoreId(storeId);
+        }
         return this.baseMapper.selectCount(Wrappers.query(storeStaff)) > 0;
     }
 
