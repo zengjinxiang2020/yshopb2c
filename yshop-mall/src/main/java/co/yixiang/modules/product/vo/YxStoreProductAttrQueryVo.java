@@ -32,8 +32,10 @@ public class YxStoreProductAttrQueryVo implements Serializable {
     @ApiModelProperty(value = "属性值")
     private String attrValues;
 
+    @ApiModelProperty(value = "属性值集合")
     private List<AttrValueDto> attrValue;
 
+    @ApiModelProperty(value = "属性")
     private List<String> attrValueArr;
 
 }

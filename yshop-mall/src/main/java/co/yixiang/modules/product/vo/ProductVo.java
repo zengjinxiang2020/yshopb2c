@@ -20,6 +20,7 @@ import java.util.Map;
 @Data
 public class ProductVo{
 
+    @ApiModelProperty(value = "商品信息列表")
     private List<YxStoreProductQueryVo> goodList = new ArrayList();
 
     @ApiModelProperty(value = "商户ID，预留字段")
@@ -43,6 +44,7 @@ public class ProductVo{
     //todo
     private List similarity = new ArrayList();
 
+    @ApiModelProperty(value = "商品信息")
     private YxStoreProductQueryVo storeInfo;
 
     @ApiModelProperty(value = "腾讯地图key")
