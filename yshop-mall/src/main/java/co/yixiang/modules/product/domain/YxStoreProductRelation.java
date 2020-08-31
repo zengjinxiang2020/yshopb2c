@@ -38,7 +38,7 @@ public class YxStoreProductRelation extends BaseDomain {
     @ApiModelProperty(value = "商品ID")
     private Long productId;
 
-    @ApiModelProperty(value = "类型(收藏(collect）、点赞(like))")
+    @ApiModelProperty(value = "类型(收藏(collect）、点赞(like)、足迹(foot))")
     private String type;
 
     @ApiModelProperty(value = "某种类型的商品(普通商品、秒杀商品)")

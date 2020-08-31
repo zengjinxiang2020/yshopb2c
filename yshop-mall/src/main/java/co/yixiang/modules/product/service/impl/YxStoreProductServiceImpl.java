@@ -30,6 +30,7 @@ import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.category.service.YxStoreCategoryService;
 import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
+import co.yixiang.modules.product.domain.YxStoreProductRelation;
 import co.yixiang.modules.product.param.YxStoreProductQueryParam;
 import co.yixiang.modules.product.service.YxStoreProductAttrService;
 import co.yixiang.modules.product.service.YxStoreProductAttrValueService;
@@ -57,6 +58,7 @@ import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.ShopKeyUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -72,13 +74,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -333,6 +329,21 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         //门店
         productVo.setSystemStore(systemStoreService.getStoreInfo(latitude,longitude));
         productVo.setMapKey(RedisUtil.get(ShopKeyUtils.getTengXunMapKey()));
+        //添加足迹
+        YxStoreProductRelation foot = relationService.getOne(new LambdaQueryWrapper<YxStoreProductRelation>()
+                .eq(YxStoreProductRelation::getUid, uid)
+                .eq(YxStoreProductRelation::getProductId, storeProductQueryVo.getId())
+                .eq(YxStoreProductRelation::getType, "foot"));
+        if(ObjectUtil.isNotNull(foot)){
+            foot.setCreateTime(new Date());
+            relationService.saveOrUpdate(foot);
+        }else {
+            YxStoreProductRelation storeProductRelation = new YxStoreProductRelation();
+            storeProductRelation.setProductId(storeProductQueryVo.getId());
+            storeProductRelation.setUid(uid);
+            storeProductRelation.setCreateTime(new Date());
+            relationService.save(storeProductRelation);
+        }
 
         return productVo;
     }

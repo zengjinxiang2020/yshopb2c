@@ -54,7 +54,7 @@ public interface YxStoreProductRelationService extends BaseService<YxStoreProduc
      * @param uid 用户id
      * @return list
      */
-    List<YxStoreProductRelationQueryVo> userCollectProduct(int page, int limit, Long uid);
+    List<YxStoreProductRelationQueryVo> userCollectProduct(int page, int limit, Long uid,String type);
 
 
 

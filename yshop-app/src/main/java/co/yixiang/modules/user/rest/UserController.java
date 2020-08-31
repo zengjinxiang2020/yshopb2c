@@ -111,13 +111,15 @@ public class UserController {
     @GetMapping("/collect/user")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
-            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
+            @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "type", value = "foot为足迹,collect为收藏", paramType = "query", dataType = "String")
     })
-    @ApiOperation(value = "获取收藏产品",notes = "获取收藏产品")
+    @ApiOperation(value = "获取收藏产品,或足迹",notes = "获取收藏产品,或足迹")
     public ApiResult<List<YxStoreProductRelationQueryVo>> collectUser(@RequestParam(value = "page",defaultValue = "1") int page,
-                                                                      @RequestParam(value = "limit",defaultValue = "10") int limit){
+                                                                      @RequestParam(value = "limit",defaultValue = "10") int limit,
+                                                                      @RequestParam(value = "type") String type){
         Long uid = LocalUser.getUser().getUid();
-        return ApiResult.ok(relationService.userCollectProduct(page,limit,uid));
+        return ApiResult.ok(relationService.userCollectProduct(page,limit,uid,type));
     }
 
     /**

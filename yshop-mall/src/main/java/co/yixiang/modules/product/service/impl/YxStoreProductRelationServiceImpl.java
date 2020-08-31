@@ -49,9 +49,9 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
      * @return list
      */
     @Override
-    public List<YxStoreProductRelationQueryVo> userCollectProduct(int page, int limit, Long uid) {
+    public List<YxStoreProductRelationQueryVo> userCollectProduct(int page, int limit, Long uid,String type) {
         Page<YxStoreProductRelation> pageModel = new Page<>(page, limit);
-        List<YxStoreProductRelationQueryVo> list = yxStoreProductRelationMapper.selectList(pageModel,uid);
+        List<YxStoreProductRelationQueryVo> list = yxStoreProductRelationMapper.selectList(pageModel,uid,type);
         return list;
     }
 
@@ -68,6 +68,7 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
         YxStoreProductRelation storeProductRelation = YxStoreProductRelation.builder()
                 .productId(productId)
                 .uid(uid)
+                .type("collect")
                 .build();
         yxStoreProductRelationMapper.insert(storeProductRelation);
     }
@@ -82,6 +83,7 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
         YxStoreProductRelation productRelation = this.lambdaQuery()
                 .eq(YxStoreProductRelation::getProductId,productId)
                 .eq(YxStoreProductRelation::getUid,uid)
+                .eq(YxStoreProductRelation::getType,"collect")
                 .one();
         if(productRelation == null) {
             throw new YshopException("已取消");
@@ -103,6 +105,7 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
         int count = yxStoreProductRelationMapper
                 .selectCount(Wrappers.<YxStoreProductRelation>lambdaQuery()
                         .eq(YxStoreProductRelation::getUid,uid)
+                        .eq(YxStoreProductRelation::getType,"collect")
                         .eq(YxStoreProductRelation::getProductId,productId));
         if(count > 0) {
             return true;
