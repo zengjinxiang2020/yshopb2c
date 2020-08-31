@@ -209,7 +209,8 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
             pinkBool = PinkEnum.PINK_BOOL_MINUS_1.getValue();
             isOk = PinkEnum.IS_OK_0.getValue();
         }else{
-            if(count < 1){//组团完成
+            //组团完成
+            if(count < 1){
                 isOk = PinkEnum.IS_OK_1.getValue();
                 pinkBool = this.pinkComplete(uidAll,idAll,uid,pinkT);
             }else{

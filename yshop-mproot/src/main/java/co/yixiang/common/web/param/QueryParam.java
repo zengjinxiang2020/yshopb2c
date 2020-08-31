@@ -24,6 +24,7 @@ public abstract class QueryParam implements Serializable{
     @ApiModelProperty(value = "搜索字符串")
     private String keyword;
 
+    @ApiModelProperty(value = "当前第几页")
     public void setCurrent(Integer current) {
 	    if (current == null || current <= 0){
 	        this.page = 1;
