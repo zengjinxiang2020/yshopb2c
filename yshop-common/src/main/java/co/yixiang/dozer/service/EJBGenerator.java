@@ -6,6 +6,8 @@
 package co.yixiang.dozer.service;
 
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.domain.PageResult;
+import com.github.pagehelper.PageInfo;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -64,5 +66,10 @@ public class EJBGenerator implements IGenerator {
             arr[i] = this.dozerMapper.map(s[i], clz);
         }
         return arr;
+    }
+
+    @Override
+    public <T, S> PageResult<T> convertPageInfo(PageInfo<S> s, Class<T> clz) {
+        return new PageResult(s.getTotal(), convert(s.getList(), clz));
     }
 }

@@ -52,7 +52,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-
+import co.yixiang.base.PageResult;
 /**
 * @author ${author}
 * @date ${date}
@@ -67,13 +67,10 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Mapper,
 
     @Override
     //@Cacheable
-    public Map<String, Object> queryAll(${className}QueryCriteria criteria, Pageable pageable) {
+    public PageResult<${className}Dto> queryAll(${className}QueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
         PageInfo<${className}> page = new PageInfo<>(queryAll(criteria));
-        Map<String, Object> map = new LinkedHashMap<>(2);
-        map.put("content", generator.convert(page.getList(), ${className}Dto.class));
-        map.put("totalElements", page.getTotal());
-        return map;
+        return generator.convertPageInfo(page,${className}VO.class);
     }
 
 

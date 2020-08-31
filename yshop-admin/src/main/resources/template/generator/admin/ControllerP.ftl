@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-
+import co.yixiang.domain.PageResult;
 /**
 * @author ${author}
 * @date ${date}
@@ -51,7 +51,7 @@ public class ${className}Controller {
     @Log("查询${apiAlias}")
     @ApiOperation("查询${apiAlias}")
     @PreAuthorize("@el.check('admin','${changeClassName}:list')")
-    public ResponseEntity<Object> get${className}s(${className}QueryCriteria criteria, Pageable pageable){
+    public ResponseEntity<PageResult<${className}Dto>> get${className}s(${className}QueryCriteria criteria, Pageable pageable){
         return new ResponseEntity<>(${changeClassName}Service.queryAll(criteria,pageable),HttpStatus.OK);
     }
 

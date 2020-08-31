@@ -6,6 +6,8 @@
 package co.yixiang.dozer.service;
 
 import co.yixiang.common.web.vo.Paging;
+import co.yixiang.domain.PageResult;
+import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 import java.util.Set;
@@ -80,4 +82,10 @@ public interface IGenerator {
      * @Time 2018年5月9日 下午3:54:57
      */
     <T, S> T[] convert(S[] s, Class<T> clz);
+
+    /**
+     * 分页信息转换
+     * @return {@link PageResult<T>}
+     */
+    <T, S> PageResult<T> convertPageInfo(PageInfo<S> s, Class<T> clz);
 }

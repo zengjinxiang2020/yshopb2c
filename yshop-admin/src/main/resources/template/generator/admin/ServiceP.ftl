@@ -16,20 +16,20 @@ import java.util.Map;
 import java.util.List;
 import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
-
+import co.yixiang.base.PageResult;
 /**
 * @author ${author}
 * @date ${date}
 */
 public interface ${className}Service  extends BaseService<${className}>{
 
-/**
+    /**
     * 查询数据分页
     * @param criteria 条件
     * @param pageable 分页参数
     * @return Map<String,Object>
     */
-    Map<String,Object> queryAll(${className}QueryCriteria criteria, Pageable pageable);
+    PageResult<${className}Dto>  queryAll(${className}QueryCriteria criteria, Pageable pageable);
 
     /**
     * 查询所有数据不分页
