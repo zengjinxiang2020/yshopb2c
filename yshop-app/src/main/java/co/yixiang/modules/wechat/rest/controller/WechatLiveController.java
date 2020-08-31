@@ -15,6 +15,7 @@ import co.yixiang.modules.wechat.domain.YxWechatLive;
 import co.yixiang.modules.wechat.service.YxWechatLiveService;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveQueryCriteria;
+import co.yixiang.modules.wechat.vo.WechatLiveVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -44,7 +45,7 @@ public class WechatLiveController {
 
     @GetMapping("yxWechatLive")
     @ApiOperation("查询所有直播间")
-    public ApiResult<Map<String,Object>> getYxWechatLives(YxWechatLiveQueryCriteria criteria, Pageable pageable){
+    public ApiResult<WechatLiveVo> getYxWechatLives(YxWechatLiveQueryCriteria criteria, Pageable pageable){
         return ApiResult.ok(yxWechatLiveService.queryAll(criteria,pageable));
     }
 

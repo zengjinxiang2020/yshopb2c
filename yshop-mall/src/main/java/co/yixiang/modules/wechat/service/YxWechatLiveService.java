@@ -12,6 +12,7 @@ import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.wechat.domain.YxWechatLive;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveQueryCriteria;
+import co.yixiang.modules.wechat.vo.WechatLiveVo;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +41,7 @@ public interface YxWechatLiveService  extends BaseService<YxWechatLive>{
     * @param pageable 分页参数
     * @return Map<String,Object>
     */
-    Map<String,Object> queryAll(YxWechatLiveQueryCriteria criteria, Pageable pageable);
+    WechatLiveVo queryAll(YxWechatLiveQueryCriteria criteria, Pageable pageable);
 
     /**
     * 查询所有数据不分页

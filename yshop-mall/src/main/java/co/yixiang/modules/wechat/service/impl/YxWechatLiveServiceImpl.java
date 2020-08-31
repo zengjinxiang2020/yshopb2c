@@ -25,6 +25,7 @@ import co.yixiang.modules.wechat.service.dto.YxWechatLiveDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveGoodsDto;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveQueryCriteria;
 import co.yixiang.modules.wechat.service.mapper.YxWechatLiveMapper;
+import co.yixiang.modules.wechat.vo.WechatLiveVo;
 import co.yixiang.tools.config.WxMaConfiguration;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.OrderUtil;
@@ -88,10 +89,10 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
     }
     @Override
     //@Cacheable
-    public Map<String, Object> queryAll(YxWechatLiveQueryCriteria criteria, Pageable pageable) {
+    public WechatLiveVo queryAll(YxWechatLiveQueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
         PageInfo<YxWechatLive> page = new PageInfo<>(queryAll(criteria));
-        Map<String, Object> map = new LinkedHashMap<>(2);
+        WechatLiveVo wechatLiveVo = new WechatLiveVo();
 //            List<WxMaLiveResult.RoomInfo> liveInfos = wxMaLiveService.getLiveInfos();
         List<YxWechatLiveDto> liveDtos = generator.convert(page.getList(), YxWechatLiveDto.class);
         //获取所有商品
@@ -104,9 +105,9 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
             }
             i.setId(i.getRoomid());
         });
-        map.put("content",liveDtos);
-            map.put("totalElements", page.getTotal());
-        return map;
+        wechatLiveVo.setContent(liveDtos);
+        wechatLiveVo.setTotalElements(page.getTotal());
+        return wechatLiveVo;
     }
     @Override
     public boolean saveLive(YxWechatLive resources){
