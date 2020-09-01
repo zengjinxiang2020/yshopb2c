@@ -144,7 +144,18 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         return baseMapper.selectList(QueryHelpPlus.getPredicate(YxWechatLive.class, criteria));
     }
 
-
+    @Override
+    //@Cacheable
+    public List<WxMaLiveResult.LiveReplay> getLiveReplay(Integer roomId){
+        WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+        WxMaLiveResult get_replay = new WxMaLiveResult();
+        try {
+             get_replay = wxMaService.getLiveService().getLiveReplay("get_replay", roomId, 0, 100);
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+        }
+        return get_replay.getLiveReplay();
+    }
     @Override
     public void download(List<YxWechatLiveDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();

@@ -8,6 +8,7 @@
 */
 package co.yixiang.modules.wechat.rest.controller;
 
+import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
 import co.yixiang.api.ApiResult;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.logging.aop.log.Log;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,5 +50,9 @@ public class WechatLiveController {
     public ApiResult<WechatLiveVo> getYxWechatLives(YxWechatLiveQueryCriteria criteria, Pageable pageable){
         return ApiResult.ok(yxWechatLiveService.queryAll(criteria,pageable));
     }
-
+    @GetMapping("yxWechatLive/getLiveReplay/{id}")
+    @ApiOperation("获取直播回放")
+    public ApiResult<List<WxMaLiveResult.LiveReplay>>  getLiveReplay(@PathVariable Integer id){
+        return ApiResult.ok(yxWechatLiveService.getLiveReplay(id));
+    }
 }

@@ -8,6 +8,7 @@
 */
 package co.yixiang.modules.wechat.service;
 
+import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.wechat.domain.YxWechatLive;
 import co.yixiang.modules.wechat.service.dto.YxWechatLiveDto;
@@ -60,4 +61,11 @@ public interface YxWechatLiveService  extends BaseService<YxWechatLive>{
     * @throws IOException /
     */
     void download(List<YxWechatLiveDto> all, HttpServletResponse response) throws IOException;
+
+    /**
+     * 获取直播回放
+     * @param roomId
+     * @return
+     */
+     List<WxMaLiveResult.LiveReplay> getLiveReplay(Integer roomId);
 }
