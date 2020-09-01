@@ -14,11 +14,15 @@ import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.ProductEnum;
+import co.yixiang.modules.activity.service.YxStoreCombinationService;
+import co.yixiang.modules.activity.service.YxStoreSeckillService;
+import co.yixiang.modules.activity.vo.YxStoreSeckillQueryVo;
 import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.modules.product.vo.YxSystemStoreQueryVo;
 import co.yixiang.modules.shop.param.YxSystemStoreQueryParam;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
+import co.yixiang.modules.shop.vo.IndexVo;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.ShopKeyUtils;
@@ -54,35 +58,26 @@ public class IndexController {
     private final YxSystemGroupDataService systemGroupDataService;
     private final YxStoreProductService storeProductService;
     private final YxSystemStoreService systemStoreService;
-
+    private final YxStoreCombinationService storeCombinationService;
+    private final YxStoreSeckillService storeSeckillService;
 
     @Cacheable(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY)
     @GetMapping("/index")
     @ApiOperation(value = "首页数据",notes = "首页数据")
-    public ApiResult<Map<String,Object>> index(){
-
-        Map<String,Object> map = new LinkedHashMap<>();
-        //banner
-        map.put("banner",systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_BANNER));
-        //首页按钮
-        map.put("menus",systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_MENUS));
-
-
-        //精品推荐
-        map.put("bastList",storeProductService.getList(1,6, ProductEnum.TYPE_1.getValue()));
-        //首发新品
-        map.put("firstList",storeProductService.getList(1,6,ProductEnum.TYPE_3.getValue()));
-        //猜你喜欢
-        map.put("benefit",storeProductService.getList(1,10,ProductEnum.TYPE_4.getValue()));
-        //热门榜单
-        map.put("likeInfo",storeProductService.getList(1,3,ProductEnum.TYPE_2.getValue()));
-
-        //滚动
-        map.put("roll",systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_ROLL_NEWS));
-
-        map.put("mapKey",RedisUtil.get(ShopKeyUtils.getTengXunMapKey()));
-
-        return ApiResult.ok(map);
+    public ApiResult<IndexVo> index(){
+        IndexVo indexVo = IndexVo.builder()
+                .banner(systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_BANNER))
+                .bastList(storeProductService.getList(1,6, ProductEnum.TYPE_1.getValue()))
+                .benefit(storeProductService.getList(1,10,ProductEnum.TYPE_4.getValue()))
+                .combinationList(storeCombinationService.getList(1,4))
+                .firstList(storeProductService.getList(1,6,ProductEnum.TYPE_3.getValue()))
+                .likeInfo(storeProductService.getList(1,3,ProductEnum.TYPE_2.getValue()))
+                .mapKey(RedisUtil.get(ShopKeyUtils.getTengXunMapKey()))
+                .menus(systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_MENUS))
+                .roll(systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_ROLL_NEWS))
+                .seckillList(storeSeckillService.getList(1, 4))
+                .build();
+        return ApiResult.ok(indexVo);
     }
 
     @GetMapping("/search/keyword")

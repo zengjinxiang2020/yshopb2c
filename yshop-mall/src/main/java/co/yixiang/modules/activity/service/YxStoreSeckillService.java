@@ -58,6 +58,13 @@ public interface YxStoreSeckillService  extends BaseService<YxStoreSeckill>{
      */
     List<YxStoreSeckillQueryVo> getList(int page, int limit, int time);
 
+    /**
+     * 秒杀产品列表(首页用)
+     * @param page page
+     * @param limit limit
+     * @return list
+     */
+    List<YxStoreSeckillQueryVo> getList(int page, int limit);
 
     /**
     * 查询数据分页

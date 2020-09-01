@@ -182,7 +182,32 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
         });
         return yxStoreSeckillQueryVos;
     }
-
+    /**
+     * 秒杀产品列表（首页用）
+     * @param page page
+     * @param limit limit
+     * @return list
+     */
+    @Override
+    public List<YxStoreSeckillQueryVo> getList(int page, int limit) {
+        Date nowTime = new Date();
+        Page<YxStoreSeckill> pageModel = new Page<>(page, limit);
+        QueryWrapper<YxStoreSeckill> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(YxStoreSeckill::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
+                .eq(YxStoreSeckill::getIsHot,1)
+                .le(YxStoreSeckill::getStartTime,nowTime)
+                .ge(YxStoreSeckill::getStopTime,nowTime)
+                .orderByDesc(YxStoreSeckill::getSort);
+        List<YxStoreSeckillQueryVo> yxStoreSeckillQueryVos = generator.convert
+                (yxStoreSeckillMapper.selectPage(pageModel,wrapper).getRecords(),
+                        YxStoreSeckillQueryVo.class);
+        yxStoreSeckillQueryVos.forEach(item->{
+            Integer sum = item.getSales() + item.getStock();
+            item.setPercent(NumberUtil.round(NumberUtil.mul(NumberUtil.div(item.getSales(),sum),
+                    100),0).intValue());
+        });
+        return yxStoreSeckillQueryVos;
+    }
     @Override
     //@Cacheable
     public Map<String, Object> queryAll(YxStoreSeckillQueryCriteria criteria, Pageable pageable) {
