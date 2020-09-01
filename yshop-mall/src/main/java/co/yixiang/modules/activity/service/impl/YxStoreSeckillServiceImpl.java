@@ -217,9 +217,6 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
             map.put("轮播图", yxStoreSeckill.getImages());
             map.put("活动标题", yxStoreSeckill.getTitle());
             map.put("简介", yxStoreSeckill.getInfo());
-            map.put("价格", yxStoreSeckill.getPrice());
-            map.put("成本", yxStoreSeckill.getCost());
-            map.put("原价", yxStoreSeckill.getOtPrice());
             map.put("返多少积分", yxStoreSeckill.getGiveIntegral());
             map.put("排序", yxStoreSeckill.getSort());
             map.put("库存", yxStoreSeckill.getStock());
@@ -251,8 +248,6 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
             throw new YshopException("请上传轮播图");
         }
 
-        yxStoreSeckill.setPrice(BigDecimal.valueOf(resultDTO.getMinPrice()));
-        yxStoreSeckill.setCost(new BigDecimal(resultDTO.getMinCost()));
         yxStoreSeckill.setStock(resultDTO.getStock());
         yxStoreSeckill.setImages(String.join(",", resources.getImages()));
         this.saveOrUpdate(yxStoreSeckill);

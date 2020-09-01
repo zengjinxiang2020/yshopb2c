@@ -71,24 +71,6 @@ public class YxStoreSeckill extends BaseDomain {
     private String info;
 
 
-    /** 价格 */
-    @NotNull(message = "请输入秒杀价")
-    @DecimalMin(value="0.00", message = "秒杀价不在合法范围内" )
-    @DecimalMax(value="99999999.99", message = "秒杀价不在合法范围内")
-    @ApiModelProperty(value = "秒杀价")
-    private BigDecimal price;
-
-
-    /** 成本 */
-    @ApiModelProperty(value = "成本价")
-    private BigDecimal cost;
-
-
-    /** 原价 */
-    @ApiModelProperty(value = "原价")
-    private BigDecimal otPrice;
-
-
     /** 返多少积分 */
     @ApiModelProperty(value = "返多少积分")
     private BigDecimal giveIntegral;

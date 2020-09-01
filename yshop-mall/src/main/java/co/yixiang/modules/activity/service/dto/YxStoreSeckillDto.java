@@ -51,15 +51,6 @@ public class YxStoreSeckillDto implements Serializable {
     // 简介
     private String info;
 
-    // 价格
-    private BigDecimal price;
-
-    // 成本
-    private BigDecimal cost;
-
-    // 原价
-    private BigDecimal otPrice;
-
     // 返多少积分
     private BigDecimal giveIntegral;
 
