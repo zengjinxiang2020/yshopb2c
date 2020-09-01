@@ -125,11 +125,13 @@ public class DeptController {
                 }
             }
         }
-        try {
-            deptService.removeByIds(deptIds);
-        }catch (Throwable e){
-            throw new BadRequestException( "所选部门中存在岗位或者角色关联，请取消关联后再试");
-        }
+
+        deptService.delDepts(deptIds);
+//        try {
+//            deptService.delDepts(deptIds);
+//        }catch (Throwable e){
+//            throw new BadRequestException( "所选部门中存在岗位或者角色关联，请取消关联后再试");
+//        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
