@@ -75,6 +75,8 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProduct
     public ReplyCountVo getReplyCount(long productId) {
         int sumCount = productReplyCount(productId);
 
+        if(sumCount == 0) return new ReplyCountVo();
+
         //好评
         int goodCount = this.baseMapper.selectCount(Wrappers.<YxStoreProductReply>lambdaQuery()
                 .eq(YxStoreProductReply::getProductId,productId)
@@ -245,7 +247,7 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProduct
     public List<YxStoreProductReply> queryAll(YxStoreProductReplyQueryCriteria criteria){
         List<YxStoreProductReply> storeProductReplyList =  baseMapper.selectList(QueryHelpPlus.getPredicate(YxStoreProductReply.class, criteria));
         storeProductReplyList.forEach(yxStoreProductReply->{
-            yxStoreProductReply.setUser(yxUserService.getById(yxStoreProductReply.getUid()));;
+            yxStoreProductReply.setUser(yxUserService.getById(yxStoreProductReply.getUid()));
             yxStoreProductReply.setStoreProduct(yxStoreProductService.getById(yxStoreProductReply.getProductId()));
         });
         return storeProductReplyList;
