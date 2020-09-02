@@ -213,6 +213,10 @@ public class StoreOrderController {
             return ApiResult.ok(map,"支付成功");
         }
 
+        //处理是否已经修改过订单价格，如果修改用新的单号去拉起支付
+        if(StrUtil.isNotBlank(storeOrder.getExtendOrderId())) orderId = storeOrder.getExtendOrderId();
+
+
         orderSupplyService.goPay(map,orderId,uid, param.getPaytype(),param.getFrom(),orderDTO);
 
         return ApiResult.ok(map);
