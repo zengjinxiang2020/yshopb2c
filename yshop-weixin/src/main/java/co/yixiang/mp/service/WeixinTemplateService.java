@@ -182,6 +182,7 @@ public class WeixinTemplateService {
      */
     private String getTempId(String key){
         YxWechatTemplate yxWechatTemplate = yxWechatTemplateService.lambdaQuery()
+                .eq(YxWechatTemplate::getType,"template")
                 .eq(YxWechatTemplate::getTempkey,key)
                 .one();
         if (yxWechatTemplate == null) {

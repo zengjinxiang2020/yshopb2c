@@ -3,11 +3,13 @@ package co.yixiang.mp.service;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import cn.hutool.core.util.StrUtil;
-import co.yixiang.config.SubscribeProperties;
+import co.yixiang.api.YshopException;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
+import co.yixiang.modules.wechat.domain.YxWechatTemplate;
+import co.yixiang.modules.wechat.service.YxWechatTemplateService;
 import co.yixiang.mp.enums.WechatTempateEnum;
 import co.yixiang.tools.config.WxMaConfiguration;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -29,11 +31,7 @@ public class WeiXinSubscribeService {
     @Autowired
     private YxUserService userService;
     @Autowired
-    private SubscribeProperties subscribeProperties;
-
-
-
-
+    private YxWechatTemplateService yxWechatTemplateService;
     /**
      * 充值成功通知
      * @param time 时间
@@ -163,13 +161,14 @@ public class WeiXinSubscribeService {
      * @return string
      */
     private String getTempId(String key){
-        AtomicReference<String> tempId = new AtomicReference<>();
-        subscribeProperties.getSubscribeMaps().forEach((k,v)->{
-            if(key.equals(k)){
-                tempId.set(v);
-            }
-        });
-        return tempId.get();
+        YxWechatTemplate yxWechatTemplate = yxWechatTemplateService.lambdaQuery()
+                .eq(YxWechatTemplate::getType,"subscribe")
+                .eq(YxWechatTemplate::getTempkey,key)
+                .one();
+        if (yxWechatTemplate == null) {
+            throw new YshopException("请后台配置key:" + key + "订阅消息id");
+        }
+        return yxWechatTemplate.getTempid();
     }
 
 

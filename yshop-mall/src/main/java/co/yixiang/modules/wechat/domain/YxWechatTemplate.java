@@ -47,6 +47,8 @@ public class YxWechatTemplate extends BaseDomain {
     /** 状态 */
     private Integer status;
 
+    /** 类型：template:模板消息 subscribe:订阅消息 */
+    private String type;
 
     public void copy(YxWechatTemplate source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

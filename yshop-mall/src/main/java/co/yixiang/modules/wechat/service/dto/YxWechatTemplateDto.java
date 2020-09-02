@@ -36,4 +36,6 @@ public class YxWechatTemplateDto implements Serializable {
 
     /** 状态 */
     private Integer status;
+    /** 类型：template:模板消息 subscribe:订阅消息 */
+    private String type;
 }
