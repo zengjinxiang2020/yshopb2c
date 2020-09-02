@@ -2572,7 +2572,11 @@ INSERT INTO `menu` VALUES (244, b'0', '拼团商品添加', 'activity/combinatio
 INSERT INTO `menu` VALUES (245, b'0', '拼团商品修改', 'activity/combination/form', 63, 3, 'anq', 'combinationEdit/:id', b'0', b'1', 'CombinationEdit', '2019-12-24 13:02:23', 'YXSTORECOMBINATION_EDIT', 1, '2020-07-10 16:45:33', 0);
 INSERT INTO `menu` VALUES (246, b'0', '秒杀商品添加', 'activity/seckill/form', 63, 999, NULL, 'secKillAdd', b'0', b'1', 'SecKillAdd', '2020-08-13 21:28:45', 'YXSTORESECKILL_EDIT', 1, '2020-08-13 21:31:26', 0);
 INSERT INTO `menu` VALUES (247, b'0', '秒杀商品修改', 'activity/seckill/form', 63, 3, 'anq', 'secKillEdit/:id', b'0', b'1', 'SecKillEdit', '2019-12-24 13:02:23', 'YXSTORESECKILL_EDIT', 1, '2020-07-10 16:45:33', 0);
-
+INSERT INTO `menu` VALUES (248, b'0', '多级菜单', NULL, 0, 999, 'menu', 'nested', b'0', b'0', '-', '2020-08-19 11:31:10', NULL, 0, NULL, 0);
+INSERT INTO `menu` VALUES (249, b'0', '二级菜单1', 'nested/menu1/index', 248, 999, 'menu', 'menu1', b'0', b'0', '-', '2020-08-19 11:34:34', NULL, 1, NULL, 0);
+INSERT INTO `menu` VALUES (250, b'0', '三级菜单1', 'nested/menu1/menu1-1', 249, 999, 'menu', 'menu1-1', b'0', b'0', '-', '2020-08-19 11:35:52', NULL, 1, NULL, 0);
+INSERT INTO `menu` VALUES (251, b'0', '三级菜单2', 'nested/menu1/menu1-2', 249, 999, 'menu', 'menu1-2', b'0', b'0', '-', '2020-08-19 11:37:48', NULL, 1, NULL, 0);
+INSERT INTO `menu` VALUES (252, b'0', '二级菜单2', 'nested/menu2/index', 248, 999, 'menu', 'menu2', b'0', b'0', '-', '2020-08-19 11:38:35', NULL, 1, NULL, 0);
 -- ----------------------------
 -- Table structure for monitor_server
 -- ----------------------------
@@ -2984,6 +2988,11 @@ INSERT INTO `roles_menus` VALUES (244, 1);
 INSERT INTO `roles_menus` VALUES (245, 1);
 INSERT INTO `roles_menus` VALUES (246, 1);
 INSERT INTO `roles_menus` VALUES (247, 1);
+INSERT INTO `roles_menus` VALUES (248, 1);
+INSERT INTO `roles_menus` VALUES (249, 1);
+INSERT INTO `roles_menus` VALUES (250, 1);
+INSERT INTO `roles_menus` VALUES (251, 1);
+INSERT INTO `roles_menus` VALUES (252, 1);
 INSERT INTO `roles_menus` VALUES (1, 2);
 INSERT INTO `roles_menus` VALUES (2, 2);
 INSERT INTO `roles_menus` VALUES (3, 2);
