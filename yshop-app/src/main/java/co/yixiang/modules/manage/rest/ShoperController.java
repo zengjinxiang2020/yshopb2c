@@ -12,7 +12,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
-import co.yixiang.common.aop.AppLog;
+import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.modules.manage.param.OrderPriceParam;
 import co.yixiang.modules.manage.param.ShoperQueryParam;

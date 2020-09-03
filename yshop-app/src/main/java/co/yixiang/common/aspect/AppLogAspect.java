@@ -43,7 +43,7 @@ public class AppLogAspect {
     /**
      * 配置切入点
      */
-    @Pointcut("@annotation(co.yixiang.logging.aop.log.Log)")
+    @Pointcut("@annotation(co.yixiang.logging.aop.log.AppLog)")
     public void logPointcut() {
         // 该方法无方法体,主要为了让同类中其他方法使用此切入点
     }
@@ -61,7 +61,7 @@ public class AppLogAspect {
         Log log = new Log("INFO",System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
         HttpServletRequest request = RequestHolder.getHttpServletRequest();
-        logService.save(getUsername(),
+        logService.saveApp(getUsername(),
                 StringUtils.getIp(RequestHolder.getHttpServletRequest()),joinPoint,
                 log,getUid());
         return result;

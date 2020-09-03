@@ -10,7 +10,7 @@ package co.yixiang.modules.cart.rest;
 
 import co.yixiang.annotation.Limit;
 import co.yixiang.api.ApiResult;
-import co.yixiang.common.aop.AppLog;
+import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;

@@ -59,6 +59,15 @@ public interface LogService extends BaseService<Log> {
     void save(String username, String ip, ProceedingJoinPoint joinPoint, Log log,Long uid);
 
     /**
+     * 保存app日志数据
+     * @param username 用户
+     * @param ip 请求IP
+     * @param joinPoint /
+     * @param log 日志实体
+     */
+    @Async
+    void saveApp(String username, String ip, ProceedingJoinPoint joinPoint, Log log,Long uid);
+    /**
      * 查询异常详情
      * @param id 日志ID
      * @return Object

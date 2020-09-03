@@ -3,7 +3,7 @@
  * All rights reserved, Designed By www.yixiang.co
 
  */
-package co.yixiang.common.aop;
+package co.yixiang.logging.aop.log;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
