@@ -5,6 +5,7 @@
  */
 package co.yixiang.tools.rest;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.enums.ShopCommonEnum;
@@ -15,6 +16,7 @@ import co.yixiang.tools.service.dto.LocalStorageDto;
 import co.yixiang.utils.RedisUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,7 @@ import java.util.Map;
 @Api(tags = "上传统一管理")
 @RestController
 @RequestMapping("/api/upload")
+@Slf4j
 @SuppressWarnings("unchecked")
 public class UploadController {
 
@@ -64,6 +67,9 @@ public class UploadController {
                 throw new YshopException("本地上传,请先登陆系统配置后台/移动端API地址");
             }
             for (MultipartFile file : files) {
+                if(ObjectUtil.isNull(file)){
+                    log.info("文件流为空");
+                }
                 LocalStorageDto localStorageDTO = localStorageService.create(name, file);
                 if ("".equals(url.toString())) {
                     url = url.append(localUrl + "/file/" + localStorageDTO.getType() + "/" + localStorageDTO.getRealName());
