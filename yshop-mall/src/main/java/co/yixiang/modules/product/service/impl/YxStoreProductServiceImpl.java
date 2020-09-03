@@ -342,6 +342,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             storeProductRelation.setProductId(storeProductQueryVo.getId());
             storeProductRelation.setUid(uid);
             storeProductRelation.setCreateTime(new Date());
+            storeProductRelation.setType("foot");
             relationService.save(storeProductRelation);
         }
 
