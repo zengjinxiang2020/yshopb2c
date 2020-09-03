@@ -10,9 +10,14 @@ package co.yixiang.modules.product.service;
 
 
 import co.yixiang.common.service.BaseService;
+import co.yixiang.domain.PageResult;
 import co.yixiang.modules.product.domain.YxStoreProductRelation;
+import co.yixiang.modules.product.service.dto.YxStoreProductRelationDto;
+import co.yixiang.modules.product.service.dto.YxStoreProductRelationQueryCriteria;
 import co.yixiang.modules.product.vo.YxStoreProductRelationQueryVo;
-
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.data.domain.Pageable;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -56,7 +61,28 @@ public interface YxStoreProductRelationService extends BaseService<YxStoreProduc
      */
     List<YxStoreProductRelationQueryVo> userCollectProduct(int page, int limit, Long uid,String type);
 
+    /**
+     * 查询数据分页
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return Map<String,Object>
+     */
+    PageResult<YxStoreProductRelationDto> queryAll(YxStoreProductRelationQueryCriteria criteria, Pageable pageable);
 
+    /**
+     * 查询所有数据不分页
+     * @param criteria 条件参数
+     * @return List<YxStoreProductRelationDto>
+     */
+    List<YxStoreProductRelation> queryAll(YxStoreProductRelationQueryCriteria criteria);
+
+    /**
+     * 导出数据
+     * @param all 待导出的数据
+     * @param response /
+     * @throws IOException /
+     */
+    void download(List<YxStoreProductRelationDto> all, HttpServletResponse response) throws IOException;
 
 
 }
