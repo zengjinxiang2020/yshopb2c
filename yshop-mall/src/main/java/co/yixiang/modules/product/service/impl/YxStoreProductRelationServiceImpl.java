@@ -68,7 +68,7 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
     @Override
     public List<YxStoreProductRelationQueryVo> userCollectProduct(int page, int limit, Long uid,String type) {
         Page<YxStoreProductRelation> pageModel = new Page<>(page, limit);
-        List<YxStoreProductRelationQueryVo> list = yxStoreProductRelationMapper.selectList(pageModel,uid,type);
+        List<YxStoreProductRelationQueryVo> list = yxStoreProductRelationMapper.selectRelationList(pageModel,uid,type);
         return list;
     }
 
@@ -139,7 +139,7 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
         PageResult<YxStoreProductRelationDto> relationDtoPageResult = generator.convertPageInfo(page, YxStoreProductRelationDto.class);
         relationDtoPageResult.getContent().forEach(i ->{
             i.setProduct(storeProductService.getById(i.getProductId()));
-            i.setUserName(userService.getYxUserById(i.getUid()).getUsername());
+            i.setUserName(userService.getYxUserById(i.getUid()).getNickname());
         });
         return relationDtoPageResult;
     }
