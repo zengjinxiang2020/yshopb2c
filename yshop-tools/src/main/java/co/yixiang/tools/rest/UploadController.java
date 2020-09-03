@@ -67,9 +67,6 @@ public class UploadController {
                 throw new YshopException("本地上传,请先登陆系统配置后台/移动端API地址");
             }
             for (MultipartFile file : files) {
-                if(ObjectUtil.isNull(file)){
-                    log.info("文件流为空");
-                }
                 LocalStorageDto localStorageDTO = localStorageService.create(name, file);
                 if ("".equals(url.toString())) {
                     url = url.append(localUrl + "/file/" + localStorageDTO.getType() + "/" + localStorageDTO.getRealName());
