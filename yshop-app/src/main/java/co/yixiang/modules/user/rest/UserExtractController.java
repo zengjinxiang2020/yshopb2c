@@ -10,6 +10,7 @@ package co.yixiang.modules.user.rest;
 
 
 import co.yixiang.api.ApiResult;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.constant.SystemConfigConstants;
@@ -66,6 +67,7 @@ public class UserExtractController {
     /**
     * 用户提现
     */
+    @AppLog(value = "用户提现", type = 1)
     @AuthCheck
     @PostMapping("/extract/cash")
     @ApiOperation(value = "用户提现",notes = "用户提现")

@@ -12,6 +12,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.constant.SystemConfigConstants;
@@ -87,6 +88,7 @@ public class StoreCombinationController {
     /**
      * 拼团产品详情
      */
+    @AppLog(value = "查看拼团产品详情", type = 1)
     @AuthCheck
     @GetMapping("/combination/detail/{id}")
     @ApiOperation(value = "拼团产品详情",notes = "拼团产品详情")
@@ -104,6 +106,7 @@ public class StoreCombinationController {
     /**
      * 拼团明细
      */
+    @AppLog(value = "查看拼团明细", type = 1)
     @AuthCheck
     @GetMapping("/combination/pink/{id}")
     @ApiOperation(value = "拼团明细",notes = "拼团明细")
@@ -118,6 +121,7 @@ public class StoreCombinationController {
     /**
      * 拼团海报
      */
+    @AppLog(value = "生成拼团海报", type = 1)
     @AuthCheck
     @PostMapping("/combination/poster")
     @ApiOperation(value = "拼团海报",notes = "拼团海报")
@@ -141,6 +145,7 @@ public class StoreCombinationController {
     /**
      * 取消开团
      */
+    @AppLog(value = "取消开团", type = 1)
     @AuthCheck
     @PostMapping("/combination/remove")
     @ApiOperation(value = "取消开团",notes = "取消开团")

@@ -13,10 +13,12 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.constant.SystemConfigConstants;
+import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreBargainUser;
 import co.yixiang.modules.activity.domain.YxStoreBargainUserHelp;
 import co.yixiang.modules.activity.param.BargainShareParam;
@@ -102,6 +104,7 @@ public class StoreBargainController {
     /**
     * 砍价详情
     */
+    @AppLog(value = "查看砍价产品", type = 1)
     @AuthCheck
     @GetMapping("/bargain/detail/{id}")
     @ApiOperation(value = "砍价详情",notes = "砍价详情",response = YxStoreBargainQueryVo.class)
@@ -116,6 +119,7 @@ public class StoreBargainController {
     /**
      * 砍价详情统计
      */
+    @AppLog(value = "砍价详情统计", type = 1)
     @AuthCheck
     @PostMapping("/bargain/help/count")
     @ApiOperation(value = "砍价详情统计",notes = "砍价详情统计")
@@ -142,6 +146,7 @@ public class StoreBargainController {
     /**
      * 参与砍价
      */
+    @AppLog(value = "参与砍价", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/bargain/start")
@@ -159,6 +164,7 @@ public class StoreBargainController {
     /**
      * 帮助好友砍价
      */
+    @AppLog(value = "帮助好友砍价", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/bargain/help")
@@ -281,6 +287,7 @@ public class StoreBargainController {
     /**
      * 砍价取消
      */
+    @AppLog(value = "取消砍价", type = 1)
     @AuthCheck
     @PostMapping("/bargain/user/cancel")
     @ApiOperation(value = "砍价取消",notes = "砍价取消")

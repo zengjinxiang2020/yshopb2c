@@ -16,6 +16,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
@@ -130,6 +131,7 @@ public class StoreProductController {
     /**
      * 商品详情海报
      */
+    @AppLog(value = "商品详情海报", type = 1)
     @AuthCheck
     @GetMapping("/product/poster/{id}")
     @ApiImplicitParams({
@@ -198,6 +200,7 @@ public class StoreProductController {
     /**
      * 普通商品详情
      */
+    @AppLog(value = "普通商品详情", type = 1)
     @AuthCheck
     @GetMapping("/product/detail/{id}")
     @ApiImplicitParams({
@@ -219,6 +222,7 @@ public class StoreProductController {
     /**
      * 添加收藏
      */
+    @AppLog(value = "添加收藏", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/collect/add")
@@ -235,6 +239,7 @@ public class StoreProductController {
     /**
      * 取消收藏
      */
+    @AppLog(value = "取消收藏", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/collect/del")

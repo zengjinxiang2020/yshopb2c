@@ -10,6 +10,7 @@ package co.yixiang.modules.user.rest;
 
 
 import co.yixiang.api.ApiResult;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
@@ -96,6 +97,7 @@ public class UserController {
     /**
      * 订单统计数据
      */
+    @AppLog(value = "查看订单统计数据", type = 1)
     @AuthCheck
     @GetMapping("/order/data")
     @ApiOperation(value = "订单统计数据",notes = "订单统计数据")
@@ -125,6 +127,7 @@ public class UserController {
     /**
      * 用户资金统计
      */
+    @AppLog(value = "查看用户资金统计", type = 1)
     @AuthCheck
     @GetMapping("/user/balance")
     @ApiOperation(value = "用户资金统计",notes = "用户资金统计")
@@ -142,6 +145,7 @@ public class UserController {
     /**
      * 签到用户信息
      */
+    @AppLog(value = "签到用户信息", type = 1)
     @AuthCheck
     @PostMapping("/sign/user")
     @ApiOperation(value = "签到用户信息",notes = "签到用户信息")
@@ -162,6 +166,7 @@ public class UserController {
     /**
      * 签到列表
      */
+    @AppLog(value = "查看签到列表", type = 1)
     @AuthCheck
     @GetMapping("/sign/list")
     @ApiImplicitParams({
@@ -178,6 +183,7 @@ public class UserController {
     /**
      * 签到列表（年月）
      */
+
     @AuthCheck
     @GetMapping("/sign/month")
     @ApiImplicitParams({
@@ -194,6 +200,7 @@ public class UserController {
     /**
      * 开始签到
      */
+    @AppLog(value = "开始签到", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/sign/integral")
@@ -207,7 +214,7 @@ public class UserController {
         return ApiResult.ok(map,"签到获得" + integral + "积分");
     }
 
-
+    @AppLog(value = "用户修改信息", type = 1)
     @AuthCheck
     @PostMapping("/user/edit")
     @ApiOperation(value = "用户修改信息",notes = "用修改信息")

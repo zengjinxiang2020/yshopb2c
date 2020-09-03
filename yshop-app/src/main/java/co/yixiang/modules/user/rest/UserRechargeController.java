@@ -11,6 +11,7 @@ package co.yixiang.modules.user.rest;
 import cn.hutool.core.bean.BeanUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.constant.ShopConstants;
@@ -89,6 +90,7 @@ public class UserRechargeController {
     /**
      * 公众号充值/H5充值
      */
+    @AppLog(value = "公众号充值", type = 1)
     @AuthCheck
     @PostMapping("/recharge/wechat")
     @ApiOperation(value = "公众号充值/H5充值",notes = "公众号充值/H5充值",response = ApiResult.class)

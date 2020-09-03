@@ -10,6 +10,7 @@ package co.yixiang.modules.cart.rest;
 
 import co.yixiang.annotation.Limit;
 import co.yixiang.api.ApiResult;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
@@ -63,6 +64,7 @@ public class StoreCartController {
     /**
      * 购物车 添加
      */
+    @AppLog(value = "购物车 添加", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/cart/add")
@@ -81,6 +83,7 @@ public class StoreCartController {
     /**
      * 购物车列表
      */
+    @AppLog(value = "查看购物车列表", type = 1)
     @AuthCheck
     @GetMapping("/cart/list")
     @ApiOperation(value = "购物车列表",notes = "购物车列表")
@@ -92,6 +95,7 @@ public class StoreCartController {
     /**
      * 修改产品数量
      */
+    @AppLog(value = "修改购物车产品数量", type = 1)
     @AuthCheck
     @PostMapping("/cart/num")
     @ApiOperation(value = "修改产品数量",notes = "修改产品数量")
@@ -104,6 +108,7 @@ public class StoreCartController {
     /**
      * 购物车删除产品
      */
+    @AppLog(value = "购物车删除产品", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/cart/del")

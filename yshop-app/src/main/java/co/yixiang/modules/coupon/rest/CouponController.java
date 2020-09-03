@@ -11,6 +11,7 @@ package co.yixiang.modules.coupon.rest;
 import cn.hutool.core.util.NumberUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
@@ -77,6 +78,7 @@ public class CouponController {
     /**
      * 领取优惠券
      */
+    @AppLog(value = "领取优惠券", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/coupon/receive")
@@ -94,6 +96,7 @@ public class CouponController {
     /**
      * 用户已领取优惠券
      */
+    @AppLog(value = "查看已领取优惠券", type = 1)
     @AuthCheck
     @GetMapping("/coupons/user/{type}")
     @ApiOperation(value = "用户已领取优惠券",notes = "用户已领取优惠券")

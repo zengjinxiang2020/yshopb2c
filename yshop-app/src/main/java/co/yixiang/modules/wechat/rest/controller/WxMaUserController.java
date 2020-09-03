@@ -15,6 +15,7 @@ import cn.binarywang.wx.miniapp.config.impl.WxMaDefaultConfigImpl;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.modules.user.domain.YxUser;
@@ -51,7 +52,7 @@ public class WxMaUserController {
     private final YxUserService userService;
     private final RedisUtils redisUtils;
 
-
+    @AppLog(value = "公众号绑定手机号", type = 1)
     @AuthCheck
     @PostMapping("/binding")
     @ApiOperation(value = "公众号绑定手机号", notes = "公众号绑定手机号")
@@ -77,7 +78,7 @@ public class WxMaUserController {
 
     }
 
-
+    @AppLog(value = "小程序绑定手机号", type = 1)
     @AuthCheck
     @PostMapping("/wxapp/binding")
     @ApiOperation(value = "小程序绑定手机号", notes = "小程序绑定手机号")

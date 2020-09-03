@@ -13,6 +13,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.constant.ShopConstants;
@@ -82,6 +83,7 @@ public class StoreSeckillController {
     /**
      * 根据id获取商品秒杀产品详情
      */
+    @AppLog(value = "根据id获取商品秒杀产品详情", type = 1)
     @AuthCheck
     @GetMapping("/seckill/detail/{id}")
     @ApiOperation(value = "秒杀产品详情", notes = "秒杀产品详情")

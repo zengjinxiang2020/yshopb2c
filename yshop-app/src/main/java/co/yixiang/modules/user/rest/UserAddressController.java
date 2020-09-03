@@ -12,6 +12,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.common.util.CityTreeUtil;
@@ -86,6 +87,7 @@ public class UserAddressController {
     /**
     * 添加或修改地址
     */
+    @AppLog(value = "添加或修改地址", type = 1)
     @AuthCheck
     @PostMapping("/address/edit")
     @ApiOperation(value = "添加或修改地址",notes = "添加或修改地址")
@@ -100,6 +102,7 @@ public class UserAddressController {
     /**
      * 设置默认地址
      */
+    @AppLog(value = "设置默认地址", type = 1)
     @AuthCheck
     @PostMapping("/address/default/set")
     @ApiOperation(value = "设置默认地址",notes = "设置默认地址")

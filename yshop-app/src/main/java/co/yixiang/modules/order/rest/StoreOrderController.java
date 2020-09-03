@@ -13,6 +13,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
@@ -93,6 +94,7 @@ public class StoreOrderController {
     /**
      * 订单确认
      */
+    @AppLog(value = "订单确认", type = 1)
     @AuthCheck
     @PostMapping("/order/confirm")
     @ApiOperation(value = "订单确认",notes = "订单确认")
@@ -135,6 +137,7 @@ public class StoreOrderController {
     /**
      * 订单创建
      */
+    @AppLog(value = "订单创建", type = 1)
     @AuthCheck
     @NoRepeatSubmit
     @PostMapping("/order/create/{key}")
@@ -184,6 +187,7 @@ public class StoreOrderController {
     /**
      *  订单支付
      */
+    @AppLog(value = "订单支付", type = 1)
     @AuthCheck
     @PostMapping("/order/pay")
     @ApiOperation(value = "订单支付",notes = "订单支付")
@@ -226,6 +230,7 @@ public class StoreOrderController {
     /**
      * 订单列表
      */
+    @AppLog(value = "查看订单列表", type = 1)
     @AuthCheck
     @GetMapping("/order/list")
     @ApiImplicitParams({
@@ -245,6 +250,7 @@ public class StoreOrderController {
     /**
      * 订单详情
      */
+    @AppLog(value = "查看订单详情", type = 1)
     @AuthCheck
     @GetMapping("/order/detail/{key}")
     @ApiImplicitParams({
@@ -271,6 +277,7 @@ public class StoreOrderController {
     /**
      * 订单收货
      */
+    @AppLog(value = "订单收货", type = 1)
     @AuthCheck
     @PostMapping("/order/take")
     @ApiOperation(value = "订单收货",notes = "订单收货")
@@ -292,6 +299,7 @@ public class StoreOrderController {
     /**
      * 订单评价
      */
+    @AppLog(value = "订单评价", type = 1)
     @AuthCheck
     @NoRepeatSubmit
     @PostMapping("/order/comment")
@@ -308,6 +316,7 @@ public class StoreOrderController {
     /**
      * 订单删除
      */
+    @AppLog(value = "订单删除", type = 1)
     @AuthCheck
     @PostMapping("/order/del")
     @ApiOperation(value = "订单删除",notes = "订单删除")
@@ -337,6 +346,7 @@ public class StoreOrderController {
     /**
      * 订单退款审核
      */
+    @AppLog(value = "订单退款审核", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/order/refund/verify")
@@ -353,6 +363,7 @@ public class StoreOrderController {
     /**
      * 订单取消   未支付的订单回退积分,回退优惠券,回退库存
      */
+    @AppLog(value = "订单取消", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/order/cancel")
@@ -382,6 +393,7 @@ public class StoreOrderController {
     /**
      * 订单核销
      */
+    @AppLog(value = "订单核销", type = 1)
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/order/order_verific")

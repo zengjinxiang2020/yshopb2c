@@ -12,6 +12,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.constant.SystemConfigConstants;
@@ -70,6 +71,7 @@ public class UserBillController {
     /**
      * 推广数据    昨天的佣金   累计提现金额  当前佣金
      */
+    @AppLog(value = "查看推广数据", type = 1)
     @AuthCheck
     @GetMapping("/commission")
     @ApiOperation(value = "推广数据",notes = "推广数据")
@@ -92,6 +94,7 @@ public class UserBillController {
     /**
      * 积分记录
      */
+    @AppLog(value = "查看积分记录", type = 1)
     @AuthCheck
     @GetMapping("/integral/list")
     @ApiImplicitParams({
@@ -110,6 +113,7 @@ public class UserBillController {
     /**
      * 分销二维码海报生成
      */
+    @AppLog(value = "分销二维码海报生成", type = 1)
     @AuthCheck
     @GetMapping("/spread/banner")
     @ApiImplicitParams({
@@ -144,6 +148,7 @@ public class UserBillController {
     /**
      *  推广人统计
      */
+    @AppLog(value = "查看推广人统计", type = 1)
     @AuthCheck
     @PostMapping("/spread/people")
     @ApiOperation(value = "推广人统计",notes = "推广人统计")
@@ -164,6 +169,7 @@ public class UserBillController {
      * type  0 全部  1 消费  2 充值  3 返佣  4 提现
      * @return mixed
      */
+    @AppLog(value = "查看推广佣金明细", type = 1)
     @AuthCheck
     @GetMapping("/spread/commission/{type}")
     @ApiImplicitParams({
@@ -187,6 +193,7 @@ public class UserBillController {
     /**
      * 推广订单
      */
+    @AppLog(value = "查看推广订单", type = 1)
     @AuthCheck
     @PostMapping("/spread/order")
     @ApiOperation(value = "推广订单",notes = "推广订单")

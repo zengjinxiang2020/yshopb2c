@@ -12,6 +12,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.aop.AppLog;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.modules.manage.param.OrderPriceParam;
 import co.yixiang.modules.manage.param.ShoperQueryParam;
@@ -91,6 +92,7 @@ public class ShoperController {
     /**
      * 订单列表
      */
+    @AppLog(value = "查看订单列表", type = 1)
     @AuthCheck
     @GetMapping("/admin/order/list")
     @ApiOperation(value = "订单列表",notes = "订单列表")
@@ -102,6 +104,7 @@ public class ShoperController {
     /**
      * 订单详情
      */
+    @AppLog(value = "查看订单详情", type = 1)
     @AuthCheck
     @GetMapping("/admin/order/detail/{key}")
     @ApiOperation(value = "订单详情",notes = "订单详情")
@@ -119,6 +122,7 @@ public class ShoperController {
     /**
      * 订单改价
      */
+    @AppLog(value = "订单改价", type = 1)
     @AuthCheck
     @PostMapping("/admin/order/price")
     @ApiOperation(value = "订单改价",notes = "订单改价")
@@ -140,6 +144,7 @@ public class ShoperController {
     /**
      * 订单发货
      */
+    @AppLog(value = "订单发货", type = 1)
     @AuthCheck
     @PostMapping("/admin/order/delivery/keep")
     @ApiOperation(value = "订单发货",notes = "订单发货")
@@ -152,6 +157,7 @@ public class ShoperController {
     /**
      * 订单退款
      */
+    @AppLog(value = "订单退款", type = 1)
     @AuthCheck
     @PostMapping("/admin/order/refund")
     @ApiOperation(value = "订单退款",notes = "订单退款")
