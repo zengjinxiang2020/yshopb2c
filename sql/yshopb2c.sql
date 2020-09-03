@@ -2577,6 +2577,7 @@ INSERT INTO `menu` VALUES (249, b'0', '二级菜单1', 'nested/menu1/index', 248
 INSERT INTO `menu` VALUES (250, b'0', '三级菜单1', 'nested/menu1/menu1-1', 249, 999, 'menu', 'menu1-1', b'0', b'0', '-', '2020-08-19 11:35:52', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (251, b'0', '三级菜单2', 'nested/menu1/menu1-2', 249, 999, 'menu', 'menu1-2', b'0', b'0', '-', '2020-08-19 11:37:48', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (252, b'0', '二级菜单2', 'nested/menu2/index', 248, 999, 'menu', 'menu2', b'0', b'0', '-', '2020-08-19 11:38:35', NULL, 1, NULL, 0);
+INSERT INTO `menu` VALUES (253, b'0', '浏览记录', 'monitor/log/mlog', 40, 15, 'log', 'viewlog', b'0', b'0', 'Viewlog', '2020-07-31 09:47:11', 'log:list', 1, '2020-07-31 09:49:39', 0);
 -- ----------------------------
 -- Table structure for monitor_server
 -- ----------------------------
@@ -2993,6 +2994,7 @@ INSERT INTO `roles_menus` VALUES (249, 1);
 INSERT INTO `roles_menus` VALUES (250, 1);
 INSERT INTO `roles_menus` VALUES (251, 1);
 INSERT INTO `roles_menus` VALUES (252, 1);
+INSERT INTO `roles_menus` VALUES (253, 1);
 INSERT INTO `roles_menus` VALUES (1, 2);
 INSERT INTO `roles_menus` VALUES (2, 2);
 INSERT INTO `roles_menus` VALUES (3, 2);
