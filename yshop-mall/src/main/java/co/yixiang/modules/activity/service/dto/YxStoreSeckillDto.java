@@ -8,6 +8,7 @@ package co.yixiang.modules.activity.service.dto;
 import co.yixiang.modules.product.service.dto.FromatDetailDto;
 import co.yixiang.modules.product.service.dto.ProductFormatDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -54,14 +55,27 @@ public class YxStoreSeckillDto implements Serializable {
     // 返多少积分
     private BigDecimal giveIntegral;
 
+    /** 秒杀价 */
+    @ApiModelProperty(value = "秒杀价")
+    private BigDecimal price;
+
+    /** 原价 */
+    @ApiModelProperty(value = "原价")
+    private BigDecimal otPrice;
+
+    /** 成本 */
+    @ApiModelProperty(value = "成本")
+    private BigDecimal cost;
+
+    /** 销量 */
+    @ApiModelProperty(value = "秒杀销量")
+    private Integer sales;
+
     // 排序
     private Integer sort;
 
     // 库存
     private Integer stock;
-
-    // 销量
-    private Integer sales;
 
     // 单位名
     private String unitName;
@@ -107,6 +121,10 @@ public class YxStoreSeckillDto implements Serializable {
     /** 规格 0单 1多 */
     @JsonProperty("spec_type")
     private Integer specType;
+
+    /** 是否单独分佣 */
+    @JsonProperty("is_sub")
+    private Integer isSub;
 
     private ProductFormatDto attr;
     //属性项目

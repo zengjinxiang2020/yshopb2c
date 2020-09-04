@@ -82,12 +82,20 @@ public class YxStoreSeckill extends BaseDomain {
 
 
     /** 库存 */
-    @NotNull(message = "请输入库存")
-    @Min(message = "库存不能小于0",value = 1)
     @ApiModelProperty(value = "秒杀库存")
     private Integer stock;
 
+    /** 秒杀价 */
+    @ApiModelProperty(value = "秒杀价")
+    private BigDecimal price;
 
+    /** 原价 */
+    @ApiModelProperty(value = "原价")
+    private BigDecimal otPrice;
+
+    /** 成本 */
+    @ApiModelProperty(value = "成本")
+    private BigDecimal cost;
     /** 销量 */
     @ApiModelProperty(value = "秒杀销量")
     private Integer sales;
@@ -101,6 +109,8 @@ public class YxStoreSeckill extends BaseDomain {
     /** 邮费 */
     @ApiModelProperty(value = "邮费")
     private BigDecimal postage;
+
+
 
 
     /** 内容 */
@@ -165,6 +175,10 @@ public class YxStoreSeckill extends BaseDomain {
     @JsonProperty("temp_id")
     @ApiModelProperty(value = "运费模板ID")
     private Long tempId;
+
+    /** 是否单独分佣 */
+    @JsonProperty("is_sub")
+    private Integer isSub;
 
     /** 属性项目 */
     @TableField(exist = false)

@@ -125,6 +125,10 @@ public class YxStoreCombinationDto implements Serializable {
     @JsonProperty("temp_id")
     private Integer tempId;
 
+    /** 是否单独分佣 */
+    @JsonProperty("is_sub")
+    private Integer isSub;
+
     private ProductFormatDto attr;
     //属性项目
     private List<FromatDetailDto> items;

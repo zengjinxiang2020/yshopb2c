@@ -1,6 +1,7 @@
 package co.yixiang.modules.activity.vo;
 
 import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -94,6 +95,10 @@ public class YxStoreSeckillQueryVo implements Serializable{
 
     @ApiModelProperty(value = "百分比")
     private Integer percent;
+
+    /** 是否单独分佣 */
+    @JsonProperty("is_sub")
+    private Integer isSub;
 
 
 

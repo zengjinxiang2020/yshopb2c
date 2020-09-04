@@ -274,6 +274,9 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
         }
 
         yxStoreSeckill.setStock(resultDTO.getStock());
+        yxStoreSeckill.setPostage(BigDecimal.valueOf(resultDTO.getMinPrice()));
+        yxStoreSeckill.setCost(BigDecimal.valueOf(resultDTO.getMinCost()));
+        yxStoreSeckill.setStock(resultDTO.getStock());
         yxStoreSeckill.setImages(String.join(",", resources.getImages()));
         this.saveOrUpdate(yxStoreSeckill);
 

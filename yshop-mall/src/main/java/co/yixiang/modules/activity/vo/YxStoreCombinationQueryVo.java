@@ -1,6 +1,7 @@
 package co.yixiang.modules.activity.vo;
 
 import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -90,6 +91,10 @@ public class YxStoreCombinationQueryVo implements Serializable {
 
     @ApiModelProperty(value = "单位名")
     private String unitName;
+
+    /** 是否单独分佣 */
+    @JsonProperty("is_sub")
+    private Integer isSub;
 
 
 }
