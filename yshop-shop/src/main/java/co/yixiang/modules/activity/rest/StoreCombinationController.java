@@ -131,15 +131,15 @@ public class StoreCombinationController {
                     .pinkPrice(Double.valueOf(mapAttr.get("pink_price").toString()))
                     .cost(Double.valueOf(mapAttr.get("cost").toString()))
                     .otPrice(Double.valueOf(mapAttr.get("ot_price").toString()))
-                    .stock(Integer.valueOf(mapAttr.get("stock").toString()))
-                    .pinkStock(Integer.valueOf(mapAttr.get("pink_stock").toString()))
                     .barCode(mapAttr.get("bar_code").toString())
                     .weight(Double.valueOf(mapAttr.get("weight").toString()))
                     .volume(Double.valueOf(mapAttr.get("volume").toString()))
                     .brokerage(Double.valueOf(mapAttr.get("brokerage").toString()))
                     .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
-                    .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
-                    .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
+                    .pinkPrice(Double.valueOf(mapAttr.get("pink_price").toString()))
+                    .pinkStock(Integer.valueOf(mapAttr.get("pink_stock").toString()))
+                    .seckillPrice(Double.valueOf(mapAttr.get("seckill_price").toString()))
+                    .seckillStock(Integer.valueOf(mapAttr.get("seckill_stock").toString()))
                     .build();
             productDto.setAttr(productFormatDto);
         }
