@@ -53,13 +53,13 @@ public class ProductFormatDto {
     private Double volume = 0d;
 
     private Double weight = 0d;
-
+    @JsonProperty("pink_price")
     private Double pinkPrice = 0d;
-
+    @JsonProperty("pink_stock")
     private Integer pinkStock = 0;
-
+    @JsonProperty("seckill_price")
     private Double seckillPrice = 0d;
-
+    @JsonProperty("seckill_stock")
     private Integer seckillStock = 0;
 
     private Map<String, String> detail;
