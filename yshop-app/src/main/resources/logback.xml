@@ -48,7 +48,6 @@
     <!--普通日志输出到控制台-->
     <root level="info">
         <appender-ref ref="console" />
-        <appender-ref ref="debug"/>
         <appender-ref ref="error"/>
         <appender-ref ref="info"/>
     </root>
