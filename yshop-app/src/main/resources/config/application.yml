@@ -55,7 +55,6 @@ mybatis-plus:
   check-config-location: true
   configuration:
     map-underscore-to-camel-case: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
       id-type: auto
@@ -65,9 +64,11 @@ mybatis-plus:
 
 logging:
   level:
-    org.springframework.web: INFO
+    co.yixiang: DEBUG
+    org.springframework.web: wanning
     com.github.binarywang.demo.wx.mp: DEBUG
     me.chanjar.weixin: DEBUG
+
 
 
 
