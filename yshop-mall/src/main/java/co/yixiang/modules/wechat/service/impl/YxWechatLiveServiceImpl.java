@@ -103,7 +103,7 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
                         ,YxWechatLiveGoodsDto.class);
                 i.setProduct(wechatLiveGoodsDtos);
             }
-            i.setId(i.getRoomid());
+            i.setId(i.getRoomId());
         });
         wechatLiveVo.setContent(liveDtos);
         wechatLiveVo.setTotalElements(page.getTotal());
@@ -120,7 +120,7 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
             resources.setShareImg(uploadPhotoToWx(wxMaService,resources.getShareImge()).getMediaId());
             WxMaLiveInfo.RoomInfo roomInfo = generator.convert(resources, WxMaLiveInfo.RoomInfo.class);
             Integer status = wxMaService.getLiveService().createRoom(roomInfo);
-            resources.setRoomid(Long.valueOf(status));
+            resources.setRoomId(Long.valueOf(status));
             if(StringUtils.isNotBlank(resources.getProductId())){
                 String[] productIds = resources.getProductId().split(",");
                 List<Integer> pids = new ArrayList<>();

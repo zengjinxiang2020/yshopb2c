@@ -31,7 +31,7 @@ public class YxWechatLive implements Serializable {
 
     /** 直播间id */
     @TableId(type = IdType.INPUT)
-    private Long roomid;
+    private Long roomId;
 
 
     /** 直播间标题 */

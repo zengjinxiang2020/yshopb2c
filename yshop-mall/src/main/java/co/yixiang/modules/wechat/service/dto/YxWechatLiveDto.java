@@ -29,7 +29,7 @@ public class YxWechatLiveDto implements Serializable {
     /** 防止精度丢失 */
     @JsonSerialize(using= ToStringSerializer.class)
     @ApiModelProperty(value = "直播间id")
-    private Long roomid;
+    private Long roomId;
 
     private Long id;
 
