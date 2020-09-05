@@ -409,13 +409,14 @@ public class CreatShareProductService {
                 if(!new File(picImage).exists()){
                     //下载商品图
                     HttpUtil.downloadFile(image, FileUtil.file(picImage));
+                    //只缩放一次防止图片持续缩放导致图片没了
+                    ImgUtil.scale(
+                            FileUtil.file(picImage),
+                            FileUtil.file(picImage),
+                            0.4f//缩放比例
+                    );
                 }
 
-                ImgUtil.scale(
-                        FileUtil.file(picImage),
-                        FileUtil.file(picImage),
-                        0.4f//缩放比例
-                );
                 ImgUtil.pressImage(
                         FileUtil.file(spreadPicPath),
                         FileUtil.file(spreadPicPath),
@@ -604,14 +605,14 @@ public class CreatShareProductService {
                 if(!new File(picImage).exists()){
                     //下载商品图
                     HttpUtil.downloadFile(image, FileUtil.file(picImage));
+                    //只缩放一次防止图片持续缩放导致图片没了
+                    ImgUtil.scale(
+                            FileUtil.file(picImage),
+                            FileUtil.file(picImage),
+                            0.5f//缩放比例
+                    );
                 }
 
-
-                ImgUtil.scale(
-                        FileUtil.file(picImage),
-                        FileUtil.file(picImage),
-                        0.5f//缩放比例
-                );
 
                 ImgUtil.pressImage(
                         FileUtil.file(spreadPicPath),
