@@ -84,8 +84,8 @@ public interface UserBillMapper extends CoreMapper<YxUserBill> {
             "<if test =\"type !=''\">and b.type=#{type}</if> " +
             "<if test =\"title !=''\">and b.title=#{title}</if> " +
             "<if test =\"pm !=null\">and b.pm=#{pm}</if> " +
-            "<if test =\"date !=null\">and b.add_time &gt;= ${date}</if> " +
-            "<if test =\"date1 !=null\">and b.add_time &lt;= ${date1}</if> " +
+            "<if test =\"date !=null\">and b.create_time &gt;= STR_TO_DATE(#{date},'%Y-%m-%d %H:%i:%s')</if> " +
+            "<if test =\"date1 !=null\">and b.create_time &lt;=STR_TO_DATE(#{date1},'%Y-%m-%d %H:%i:%s')</if> " +
             "<if test =\"nickname !=''\">and u.nickname LIKE CONCAT('%',#{nickname},'%')</if> </script> ")
-    List<YxUserBillDto> findAllByQueryCriteria(@Param("category") String category, @Param("type") String type, @Param("nickname") String nickname, @Param("pm") Integer pm, @Param("date")Integer date, @Param("date1")Integer date1,@Param("title")String title);
+    List<YxUserBillDto> findAllByQueryCriteria(@Param("category") String category, @Param("type") String type, @Param("nickname") String nickname, @Param("pm") Integer pm, @Param("date")String date, @Param("date1")String date1,@Param("title")String title);
 }

@@ -274,13 +274,13 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
     @Override
     public List<YxUserBillDto> queryAll(YxUserBillQueryCriteria criteria){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Integer date =null;
-        Integer date1 = null;
+        String date =null;
+        String date1 = null;
         if(StringUtils.isNotEmpty(criteria.getStartTime())){
             try {
-                date =   OrderUtil.dateToTimestamp(sdf.parse(criteria.getStartTime()));
+                date =  sdf.parse(criteria.getStartTime())+ " 00:00:00";
                 if(StringUtils.isNotEmpty(criteria.getEndTime())){
-                    date1 = OrderUtil.dateToTimestamp(sdf.parse(criteria.getEndTime()))+24*60*60;
+                    date1 =sdf.parse(criteria.getEndTime())+ " 23:59:59";
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
