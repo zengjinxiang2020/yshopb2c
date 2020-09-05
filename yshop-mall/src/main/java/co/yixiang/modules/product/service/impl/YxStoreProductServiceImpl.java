@@ -280,6 +280,8 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         ProductVo productVo = new ProductVo();
         YxStoreProductQueryVo storeProductQueryVo  = generator.convert(storeProduct,YxStoreProductQueryVo.class);
 
+        //设置销量
+        storeProductQueryVo.setSales(storeProductQueryVo.getSales()+storeProductQueryVo.getFicti());
 
         //设置VIP价格
         double vipPrice = userService.setLevelPrice(
