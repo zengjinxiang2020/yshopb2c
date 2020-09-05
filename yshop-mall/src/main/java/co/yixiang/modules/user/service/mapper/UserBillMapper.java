@@ -78,7 +78,7 @@ public interface UserBillMapper extends CoreMapper<YxUserBill> {
             "and uid=#{uid} and TO_DAYS(NOW()) - TO_DAYS(create_time) <= 1")
     double sumYesterdayPrice(@Param("uid") Long uid);
 
-    @Select("<script> select b.title,b.pm,b.category,b.type,b.number,b.add_time ,u.nickname " +
+    @Select("<script> select b.title,b.pm,b.category,b.type,b.number,b.create_time ,u.nickname " +
             "from yx_user_bill b left join yx_user u on u.uid=b.uid  where 1=1  "  +
             "<if test =\"category !=''\">and b.category=#{category}</if> " +
             "<if test =\"type !=''\">and b.type=#{type}</if> " +
@@ -86,6 +86,6 @@ public interface UserBillMapper extends CoreMapper<YxUserBill> {
             "<if test =\"pm !=null\">and b.pm=#{pm}</if> " +
             "<if test =\"date !=null\">and b.create_time &gt;= STR_TO_DATE(#{date},'%Y-%m-%d %H:%i:%s')</if> " +
             "<if test =\"date1 !=null\">and b.create_time &lt;=STR_TO_DATE(#{date1},'%Y-%m-%d %H:%i:%s')</if> " +
-            "<if test =\"nickname !=''\">and u.nickname LIKE CONCAT('%',#{nickname},'%')</if> </script> ")
+            "<if test =\"nickname !=''\">and u.nickname LIKE CONCAT('%',#{nickname},'%')</if> order by b.create_time desc </script> ")
     List<YxUserBillDto> findAllByQueryCriteria(@Param("category") String category, @Param("type") String type, @Param("nickname") String nickname, @Param("pm") Integer pm, @Param("date")String date, @Param("date1")String date1,@Param("title")String title);
 }
