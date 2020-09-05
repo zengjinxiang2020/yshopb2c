@@ -8,11 +8,13 @@
 */
 package co.yixiang.modules.system.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.modules.system.domain.Dict;
 import co.yixiang.modules.system.service.DictService;
+import co.yixiang.modules.system.service.dto.DictDetailDto;
 import co.yixiang.modules.system.service.dto.DictDto;
 import co.yixiang.modules.system.service.dto.DictQueryCriteria;
 import co.yixiang.modules.system.service.mapper.DictMapper;
@@ -71,11 +73,25 @@ public class DictServiceImpl extends BaseServiceImpl<DictMapper, Dict> implement
     public void download(List<DictDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (DictDto dict : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
-            map.put("字典名称", dict.getName());
-            map.put("描述", dict.getRemark());
-            map.put("创建日期", dict.getCreateTime());
-            list.add(map);
+            if(CollectionUtil.isNotEmpty(dict.getDictDetails())){
+                for (DictDetailDto dictDetail : dict.getDictDetails()) {
+                    Map<String,Object> map = new LinkedHashMap<>();
+                    map.put("字典名称", dict.getName());
+                    map.put("字典描述", dict.getRemark());
+                    map.put("字典标签", dictDetail.getLabel());
+                    map.put("字典值", dictDetail.getValue());
+                    map.put("创建日期", dictDetail.getCreateTime());
+                    list.add(map);
+                }
+            } else {
+                Map<String,Object> map = new LinkedHashMap<>();
+                map.put("字典名称", dict.getName());
+                map.put("字典描述", dict.getRemark());
+                map.put("字典标签", null);
+                map.put("字典值", null);
+                map.put("创建日期", dict.getCreateTime());
+                list.add(map);
+            }
         }
         FileUtil.downloadExcel(list, response);
     }

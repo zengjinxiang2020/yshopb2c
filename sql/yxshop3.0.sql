@@ -2988,10 +2988,7 @@ CREATE TABLE `yx_express`  (
 INSERT INTO `yx_express` VALUES (426, 'STO', '申通快递', 0, 0, NULL, NULL, 0);
 INSERT INTO `yx_express` VALUES (427, 'SF', '顺丰速运', 0, 0, NULL, NULL, 0);
 INSERT INTO `yx_express` VALUES (428, 'ZTO', '中通快递', 0, 0, NULL, NULL, 0);
-INSERT INTO `yx_express` VALUES (429, 'YTO', '圆通速递2', 0, 0, NULL, NULL, 0);
-INSERT INTO `yx_express` VALUES (430, '555', '555555', 0, 0, NULL, NULL, 1);
-INSERT INTO `yx_express` VALUES (431, '555', '5555', 0, 0, NULL, NULL, 1);
-INSERT INTO `yx_express` VALUES (432, '555', '555', 0, 0, '2020-06-26 12:29:48', NULL, 1);
+INSERT INTO `yx_express` VALUES (429, 'YTO', '圆通速递', 0, 0, NULL, NULL, 0);
 
 -- ----------------------------
 -- Table structure for yx_material
@@ -3076,11 +3073,8 @@ CREATE TABLE `yx_shipping_templates`  (
 -- ----------------------------
 -- Records of yx_shipping_templates
 -- ----------------------------
-INSERT INTO `yx_shipping_templates` VALUES (32, '9999', 1, '[{\"_continue\":\"1\",\"continue_price\":\"0\",\"first\":\"1\",\"price\":\"0\",\"region\":[{\"city_id\":\"0\",\"name\":\"默认全国\"}],\"regionName\":\"默认全国\"}]', 0, '[]', '2020-07-01 14:03:59', NULL, 1, 0);
-INSERT INTO `yx_shipping_templates` VALUES (33, '8888', 1, '[{\"_continue\":\"1\",\"continue_price\":\"0\",\"first\":\"1\",\"price\":\"0\",\"region\":[{\"city_id\":\"0\",\"name\":\"默认全国\"}],\"regionName\":\"默认全国\"}]', 0, '[]', '2020-07-01 14:08:19', NULL, 1, 0);
 INSERT INTO `yx_shipping_templates` VALUES (34, '默认全国运费模板', 1, '[{\"_continue\":\"1\",\"continue_price\":\"2\",\"first\":\"1\",\"price\":\"1\",\"region\":[{\"city_id\":\"0\",\"name\":\"默认全国\"}],\"regionName\":\"默认全国\"}]', 0, '[]', '2020-07-01 15:20:44', '2020-07-05 17:06:47', 0, 0);
 INSERT INTO `yx_shipping_templates` VALUES (35, '包邮湖北省，河南省特例', 1, '[{\"_continue\":\"1\",\"continue_price\":\"1\",\"first\":\"1\",\"price\":\"1\",\"region\":[{\"city_id\":\"0\",\"name\":\"默认全国\"}],\"regionName\":\"默认全国\"},{\"_continue\":\"1\",\"continue_price\":\"5\",\"first\":\"1\",\"price\":\"2\",\"region\":[{\"children\":[{\"city_id\":\"367396\"},{\"city_id\":\"370304\"},{\"city_id\":\"372971\"},{\"city_id\":\"376365\"},{\"city_id\":\"379245\"},{\"city_id\":\"382878\"},{\"city_id\":\"383890\"},{\"city_id\":\"387707\"},{\"city_id\":\"389719\"},{\"city_id\":\"392737\"},{\"city_id\":\"395254\"},{\"city_id\":\"396611\"},{\"city_id\":\"398169\"},{\"city_id\":\"403311\"},{\"city_id\":\"408287\"},{\"city_id\":\"411925\"},{\"city_id\":\"417174\"},{\"city_id\":\"420258\"}],\"city_id\":\"367395\",\"name\":\"河南省\"}],\"regionName\":\"河南省\"}]', 1, '[{\"a_num\":\"2\",\"a_price\":\"100\",\"place\":[{\"children\":[{\"city_id\":\"420825\"},{\"city_id\":\"424449\"},{\"city_id\":\"425508\"},{\"city_id\":\"427710\"},{\"city_id\":\"429501\"},{\"city_id\":\"432415\"},{\"city_id\":\"432829\"},{\"city_id\":\"434548\"},{\"city_id\":\"437779\"},{\"city_id\":\"440639\"},{\"city_id\":\"445040\"},{\"city_id\":\"446212\"},{\"city_id\":\"447268\"},{\"city_id\":\"449865\"}],\"city_id\":\"420824\",\"name\":\"湖北省\"}],\"placeName\":\"湖北省\"}]', '2020-07-01 15:26:38', '2020-07-05 17:08:39', 0, 0);
-INSERT INTO `yx_shipping_templates` VALUES (36, '8888', 1, '[{\"_continue\":\"1\",\"continue_price\":\"1\",\"first\":\"1\",\"price\":\"1\",\"region\":[{\"city_id\":\"0\",\"name\":\"默认全国\"}],\"regionName\":\"默认全国\"}]', 1, '[]', '2020-07-01 16:04:28', '2020-07-01 16:07:31', 1, 0);
 
 -- ----------------------------
 -- Table structure for yx_shipping_templates_free
