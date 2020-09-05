@@ -24,6 +24,8 @@ import co.yixiang.modules.user.service.mapper.UserBillMapper;
 import co.yixiang.modules.user.vo.BillVo;
 import co.yixiang.modules.user.vo.YxUserBillQueryVo;
 import co.yixiang.utils.FileUtil;
+import co.yixiang.utils.OrderUtil;
+import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -38,6 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -269,7 +273,21 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
 
     @Override
     public List<YxUserBillDto> queryAll(YxUserBillQueryCriteria criteria){
-        return baseMapper.findAllByQueryCriteria(criteria.getCategory(),criteria.getType(),criteria.getNickname());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Integer date =null;
+        Integer date1 = null;
+        if(StringUtils.isNotEmpty(criteria.getStartTime())){
+            try {
+                date =   OrderUtil.dateToTimestamp(sdf.parse(criteria.getStartTime()));
+                if(StringUtils.isNotEmpty(criteria.getEndTime())){
+                    date1 = OrderUtil.dateToTimestamp(sdf.parse(criteria.getEndTime()))+24*60*60;
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return baseMapper.findAllByQueryCriteria(criteria.getCategory(),criteria.getType(),criteria.getNickname(),criteria.getPm(),date,date1,criteria.getTitle());
     }
 
 
