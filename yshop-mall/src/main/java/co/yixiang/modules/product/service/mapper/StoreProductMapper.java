@@ -48,7 +48,7 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
     @Update("update yx_store_combination set stock=stock-#{num}, sales=sales+#{num}" +
             " where id=#{activityId} and stock >= #{num}")
     int decCombinationStockIncSales(int num, Long productId,Long activityId);
-    //todo 拼团商品库存+—
+    //todo 秒杀商品库存+—
     @Update("update yx_store_seckill set stock=stock-#{num}, sales=sales+#{num}" +
             " where id=#{activityId} and stock >= #{num}")
     int decSeckillStockIncSales(int num, Long productId,Long activityId);

@@ -34,7 +34,7 @@ public interface YxStoreCombinationMapper extends CoreMapper<YxStoreCombination>
             " where id=#{combinationId}")
     int incStockDecSales(@Param("num") int num,@Param("combinationId") Long combinationId);
 
-    @Select("SELECT c.id,c.effective_time as effectiveTime,c.image,c.people,c.price," +
+    @Select("SELECT c.id,c.effective_time as effectiveTime,c.image,c.people,c.price, s.sales as sales," +
             "c.title,c.unit_name as unitName,s.price as productPrice FROM yx_store_combination c " +
             "INNER JOIN yx_store_product s ON s.id=c.product_id " +
             " WHERE c.is_show = 1 AND c.is_del = 0 AND c.start_time < now() " +
@@ -42,7 +42,7 @@ public interface YxStoreCombinationMapper extends CoreMapper<YxStoreCombination>
     List<YxStoreCombinationQueryVo> getCombList(Page page);
 
     @Select("SELECT c.id,c.effective_time as effectiveTime,c.image,c.people,c.price,c.browse," +
-            "c.description,c.image,c.images,c.info,c.is_postage as isPostage,c.postage," +
+            "c.description,c.image,c.images,c.info," +
             "c.product_id as productId,c.sales,c.start_time as startTime" +
             ",c.stock,c.stop_time stopTime," +
             "c.title,c.unit_name as unitName,s.price as productPrice FROM yx_store_combination c " +
@@ -51,7 +51,7 @@ public interface YxStoreCombinationMapper extends CoreMapper<YxStoreCombination>
     YxStoreCombinationQueryVo getCombDetail(Long id);
 
     @Select("SELECT c.id,c.image,c.price,c.title as storeName,c.is_show as isShow,c.cost," +
-            "c.is_postage as isPostage,c.postage,c.sales,c.stock,c.is_del as isDel" +
+            "c.sales,c.stock,c.is_del as isDel" +
             " FROM yx_store_combination c " +
             " WHERE c.id = #{id} and c.is_del = 0 ")
     YxStoreProductQueryVo combinatiionInfo(Long id);
