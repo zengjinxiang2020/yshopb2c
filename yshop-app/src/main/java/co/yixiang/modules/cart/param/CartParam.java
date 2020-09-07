@@ -36,11 +36,11 @@ public class CartParam {
     private String uniqueId;
 
     @ApiModelProperty(value = "产品拼团ID")
-    private Long combinationId;
+    private Long combinationId = 0L;
 
     @ApiModelProperty(value = "产品秒杀ID")
-    private Long secKillId;
+    private Long secKillId = 0L;
 
     @ApiModelProperty(value = "产品砍价ID")
-    private Long bargainId;
+    private Long bargainId = 0L;
 }
