@@ -31,6 +31,7 @@ import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
@@ -90,7 +91,15 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
     @Override
     //@Cacheable
     public WechatLiveVo queryAll(YxWechatLiveQueryCriteria criteria, Pageable pageable) {
-        getPage(pageable);
+        String order=null;
+        if(pageable.getSort()!=null){
+            order= pageable.getSort().toString();
+            order=order.replace(":","");
+            if("UNSORTED".equals(order)){
+                order="start_time desc";
+            }
+        }
+        PageHelper.startPage(pageable.getPageNumber()+1, pageable.getPageSize(),order);
         PageInfo<YxWechatLive> page = new PageInfo<>(queryAll(criteria));
         WechatLiveVo wechatLiveVo = new WechatLiveVo();
 //            List<WxMaLiveResult.RoomInfo> liveInfos = wxMaLiveService.getLiveInfos();
