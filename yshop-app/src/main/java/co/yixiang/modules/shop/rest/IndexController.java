@@ -71,7 +71,7 @@ public class IndexController {
                 .benefit(storeProductService.getList(1,10,ProductEnum.TYPE_4.getValue()))
                 .combinationList(storeCombinationService.getList(1,4))
                 .firstList(storeProductService.getList(1,6,ProductEnum.TYPE_3.getValue()))
-                .likeInfo(storeProductService.getList(1,3,ProductEnum.TYPE_2.getValue()))
+                .likeInfo(storeProductService.getList(1,4,ProductEnum.TYPE_2.getValue()))
                 .mapKey(RedisUtil.get(ShopKeyUtils.getTengXunMapKey()))
                 .menus(systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_MENUS))
                 .roll(systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_ROLL_NEWS))
