@@ -7069,7 +7069,7 @@ INSERT INTO `yx_user_task_finish` VALUES (6, 17, 21, 0, '2020-06-24 18:35:45', N
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_wechat_live`;
 CREATE TABLE `yx_wechat_live`  (
-  `roomid` bigint(11) NOT NULL COMMENT '直播间id',
+  `room_id` bigint(11) NOT NULL COMMENT '直播间id',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '直播间标题',
   `cover_imge` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '背景图',
   `share_imge` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分享图片',
@@ -7085,7 +7085,7 @@ CREATE TABLE `yx_wechat_live`  (
   `close_comment` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭评论 【0：开启，1：关闭】',
   `close_goods` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭货架 【0：开启，1：关闭】',
   `product_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品id 多个,分割',
-  PRIMARY KEY (`roomid`) USING BTREE
+  PRIMARY KEY (`room_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
