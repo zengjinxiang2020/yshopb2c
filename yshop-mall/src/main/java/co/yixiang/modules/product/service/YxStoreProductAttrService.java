@@ -12,6 +12,7 @@ import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.product.domain.YxStoreProductAttr;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
 import co.yixiang.modules.product.service.dto.FromatDetailDto;
+import co.yixiang.modules.product.service.dto.ProductFormatDto;
 
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,6 @@ public interface YxStoreProductAttrService  extends BaseService<YxStoreProductAt
      * @param attrs value
      * @param productId 商品id
      */
-    void insertYxStoreProductAttr(List<FromatDetailDto> items, List<Map<String,Object>> attrs,
+    void insertYxStoreProductAttr(List<FromatDetailDto> items, List<ProductFormatDto> attrs,
                                   Long productId);
 }

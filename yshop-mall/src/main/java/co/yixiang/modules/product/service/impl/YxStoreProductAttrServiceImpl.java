@@ -73,7 +73,7 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
      */
     @Override
     @Transactional
-    public void insertYxStoreProductAttr(List<FromatDetailDto> items, List<Map<String,Object>> attrs,
+    public void insertYxStoreProductAttr(List<FromatDetailDto> items, List<ProductFormatDto> attrs,
                                          Long productId)
     {
         List<YxStoreProductAttr> attrGroup = new ArrayList<>();
@@ -89,11 +89,8 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
 
 
         List<YxStoreProductAttrValue> valueGroup = new ArrayList<>();
-        for (Map<String, Object> m : attrs) {
-            ProductFormatDto productFormatDto = BeanUtil.mapToBean(m,ProductFormatDto.class,true);
-//            List<String> stringList = productFormatDto.getDetail().values()
-//                    .stream()
-//                    .collect(Collectors.toList());
+        for (ProductFormatDto productFormatDto : attrs) {
+
             if(productFormatDto.getPinkStock()>productFormatDto.getStock() || productFormatDto.getSeckillStock()>productFormatDto.getStock()){
                 throw new BadRequestException("活动商品库存不能大于原有商品库存");
             }
