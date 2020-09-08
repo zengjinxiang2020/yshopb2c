@@ -60,7 +60,6 @@ import java.util.List;
 public class AuthService {
 
     private final YxUserService userService;
-    private final RedisUtils redisUtil;
     private final RedisUtils redisUtils;
     private static Integer expiredTimeIn;
 
@@ -86,8 +85,8 @@ public class AuthService {
         String spread = loginParam.getSpread();
         try {
             //读取redis配置
-            String appId = redisUtil.getY(ShopKeyUtils.getWxAppAppId());
-            String secret = redisUtil.getY(ShopKeyUtils.getWxAppSecret());
+            String appId = redisUtils.getY(ShopKeyUtils.getWxAppAppId());
+            String secret = redisUtils.getY(ShopKeyUtils.getWxAppSecret());
             if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
                 throw new YshopException("请先配置小程序");
             }

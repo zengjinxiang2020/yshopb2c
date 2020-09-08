@@ -1162,6 +1162,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         Date today = DateUtil.beginOfDay(new Date());
         Date yesterday = DateUtil.beginOfDay(DateUtil.yesterday());
         Date nowMonth = DateUtil.beginOfMonth(new Date());
+        Date lastWeek = DateUtil.beginOfDay(DateUtil.lastWeek());
 
         ShoperOrderTimeDataVo orderTimeDataVo = new ShoperOrderTimeDataVo();
 
@@ -1195,6 +1196,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         orderTimeDataVo.setMonthPrice(yxStoreOrderMapper.todayPrice(wrapperThree));
         //本月订单数
         orderTimeDataVo.setMonthCount(yxStoreOrderMapper.selectCount(wrapperThree));
+
+        //上周成交额
+        QueryWrapper<YxStoreOrder> wrapperLastWeek = new QueryWrapper<>();
+        wrapperLastWeek.lambda()
+                .lt(YxStoreOrder::getPayTime,today)
+                .ge(YxStoreOrder::getPayTime,lastWeek)
+                .eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
+                .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue());
+        orderTimeDataVo.setLastWeekPrice(yxStoreOrderMapper.todayPrice(wrapperLastWeek));
+        //上周订单数
+        orderTimeDataVo.setLastWeekCount(yxStoreOrderMapper.selectCount(wrapperLastWeek));
 
 
         return orderTimeDataVo;
