@@ -78,28 +78,7 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
 
     @Autowired
     private YxShippingTemplatesService shippingTemplatesService;
-    /**
-     * 退回库存减少销量
-     * @param num 数量
-     * @param seckillId 秒杀产品id
-     */
-    @Override
-    public void incStockDecSales(int num, Long seckillId) {
-        yxStoreSeckillMapper.incStockDecSales(num,seckillId);
-    }
 
-    /**
-     * 减库存增加销量
-     * @param num 数量
-     * @param seckillId 秒杀产品id
-     */
-    @Override
-    public void decStockIncSales(int num, Long seckillId) {
-        int res = yxStoreSeckillMapper.decStockIncSales(num,seckillId);
-        if(res == 0) {
-            throw new YshopException("秒杀产品库存不足");
-        }
-    }
 
 //    @Override
 //    public YxStoreSeckill getSeckill(int id) {
@@ -274,6 +253,7 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
         }
 
         yxStoreSeckill.setStock(resultDTO.getStock());
+        yxStoreSeckill.setOtPrice(BigDecimal.valueOf(resultDTO.getMinOtPrice()));
         yxStoreSeckill.setPostage(BigDecimal.valueOf(resultDTO.getMinPrice()));
         yxStoreSeckill.setCost(BigDecimal.valueOf(resultDTO.getMinCost()));
         yxStoreSeckill.setStock(resultDTO.getStock());
@@ -289,14 +269,14 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
                     .attrHidden("")
                     .detail(ListUtil.toList("默认"))
                     .build();
-            List<Map<String,Object>> attrs = resources.getAttrs();
-            Map<String,Object> map = attrs.get(0);
-            map.put("value1","规格");
-            map.put("detail", MapUtil.of(new String[][] {
-                    {"规格", "默认"}
-            }));
+            List<ProductFormatDto> attrs = resources.getAttrs();
+            ProductFormatDto productFormatDto = attrs.get(0);
+            productFormatDto.setValue1("规格");
+            Map<String,String> map = new HashMap<>();
+            map.put("规格","默认");
+            productFormatDto.setDetail(map);
             yxStoreProductAttrService.insertYxStoreProductAttr(ListUtil.toList(fromatDetailDto),
-                    ListUtil.toList(map),resources.getProductId());
+                    ListUtil.toList(productFormatDto),resources.getProductId());
         }else{
             yxStoreProductAttrService.insertYxStoreProductAttr(resources.getItems(),
                     resources.getAttrs(),resources.getProductId());
@@ -309,27 +289,27 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
      * @param attrs attrs
      * @return ProductResultDto
      */
-    private ProductResultDto computedProduct(List<Map<String,Object>> attrs){
+    private ProductResultDto computedProduct(List<ProductFormatDto> attrs){
         //取最小价格
-        Double minPrice = ListMapToListBean(attrs)
+        Double minPrice = attrs
                 .stream()
                 .map(ProductFormatDto::getSeckillPrice)
                 .min(Comparator.naturalOrder())
                 .orElse(0d);
 
-        Double minOtPrice = ListMapToListBean(attrs)
+        Double minOtPrice = attrs
                 .stream()
                 .map(ProductFormatDto::getOtPrice)
                 .min(Comparator.naturalOrder())
                 .orElse(0d);
 
-        Double minCost = ListMapToListBean(attrs)
+        Double minCost = attrs
                 .stream()
                 .map(ProductFormatDto::getCost)
                 .min(Comparator.naturalOrder())
                 .orElse(0d);
         //计算库存
-        Integer stock = ListMapToListBean(attrs)
+        Integer stock = attrs
                 .stream()
                 .map(ProductFormatDto::getSeckillStock)
                 .reduce(Integer::sum)
@@ -347,17 +327,4 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
                 .build();
     }
 
-    /**
-     * mapTobean
-     * @param listMap listMap
-     * @return list
-     */
-    private List<ProductFormatDto> ListMapToListBean(List<Map<String, Object>> listMap){
-        List<ProductFormatDto> list = new ArrayList<>();
-        // 循环遍历出map对象
-        for (Map<String, Object> m : listMap) {
-            list.add(BeanUtil.mapToBean(m,ProductFormatDto.class,true));
-        }
-        return list;
-    }
 }

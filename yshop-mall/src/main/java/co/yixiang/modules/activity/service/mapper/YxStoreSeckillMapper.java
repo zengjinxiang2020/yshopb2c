@@ -22,13 +22,6 @@ import org.springframework.stereotype.Repository;
 */
 @Repository
 public interface YxStoreSeckillMapper extends CoreMapper<YxStoreSeckill> {
-    @Update("update yx_store_seckill set stock=stock+#{num}, sales=sales-#{num}" +
-            " where id=#{seckillId}")
-    int incStockDecSales(@Param("num") int num, @Param("seckillId") Long seckillId);
-
-    @Update("update yx_store_seckill set stock=stock-#{num}, sales=sales+#{num}" +
-            " where id=#{seckillId} and stock >= #{num}")
-    int decStockIncSales(@Param("num") int num,@Param("seckillId") Long seckillId);
 
     @Select("SELECT c.id,c.image,c.price,c.title as storeName,c.is_show as isShow,c.cost," +
             "c.is_postage as isPostage,c.postage,c.sales,c.stock,c.is_del as isDel" +

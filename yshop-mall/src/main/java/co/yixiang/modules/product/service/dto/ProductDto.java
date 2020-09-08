@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * 商品对象VO
- * 
+ *
  * @author hupeng
  * @date 2020-04-25
  */
@@ -138,7 +138,7 @@ public class ProductDto
 
     private List<FromatDetailDto> items;
 
-    private List<Map<String,Object>> attrs;
+    private List<ProductFormatDto> attrs;
 
 
 

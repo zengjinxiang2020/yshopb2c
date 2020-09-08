@@ -134,6 +134,6 @@ public class YxStoreCombinationDto implements Serializable {
     private List<FromatDetailDto> items;
 
     //sku结果集
-    private List<Map<String,Object>> attrs;
+    private List<ProductFormatDto> attrs;
 
 }

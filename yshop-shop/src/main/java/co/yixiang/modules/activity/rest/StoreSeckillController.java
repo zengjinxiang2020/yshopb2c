@@ -8,23 +8,25 @@ package co.yixiang.modules.activity.rest;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.SpecTypeEnum;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.activity.domain.YxStoreSeckill;
-import co.yixiang.modules.activity.domain.YxStoreSeckill;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
-import co.yixiang.modules.activity.service.dto.YxStoreSeckillDto;
 import co.yixiang.modules.activity.service.dto.YxStoreSeckillDto;
 import co.yixiang.modules.activity.service.dto.YxStoreSeckillQueryCriteria;
 import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.product.domain.YxStoreProductAttrResult;
+import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
 import co.yixiang.modules.product.service.YxStoreProductAttrResultService;
+import co.yixiang.modules.product.service.YxStoreProductAttrValueService;
 import co.yixiang.modules.product.service.YxStoreProductRuleService;
 import co.yixiang.modules.product.service.dto.ProductFormatDto;
 import co.yixiang.modules.template.domain.YxShippingTemplates;
 import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,14 +49,20 @@ import java.util.*;
 @RequestMapping("api")
 public class StoreSeckillController {
 
+    private final IGenerator generator;
     private final YxStoreSeckillService yxStoreSeckillService;
     private final YxShippingTemplatesService yxShippingTemplatesService;
     private final YxStoreProductRuleService yxStoreProductRuleService;
+    private final YxStoreProductAttrValueService storeProductAttrValueService;
     private final YxStoreProductAttrResultService yxStoreProductAttrResultService;
-    public StoreSeckillController(YxStoreSeckillService yxStoreSeckillService, YxShippingTemplatesService yxShippingTemplatesService, YxStoreProductRuleService yxStoreProductRuleService, YxStoreProductAttrResultService yxStoreProductAttrResultService) {
+    public StoreSeckillController(IGenerator generator, YxStoreSeckillService yxStoreSeckillService, YxShippingTemplatesService yxShippingTemplatesService,
+                                  YxStoreProductRuleService yxStoreProductRuleService, YxStoreProductAttrValueService storeProductAttrValueService,
+                                  YxStoreProductAttrResultService yxStoreProductAttrResultService) {
+        this.generator = generator;
         this.yxStoreSeckillService = yxStoreSeckillService;
         this.yxShippingTemplatesService = yxShippingTemplatesService;
         this.yxStoreProductRuleService = yxStoreProductRuleService;
+        this.storeProductAttrValueService = storeProductAttrValueService;
         this.yxStoreProductAttrResultService = yxStoreProductAttrResultService;
     }
 
@@ -108,14 +116,6 @@ public class StoreSeckillController {
         List<YxShippingTemplates> shippingTemplatesList = yxShippingTemplatesService.list();
         map.put("tempList", shippingTemplatesList);
 
-//        //商品分类
-//        List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
-//                .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
-//                .list();
-
-//        List<Map<String,Object>> cateList = new ArrayList<>();
-//        map.put("cateList", this.makeCate(storeCategories,cateList,0,1));
-
         //商品规格
         map.put("ruleList",yxStoreProductRuleService.list());
 
@@ -134,30 +134,15 @@ public class StoreSeckillController {
                         .eq(YxStoreProductAttrResult::getProductId,yxStoreSeckill.getProductId()).last("limit 1"));
         JSONObject result = JSON.parseObject(storeProductAttrResult.getResult());
 
+        List<YxStoreProductAttrValue> attrValues = storeProductAttrValueService.list(new LambdaQueryWrapper<YxStoreProductAttrValue>().eq(YxStoreProductAttrValue::getProductId, yxStoreSeckill.getProductId()));
+        List<ProductFormatDto> productFormatDtos = generator.convert(attrValues, ProductFormatDto.class);
+
         if(SpecTypeEnum.TYPE_1.getValue().equals(yxStoreSeckill.getSpecType())){
             productDto.setAttr(new ProductFormatDto());
-            productDto.setAttrs(result.getObject("value", ArrayList.class));
+            productDto.setAttrs(productFormatDtos);
             productDto.setItems(result.getObject("attr",ArrayList.class));
         }else{
-            Map<String,Object> mapAttr = (Map<String,Object>)result.getObject("value",ArrayList.class).get(0);
-            ProductFormatDto productFormatDto = ProductFormatDto.builder()
-                    .pic(mapAttr.get("pic").toString())
-                    .price(Double.valueOf(mapAttr.get("price").toString()))
-                    .pinkPrice(Double.valueOf(mapAttr.get("pink_price").toString()))
-                    .cost(Double.valueOf(mapAttr.get("cost").toString()))
-                    .otPrice(Double.valueOf(mapAttr.get("ot_price").toString()))
-                    .barCode(mapAttr.get("bar_code").toString())
-                    .weight(Double.valueOf(mapAttr.get("weight").toString()))
-                    .volume(Double.valueOf(mapAttr.get("volume").toString()))
-                    .stock(Integer.valueOf(mapAttr.get("stock").toString()))
-                    .brokerage(Double.valueOf(mapAttr.get("brokerage").toString()))
-                    .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
-                    .pinkPrice(Double.valueOf(mapAttr.get("pink_price").toString()))
-                    .pinkStock(Integer.valueOf(mapAttr.get("pink_stock").toString()))
-                    .seckillPrice(Double.valueOf(mapAttr.get("seckill_price").toString()))
-                    .seckillStock(Integer.valueOf(mapAttr.get("seckill_stock").toString()))
-                    .build();
-            productDto.setAttr(productFormatDto);
+            productDto.setAttr(productFormatDtos.get(0));
         }
 
 

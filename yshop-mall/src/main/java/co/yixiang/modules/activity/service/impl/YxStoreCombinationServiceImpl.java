@@ -58,13 +58,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 /**
@@ -97,52 +91,6 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
     private YxShippingTemplatesService shippingTemplatesService;
 
 
-    /**
-     * 减库存增加销量
-     * @param num 数量
-     * @param combinationId 拼团产品id
-     */
-    @Override
-    public void decStockIncSales(int num, Long combinationId) {
-        int res = yxStoreCombinationMapper.decStockIncSales(num,combinationId);
-        if(res == 0) {
-            throw new YshopException("拼团产品库存不足");
-        }
-    }
-
-    /**
-     * 增加库存 减少销量
-     * @param num  数量
-     * @param combinationId 拼团产品id
-     */
-    @Override
-    public void incStockDecSales(int num, Long combinationId) {
-        yxStoreCombinationMapper.incStockDecSales(num,combinationId);
-    }
-
-    @Override
-    public YxStoreCombination getCombination(int id) {
-        QueryWrapper<YxStoreCombination> wrapper = new QueryWrapper<>();
-        wrapper.eq("id",id).eq("is_del",0).eq("is_show",1);
-        return yxStoreCombinationMapper.selectOne(wrapper);
-    }
-
-//    /**
-//     * 判断库存是否足够
-//     * @param combinationId 平团产品id
-//     * @param cartNum 购物车数量
-//     * @return boolean
-//     */
-//    @Override
-//    public boolean judgeCombinationStock(Long combinationId, Integer cartNum) {
-//        YxStoreCombination storeCombination = this.getById(combinationId);
-//        return storeCombination.getStock() >= cartNum;
-//    }
-
-//    @Override
-//    public YxStoreCombinationQueryVo getCombinationT(int id) {
-//        return yxStoreCombinationMapper.getCombDetail(id);
-//    }
 
     /**
      * 获取拼团详情
@@ -322,6 +270,7 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         }
 
         yxStoreCombination.setPrice(BigDecimal.valueOf(resultDTO.getMinPrice()));
+        yxStoreCombination.setProductPrice(BigDecimal.valueOf(resultDTO.getMinOtPrice()));
         yxStoreCombination.setCost(resultDTO.getMinCost().intValue());
         yxStoreCombination.setStock(resultDTO.getStock());
         yxStoreCombination.setImages(String.join(",", resources.getImages()));
@@ -336,14 +285,14 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
                     .attrHidden("")
                     .detail(ListUtil.toList("默认"))
                     .build();
-            List<Map<String,Object>> attrs = resources.getAttrs();
-            Map<String,Object> map = attrs.get(0);
-            map.put("value1","规格");
-            map.put("detail", MapUtil.of(new String[][] {
-                    {"规格", "默认"}
-            }));
+            List<ProductFormatDto> attrs = resources.getAttrs();
+            ProductFormatDto productFormatDto = attrs.get(0);
+            productFormatDto.setValue1("规格");
+            Map<String,String> map = new HashMap<>();
+            map.put("规格","默认");
+            productFormatDto.setDetail(map);
             yxStoreProductAttrService.insertYxStoreProductAttr(ListUtil.toList(fromatDetailDto),
-                    ListUtil.toList(map),resources.getProductId());
+                    ListUtil.toList(productFormatDto),resources.getProductId());
         }else{
             yxStoreProductAttrService.insertYxStoreProductAttr(resources.getItems(),
                     resources.getAttrs(),resources.getProductId());
@@ -357,27 +306,27 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
      * @param attrs attrs
      * @return ProductResultDto
      */
-    private ProductResultDto computedProduct(List<Map<String,Object>> attrs){
+    private ProductResultDto computedProduct(List<ProductFormatDto> attrs){
         //取最小价格
-        Double minPrice = ListMapToListBean(attrs)
+        Double minPrice = attrs
                 .stream()
                 .map(ProductFormatDto::getPinkPrice)
                 .min(Comparator.naturalOrder())
                 .orElse(0d);
 
-        Double minOtPrice = ListMapToListBean(attrs)
+        Double minOtPrice = attrs
                 .stream()
                 .map(ProductFormatDto::getOtPrice)
                 .min(Comparator.naturalOrder())
                 .orElse(0d);
 
-        Double minCost = ListMapToListBean(attrs)
+        Double minCost = attrs
                 .stream()
                 .map(ProductFormatDto::getCost)
                 .min(Comparator.naturalOrder())
                 .orElse(0d);
         //计算库存
-        Integer stock = ListMapToListBean(attrs)
+        Integer stock = attrs
                 .stream()
                 .map(ProductFormatDto::getPinkStock)
                 .reduce(Integer::sum)

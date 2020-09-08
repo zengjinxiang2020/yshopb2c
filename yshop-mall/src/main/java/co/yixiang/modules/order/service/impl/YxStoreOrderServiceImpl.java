@@ -639,9 +639,6 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
     }
 
-
-
-
     /**
      * 确认订单退款
      * @param orderId 单号
@@ -1162,6 +1159,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         Date today = DateUtil.beginOfDay(new Date());
         Date yesterday = DateUtil.beginOfDay(DateUtil.yesterday());
         Date nowMonth = DateUtil.beginOfMonth(new Date());
+        Date lastWeek = DateUtil.beginOfDay(DateUtil.lastWeek());
 
         ShoperOrderTimeDataVo orderTimeDataVo = new ShoperOrderTimeDataVo();
 
@@ -1195,6 +1193,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         orderTimeDataVo.setMonthPrice(yxStoreOrderMapper.todayPrice(wrapperThree));
         //本月订单数
         orderTimeDataVo.setMonthCount(yxStoreOrderMapper.selectCount(wrapperThree));
+
+        //上周成交额
+        QueryWrapper<YxStoreOrder> wrapperLastWeek = new QueryWrapper<>();
+        wrapperLastWeek.lambda()
+                .lt(YxStoreOrder::getPayTime,today)
+                .ge(YxStoreOrder::getPayTime,lastWeek)
+                .eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
+                .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue());
+        orderTimeDataVo.setLastWeekPrice(yxStoreOrderMapper.todayPrice(wrapperLastWeek));
+        //上周订单数
+        orderTimeDataVo.setLastWeekCount(yxStoreOrderMapper.selectCount(wrapperLastWeek));
 
 
         return orderTimeDataVo;
@@ -1581,7 +1590,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                         storeCartVO.getProductAttrUnique(),combinationId,"combination");
             }else if(seckillId != null && seckillId > 0){
                 productService.decProductStock(storeCartVO.getCartNum(),storeCartVO.getProductId(),
-                        storeCartVO.getProductAttrUnique(),combinationId,"seckill");
+                        storeCartVO.getProductAttrUnique(),seckillId,"seckill");
             }else if(bargainId != null && bargainId > 0){
                 storeBargainService.decStockIncSales(storeCartVO.getCartNum(),bargainId);
             } else {
@@ -1673,14 +1682,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             YxStoreCartQueryVo cart = JSONObject.parseObject(cartInfo.getCartInfo()
                     ,YxStoreCartQueryVo.class);
             if(order.getCombinationId() != null && order.getCombinationId() > 0){//拼团
-                combinationService.incStockDecSales(cart.getCartNum(),order.getCombinationId());
+                productService.incProductStock(cart.getCartNum(),cart.getProductId(),cart.getProductAttrUnique(),order.getCombinationId(),"combination");
             }else if(order.getSeckillId() != null && order.getSeckillId() > 0){//秒杀
-                storeSeckillService.incStockDecSales(cart.getCartNum(),order.getSeckillId());
+                productService.incProductStock(cart.getCartNum(),cart.getProductId(),cart.getProductAttrUnique(),order.getSeckillId(),"seckill");
             }else if(order.getBargainId() != null && order.getBargainId() > 0){//砍价
                 storeBargainService.incStockDecSales(cart.getCartNum(),order.getBargainId());
             }else{
                 productService.incProductStock(cart.getCartNum(),cart.getProductId()
-                        ,cart.getProductAttrUnique());
+                        ,cart.getProductAttrUnique(),0L,null);
             }
 
         }

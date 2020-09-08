@@ -16,6 +16,7 @@ import co.yixiang.tools.service.dto.LocalStorageDto;
 import co.yixiang.tools.service.dto.LocalStorageQueryCriteria;
 import co.yixiang.tools.service.mapper.LocalStorageMapper;
 import co.yixiang.utils.FileUtil;
+import co.yixiang.utils.SecurityUtils;
 import co.yixiang.utils.StringUtils;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -101,7 +102,7 @@ public class LocalStorageServiceImpl extends BaseServiceImpl<LocalStorageMapper,
                     file.getPath(),
                     type,
                     FileUtil.getSize(multipartFile.getSize()),
-                    "yshop"
+                    SecurityUtils.getUsername()
             );
             this.save(localStorage);
             return generator.convert(localStorage,LocalStorageDto.class);

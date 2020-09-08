@@ -10,6 +10,7 @@ package co.yixiang.modules.product.rest;
 
 import cn.hutool.core.bean.BeanUtil;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.enums.SpecTypeEnum;
 import co.yixiang.logging.aop.log.Log;
@@ -18,7 +19,9 @@ import co.yixiang.modules.category.domain.YxStoreCategory;
 import co.yixiang.modules.category.service.YxStoreCategoryService;
 import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.domain.YxStoreProductAttrResult;
+import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
 import co.yixiang.modules.product.service.YxStoreProductAttrResultService;
+import co.yixiang.modules.product.service.YxStoreProductAttrValueService;
 import co.yixiang.modules.product.service.YxStoreProductRuleService;
 import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.modules.product.service.dto.ProductDto;
@@ -29,6 +32,7 @@ import co.yixiang.modules.template.domain.YxShippingTemplates;
 import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -68,17 +72,20 @@ public class StoreProductController {
     private final YxShippingTemplatesService yxShippingTemplatesService;
     private final YxStoreProductRuleService yxStoreProductRuleService;
     private final YxStoreProductAttrResultService yxStoreProductAttrResultService;
-
+    private final YxStoreProductAttrValueService storeProductAttrValueService;
+    private final IGenerator generator;
     public StoreProductController(YxStoreProductService yxStoreProductService,
                                   YxStoreCategoryService yxStoreCategoryService,
                                   YxShippingTemplatesService yxShippingTemplatesService,
                                   YxStoreProductRuleService yxStoreProductRuleService,
-                                  YxStoreProductAttrResultService yxStoreProductAttrResultService) {
+                                  YxStoreProductAttrResultService yxStoreProductAttrResultService, YxStoreProductAttrValueService storeProductAttrValueService, IGenerator generator) {
         this.yxStoreProductService = yxStoreProductService;
         this.yxStoreCategoryService = yxStoreCategoryService;
         this.yxShippingTemplatesService = yxShippingTemplatesService;
         this.yxStoreProductRuleService = yxStoreProductRuleService;
         this.yxStoreProductAttrResultService = yxStoreProductAttrResultService;
+        this.storeProductAttrValueService = storeProductAttrValueService;
+        this.generator = generator;
     }
 
     @Log("查询商品")
@@ -178,32 +185,16 @@ public class StoreProductController {
                 .getOne(Wrappers.<YxStoreProductAttrResult>lambdaQuery()
                         .eq(YxStoreProductAttrResult::getProductId,id).last("limit 1"));
         JSONObject result = JSON.parseObject(storeProductAttrResult.getResult());
-
+        List<YxStoreProductAttrValue> attrValues = storeProductAttrValueService.list(new LambdaQueryWrapper<YxStoreProductAttrValue>().eq(YxStoreProductAttrValue::getProductId, yxStoreProduct.getId()));
+        List<ProductFormatDto> productFormatDtos = generator.convert(attrValues, ProductFormatDto.class);
         if(SpecTypeEnum.TYPE_1.getValue().equals(yxStoreProduct.getSpecType())){
             productDto.setAttr(new ProductFormatDto());
-            productDto.setAttrs(result.getObject("value",ArrayList.class));
+            productDto.setAttrs(productFormatDtos);
             productDto.setItems(result.getObject("attr",ArrayList.class));
         }else{
-            Map<String,Object> mapAttr = (Map<String,Object>)result.getObject("value",ArrayList.class).get(0);
-            ProductFormatDto productFormatDto = ProductFormatDto.builder()
-                    .pic(mapAttr.get("pic").toString())
-                    .price(Double.valueOf(mapAttr.get("price").toString()))
-                    .cost(Double.valueOf(mapAttr.get("cost").toString()))
-                    .otPrice(Double.valueOf(mapAttr.get("ot_price").toString()))
-                    .stock(Integer.valueOf(mapAttr.get("stock").toString()))
-                    .barCode(mapAttr.get("bar_code").toString())
-                    .weight(Double.valueOf(mapAttr.get("weight").toString()))
-                    .volume(Double.valueOf(mapAttr.get("volume").toString()))
-                    .brokerage(Double.valueOf(mapAttr.get("brokerage").toString()))
-                    .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
-                    .pinkPrice(Double.valueOf(mapAttr.get("pink_price").toString()))
-                    .pinkStock(Integer.valueOf(mapAttr.get("pink_stock").toString()))
-                    .seckillPrice(Double.valueOf(mapAttr.get("seckill_price").toString()))
-                    .seckillStock(Integer.valueOf(mapAttr.get("seckill_stock").toString()))
-                    .build();
-            productDto.setAttr(productFormatDto);
-        }
 
+            productDto.setAttr(productFormatDtos.get(0));
+        }
 
         map.put("productInfo",productDto);
 

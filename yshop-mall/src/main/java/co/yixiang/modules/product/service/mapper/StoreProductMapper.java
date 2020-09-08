@@ -21,35 +21,70 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
 
+    /**
+     * 正常商品库存 减库存 加销量
+     * @param num
+     * @param productId
+     * @return
+     */
     @Update("update yx_store_product set stock=stock-#{num}, sales=sales+#{num}" +
             " where id=#{productId} and stock >= #{num}")
     int decStockIncSales(@Param("num") int num,@Param("productId") Long productId);
 
+    /**
+     * 正常商品库存 加库存 减销量
+     * @param num
+     * @param productId
+     * @return
+     */
     @Update("update yx_store_product set stock=stock+#{num}, sales=sales-#{num}" +
             " where id=#{productId}")
     int incStockDecSales(@Param("num") int num,@Param("productId") Long productId);
 
-    @Update("update yx_store_product set sales=sales+#{num}" +
-            " where id=#{productId}")
-    int incSales(@Param("num") int num,@Param("productId") int productId);
-
-    @Update("update yx_store_product set sales=sales-#{num}" +
-            " where id=#{productId}")
-    int decSales(@Param("num") int num,@Param("productId") Long productId);
-
-
-    @Update("update yx_store_product set is_del = #{status} where id = #{id}")
-    void updateDel(@Param("status")int status,@Param("id") Integer id);
 
     @Update("update yx_store_product set is_show = #{status} where id = #{id}")
     void updateOnsale(@Param("status") Integer status, @Param("id") Long id);
 
-    //todo 拼团商品库存+—
+    /**
+     * 拼团商品库存，减库存 加销量
+     * @param num
+     * @param productId
+     * @param activityId
+     * @return
+     */
     @Update("update yx_store_combination set stock=stock-#{num}, sales=sales+#{num}" +
             " where id=#{activityId} and stock >= #{num}")
     int decCombinationStockIncSales(int num, Long productId,Long activityId);
-    //todo 秒杀商品库存+—
+
+    /**
+     * 秒杀产品库存 减库存，加销量
+     * @param num
+     * @param productId
+     * @param activityId
+     * @return
+     */
     @Update("update yx_store_seckill set stock=stock-#{num}, sales=sales+#{num}" +
             " where id=#{activityId} and stock >= #{num}")
     int decSeckillStockIncSales(int num, Long productId,Long activityId);
+
+    /**
+     * 拼团商品库存，加库存 减销量
+     * @param num
+     * @param productId
+     * @param activityId
+     */
+    @Update("update yx_store_combination set stock=stock+#{num}, sales=sales-#{num}" +
+            " where id=#{activityId} and stock >= #{num}")
+    void incCombinationStockIncSales(Integer num, Long productId, Long activityId);
+
+    /**
+     * 秒杀产品库存 加库存，减销量
+     * @param num
+     * @param productId
+     * @param activityId
+     * @return
+     */
+    @Update("update yx_store_seckill set stock=stock+#{num}, sales=sales-#{num}" +
+            " where id=#{activityId} and stock >= #{num}")
+    void incSeckillStockIncSales(Integer num, Long productId, Long activityId);
 }

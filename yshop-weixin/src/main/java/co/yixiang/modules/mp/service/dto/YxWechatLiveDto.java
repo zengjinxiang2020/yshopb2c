@@ -93,5 +93,7 @@ public class YxWechatLiveDto implements Serializable {
      */
 
     private String productId;
+
+    @ApiModelProperty(value = "商品信息")
     private List<YxWechatLiveGoodsDto> product;
 }

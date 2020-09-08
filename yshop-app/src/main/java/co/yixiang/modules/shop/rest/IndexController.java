@@ -17,6 +17,7 @@ import co.yixiang.enums.ProductEnum;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.vo.YxStoreSeckillQueryVo;
+import co.yixiang.modules.mp.service.YxWechatLiveService;
 import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.modules.product.vo.YxSystemStoreQueryVo;
 import co.yixiang.modules.shop.param.YxSystemStoreQueryParam;
@@ -60,6 +61,7 @@ public class IndexController {
     private final YxSystemStoreService systemStoreService;
     private final YxStoreCombinationService storeCombinationService;
     private final YxStoreSeckillService storeSeckillService;
+    private final YxWechatLiveService wechatLiveService;
 
     @Cacheable(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY)
     @GetMapping("/index")
@@ -76,6 +78,7 @@ public class IndexController {
                 .menus(systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_MENUS))
                 .roll(systemGroupDataService.getDatas(ShopConstants.YSHOP_HOME_ROLL_NEWS))
                 .seckillList(storeSeckillService.getList(1, 4))
+                .liveList(wechatLiveService.getList(1,4,0))
                 .build();
         return ApiResult.ok(indexVo);
     }
