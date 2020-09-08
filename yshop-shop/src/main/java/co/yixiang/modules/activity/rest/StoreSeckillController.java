@@ -149,6 +149,7 @@ public class StoreSeckillController {
                     .barCode(mapAttr.get("bar_code").toString())
                     .weight(Double.valueOf(mapAttr.get("weight").toString()))
                     .volume(Double.valueOf(mapAttr.get("volume").toString()))
+                    .stock(Integer.valueOf(mapAttr.get("stock").toString()))
                     .brokerage(Double.valueOf(mapAttr.get("brokerage").toString()))
                     .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
                     .pinkPrice(Double.valueOf(mapAttr.get("pink_price").toString()))

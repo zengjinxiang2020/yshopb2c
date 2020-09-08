@@ -176,9 +176,6 @@ public class YxStoreCombination extends BaseDomain {
     @ApiModelProperty(value = "运费模板ID")
     private Long tempId;
 
-    /** 是否单独分佣 */
-    @JsonProperty("is_sub")
-    private Integer isSub;
 
     /** 属性项目 */
     @TableField(exist = false)

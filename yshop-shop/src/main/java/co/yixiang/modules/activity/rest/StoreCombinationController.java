@@ -138,6 +138,7 @@ public class StoreCombinationController {
                     .brokerageTwo(Double.valueOf(mapAttr.get("brokerage_two").toString()))
                     .pinkPrice(Double.valueOf(mapAttr.get("pink_price").toString()))
                     .pinkStock(Integer.valueOf(mapAttr.get("pink_stock").toString()))
+                    .stock(Integer.valueOf(mapAttr.get("stock").toString()))
                     .seckillPrice(Double.valueOf(mapAttr.get("seckill_price").toString()))
                     .seckillStock(Integer.valueOf(mapAttr.get("seckill_stock").toString()))
                     .build();
