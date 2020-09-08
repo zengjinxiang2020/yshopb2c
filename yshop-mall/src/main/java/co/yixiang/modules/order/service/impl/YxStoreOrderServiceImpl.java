@@ -1590,7 +1590,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                         storeCartVO.getProductAttrUnique(),combinationId,"combination");
             }else if(seckillId != null && seckillId > 0){
                 productService.decProductStock(storeCartVO.getCartNum(),storeCartVO.getProductId(),
-                        storeCartVO.getProductAttrUnique(),combinationId,"seckill");
+                        storeCartVO.getProductAttrUnique(),seckillId,"seckill");
             }else if(bargainId != null && bargainId > 0){
                 storeBargainService.decStockIncSales(storeCartVO.getCartNum(),bargainId);
             } else {
