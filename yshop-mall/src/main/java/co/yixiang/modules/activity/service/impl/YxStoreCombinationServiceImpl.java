@@ -270,6 +270,7 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         }
 
         yxStoreCombination.setPrice(BigDecimal.valueOf(resultDTO.getMinPrice()));
+        yxStoreCombination.setProductPrice(BigDecimal.valueOf(resultDTO.getMinOtPrice()));
         yxStoreCombination.setCost(resultDTO.getMinCost().intValue());
         yxStoreCombination.setStock(resultDTO.getStock());
         yxStoreCombination.setImages(String.join(",", resources.getImages()));
