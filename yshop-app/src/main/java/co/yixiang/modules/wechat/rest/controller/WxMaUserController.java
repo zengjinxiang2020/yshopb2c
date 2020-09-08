@@ -21,7 +21,7 @@ import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.wechat.rest.param.BindPhoneParam;
 import co.yixiang.modules.wechat.rest.param.WxPhoneParam;
-import co.yixiang.tools.config.WxMaConfiguration;
+import co.yixiang.modules.mp.config.WxMaConfiguration;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.ShopKeyUtils;
 import io.swagger.annotations.Api;

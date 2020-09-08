@@ -9,8 +9,8 @@
 package co.yixiang.modules.shop.rest;
 
 import co.yixiang.api.ApiResult;
-import co.yixiang.modules.wechat.service.YxArticleService;
-import co.yixiang.modules.wechat.vo.YxArticleQueryVo;
+import co.yixiang.modules.mp.service.YxArticleService;
+import co.yixiang.modules.mp.vo.YxArticleQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

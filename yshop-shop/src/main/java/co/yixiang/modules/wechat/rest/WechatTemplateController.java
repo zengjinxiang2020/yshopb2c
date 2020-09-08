@@ -7,10 +7,10 @@ package co.yixiang.modules.wechat.rest;
 
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.modules.aop.ForbidSubmit;
-import co.yixiang.modules.wechat.domain.YxWechatTemplate;
-import co.yixiang.modules.wechat.service.YxWechatTemplateService;
-import co.yixiang.modules.wechat.service.dto.YxWechatTemplateDto;
-import co.yixiang.modules.wechat.service.dto.YxWechatTemplateQueryCriteria;
+import co.yixiang.modules.mp.domain.YxWechatTemplate;
+import co.yixiang.modules.mp.service.YxWechatTemplateService;
+import co.yixiang.modules.mp.service.dto.YxWechatTemplateDto;
+import co.yixiang.modules.mp.service.dto.YxWechatTemplateQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;

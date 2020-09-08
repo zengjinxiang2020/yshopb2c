@@ -10,10 +10,10 @@ package co.yixiang.modules.wechat.rest;
 
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.logging.aop.log.Log;
-import co.yixiang.modules.wechat.domain.YxWechatLive;
-import co.yixiang.modules.wechat.service.YxWechatLiveService;
-import co.yixiang.modules.wechat.service.dto.YxWechatLiveDto;
-import co.yixiang.modules.wechat.service.dto.YxWechatLiveQueryCriteria;
+import co.yixiang.modules.mp.domain.YxWechatLive;
+import co.yixiang.modules.mp.service.YxWechatLiveService;
+import co.yixiang.modules.mp.service.dto.YxWechatLiveDto;
+import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;

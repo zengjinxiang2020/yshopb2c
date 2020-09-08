@@ -139,8 +139,13 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             yxStoreProductAttrService.decProductAttrStock(num,productId,unique, type);
         }
         int res = 0;
-
+        if("combination".equals(type)){
+            res = storeProductMapper.decCombinationStockIncSales(num,productId,activityId);
+        }else if("seckill".equals(type)){
+            res = storeProductMapper.decSeckillStockIncSales(num,productId,activityId);
+        }else {
             res = storeProductMapper.decStockIncSales(num,productId);
+        }
 
         if(res == 0) {
             throw new YshopException("商品库存不足");

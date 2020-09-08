@@ -361,7 +361,7 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         //取最小价格
         Double minPrice = ListMapToListBean(attrs)
                 .stream()
-                .map(ProductFormatDto::getPrice)
+                .map(ProductFormatDto::getPinkPrice)
                 .min(Comparator.naturalOrder())
                 .orElse(0d);
 
@@ -379,7 +379,7 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         //计算库存
         Integer stock = ListMapToListBean(attrs)
                 .stream()
-                .map(ProductFormatDto::getStock)
+                .map(ProductFormatDto::getPinkStock)
                 .reduce(Integer::sum)
                 .orElse(0);
 

@@ -313,7 +313,7 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
         //取最小价格
         Double minPrice = ListMapToListBean(attrs)
                 .stream()
-                .map(ProductFormatDto::getPrice)
+                .map(ProductFormatDto::getSeckillPrice)
                 .min(Comparator.naturalOrder())
                 .orElse(0d);
 
@@ -331,7 +331,7 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
         //计算库存
         Integer stock = ListMapToListBean(attrs)
                 .stream()
-                .map(ProductFormatDto::getStock)
+                .map(ProductFormatDto::getSeckillStock)
                 .reduce(Integer::sum)
                 .orElse(0);
 

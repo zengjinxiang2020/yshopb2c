@@ -10,27 +10,16 @@ package co.yixiang.modules.wechat.rest.controller;
 
 import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
 import co.yixiang.api.ApiResult;
-import co.yixiang.dozer.service.IGenerator;
-import co.yixiang.logging.aop.log.Log;
-import co.yixiang.modules.wechat.domain.YxWechatLive;
-import co.yixiang.modules.wechat.service.YxWechatLiveService;
-import co.yixiang.modules.wechat.service.dto.YxWechatLiveDto;
-import co.yixiang.modules.wechat.service.dto.YxWechatLiveQueryCriteria;
-import co.yixiang.modules.wechat.vo.WechatLiveVo;
+import co.yixiang.modules.mp.service.YxWechatLiveService;
+import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
+import co.yixiang.modules.mp.vo.WechatLiveVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
 * @author hupeng

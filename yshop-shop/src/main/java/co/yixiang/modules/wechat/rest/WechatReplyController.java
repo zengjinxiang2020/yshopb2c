@@ -7,8 +7,8 @@ package co.yixiang.modules.wechat.rest;
 
 import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.modules.aop.ForbidSubmit;
-import co.yixiang.modules.wechat.domain.YxWechatReply;
-import co.yixiang.modules.wechat.service.YxWechatReplyService;
+import co.yixiang.modules.mp.domain.YxWechatReply;
+import co.yixiang.modules.mp.service.YxWechatReplyService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;

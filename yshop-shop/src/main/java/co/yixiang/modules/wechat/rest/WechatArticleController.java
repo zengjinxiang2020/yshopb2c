@@ -7,10 +7,10 @@ package co.yixiang.modules.wechat.rest;
 
 import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.services.WechatArticleService;
-import co.yixiang.modules.wechat.domain.YxArticle;
-import co.yixiang.modules.wechat.service.YxArticleService;
-import co.yixiang.modules.wechat.service.dto.YxArticleDto;
-import co.yixiang.modules.wechat.service.dto.YxArticleQueryCriteria;
+import co.yixiang.modules.mp.domain.YxArticle;
+import co.yixiang.modules.mp.service.YxArticleService;
+import co.yixiang.modules.mp.service.dto.YxArticleDto;
+import co.yixiang.modules.mp.service.dto.YxArticleQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;

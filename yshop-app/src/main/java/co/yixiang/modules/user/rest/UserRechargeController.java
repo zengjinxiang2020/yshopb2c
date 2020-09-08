@@ -24,7 +24,7 @@ import co.yixiang.modules.shop.vo.YxSystemGroupDataVo;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.param.RechargeParam;
 import co.yixiang.modules.user.service.YxUserRechargeService;
-import co.yixiang.mp.service.WeixinPayService;
+import co.yixiang.modules.mp.service.WeixinPayService;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;

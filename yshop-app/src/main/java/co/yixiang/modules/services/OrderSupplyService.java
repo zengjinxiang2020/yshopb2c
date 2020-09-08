@@ -31,7 +31,7 @@ import co.yixiang.modules.order.service.dto.ProductAttrDto;
 import co.yixiang.modules.order.service.dto.ProductDto;
 import co.yixiang.modules.order.vo.OrderCartInfoVo;
 import co.yixiang.modules.order.vo.YxStoreOrderQueryVo;
-import co.yixiang.mp.service.WeixinPayService;
+import co.yixiang.modules.mp.service.WeixinPayService;
 import com.alibaba.fastjson.JSONObject;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
