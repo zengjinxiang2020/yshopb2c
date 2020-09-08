@@ -1,6 +1,7 @@
 package co.yixiang.modules.order.vo;
 
 
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.service.dto.StatusDto;
 import co.yixiang.modules.product.vo.YxSystemStoreQueryVo;
@@ -127,6 +128,12 @@ public class YxStoreOrderQueryVo implements Serializable {
     @ApiModelProperty(value = "发货类型")
     private String deliveryType;
 
+    public String getDeliveryType() {
+        if(StrUtil.isBlank(deliveryType)) return "express";
+        return deliveryType;
+    }
+
+
     @ApiModelProperty(value = "快递单号/手机号")
     private String deliveryId;
 
@@ -176,6 +183,7 @@ public class YxStoreOrderQueryVo implements Serializable {
 
     @ApiModelProperty(value = "配送方式 1=快递 ，2=门店自提")
     private Integer shippingType;
+
 
     @ApiModelProperty(value = "支付渠道(0微信公众号1微信小程序)")
     private Integer isChannel;
