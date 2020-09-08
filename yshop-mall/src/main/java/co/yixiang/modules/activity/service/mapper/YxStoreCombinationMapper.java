@@ -26,13 +26,6 @@ import java.util.List;
 */
 @Repository
 public interface YxStoreCombinationMapper extends CoreMapper<YxStoreCombination> {
-    @Update("update yx_store_combination set stock=stock-#{num}, sales=sales+#{num}" +
-            " where id=#{combinationId} and stock >= #{num}")
-    int decStockIncSales(@Param("num") int num, @Param("combinationId") Long combinationId);
-
-    @Update("update yx_store_combination set stock=stock+#{num}, sales=sales-#{num}" +
-            " where id=#{combinationId}")
-    int incStockDecSales(@Param("num") int num,@Param("combinationId") Long combinationId);
 
     @Select("SELECT c.id,c.effective_time as effectiveTime,c.image,c.people,c.price, s.sales as sales," +
             "c.title,c.unit_name as unitName,s.price as productPrice FROM yx_store_combination c " +

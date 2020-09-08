@@ -27,21 +27,6 @@ import java.util.Map;
 */
 public interface YxStoreSeckillService  extends BaseService<YxStoreSeckill>{
 
-    /**
-     * 退回库存减少销量
-     * @param num 数量
-     * @param seckillId 秒杀产品id
-     */
-    void incStockDecSales(int num,Long seckillId);
-
-    /**
-     * 减库存增加销量
-     * @param num 数量
-     * @param seckillId 秒杀产品id
-     */
-    void decStockIncSales(int num,Long seckillId);
-
-    //YxStoreSeckill getSeckill(int id);
 
     /**
      * 产品详情

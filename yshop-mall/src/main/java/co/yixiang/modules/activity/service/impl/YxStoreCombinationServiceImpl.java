@@ -97,52 +97,6 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
     private YxShippingTemplatesService shippingTemplatesService;
 
 
-    /**
-     * 减库存增加销量
-     * @param num 数量
-     * @param combinationId 拼团产品id
-     */
-    @Override
-    public void decStockIncSales(int num, Long combinationId) {
-        int res = yxStoreCombinationMapper.decStockIncSales(num,combinationId);
-        if(res == 0) {
-            throw new YshopException("拼团产品库存不足");
-        }
-    }
-
-    /**
-     * 增加库存 减少销量
-     * @param num  数量
-     * @param combinationId 拼团产品id
-     */
-    @Override
-    public void incStockDecSales(int num, Long combinationId) {
-        yxStoreCombinationMapper.incStockDecSales(num,combinationId);
-    }
-
-    @Override
-    public YxStoreCombination getCombination(int id) {
-        QueryWrapper<YxStoreCombination> wrapper = new QueryWrapper<>();
-        wrapper.eq("id",id).eq("is_del",0).eq("is_show",1);
-        return yxStoreCombinationMapper.selectOne(wrapper);
-    }
-
-//    /**
-//     * 判断库存是否足够
-//     * @param combinationId 平团产品id
-//     * @param cartNum 购物车数量
-//     * @return boolean
-//     */
-//    @Override
-//    public boolean judgeCombinationStock(Long combinationId, Integer cartNum) {
-//        YxStoreCombination storeCombination = this.getById(combinationId);
-//        return storeCombination.getStock() >= cartNum;
-//    }
-
-//    @Override
-//    public YxStoreCombinationQueryVo getCombinationT(int id) {
-//        return yxStoreCombinationMapper.getCombDetail(id);
-//    }
 
     /**
      * 获取拼团详情

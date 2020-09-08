@@ -30,24 +30,6 @@ public interface YxStoreCombinationService  extends BaseService<YxStoreCombinati
 
 
     /**
-     * 减库存增加销量
-     * @param num 数量
-     * @param combinationId 拼团产品id
-     */
-    void decStockIncSales(int num,Long combinationId);
-
-    /**
-     * 增加库存 减少销量
-     * @param num  数量
-     * @param combinationId 拼团产品id
-     */
-    void incStockDecSales(int num,Long combinationId);
-
-    YxStoreCombination getCombination(int id);
-
-    //boolean judgeCombinationStock(Long combinationId,Integer cartNum);
-
-    /**
      * 拼团列表
      * @param page page
      * @param limit limit

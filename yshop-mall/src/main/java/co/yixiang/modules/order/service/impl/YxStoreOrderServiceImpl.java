@@ -639,9 +639,6 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
     }
 
-
-
-
     /**
      * 确认订单退款
      * @param orderId 单号
@@ -1685,14 +1682,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             YxStoreCartQueryVo cart = JSONObject.parseObject(cartInfo.getCartInfo()
                     ,YxStoreCartQueryVo.class);
             if(order.getCombinationId() != null && order.getCombinationId() > 0){//拼团
-                combinationService.incStockDecSales(cart.getCartNum(),order.getCombinationId());
+                productService.incProductStock(cart.getCartNum(),cart.getProductId(),cart.getProductAttrUnique(),order.getCombinationId(),"combination");
             }else if(order.getSeckillId() != null && order.getSeckillId() > 0){//秒杀
-                storeSeckillService.incStockDecSales(cart.getCartNum(),order.getSeckillId());
+                productService.incProductStock(cart.getCartNum(),cart.getProductId(),cart.getProductAttrUnique(),order.getSeckillId(),"seckill");
             }else if(order.getBargainId() != null && order.getBargainId() > 0){//砍价
                 storeBargainService.incStockDecSales(cart.getCartNum(),order.getBargainId());
             }else{
                 productService.incProductStock(cart.getCartNum(),cart.getProductId()
-                        ,cart.getProductAttrUnique());
+                        ,cart.getProductAttrUnique(),0L,null);
             }
 
         }

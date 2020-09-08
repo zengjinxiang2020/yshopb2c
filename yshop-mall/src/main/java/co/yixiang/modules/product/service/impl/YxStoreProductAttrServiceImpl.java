@@ -16,6 +16,7 @@ import co.yixiang.api.BusinessException;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.product.domain.YxStoreProductAttr;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
 import co.yixiang.modules.product.service.YxStoreProductAttrResultService;
@@ -93,6 +94,9 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
 //            List<String> stringList = productFormatDto.getDetail().values()
 //                    .stream()
 //                    .collect(Collectors.toList());
+            if(productFormatDto.getPinkStock()>productFormatDto.getStock() || productFormatDto.getSeckillStock()>productFormatDto.getStock()){
+                throw new BadRequestException("活动商品库存不能大于原有商品库存");
+            }
             List<String> stringList = new ArrayList<>(productFormatDto.getDetail().values());
             Collections.sort(stringList);
 
@@ -162,12 +166,19 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
      * @param unique sku唯一值
      */
     @Override
-    public void incProductAttrStock(Integer num, Long productId, String unique) {
-        yxStoreProductAttrValueMapper.incStockDecSales(num,productId,unique);
+    public void incProductAttrStock(Integer num, Long productId, String unique, String type ) {
+
+        if("combination".equals(type)){
+           yxStoreProductAttrValueMapper.incCombinationStockDecSales(num,productId,unique);
+        }else if("seckill".equals(type)){
+           yxStoreProductAttrValueMapper.incSeckillStockDecSales(num,productId,unique);
+        }else {
+            yxStoreProductAttrValueMapper.incStockDecSales(num,productId,unique);
+        }
     }
 
     /**
-     * 减少库存增加销量
+     * 减少库存增加销量（针对sku操作）
      * @param num 数量
      * @param productId 商品id
      * @param unique sku唯一值

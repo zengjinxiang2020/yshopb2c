@@ -35,7 +35,7 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
      * @param productId 商品id
      * @param unique sku唯一值
      */
-    void incProductStock(Integer num, Long productId, String unique);
+    void incProductStock(Integer num, Long productId, String unique,Long activityId, String type);
 
     /**
      * 减少库存与增加销量

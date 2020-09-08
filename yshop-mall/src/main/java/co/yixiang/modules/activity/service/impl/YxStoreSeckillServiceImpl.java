@@ -78,28 +78,7 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
 
     @Autowired
     private YxShippingTemplatesService shippingTemplatesService;
-    /**
-     * 退回库存减少销量
-     * @param num 数量
-     * @param seckillId 秒杀产品id
-     */
-    @Override
-    public void incStockDecSales(int num, Long seckillId) {
-        yxStoreSeckillMapper.incStockDecSales(num,seckillId);
-    }
 
-    /**
-     * 减库存增加销量
-     * @param num 数量
-     * @param seckillId 秒杀产品id
-     */
-    @Override
-    public void decStockIncSales(int num, Long seckillId) {
-        int res = yxStoreSeckillMapper.decStockIncSales(num,seckillId);
-        if(res == 0) {
-            throw new YshopException("秒杀产品库存不足");
-        }
-    }
 
 //    @Override
 //    public YxStoreSeckill getSeckill(int id) {
