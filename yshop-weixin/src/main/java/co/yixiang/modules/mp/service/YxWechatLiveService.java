@@ -14,6 +14,7 @@ import co.yixiang.modules.mp.service.dto.YxWechatLiveDto;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
 import co.yixiang.modules.mp.vo.WechatLiveVo;
 import co.yixiang.modules.mp.domain.YxWechatLive;
+import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -67,4 +68,14 @@ public interface YxWechatLiveService  extends BaseService<YxWechatLive>{
      * @return
      */
      List<WxMaLiveResult.LiveReplay> getLiveReplay(Integer roomId);
+
+
+    /**
+     * 商品列表
+     * @param page 页码
+     * @param limit 条数
+     * @param order ProductEnum
+     * @return List
+     */
+    List<YxWechatLiveDto> getList(int page, int limit, int order);
 }

@@ -16,6 +16,7 @@ import cn.hutool.json.JSONUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.mp.domain.YxWechatLiveGoods;
 import co.yixiang.modules.mp.service.YxWechatLiveGoodsService;
@@ -27,10 +28,15 @@ import co.yixiang.modules.mp.service.mapper.YxWechatLiveMapper;
 import co.yixiang.modules.mp.vo.WechatLiveVo;
 import co.yixiang.modules.mp.domain.YxWechatLive;
 import co.yixiang.modules.mp.config.WxMaConfiguration;
+import co.yixiang.modules.product.domain.YxStoreProduct;
+import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -66,9 +72,12 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
     private String uploadDirStr;
     private final YxWechatLiveGoodsService wechatLiveGoodsService;
 
-    public YxWechatLiveServiceImpl(IGenerator generator, YxWechatLiveGoodsService wechatLiveGoodsService) {
+    private final  YxWechatLiveMapper wechatLiveMapper;
+
+    public YxWechatLiveServiceImpl(IGenerator generator, YxWechatLiveGoodsService wechatLiveGoodsService, YxWechatLiveMapper wechatLiveMapper) {
         this.generator = generator;
         this.wechatLiveGoodsService = wechatLiveGoodsService;
+        this.wechatLiveMapper = wechatLiveMapper;
     }
 
     /**
@@ -205,5 +214,29 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         WxMediaUploadResult wxMediaUploadResult = wxMaService.getMediaService().uploadMedia( WxConsts.MediaFileType.IMAGE, picFile );
         log.info( "wxMpMaterialUploadResult : {}", JSONUtil.toJsonStr( wxMediaUploadResult ) );
         return wxMediaUploadResult;
+    }
+
+
+    /**
+     * 直播间列表
+     * @param page 页码
+     * @param limit 条数
+     * @param order ProductEnum
+     * @return List
+     */
+    @Override
+    public List<YxWechatLiveDto> getList(int page, int limit, int order) {
+        //todo 添加状态判断
+        QueryWrapper<YxWechatLive> wrapper = new QueryWrapper<>();
+        wrapper.lambda()
+                .orderByDesc(YxWechatLive::getStartTime);
+
+
+        Page<YxWechatLive> pageModel = new Page<>(page, limit);
+
+        IPage<YxWechatLive> pageList = wechatLiveMapper.selectPage(pageModel,wrapper);
+
+
+        return generator.convert(pageList.getRecords(),YxWechatLiveDto.class);
     }
 }
