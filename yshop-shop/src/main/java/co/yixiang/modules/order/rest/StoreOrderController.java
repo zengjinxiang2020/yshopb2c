@@ -127,10 +127,10 @@ public class StoreOrderController {
     }
 
     @ApiOperation(value = "根据订单id获取订单详情")
-    @GetMapping(value = "/getStoreOrderDetail")
+    @GetMapping(value = "/getStoreOrderDetail/{id}")
     @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_SELECT','YXEXPRESS_SELECT')")
-    public ResponseEntity getYxStoreOrders(@PathVariable Long orderId) {
-        return new ResponseEntity<>(yxStoreOrderService.getOrderDetail(orderId), HttpStatus.OK);
+    public ResponseEntity getYxStoreOrders(@PathVariable Long id) {
+        return new ResponseEntity<>(yxStoreOrderService.getOrderDetail(id), HttpStatus.OK);
     }
 
 

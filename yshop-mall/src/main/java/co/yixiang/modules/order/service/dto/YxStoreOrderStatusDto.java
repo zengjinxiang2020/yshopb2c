@@ -5,9 +5,12 @@
  */
 package co.yixiang.modules.order.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
 * @author hupeng
@@ -28,5 +31,9 @@ public class YxStoreOrderStatusDto implements Serializable {
     private String changeMessage;
 
     /** 操作时间 */
-    private Integer changeTime;
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(
+            pattern = "yyyy-MM-dd HH:mm:ss"
+    )
+    private Date changeTime;
 }
