@@ -215,6 +215,7 @@ public class StoreProductController {
                                        @RequestParam(value = "",required=false) String longitude,
                                        @RequestParam(value = "",required=false) String from)  {
         long uid = LocalUser.getUser().getUid();
+        storeProductService.incBrowseNum(id);
         ProductVo productDTO = storeProductService.goodsDetail(id,uid,latitude,longitude);
         return ApiResult.ok(productDTO);
     }

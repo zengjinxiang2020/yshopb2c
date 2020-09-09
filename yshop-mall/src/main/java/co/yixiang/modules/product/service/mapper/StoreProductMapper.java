@@ -87,4 +87,13 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
     @Update("update yx_store_seckill set stock=stock+#{num}, sales=sales-#{num}" +
             " where id=#{activityId} and stock >= #{num}")
     void incSeckillStockIncSales(Integer num, Long productId, Long activityId);
+
+    /**
+     * 商品浏览量
+     * @param productId
+     * @return
+     */
+    @Update("update yx_store_product set browse=browse+1 " +
+            "where id=#{productId}")
+    int incBrowseNum(@Param("productId") Long productId);
 }

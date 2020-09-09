@@ -10,7 +10,6 @@ package co.yixiang.modules.product.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -64,7 +63,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -363,6 +361,16 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         }
 
         return productVo;
+    }
+
+    /**
+     * 商品浏览量
+     *
+     * @param productId
+     */
+    @Override
+    public void incBrowseNum(Long productId) {
+        storeProductMapper.incBrowseNum(productId);
     }
 
 
