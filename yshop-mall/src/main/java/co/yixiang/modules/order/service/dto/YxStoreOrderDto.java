@@ -35,6 +35,10 @@ public class YxStoreOrderDto implements Serializable {
 
     private List<StoreOrderCartInfoDto> cartInfoList;
 
+    /**
+     * 订单状态列表
+     */
+    private List<YxStoreOrderStatusDto> storeOrderStatusList;
 
     // 订单号
     private String orderId;

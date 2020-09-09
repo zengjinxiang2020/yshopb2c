@@ -33,6 +33,7 @@ import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.event.TemplateBean;
 import co.yixiang.event.TemplateEvent;
 import co.yixiang.event.TemplateListenEnum;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.EntityExistException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.domain.YxStoreCouponUser;
@@ -2180,6 +2181,65 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public YxStoreOrderDto getOrderDetail(Long orderId) {
+        YxStoreOrder yxStoreOrder = this.getById(orderId);
+        if(ObjectUtil.isEmpty(yxStoreOrder)){
+            throw new BadRequestException("订单详情不存在");
+        }
+        YxStoreOrderDto yxStoreOrderDto = generator.convert(yxStoreOrder, YxStoreOrderDto.class);
+        Integer _status = OrderUtil.orderStatus(yxStoreOrder.getPaid(),yxStoreOrder.getStatus(),
+                yxStoreOrder.getRefundStatus());
+
+        if(yxStoreOrder.getStoreId() > 0) {
+            String storeName = systemStoreService.getById(yxStoreOrder.getStoreId()).getName();
+            yxStoreOrderDto.setStoreName(storeName);
+        }
+
+        //订单状态
+        String orderStatusStr = OrderUtil.orderStatusStr(yxStoreOrder.getPaid()
+                ,yxStoreOrder.getStatus(),yxStoreOrder.getShippingType()
+                ,yxStoreOrder.getRefundStatus());
+
+        if(_status == 3){
+
+            String refundTime = DateUtil.formatDateTime(yxStoreOrder.getRefundReasonTime());
+            String str = "<b style='color:#f124c7'>申请退款</b><br/>"+
+                    "<span>退款原因："+yxStoreOrder.getRefundReasonWap()+"</span><br/>" +
+                    "<span>备注说明："+yxStoreOrder.getRefundReasonWapExplain()+"</span><br/>" +
+                    "<span>退款时间："+refundTime+"</span><br/>";
+            orderStatusStr = str;
+        }
+        yxStoreOrderDto.setStatusName(orderStatusStr);
+
+        yxStoreOrderDto.set_status(_status);
+
+        String payTypeName = OrderUtil.payTypeName(yxStoreOrder.getPayType()
+                ,yxStoreOrder.getPaid());
+        yxStoreOrderDto.setPayTypeName(payTypeName);
+
+        yxStoreOrderDto.setPinkName(this.orderType(yxStoreOrder.getId()
+                ,yxStoreOrder.getPinkId(),yxStoreOrder.getCombinationId()
+                ,yxStoreOrder.getSeckillId(),yxStoreOrder.getBargainId(),
+                yxStoreOrder.getShippingType()));
+
+        List<YxStoreOrderCartInfo> cartInfos = storeOrderCartInfoService.list(
+                new QueryWrapper<YxStoreOrderCartInfo>().eq("oid",yxStoreOrder.getId()));
+        List<StoreOrderCartInfoDto> cartInfoDTOS = new ArrayList<>();
+        for (YxStoreOrderCartInfo cartInfo : cartInfos) {
+            StoreOrderCartInfoDto cartInfoDTO = new StoreOrderCartInfoDto();
+            cartInfoDTO.setCartInfoMap(JSON.parseObject(cartInfo.getCartInfo()));
+
+            cartInfoDTOS.add(cartInfoDTO);
+        }
+        yxStoreOrderDto.setCartInfoList(cartInfoDTOS);
+        yxStoreOrderDto.setUserDTO(generator.convert(userService.getById(yxStoreOrder.getUid()), YxUserDto.class));
+        if(yxStoreOrderDto.getUserDTO()==null){
+            yxStoreOrderDto.setUserDTO(new YxUserDto());
+        }
+        return yxStoreOrderDto;
     }
 
     @Override
