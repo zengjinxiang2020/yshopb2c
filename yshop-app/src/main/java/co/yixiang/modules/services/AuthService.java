@@ -108,11 +108,10 @@ public class AuthService {
 
 
                 //过滤掉表情
-                String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickName());
                 String ip = IpUtil.getRequestIp();
                 YxUser user = YxUser.builder()
                         .username(openid)
-                        .nickname(nickname)
+                        .nickname(wxMpUser.getNickName())
                         .avatar(wxMpUser.getAvatarUrl())
                         .addIp(ip)
                         .lastIp(ip)
@@ -121,7 +120,7 @@ public class AuthService {
 
                 //构建微信用户
                 WechatUserDto wechatUserDTO = WechatUserDto.builder()
-                        .nickname(nickname)
+                        .nickname(wxMpUser.getNickName())
                         .routineOpenid(wxMpUser.getOpenId())
                         .unionId(wxMpUser.getUnionId())
                         .sex(Integer.valueOf(wxMpUser.getGender()))
