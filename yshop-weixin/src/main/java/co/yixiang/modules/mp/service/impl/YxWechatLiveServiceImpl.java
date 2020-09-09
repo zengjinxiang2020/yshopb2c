@@ -125,6 +125,8 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         });
         wechatLiveVo.setContent(liveDtos);
         wechatLiveVo.setTotalElements(page.getTotal());
+        wechatLiveVo.setPageNumber(page.getPageNum());
+        wechatLiveVo.setLastPage(page.getPages());
         return wechatLiveVo;
     }
     @Override

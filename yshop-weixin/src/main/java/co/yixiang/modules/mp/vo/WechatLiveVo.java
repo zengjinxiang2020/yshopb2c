@@ -11,4 +11,10 @@ public class WechatLiveVo {
     private List<YxWechatLiveDto> content;
 
     private Long totalElements;
+
+    private Integer pageNumber;
+
+    private Integer lastPage;
+
+
 }

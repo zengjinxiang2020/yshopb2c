@@ -102,6 +102,7 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         YxWechatLiveGoods wechatLiveGoods = this.getById(resources.getGoodsId());
         try {
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+            WxMaLiveInfo.Goods goods = generator.convert(resources, WxMaLiveInfo.Goods.class);
             if(ObjectUtil.isNotEmpty(wechatLiveGoods)){
                 /** 审核状态 0：未审核，1：审核中，2:审核通过，3审核失败 */
                 if(LiveGoodsEnum.IS_Audit_2.getValue().equals(wechatLiveGoods.getAuditStatus())){
@@ -109,9 +110,14 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
                     resources.setCoverImgUrl(uploadPhotoToWx(wxMaService,resources.getCoverImgeUrl()).getMediaId());
                 }else if(LiveGoodsEnum.IS_Audit_1.getValue().equals(wechatLiveGoods.getAuditStatus())){
                     throw new BadRequestException("商品审核中不允许修改");
+                }else if(LiveGoodsEnum.IS_Audit_3.getValue().equals(wechatLiveGoods.getAuditStatus())){
+                    resources.setCoverImgUrl(uploadPhotoToWx(wxMaService,resources.getCoverImgeUrl()).getMediaId());
+                    wxMaService.getLiveGoodsService().updateGoods(goods);
+                    wxMaService.getLiveGoodsService().auditGoods(goods.getGoodsId());
+                    return;
                 }
             }
-            WxMaLiveInfo.Goods goods = generator.convert(resources, WxMaLiveInfo.Goods.class);
+
             boolean wxMaLiveResult = wxMaService.getLiveGoodsService().updateGoods(goods);
             this.saveOrUpdate(resources);
         } catch (WxErrorException e) {

@@ -251,6 +251,12 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
     */
     void download(List<YxStoreOrderDto> all, HttpServletResponse response) throws IOException;
 
+    /**
+     * 获取订单详情
+     * @param orderId
+     * @return
+     */
+    YxStoreOrderDto getOrderDetail(Long orderId);
 
     Map<String,Object> queryAll(List<String> ids);
 

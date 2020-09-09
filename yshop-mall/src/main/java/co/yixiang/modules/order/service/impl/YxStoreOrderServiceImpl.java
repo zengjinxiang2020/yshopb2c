@@ -33,6 +33,7 @@ import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.event.TemplateBean;
 import co.yixiang.event.TemplateEvent;
 import co.yixiang.event.TemplateListenEnum;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.exception.EntityExistException;
 import co.yixiang.exception.ErrorRequestException;
 import co.yixiang.modules.activity.domain.YxStoreCouponUser;
@@ -51,22 +52,13 @@ import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.domain.YxExpress;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.domain.YxStoreOrderCartInfo;
+import co.yixiang.modules.order.domain.YxStoreOrderStatus;
 import co.yixiang.modules.order.param.OrderParam;
 import co.yixiang.modules.order.service.YxExpressService;
 import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.service.YxStoreOrderStatusService;
-import co.yixiang.modules.order.service.dto.CacheDto;
-import co.yixiang.modules.order.service.dto.CountDto;
-import co.yixiang.modules.order.service.dto.OrderCountDto;
-import co.yixiang.modules.order.service.dto.OrderTimeDataDto;
-import co.yixiang.modules.order.service.dto.OtherDto;
-import co.yixiang.modules.order.service.dto.PriceGroupDto;
-import co.yixiang.modules.order.service.dto.StatusDto;
-import co.yixiang.modules.order.service.dto.StoreOrderCartInfoDto;
-import co.yixiang.modules.order.service.dto.TemplateDto;
-import co.yixiang.modules.order.service.dto.YxStoreOrderDto;
-import co.yixiang.modules.order.service.dto.YxStoreOrderQueryCriteria;
+import co.yixiang.modules.order.service.dto.*;
 import co.yixiang.modules.order.service.mapper.StoreOrderMapper;
 import co.yixiang.modules.order.vo.ComputeVo;
 import co.yixiang.modules.order.vo.ConfirmOrderVo;
@@ -104,6 +96,7 @@ import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -2180,6 +2173,76 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+    /**
+     * 获取订单详情
+     * @param orderId
+     * @return
+     */
+    @Override
+    public YxStoreOrderDto getOrderDetail(Long orderId) {
+        YxStoreOrder yxStoreOrder = this.getById(orderId);
+        if(ObjectUtil.isEmpty(yxStoreOrder)){
+            throw new BadRequestException("订单详情不存在");
+        }
+        YxStoreOrderDto yxStoreOrderDto = generator.convert(yxStoreOrder, YxStoreOrderDto.class);
+        Integer _status = OrderUtil.orderStatus(yxStoreOrder.getPaid(),yxStoreOrder.getStatus(),
+                yxStoreOrder.getRefundStatus());
+
+        if(yxStoreOrder.getStoreId() > 0) {
+            String storeName = systemStoreService.getById(yxStoreOrder.getStoreId()).getName();
+            yxStoreOrderDto.setStoreName(storeName);
+        }
+
+        //订单状态
+        String orderStatusStr = OrderUtil.orderStatusStr(yxStoreOrder.getPaid()
+                ,yxStoreOrder.getStatus(),yxStoreOrder.getShippingType()
+                ,yxStoreOrder.getRefundStatus());
+
+        if(_status == 3){
+
+            String refundTime = DateUtil.formatDateTime(yxStoreOrder.getRefundReasonTime());
+            String str = "<b style='color:#f124c7'>申请退款</b><br/>"+
+                    "<span>退款原因："+yxStoreOrder.getRefundReasonWap()+"</span><br/>" +
+                    "<span>备注说明："+yxStoreOrder.getRefundReasonWapExplain()+"</span><br/>" +
+                    "<span>退款时间："+refundTime+"</span><br/>";
+            orderStatusStr = str;
+        }
+        yxStoreOrderDto.setStatusName(orderStatusStr);
+
+        yxStoreOrderDto.set_status(_status);
+
+        String payTypeName = OrderUtil.payTypeName(yxStoreOrder.getPayType()
+                ,yxStoreOrder.getPaid());
+        yxStoreOrderDto.setPayTypeName(payTypeName);
+
+        yxStoreOrderDto.setPinkName(this.orderType(yxStoreOrder.getId()
+                ,yxStoreOrder.getPinkId(),yxStoreOrder.getCombinationId()
+                ,yxStoreOrder.getSeckillId(),yxStoreOrder.getBargainId(),
+                yxStoreOrder.getShippingType()));
+
+        //添加订单状态
+        List<YxStoreOrderStatus> storeOrderStatuses = orderStatusService.list(new LambdaQueryWrapper<YxStoreOrderStatus>()
+        .eq(YxStoreOrderStatus::getOid,yxStoreOrder.getId()));
+        List<YxStoreOrderStatusDto> orderStatusDtos = generator.convert(storeOrderStatuses, YxStoreOrderStatusDto.class);
+        yxStoreOrderDto.setStoreOrderStatusList(orderStatusDtos);
+        //添加购物车详情
+        List<YxStoreOrderCartInfo> cartInfos = storeOrderCartInfoService.list(
+                new QueryWrapper<YxStoreOrderCartInfo>().eq("oid",yxStoreOrder.getId()));
+        List<StoreOrderCartInfoDto> cartInfoDTOS = new ArrayList<>();
+        for (YxStoreOrderCartInfo cartInfo : cartInfos) {
+            StoreOrderCartInfoDto cartInfoDTO = new StoreOrderCartInfoDto();
+            cartInfoDTO.setCartInfoMap(JSON.parseObject(cartInfo.getCartInfo()));
+
+            cartInfoDTOS.add(cartInfoDTO);
+        }
+        yxStoreOrderDto.setCartInfoList(cartInfoDTOS);
+        //添加用户信息
+        yxStoreOrderDto.setUserDTO(generator.convert(userService.getById(yxStoreOrder.getUid()), YxUserDto.class));
+        if(yxStoreOrderDto.getUserDTO()==null){
+            yxStoreOrderDto.setUserDTO(new YxUserDto());
+        }
+        return yxStoreOrderDto;
     }
 
     @Override
