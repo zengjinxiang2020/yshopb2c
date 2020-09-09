@@ -188,7 +188,7 @@ public class AuthService {
             YxUser returnUser = null;
             if(yxUser == null){
                 //过滤掉表情
-                String nickname = EmojiParser.removeAllEmojis(wxMpUser.getNickname());
+                String nickname = wxMpUser.getNickname();
                 log.info("昵称：{}", nickname);
                 //用户保存
                 String ip = IpUtil.getRequestIp();
