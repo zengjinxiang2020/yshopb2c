@@ -14,5 +14,7 @@ public class WechatLiveVo {
 
     private Integer pageNumber;
 
+    private Integer lastPage;
+
 
 }
