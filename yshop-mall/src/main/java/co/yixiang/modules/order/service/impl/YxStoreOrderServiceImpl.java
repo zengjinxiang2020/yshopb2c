@@ -1520,7 +1520,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         YxUserQueryVo userInfo = userService.getYxUserById(uid);
 
-        if(userInfo.getNowMoney().compareTo(orderInfo.getPayPrice()) <= 0){
+        if(userInfo.getNowMoney().compareTo(orderInfo.getPayPrice()) < 0){
             throw new YshopException("余额不足");
         }
 
