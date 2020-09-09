@@ -80,6 +80,12 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
     ProductVo goodsDetail(Long id, Long uid, String latitude, String longitude);
 
     /**
+     *  商品浏览量
+     * @param productId
+     */
+    void incBrowseNum(Long productId);
+
+    /**
      * 商品列表
      * @param page 页码
      * @param limit 条数

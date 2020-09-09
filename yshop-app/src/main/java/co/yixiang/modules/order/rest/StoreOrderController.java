@@ -306,7 +306,7 @@ public class StoreOrderController {
     public ApiResult<Boolean> comment(@Valid @RequestBody ProductReplyParam param){
         YxUser user = LocalUser.getUser();
         storeOrderService.orderComment(user,param.getUnique(),
-                EmojiParser.removeAllEmojis(param.getComment()),
+                param.getComment(),
                 param.getPics(),param.getProductScore(),param.getServiceScore());
         return ApiResult.ok();
     }

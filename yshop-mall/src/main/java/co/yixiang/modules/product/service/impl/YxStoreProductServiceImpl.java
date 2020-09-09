@@ -10,7 +10,6 @@ package co.yixiang.modules.product.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -64,7 +63,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.ApiModelProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -148,19 +146,22 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         //先处理商品库存，活动商品也要处理，因为共享库存
         int product = storeProductMapper.decStockIncSales(num,productId);
         if(product == 0) {
-            throw new YshopException("商品库存不足");
+            throw new YshopException("共享商品库存不足");
         }
         //处理商品外层显示的库存
-        int res = 0;
         if("combination".equals(type)){
-            res = storeProductMapper.decCombinationStockIncSales(num,productId,activityId);
+            int combinationRes = storeProductMapper.decCombinationStockIncSales(num,productId,activityId);
+            if(combinationRes == 0) {
+                throw new YshopException("拼团商品库存不足");
+            }
         }else if("seckill".equals(type)){
-            res = storeProductMapper.decSeckillStockIncSales(num,productId,activityId);
+           int seckillRes = storeProductMapper.decSeckillStockIncSales(num,productId,activityId);
+            if(seckillRes == 0) {
+                throw new YshopException("秒杀商品库存不足");
+            }
         }
         //todo 处理砍价库存
-        if(res == 0) {
-            throw new YshopException("商品库存不足");
-        }
+
     }
 
 
@@ -360,6 +361,16 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         }
 
         return productVo;
+    }
+
+    /**
+     * 商品浏览量
+     *
+     * @param productId
+     */
+    @Override
+    public void incBrowseNum(Long productId) {
+        storeProductMapper.incBrowseNum(productId);
     }
 
 
