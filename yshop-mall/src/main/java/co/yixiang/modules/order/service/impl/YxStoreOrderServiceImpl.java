@@ -52,22 +52,13 @@ import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.domain.YxExpress;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.domain.YxStoreOrderCartInfo;
+import co.yixiang.modules.order.domain.YxStoreOrderStatus;
 import co.yixiang.modules.order.param.OrderParam;
 import co.yixiang.modules.order.service.YxExpressService;
 import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.service.YxStoreOrderStatusService;
-import co.yixiang.modules.order.service.dto.CacheDto;
-import co.yixiang.modules.order.service.dto.CountDto;
-import co.yixiang.modules.order.service.dto.OrderCountDto;
-import co.yixiang.modules.order.service.dto.OrderTimeDataDto;
-import co.yixiang.modules.order.service.dto.OtherDto;
-import co.yixiang.modules.order.service.dto.PriceGroupDto;
-import co.yixiang.modules.order.service.dto.StatusDto;
-import co.yixiang.modules.order.service.dto.StoreOrderCartInfoDto;
-import co.yixiang.modules.order.service.dto.TemplateDto;
-import co.yixiang.modules.order.service.dto.YxStoreOrderDto;
-import co.yixiang.modules.order.service.dto.YxStoreOrderQueryCriteria;
+import co.yixiang.modules.order.service.dto.*;
 import co.yixiang.modules.order.service.mapper.StoreOrderMapper;
 import co.yixiang.modules.order.vo.ComputeVo;
 import co.yixiang.modules.order.vo.ConfirmOrderVo;
@@ -105,6 +96,7 @@ import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -2182,7 +2174,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         }
         FileUtil.downloadExcel(list, response);
     }
-
+    /**
+     * 获取订单详情
+     * @param orderId
+     * @return
+     */
     @Override
     public YxStoreOrderDto getOrderDetail(Long orderId) {
         YxStoreOrder yxStoreOrder = this.getById(orderId);
@@ -2225,6 +2221,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 ,yxStoreOrder.getSeckillId(),yxStoreOrder.getBargainId(),
                 yxStoreOrder.getShippingType()));
 
+        //添加订单状态
+        List<YxStoreOrderStatus> storeOrderStatuses = orderStatusService.list(new LambdaQueryWrapper<YxStoreOrderStatus>()
+        .eq(YxStoreOrderStatus::getOid,yxStoreOrder.getId()));
+        List<YxStoreOrderStatusDto> orderStatusDtos = generator.convert(storeOrderStatuses, YxStoreOrderStatusDto.class);
+        yxStoreOrderDto.setStoreOrderStatusList(orderStatusDtos);
+        //添加购物车详情
         List<YxStoreOrderCartInfo> cartInfos = storeOrderCartInfoService.list(
                 new QueryWrapper<YxStoreOrderCartInfo>().eq("oid",yxStoreOrder.getId()));
         List<StoreOrderCartInfoDto> cartInfoDTOS = new ArrayList<>();
@@ -2235,6 +2237,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             cartInfoDTOS.add(cartInfoDTO);
         }
         yxStoreOrderDto.setCartInfoList(cartInfoDTOS);
+        //添加用户信息
         yxStoreOrderDto.setUserDTO(generator.convert(userService.getById(yxStoreOrder.getUid()), YxUserDto.class));
         if(yxStoreOrderDto.getUserDTO()==null){
             yxStoreOrderDto.setUserDTO(new YxUserDto());
