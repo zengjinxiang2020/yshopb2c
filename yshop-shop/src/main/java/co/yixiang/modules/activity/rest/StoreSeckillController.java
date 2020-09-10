@@ -30,6 +30,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
 * @author hupeng
@@ -135,8 +137,12 @@ public class StoreSeckillController {
         JSONObject result = JSON.parseObject(storeProductAttrResult.getResult());
 
         List<YxStoreProductAttrValue> attrValues = storeProductAttrValueService.list(new LambdaQueryWrapper<YxStoreProductAttrValue>().eq(YxStoreProductAttrValue::getProductId, yxStoreSeckill.getProductId()));
-        List<ProductFormatDto> productFormatDtos = generator.convert(attrValues, ProductFormatDto.class);
-
+        List<ProductFormatDto> productFormatDtos =attrValues.stream().map(i ->{
+            ProductFormatDto productFormatDto = new ProductFormatDto();
+            BeanUtils.copyProperties(i,productFormatDto);
+            productFormatDto.setPic(i.getImage());
+            return productFormatDto;
+        }).collect(Collectors.toList());
         if(SpecTypeEnum.TYPE_1.getValue().equals(yxStoreSeckill.getSpecType())){
             productDto.setAttr(new ProductFormatDto());
             productDto.setAttrs(productFormatDtos);
