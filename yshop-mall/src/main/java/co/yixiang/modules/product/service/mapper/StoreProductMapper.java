@@ -10,6 +10,7 @@ package co.yixiang.modules.product.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.product.domain.YxStoreProduct;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
@@ -96,4 +97,7 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
     @Update("update yx_store_product set browse=browse+1 " +
             "where id=#{productId}")
     int incBrowseNum(@Param("productId") Long productId);
+
+    @Delete("DELETE from yx_system_attachment where name like CONCAT(#{id},'_%',#{name}, '%')")
+    void deleteForwardImg(@Param("id") Long id,@Param("name") String name);
 }

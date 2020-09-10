@@ -143,4 +143,9 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
      */
     void insertAndEditYxStoreProduct(StoreProductDto storeProductDto);
 
+    /**+
+     * 删除商品转发海报
+     * @param id
+     */
+    void deleteForwardImg(Long id);
 }
