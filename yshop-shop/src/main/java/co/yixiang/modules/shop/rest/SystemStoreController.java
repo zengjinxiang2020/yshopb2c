@@ -19,6 +19,8 @@ import co.yixiang.modules.shop.service.dto.YxSystemStoreDto;
 import co.yixiang.modules.shop.service.dto.YxSystemStoreQueryCriteria;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.ShopKeyUtils;
+import co.yixiang.utils.location.GetTencentLocationVO;
+import co.yixiang.utils.location.LocationUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
@@ -86,16 +88,10 @@ public class SystemStoreController {
     @Log("获取经纬度")
     @ApiOperation("获取经纬度")
     @PreAuthorize("@el.check('yxSystemStore:getl')")
-    public ResponseEntity<Object> create(@Validated @RequestBody String jsonStr){
-        String key = RedisUtil.get(ShopKeyUtils.getTengXunMapKey());
-        if(StrUtil.isBlank(key)) {
-            throw  new BadRequestException("请先配置腾讯地图key");
-        }
+    public ResponseEntity<GetTencentLocationVO> create(@Validated @RequestBody String jsonStr) {
         JSONObject jsonObject = JSON.parseObject(jsonStr);
         String addr = jsonObject.getString("addr");
-        String url = StrUtil.format("?address={}&key={}",addr,key);
-        String json = HttpUtil.get(ShopConstants.QQ_MAP_URL+url);
-        return new ResponseEntity<>(JSONUtil.parseObj(json),HttpStatus.CREATED);
+        return new ResponseEntity<>(LocationUtils.getLocation(addr), HttpStatus.CREATED);
     }
 
     @ForbidSubmit
