@@ -49,6 +49,15 @@ public class YxStoreSeckillQueryVo implements Serializable{
 
     }
 
+    @ApiModelProperty(value = "价格")
+    private BigDecimal price;
+
+    @ApiModelProperty(value = "成本")
+    private BigDecimal cost;
+
+    @ApiModelProperty(value = "原价")
+    private BigDecimal otPrice;
+
     @ApiModelProperty(value = "轮播图")
     private String[] pics;
     @ApiModelProperty(value = "活动标题")
