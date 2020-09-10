@@ -3,9 +3,9 @@ package co.yixiang.utils.location;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
-import co.yixiang.constant.ShopKeyUtils;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.utils.RedisUtil;
+import co.yixiang.utils.ShopKeyUtils;
 import com.alibaba.fastjson.JSONObject;
 
 /**
