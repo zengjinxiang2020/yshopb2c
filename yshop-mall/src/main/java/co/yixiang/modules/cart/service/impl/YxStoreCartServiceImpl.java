@@ -214,11 +214,19 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
                         //设置VIP价格
                         double vipPrice = userService.setLevelPrice(
                                 productAttrValue.getPrice().doubleValue(), uid);
-                        if (storeCart.getCombinationId() > 0 || storeCart.getSeckillId() > 0
-                                || storeCart.getBargainId() > 0) {
+                        //砍价金额
+                        if ( storeCart.getBargainId() > 0
+                               ) {
                             vipPrice = storeProduct.getPrice().doubleValue();
                         }
-
+                        //设置拼团价格
+                       if(storeCart.getCombinationId() > 0 ){
+                            vipPrice = productAttrValue.getPinkPrice().doubleValue();
+                        }
+                        //设置秒杀价格
+                        if( storeCart.getSeckillId() > 0){
+                            vipPrice = productAttrValue.getSeckillPrice().doubleValue();
+                        }
                         storeCartQueryVo.setTruePrice(vipPrice);
                         //设置会员价
                         storeCartQueryVo.setVipTruePrice(productAttrValue.getPrice()
@@ -261,7 +269,6 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
 
     /**
      * 添加购物车
-     *
      * @param uid               用户id
      * @param productId         普通产品编号
      * @param cartNum           购物车数量
