@@ -10,11 +10,12 @@ package co.yixiang.modules.mp.service;
 
 import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.modules.mp.service.dto.WxMaLiveInfo;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveDto;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
 import co.yixiang.modules.mp.vo.WechatLiveVo;
 import co.yixiang.modules.mp.domain.YxWechatLive;
-import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
+import me.chanjar.weixin.common.error.WxErrorException;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -61,6 +62,21 @@ public interface YxWechatLiveService  extends BaseService<YxWechatLive>{
     * @throws IOException /
     */
     void download(List<YxWechatLiveDto> all, HttpServletResponse response) throws IOException;
+
+
+    /**
+     * 创建直播间
+     * <pre>
+     * 调用此接口创建直播间，创建成功后将在直播间列表展示，调用额度：10000次/一天
+     * 文档地址：https://developers.weixin.qq.com/miniprogram/dev/framework/liveplayer/studio-api.html#1
+     * http请求方式：POST https://api.weixin.qq.com/wxaapi/broadcast/room/create?access_token=ACCESS_TOKEN
+     * </pre>
+     *
+     * @param roomInfo 直播间信息
+     * @return .
+     * @throws WxErrorException .
+     */
+    Integer createRoom(WxMaLiveInfo.RoomInfo roomInfo) throws WxErrorException;
 
     /**
      * 获取直播回放

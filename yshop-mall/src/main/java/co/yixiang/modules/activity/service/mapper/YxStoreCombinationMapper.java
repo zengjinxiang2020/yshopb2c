@@ -27,7 +27,7 @@ import java.util.List;
 @Repository
 public interface YxStoreCombinationMapper extends CoreMapper<YxStoreCombination> {
 
-    @Select("SELECT c.id,c.effective_time as effectiveTime,c.image,c.people,c.price, s.sales as sales," +
+    @Select("SELECT c.id,c.effective_time as effectiveTime,c.info,c.image,c.people,c.price, s.sales as sales," +
             "c.title,c.unit_name as unitName,s.price as productPrice FROM yx_store_combination c " +
             "INNER JOIN yx_store_product s ON s.id=c.product_id " +
             " WHERE c.is_show = 1 AND c.is_del = 0 AND c.start_time < now() " +

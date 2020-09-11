@@ -9,8 +9,8 @@
 package co.yixiang.modules.mp.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.bean.WxMaLiveInfo;
 import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
+import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
@@ -21,6 +21,7 @@ import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.mp.domain.YxWechatLiveGoods;
 import co.yixiang.modules.mp.service.YxWechatLiveGoodsService;
 import co.yixiang.modules.mp.service.YxWechatLiveService;
+import co.yixiang.modules.mp.service.dto.WxMaLiveInfo;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveDto;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveGoodsDto;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
@@ -39,10 +40,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.result.WxMediaUploadResult;
+import me.chanjar.weixin.common.enums.WxType;
+import me.chanjar.weixin.common.error.WxError;
 import me.chanjar.weixin.common.error.WxErrorException;
+import me.chanjar.weixin.common.util.json.GsonParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -56,6 +61,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import static cn.binarywang.wx.miniapp.api.WxMaLiveService.CREATE_ROOM;
 
 /**
 * @author hupeng
@@ -139,7 +146,7 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
             resources.setCoverImg(uploadPhotoToWx(wxMaService,resources.getCoverImge()).getMediaId());
             resources.setShareImg(uploadPhotoToWx(wxMaService,resources.getShareImge()).getMediaId());
             WxMaLiveInfo.RoomInfo roomInfo = generator.convert(resources, WxMaLiveInfo.RoomInfo.class);
-            Integer status = wxMaService.getLiveService().createRoom(roomInfo);
+            Integer status = this.createRoom(roomInfo);
             resources.setRoomId(Long.valueOf(status));
             if(StringUtils.isNotBlank(resources.getProductId())){
                 String[] productIds = resources.getProductId().split(",");
@@ -199,6 +206,17 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         FileUtil.downloadExcel(list, response);
     }
 
+
+    @Override
+    public Integer createRoom(WxMaLiveInfo.RoomInfo roomInfo) throws WxErrorException {
+        WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+        String responseContent = wxMaService.post(CREATE_ROOM, WxMaGsonBuilder.create().toJson(roomInfo));
+        JsonObject jsonObject = GsonParser.parse(responseContent);
+        if (jsonObject.get("errcode").getAsInt() != 0) {
+            throw new WxErrorException(WxError.fromJson(responseContent, WxType.MiniApp));
+        }
+        return jsonObject.get("roomId").getAsInt();
+    }
     /**
      * 上传临时素材
      * @param wxMaService WxMaService

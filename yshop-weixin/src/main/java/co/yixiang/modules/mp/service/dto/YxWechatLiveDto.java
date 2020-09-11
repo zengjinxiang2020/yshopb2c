@@ -88,6 +88,12 @@ public class YxWechatLiveDto implements Serializable {
     /** 是否关闭货架 【0：开启，1：关闭】 */
     @ApiModelProperty(value = "是否关闭货架 【0：开启，1：关闭】")
     private Integer closeGoods;
+
+    private Integer closeReplay  ; // 是否关闭回放 1 关闭
+
+    private Integer closeShare ;   //  是否关闭分享 1 关闭
+
+    private Integer closeKf ; // 是否关闭客服，1 关闭
     /**
      * 关联商品id多个，隔开
      */

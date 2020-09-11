@@ -122,6 +122,12 @@ public class YxWechatLive implements Serializable {
     /** 是否关闭评论 【0：开启，1：关闭】 */
     @NotNull
     private Integer closeComment;
+    @NotNull
+    private Integer closeReplay  ; // 是否关闭回放 1 关闭
+    @NotNull
+    private Integer closeShare ;   //  是否关闭分享 1 关闭
+    @NotNull
+    private Integer closeKf ; // 是否关闭客服，1 关闭
 
     private String productId;
 
