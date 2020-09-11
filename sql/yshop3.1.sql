@@ -4,14 +4,14 @@
  Source Server         : xinxin
  Source Server Type    : MySQL
  Source Server Version : 50729
- Source Host           : 182.92.215.81:3306
+ Source Host           : localhost:3306
  Source Schema         : yshopb2c
 
  Target Server Type    : MySQL
  Target Server Version : 50729
  File Encoding         : 65001
 
- Date: 05/09/2020 16:53:30
+ Date: 11/09/2020 18:25:12
 */
 
 SET NAMES utf8mb4;
@@ -508,7 +508,7 @@ CREATE TABLE `local_storage`  (
   `operate` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 62 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '本地存储' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 63 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '本地存储' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of local_storage
@@ -574,6 +574,7 @@ INSERT INTO `local_storage` VALUES (58, '20200903171807584910.jpg', '3', 'jpg', 
 INSERT INTO `local_storage` VALUES (59, '20200903171807625149.jpg', '5', 'jpg', '/home/yshop/file/pic/20200903171807625149.jpg', 'pic', '81.55KB   ', 'yshop', '2020-09-03 17:18:08');
 INSERT INTO `local_storage` VALUES (60, '20200903171807641535.jpg', '6', 'jpg', '/home/yshop/file/pic/20200903171807641535.jpg', 'pic', '61.97KB   ', 'yshop', '2020-09-03 17:18:08');
 INSERT INTO `local_storage` VALUES (61, '20200903171807647067.jpg', '7', 'jpg', '/home/yshop/file/pic/20200903171807647067.jpg', 'pic', '76.04KB   ', 'yshop', '2020-09-03 17:18:08');
+INSERT INTO `local_storage` VALUES (62, '20200911093912577832.png', 'avatar_default', 'png', '/home/yshop/file/pic/20200911093912577832.png', 'pic', '54.06KB   ', 'admin', '2020-09-11 09:39:13');
 
 -- ----------------------------
 -- Table structure for log
@@ -597,7 +598,7 @@ CREATE TABLE `log`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1270210481028397593 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1270210481028401198 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of log
@@ -626,7 +627,7 @@ CREATE TABLE `menu`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FKqcf9gem97gqa5qjm4d3elcqt5`(`pid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 258 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 259 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of menu
@@ -828,6 +829,7 @@ INSERT INTO `menu` VALUES (252, b'0', '二级菜单2', 'nested/menu2/index', 248
 INSERT INTO `menu` VALUES (253, b'0', '浏览记录', 'monitor/log/mlog', 40, 15, 'log', 'viewlog', b'0', b'0', 'Viewlog', '2020-07-31 09:47:11', 'log:list', 1, '2020-07-31 09:49:39', 0);
 INSERT INTO `menu` VALUES (256, b'0', '商品收藏', 'shop/collect/index', 40, 16, 'menu', 'productRelation', b'0', b'0', 'ProductRelation', '2020-09-03 14:32:49', 'yxStoreProductRelation:list', 1, '2020-09-03 16:21:08', 0);
 INSERT INTO `menu` VALUES (257, b'0', '用户足迹', 'shop/foot/index', 40, 17, 'list', 'footRelation', b'0', b'0', 'FootRelation', '2020-09-03 16:20:21', 'yxStoreProductRelation:list', 1, '2020-09-03 16:21:16', 0);
+INSERT INTO `menu` VALUES (258, b'0', '订单详情', 'shop/order/detail', 53, 999, 'sqlMonitor', 'detail/:id', b'0', b'1', 'Detail', '2020-09-10 07:29:34', NULL, 1, '2020-09-10 08:52:09', 0);
 
 -- ----------------------------
 -- Table structure for monitor_server
@@ -989,7 +991,7 @@ CREATE TABLE `quartz_log`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务日志' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务日志' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of quartz_log
@@ -1002,6 +1004,12 @@ INSERT INTO `quartz_log` VALUES (5, 'visitsTask', '2020-09-02 00:00:00', '0 0 0 
 INSERT INTO `quartz_log` VALUES (6, 'visitsTask', '2020-09-03 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 39, NULL, 0);
 INSERT INTO `quartz_log` VALUES (7, 'visitsTask', '2020-09-04 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 30, NULL, 0);
 INSERT INTO `quartz_log` VALUES (8, 'visitsTask', '2020-09-05 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 23, NULL, 0);
+INSERT INTO `quartz_log` VALUES (9, 'visitsTask', '2020-09-06 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 70, NULL, 0);
+INSERT INTO `quartz_log` VALUES (10, 'visitsTask', '2020-09-07 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 18, NULL, 0);
+INSERT INTO `quartz_log` VALUES (11, 'visitsTask', '2020-09-08 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 14, NULL, 0);
+INSERT INTO `quartz_log` VALUES (12, 'visitsTask', '2020-09-09 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 31, NULL, 0);
+INSERT INTO `quartz_log` VALUES (13, 'visitsTask', '2020-09-10 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 40, NULL, 0);
+INSERT INTO `quartz_log` VALUES (14, 'visitsTask', '2020-09-11 00:00:00', '0 0 0 * * ?', NULL, b'1', '更新访客记录', 'run', NULL, 20, NULL, 0);
 
 -- ----------------------------
 -- Table structure for role
@@ -1252,6 +1260,7 @@ INSERT INTO `roles_menus` VALUES (252, 1);
 INSERT INTO `roles_menus` VALUES (253, 1);
 INSERT INTO `roles_menus` VALUES (256, 1);
 INSERT INTO `roles_menus` VALUES (257, 1);
+INSERT INTO `roles_menus` VALUES (258, 1);
 
 -- ----------------------------
 -- Table structure for user
@@ -1365,7 +1374,7 @@ CREATE TABLE `visits`  (
   `week_day` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `UK_11aksgq87euk9bcyeesfs4vtp`(`date`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1266934639347150871 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '访客记录' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1266934639347150877 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '访客记录' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of visits
@@ -1396,7 +1405,13 @@ INSERT INTO `visits` VALUES (1266934639347150866, '2020-09-01 00:00:00', '2020-0
 INSERT INTO `visits` VALUES (1266934639347150867, '2020-09-02 00:00:00', '2020-09-02', 1, 4, 'Wed');
 INSERT INTO `visits` VALUES (1266934639347150868, '2020-09-03 00:00:00', '2020-09-03', 1, 2, 'Thu');
 INSERT INTO `visits` VALUES (1266934639347150869, '2020-09-04 00:00:00', '2020-09-04', 1, 3, 'Fri');
-INSERT INTO `visits` VALUES (1266934639347150870, '2020-09-05 00:00:00', '2020-09-05', 1, 1, 'Sat');
+INSERT INTO `visits` VALUES (1266934639347150870, '2020-09-05 00:00:00', '2020-09-05', 5, 2, 'Sat');
+INSERT INTO `visits` VALUES (1266934639347150871, '2020-09-06 00:00:00', '2020-09-06', 4, 2, 'Sun');
+INSERT INTO `visits` VALUES (1266934639347150872, '2020-09-07 00:00:00', '2020-09-07', 5, 3, 'Mon');
+INSERT INTO `visits` VALUES (1266934639347150873, '2020-09-08 00:00:00', '2020-09-08', 7, 15, 'Tue');
+INSERT INTO `visits` VALUES (1266934639347150874, '2020-09-09 00:00:00', '2020-09-09', 5, 3, 'Wed');
+INSERT INTO `visits` VALUES (1266934639347150875, '2020-09-10 00:00:00', '2020-09-10', 2, 4, 'Thu');
+INSERT INTO `visits` VALUES (1266934639347150876, '2020-09-11 00:00:00', '2020-09-11', 10, 4, 'Fri');
 
 -- ----------------------------
 -- Table structure for yx_article
@@ -1431,9 +1446,9 @@ CREATE TABLE `yx_article`  (
 -- ----------------------------
 -- Records of yx_article
 -- ----------------------------
-INSERT INTO `yx_article` VALUES (2, '', 'yshop2版本上线了', 'yshop', 'http://127.0.0.1:8000/file/pic/20200527164526793230.png', 'yshop1.3版本上线了', '<h3 data-v-01881cfc=\"\" style=\"text-align: center;\"><p>yshop1.3版本上线了</p></h3>', '', '', '7', NULL, '', NULL, '2019-08-22 12:26:00', '2020-06-25 19:12:53', 0, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `yx_article` VALUES (2, '', 'yshop2版本上线了', 'yshop', 'http://127.0.0.1:8000/file/pic/20200527164526793230.png', 'yshop1.3版本上线了', '<h3 data-v-01881cfc=\"\" style=\"text-align: center;\"><p>yshop1.3版本上线了</p></h3>', '', '', '8', NULL, '', NULL, '2019-08-22 12:26:00', '2020-06-25 19:12:53', 0, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `yx_article` VALUES (3, '', '44', '444', 'http://127.0.0.1:8000/file/pic/20200527164543489004.png', '4444', '<p>55555</p>', '', '', '', 0, '', NULL, '2020-06-25 19:12:35', NULL, 1, 0, 0, 0, 0, 0, 0);
-INSERT INTO `yx_article` VALUES (4, '', 'yshop3.0', 'yshop', 'https://image.dayouqiantu.cn/news.png', 'yshop3.0', '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/add.png\"/></p><p>yshop3.0</p>', '', '', '1', 0, '', NULL, '2020-07-02 12:15:13', '2020-07-03 17:58:19', 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `yx_article` VALUES (4, '', 'yshop3.0', 'yshop', 'https://image.dayouqiantu.cn/news.png', 'yshop3.0', '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/add.png\"/></p><p>yshop3.0</p>', '', '', '2', 0, '', NULL, '2020-07-02 12:15:13', '2020-07-03 17:58:19', 0, 0, 0, 0, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for yx_express
@@ -1458,7 +1473,7 @@ CREATE TABLE `yx_express`  (
 INSERT INTO `yx_express` VALUES (426, 'STO', '申通快递', 0, 0, NULL, NULL, 0);
 INSERT INTO `yx_express` VALUES (427, 'SF', '顺丰速运', 0, 0, NULL, NULL, 0);
 INSERT INTO `yx_express` VALUES (428, 'ZTO', '中通快递', 0, 0, NULL, NULL, 0);
-INSERT INTO `yx_express` VALUES (429, 'YTO', '圆通速递2', 0, 0, NULL, NULL, 0);
+INSERT INTO `yx_express` VALUES (429, 'YTO', '圆通速递', 0, 0, NULL, '2020-09-06 09:59:36', 0);
 INSERT INTO `yx_express` VALUES (430, '555', '555555', 0, 0, NULL, NULL, 1);
 INSERT INTO `yx_express` VALUES (431, '555', '5555', 0, 0, NULL, NULL, 1);
 INSERT INTO `yx_express` VALUES (432, '555', '555', 0, 0, '2020-06-26 12:29:48', NULL, 1);
@@ -1500,6 +1515,7 @@ INSERT INTO `yx_material` VALUES ('808cbc928e818b2c0d12f5919042cdc2', '2020-06-2
 INSERT INTO `yx_material` VALUES ('8a599a4721469bfcd1c313241c88bee0', '2020-06-26 18:20:58', 'admin', '1', 'd9b1b9d69f5b72cda63e26dc9f087623', 'buy.png', 'https://image.dayouqiantu.cn/buy.png', NULL, 0);
 INSERT INTO `yx_material` VALUES ('8e19af4d16b717574d863e6316cf15e4', '2020-06-26 18:24:51', 'admin', '1', 'd9b1b9d69f5b72cda63e26dc9f087623', 'add.png', 'https://image.dayouqiantu.cn/add.png', NULL, 0);
 INSERT INTO `yx_material` VALUES ('9ddc310b8b6e224cd1ee2f27f1d19017', '2020-06-26 18:25:07', 'admin', '1', 'd9b1b9d69f5b72cda63e26dc9f087623', 'sekill.png', 'https://image.dayouqiantu.cn/sekill.png', NULL, 0);
+INSERT INTO `yx_material` VALUES ('a0fc29a301a72712802ef38efe011fc4', '2020-09-11 09:39:13', 'admin', '1', 'd9b1b9d69f5b72cda63e26dc9f087623', 'avatar_default.png', 'https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png', NULL, 0);
 INSERT INTO `yx_material` VALUES ('a961d6c0f255083294c27bed47330ad9', '2020-05-27 16:45:27', 'admin', '1', '83ee56004ff88fd1ecdde5a43469ef2e', 'list_13.png', 'http://127.0.0.1:8000/file/pic/20200527164526793230.png', NULL, 1);
 INSERT INTO `yx_material` VALUES ('b36ab3797cd310a210f5d3dec2d05349', '2020-09-03 17:18:08', 'admin', '1', NULL, '5.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', NULL, 0);
 INSERT INTO `yx_material` VALUES ('bd6c9dc5a3373fe377b4aeb0579ed1bb', '2020-06-26 17:35:22', 'admin', '1', NULL, 'list_18.png', 'http://127.0.0.1:8009/api/api/file/pic/20200626173520849370.png', NULL, 1);
@@ -1569,8 +1585,8 @@ CREATE TABLE `yx_shipping_templates_free`  (
   `province_id` int(11) NOT NULL DEFAULT 0 COMMENT '省ID',
   `temp_id` int(11) NOT NULL DEFAULT 0 COMMENT '模板ID',
   `city_id` int(11) NOT NULL DEFAULT 0 COMMENT '城市ID',
-  `number` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '包邮件数',
-  `price` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '包邮金额',
+  `number` decimal(10, 2) NOT NULL COMMENT '包邮件数',
+  `price` decimal(10, 2) NOT NULL COMMENT '包邮金额',
   `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '计费方式',
   `uniqid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '分组唯一值',
   PRIMARY KEY (`id`) USING BTREE
@@ -1615,10 +1631,10 @@ CREATE TABLE `yx_shipping_templates_region`  (
   `province_id` int(11) NOT NULL DEFAULT 0 COMMENT '省ID',
   `temp_id` int(11) NOT NULL DEFAULT 0 COMMENT '模板ID',
   `city_id` int(11) NOT NULL DEFAULT 0 COMMENT '城市ID',
-  `first` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '首件',
-  `first_price` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '首件运费',
-  `continues` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '续件',
-  `continue_price` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '续件运费',
+  `first` decimal(10, 2) NOT NULL COMMENT '首件',
+  `first_price` decimal(10, 2) NOT NULL COMMENT '首件运费',
+  `continues` decimal(10, 2) NOT NULL COMMENT '续件',
+  `continue_price` decimal(10, 2) NOT NULL COMMENT '续件运费',
   `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '计费方式',
   `uniqid` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '分组唯一值',
   PRIMARY KEY (`id`) USING BTREE
@@ -1675,7 +1691,7 @@ CREATE TABLE `yx_store_bargain`  (
   `bargain_num` int(11) UNSIGNED NOT NULL DEFAULT 1 COMMENT '用户每次砍价的次数',
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '砍价状态 0(到砍价时间不自动开启)  1(到砍价时间自动开启时间)',
   `description` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '砍价详情',
-  `give_integral` decimal(10, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '反多少积分',
+  `give_integral` decimal(10, 2) UNSIGNED NOT NULL COMMENT '反多少积分',
   `info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '砍价活动简介',
   `cost` decimal(8, 2) UNSIGNED NULL DEFAULT NULL COMMENT '成本价',
   `sort` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '排序',
@@ -1689,11 +1705,14 @@ CREATE TABLE `yx_store_bargain`  (
   `look` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '砍价产品浏览量',
   `share` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '砍价产品分享量',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_bargain
 -- ----------------------------
+INSERT INTO `yx_store_bargain` VALUES (9, 2, 'X型展架', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '张', 3330, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', '2020-09-05 00:00:00', '2020-09-30 00:00:00', NULL, 999.00, 450.00, 1, 10.00, 1.00, 1, 1, '<p><br></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"></p>', 0.00, 'X型展架', 11.00, 2, 0, 0, '2020-09-05 17:18:26', NULL, 1, 0.00, '<p><br><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\">&nbsp;&nbsp;<br></p>', 22, 12);
+INSERT INTO `yx_store_bargain` VALUES (10, 3, '彩色复印-量大有优惠', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', '张', 8, 3, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', '2020-09-10 00:00:00', '2020-09-30 00:00:00', NULL, 2.00, 0.10, 2, 1.00, 0.10, 1, 1, '<p>1111</p>', 0.00, '彩色复印', 1.00, 0, 0, 0, '2020-09-10 18:56:18', NULL, 1, 0.00, '<p>3333</p>', 2, 0);
+INSERT INTO `yx_store_bargain` VALUES (11, 1, '照片打印', 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '张', 995, 5, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '2020-09-03 11:14:36', '2020-09-23 00:00:00', NULL, 2.00, 1.00, 1, 1.00, 0.10, 1, 1, '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\"/></p>', 0.00, '照片打印', 3.00, 0, 0, 0, '2020-09-11 11:15:20', NULL, 1, 0.00, '<p>9999</p>', 2, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_bargain_user
@@ -1711,11 +1730,16 @@ CREATE TABLE `yx_store_bargain_user`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否取消',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户参与砍价表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户参与砍价表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_bargain_user
 -- ----------------------------
+INSERT INTO `yx_store_bargain_user` VALUES (1, 27, 9, 450.00, 999.00, 3.85, 1, '2020-09-08 15:59:42', '2020-09-08 15:59:42', 0);
+INSERT INTO `yx_store_bargain_user` VALUES (2, 26, 9, 450.00, 999.00, 8.60, 1, '2020-09-10 15:34:36', '2020-09-10 15:34:36', 0);
+INSERT INTO `yx_store_bargain_user` VALUES (3, 33, 9, 450.00, 999.00, 3.02, 1, '2020-09-10 18:34:50', '2020-09-10 18:34:50', 0);
+INSERT INTO `yx_store_bargain_user` VALUES (4, 27, 10, 0.10, 2.00, 0.48, 1, '2020-09-11 11:13:18', '2020-09-11 11:13:22', 0);
+INSERT INTO `yx_store_bargain_user` VALUES (5, 27, 11, 1.00, 2.00, 0.99, 1, '2020-09-11 11:15:37', '2020-09-11 11:15:37', 0);
 
 -- ----------------------------
 -- Table structure for yx_store_bargain_user_help
@@ -1731,11 +1755,16 @@ CREATE TABLE `yx_store_bargain_user_help`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价用户帮助表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价用户帮助表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_bargain_user_help
 -- ----------------------------
+INSERT INTO `yx_store_bargain_user_help` VALUES (1, 27, 9, 1, 3.85, '2020-09-08 15:59:42', NULL, 0);
+INSERT INTO `yx_store_bargain_user_help` VALUES (2, 26, 9, 2, 8.60, '2020-09-10 15:34:36', NULL, 0);
+INSERT INTO `yx_store_bargain_user_help` VALUES (3, 33, 9, 3, 3.02, '2020-09-10 18:34:50', NULL, 0);
+INSERT INTO `yx_store_bargain_user_help` VALUES (4, 27, 10, 4, 0.48, '2020-09-11 11:13:22', NULL, 0);
+INSERT INTO `yx_store_bargain_user_help` VALUES (5, 27, 11, 5, 0.99, '2020-09-11 11:15:37', NULL, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_cart
@@ -1763,12 +1792,87 @@ CREATE TABLE `yx_store_cart`  (
   INDEX `uid_2`(`uid`, `is_del`) USING BTREE,
   INDEX `uid_3`(`uid`, `is_new`) USING BTREE,
   INDEX `type`(`type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 81 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_cart
 -- ----------------------------
-INSERT INTO `yx_store_cart` VALUES (1, 28, 'product', 2, '890bd835ddf540cd95e0c3cc25e34182', 1, '2020-09-04 19:01:37', NULL, 0, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (1, 28, 'product', 2, '890bd835ddf540cd95e0c3cc25e34182', 1, '2020-09-04 19:01:37', NULL, 0, 1, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (2, 29, 'product', 2, 'd3cb524f8fe0477fb6fdaf8c27ee2e96', 1, '2020-09-05 20:52:23', '2020-09-05 20:53:04', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (3, 29, 'product', 2, 'd3cb524f8fe0477fb6fdaf8c27ee2e96', 1, '2020-09-05 20:54:01', '2020-09-05 20:54:06', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (4, 29, 'product', 2, 'b555ab09657e40f1a692429c844a7130', 1, '2020-09-05 20:54:40', '2020-09-05 20:55:13', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (5, 26, 'product', 2, 'aa377803b4604f2aa3757d97d5b19279', 1, '2020-09-06 02:11:48', NULL, 0, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (6, 26, 'product', 2, 'aa377803b4604f2aa3757d97d5b19279', 1, '2020-09-06 03:01:39', NULL, 0, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (7, 26, 'product', 1, '395e84d466844badbfd8a4fe96cda1b0', 1, '2020-09-06 03:21:21', NULL, 0, 0, 1, 0, 1, 0);
+INSERT INTO `yx_store_cart` VALUES (8, 29, 'product', 2, 'aa377803b4604f2aa3757d97d5b19279', 1, '2020-09-06 09:46:35', '2020-09-06 09:46:38', 1, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (9, 32, 'product', 1, '395e84d466844badbfd8a4fe96cda1b0', 1, '2020-09-06 10:59:00', NULL, 0, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (10, 32, 'product', 2, 'aa377803b4604f2aa3757d97d5b19279', 1, '2020-09-06 11:15:42', NULL, 0, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (11, 28, 'product', 4, '40d0683300414a7fbc08372d840c801c', 1, '2020-09-07 13:42:25', '2020-09-07 13:42:59', 1, 0, 1, 4, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (12, 28, 'product', 2, 'aa377803b4604f2aa3757d97d5b19279', 1, '2020-09-07 13:53:19', '2020-09-07 13:53:26', 1, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (13, 28, 'product', 5, '26dbb2c06d9e4740acd191aef3cfd0c0', 1, '2020-09-07 13:55:20', '2020-09-07 13:55:24', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (14, 28, 'product', 4, '40d0683300414a7fbc08372d840c801c', 1, '2020-09-07 14:05:50', NULL, 0, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (15, 11, 'product', 2, '8d1b50eb86c1429a966dcda8782b7aaf', 1, '2020-09-07 17:40:23', NULL, 0, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (16, 29, 'product', 4, '40d0683300414a7fbc08372d840c801c', 1, '2020-09-08 10:35:51', '2020-09-08 10:35:54', 1, 0, 1, 4, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (17, 29, 'product', 4, '40d0683300414a7fbc08372d840c801c', 1, '2020-09-08 10:36:27', '2020-09-08 10:36:29', 1, 0, 1, 4, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (18, 29, 'product', 4, '40d0683300414a7fbc08372d840c801c', 1, '2020-09-08 10:36:36', '2020-09-08 10:36:37', 1, 0, 1, 4, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (19, 29, 'product', 2, 'aa377803b4604f2aa3757d97d5b19279', 1, '2020-09-08 10:37:30', '2020-09-08 10:37:31', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (20, 27, 'product', 2, '8d1b50eb86c1429a966dcda8782b7aaf', 1, '2020-09-08 15:11:25', NULL, 0, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (21, 27, 'product', 2, '7250ac97c110456eb569ec30b31f055d', 1, '2020-09-08 15:14:58', '2020-09-08 15:16:57', 1, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (22, 27, 'product', 6, 'e6d92455baf844b4981f2bde85d2135d', 1, '2020-09-08 15:17:29', '2020-09-08 15:17:31', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (23, 27, 'product', 5, '26dbb2c06d9e4740acd191aef3cfd0c0', 1, '2020-09-08 15:18:07', '2020-09-08 15:18:09', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (24, 27, 'product', 2, 'aa377803b4604f2aa3757d97d5b19279', 1, '2020-09-08 15:21:28', '2020-09-08 15:21:30', 1, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (25, 27, 'product', 2, 'aa377803b4604f2aa3757d97d5b19279', 1, '2020-09-08 15:21:51', NULL, 0, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (26, 27, 'product', 1, '395e84d466844badbfd8a4fe96cda1b0', 1, '2020-09-08 15:55:47', NULL, 0, 0, 1, 0, 1, 0);
+INSERT INTO `yx_store_cart` VALUES (27, 29, 'product', 1, '395e84d466844badbfd8a4fe96cda1b0', 1, '2020-09-08 16:44:43', '2020-09-08 19:38:38', 1, 0, 1, 0, 1, 0);
+INSERT INTO `yx_store_cart` VALUES (28, 29, 'product', 1, 'b76d9d8eaa9e4c72b14e009d1974715c', 1, '2020-09-08 19:43:39', '2020-09-08 19:43:45', 1, 0, 1, 0, 1, 0);
+INSERT INTO `yx_store_cart` VALUES (29, 29, 'product', 1, 'd4ce8cd4bda84d479c11348e060afb8e', 1, '2020-09-08 21:20:33', '2020-09-08 21:20:41', 1, 0, 1, 0, 1, 0);
+INSERT INTO `yx_store_cart` VALUES (30, 29, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-08 21:27:49', '2020-09-08 21:27:54', 1, 0, 1, 4, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (31, 28, 'product', 2, '749e3feb4de4404facb2b3af244724e7', 1, '2020-09-08 22:49:33', '2020-09-08 22:49:40', 1, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (32, 33, 'product', 6, 'c59c04bcbb0144ccbdf2e2b8d44aed21', 1, '2020-09-09 10:42:39', NULL, 0, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (33, 33, 'product', 5, '26dbb2c06d9e4740acd191aef3cfd0c0', 1, '2020-09-09 10:44:03', '2020-09-11 14:38:06', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (34, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-09 10:44:16', '2020-09-09 10:44:18', 1, 0, 1, 4, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (35, 33, 'product', 1, 'd4ce8cd4bda84d479c11348e060afb8e', 1, '2020-09-09 10:45:07', '2020-09-09 10:45:11', 1, 0, 1, 0, 1, 0);
+INSERT INTO `yx_store_cart` VALUES (36, 33, 'product', 6, '9b046545aa8f4a5b996ef742b9169940', 1, '2020-09-09 10:50:00', '2020-09-09 11:02:38', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (37, 33, 'product', 6, '9b046545aa8f4a5b996ef742b9169940', 4, '2020-09-09 14:54:58', '2020-09-09 14:56:15', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (38, 33, 'product', 5, '26dbb2c06d9e4740acd191aef3cfd0c0', 3, '2020-09-09 14:55:09', '2020-09-09 14:56:15', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (39, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 2, '2020-09-09 14:55:19', '2020-09-09 14:56:15', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (40, 33, 'product', 2, '749e3feb4de4404facb2b3af244724e7', 1, '2020-09-09 14:55:42', '2020-09-09 14:56:15', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (41, 33, 'product', 2, 'f11d972b9c6444a5b2a53e5758eea8a6', 1, '2020-09-09 14:58:01', '2020-09-09 14:58:16', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (42, 33, 'product', 2, 'f1e8ba7815b34e60b68b221730ed982d', 1, '2020-09-09 14:58:05', '2020-09-09 14:58:16', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (43, 33, 'product', 2, '749e3feb4de4404facb2b3af244724e7', 1, '2020-09-09 14:58:07', '2020-09-09 14:58:16', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (44, 33, 'product', 6, '9b046545aa8f4a5b996ef742b9169940', 1, '2020-09-10 13:54:14', '2020-09-10 13:54:20', 0, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (45, 33, 'product', 6, '9b046545aa8f4a5b996ef742b9169940', 1, '2020-09-10 13:54:23', '2020-09-10 13:55:30', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (46, 33, 'product', 5, '26dbb2c06d9e4740acd191aef3cfd0c0', 1, '2020-09-10 13:54:28', '2020-09-10 13:55:30', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (47, 33, 'product', 3, 'c9a418620c8b491d8af537974e07b1a2', 3, '2020-09-10 13:54:36', '2020-09-10 13:55:30', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (48, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-10 13:54:41', '2020-09-10 13:55:30', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (49, 33, 'product', 2, '749e3feb4de4404facb2b3af244724e7', 2, '2020-09-10 13:55:08', '2020-09-10 13:55:30', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (50, 33, 'product', 2, '6e1a0039b17b4a0b9286b251f7c6529e', 1, '2020-09-10 13:55:10', '2020-09-10 13:55:30', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (51, 33, 'product', 2, 'f1e8ba7815b34e60b68b221730ed982d', 1, '2020-09-10 13:55:15', '2020-09-10 13:55:30', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (56, 26, 'product', 6, 'd726ae74969b41ed95eba1cfff02136d', 1, '2020-09-10 16:24:19', NULL, 0, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (57, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-10 17:12:43', '2020-09-10 17:12:48', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (58, 33, 'product', 2, 'f1e8ba7815b34e60b68b221730ed982d', 1, '2020-09-10 18:23:22', NULL, 0, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (59, 27, 'product', 6, 'd726ae74969b41ed95eba1cfff02136d', 1, '2020-09-10 18:26:15', '2020-09-10 18:26:46', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (60, 27, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-10 18:27:00', '2020-09-10 18:27:04', 1, 0, 1, 4, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (61, 27, 'product', 6, 'd726ae74969b41ed95eba1cfff02136d', 1, '2020-09-10 18:40:01', NULL, 0, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (62, 27, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-10 18:40:14', '2020-09-10 18:40:18', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (63, 27, 'product', 1, 'd4ce8cd4bda84d479c11348e060afb8e', 1, '2020-09-10 18:51:50', NULL, 0, 0, 1, 0, 1, 0);
+INSERT INTO `yx_store_cart` VALUES (64, 33, 'product', 2, 'c36c8514daf74674a4a9fc39dea8c471', 1, '2020-09-10 18:57:35', '2020-09-10 18:57:40', 1, 0, 1, 2, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (65, 27, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-10 19:44:42', NULL, 0, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (66, 27, 'product', 2, 'd3e8617890cd40d19ccd212591ef6544', 2, '2020-09-10 19:45:00', '2020-09-10 19:46:14', 0, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (67, 27, 'product', 3, 'c9a418620c8b491d8af537974e07b1a2', 1, '2020-09-10 19:45:37', NULL, 0, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (68, 28, 'product', 1, 'd4ce8cd4bda84d479c11348e060afb8e', 1, '2020-09-10 21:17:15', NULL, 0, 0, 1, 0, 1, 0);
+INSERT INTO `yx_store_cart` VALUES (69, 28, 'product', 6, '1432af5acbcd407e97a1c86c37cafa39', 1, '2020-09-10 23:02:30', '2020-09-10 23:02:57', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (70, 28, 'product', 3, 'c9a418620c8b491d8af537974e07b1a2', 1, '2020-09-10 23:02:42', '2020-09-10 23:02:57', 1, 0, 0, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (71, 33, 'product', 6, '1432af5acbcd407e97a1c86c37cafa39', 1, '2020-09-11 14:17:34', '2020-09-11 14:17:43', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (72, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-11 14:24:48', '2020-09-11 14:24:52', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (73, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-11 14:25:06', '2020-09-11 14:25:16', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (74, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-11 14:43:37', '2020-09-11 14:43:41', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (75, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-11 14:45:53', '2020-09-11 14:45:57', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (76, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-11 14:48:43', '2020-09-11 14:48:48', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (77, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-11 15:07:02', '2020-09-11 15:07:05', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (78, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-11 15:08:31', '2020-09-11 15:08:39', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (79, 33, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-11 15:09:43', '2020-09-11 15:09:46', 1, 0, 1, 0, 0, 0);
+INSERT INTO `yx_store_cart` VALUES (80, 25, 'product', 4, 'bfc82f4771ec474994b0edb198e4fc6b', 1, '2020-09-11 16:06:26', '2020-09-11 16:06:34', 1, 0, 1, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_category
@@ -1796,8 +1900,8 @@ CREATE TABLE `yx_store_category`  (
 -- ----------------------------
 INSERT INTO `yx_store_category` VALUES (1, 0, '图文广告', 1, '', 1, '2020-06-25 18:54:35', NULL, 0);
 INSERT INTO `yx_store_category` VALUES (2, 1, '写真', 1, 'http://localhost:8000/file/pic/资讯-20200311043727918.png', 1, '2020-06-25 18:54:35', NULL, 1);
-INSERT INTO `yx_store_category` VALUES (3, 1, '平面设计', 1, 'http://localhost:8000/file/pic/资讯-20200311043727918.png', 1, '2020-06-25 18:54:35', NULL, 0);
-INSERT INTO `yx_store_category` VALUES (5, 1, '名片', 1, 'http://localhost:8000/file/pic/砍价-20200311043720679.png', 1, '2020-06-25 18:54:35', NULL, 0);
+INSERT INTO `yx_store_category` VALUES (3, 1, '平面设计', 1, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 1, '2020-06-25 18:54:35', '2020-09-09 21:00:17', 0);
+INSERT INTO `yx_store_category` VALUES (5, 1, '名片', 1, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', 1, '2020-06-25 18:54:35', '2020-09-09 21:00:32', 0);
 INSERT INTO `yx_store_category` VALUES (6, 0, '666', 1, '', 1, '2020-06-25 18:54:35', NULL, 1);
 INSERT INTO `yx_store_category` VALUES (7, 0, '99995', 1, '', 1, '2020-06-25 18:54:35', NULL, 1);
 INSERT INTO `yx_store_category` VALUES (8, 7, '8888', 1, 'http://localhost:8000/file/pic/钻石-20200328094531898.jpg', 1, '2020-06-25 18:54:35', NULL, 1);
@@ -1838,15 +1942,16 @@ CREATE TABLE `yx_store_combination`  (
   `unit_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '单位名',
   `spec_type` tinyint(1) NULL DEFAULT NULL COMMENT '规格 0单 1多',
   `temp_id` int(10) NULL DEFAULT NULL COMMENT '运费模板ID',
-  `is_sub` int(1) NULL DEFAULT NULL COMMENT '规格设置',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团产品表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团产品表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_combination
 -- ----------------------------
-INSERT INTO `yx_store_combination` VALUES (1, 1, 0, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '照片打印', NULL, 5, '照片打印', 2.00, NULL, 0, 0, 1000, '2020-09-04 17:47:45', NULL, 0, 1, 0, 1, NULL, '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\"/></p>', '2020-09-04 00:00:00', '2020-09-30 00:00:00', 5, 3, 0, '张', 0, 34, 0);
-INSERT INTO `yx_store_combination` VALUES (2, 2, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'X型展架', NULL, 3, 'X型展架', 10.00, NULL, 0, 0, 3330, '2020-09-04 20:15:33', NULL, 0, 1, 0, 1, NULL, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"/></p>', '2020-09-04 00:00:00', '2020-09-30 00:00:00', 5, 11, 0, '张', 1, 34, 0);
+INSERT INTO `yx_store_combination` VALUES (1, 1, 0, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '照片打印', NULL, 5, '照片打印', 0.10, 1.00, 0, 0, 100, '2020-09-04 17:47:45', '2020-09-08 21:17:11', 0, 1, 0, 1, NULL, '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\"/></p>', '2020-09-04 00:00:00', '2020-09-30 00:00:00', 5, 3, 0, '张', 0, 34);
+INSERT INTO `yx_store_combination` VALUES (2, 2, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'X型展架', NULL, 3, 'X型展架', 1.00, 12.00, 0, 4, 398, '2020-09-04 20:15:33', '2020-09-08 21:17:01', 0, 1, 0, 1, NULL, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"/></p>', '2020-09-04 00:00:00', '2020-09-30 00:00:00', 5, 11, 0, '张', 1, 34);
+INSERT INTO `yx_store_combination` VALUES (3, 3, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', '彩色复印-量大有优惠', NULL, 2, '彩色复印', 2.00, 1.00, 0, 0, 10, '2020-09-07 13:23:07', '2020-09-08 21:14:27', 0, 1, 0, 1, NULL, '<p>1111</p>', '2020-09-07 00:00:00', '2020-09-30 00:00:00', 2, 1, 0, '张', 0, 34);
+INSERT INTO `yx_store_combination` VALUES (4, 4, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', '户外写真背胶', NULL, 2, '户外写真背胶', 2.00, 1.00, 0, 4, 18, '2020-09-07 13:31:28', '2020-09-08 21:14:04', 0, 1, 0, 1, NULL, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"/></p>', '2020-09-07 13:31:14', '2020-09-30 00:00:00', 1, 1, 0, '米', 0, 34);
 
 -- ----------------------------
 -- Table structure for yx_store_coupon
@@ -1856,8 +1961,8 @@ CREATE TABLE `yx_store_coupon`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '优惠券表ID',
   `title` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '优惠券名称',
   `integral` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '兑换消耗积分值',
-  `coupon_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '兑换的优惠券面值',
-  `use_min_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '最低消费多少金额可用优惠券',
+  `coupon_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '兑换的优惠券面值',
+  `use_min_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '最低消费多少金额可用优惠券',
   `coupon_time` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '优惠券有效期限（单位：天）',
   `sort` int(11) UNSIGNED NOT NULL DEFAULT 1 COMMENT '排序',
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '状态（0：关闭，1：开启）',
@@ -1906,13 +2011,14 @@ CREATE TABLE `yx_store_coupon_issue`  (
   INDEX `remain_count`(`remain_count`) USING BTREE,
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_del`(`is_del`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券前台领取表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券前台领取表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_coupon_issue
 -- ----------------------------
 INSERT INTO `yx_store_coupon_issue` VALUES (3, '商品券', 4, 1, '2020-07-05 12:47:39', '2020-07-31 00:00:00', 1000, 999, 0, 1, 0, '2020-07-05 12:47:50', NULL);
 INSERT INTO `yx_store_coupon_issue` VALUES (4, '双十一优惠券', 1, 0, '2020-07-05 12:48:12', '2020-07-31 00:00:00', 1000, 999, 0, 1, 0, '2020-07-05 12:48:23', NULL);
+INSERT INTO `yx_store_coupon_issue` VALUES (5, '商品券', 4, 1, '2020-09-08 16:06:44', '2020-09-30 00:00:00', 1000, 999, 0, 1, 0, '2020-09-08 16:06:53', NULL);
 
 -- ----------------------------
 -- Table structure for yx_store_coupon_issue_user
@@ -1927,13 +2033,14 @@ CREATE TABLE `yx_store_coupon_issue_user`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uid`(`uid`, `issue_coupon_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券前台用户领取记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券前台用户领取记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_coupon_issue_user
 -- ----------------------------
 INSERT INTO `yx_store_coupon_issue_user` VALUES (2, 12, 3, '2020-07-05 14:47:19', NULL, 0);
 INSERT INTO `yx_store_coupon_issue_user` VALUES (3, 12, 4, '2020-07-05 14:53:05', NULL, 0);
+INSERT INTO `yx_store_coupon_issue_user` VALUES (4, 33, 5, '2020-09-10 18:52:21', NULL, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_coupon_user
@@ -1944,8 +2051,8 @@ CREATE TABLE `yx_store_coupon_user`  (
   `cid` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '兑换的项目id',
   `uid` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '优惠券所属用户',
   `coupon_title` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '优惠券名称',
-  `coupon_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '优惠券的面值',
-  `use_min_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '最低消费多少金额可用优惠券',
+  `coupon_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '优惠券的面值',
+  `use_min_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '最低消费多少金额可用优惠券',
   `create_time` datetime(0) NOT NULL COMMENT '优惠券创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL,
   `end_time` datetime(0) NOT NULL COMMENT '优惠券结束时间',
@@ -1961,13 +2068,14 @@ CREATE TABLE `yx_store_coupon_user`  (
   INDEX `end_time`(`end_time`) USING BTREE,
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_fail`(`is_fail`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券发放记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券发放记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_coupon_user
 -- ----------------------------
 INSERT INTO `yx_store_coupon_user` VALUES (2, 4, 12, '商品券', 1.00, 10.00, '2020-07-05 14:47:19', '2020-07-07 16:51:27', '2020-09-23 14:47:19', '2020-07-07 16:51:27', 'get', 1, 0, 0);
 INSERT INTO `yx_store_coupon_user` VALUES (3, 1, 12, '双十一优惠券', 5.00, 100.00, '2020-07-05 14:53:05', '2020-09-03 10:03:09', '2020-07-25 14:53:05', '2020-06-25 18:54:35', 'get', 2, 0, 0);
+INSERT INTO `yx_store_coupon_user` VALUES (4, 4, 33, '商品券', 1.00, 10.00, '2020-09-10 18:52:21', NULL, '2020-11-29 18:52:21', NULL, 'get', 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_order
@@ -1982,15 +2090,15 @@ CREATE TABLE `yx_store_order`  (
   `user_phone` varchar(18) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户电话',
   `user_address` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '详细地址',
   `cart_id` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '[]' COMMENT '购物车id',
-  `freight_price` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',
+  `freight_price` decimal(8, 2) NOT NULL COMMENT '运费金额',
   `total_num` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '订单商品总数',
-  `total_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '订单总价',
-  `total_postage` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '邮费',
-  `pay_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '实际支付金额',
-  `pay_postage` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '支付邮费',
-  `deduction_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '抵扣金额',
+  `total_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '订单总价',
+  `total_postage` decimal(8, 2) UNSIGNED NOT NULL COMMENT '邮费',
+  `pay_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '实际支付金额',
+  `pay_postage` decimal(8, 2) UNSIGNED NOT NULL COMMENT '支付邮费',
+  `deduction_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '抵扣金额',
   `coupon_id` int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '优惠券id',
-  `coupon_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '优惠券金额',
+  `coupon_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '优惠券金额',
   `paid` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '支付状态',
   `pay_time` datetime(0) NULL DEFAULT NULL COMMENT '支付时间',
   `pay_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '支付方式',
@@ -2003,13 +2111,13 @@ CREATE TABLE `yx_store_order`  (
   `refund_reason_time` datetime(0) NULL DEFAULT NULL COMMENT '退款时间',
   `refund_reason_wap` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '前台退款原因',
   `refund_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '不退款的理由',
-  `refund_price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '退款金额',
+  `refund_price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '退款金额',
   `delivery_sn` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '快递公司编号',
   `delivery_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递名称/送货人姓名',
   `delivery_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发货类型',
   `delivery_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '快递单号/手机号',
-  `gain_integral` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '消费赚取积分',
-  `use_integral` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '使用积分',
+  `gain_integral` decimal(8, 2) UNSIGNED NOT NULL COMMENT '消费赚取积分',
+  `use_integral` decimal(8, 2) UNSIGNED NOT NULL COMMENT '使用积分',
   `back_integral` decimal(8, 2) UNSIGNED NULL DEFAULT NULL COMMENT '给用户退了多少积分',
   `mark` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '备注',
   `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否删除',
@@ -2040,11 +2148,58 @@ CREATE TABLE `yx_store_order`  (
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_del`(`is_del`) USING BTREE,
   INDEX `coupon_id`(`coupon_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 63 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_order
 -- ----------------------------
+INSERT INTO `yx_store_order` VALUES (1, '1302228251506114560', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '2', 0.00, 1, 10.00, 0.00, 10.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-05 20:55:40', 'yue', '2020-09-05 20:53:04', '2020-09-05 20:55:40', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '8b53cc02e2ed45dda4356979fc7f2f87', NULL, 0, 0, 0, 0, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (2, '1302228511980781568', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '3', 0.00, 1, 10.00, 0.00, 10.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-05 20:55:50', 'yue', '2020-09-05 20:54:06', '2020-09-05 20:55:50', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '25b2b005df854350bfae0e0b57ebd623', NULL, 0, 0, 0, 0, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (3, '1302228792088985600', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '4', 0.00, 1, 12.00, 0.00, 12.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-05 20:55:13', 'yue', '2020-09-05 20:55:13', '2020-09-05 20:56:14', 1, 0, NULL, NULL, NULL, NULL, NULL, 0.00, 'STO', '申通快递', 'express', '5556666666666', 0.00, 0.00, NULL, '', 0, 'd29fd0417ad74ff9b54438f39d5e1544', NULL, 0, 0, 0, 0, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (4, '1302422925634174976', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '8', 0.00, 1, 10.00, 0.00, 10.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-06 09:46:38', 'yue', '2020-09-06 09:46:38', '2020-09-06 09:46:38', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'c3bf416fd91b402bab54bc34d0941edc', NULL, 0, 0, 2, 4, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (5, '1302844793633636352', NULL, 28, '陶子', '13666666666', '天津市 天津市 河西区 卡阿吉纳加', '11', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-07 13:47:32', 'yue', '2020-09-07 13:42:59', '2020-09-10 21:13:59', 0, 1, '', '', '2020-09-10 21:13:59', '拼团时间超时', NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '44528a1bb76b4f3fae9db28c2a349cab', NULL, 0, 0, 4, 5, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (6, '1302847424330465280', NULL, 28, '陶子', '13666666666', '天津市 天津市 河西区 卡阿吉纳加', '12', 0.00, 1, 10.00, 0.00, 10.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-07 13:53:26', 'yue', '2020-09-07 13:53:26', '2020-09-07 13:53:26', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'be958e9ff0bd4208bec2094b7ae71605', NULL, 0, 0, 2, 6, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (7, '1302847918650163200', NULL, 28, '陶子', '13666666666', '天津市 天津市 河西区 卡阿吉纳加', '13', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-07 13:55:24', 'yue', '2020-09-07 13:55:24', '2020-09-07 13:58:12', 0, 2, '', '', '2020-09-07 13:57:02', '收货地址填错了', NULL, 2.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '02aa27f647d14812b4fa14d82abb9d91', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (8, '1303160097777647616', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '16', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 10:35:54', 'yue', '2020-09-08 10:35:54', '2020-09-08 10:35:54', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'ea8891967b154d71a5cad708aa692107', NULL, 0, 0, 4, 7, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (9, '1303160248218943488', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '17', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 10:36:29', 'yue', '2020-09-08 10:36:29', '2020-09-08 16:44:07', 0, 1, '', '', '2020-09-08 16:44:07', '拼团时间超时', NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'ca999af59360467c8e482a14cdda06e2', NULL, 0, 0, 4, 8, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (10, '1303160281987284992', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '18', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 10:36:37', 'yue', '2020-09-08 10:36:37', '2020-09-08 16:43:45', 0, 1, '', '', '2020-09-08 16:43:45', '拼团时间超时', NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'ed4d85299c634b69b16cadfcb8778c45', NULL, 0, 0, 4, 9, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (11, '1303160507707949056', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '19', 0.00, 1, 10.00, 0.00, 10.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 10:37:31', 'yue', '2020-09-08 10:37:31', '2020-09-08 10:37:31', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'aeee9dc51fd14cdf9ccd472829c01ba9', NULL, 0, 0, 0, 0, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (12, '1303230828439928832', NULL, 27, '哈哈', '15136175246', '天津市 天津市 和平区 666', '21', 0.00, 1, 10.00, 0.00, 10.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 15:16:57', 'yue', '2020-09-08 15:16:57', '2020-09-08 15:16:57', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '2303cf8cc01b48a69223b921675bf116', NULL, 0, 0, 2, 10, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (13, '1303230972069675008', NULL, 27, '哈哈', '15136175246', '天津市 天津市 和平区 666', '22', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 15:17:31', 'yue', '2020-09-08 15:17:31', '2020-09-08 15:17:31', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'edd9751372f440c9b45586f1009c71a2', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (14, '1303231129775505408', NULL, 27, '哈哈', '15136175246', '天津市 天津市 和平区 666', '23', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 15:18:09', 'yue', '2020-09-08 15:18:09', '2020-09-08 15:49:56', 2, 0, NULL, NULL, NULL, NULL, NULL, 0.00, 'ZTO', '中通快递', NULL, '999999', 0.00, 0.00, NULL, '', 0, '76a50e6c16544c54ba615f06687448ad', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (15, '1303231973052907520', NULL, 27, '哈哈', '15136175246', '天津市 天津市 和平区 666', '24', 0.00, 1, 10.00, 0.00, 10.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 15:21:30', 'yue', '2020-09-08 15:21:30', '2020-09-08 15:21:30', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'a5dfc7af20384422902e3cbf4dd7abde', NULL, 0, 0, 2, 11, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (27, '1303296684133974016', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '27', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 19:38:39', 'yue', '2020-09-08 19:38:38', '2020-09-08 19:38:39', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '70b8f7e43cca4a7c83a4f7cc991b5f92', NULL, 0, 0, 0, 0, 3.00, 1, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (28, '1303297972410253312', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '28', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 19:43:45', 'yue', '2020-09-08 19:43:45', '2020-09-08 19:43:45', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '8959762ed54f4973ac351fc37890e549', NULL, 0, 0, 0, 0, 3.00, 1, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (29, '1303322366461345792', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '29', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 21:20:41', 'yue', '2020-09-08 21:20:41', '2020-09-08 21:20:41', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '8e28789828b84f6cb33abd6a2247a5d5', NULL, 0, 0, 0, 0, 3.00, 1, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (30, '1303324179692519424', NULL, 29, '哈哈', '18888888888', '北京市 北京市 朝阳区 老两口儿', '30', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 21:27:54', 'yue', '2020-09-08 21:27:54', '2020-09-08 21:27:54', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'c240e002c2824053a1bfc3079ac27d33', NULL, 0, 0, 4, 12, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (31, '1303344758915072000', NULL, 28, '陶子', '13666666666', '天津市 天津市 河西区 卡阿吉纳加', '31', 0.00, 1, 1.00, 0.00, 1.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-08 22:49:40', 'yue', '2020-09-08 22:49:40', '2020-09-08 22:49:40', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'd093b89789e64e1fb770e648e26e642e', NULL, 0, 0, 2, 13, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (35, '1303524602529447936', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '34', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-09 10:44:18', 'yue', '2020-09-09 10:44:18', '2020-09-09 10:44:18', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '04df17aacac948bbb2beab938bb1f4a4', NULL, 0, 0, 4, 14, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (36, '1303524822927540224', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '35', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-09 10:45:11', 'yue', '2020-09-09 10:45:11', '2020-09-09 10:46:14', 3, 0, NULL, NULL, NULL, NULL, NULL, 0.00, 'STO', '申通快递', 'express', '摸摸', 0.00, 0.00, NULL, '', 0, '25d5347c9aa644e88ca33afae4ed95a1', NULL, 0, 0, 0, 0, 3.00, 1, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (38, '1303529213680156672', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '36', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-09 11:02:38', 'yue', '2020-09-09 11:02:38', '2020-09-09 11:08:37', 3, 0, NULL, NULL, NULL, NULL, NULL, 0.00, 'STO', '申通快递', 'express', '咯哦哦', 0.00, 0.00, NULL, '', 0, 'a84a3da2f8d2452ea117227983f8b56b', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (39, '1303588006036242432', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '40,39,38,37', 0.00, 10, 29.00, 0.00, 29.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-09 14:56:15', 'yue', '2020-09-09 14:56:15', '2020-09-09 14:56:15', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '6b639378b01e4be395eb6d2e1ecd29b5', NULL, 0, 0, 0, 0, 20.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (40, '1303588513781907456', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '43,42,41', 0.00, 3, 33.00, 0.00, 33.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-09 14:58:16', 'yue', '2020-09-09 14:58:16', '2020-09-09 14:58:16', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'ade2ce4655f9430e8c0e5e56eb395f03', NULL, 0, 0, 0, 0, 33.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (41, '1303935108465557504', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '51,50,49,48,47,46,45', 0.00, 10, 57.00, 0.00, 57.00, 0.00, 0.00, 0, 0.00, 0, NULL, 'weixin', '2020-09-10 13:55:30', NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '82e665eb25754724935e8f796fb858de', NULL, 0, 0, 0, 0, 50.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (42, '1303951594382950400', NULL, 26, 'sahsdh', '15601064107', '北京市 北京市 东城区 asdsdsd', '52', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-10 15:01:01', 'yue', '2020-09-10 15:01:01', '2020-09-10 15:01:01', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'b006c567b271476baaf9e31a76ca3d98', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (43, '1303952625439342592', NULL, 26, 'sahsdh', '15601064107', '北京市 北京市 东城区 asdsdsd', '53', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-10 15:05:07', 'yue', '2020-09-10 15:05:07', '2020-09-10 15:05:07', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'f75fd4260b234f688310971191b865a6', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (44, '1303952870156009472', NULL, 26, 'sahsdh', '15601064107', '北京市 北京市 东城区 asdsdsd', '54', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-10 15:06:05', 'yue', '2020-09-10 15:06:05', '2020-09-10 15:06:05', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '59e4dbcd7c104c6fb1d61923c403d541', NULL, 0, 0, 4, 15, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (45, '1303959894109454336', NULL, 26, 'sahsdh', '15601064107', '北京市 北京市 东城区 asdsdsd', '55', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-10 15:34:00', 'yue', '2020-09-10 15:34:00', '2020-09-10 15:34:00', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '7b6ae34244ee48a392092520c9625f01', NULL, 0, 0, 0, 0, 3.00, 1, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (46, '1303984758220390400', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '57', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-10 17:12:48', 'yue', '2020-09-10 17:12:48', '2020-09-10 17:12:48', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '6f09d05650844976a225fecabf8fbada', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (47, '1304003372839337984', NULL, 27, '哈哈', '15136175246', '天津市 天津市 和平区 666', '59', 0.00, 1, 0.00, 1.00, 1.00, 1.00, 0.00, 0, 0.00, 1, '2020-09-10 18:26:46', 'yue', '2020-09-10 18:26:46', '2020-09-10 18:26:46', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '947187685ea348d1a7fd1ca3e085180d', NULL, 0, 0, 0, 0, 0.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (48, '1304003448743657472', NULL, 27, '哈哈', '15136175246', '天津市 天津市 和平区 666', '60', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-10 18:27:04', 'yue', '2020-09-10 18:27:04', '2020-09-10 18:27:04', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '6c3c7e6b04de4e068249db733f2aad34', NULL, 0, 0, 4, 16, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (49, '1304006777817268224', NULL, 27, '哈哈', '15136175246', '天津市 天津市 和平区 666', '62', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-10 18:40:18', 'yue', '2020-09-10 18:40:18', '2020-09-10 18:40:18', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '0ef613dcb323485a821f436a0b1d298a', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (50, '1304011149808762880', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '64', 0.00, 1, 1.00, 0.00, 1.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-10 18:57:40', 'yue', '2020-09-10 18:57:40', '2020-09-10 18:57:40', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'bbc820d1a01746739fbef2dc92363e44', NULL, 0, 0, 2, 17, 11.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (51, '1304072878701936640', NULL, 28, '陶子', '13666666666', '天津市 天津市 河西区 卡阿吉纳加', '70,69', 0.00, 2, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-10 23:02:57', 'yue', '2020-09-10 23:02:57', '2020-09-10 23:03:40', 2, 0, NULL, NULL, NULL, NULL, NULL, 0.00, 'STO', '申通快递', 'express', '818181188', 0.00, 0.00, NULL, '', 0, 'a25693ae19714911a7c331a15d13ffa1', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (52, '1304303086931542016', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '71', 0.00, 1, 0.00, 1.00, 1.00, 1.00, 0.00, 0, 0.00, 1, '2020-09-11 14:18:22', 'yue', '2020-09-11 14:17:43', '2020-09-11 14:18:22', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 1, '9c873b8c61824f9c99c7cfaa6e5e6e72', NULL, 0, 0, 0, 0, 0.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (53, '1304304884484407296', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '72', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-11 14:24:52', 'yue', '2020-09-11 14:24:52', '2020-09-11 14:24:52', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'c0fec1bbb975443ebffc2097d4f7102c', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (54, '1304304986074644480', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '73', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-11 14:25:16', 'yue', '2020-09-11 14:25:16', '2020-09-11 14:25:16', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '216fa0eefaf4466294d239d6c53f627b', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (55, '1304308214954721280', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '33', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-11 14:38:06', 'yue', '2020-09-11 14:38:06', '2020-09-11 14:38:06', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '32eb0402974142da95e6d4e9792c6f83', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (56, '1304309621325824000', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '74', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-11 14:43:41', 'yue', '2020-09-11 14:43:41', '2020-09-11 14:43:41', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '65bf08b18dc0443a8640b8f446f5862f', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (57, '1304310189180059648', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '75', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-11 14:45:57', 'yue', '2020-09-11 14:45:57', '2020-09-11 14:45:57', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '7206c63edb414b7ba0c16f61c83c7676', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (58, '1304310906536067072', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '76', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-11 14:48:48', 'yue', '2020-09-11 14:48:48', '2020-09-11 14:48:48', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '404e291d35924ce6b753a0a1dda9c26a', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (59, '1304315509348499456', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '77', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-11 15:07:05', 'yue', '2020-09-11 15:07:05', '2020-09-11 15:07:05', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '6a44eda3d7bf407aa79dc887a3fbe80e', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (60, '1304315901494951936', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '78', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-11 15:08:39', 'yue', '2020-09-11 15:08:39', '2020-09-11 15:08:39', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '40855941c1c04152b90235ded3aefcd4', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (61, '1304316185264783360', NULL, 33, '老两口', '18888888888', '天津市 天津市 河西区 天锡我宗盟', '79', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 1, '2020-09-11 15:09:46', 'yue', '2020-09-11 15:09:46', '2020-09-11 15:09:46', 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, 'bb275a627963425a85e121d9dcf68d76', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 1, 0, 0);
+INSERT INTO `yx_store_order` VALUES (62, '1304330478194524160', NULL, 25, 'hupeng', '15136175234', '安徽省 芜湖市 镜湖区 99', '80', 0.00, 1, 2.00, 0.00, 2.00, 0.00, 0.00, 0, 0.00, 0, NULL, 'weixin', '2020-09-11 16:06:34', NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, 0.00, '', NULL, NULL, NULL, 0.00, 0.00, NULL, '', 0, '87b8d8fd48d941a190999bce9d81a924', NULL, 0, 0, 0, 0, 1.00, 0, 0, '', 0, 1, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_order_cart_info
@@ -2061,11 +2216,70 @@ CREATE TABLE `yx_store_order_cart_info`  (
   UNIQUE INDEX `oid`(`oid`, `unique`) USING BTREE,
   INDEX `cart_id`(`cart_id`) USING BTREE,
   INDEX `product_id`(`product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单购物详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单购物详情表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_order_cart_info
 -- ----------------------------
+INSERT INTO `yx_store_order_cart_info` VALUES (1, 1, 2, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":10.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":999,\"truePrice\":10.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":0,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3330,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":10.00,\"pinkStock\":666,\"seckillPrice\":1.00,\"unique\":\"d3cb524f8fe0477fb6fdaf8c27ee2e96\",\"id\":15,\"sku\":\"A4,白色\",\"stock\":999,\"pinkPrice\":1.00,\"seckillStock\":999},\"browse\":0},\"uid\":29,\"productAttrUnique\":\"d3cb524f8fe0477fb6fdaf8c27ee2e96\",\"bargainId\":0,\"id\":2}', 'f9ac4325f4464ef8ba14f063f935077e');
+INSERT INTO `yx_store_order_cart_info` VALUES (2, 2, 3, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":10.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":998,\"truePrice\":10.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":1,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3329,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":10.00,\"pinkStock\":666,\"seckillPrice\":1.00,\"unique\":\"d3cb524f8fe0477fb6fdaf8c27ee2e96\",\"id\":15,\"sku\":\"A4,白色\",\"stock\":998,\"pinkPrice\":1.00,\"seckillStock\":999},\"browse\":0},\"uid\":29,\"productAttrUnique\":\"d3cb524f8fe0477fb6fdaf8c27ee2e96\",\"bargainId\":0,\"id\":3}', '7dbd8a0c53684cd09829c16a2ca25db2');
+INSERT INTO `yx_store_order_cart_info` VALUES (3, 3, 4, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":12.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":999,\"truePrice\":12.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":2,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3328,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":12.00,\"pinkStock\":666,\"seckillPrice\":3.00,\"unique\":\"b555ab09657e40f1a692429c844a7130\",\"id\":17,\"sku\":\"A3,白色\",\"stock\":999,\"pinkPrice\":3.00,\"seckillStock\":999},\"browse\":0},\"uid\":29,\"productAttrUnique\":\"b555ab09657e40f1a692429c844a7130\",\"bargainId\":0,\"id\":4}', '4a4d624e6dc540deba1c175e221f33bd');
+INSERT INTO `yx_store_order_cart_info` VALUES (4, 4, 8, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":10.0,\"combinationId\":2,\"costPrice\":11.0,\"trueStock\":997,\"truePrice\":10.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":0,\"price\":10.00,\"userLike\":false,\"storeName\":\"X型展架\",\"id\":2,\"stock\":3330,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00001\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":10.00,\"pinkStock\":666,\"seckillPrice\":1.00,\"unique\":\"aa377803b4604f2aa3757d97d5b19279\",\"id\":20,\"sku\":\"A4,白色\",\"stock\":997,\"pinkPrice\":1.00,\"seckillStock\":999}},\"uid\":29,\"productAttrUnique\":\"aa377803b4604f2aa3757d97d5b19279\",\"bargainId\":0,\"id\":8}', '0278c365e8a6446f87ad1050b61453dd');
+INSERT INTO `yx_store_order_cart_info` VALUES (5, 5, 11, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":4,\"costPrice\":1.0,\"trueStock\":111,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":0,\"price\":2.00,\"userLike\":false,\"storeName\":\"户外写真背胶\",\"id\":4,\"stock\":111,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":22,\"seckillPrice\":0.00,\"unique\":\"40d0683300414a7fbc08372d840c801c\",\"id\":31,\"sku\":\"默认\",\"stock\":111,\"pinkPrice\":2.00,\"seckillStock\":0}},\"uid\":28,\"productAttrUnique\":\"40d0683300414a7fbc08372d840c801c\",\"bargainId\":0,\"id\":11}', 'c6be2b48c16d4916a04241c024f1e62b');
+INSERT INTO `yx_store_order_cart_info` VALUES (6, 6, 12, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":10.0,\"combinationId\":2,\"costPrice\":11.0,\"trueStock\":996,\"truePrice\":10.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":0,\"price\":10.00,\"userLike\":false,\"storeName\":\"X型展架\",\"id\":2,\"stock\":3330,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"00001\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":10.00,\"pinkStock\":665,\"seckillPrice\":1.00,\"unique\":\"aa377803b4604f2aa3757d97d5b19279\",\"id\":20,\"sku\":\"A4,白色\",\"stock\":996,\"pinkPrice\":1.00,\"seckillStock\":999}},\"uid\":28,\"productAttrUnique\":\"aa377803b4604f2aa3757d97d5b19279\",\"bargainId\":0,\"id\":12}', '367dd8f5455f47e2acebd7a74045a1f2');
+INSERT INTO `yx_store_order_cart_info` VALUES (7, 7, 13, 5, '{\"productId\":5,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":11,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>广告版定制</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"sales\":0,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"广告版定制\",\"id\":5,\"keyword\":\"广告版定制\",\"stock\":11,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"广告版定制\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":5,\"otPrice\":11.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":0,\"seckillPrice\":0.00,\"unique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"id\":32,\"sku\":\"默认\",\"stock\":11,\"pinkPrice\":0.00,\"seckillStock\":0},\"browse\":0},\"uid\":28,\"productAttrUnique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"bargainId\":0,\"id\":13}', 'a09beaabf7ef4ab78eb1b5f91e61b9af');
+INSERT INTO `yx_store_order_cart_info` VALUES (8, 8, 16, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":4,\"costPrice\":1.0,\"trueStock\":110,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":0,\"price\":2.00,\"userLike\":false,\"storeName\":\"户外写真背胶\",\"id\":4,\"stock\":111,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":21,\"seckillPrice\":0.00,\"unique\":\"40d0683300414a7fbc08372d840c801c\",\"id\":31,\"sku\":\"默认\",\"stock\":110,\"pinkPrice\":2.00,\"seckillStock\":0}},\"uid\":29,\"productAttrUnique\":\"40d0683300414a7fbc08372d840c801c\",\"bargainId\":0,\"id\":16}', '1920483f8ff04f9e8a2b3a56b25f961e');
+INSERT INTO `yx_store_order_cart_info` VALUES (9, 9, 17, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":4,\"costPrice\":1.0,\"trueStock\":109,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":0,\"price\":2.00,\"userLike\":false,\"storeName\":\"户外写真背胶\",\"id\":4,\"stock\":111,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":2,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":20,\"seckillPrice\":0.00,\"unique\":\"40d0683300414a7fbc08372d840c801c\",\"id\":31,\"sku\":\"默认\",\"stock\":109,\"pinkPrice\":2.00,\"seckillStock\":0}},\"uid\":29,\"productAttrUnique\":\"40d0683300414a7fbc08372d840c801c\",\"bargainId\":0,\"id\":17}', '7ac2cab6d1dc4a779f784490b7b6e7c1');
+INSERT INTO `yx_store_order_cart_info` VALUES (10, 10, 18, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":4,\"costPrice\":1.0,\"trueStock\":108,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":0,\"price\":2.00,\"userLike\":false,\"storeName\":\"户外写真背胶\",\"id\":4,\"stock\":111,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":3,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":19,\"seckillPrice\":0.00,\"unique\":\"40d0683300414a7fbc08372d840c801c\",\"id\":31,\"sku\":\"默认\",\"stock\":108,\"pinkPrice\":2.00,\"seckillStock\":0}},\"uid\":29,\"productAttrUnique\":\"40d0683300414a7fbc08372d840c801c\",\"bargainId\":0,\"id\":18}', '108eff57819642e6907926a71449e8af');
+INSERT INTO `yx_store_order_cart_info` VALUES (11, 11, 19, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":10.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":995,\"truePrice\":10.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":5,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3325,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":2,\"barCode\":\"00001\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":10.00,\"pinkStock\":664,\"seckillPrice\":1.00,\"unique\":\"aa377803b4604f2aa3757d97d5b19279\",\"id\":20,\"sku\":\"A4,白色\",\"stock\":995,\"pinkPrice\":1.00,\"seckillStock\":999},\"browse\":0},\"uid\":29,\"productAttrUnique\":\"aa377803b4604f2aa3757d97d5b19279\",\"bargainId\":0,\"id\":19}', 'f39a039285fa47558fea53903eb832fe');
+INSERT INTO `yx_store_order_cart_info` VALUES (12, 12, 21, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":12.0,\"combinationId\":2,\"costPrice\":11.0,\"trueStock\":998,\"truePrice\":10.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":0,\"price\":10.00,\"userLike\":false,\"storeName\":\"X型展架\",\"id\":2,\"stock\":3330,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00003\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":12.00,\"pinkStock\":666,\"seckillPrice\":3.00,\"unique\":\"7250ac97c110456eb569ec30b31f055d\",\"id\":22,\"sku\":\"A3,白色\",\"stock\":998,\"pinkPrice\":3.00,\"seckillStock\":999}},\"uid\":27,\"productAttrUnique\":\"7250ac97c110456eb569ec30b31f055d\",\"bargainId\":0,\"id\":21}', 'c0f652ee88164fefad350e5b64fc15d0');
+INSERT INTO `yx_store_order_cart_info` VALUES (13, 13, 22, 6, '{\"productId\":6,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":111,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>印刷各种印刷</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"sales\":0,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"印刷各种印刷\",\"id\":6,\"keyword\":\"印刷各种印刷\",\"stock\":111,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"印刷各种印刷\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":6,\"otPrice\":11.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":11,\"seckillPrice\":0.10,\"unique\":\"e6d92455baf844b4981f2bde85d2135d\",\"id\":33,\"sku\":\"默认\",\"stock\":111,\"pinkPrice\":1.00,\"seckillStock\":9999},\"browse\":0},\"uid\":27,\"productAttrUnique\":\"e6d92455baf844b4981f2bde85d2135d\",\"bargainId\":0,\"id\":22}', 'e382536e86c346dabd9e174df1a40374');
+INSERT INTO `yx_store_order_cart_info` VALUES (14, 14, 23, 5, '{\"productId\":5,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":10,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>广告版定制</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"sales\":1,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"广告版定制\",\"id\":5,\"keyword\":\"广告版定制\",\"stock\":10,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"广告版定制\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":5,\"otPrice\":11.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":0,\"seckillPrice\":0.00,\"unique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"id\":32,\"sku\":\"默认\",\"stock\":10,\"pinkPrice\":0.00,\"seckillStock\":0},\"browse\":0},\"uid\":27,\"productAttrUnique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"bargainId\":0,\"id\":23}', '8e22cfbbf4d64dc4abbc9787b0721200');
+INSERT INTO `yx_store_order_cart_info` VALUES (15, 15, 24, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":10.0,\"combinationId\":2,\"costPrice\":11.0,\"trueStock\":994,\"truePrice\":10.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":1,\"price\":10.00,\"userLike\":false,\"storeName\":\"X型展架\",\"id\":2,\"stock\":3329,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":3,\"barCode\":\"00001\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":10.00,\"pinkStock\":664,\"seckillPrice\":1.00,\"unique\":\"aa377803b4604f2aa3757d97d5b19279\",\"id\":20,\"sku\":\"A4,白色\",\"stock\":994,\"pinkPrice\":1.00,\"seckillStock\":999}},\"uid\":27,\"productAttrUnique\":\"aa377803b4604f2aa3757d97d5b19279\",\"bargainId\":0,\"id\":24}', '5b08bd3f006a4f4c9b5e2f2e3bf3dc34');
+INSERT INTO `yx_store_order_cart_info` VALUES (16, 27, 27, 1, '{\"productId\":1,\"seckillId\":1,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":3.0,\"trueStock\":1000,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"isPostage\":0,\"image_base\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"sales\":0,\"price\":2.00,\"userLike\":false,\"storeName\":\"照片打印\",\"id\":1,\"stock\":1000,\"image\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"cost\":3.00,\"sliderImageArr\":[],\"isShow\":1,\"postage\":2.00,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":3.00,\"productId\":1,\"otPrice\":1.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00005\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":999,\"seckillPrice\":0.20,\"unique\":\"395e84d466844badbfd8a4fe96cda1b0\",\"id\":24,\"sku\":\"默认\",\"stock\":1000,\"pinkPrice\":0.10,\"seckillStock\":999}},\"uid\":29,\"productAttrUnique\":\"395e84d466844badbfd8a4fe96cda1b0\",\"bargainId\":0,\"id\":27}', 'f581a83bdfc64faea90b2865eee36dda');
+INSERT INTO `yx_store_order_cart_info` VALUES (17, 28, 28, 1, '{\"productId\":1,\"seckillId\":1,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":3.0,\"trueStock\":1000,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"isPostage\":0,\"image_base\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"sales\":1,\"price\":2.00,\"userLike\":false,\"storeName\":\"照片打印\",\"id\":1,\"stock\":999,\"image\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"cost\":3.00,\"sliderImageArr\":[],\"isShow\":1,\"postage\":0.20,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":3.00,\"productId\":1,\"otPrice\":1.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00005\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":999,\"seckillPrice\":0.20,\"unique\":\"b76d9d8eaa9e4c72b14e009d1974715c\",\"id\":35,\"sku\":\"默认\",\"stock\":1000,\"pinkPrice\":0.10,\"seckillStock\":999}},\"uid\":29,\"productAttrUnique\":\"b76d9d8eaa9e4c72b14e009d1974715c\",\"bargainId\":0,\"id\":28}', '5b1a07c9681649adb0b52a491efa2ddf');
+INSERT INTO `yx_store_order_cart_info` VALUES (18, 29, 29, 1, '{\"productId\":1,\"seckillId\":1,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":3.0,\"trueStock\":999,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"isPostage\":0,\"image_base\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"sales\":2,\"price\":2.00,\"userLike\":false,\"storeName\":\"照片打印\",\"id\":1,\"stock\":100,\"image\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"cost\":3.00,\"sliderImageArr\":[],\"isShow\":1,\"postage\":0.20,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":3.00,\"productId\":1,\"otPrice\":1.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00005\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":100,\"seckillPrice\":0.20,\"unique\":\"d4ce8cd4bda84d479c11348e060afb8e\",\"id\":44,\"sku\":\"默认\",\"stock\":999,\"pinkPrice\":0.10,\"seckillStock\":100}},\"uid\":29,\"productAttrUnique\":\"d4ce8cd4bda84d479c11348e060afb8e\",\"bargainId\":0,\"id\":29}', '81dfa231a2f24557b90d9454acc2f645');
+INSERT INTO `yx_store_order_cart_info` VALUES (19, 30, 30, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":4,\"costPrice\":1.0,\"trueStock\":111,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":0,\"price\":2.00,\"userLike\":false,\"storeName\":\"户外写真背胶\",\"id\":4,\"stock\":22,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":22,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":111,\"pinkPrice\":2.00,\"seckillStock\":0}},\"uid\":29,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":30}', '4faf99aa996f49548f2ff32d5eb510a8');
+INSERT INTO `yx_store_order_cart_info` VALUES (20, 31, 31, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":11.0,\"combinationId\":2,\"costPrice\":11.0,\"trueStock\":666,\"truePrice\":1.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":2,\"price\":1.00,\"userLike\":false,\"storeName\":\"X型展架\",\"id\":2,\"stock\":400,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00002\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":11.00,\"pinkStock\":100,\"seckillPrice\":2.00,\"unique\":\"749e3feb4de4404facb2b3af244724e7\",\"id\":54,\"sku\":\"A4,红色\",\"stock\":666,\"pinkPrice\":2.00,\"seckillStock\":100}},\"uid\":28,\"productAttrUnique\":\"749e3feb4de4404facb2b3af244724e7\",\"bargainId\":0,\"id\":31}', '9d4a4d9f888e4267bc24160389d7e00d');
+INSERT INTO `yx_store_order_cart_info` VALUES (21, 35, 34, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":4,\"costPrice\":1.0,\"trueStock\":110,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":1,\"price\":2.00,\"userLike\":false,\"storeName\":\"户外写真背胶\",\"id\":4,\"stock\":21,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":21,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":110,\"pinkPrice\":2.00,\"seckillStock\":0}},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":34}', '7734c098d38d4d709e72750e044c2ee8');
+INSERT INTO `yx_store_order_cart_info` VALUES (22, 36, 35, 1, '{\"productId\":1,\"seckillId\":1,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":3.0,\"trueStock\":998,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"isPostage\":0,\"image_base\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"sales\":3,\"price\":2.00,\"userLike\":false,\"storeName\":\"照片打印\",\"id\":1,\"stock\":99,\"image\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"cost\":3.00,\"sliderImageArr\":[],\"isShow\":1,\"postage\":0.20,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":3.00,\"productId\":1,\"otPrice\":1.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"00005\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":100,\"seckillPrice\":0.20,\"unique\":\"d4ce8cd4bda84d479c11348e060afb8e\",\"id\":44,\"sku\":\"默认\",\"stock\":998,\"pinkPrice\":0.10,\"seckillStock\":99}},\"uid\":33,\"productAttrUnique\":\"d4ce8cd4bda84d479c11348e060afb8e\",\"bargainId\":0,\"id\":35}', '72864ec6afd144b787a04b26961b3b2d');
+INSERT INTO `yx_store_order_cart_info` VALUES (23, 38, 36, 6, '{\"productId\":6,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":9999,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>印刷各种印刷</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"sales\":1,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"印刷各种印刷\",\"id\":6,\"keyword\":\"印刷各种印刷\",\"stock\":9999,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"印刷各种印刷\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":6,\"otPrice\":11.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":11,\"seckillPrice\":0.10,\"unique\":\"9b046545aa8f4a5b996ef742b9169940\",\"id\":57,\"sku\":\"默认\",\"stock\":9999,\"pinkPrice\":1.00,\"seckillStock\":100},\"browse\":0},\"uid\":33,\"productAttrUnique\":\"9b046545aa8f4a5b996ef742b9169940\",\"bargainId\":0,\"id\":36}', 'df62cc96c2cb49e58a3b358138c0559c');
+INSERT INTO `yx_store_order_cart_info` VALUES (24, 39, 40, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":11.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":665,\"truePrice\":11.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":7,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3323,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"00002\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":11.00,\"pinkStock\":99,\"seckillPrice\":2.00,\"unique\":\"749e3feb4de4404facb2b3af244724e7\",\"id\":54,\"sku\":\"A4,红色\",\"stock\":665,\"pinkPrice\":2.00,\"seckillStock\":100},\"browse\":2},\"uid\":33,\"productAttrUnique\":\"749e3feb4de4404facb2b3af244724e7\",\"bargainId\":0,\"id\":40}', '7cb0461ea93c461eb592a1da365ed827');
+INSERT INTO `yx_store_order_cart_info` VALUES (25, 39, 39, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":109,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":2,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":6,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":105,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":2,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":20,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":109,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":2},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":39}', '62cebd42f16f4a59a6c5c78c799b4522');
+INSERT INTO `yx_store_order_cart_info` VALUES (26, 39, 38, 5, '{\"productId\":5,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":9,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":3,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>广告版定制</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"sales\":2,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"广告版定制\",\"id\":5,\"keyword\":\"广告版定制\",\"stock\":9,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"广告版定制\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":5,\"otPrice\":11.00,\"weight\":0.00,\"sales\":2,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":0,\"seckillPrice\":0.00,\"unique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"id\":32,\"sku\":\"默认\",\"stock\":9,\"pinkPrice\":0.00,\"seckillStock\":0},\"browse\":3},\"uid\":33,\"productAttrUnique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"bargainId\":0,\"id\":38}', '883a97d922b5414da153968a2d145a28');
+INSERT INTO `yx_store_order_cart_info` VALUES (27, 39, 37, 6, '{\"productId\":6,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":9998,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":4,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>印刷各种印刷</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"sales\":2,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"印刷各种印刷\",\"id\":6,\"keyword\":\"印刷各种印刷\",\"stock\":9998,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"印刷各种印刷\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"\",\"cost\":1.00,\"productId\":6,\"otPrice\":11.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":11,\"seckillPrice\":0.10,\"unique\":\"9b046545aa8f4a5b996ef742b9169940\",\"id\":57,\"sku\":\"默认\",\"stock\":9998,\"pinkPrice\":1.00,\"seckillStock\":100},\"browse\":3},\"uid\":33,\"productAttrUnique\":\"9b046545aa8f4a5b996ef742b9169940\",\"bargainId\":0,\"id\":37}', '3c3ac1b6811c4b04ad62e2089f12dbe7');
+INSERT INTO `yx_store_order_cart_info` VALUES (28, 40, 43, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":11.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":664,\"truePrice\":11.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":8,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3322,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":2,\"barCode\":\"00002\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":11.00,\"pinkStock\":99,\"seckillPrice\":2.00,\"unique\":\"749e3feb4de4404facb2b3af244724e7\",\"id\":54,\"sku\":\"A4,红色\",\"stock\":664,\"pinkPrice\":2.00,\"seckillStock\":100},\"browse\":3},\"uid\":33,\"productAttrUnique\":\"749e3feb4de4404facb2b3af244724e7\",\"bargainId\":0,\"id\":43}', 'bf9973d3fc7c4741bee8fd4e3553aea8');
+INSERT INTO `yx_store_order_cart_info` VALUES (29, 40, 42, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":10.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":993,\"truePrice\":10.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":8,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3322,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00001\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":10.00,\"pinkStock\":100,\"seckillPrice\":1.00,\"unique\":\"f1e8ba7815b34e60b68b221730ed982d\",\"id\":53,\"sku\":\"A4,白色\",\"stock\":993,\"pinkPrice\":1.00,\"seckillStock\":100},\"browse\":3},\"uid\":33,\"productAttrUnique\":\"f1e8ba7815b34e60b68b221730ed982d\",\"bargainId\":0,\"id\":42}', 'bbbff41960a6497eb0ff207b95b62916');
+INSERT INTO `yx_store_order_cart_info` VALUES (30, 40, 41, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":12.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":997,\"truePrice\":12.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":8,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3322,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00003\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":12.00,\"pinkStock\":100,\"seckillPrice\":3.00,\"unique\":\"f11d972b9c6444a5b2a53e5758eea8a6\",\"id\":55,\"sku\":\"A3,白色\",\"stock\":997,\"pinkPrice\":3.00,\"seckillStock\":100},\"browse\":3},\"uid\":33,\"productAttrUnique\":\"f11d972b9c6444a5b2a53e5758eea8a6\",\"bargainId\":0,\"id\":41}', 'a022d7c0fb4a44b881284c154b1f850a');
+INSERT INTO `yx_store_order_cart_info` VALUES (31, 41, 51, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":10.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":992,\"truePrice\":10.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":11,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3319,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"00001\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":10.00,\"pinkStock\":100,\"seckillPrice\":1.00,\"unique\":\"f1e8ba7815b34e60b68b221730ed982d\",\"id\":53,\"sku\":\"A4,白色\",\"stock\":992,\"pinkPrice\":1.00,\"seckillStock\":100},\"browse\":4},\"uid\":33,\"productAttrUnique\":\"f1e8ba7815b34e60b68b221730ed982d\",\"bargainId\":0,\"id\":51}', 'c07c0a3e258b4f0185a9fd894ec2feb1');
+INSERT INTO `yx_store_order_cart_info` VALUES (32, 41, 50, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":13.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":666,\"truePrice\":13.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":11,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3319,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00004\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":13.00,\"pinkStock\":100,\"seckillPrice\":4.00,\"unique\":\"6e1a0039b17b4a0b9286b251f7c6529e\",\"id\":56,\"sku\":\"A3,红色\",\"stock\":666,\"pinkPrice\":4.00,\"seckillStock\":100},\"browse\":4},\"uid\":33,\"productAttrUnique\":\"6e1a0039b17b4a0b9286b251f7c6529e\",\"bargainId\":0,\"id\":50}', '2f1608a3fcca4ef1bbd1f8f3304c9490');
+INSERT INTO `yx_store_order_cart_info` VALUES (33, 41, 49, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":11.0,\"combinationId\":0,\"costPrice\":11.0,\"trueStock\":663,\"truePrice\":11.0,\"type\":\"product\",\"cartNum\":2,\"productInfo\":{\"specType\":1,\"otPrice\":12.00,\"userCollect\":false,\"description\":\"<p><br/></p><p><img src=\\\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\\\"/></p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":11,\"price\":10.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"X型展架\",\"id\":2,\"keyword\":\"X型展架\",\"stock\":3319,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":69,\"storeInfo\":\"X型展架\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":3,\"barCode\":\"00002\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":11.00,\"pinkStock\":99,\"seckillPrice\":2.00,\"unique\":\"749e3feb4de4404facb2b3af244724e7\",\"id\":54,\"sku\":\"A4,红色\",\"stock\":663,\"pinkPrice\":2.00,\"seckillStock\":100},\"browse\":4},\"uid\":33,\"productAttrUnique\":\"749e3feb4de4404facb2b3af244724e7\",\"bargainId\":0,\"id\":49}', 'c99b130cddd940fcbb8cbe3994707ba2');
+INSERT INTO `yx_store_order_cart_info` VALUES (34, 41, 48, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":107,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":8,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":103,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":4,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":20,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":107,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":5},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":48}', 'a53b394de9654ef095b974041c2fcbb6');
+INSERT INTO `yx_store_order_cart_info` VALUES (35, 41, 47, 3, '{\"productId\":3,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":11,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":3,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>1111</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"sales\":0,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"彩色复印-量大有优惠\",\"id\":3,\"keyword\":\"彩色复印\",\"stock\":11,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"彩色复印\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":3,\"otPrice\":1.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":10,\"seckillPrice\":0.00,\"unique\":\"c9a418620c8b491d8af537974e07b1a2\",\"id\":37,\"sku\":\"默认\",\"stock\":11,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":4},\"uid\":33,\"productAttrUnique\":\"c9a418620c8b491d8af537974e07b1a2\",\"bargainId\":0,\"id\":47}', '04802f71bf5b4989aeffb69f7169e073');
+INSERT INTO `yx_store_order_cart_info` VALUES (36, 41, 46, 5, '{\"productId\":5,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":6,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>广告版定制</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"sales\":5,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"广告版定制\",\"id\":5,\"keyword\":\"广告版定制\",\"stock\":6,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"广告版定制\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":5,\"otPrice\":11.00,\"weight\":0.00,\"sales\":5,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":0,\"seckillPrice\":0.00,\"unique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"id\":32,\"sku\":\"默认\",\"stock\":6,\"pinkPrice\":0.00,\"seckillStock\":0},\"browse\":5},\"uid\":33,\"productAttrUnique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"bargainId\":0,\"id\":46}', '2f596830bef749ceae9556109da05ac2');
+INSERT INTO `yx_store_order_cart_info` VALUES (37, 41, 45, 6, '{\"productId\":6,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":9994,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>印刷各种印刷</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"sales\":6,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"印刷各种印刷\",\"id\":6,\"keyword\":\"印刷各种印刷\",\"stock\":9994,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"印刷各种印刷\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":6,\"otPrice\":11.00,\"weight\":0.00,\"sales\":5,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":11,\"seckillPrice\":0.10,\"unique\":\"9b046545aa8f4a5b996ef742b9169940\",\"id\":57,\"sku\":\"默认\",\"stock\":9994,\"pinkPrice\":1.00,\"seckillStock\":100},\"browse\":10},\"uid\":33,\"productAttrUnique\":\"9b046545aa8f4a5b996ef742b9169940\",\"bargainId\":0,\"id\":45}', '32e8adb6270945db884ad7b579555edf');
+INSERT INTO `yx_store_order_cart_info` VALUES (38, 42, 52, 6, '{\"productId\":6,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":9993,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>印刷各种印刷</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"sales\":7,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"印刷各种印刷\",\"id\":6,\"keyword\":\"印刷各种印刷\",\"stock\":9993,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"印刷各种印刷\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":6,\"otPrice\":11.00,\"weight\":0.00,\"sales\":6,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":11,\"seckillPrice\":0.10,\"unique\":\"9b046545aa8f4a5b996ef742b9169940\",\"id\":57,\"sku\":\"默认\",\"stock\":9993,\"pinkPrice\":1.00,\"seckillStock\":100},\"browse\":13},\"uid\":26,\"productAttrUnique\":\"9b046545aa8f4a5b996ef742b9169940\",\"bargainId\":0,\"id\":52}', '0c44cad26d9a4babb64d5d476d685e76');
+INSERT INTO `yx_store_order_cart_info` VALUES (39, 43, 53, 6, '{\"productId\":6,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":9992,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>印刷各种印刷</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"sales\":8,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"印刷各种印刷\",\"id\":6,\"keyword\":\"印刷各种印刷\",\"stock\":9992,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"印刷各种印刷\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":6,\"otPrice\":11.00,\"weight\":0.00,\"sales\":7,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":11,\"seckillPrice\":0.10,\"unique\":\"9b046545aa8f4a5b996ef742b9169940\",\"id\":57,\"sku\":\"默认\",\"stock\":9992,\"pinkPrice\":1.00,\"seckillStock\":100},\"browse\":14},\"uid\":26,\"productAttrUnique\":\"9b046545aa8f4a5b996ef742b9169940\",\"bargainId\":0,\"id\":53}', '0695c47255fc4d2893bad4b524dd4f77');
+INSERT INTO `yx_store_order_cart_info` VALUES (40, 44, 54, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":4,\"costPrice\":1.0,\"trueStock\":106,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":2,\"price\":2.00,\"userLike\":false,\"storeName\":\"户外写真背胶\",\"id\":4,\"stock\":20,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":5,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":20,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":106,\"pinkPrice\":2.00,\"seckillStock\":0}},\"uid\":26,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":54}', 'cd1c935f5eb44dc7a4a372955fe51242');
+INSERT INTO `yx_store_order_cart_info` VALUES (41, 45, 55, 1, '{\"productId\":1,\"seckillId\":1,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":3.0,\"trueStock\":997,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"isPostage\":0,\"image_base\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"sales\":4,\"price\":2.00,\"userLike\":false,\"storeName\":\"照片打印\",\"id\":1,\"stock\":98,\"image\":\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\",\"cost\":3.00,\"sliderImageArr\":[],\"isShow\":1,\"postage\":0.20,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":3.00,\"productId\":1,\"otPrice\":1.00,\"weight\":0.00,\"sales\":2,\"barCode\":\"00005\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":100,\"seckillPrice\":0.20,\"unique\":\"d4ce8cd4bda84d479c11348e060afb8e\",\"id\":44,\"sku\":\"默认\",\"stock\":997,\"pinkPrice\":0.10,\"seckillStock\":98}},\"uid\":26,\"productAttrUnique\":\"d4ce8cd4bda84d479c11348e060afb8e\",\"bargainId\":0,\"id\":55}', '64b8ce2799d140f1a1fc567d99c4aa71');
+INSERT INTO `yx_store_order_cart_info` VALUES (42, 46, 57, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":105,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":10,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":101,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":6,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":19,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":105,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":6},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":57}', 'f9d059a37f454d9681c0f28dc9e0bb74');
+INSERT INTO `yx_store_order_cart_info` VALUES (43, 47, 59, 6, '{\"productId\":6,\"seckillId\":0,\"vipTruePrice\":0.0,\"combinationId\":0,\"costPrice\":0.0,\"trueStock\":9991,\"truePrice\":0.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>印刷各种印刷</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"sales\":9,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"印刷各种印刷\",\"id\":6,\"keyword\":\"印刷各种印刷\",\"stock\":9991,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"印刷各种印刷\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":0.00,\"productId\":6,\"otPrice\":0.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":0.00,\"pinkStock\":11,\"seckillPrice\":2.90,\"unique\":\"d726ae74969b41ed95eba1cfff02136d\",\"id\":58,\"sku\":\"默认\",\"stock\":9991,\"pinkPrice\":0.00,\"seckillStock\":2000},\"browse\":22},\"uid\":27,\"productAttrUnique\":\"d726ae74969b41ed95eba1cfff02136d\",\"bargainId\":0,\"id\":59}', 'aa4027b8aa0d48bfad25bce2f9ea5f84');
+INSERT INTO `yx_store_order_cart_info` VALUES (44, 48, 60, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":4,\"costPrice\":1.0,\"trueStock\":104,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":3,\"price\":2.00,\"userLike\":false,\"storeName\":\"户外写真背胶\",\"id\":4,\"stock\":19,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":7,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":19,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":104,\"pinkPrice\":2.00,\"seckillStock\":0}},\"uid\":27,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":60}', '1c14ce63bda244268baf1218763791db');
+INSERT INTO `yx_store_order_cart_info` VALUES (45, 49, 62, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":103,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":12,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":99,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":8,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":103,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":7},\"uid\":27,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":62}', '7ed379feb0af4b5fa2c2858a6927dcdf');
+INSERT INTO `yx_store_order_cart_info` VALUES (46, 50, 64, 2, '{\"productId\":2,\"seckillId\":0,\"vipTruePrice\":12.0,\"combinationId\":2,\"costPrice\":11.0,\"trueStock\":996,\"truePrice\":1.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"userCollect\":false,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"sales\":3,\"price\":1.00,\"userLike\":false,\"storeName\":\"X型展架\",\"id\":2,\"stock\":399,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11,\"sliderImageArr\":[],\"isShow\":1,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":11.00,\"productId\":2,\"otPrice\":12.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"00003\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":12.00,\"pinkStock\":100,\"seckillPrice\":3.00,\"unique\":\"c36c8514daf74674a4a9fc39dea8c471\",\"id\":61,\"sku\":\"A3,白色\",\"stock\":996,\"pinkPrice\":3.00,\"seckillStock\":100}},\"uid\":33,\"productAttrUnique\":\"c36c8514daf74674a4a9fc39dea8c471\",\"bargainId\":0,\"id\":64}', 'f65a60242969406e9f20096ac7bb323b');
+INSERT INTO `yx_store_order_cart_info` VALUES (47, 51, 70, 3, '{\"productId\":3,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":8,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>1111</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"sales\":3,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"彩色复印-量大有优惠\",\"id\":3,\"keyword\":\"彩色复印\",\"stock\":8,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"彩色复印\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":3,\"otPrice\":1.00,\"weight\":0.00,\"sales\":3,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":10,\"seckillPrice\":0.00,\"unique\":\"c9a418620c8b491d8af537974e07b1a2\",\"id\":37,\"sku\":\"默认\",\"stock\":8,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":11},\"uid\":28,\"productAttrUnique\":\"c9a418620c8b491d8af537974e07b1a2\",\"bargainId\":0,\"id\":70}', 'b1da5dd6f99647c5b262e6d2cdb2f835');
+INSERT INTO `yx_store_order_cart_info` VALUES (48, 51, 69, 6, '{\"productId\":6,\"seckillId\":0,\"vipTruePrice\":0.0,\"combinationId\":0,\"costPrice\":0.0,\"trueStock\":9990,\"truePrice\":0.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>印刷各种印刷</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"sales\":10,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"印刷各种印刷\",\"id\":6,\"keyword\":\"印刷各种印刷\",\"stock\":9990,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"印刷各种印刷\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":0.00,\"productId\":6,\"otPrice\":0.00,\"weight\":0.00,\"sales\":0,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":0.00,\"pinkStock\":11,\"seckillPrice\":2.20,\"unique\":\"1432af5acbcd407e97a1c86c37cafa39\",\"id\":64,\"sku\":\"默认\",\"stock\":9990,\"pinkPrice\":0.00,\"seckillStock\":2000},\"browse\":30},\"uid\":28,\"productAttrUnique\":\"1432af5acbcd407e97a1c86c37cafa39\",\"bargainId\":0,\"id\":69}', '1656740d8eb54aa79b6edea6a7c66330');
+INSERT INTO `yx_store_order_cart_info` VALUES (49, 52, 71, 6, '{\"productId\":6,\"seckillId\":0,\"vipTruePrice\":0.0,\"combinationId\":0,\"costPrice\":0.0,\"trueStock\":9989,\"truePrice\":0.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>印刷各种印刷</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"sales\":11,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"印刷各种印刷\",\"id\":6,\"keyword\":\"印刷各种印刷\",\"stock\":9989,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"张\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"印刷各种印刷\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":0.00,\"productId\":6,\"otPrice\":0.00,\"weight\":0.00,\"sales\":1,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":0.00,\"pinkStock\":11,\"seckillPrice\":2.20,\"unique\":\"1432af5acbcd407e97a1c86c37cafa39\",\"id\":64,\"sku\":\"默认\",\"stock\":9989,\"pinkPrice\":0.00,\"seckillStock\":2000},\"browse\":42},\"uid\":33,\"productAttrUnique\":\"1432af5acbcd407e97a1c86c37cafa39\",\"bargainId\":0,\"id\":71}', 'c5ea3dd58b9c4c6783a2ff8b13dd390a');
+INSERT INTO `yx_store_order_cart_info` VALUES (50, 53, 72, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":102,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":13,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":98,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":9,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":102,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":12},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":72}', 'ad8404cc36e347eb99fc04807f21bc42');
+INSERT INTO `yx_store_order_cart_info` VALUES (51, 54, 73, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":101,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":14,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":97,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":10,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":101,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":12},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":73}', '6641232c74294005aa95e1d370ec1093');
+INSERT INTO `yx_store_order_cart_info` VALUES (52, 55, 33, 5, '{\"productId\":5,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":5,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":11.00,\"userCollect\":false,\"description\":\"<p>广告版定制</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"sales\":6,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"广告版定制\",\"id\":5,\"keyword\":\"广告版定制\",\"stock\":5,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"广告版定制\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":5,\"otPrice\":11.00,\"weight\":0.00,\"sales\":6,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":0,\"seckillPrice\":0.00,\"unique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"id\":32,\"sku\":\"默认\",\"stock\":5,\"pinkPrice\":0.00,\"seckillStock\":0},\"browse\":8},\"uid\":33,\"productAttrUnique\":\"26dbb2c06d9e4740acd191aef3cfd0c0\",\"bargainId\":0,\"id\":33}', 'b04e589c0cfd4215906059c7aff71fdb');
+INSERT INTO `yx_store_order_cart_info` VALUES (53, 56, 74, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":100,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":15,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":96,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":11,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":100,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":13},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":74}', '68c20fe9a0d14a47ac366978874ad7e5');
+INSERT INTO `yx_store_order_cart_info` VALUES (54, 57, 75, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":99,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":16,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":95,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":12,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":99,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":14},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":75}', '6abb90e9cbe942d8b9104950e43072b4');
+INSERT INTO `yx_store_order_cart_info` VALUES (55, 58, 76, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":98,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":17,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":94,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":13,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":98,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":15},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":76}', '8f89c2ac13d5408db513f592a7e1f0ce');
+INSERT INTO `yx_store_order_cart_info` VALUES (56, 59, 77, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":97,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":18,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":93,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":14,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":97,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":16},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":77}', '02f0cf2552cc41a780bb77b9f27841fa');
+INSERT INTO `yx_store_order_cart_info` VALUES (57, 60, 78, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":96,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":19,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":92,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":15,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":96,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":17},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":78}', '97bfaba217f84af8897fadf3302afa98');
+INSERT INTO `yx_store_order_cart_info` VALUES (58, 61, 79, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":95,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":20,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":91,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":16,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":95,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":18},\"uid\":33,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":79}', '2781c5d52a9744f190dc81b70cc6a420');
+INSERT INTO `yx_store_order_cart_info` VALUES (59, 62, 80, 4, '{\"productId\":4,\"seckillId\":0,\"vipTruePrice\":2.0,\"combinationId\":0,\"costPrice\":1.0,\"trueStock\":94,\"truePrice\":2.0,\"type\":\"product\",\"cartNum\":1,\"productInfo\":{\"specType\":0,\"otPrice\":1.00,\"userCollect\":false,\"description\":\"<p>户外写真背胶</p>\",\"isPostage\":0,\"isSub\":0,\"image_base\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"sales\":21,\"price\":2.00,\"userLike\":false,\"vipPrice\":0.00,\"storeName\":\"户外写真背胶\",\"id\":4,\"keyword\":\"户外写真背胶\",\"stock\":90,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"cost\":1.00,\"isGood\":0,\"unitName\":\"米\",\"giveIntegral\":0.00,\"sort\":0,\"sliderImageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\"],\"sliderImage\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg\",\"isShow\":1,\"postage\":0.00,\"cateId\":\"3\",\"isSeckill\":0,\"merId\":0,\"ficti\":0,\"storeInfo\":\"户外写真背胶\",\"tempId\":34,\"attrInfo\":{\"brokerage\":0.00,\"image\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"cost\":1.00,\"productId\":4,\"otPrice\":1.00,\"weight\":0.00,\"sales\":17,\"barCode\":\"\",\"brokerageTwo\":0.00,\"volume\":0.00,\"price\":2.00,\"pinkStock\":18,\"seckillPrice\":0.00,\"unique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"id\":36,\"sku\":\"默认\",\"stock\":94,\"pinkPrice\":2.00,\"seckillStock\":0},\"browse\":19},\"uid\":25,\"productAttrUnique\":\"bfc82f4771ec474994b0edb198e4fc6b\",\"bargainId\":0,\"id\":80}', 'c6c2364d1b2f41a991509668b7377d0d');
 
 -- ----------------------------
 -- Table structure for yx_store_order_status
@@ -2080,11 +2294,119 @@ CREATE TABLE `yx_store_order_status`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `oid`(`oid`) USING BTREE,
   INDEX `change_type`(`change_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单操作记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 109 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单操作记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_order_status
 -- ----------------------------
+INSERT INTO `yx_store_order_status` VALUES (1, 1, 'yshop_create_order', '订单生成', '2020-09-05 20:53:04');
+INSERT INTO `yx_store_order_status` VALUES (2, 2, 'yshop_create_order', '订单生成', '2020-09-05 20:54:06');
+INSERT INTO `yx_store_order_status` VALUES (3, 3, 'yshop_create_order', '订单生成', '2020-09-05 20:55:12');
+INSERT INTO `yx_store_order_status` VALUES (4, 3, 'pay_success', '用户付款成功', '2020-09-05 20:55:12');
+INSERT INTO `yx_store_order_status` VALUES (5, 1, 'pay_success', '用户付款成功', '2020-09-05 20:55:39');
+INSERT INTO `yx_store_order_status` VALUES (6, 2, 'pay_success', '用户付款成功', '2020-09-05 20:55:50');
+INSERT INTO `yx_store_order_status` VALUES (7, 3, 'delivery_goods', '已发货 快递公司：申通快递快递单号：5556666666666', '2020-09-05 20:56:14');
+INSERT INTO `yx_store_order_status` VALUES (8, 4, 'yshop_create_order', '订单生成', '2020-09-06 09:46:38');
+INSERT INTO `yx_store_order_status` VALUES (9, 4, 'pay_success', '用户付款成功', '2020-09-06 09:46:38');
+INSERT INTO `yx_store_order_status` VALUES (10, 5, 'yshop_create_order', '订单生成', '2020-09-07 13:42:59');
+INSERT INTO `yx_store_order_status` VALUES (11, 5, 'pay_success', '用户付款成功', '2020-09-07 13:47:32');
+INSERT INTO `yx_store_order_status` VALUES (12, 6, 'yshop_create_order', '订单生成', '2020-09-07 13:53:26');
+INSERT INTO `yx_store_order_status` VALUES (13, 6, 'pay_success', '用户付款成功', '2020-09-07 13:53:26');
+INSERT INTO `yx_store_order_status` VALUES (14, 7, 'yshop_create_order', '订单生成', '2020-09-07 13:55:24');
+INSERT INTO `yx_store_order_status` VALUES (15, 7, 'pay_success', '用户付款成功', '2020-09-07 13:55:24');
+INSERT INTO `yx_store_order_status` VALUES (16, 7, 'apply_refund', '用户申请退款，原因：收货地址填错了', '2020-09-07 13:57:02');
+INSERT INTO `yx_store_order_status` VALUES (17, 7, 'order_edit', '退款给用户：2元', '2020-09-07 13:58:12');
+INSERT INTO `yx_store_order_status` VALUES (18, 8, 'yshop_create_order', '订单生成', '2020-09-08 10:35:53');
+INSERT INTO `yx_store_order_status` VALUES (19, 8, 'pay_success', '用户付款成功', '2020-09-08 10:35:53');
+INSERT INTO `yx_store_order_status` VALUES (20, 9, 'yshop_create_order', '订单生成', '2020-09-08 10:36:29');
+INSERT INTO `yx_store_order_status` VALUES (21, 9, 'pay_success', '用户付款成功', '2020-09-08 10:36:29');
+INSERT INTO `yx_store_order_status` VALUES (22, 10, 'yshop_create_order', '订单生成', '2020-09-08 10:36:37');
+INSERT INTO `yx_store_order_status` VALUES (23, 10, 'pay_success', '用户付款成功', '2020-09-08 10:36:37');
+INSERT INTO `yx_store_order_status` VALUES (24, 11, 'yshop_create_order', '订单生成', '2020-09-08 10:37:31');
+INSERT INTO `yx_store_order_status` VALUES (25, 11, 'pay_success', '用户付款成功', '2020-09-08 10:37:31');
+INSERT INTO `yx_store_order_status` VALUES (26, 12, 'yshop_create_order', '订单生成', '2020-09-08 15:16:57');
+INSERT INTO `yx_store_order_status` VALUES (27, 12, 'pay_success', '用户付款成功', '2020-09-08 15:16:57');
+INSERT INTO `yx_store_order_status` VALUES (28, 13, 'yshop_create_order', '订单生成', '2020-09-08 15:17:31');
+INSERT INTO `yx_store_order_status` VALUES (29, 13, 'pay_success', '用户付款成功', '2020-09-08 15:17:31');
+INSERT INTO `yx_store_order_status` VALUES (30, 14, 'yshop_create_order', '订单生成', '2020-09-08 15:18:08');
+INSERT INTO `yx_store_order_status` VALUES (31, 14, 'pay_success', '用户付款成功', '2020-09-08 15:18:08');
+INSERT INTO `yx_store_order_status` VALUES (32, 15, 'yshop_create_order', '订单生成', '2020-09-08 15:21:29');
+INSERT INTO `yx_store_order_status` VALUES (33, 15, 'pay_success', '用户付款成功', '2020-09-08 15:21:29');
+INSERT INTO `yx_store_order_status` VALUES (34, 14, 'delivery_goods', '已发货 快递公司：中通快递快递单号：999999', '2020-09-08 15:44:06');
+INSERT INTO `yx_store_order_status` VALUES (35, 14, 'user_take_delivery', '用户已收货', '2020-09-08 15:49:55');
+INSERT INTO `yx_store_order_status` VALUES (36, 10, 'apply_refund', '用户申请退款，原因：拼团时间超时', '2020-09-08 16:43:44');
+INSERT INTO `yx_store_order_status` VALUES (37, 9, 'apply_refund', '用户申请退款，原因：拼团时间超时', '2020-09-08 16:44:06');
+INSERT INTO `yx_store_order_status` VALUES (38, 27, 'yshop_create_order', '订单生成', '2020-09-08 19:38:38');
+INSERT INTO `yx_store_order_status` VALUES (39, 27, 'pay_success', '用户付款成功', '2020-09-08 19:38:39');
+INSERT INTO `yx_store_order_status` VALUES (40, 28, 'yshop_create_order', '订单生成', '2020-09-08 19:43:45');
+INSERT INTO `yx_store_order_status` VALUES (41, 28, 'pay_success', '用户付款成功', '2020-09-08 19:43:45');
+INSERT INTO `yx_store_order_status` VALUES (42, 29, 'yshop_create_order', '订单生成', '2020-09-08 21:20:41');
+INSERT INTO `yx_store_order_status` VALUES (43, 29, 'pay_success', '用户付款成功', '2020-09-08 21:20:41');
+INSERT INTO `yx_store_order_status` VALUES (44, 30, 'yshop_create_order', '订单生成', '2020-09-08 21:27:53');
+INSERT INTO `yx_store_order_status` VALUES (45, 30, 'pay_success', '用户付款成功', '2020-09-08 21:27:53');
+INSERT INTO `yx_store_order_status` VALUES (46, 31, 'yshop_create_order', '订单生成', '2020-09-08 22:49:40');
+INSERT INTO `yx_store_order_status` VALUES (47, 31, 'pay_success', '用户付款成功', '2020-09-08 22:49:40');
+INSERT INTO `yx_store_order_status` VALUES (48, 35, 'yshop_create_order', '订单生成', '2020-09-09 10:44:18');
+INSERT INTO `yx_store_order_status` VALUES (49, 35, 'pay_success', '用户付款成功', '2020-09-09 10:44:18');
+INSERT INTO `yx_store_order_status` VALUES (50, 36, 'yshop_create_order', '订单生成', '2020-09-09 10:45:10');
+INSERT INTO `yx_store_order_status` VALUES (51, 36, 'pay_success', '用户付款成功', '2020-09-09 10:45:10');
+INSERT INTO `yx_store_order_status` VALUES (52, 36, 'delivery_goods', '已发货 快递公司：申通快递快递单号：摸摸', '2020-09-09 10:45:47');
+INSERT INTO `yx_store_order_status` VALUES (53, 36, 'user_take_delivery', '用户已收货', '2020-09-09 10:45:54');
+INSERT INTO `yx_store_order_status` VALUES (54, 36, 'order_eval', '用户评价', '2020-09-09 10:46:14');
+INSERT INTO `yx_store_order_status` VALUES (55, 38, 'yshop_create_order', '订单生成', '2020-09-09 11:02:37');
+INSERT INTO `yx_store_order_status` VALUES (56, 38, 'pay_success', '用户付款成功', '2020-09-09 11:02:37');
+INSERT INTO `yx_store_order_status` VALUES (57, 38, 'delivery_goods', '已发货 快递公司：申通快递快递单号：咯哦哦', '2020-09-09 11:07:43');
+INSERT INTO `yx_store_order_status` VALUES (58, 38, 'user_take_delivery', '用户已收货', '2020-09-09 11:07:49');
+INSERT INTO `yx_store_order_status` VALUES (59, 38, 'order_eval', '用户评价', '2020-09-09 11:08:37');
+INSERT INTO `yx_store_order_status` VALUES (60, 39, 'yshop_create_order', '订单生成', '2020-09-09 14:56:14');
+INSERT INTO `yx_store_order_status` VALUES (61, 39, 'pay_success', '用户付款成功', '2020-09-09 14:56:14');
+INSERT INTO `yx_store_order_status` VALUES (62, 40, 'yshop_create_order', '订单生成', '2020-09-09 14:58:15');
+INSERT INTO `yx_store_order_status` VALUES (63, 40, 'pay_success', '用户付款成功', '2020-09-09 14:58:15');
+INSERT INTO `yx_store_order_status` VALUES (64, 41, 'yshop_create_order', '订单生成', '2020-09-10 13:55:30');
+INSERT INTO `yx_store_order_status` VALUES (65, 42, 'yshop_create_order', '订单生成', '2020-09-10 15:01:01');
+INSERT INTO `yx_store_order_status` VALUES (66, 42, 'pay_success', '用户付款成功', '2020-09-10 15:01:01');
+INSERT INTO `yx_store_order_status` VALUES (67, 43, 'yshop_create_order', '订单生成', '2020-09-10 15:05:06');
+INSERT INTO `yx_store_order_status` VALUES (68, 43, 'pay_success', '用户付款成功', '2020-09-10 15:05:06');
+INSERT INTO `yx_store_order_status` VALUES (69, 44, 'yshop_create_order', '订单生成', '2020-09-10 15:06:05');
+INSERT INTO `yx_store_order_status` VALUES (70, 44, 'pay_success', '用户付款成功', '2020-09-10 15:06:05');
+INSERT INTO `yx_store_order_status` VALUES (71, 45, 'yshop_create_order', '订单生成', '2020-09-10 15:33:59');
+INSERT INTO `yx_store_order_status` VALUES (72, 45, 'pay_success', '用户付款成功', '2020-09-10 15:33:59');
+INSERT INTO `yx_store_order_status` VALUES (73, 46, 'yshop_create_order', '订单生成', '2020-09-10 17:12:47');
+INSERT INTO `yx_store_order_status` VALUES (74, 46, 'pay_success', '用户付款成功', '2020-09-10 17:12:47');
+INSERT INTO `yx_store_order_status` VALUES (75, 47, 'yshop_create_order', '订单生成', '2020-09-10 18:26:45');
+INSERT INTO `yx_store_order_status` VALUES (76, 47, 'pay_success', '用户付款成功', '2020-09-10 18:26:45');
+INSERT INTO `yx_store_order_status` VALUES (77, 48, 'yshop_create_order', '订单生成', '2020-09-10 18:27:04');
+INSERT INTO `yx_store_order_status` VALUES (78, 48, 'pay_success', '用户付款成功', '2020-09-10 18:27:04');
+INSERT INTO `yx_store_order_status` VALUES (79, 49, 'yshop_create_order', '订单生成', '2020-09-10 18:40:17');
+INSERT INTO `yx_store_order_status` VALUES (80, 49, 'pay_success', '用户付款成功', '2020-09-10 18:40:17');
+INSERT INTO `yx_store_order_status` VALUES (81, 50, 'yshop_create_order', '订单生成', '2020-09-10 18:57:40');
+INSERT INTO `yx_store_order_status` VALUES (82, 50, 'pay_success', '用户付款成功', '2020-09-10 18:57:40');
+INSERT INTO `yx_store_order_status` VALUES (83, 5, 'apply_refund', '用户申请退款，原因：拼团时间超时', '2020-09-10 21:13:58');
+INSERT INTO `yx_store_order_status` VALUES (84, 51, 'yshop_create_order', '订单生成', '2020-09-10 23:02:57');
+INSERT INTO `yx_store_order_status` VALUES (85, 51, 'pay_success', '用户付款成功', '2020-09-10 23:02:57');
+INSERT INTO `yx_store_order_status` VALUES (86, 51, 'delivery_goods', '已发货 快递公司：申通快递快递单号：818181188', '2020-09-10 23:03:31');
+INSERT INTO `yx_store_order_status` VALUES (87, 51, 'user_take_delivery', '用户已收货', '2020-09-10 23:03:39');
+INSERT INTO `yx_store_order_status` VALUES (88, 52, 'yshop_create_order', '订单生成', '2020-09-11 14:17:43');
+INSERT INTO `yx_store_order_status` VALUES (89, 52, 'pay_success', '用户付款成功', '2020-09-11 14:18:22');
+INSERT INTO `yx_store_order_status` VALUES (90, 53, 'yshop_create_order', '订单生成', '2020-09-11 14:24:51');
+INSERT INTO `yx_store_order_status` VALUES (91, 53, 'pay_success', '用户付款成功', '2020-09-11 14:24:51');
+INSERT INTO `yx_store_order_status` VALUES (92, 54, 'yshop_create_order', '订单生成', '2020-09-11 14:25:16');
+INSERT INTO `yx_store_order_status` VALUES (93, 54, 'pay_success', '用户付款成功', '2020-09-11 14:25:16');
+INSERT INTO `yx_store_order_status` VALUES (94, 55, 'yshop_create_order', '订单生成', '2020-09-11 14:38:05');
+INSERT INTO `yx_store_order_status` VALUES (95, 55, 'pay_success', '用户付款成功', '2020-09-11 14:38:06');
+INSERT INTO `yx_store_order_status` VALUES (96, 56, 'yshop_create_order', '订单生成', '2020-09-11 14:43:41');
+INSERT INTO `yx_store_order_status` VALUES (97, 56, 'pay_success', '用户付款成功', '2020-09-11 14:43:41');
+INSERT INTO `yx_store_order_status` VALUES (98, 57, 'yshop_create_order', '订单生成', '2020-09-11 14:45:56');
+INSERT INTO `yx_store_order_status` VALUES (99, 57, 'pay_success', '用户付款成功', '2020-09-11 14:45:56');
+INSERT INTO `yx_store_order_status` VALUES (100, 58, 'yshop_create_order', '订单生成', '2020-09-11 14:48:47');
+INSERT INTO `yx_store_order_status` VALUES (101, 58, 'pay_success', '用户付款成功', '2020-09-11 14:48:47');
+INSERT INTO `yx_store_order_status` VALUES (102, 59, 'yshop_create_order', '订单生成', '2020-09-11 15:07:05');
+INSERT INTO `yx_store_order_status` VALUES (103, 59, 'pay_success', '用户付款成功', '2020-09-11 15:07:05');
+INSERT INTO `yx_store_order_status` VALUES (104, 60, 'yshop_create_order', '订单生成', '2020-09-11 15:08:38');
+INSERT INTO `yx_store_order_status` VALUES (105, 60, 'pay_success', '用户付款成功', '2020-09-11 15:08:38');
+INSERT INTO `yx_store_order_status` VALUES (106, 61, 'yshop_create_order', '订单生成', '2020-09-11 15:09:46');
+INSERT INTO `yx_store_order_status` VALUES (107, 61, 'pay_success', '用户付款成功', '2020-09-11 15:09:46');
+INSERT INTO `yx_store_order_status` VALUES (108, 62, 'yshop_create_order', '订单生成', '2020-09-11 16:06:33');
 
 -- ----------------------------
 -- Table structure for yx_store_pink
@@ -2110,11 +2432,20 @@ CREATE TABLE `yx_store_pink`  (
   `status` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态1进行中2已完成3未完成',
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_pink
 -- ----------------------------
+INSERT INTO `yx_store_pink` VALUES (5, 28, '1302844793633636352', 5, 1, 2.00, 4, 4, 2, 2.00, '2020-09-07 13:47:32', '2020-09-10 21:13:59', '2020-09-10 21:13:59', 0, 0, 0, 3, 0);
+INSERT INTO `yx_store_pink` VALUES (6, 28, '1302847424330465280', 6, 1, 10.00, 2, 2, 3, 10.00, '2020-09-07 13:53:26', NULL, '2020-09-07 18:53:26', 0, 0, 0, 1, 0);
+INSERT INTO `yx_store_pink` VALUES (10, 27, '1303230828439928832', 12, 1, 10.00, 2, 2, 3, 10.00, '2020-09-08 15:16:57', NULL, '2020-09-08 20:16:57', 0, 0, 0, 1, 0);
+INSERT INTO `yx_store_pink` VALUES (11, 27, '1303231973052907520', 15, 1, 10.00, 2, 2, 3, 10.00, '2020-09-08 15:21:30', NULL, '2020-09-08 20:21:30', 0, 0, 0, 1, 0);
+INSERT INTO `yx_store_pink` VALUES (13, 28, '1303344758915072000', 31, 1, 1.00, 2, 2, 3, 1.00, '2020-09-08 22:49:40', NULL, '2020-09-09 03:49:40', 0, 0, 0, 1, 0);
+INSERT INTO `yx_store_pink` VALUES (14, 33, '1303524602529447936', 35, 1, 2.00, 4, 4, 2, 2.00, '2020-09-09 10:44:18', NULL, '2020-09-09 11:44:18', 0, 0, 0, 1, 0);
+INSERT INTO `yx_store_pink` VALUES (15, 26, '1303952870156009472', 44, 1, 2.00, 4, 4, 2, 2.00, '2020-09-10 15:06:05', NULL, '2020-09-10 16:06:05', 0, 0, 0, 1, 0);
+INSERT INTO `yx_store_pink` VALUES (16, 27, '1304003448743657472', 48, 1, 2.00, 4, 4, 2, 2.00, '2020-09-10 18:27:04', NULL, '2020-09-10 19:27:04', 0, 0, 0, 1, 0);
+INSERT INTO `yx_store_pink` VALUES (17, 33, '1304011149808762880', 50, 1, 1.00, 2, 2, 3, 1.00, '2020-09-10 18:57:40', NULL, '2020-09-10 23:57:40', 0, 0, 0, 1, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_product
@@ -2130,10 +2461,10 @@ CREATE TABLE `yx_store_product`  (
   `keyword` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '关键字',
   `bar_code` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '产品条码（一维码）',
   `cate_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '分类id',
-  `price` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '商品价格',
-  `vip_price` decimal(8, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '会员价格',
-  `ot_price` decimal(8, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '市场价',
-  `postage` decimal(8, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '邮费',
+  `price` decimal(8, 2) UNSIGNED NOT NULL COMMENT '商品价格',
+  `vip_price` decimal(8, 2) UNSIGNED NULL COMMENT '会员价格',
+  `ot_price` decimal(8, 2) UNSIGNED NULL COMMENT '市场价',
+  `postage` decimal(8, 2) UNSIGNED NULL COMMENT '邮费',
   `unit_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单位名',
   `sort` smallint(11) NULL DEFAULT 0 COMMENT '排序',
   `sales` mediumint(11) UNSIGNED NULL DEFAULT 0 COMMENT '销量',
@@ -2172,13 +2503,17 @@ CREATE TABLE `yx_store_product`  (
   INDEX `sales`(`sales`) USING BTREE,
   INDEX `add_time`(`create_time`) USING BTREE,
   INDEX `is_postage`(`is_postage`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_product
 -- ----------------------------
-INSERT INTO `yx_store_product` VALUES (1, 0, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '照片打印', '照片打印', '照片打印', '', '5', 2.00, 0.00, 1.00, 0.00, '张', 0, 0, 1000, 1, 0, 0, 0, 0, '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\"/></p>', '2020-09-04 17:41:30', NULL, 0, 0, 0, 0.00, 3.00, 0, NULL, 0, 0, 0, '', 0, 34, 0);
-INSERT INTO `yx_store_product` VALUES (2, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'X型展架', 'X型展架', 'X型展架', '', '3', 10.00, 0.00, 12.00, 0.00, '张', 0, 0, 3330, 1, 1, 1, 0, 0, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"/></p>', '2020-09-04 17:55:16', NULL, 0, 0, 0, 0.00, 11.00, 0, NULL, 0, 69, 0, '', 0, 34, 1);
+INSERT INTO `yx_store_product` VALUES (1, 0, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '照片打印', '照片打印', '照片打印', '', '5', 2.00, 0.00, 1.00, 0.00, '张', 0, 5, 995, 1, 0, 0, 0, 0, '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\"/></p>', '2020-09-04 17:41:30', '2020-09-05 20:57:49', 0, 0, 0, 0.00, 3.00, 0, NULL, 0, 0, 1, '', 0, 34, 0);
+INSERT INTO `yx_store_product` VALUES (2, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'X型展架', 'X型展架', 'X型展架', '', '3', 10.00, 0.00, 12.00, 0.00, '张', 0, 16, 3314, 1, 1, 1, 0, 0, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"/></p>', '2020-09-04 17:55:16', '2020-09-05 20:57:41', 0, 0, 0, 0.00, 11.00, 0, NULL, 0, 69, 10, '', 0, 34, 1);
+INSERT INTO `yx_store_product` VALUES (3, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', '彩色复印-量大有优惠', '彩色复印', '彩色复印', '', '3', 2.00, 0.00, 1.00, 0.00, '张', 0, 4, 7, 1, 1, 1, 0, 0, '<p>1111</p>', '2020-09-07 13:14:50', NULL, 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 15, '', 0, 34, 0);
+INSERT INTO `yx_store_product` VALUES (4, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', '户外写真背胶', '户外写真背胶', '户外写真背胶', '', '3', 2.00, 0.00, 1.00, 0.00, '米', 0, 22, 89, 1, 1, 1, 0, 0, '<p>户外写真背胶</p>', '2020-09-07 13:16:02', NULL, 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 19, '', 0, 34, 0);
+INSERT INTO `yx_store_product` VALUES (5, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg', '广告版定制', '广告版定制', '广告版定制', '', '3', 2.00, 0.00, 11.00, 0.00, '米', 0, 7, 4, 1, 1, 1, 1, 1, '<p>广告版定制</p>', '2020-09-07 13:17:49', '2020-09-07 13:44:21', 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 11, '', 0, 34, 0);
+INSERT INTO `yx_store_product` VALUES (6, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', '印刷各种印刷', '印刷各种印刷', '印刷各种印刷', '', '3', 11.00, 0.00, 33.00, 0.00, '张', 1, 11, 9989, 1, 1, 1, 0, 0, '<p>印刷各种印刷</p>', '2020-09-07 13:18:45', '2020-09-11 17:18:18', 0, 0, 0, 1.00, 22.00, 0, NULL, 0, 1, 46, '', 0, 34, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_product_attr
@@ -2191,14 +2526,18 @@ CREATE TABLE `yx_store_product_attr`  (
   `attr_values` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '属性值',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `store_id`(`product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 49 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_product_attr
 -- ----------------------------
-INSERT INTO `yx_store_product_attr` VALUES (2, 1, '规格', '默认');
-INSERT INTO `yx_store_product_attr` VALUES (5, 2, '纸张', 'A4,A3');
-INSERT INTO `yx_store_product_attr` VALUES (6, 2, '颜色', '白色,红色');
+INSERT INTO `yx_store_product_attr` VALUES (22, 5, '规格', '默认');
+INSERT INTO `yx_store_product_attr` VALUES (26, 4, '规格', '默认');
+INSERT INTO `yx_store_product_attr` VALUES (27, 3, '规格', '默认');
+INSERT INTO `yx_store_product_attr` VALUES (32, 1, '规格', '默认');
+INSERT INTO `yx_store_product_attr` VALUES (45, 2, '纸张', 'A4,A3');
+INSERT INTO `yx_store_product_attr` VALUES (46, 2, '颜色', '白色,红色');
+INSERT INTO `yx_store_product_attr` VALUES (48, 6, '规格', '默认');
 
 -- ----------------------------
 -- Table structure for yx_store_product_attr_result
@@ -2211,13 +2550,17 @@ CREATE TABLE `yx_store_product_attr_result`  (
   `change_time` datetime(0) NOT NULL COMMENT '上次修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `product_id`(`product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性详情表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_product_attr_result
 -- ----------------------------
-INSERT INTO `yx_store_product_attr_result` VALUES (2, 1, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"brokerage\":0,\"price\":2,\"cost\":3,\"stock\":1000,\"pic\":\"\",\"value1\":\"规格\",\"volume\":0,\"weight\":0,\"detail\":{\"规格\":\"默认\"},\"bar_code\":\"\",\"brokerage_two\":0,\"ot_price\":1,\"pink_price\":\"0.1\",\"pink_stock\":\"999\",\"seckill_price\":0,\"seckill_stock\":0}]}', '2020-09-04 17:47:45');
-INSERT INTO `yx_store_product_attr_result` VALUES (4, 2, '{\"attr\":[{\"detail\":[\"A4\",\"A3\"],\"value\":\"纸张\"},{\"detail\":[\"白色\",\"红色\"],\"value\":\"颜色\"}],\"value\":[{\"value1\":\"A4\",\"value2\":\"白色\",\"detail\":{\"纸张\":\"A4\",\"颜色\":\"白色\"},\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"price\":10,\"cost\":11,\"ot_price\":12,\"stock\":999,\"bar_code\":\"\",\"weight\":0,\"volume\":0,\"brokerage\":0,\"brokerage_two\":0,\"pink_price\":\"1\",\"seckill_price\":0,\"pink_stock\":\"666\",\"seckill_stock\":0},{\"value1\":\"A4\",\"value2\":\"红色\",\"detail\":{\"纸张\":\"A4\",\"颜色\":\"红色\"},\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"price\":11,\"cost\":11,\"ot_price\":12,\"stock\":666,\"bar_code\":\"\",\"weight\":0,\"volume\":0,\"brokerage\":0,\"brokerage_two\":0,\"pink_price\":\"1\",\"seckill_price\":0,\"pink_stock\":\"999\",\"seckill_stock\":0},{\"value1\":\"A3\",\"value2\":\"白色\",\"detail\":{\"纸张\":\"A3\",\"颜色\":\"白色\"},\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"price\":12,\"cost\":11,\"ot_price\":12,\"stock\":999,\"bar_code\":\"\",\"weight\":0,\"volume\":0,\"brokerage\":0,\"brokerage_two\":0,\"pink_price\":\"1\",\"seckill_price\":0,\"pink_stock\":\"666\",\"seckill_stock\":0},{\"value1\":\"A3\",\"value2\":\"红色\",\"detail\":{\"纸张\":\"A3\",\"颜色\":\"红色\"},\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"price\":13,\"cost\":11,\"ot_price\":12,\"stock\":666,\"bar_code\":\"\",\"weight\":0,\"volume\":0,\"brokerage\":0,\"brokerage_two\":0,\"pink_price\":\"1\",\"seckill_price\":0,\"pink_stock\":\"999\",\"seckill_stock\":0}]}', '2020-09-04 20:15:33');
+INSERT INTO `yx_store_product_attr_result` VALUES (17, 5, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"brokerage\":0,\"price\":2,\"cost\":1,\"stock\":11,\"pic\":\"\",\"value1\":\"规格\",\"volume\":0,\"weight\":0,\"detail\":{\"规格\":\"默认\"},\"bar_code\":\"\",\"brokerage_two\":0,\"ot_price\":11,\"pink_price\":0,\"pink_stock\":0,\"seckill_price\":0,\"seckill_stock\":0}]}', '2020-09-07 13:44:21');
+INSERT INTO `yx_store_product_attr_result` VALUES (21, 4, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":1.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":1.0,\"pic\":\"\",\"pinkPrice\":2.0,\"pinkStock\":22,\"price\":2.0,\"seckillPrice\":0.0,\"seckillStock\":0,\"stock\":111,\"value1\":\"规格\",\"value2\":\"\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-08 21:14:04');
+INSERT INTO `yx_store_product_attr_result` VALUES (22, 3, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":1.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":1.0,\"pic\":\"\",\"pinkPrice\":2.0,\"pinkStock\":10,\"price\":2.0,\"seckillPrice\":0.0,\"seckillStock\":0,\"stock\":11,\"value1\":\"规格\",\"value2\":\"\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-08 21:14:27');
+INSERT INTO `yx_store_product_attr_result` VALUES (26, 1, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"00005\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":3.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":1.0,\"pic\":\"\",\"pinkPrice\":0.1,\"pinkStock\":100,\"price\":2.0,\"seckillPrice\":0.2,\"seckillStock\":100,\"stock\":999,\"value1\":\"规格\",\"value2\":\"\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-08 21:18:03');
+INSERT INTO `yx_store_product_attr_result` VALUES (35, 2, '{\"attr\":[{\"detail\":[\"A4\",\"A3\"],\"value\":\"纸张\"},{\"detail\":[\"白色\",\"红色\"],\"value\":\"颜色\"}],\"value\":[{\"barCode\":\"00001\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":11.0,\"detail\":{\"纸张\":\"A4\",\"颜色\":\"白色\"},\"otPrice\":12.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":1.0,\"pinkStock\":100,\"price\":10.0,\"seckillPrice\":1.0,\"seckillStock\":100,\"stock\":991,\"value1\":\"A4\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"00002\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":11.0,\"detail\":{\"纸张\":\"A4\",\"颜色\":\"红色\"},\"otPrice\":12.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":2.0,\"pinkStock\":99,\"price\":11.0,\"seckillPrice\":2.0,\"seckillStock\":100,\"stock\":661,\"value1\":\"A4\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"00003\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":11.0,\"detail\":{\"纸张\":\"A3\",\"颜色\":\"白色\"},\"otPrice\":12.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":3.0,\"pinkStock\":99,\"price\":12.0,\"seckillPrice\":3.0,\"seckillStock\":100,\"stock\":995,\"value1\":\"A3\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"00004\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":11.0,\"detail\":{\"纸张\":\"A3\",\"颜色\":\"红色\"},\"otPrice\":12.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":4.0,\"pinkStock\":100,\"price\":13.0,\"seckillPrice\":4.0,\"seckillStock\":100,\"stock\":665,\"value1\":\"A3\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-10 21:18:14');
+INSERT INTO `yx_store_product_attr_result` VALUES (37, 6, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"00002\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":22.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":33.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":0.0,\"pinkStock\":11,\"price\":11.0,\"seckillPrice\":0.0,\"seckillStock\":2000,\"stock\":9989,\"value1\":\"规格\",\"value2\":\"\",\"volume\":1.0,\"weight\":1.0}]}', '2020-09-11 17:18:19');
 
 -- ----------------------------
 -- Table structure for yx_store_product_attr_value
@@ -2234,28 +2577,32 @@ CREATE TABLE `yx_store_product_attr_value`  (
   `unique` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '唯一值',
   `cost` decimal(8, 2) UNSIGNED NOT NULL COMMENT '成本价',
   `bar_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品条码',
-  `ot_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '原价',
-  `weight` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '重量',
-  `volume` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '体积',
-  `brokerage` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '一级返佣',
-  `brokerage_two` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '二级返佣',
-  `pink_price` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '拼团价',
+  `ot_price` decimal(10, 2) NULL COMMENT '原价',
+  `weight` decimal(8, 2) NOT NULL COMMENT '重量',
+  `volume` decimal(8, 2) NOT NULL COMMENT '体积',
+  `brokerage` decimal(8, 2) NOT NULL COMMENT '一级返佣',
+  `brokerage_two` decimal(8, 2) NOT NULL COMMENT '二级返佣',
+  `pink_price` decimal(8, 2) NOT NULL COMMENT '拼团价',
   `pink_stock` int(10) NOT NULL DEFAULT 0 COMMENT '拼团库存',
-  `seckill_price` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '秒杀价',
+  `seckill_price` decimal(10, 2) NOT NULL COMMENT '秒杀价',
   `seckill_stock` int(10) NOT NULL DEFAULT 0 COMMENT '秒杀库存',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `unique`(`unique`, `sku`) USING BTREE,
   INDEX `store_id`(`product_id`, `sku`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性值表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 71 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性值表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_product_attr_value
 -- ----------------------------
-INSERT INTO `yx_store_product_attr_value` VALUES (2, 1, '默认', 1000, 0, 2.00, '', '245163c953fa41c9bf73285eb6f00c1c', 3.00, '', 1.00, 0.00, 0.00, 0.00, 0.00, 0.10, 999, 0.00, 0);
-INSERT INTO `yx_store_product_attr_value` VALUES (7, 2, 'A4,白色', 999, 0, 10.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'bbe553f111d64dc58addd05b630a3fbb', 11.00, '', 12.00, 0.00, 0.00, 0.00, 0.00, 1.00, 666, 0.00, 0);
-INSERT INTO `yx_store_product_attr_value` VALUES (8, 2, 'A4,红色', 666, 0, 11.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '88d7350a300941c3b982ebc2a7e7dc64', 11.00, '', 12.00, 0.00, 0.00, 0.00, 0.00, 1.00, 999, 0.00, 0);
-INSERT INTO `yx_store_product_attr_value` VALUES (9, 2, 'A3,白色', 999, 0, 12.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '938ca13d090f4c5b95f9e25e7acf1e0c', 11.00, '', 12.00, 0.00, 0.00, 0.00, 0.00, 1.00, 666, 0.00, 0);
-INSERT INTO `yx_store_product_attr_value` VALUES (10, 2, 'A3,红色', 666, 0, 13.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '6d5ec1de968f4c548b229fa181a98c54', 11.00, '', 12.00, 0.00, 0.00, 0.00, 0.00, 1.00, 999, 0.00, 0);
+INSERT INTO `yx_store_product_attr_value` VALUES (32, 5, '默认', 4, 7, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '26dbb2c06d9e4740acd191aef3cfd0c0', 1.00, '', 11.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0.00, 0);
+INSERT INTO `yx_store_product_attr_value` VALUES (36, 4, '默认', 93, 18, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'bfc82f4771ec474994b0edb198e4fc6b', 1.00, '', 1.00, 0.00, 0.00, 0.00, 0.00, 2.00, 18, 0.00, 0);
+INSERT INTO `yx_store_product_attr_value` VALUES (37, 3, '默认', 7, 4, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'c9a418620c8b491d8af537974e07b1a2', 1.00, '', 1.00, 0.00, 0.00, 0.00, 0.00, 2.00, 10, 0.00, 0);
+INSERT INTO `yx_store_product_attr_value` VALUES (44, 1, '默认', 996, 3, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'd4ce8cd4bda84d479c11348e060afb8e', 3.00, '00005', 1.00, 0.00, 0.00, 0.00, 0.00, 0.10, 100, 0.20, 97);
+INSERT INTO `yx_store_product_attr_value` VALUES (65, 2, 'A4,白色', 991, 0, 10.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '1d9023b0177e4ef9a2fc1575da816149', 11.00, '00001', 12.00, 0.00, 0.00, 0.00, 0.00, 1.00, 100, 1.00, 100);
+INSERT INTO `yx_store_product_attr_value` VALUES (66, 2, 'A4,红色', 661, 0, 11.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '2e64066cf1af46629521e9ea37987bce', 11.00, '00002', 12.00, 0.00, 0.00, 0.00, 0.00, 2.00, 99, 2.00, 100);
+INSERT INTO `yx_store_product_attr_value` VALUES (67, 2, 'A3,白色', 995, 0, 12.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '1b8434eb8ba847e78941405832a18d86', 11.00, '00003', 12.00, 0.00, 0.00, 0.00, 0.00, 3.00, 99, 3.00, 100);
+INSERT INTO `yx_store_product_attr_value` VALUES (68, 2, 'A3,红色', 665, 0, 13.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '16bf8b25ac2548908eb68d4bcd9ee5e3', 11.00, '00004', 12.00, 0.00, 0.00, 0.00, 0.00, 4.00, 100, 4.00, 100);
+INSERT INTO `yx_store_product_attr_value` VALUES (70, 6, '默认', 9989, 0, 11.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'ec208ca612e64f599f2dd428d07b9f32', 22.00, '00002', 33.00, 1.00, 1.00, 0.00, 0.00, 0.00, 11, 0.00, 2000);
 
 -- ----------------------------
 -- Table structure for yx_store_product_relation
@@ -2274,14 +2621,57 @@ CREATE TABLE `yx_store_product_relation`  (
   UNIQUE INDEX `uid`(`uid`, `product_id`, `type`, `category`) USING BTREE,
   INDEX `type`(`type`) USING BTREE,
   INDEX `category`(`category`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品点赞和收藏表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 51 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品点赞和收藏表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_product_relation
 -- ----------------------------
-INSERT INTO `yx_store_product_relation` VALUES (1, 28, 2, 'foot', NULL, '2020-09-04 23:34:13', '2020-09-04 23:34:13', 0);
-INSERT INTO `yx_store_product_relation` VALUES (2, 28, 1, 'foot', NULL, '2020-09-04 20:13:57', '2020-09-04 20:13:57', 0);
+INSERT INTO `yx_store_product_relation` VALUES (1, 28, 2, 'foot', NULL, '2020-09-11 10:05:29', '2020-09-11 10:05:29', 0);
+INSERT INTO `yx_store_product_relation` VALUES (2, 28, 1, 'foot', NULL, '2020-09-07 22:24:48', '2020-09-07 22:24:48', 0);
 INSERT INTO `yx_store_product_relation` VALUES (3, 28, 1, 'collect', NULL, '2020-09-04 20:12:29', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (4, 26, 2, 'foot', NULL, '2020-09-06 03:18:51', '2020-09-06 03:18:51', 0);
+INSERT INTO `yx_store_product_relation` VALUES (5, 28, 2, 'collect', NULL, '2020-09-05 18:40:56', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (7, 28, 1, 'collect', NULL, '2020-09-05 18:46:04', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (8, 26, 2, 'collect', NULL, '2020-09-06 00:43:23', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (9, 26, 2, 'collect', NULL, '2020-09-06 00:43:32', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (10, 32, 1, 'foot', NULL, '2020-09-06 10:58:43', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (11, 32, 2, 'foot', NULL, '2020-09-06 11:15:33', '2020-09-06 11:15:33', 0);
+INSERT INTO `yx_store_product_relation` VALUES (13, 28, 5, 'foot', NULL, '2020-09-11 14:03:24', '2020-09-11 14:03:24', 0);
+INSERT INTO `yx_store_product_relation` VALUES (14, 28, 3, 'foot', NULL, '2020-09-11 10:05:20', '2020-09-11 10:05:20', 0);
+INSERT INTO `yx_store_product_relation` VALUES (15, 28, 4, 'foot', NULL, '2020-09-11 13:51:38', '2020-09-11 13:51:38', 0);
+INSERT INTO `yx_store_product_relation` VALUES (17, 11, 2, 'foot', NULL, '2020-09-07 17:40:16', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (19, 27, 5, 'foot', NULL, '2020-09-08 15:50:17', '2020-09-08 15:50:17', 0);
+INSERT INTO `yx_store_product_relation` VALUES (20, 27, 4, 'foot', NULL, '2020-09-10 19:44:38', '2020-09-10 19:44:38', 0);
+INSERT INTO `yx_store_product_relation` VALUES (21, 27, 2, 'collect', NULL, '2020-09-08 15:09:03', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (22, 27, 5, 'collect', NULL, '2020-09-08 15:09:23', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (23, 27, 6, 'foot', NULL, '2020-09-11 16:09:19', '2020-09-11 16:09:19', 0);
+INSERT INTO `yx_store_product_relation` VALUES (24, 33, 6, 'foot', NULL, '2020-09-11 14:37:53', '2020-09-11 14:37:53', 0);
+INSERT INTO `yx_store_product_relation` VALUES (25, 33, 5, 'foot', NULL, '2020-09-11 14:37:58', '2020-09-11 14:37:58', 0);
+INSERT INTO `yx_store_product_relation` VALUES (26, 28, 6, 'foot', NULL, '2020-09-11 14:02:02', '2020-09-11 14:02:02', 0);
+INSERT INTO `yx_store_product_relation` VALUES (27, 33, 3, 'foot', NULL, '2020-09-11 06:13:47', '2020-09-11 06:13:47', 0);
+INSERT INTO `yx_store_product_relation` VALUES (28, 33, 4, 'foot', NULL, '2020-09-11 15:09:42', '2020-09-11 15:09:42', 0);
+INSERT INTO `yx_store_product_relation` VALUES (29, 33, 2, 'foot', NULL, '2020-09-11 14:00:36', '2020-09-11 14:00:36', 0);
+INSERT INTO `yx_store_product_relation` VALUES (30, 26, 4, 'collect', NULL, '2020-09-10 14:54:30', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (31, 26, 6, 'foot', NULL, '2020-09-10 16:24:17', '2020-09-10 16:24:17', 0);
+INSERT INTO `yx_store_product_relation` VALUES (32, 26, 6, 'collect', NULL, '2020-09-10 14:55:36', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (33, 26, 6, 'collect', NULL, '2020-09-10 14:55:45', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (34, 26, 4, 'collect', NULL, '2020-09-10 14:57:17', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (35, 26, 1, 'foot', NULL, '2020-09-10 15:25:56', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (36, 26, 1, 'collect', NULL, '2020-09-10 15:28:08', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (37, 26, 1, 'collect', NULL, '2020-09-10 15:33:41', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (38, 26, 1, 'collect', NULL, '2020-09-10 15:33:43', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (39, 26, 1, 'collect', NULL, '2020-09-10 15:33:45', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (40, 33, 6, 'collect', NULL, '2020-09-10 17:07:23', NULL, 1);
+INSERT INTO `yx_store_product_relation` VALUES (41, 27, 4, 'collect', NULL, '2020-09-10 18:25:35', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (42, 33, 1, 'collect', NULL, '2020-09-10 18:35:50', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (43, 27, 3, 'foot', NULL, '2020-09-10 19:45:35', '2020-09-10 19:45:35', 0);
+INSERT INTO `yx_store_product_relation` VALUES (44, 27, 2, 'foot', NULL, '2020-09-10 19:46:12', '2020-09-10 19:46:12', 0);
+INSERT INTO `yx_store_product_relation` VALUES (45, 11, 6, 'foot', NULL, '2020-09-11 13:36:43', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (46, 25, 5, 'foot', NULL, '2020-09-11 16:11:05', '2020-09-11 16:11:05', 0);
+INSERT INTO `yx_store_product_relation` VALUES (47, 25, 6, 'foot', NULL, '2020-09-11 16:06:02', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (48, 25, 4, 'foot', NULL, '2020-09-11 16:06:17', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (49, 34, 6, 'foot', NULL, '2020-09-11 16:12:20', NULL, 0);
+INSERT INTO `yx_store_product_relation` VALUES (50, 25, 3, 'foot', NULL, '2020-09-11 16:12:55', NULL, 0);
 
 -- ----------------------------
 -- Table structure for yx_store_product_reply
@@ -2296,11 +2686,11 @@ CREATE TABLE `yx_store_product_reply`  (
   `reply_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'product' COMMENT '某种商品类型(普通商品、秒杀商品）',
   `product_score` tinyint(1) NOT NULL COMMENT '商品分数',
   `service_score` tinyint(1) NOT NULL COMMENT '服务分数',
-  `comment` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '评论内容',
+  `comment` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '评论内容',
   `pics` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '评论图片',
   `create_time` datetime(0) NOT NULL COMMENT '评论时间',
   `update_time` datetime(0) NULL DEFAULT NULL,
-  `merchant_reply_content` varchar(300) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理员回复内容',
+  `merchant_reply_content` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '管理员回复内容',
   `merchant_reply_time` datetime(0) NULL DEFAULT NULL COMMENT '管理员回复时间',
   `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '0未删除1已删除',
   `is_reply` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0未回复1已回复',
@@ -2310,11 +2700,13 @@ CREATE TABLE `yx_store_product_reply`  (
   INDEX `is_del`(`is_del`) USING BTREE,
   INDEX `product_score`(`product_score`) USING BTREE,
   INDEX `service_score`(`service_score`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_product_reply
 -- ----------------------------
+INSERT INTO `yx_store_product_reply` VALUES (1, 33, 36, '72864ec6afd144b787a04b26961b3b2d', 1, 'product', 5, 5, '哎呦不错哦', '', '2020-09-09 10:46:14', NULL, NULL, NULL, 0, 0);
+INSERT INTO `yx_store_product_reply` VALUES (2, 33, 38, 'df62cc96c2cb49e58a3b358138c0559c', 6, 'product', 5, 5, '你真棒👍🏻 🙃 🙃 🙃 🙃 🙄 🙄', '', '2020-09-09 11:08:37', '2020-09-10 23:12:22', '那你很棒棒哦~', '2020-09-10 23:12:22', 0, 1);
 
 -- ----------------------------
 -- Table structure for yx_store_product_rule
@@ -2348,14 +2740,14 @@ CREATE TABLE `yx_store_seckill`  (
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '活动标题',
   `info` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '简介',
   `price` decimal(10, 2) UNSIGNED NULL DEFAULT NULL COMMENT '价格',
-  `cost` decimal(8, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '成本',
+  `cost` decimal(8, 2) UNSIGNED NULL COMMENT '成本',
   `ot_price` decimal(10, 2) UNSIGNED NULL DEFAULT NULL COMMENT '原价',
-  `give_integral` decimal(10, 2) UNSIGNED NOT NULL COMMENT '返多少积分',
+  `give_integral` decimal(10, 2) UNSIGNED NULL DEFAULT NULL COMMENT '返多少积分',
   `sort` int(10) UNSIGNED NOT NULL COMMENT '排序',
   `stock` int(10) UNSIGNED NOT NULL COMMENT '库存',
   `sales` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '销量',
   `unit_name` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '单位名',
-  `postage` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '邮费',
+  `postage` decimal(8, 2) UNSIGNED NOT NULL COMMENT '邮费',
   `description` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '内容',
   `start_time` date NOT NULL COMMENT '开始时间',
   `stop_time` date NOT NULL COMMENT '结束时间',
@@ -2370,7 +2762,6 @@ CREATE TABLE `yx_store_seckill`  (
   `time_id` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '时间段id',
   `spec_type` tinyint(1) NULL DEFAULT NULL COMMENT '规格 0单 1多',
   `temp_id` int(10) NULL DEFAULT NULL COMMENT '运费模板id',
-  `is_sub` int(1) NULL DEFAULT NULL COMMENT '规格设置',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `product_id`(`product_id`) USING BTREE,
   INDEX `start_time`(`start_time`, `stop_time`) USING BTREE,
@@ -2380,11 +2771,15 @@ CREATE TABLE `yx_store_seckill`  (
   INDEX `add_time`(`create_time`) USING BTREE,
   INDEX `sort`(`sort`) USING BTREE,
   INDEX `is_postage`(`is_postage`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品秒杀产品表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品秒杀产品表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_store_seckill
 -- ----------------------------
+INSERT INTO `yx_store_seckill` VALUES (1, 1, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '照片打印', '照片打印', 2.00, 3.00, 1.00, NULL, 0, 97, 5, '张', 0.20, '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\"/></p>', '2020-09-04', '2020-09-30', '2020-09-05 17:14:44', '2020-09-08 21:18:03', 1, 0, 0, 0, 5, 1, 214, 0, 34);
+INSERT INTO `yx_store_seckill` VALUES (2, 2, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'X型展架', 'X型展架', 10.00, 11.00, 12.00, NULL, 0, 400, 6, '张', 1.00, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"/></p>', '2020-09-08', '2020-09-23', '2020-09-08 10:55:08', '2020-09-10 21:18:14', 1, 0, 0, 0, 3, 1, 214, 1, 34);
+INSERT INTO `yx_store_seckill` VALUES (3, 6, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', '印刷各种印刷', '印刷各种印刷', 2.00, 0.00, 0.00, NULL, 0, 2000, 9, '张', 2.20, '<p>印刷各种印刷</p>', '2020-09-10', '2020-09-30', '2020-09-10 15:19:14', '2020-09-10 21:17:47', 1, 0, 0, 0, 3, 1, 214, 0, 34);
+INSERT INTO `yx_store_seckill` VALUES (4, 6, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', '印刷各种印刷', '印刷各种印刷', 2.00, 0.00, 0.00, NULL, 0, 2000, 9, '张', 1.10, '<p>印刷各种印刷</p>', '2020-09-10', '2020-09-30', '2020-09-10 15:19:29', '2020-09-10 21:17:35', 1, 0, 0, 0, 3, 1, 214, 0, 34);
 
 -- ----------------------------
 -- Table structure for yx_store_visit
@@ -2427,13 +2822,37 @@ CREATE TABLE `yx_system_attachment`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`att_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '附件管理表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '附件管理表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_system_attachment
 -- ----------------------------
 INSERT INTO `yx_system_attachment` VALUES (9, '2_28_routine_product_detail_wap.jpg', '/home/yshop/file/qrcode/2_28_routine_product_detail_wap.jpg', 'qrcode/2_28_routine_product_detail_wap.jpg', '9130', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-04 23:34:45', NULL, 0);
 INSERT INTO `yx_system_attachment` VALUES (10, '2_28_routine_product_user_spread.jpg', '/home/yshop/file/qrcode/2_28_routine_product_user_spread.jpg', 'qrcode/2_28_routine_product_user_spread.jpg', '69524', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-04 23:34:46', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (11, '6_28_routine_pink_share_wap.jpg', '/home/yshop/file/qrcode/6_28_routine_pink_share_wap.jpg', 'qrcode/6_28_routine_pink_share_wap.jpg', '87568', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-07 14:00:10', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (12, '6_28_routine_pink_user_spread.jpg', '/home/yshop/file/qrcode/6_28_routine_pink_user_spread.jpg', 'qrcode/6_28_routine_pink_user_spread.jpg', '56071', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-07 14:00:10', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (13, '11_27_routine_pink_share_wap.jpg', '/home/yshop/file/qrcode/11_27_routine_pink_share_wap.jpg', 'qrcode/11_27_routine_pink_share_wap.jpg', '170746', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 15:30:43', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (14, '11_27_routine_pink_user_spread.jpg', '/home/yshop/file/qrcode/11_27_routine_pink_user_spread.jpg', 'qrcode/11_27_routine_pink_user_spread.jpg', '56073', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 15:30:45', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (15, '5_27_routine_product_detail_wap.jpg', '/home/yshop/file/qrcode/5_27_routine_product_detail_wap.jpg', 'qrcode/5_27_routine_product_detail_wap.jpg', '253866', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 15:50:44', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (16, '5_27_routine_product_user_spread.jpg', '/home/yshop/file/qrcode/5_27_routine_product_user_spread.jpg', 'qrcode/5_27_routine_product_user_spread.jpg', '104250', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 15:50:45', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (17, '9_27_routine_bargain_share_wap.jpg', '/home/yshop/file/qrcode/9_27_routine_bargain_share_wap.jpg', 'qrcode/9_27_routine_bargain_share_wap.jpg', '368871', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 16:00:25', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (18, '9_27_routine_bargain_user_spread.jpg', '/home/yshop/file/qrcode/9_27_routine_bargain_user_spread.jpg', 'qrcode/9_27_routine_bargain_user_spread.jpg', '55081', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 16:00:25', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (19, '27_routine_user_wap.jpg', '/home/yshop/file/qrcode/27_routine_user_wap.jpg', 'qrcode/27_routine_user_wap.jpg', '444268', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 16:08:54', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (20, '27_routine_user_spread.jpg', '/home/yshop/file/qrcode/27_routine_user_spread.jpg', 'qrcode/27_routine_user_spread.jpg', '55558', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 16:08:54', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (21, '12_29_routine_pink_share_wap.jpg', '/home/yshop/file/qrcode/12_29_routine_pink_share_wap.jpg', 'qrcode/12_29_routine_pink_share_wap.jpg', '508908', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 21:28:05', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (22, '12_29_routine_pink_user_spread.jpg', '/home/yshop/file/qrcode/12_29_routine_pink_user_spread.jpg', 'qrcode/12_29_routine_pink_user_spread.jpg', '67456', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 21:28:06', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (23, '13_28_routine_pink_share_wap.jpg', '/home/yshop/file/qrcode/13_28_routine_pink_share_wap.jpg', 'qrcode/13_28_routine_pink_share_wap.jpg', '618670', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 22:50:08', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (24, '13_28_routine_pink_user_spread.jpg', '/home/yshop/file/qrcode/13_28_routine_pink_user_spread.jpg', 'qrcode/13_28_routine_pink_user_spread.jpg', '56159', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-08 22:50:08', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (25, '15_26_routine_pink_share_wap.jpg', '/home/yshop/file/qrcode/15_26_routine_pink_share_wap.jpg', 'qrcode/15_26_routine_pink_share_wap.jpg', '701892', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 15:06:11', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (26, '15_26_routine_pink_user_spread.jpg', '/home/yshop/file/qrcode/15_26_routine_pink_user_spread.jpg', 'qrcode/15_26_routine_pink_user_spread.jpg', '67404', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 15:06:12', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (27, '9_26_routine_bargain_share_wap.jpg', '/home/yshop/file/qrcode/9_26_routine_bargain_share_wap.jpg', 'qrcode/9_26_routine_bargain_share_wap.jpg', '813727', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 15:36:33', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (28, '9_26_routine_bargain_user_spread.jpg', '/home/yshop/file/qrcode/9_26_routine_bargain_user_spread.jpg', 'qrcode/9_26_routine_bargain_user_spread.jpg', '54898', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 15:36:34', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (29, '3_33_routine_product_detail_wap.jpg', '/home/yshop/file/qrcode/3_33_routine_product_detail_wap.jpg', 'qrcode/3_33_routine_product_detail_wap.jpg', '877546', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 18:23:52', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (30, '3_33_routine_product_user_spread.jpg', '/home/yshop/file/qrcode/3_33_routine_product_user_spread.jpg', 'qrcode/3_33_routine_product_user_spread.jpg', '109766', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 18:23:53', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (31, '16_27_routine_pink_share_wap.jpg', '/home/yshop/file/qrcode/16_27_routine_pink_share_wap.jpg', 'qrcode/16_27_routine_pink_share_wap.jpg', '996225', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 18:27:12', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (32, '16_27_routine_pink_user_spread.jpg', '/home/yshop/file/qrcode/16_27_routine_pink_user_spread.jpg', 'qrcode/16_27_routine_pink_user_spread.jpg', '67381', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 18:27:12', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (33, '9_33_routine_bargain_share_wap.jpg', '/home/yshop/file/qrcode/9_33_routine_bargain_share_wap.jpg', 'qrcode/9_33_routine_bargain_share_wap.jpg', '1108196', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 18:34:52', NULL, 0);
+INSERT INTO `yx_system_attachment` VALUES (34, '9_33_routine_bargain_user_spread.jpg', '/home/yshop/file/qrcode/9_33_routine_bargain_user_spread.jpg', 'qrcode/9_33_routine_bargain_user_spread.jpg', '55576', 'image/jpeg', 0, 1, 1, 0, '', '2020-09-10 18:34:52', NULL, 0);
 
 -- ----------------------------
 -- Table structure for yx_system_city
@@ -6411,7 +6830,7 @@ CREATE TABLE `yx_system_config`  (
 -- ----------------------------
 -- Records of yx_system_config
 -- ----------------------------
-INSERT INTO `yx_system_config` VALUES (162, 'wechat_share_img', 'https://image.dayouqiantu.cn/news.png', NULL, NULL);
+INSERT INTO `yx_system_config` VALUES (162, 'wechat_share_img', '', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (165, 'wechat_avatar', '', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (172, 'wechat_share_synopsis', 'springboot2前后端分离电商系统', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (174, 'api', 'http://你的H5端域名/api/wechat/serve', NULL, NULL);
@@ -6425,13 +6844,13 @@ INSERT INTO `yx_system_config` VALUES (183, 'store_brokerage_two', '30', NULL, N
 INSERT INTO `yx_system_config` VALUES (184, 'site_url', 'https://h5.yixiang.co', 0, 0);
 INSERT INTO `yx_system_config` VALUES (185, 'api_url', 'https://h5api.xinxintuan.co', 0, 0);
 INSERT INTO `yx_system_config` VALUES (186, 'order_cancel_job_time', '20', 0, 0);
-INSERT INTO `yx_system_config` VALUES (187, 'wechat_appid', 'wxcxxxxxxxxx', NULL, NULL);
-INSERT INTO `yx_system_config` VALUES (188, 'wechat_appsecret', '11111111', NULL, NULL);
-INSERT INTO `yx_system_config` VALUES (189, 'wechat_encodingaeskey', '2333333333333', NULL, NULL);
+INSERT INTO `yx_system_config` VALUES (187, 'wechat_appid', 'wxc061dee8806ff712', NULL, NULL);
+INSERT INTO `yx_system_config` VALUES (188, 'wechat_appsecret', '1dc5b2871d0d5ebd0f1ec7ddb856f805', NULL, NULL);
+INSERT INTO `yx_system_config` VALUES (189, 'wechat_encodingaeskey', 'yYuBUkC8BXImCXyu7O6hkzLj4TC5nxsWPfL4CQAZPNY', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (190, 'wechat_token', 'yshop', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (191, 'wxpay_mchId', '1493624002', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (192, 'wxpay_appId', '111111', NULL, NULL);
-INSERT INTO `yx_system_config` VALUES (193, 'wxpay_mchKey', '1111111111111111111', NULL, NULL);
+INSERT INTO `yx_system_config` VALUES (193, 'wxpay_mchKey', 'dayouqiantuhupeng8638004yixiangt', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (194, 'wxapp_appId', 'wx604d2ea4702620d2', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (195, 'wxapp_secret', '0beb4dad95fbd97cbaf2a0a4dec51575', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (196, 'wxpay_keyPath', 'http://localhost:8000/file/pic/list_30-20200110053337209.png', 0, 0);
@@ -6447,7 +6866,7 @@ INSERT INTO `yx_system_config` VALUES (207, 'wechat_encode', '', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (208, 'wechat_sourceid', '', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (209, 'wechat_name', '', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (210, 'wechat_qrcode', '', NULL, NULL);
-INSERT INTO `yx_system_config` VALUES (211, 'wx_native_app_appId', '222222222', NULL, NULL);
+INSERT INTO `yx_system_config` VALUES (211, 'wx_native_app_appId', 'wx7c84ede33062d1e4', NULL, NULL);
 INSERT INTO `yx_system_config` VALUES (212, 'file_store_mode', '1', 0, 0);
 INSERT INTO `yx_system_config` VALUES (213, 'sms_access_key', 'yshopyshop', 0, 0);
 INSERT INTO `yx_system_config` VALUES (214, 'sms_enable', '2', 0, 0);
@@ -6459,7 +6878,7 @@ INSERT INTO `yx_system_config` VALUES (219, 'exp_enable', '1', 0, 0);
 INSERT INTO `yx_system_config` VALUES (220, 'exp_appId', '1607734', 0, 0);
 INSERT INTO `yx_system_config` VALUES (221, 'exp_appKey', '33333333333333', 0, 0);
 INSERT INTO `yx_system_config` VALUES (222, 'admin_api_url', 'https://consoleapi.xinxintuan.co', 0, 0);
-INSERT INTO `yx_system_config` VALUES (223, 'imageArr', '[\"https://image.dayouqiantu.cn/news.png\"]', 0, 0);
+INSERT INTO `yx_system_config` VALUES (223, 'imageArr', '[\"\"]', 0, 0);
 INSERT INTO `yx_system_config` VALUES (224, 'wechat_ma_encodingaeskey', '', 0, 0);
 INSERT INTO `yx_system_config` VALUES (225, 'wxapi', 'http://你的H5api端域名/api/wxapp/serve', 0, 0);
 INSERT INTO `yx_system_config` VALUES (226, 'wechat_ma_token', '', 0, 0);
@@ -6478,7 +6897,7 @@ CREATE TABLE `yx_system_group_data`  (
   `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（1：开启；2：关闭；）',
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 225 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '组合数据详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 226 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '组合数据详情表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_system_group_data
@@ -6514,7 +6933,7 @@ INSERT INTO `yx_system_group_data` VALUES (210, 'yshop_seckill_time', '{\"contin
 INSERT INTO `yx_system_group_data` VALUES (211, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"3\",\"id\":\"\",\"sort\":\"\",\"time\":\"7\",\"value\":\"\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
 INSERT INTO `yx_system_group_data` VALUES (212, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"2\",\"id\":\"\",\"sort\":\"\",\"time\":\"10\",\"value\":\"\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
 INSERT INTO `yx_system_group_data` VALUES (213, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"3\",\"id\":\"\",\"sort\":\"\",\"time\":\"12\",\"value\":\"\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
-INSERT INTO `yx_system_group_data` VALUES (214, 'yshop_seckill_time', '{\"addTime\":\"\",\"continued\":\"4\",\"id\":\"\",\"sort\":\"\",\"time\":\"15\",\"value\":\"\",\"status\":\"\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (214, 'yshop_seckill_time', '{\"continued\":\"10\",\"id\":214,\"time\":\"15\"}', '2020-06-25 18:54:35', '2020-09-05 17:16:06', 0, 1, 0);
 INSERT INTO `yx_system_group_data` VALUES (215, 'yshop_seckill_time', '{\"continued\":\"2\",\"id\":223,\"time\":\"19\"}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
 INSERT INTO `yx_system_group_data` VALUES (216, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/b0344c148141b50d68db9722708ea49e.png\"],\"uniapp_url\":\"/pages/activity/GoodsSeckill/index\",\"name\":\"秒杀专区\",\"id\":216,\"pic\":\"https://image.dayouqiantu.cn/b0344c148141b50d68db9722708ea49e.png\",\"sort\":3,\"url\":\"/activity/goods_seckill\",\"wxapp_url\":\"/pages/activity/GoodsSeckill/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-26 18:27:06', 3, 1, 0);
 INSERT INTO `yx_system_group_data` VALUES (217, 'yshop_home_menus', '{\"imageArr\":[\"https://image.dayouqiantu.cn/bar.png\"],\"uniapp_url\":\"/pages/activity/GoodsBargain/index\",\"name\":\"砍价专区\",\"id\":217,\"pic\":\"https://image.dayouqiantu.cn/bar.png\",\"sort\":2,\"url\":\"/activity/bargain\",\"wxapp_url\":\"/pages/activity/GoodsBargain/main\",\"status\":1}', '2020-06-25 18:54:35', '2020-06-26 18:27:16', 2, 1, 0);
@@ -6524,6 +6943,7 @@ INSERT INTO `yx_system_group_data` VALUES (221, 'yshop_my_menus', '{\"imageArr\"
 INSERT INTO `yx_system_group_data` VALUES (222, 'yshop_recharge_price_ways', '{\"give_price\":\"10\",\"price\":\"100\",\"id\":\"\",\"sort\":0,\"status\":1}', '2020-06-25 18:54:35', NULL, 1, 1, 0);
 INSERT INTO `yx_system_group_data` VALUES (223, 'yshop_recharge_price_ways', '{\"give_price\":\"1\",\"price\":1,\"id\":\"\",\"sort\":0,\"status\":1}', '2020-06-25 18:54:35', NULL, 0, 1, 0);
 INSERT INTO `yx_system_group_data` VALUES (224, 'yshop_home_banner', '{\"imageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200903171351713145.jpg\"],\"uniapp_url\":\"3\",\"name\":\"3\",\"id\":\"\",\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171351713145.jpg\",\"sort\":0,\"url\":\"3\",\"wxapp_url\":\"\",\"status\":1}', '2020-09-03 17:13:59', NULL, 0, 1, 0);
+INSERT INTO `yx_system_group_data` VALUES (225, 'yshop_my_menus', '{\"imageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png\"],\"uniapp_url\":\"/pages/shop/GoodsFoot/index\",\"name\":\"我的足迹\",\"id\":225,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png\",\"sort\":10,\"url\":\"\",\"wxapp_url\":\"\",\"status\":1}', '2020-09-11 09:39:21', '2020-09-11 09:40:49', 10, 1, 0);
 
 -- ----------------------------
 -- Table structure for yx_system_store
@@ -6598,13 +7018,13 @@ CREATE TABLE `yx_system_user_level`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mer_id` int(11) NOT NULL DEFAULT 0 COMMENT '商户id',
   `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会员名称',
-  `money` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '购买金额',
+  `money` decimal(8, 2) NOT NULL COMMENT '购买金额',
   `valid_date` int(11) NOT NULL DEFAULT 0 COMMENT '有效时间',
   `is_forever` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否为永久会员',
   `is_pay` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否购买,1=购买,0=不购买',
   `is_show` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否显示 1=显示,0=隐藏',
   `grade` int(11) NOT NULL DEFAULT 0 COMMENT '会员等级',
-  `discount` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '享受折扣',
+  `discount` decimal(8, 2) NOT NULL COMMENT '享受折扣',
   `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会员卡背景',
   `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '会员图标',
   `explain` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '说明',
@@ -6691,9 +7111,9 @@ CREATE TABLE `yx_user`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '添加时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后一次登录时间',
   `last_ip` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后一次登录ip',
-  `now_money` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '用户余额',
-  `brokerage_price` decimal(8, 2) NOT NULL DEFAULT 0.00 COMMENT '佣金金额',
-  `integral` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '用户剩余积分',
+  `now_money` decimal(8, 2) UNSIGNED NOT NULL COMMENT '用户余额',
+  `brokerage_price` decimal(8, 2) NOT NULL COMMENT '佣金金额',
+  `integral` decimal(8, 2) UNSIGNED NOT NULL COMMENT '用户剩余积分',
   `sign_num` int(11) NOT NULL DEFAULT 0 COMMENT '连续签到天数',
   `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1为正常，0为禁止',
   `level` tinyint(2) UNSIGNED NOT NULL DEFAULT 0 COMMENT '等级',
@@ -6714,12 +7134,12 @@ CREATE TABLE `yx_user`  (
   INDEX `level`(`level`) USING BTREE,
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_promoter`(`is_promoter`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_user
 -- ----------------------------
-INSERT INTO `yx_user` VALUES (11, 'hupeng', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵88', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175246', '', '2020-06-25 18:54:35', '2020-09-03 10:04:48', '', 7187.01, 55.86, 1000.06, 1, 1, 1, 21, '2020-06-20 14:46:47', 'h5', 0, 49, 4, '', 1, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (11, 'hupeng', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵88', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175246', '', '2020-06-25 18:54:35', '2020-09-11 16:36:08', '', 7187.01, 55.86, 1000.06, 1, 1, 1, 21, '2020-06-20 14:46:47', 'h5', 0, 49, 4, '', 1, '', NULL, 0);
 INSERT INTO `yx_user` VALUES (12, '15136175246', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '会敲代码的喵2', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175246', '', '2020-06-25 18:54:35', '2020-07-08 15:11:48', '', 8688.71, 28.00, 0.00, 2, 1, 1, 11, '2020-06-25 18:54:35', 'h5', 0, 23, 0, '', 1, '', NULL, 0);
 INSERT INTO `yx_user` VALUES (14, '15136175247', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175247', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175247', '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '', 9200.00, 0.00, 2.00, 0, 1, 0, 11, '2020-06-25 18:54:35', 'h5', 0, 5, 0, '', 0, '', NULL, 0);
 INSERT INTO `yx_user` VALUES (15, '15136175249', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175249', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175249', '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '', 0.00, 0.00, 0.00, 0, 1, 0, 0, '2020-06-25 18:54:35', 'h5', 0, 0, 0, '', 0, '', NULL, 0);
@@ -6727,13 +7147,15 @@ INSERT INTO `yx_user` VALUES (18, '15136175523', 'e10adc3949ba59abbe56e057f20f88
 INSERT INTO `yx_user` VALUES (19, '15136175528', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175528', 'https://image.dayouqiantu.cn/5dc2c7f3a104c.png', '15136175528', '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '', 0.00, 0.00, 0.00, 0, 1, 0, 11, '2020-06-25 18:54:35', 'h5', 0, 0, 0, '', 0, '', NULL, 0);
 INSERT INTO `yx_user` VALUES (20, '15136171112', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136171112', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', '15136171112', '', '2020-06-25 18:54:35', '2020-06-25 18:54:35', '', 99.00, 0.00, 0.00, 0, 1, 0, 11, '2020-06-25 18:54:35', 'h5', 1, 0, 0, '', 0, '', NULL, 0);
 INSERT INTO `yx_user` VALUES (21, '15136175234', 'e10adc3949ba59abbe56e057f20f883e', '', 0, '', '', 0, 0, '15136175234', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', '15136175234', '127.0.0.1', '2020-06-14 09:21:58', '2020-07-09 13:29:06', '127.0.0.1', 10960.70, 1035.79, 31.00, 2, 1, 1, 0, '2020-06-25 18:54:35', 'h5', 0, 6, 1, '', 1, '', NULL, 0);
-INSERT INTO `yx_user` VALUES (25, 'o41F5txV5oZVvprIQdJMRmzB_fd0', NULL, '', 0, '', '', 0, 0, '会敲代码的喵', 'http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqbE0lXfgiagWtVetehzyfia3iaBxF0UTibMDTjicftYRYJ0G2pRZjlSB8rCtwRZ3ia9EYd3ZadK9wVWBTw/132', NULL, '127.0.0.1', '2020-07-06 15:20:51', '2020-07-06 15:53:31', '127.0.0.1', 978.00, 0.00, 0.00, 0, 1, 0, 0, '2020-06-25 18:54:35', 'wechat', 0, 2, 0, '', 0, '', '{\"sex\": 1, \"city\": \"信阳\", \"openid\": \"o41F5txV5oZVvprIQdJMRmzB_fd0\", \"country\": \"中国\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"会敲代码的喵\", \"province\": \"河南\", \"subscribe\": null, \"headimgurl\": \"http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqbE0lXfgiagWtVetehzyfia3iaBxF0UTibMDTjicftYRYJ0G2pRZjlSB8rCtwRZ3ia9EYd3ZadK9wVWBTw/132\", \"routineOpenid\": \"\", \"subscribeTime\": null}', 0);
-INSERT INTO `yx_user` VALUES (26, 'orIMY4ykNo4p1k5fiHcVYd2GLdO8', NULL, '', 0, '', '', 0, 0, 'い安好', 'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIzjkjtD1YuSoGz5EFV80luIywsVch8cx4Dgrc3rM6vWkFRaNBJ7QjoEVziaUR7xj0libnpLExq4Z5A/132', NULL, '61.148.60.102', '2020-09-03 10:37:02', '2020-09-05 16:23:18', '61.148.60.102', 0.00, 0.00, 0.00, 0, 1, 0, 0, NULL, 'routine', 0, 0, 0, '', 0, '', '{\"sex\": 1, \"city\": \"\", \"openid\": \"\", \"country\": \"China\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"い安好\", \"province\": \"Beijing\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIzjkjtD1YuSoGz5EFV80luIywsVch8cx4Dgrc3rM6vWkFRaNBJ7QjoEVziaUR7xj0libnpLExq4Z5A/132\", \"routineOpenid\": \"orIMY4ykNo4p1k5fiHcVYd2GLdO8\", \"subscribeTime\": null}', 0);
-INSERT INTO `yx_user` VALUES (27, 'orIMY4xGhMmipwFZoSL1vOhUNFZ0', NULL, '', 0, '', '', 0, 0, '会敲代码的喵', 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erkH5E5lvlWSAaoT1icTe79tGnKXtqicTUC2cOibOqJOIm4s7aKN4kXvxTj8WC8aWpSXIpGEP7IIcPtA/132', NULL, '223.91.133.96', '2020-09-03 11:56:01', '2020-09-03 19:02:59', '223.91.133.96', 0.00, 0.00, 0.00, 0, 1, 0, 0, NULL, 'routine', 0, 0, 0, '', 0, '', '{\"sex\": 1, \"city\": \"Xinyang\", \"openid\": \"\", \"country\": \"China\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"会敲代码的喵\", \"province\": \"Henan\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erkH5E5lvlWSAaoT1icTe79tGnKXtqicTUC2cOibOqJOIm4s7aKN4kXvxTj8WC8aWpSXIpGEP7IIcPtA/132\", \"routineOpenid\": \"orIMY4xGhMmipwFZoSL1vOhUNFZ0\", \"subscribeTime\": null}', 0);
-INSERT INTO `yx_user` VALUES (28, 'orIMY41pDGLN_PRNxa1HtoDG-zmw', NULL, '', 0, '', '', 0, 0, '陶子', 'https://thirdwx.qlogo.cn/mmopen/vi_32/pvVXOphTg8ic2Fec5YfMngQ8XruCMYZia5IpwSrQzExaoBibIsf8WLmt2Cb8tEokxQChDxuORQ7ukqMQGpk5L19xQ/132', NULL, '117.136.31.254', '2020-09-03 12:41:03', '2020-09-04 21:45:26', '117.136.31.254', 0.00, 0.00, 10.00, 1, 1, 0, 0, NULL, 'routine', 0, 0, 0, '', 0, '', '{\"sex\": 1, \"city\": \"Shenzhen\", \"openid\": \"\", \"country\": \"China\", \"unionId\": \"\", \"language\": \"en\", \"nickname\": \"陶子\", \"province\": \"Guangdong\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/pvVXOphTg8ic2Fec5YfMngQ8XruCMYZia5IpwSrQzExaoBibIsf8WLmt2Cb8tEokxQChDxuORQ7ukqMQGpk5L19xQ/132\", \"routineOpenid\": \"orIMY41pDGLN_PRNxa1HtoDG-zmw\", \"subscribeTime\": null}', 0);
-INSERT INTO `yx_user` VALUES (29, 'orIMY4whScQm_yv200oMRMEPAkIk', NULL, '', 0, '', '', 0, 0, '阳光正好', 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqten5LTRcBj3XzTTm1Fu7xmmOlEwUDLTfnMNOk7xg5N7jJaDic3q54HuzMwddB7licAckyxInWY9pA/132', NULL, '112.224.70.253', '2020-09-03 13:00:37', '2020-09-03 14:13:54', '112.224.70.253', 0.00, 0.00, 0.00, 0, 1, 0, 0, NULL, 'routine', 0, 0, 0, '', 0, '', '{\"sex\": 1, \"city\": \"Rizhao\", \"openid\": \"\", \"country\": \"China\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"阳光正好\", \"province\": \"Shandong\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqten5LTRcBj3XzTTm1Fu7xmmOlEwUDLTfnMNOk7xg5N7jJaDic3q54HuzMwddB7licAckyxInWY9pA/132\", \"routineOpenid\": \"orIMY4whScQm_yv200oMRMEPAkIk\", \"subscribeTime\": null}', 0);
+INSERT INTO `yx_user` VALUES (25, 'o41F5txV5oZVvprIQdJMRmzB_fd0', NULL, '', 0, '', '', 0, 0, '会敲代码的喵', 'http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqbE0lXfgiagWtVetehzyfia3iaBxF0UTibMDTjicftYRYJ0G2pRZjlSB8rCtwRZ3ia9EYd3ZadK9wVWBTw/132', NULL, '127.0.0.1', '2020-07-06 15:20:51', '2020-09-11 16:13:45', '127.0.0.1', 10978.00, 0.00, 0.00, 0, 1, 0, 0, '2020-06-25 18:54:35', 'wechat', 0, 2, 0, '', 1, '', '{\"sex\": 1, \"city\": \"信阳\", \"openid\": \"o41F5txV5oZVvprIQdJMRmzB_fd0\", \"country\": \"中国\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"会敲代码的喵\", \"province\": \"河南\", \"subscribe\": null, \"headimgurl\": \"http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqbE0lXfgiagWtVetehzyfia3iaBxF0UTibMDTjicftYRYJ0G2pRZjlSB8rCtwRZ3ia9EYd3ZadK9wVWBTw/132\", \"routineOpenid\": \"\", \"subscribeTime\": null}', 0);
+INSERT INTO `yx_user` VALUES (26, 'orIMY4ykNo4p1k5fiHcVYd2GLdO8', NULL, '', 0, '', '', 0, 0, 'い安好', 'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIzjkjtD1YuSoGz5EFV80luIywsVch8cx4Dgrc3rM6vWkFRaNBJ7QjoEVziaUR7xj0libnpLExq4Z5A/132', NULL, '61.148.60.102', '2020-09-03 10:37:02', '2020-09-11 16:05:18', '61.148.60.102', 99992.00, 0.00, 100000.00, 0, 1, 0, 0, NULL, 'routine', 0, 4, 0, '', 1, '', '{\"sex\": 1, \"city\": \"\", \"openid\": \"\", \"country\": \"China\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"い安好\", \"province\": \"Beijing\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIzjkjtD1YuSoGz5EFV80luIywsVch8cx4Dgrc3rM6vWkFRaNBJ7QjoEVziaUR7xj0libnpLExq4Z5A/132\", \"routineOpenid\": \"orIMY4ykNo4p1k5fiHcVYd2GLdO8\", \"subscribeTime\": null}', 0);
+INSERT INTO `yx_user` VALUES (27, 'orIMY4xGhMmipwFZoSL1vOhUNFZ0', NULL, '', 0, '', '', 0, 0, '会敲代码的喵', 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erkH5E5lvlWSAaoT1icTe79tGnKXtqicTUC2cOibOqJOIm4s7aKN4kXvxTj8WC8aWpSXIpGEP7IIcPtA/132', NULL, '223.91.133.96', '2020-09-03 11:56:01', '2020-09-11 16:09:19', '223.91.133.96', 9971.00, 0.00, 10.00, 1, 1, 0, 0, NULL, 'routine', 0, 7, 0, '', 1, '', '{\"sex\": 1, \"city\": \"Xinyang\", \"openid\": \"\", \"country\": \"China\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"会敲代码的喵\", \"province\": \"Henan\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erkH5E5lvlWSAaoT1icTe79tGnKXtqicTUC2cOibOqJOIm4s7aKN4kXvxTj8WC8aWpSXIpGEP7IIcPtA/132\", \"routineOpenid\": \"orIMY4xGhMmipwFZoSL1vOhUNFZ0\", \"subscribeTime\": null}', 0);
+INSERT INTO `yx_user` VALUES (28, 'orIMY41pDGLN_PRNxa1HtoDG-zmw', NULL, '', 0, '', '', 0, 0, '陶子', 'https://thirdwx.qlogo.cn/mmopen/vi_32/pvVXOphTg8ic2Fec5YfMngQ8XruCMYZia5IpwSrQzExaoBibIsf8WLmt2Cb8tEokxQChDxuORQ7ukqMQGpk5L19xQ/132', NULL, '117.136.31.254', '2020-09-03 12:41:03', '2020-09-11 14:03:09', '117.136.31.254', 9984.00, 0.00, 80.00, 1, 1, 0, 0, NULL, 'routine', 0, 5, 0, '', 1, '', '{\"sex\": 1, \"city\": \"Shenzhen\", \"openid\": \"\", \"country\": \"China\", \"unionId\": \"\", \"language\": \"en\", \"nickname\": \"陶子\", \"province\": \"Guangdong\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/pvVXOphTg8ic2Fec5YfMngQ8XruCMYZia5IpwSrQzExaoBibIsf8WLmt2Cb8tEokxQChDxuORQ7ukqMQGpk5L19xQ/132\", \"routineOpenid\": \"orIMY41pDGLN_PRNxa1HtoDG-zmw\", \"subscribeTime\": null}', 0);
 INSERT INTO `yx_user` VALUES (30, 'orIMY46Z4_Mpu4htodpxy-w6FBOw', NULL, '', 0, '', '', 0, 0, 'bug', 'https://thirdwx.qlogo.cn/mmopen/vi_32/W8eOmaCRP3iaeuWpsceN0wGWGSGgZCoRf2vnvYgYGsTB6ibbuyLRZDmVB4R0W1GwDGccu5UqVqC0X5lM6FlqD6dQ/132', NULL, '183.39.59.23', '2020-09-03 14:09:52', '2020-09-03 14:12:11', '183.39.59.23', 0.00, 0.00, 10.00, 1, 1, 0, 0, NULL, 'routine', 0, 0, 0, '', 0, '', '{\"sex\": 1, \"city\": \"Huizhou\", \"openid\": \"\", \"country\": \"China\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"bug\", \"province\": \"Guangdong\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/W8eOmaCRP3iaeuWpsceN0wGWGSGgZCoRf2vnvYgYGsTB6ibbuyLRZDmVB4R0W1GwDGccu5UqVqC0X5lM6FlqD6dQ/132\", \"routineOpenid\": \"orIMY46Z4_Mpu4htodpxy-w6FBOw\", \"subscribeTime\": null}', 0);
 INSERT INTO `yx_user` VALUES (31, '17816046892', 'dc483e80a7a0bd9ef71d8cf973673924', '', 0, '', '', 0, 0, '17816046892', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', '17816046892', '183.128.178.17', '2020-09-03 16:24:51', '2020-09-03 16:26:27', '183.128.178.17', 0.00, 0.00, 0.00, 0, 1, 0, 0, NULL, 'h5', 0, 0, 0, '', 0, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (32, '14781974380', 'fbb4522b422be92e7c0f7806ac311d79', '', 0, '', '', 0, 0, '14781974380', 'https://image.dayouqiantu.cn/5e79f6cfd33b6.png', '14781974380', '113.139.121.238', '2020-09-06 10:53:39', '2020-09-06 20:29:20', '113.139.121.238', 0.00, 0.00, 0.00, 0, 1, 0, 0, NULL, 'h5', 0, 0, 0, '', 0, '', NULL, 0);
+INSERT INTO `yx_user` VALUES (33, 'orIMY4whScQm_yv200oMRMEPAkIk', NULL, '', 0, '', '', 0, 0, '阳光正好😃', 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqten5LTRcBj3XzTTm1Fu7xmmOlEwUDLTfnMNOk7xg5N7jJaDic3q54HuzMwddB7licAckyxInWY9pA/132', NULL, '112.224.69.234', '2020-09-09 10:40:32', '2020-09-11 15:09:43', '112.224.69.234', 99910.00, 0.00, 10.00, 1, 1, 0, 0, NULL, 'routine', 0, 17, 0, '', 1, '', '{\"sex\": 1, \"city\": \"Rizhao\", \"openid\": \"\", \"country\": \"China\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"阳光正好😃\", \"province\": \"Shandong\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqten5LTRcBj3XzTTm1Fu7xmmOlEwUDLTfnMNOk7xg5N7jJaDic3q54HuzMwddB7licAckyxInWY9pA/132\", \"routineOpenid\": \"orIMY4whScQm_yv200oMRMEPAkIk\", \"subscribeTime\": null}', 0);
+INSERT INTO `yx_user` VALUES (34, 'o41F5t4_w5SXBDLsTdqQLWZV8wUU', NULL, '', 0, '', '', 0, 0, '阳光正好😃', 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epL8PhFlE6A7cdyq1f7OQdylEcUYD8Ul7xE1IaJuR4JxiafP6WCuMic5uaYG9XhyVKkP55iatTicUuM6A/132', NULL, '117.136.78.75', '2020-09-11 16:11:32', '2020-09-11 16:12:39', '117.136.78.75', 0.00, 0.00, 0.00, 0, 1, 0, 0, NULL, 'wechat', 0, 0, 0, '', 0, '', '{\"sex\": 1, \"city\": \"日照\", \"openid\": \"o41F5t4_w5SXBDLsTdqQLWZV8wUU\", \"country\": \"中国\", \"unionId\": \"\", \"language\": \"zh_CN\", \"nickname\": \"阳光正好😃\", \"province\": \"山东\", \"subscribe\": null, \"headimgurl\": \"https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epL8PhFlE6A7cdyq1f7OQdylEcUYD8Ul7xE1IaJuR4JxiafP6WCuMic5uaYG9XhyVKkP55iatTicUuM6A/132\", \"routineOpenid\": \"\", \"subscribeTime\": null}', 0);
 
 -- ----------------------------
 -- Table structure for yx_user_address
@@ -6760,15 +7182,21 @@ CREATE TABLE `yx_user_address`  (
   INDEX `uid`(`uid`) USING BTREE,
   INDEX `is_default`(`is_default`) USING BTREE,
   INDEX `is_del`(`is_del`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户地址表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户地址表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_user_address
 -- ----------------------------
-INSERT INTO `yx_user_address` VALUES (14, 12, 'hupeng888', '15136175236', '河南省', '郑州市', 367396, '市辖区', '9999', '', '0', '0', 1, 0, '2020-07-05 16:58:33', '2020-07-05 17:03:05');
+INSERT INTO `yx_user_address` VALUES (14, 12, 'hupeng888', '15136175236', '河南省', '郑州市', 367396, '市辖区', '9999', '', '0', '0', 0, 0, '2020-07-05 16:58:33', '2020-09-05 20:52:52');
 INSERT INTO `yx_user_address` VALUES (15, 12, 'hupeng333', '15136175246', '湖北省', '武汉市', 420825, '市辖区', '9999', '', '0', '0', 0, 0, '2020-07-05 17:13:04', NULL);
-INSERT INTO `yx_user_address` VALUES (16, 25, 'hupeng', '15136175234', '安徽省', '芜湖市', 226469, '镜湖区', '99', '', '0', '0', 1, 0, '2020-07-06 15:23:19', NULL);
-INSERT INTO `yx_user_address` VALUES (17, 11, 'haha', '15136175234', '山西省', '阳泉市', 71850, '矿区', '8888', '', '0', '0', 1, 0, '2020-07-08 15:32:34', NULL);
+INSERT INTO `yx_user_address` VALUES (16, 25, 'hupeng', '15136175234', '安徽省', '芜湖市', 226469, '镜湖区', '99', '', '0', '0', 0, 0, '2020-07-06 15:23:19', '2020-09-05 20:52:52');
+INSERT INTO `yx_user_address` VALUES (17, 11, 'haha', '15136175234', '山西省', '阳泉市', 71850, '矿区', '8888', '', '0', '0', 0, 0, '2020-07-08 15:32:34', '2020-09-05 20:52:52');
+INSERT INTO `yx_user_address` VALUES (18, 29, '哈哈', '18888888888', '北京市', '北京市', 2, '朝阳区', '老两口儿', '', '0', '0', 0, 0, '2020-09-05 20:52:52', '2020-09-08 15:15:33');
+INSERT INTO `yx_user_address` VALUES (19, 28, '陶子', '13666666666', '天津市', '天津市', 7363, '河西区', '卡阿吉纳加', '', '0', '0', 0, 0, '2020-09-07 13:42:47', NULL);
+INSERT INTO `yx_user_address` VALUES (20, 27, '胡萝卜', '15139174512', '北京市', '北京市', 2, '东城区', '999', '', '0', '0', 0, 0, '2020-09-08 15:15:33', '2020-09-10 18:26:34');
+INSERT INTO `yx_user_address` VALUES (21, 27, '哈哈', '15136175246', '天津市', '天津市', 7363, '和平区', '666', '', '0', '0', 1, 0, '2020-09-08 15:16:11', '2020-09-10 18:26:34');
+INSERT INTO `yx_user_address` VALUES (22, 33, '老两口', '18888888888', '天津市', '天津市', 7363, '河西区', '天锡我宗盟', '', '0', '0', 0, 0, '2020-09-09 10:43:08', '2020-09-10 15:00:51');
+INSERT INTO `yx_user_address` VALUES (23, 26, 'sahsdh', '15601064107', '北京市', '北京市', 2, '东城区', 'asdsdsd', '', '0', '0', 1, 0, '2020-09-10 15:00:51', NULL);
 
 -- ----------------------------
 -- Table structure for yx_user_bill
@@ -6782,8 +7210,8 @@ CREATE TABLE `yx_user_bill`  (
   `title` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '账单标题',
   `category` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '明细种类',
   `type` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '明细类型',
-  `number` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '明细数字',
-  `balance` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '剩余',
+  `number` decimal(8, 2) UNSIGNED NOT NULL COMMENT '明细数字',
+  `balance` decimal(8, 2) UNSIGNED NOT NULL COMMENT '剩余',
   `mark` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '备注',
   `create_time` datetime(0) NOT NULL COMMENT '添加时间',
   `update_time` datetime(0) NULL DEFAULT NULL,
@@ -6795,7 +7223,7 @@ CREATE TABLE `yx_user_bill`  (
   INDEX `add_time`(`create_time`) USING BTREE,
   INDEX `pm`(`pm`) USING BTREE,
   INDEX `type`(`category`, `type`, `link_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 54 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户账单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 114 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户账单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_user_bill
@@ -6848,6 +7276,66 @@ INSERT INTO `yx_user_bill` VALUES (50, 11, '22', 1, '购买商品赠送积分', 
 INSERT INTO `yx_user_bill` VALUES (51, 21, '22', 1, '获得推广佣金', 'now_money', 'brokerage', 7.93, 1035.79, '会敲代码的喵88成功消费9.90元,奖励推广佣金7.93', '2020-09-03 10:04:36', NULL, 1, 0);
 INSERT INTO `yx_user_bill` VALUES (52, 30, '', 1, '签到奖励', 'integral', 'sign', 10.00, 0.00, '', '2020-09-03 14:12:11', NULL, 1, 0);
 INSERT INTO `yx_user_bill` VALUES (53, 28, '', 1, '签到奖励', 'integral', 'sign', 10.00, 0.00, '', '2020-09-04 18:26:37', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (54, 29, '', 1, '系统增加余额', 'now_money', 'system_add', 100000.00, 100000.00, '系统增加了100000.0余额', '2020-09-05 20:55:03', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (55, 26, '', 1, '系统增加余额', 'now_money', 'system_add', 100000.00, 100000.00, '系统增加了100000.0余额', '2020-09-05 20:55:10', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (56, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 12.00, 99988.00, '余额支付12.00元购买商品', '2020-09-05 20:55:13', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (57, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 10.00, 99978.00, '余额支付10.00元购买商品', '2020-09-05 20:55:40', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (58, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 10.00, 99968.00, '余额支付10.00元购买商品', '2020-09-05 20:55:50', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (59, 28, '', 1, '签到奖励', 'integral', 'sign', 20.00, 10.00, '', '2020-09-05 23:44:29', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (60, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 10.00, 99958.00, '余额支付10.00元购买商品', '2020-09-06 09:46:38', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (61, 28, '', 1, '签到奖励', 'integral', 'sign', 30.00, 30.00, '', '2020-09-06 11:44:21', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (62, 28, '', 1, '系统增加余额', 'now_money', 'system_add', 9999.00, 9999.00, '系统增加了9999.0余额', '2020-09-07 13:45:19', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (63, 28, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 9997.00, '余额支付2.00元购买商品', '2020-09-07 13:47:32', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (64, 28, '0', 0, '购买商品', 'now_money', 'pay_product', 10.00, 9987.00, '余额支付10.00元购买商品', '2020-09-07 13:53:26', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (65, 28, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 9985.00, '余额支付2.00元购买商品', '2020-09-07 13:55:24', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (66, 28, '7', 1, '商品退款', 'now_money', 'pay_product_refund', 2.00, 9987.00, '订单退款到余额2元', '2020-09-07 13:58:12', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (67, 29, '', 1, '签到奖励', 'integral', 'sign', 10.00, 100000.00, '', '2020-09-08 07:53:15', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (68, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99956.00, '余额支付2.00元购买商品', '2020-09-08 10:35:54', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (69, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99954.00, '余额支付2.00元购买商品', '2020-09-08 10:36:29', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (70, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99952.00, '余额支付2.00元购买商品', '2020-09-08 10:36:38', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (71, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 10.00, 99942.00, '余额支付10.00元购买商品', '2020-09-08 10:37:31', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (72, 27, '', 1, '系统增加余额', 'now_money', 'system_add', 10000.00, 10000.00, '系统增加了10000.0余额', '2020-09-08 15:10:54', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (73, 27, '0', 0, '购买商品', 'now_money', 'pay_product', 10.00, 9990.00, '余额支付10.00元购买商品', '2020-09-08 15:16:57', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (74, 27, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 9988.00, '余额支付2.00元购买商品', '2020-09-08 15:17:31', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (75, 27, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 9986.00, '余额支付2.00元购买商品', '2020-09-08 15:18:09', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (76, 27, '0', 0, '购买商品', 'now_money', 'pay_product', 10.00, 9976.00, '余额支付10.00元购买商品', '2020-09-08 15:21:30', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (77, 27, '', 1, '签到奖励', 'integral', 'sign', 10.00, 0.00, '', '2020-09-08 16:01:25', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (78, 28, '', 1, '签到奖励', 'integral', 'sign', 10.00, 60.00, '', '2020-09-08 17:31:57', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (79, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99940.00, '余额支付2.00元购买商品', '2020-09-08 19:38:39', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (80, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99938.00, '余额支付2.00元购买商品', '2020-09-08 19:43:45', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (81, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99936.00, '余额支付2.00元购买商品', '2020-09-08 21:20:41', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (82, 29, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99934.00, '余额支付2.00元购买商品', '2020-09-08 21:27:54', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (83, 28, '0', 0, '购买商品', 'now_money', 'pay_product', 1.00, 9986.00, '余额支付1.00元购买商品', '2020-09-08 22:49:40', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (84, 33, '', 1, '系统增加余额', 'now_money', 'system_add', 99999.00, 99999.00, '系统增加了99999.0余额', '2020-09-09 10:42:21', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (85, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99997.00, '余额支付2.00元购买商品', '2020-09-09 10:44:18', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (86, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99995.00, '余额支付2.00元购买商品', '2020-09-09 10:45:11', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (87, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99993.00, '余额支付2.00元购买商品', '2020-09-09 11:02:38', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (88, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 29.00, 99964.00, '余额支付29.00元购买商品', '2020-09-09 14:56:15', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (89, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 33.00, 99931.00, '余额支付33.00元购买商品', '2020-09-09 14:58:16', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (90, 33, '', 1, '签到奖励', 'integral', 'sign', 10.00, 0.00, '', '2020-09-10 07:23:28', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (91, 26, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99998.00, '余额支付2.00元购买商品', '2020-09-10 15:01:01', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (92, 26, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99996.00, '余额支付2.00元购买商品', '2020-09-10 15:05:07', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (93, 26, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99994.00, '余额支付2.00元购买商品', '2020-09-10 15:06:05', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (94, 26, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99992.00, '余额支付2.00元购买商品', '2020-09-10 15:34:00', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (95, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99929.00, '余额支付2.00元购买商品', '2020-09-10 17:12:48', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (96, 27, '0', 0, '购买商品', 'now_money', 'pay_product', 1.00, 9975.00, '余额支付1.00元购买商品', '2020-09-10 18:26:46', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (97, 27, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 9973.00, '余额支付2.00元购买商品', '2020-09-10 18:27:04', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (98, 27, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 9971.00, '余额支付2.00元购买商品', '2020-09-10 18:40:18', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (99, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 1.00, 99928.00, '余额支付1.00元购买商品', '2020-09-10 18:57:40', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (100, 28, '', 1, '签到奖励', 'integral', 'sign', 10.00, 70.00, '', '2020-09-10 21:12:49', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (101, 28, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 9984.00, '余额支付2.00元购买商品', '2020-09-10 23:02:57', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (102, 33, '22', 1, '用户余额充值', 'now_money', 'recharge', 1.00, 99929.00, '成功充值余额1.00', '2020-09-11 11:33:42', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (103, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 1.00, 99928.00, '余额支付1.00元购买商品', '2020-09-11 14:18:22', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (104, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99926.00, '余额支付2.00元购买商品', '2020-09-11 14:24:52', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (105, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99924.00, '余额支付2.00元购买商品', '2020-09-11 14:25:16', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (106, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99922.00, '余额支付2.00元购买商品', '2020-09-11 14:38:06', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (107, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99920.00, '余额支付2.00元购买商品', '2020-09-11 14:43:41', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (108, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99918.00, '余额支付2.00元购买商品', '2020-09-11 14:45:57', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (109, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99916.00, '余额支付2.00元购买商品', '2020-09-11 14:48:48', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (110, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99914.00, '余额支付2.00元购买商品', '2020-09-11 15:07:05', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (111, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99912.00, '余额支付2.00元购买商品', '2020-09-11 15:08:39', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (112, 33, '0', 0, '购买商品', 'now_money', 'pay_product', 2.00, 99910.00, '余额支付2.00元购买商品', '2020-09-11 15:09:46', NULL, 1, 0);
+INSERT INTO `yx_user_bill` VALUES (113, 25, '', 1, '系统增加余额', 'now_money', 'system_add', 10000.00, 10978.00, '系统增加了10000.0余额', '2020-09-11 16:05:02', NULL, 1, 0);
 
 -- ----------------------------
 -- Table structure for yx_user_enter
@@ -6896,9 +7384,9 @@ CREATE TABLE `yx_user_extract`  (
   `bank_code` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '银行卡',
   `bank_address` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '开户地址',
   `alipay_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '支付宝账号',
-  `extract_price` decimal(8, 2) UNSIGNED NULL DEFAULT 0.00 COMMENT '提现金额',
+  `extract_price` decimal(8, 2) UNSIGNED NULL COMMENT '提现金额',
   `mark` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `balance` decimal(8, 2) UNSIGNED NULL DEFAULT 0.00,
+  `balance` decimal(8, 2) UNSIGNED NULL,
   `fail_msg` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '无效原因',
   `fail_time` datetime(0) NULL DEFAULT NULL,
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '添加时间',
@@ -6974,23 +7462,23 @@ DROP TABLE IF EXISTS `yx_user_recharge`;
 CREATE TABLE `yx_user_recharge`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `uid` bigint(20) NULL DEFAULT NULL COMMENT '充值用户UID',
-  `nickname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
+  `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '',
   `order_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单号',
   `price` decimal(8, 2) NULL DEFAULT NULL COMMENT '充值金额',
-  `give_price` decimal(8, 2) NULL DEFAULT 0.00 COMMENT '购买赠送金额',
+  `give_price` decimal(8, 2) NULL COMMENT '购买赠送金额',
   `recharge_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '充值类型',
   `paid` tinyint(1) NULL DEFAULT NULL COMMENT '是否充值',
   `pay_time` datetime(0) NULL DEFAULT NULL COMMENT '充值支付时间',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '充值时间',
   `update_time` datetime(0) NULL DEFAULT NULL,
-  `refund_price` decimal(10, 2) NULL DEFAULT 0.00 COMMENT '退款金额',
+  `refund_price` decimal(10, 2) NULL COMMENT '退款金额',
   `is_del` tinyint(4) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `order_id`(`order_id`) USING BTREE,
   INDEX `uid`(`uid`) USING BTREE,
   INDEX `recharge_type`(`recharge_type`) USING BTREE,
   INDEX `paid`(`paid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户充值表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户充值表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_user_recharge
@@ -7012,6 +7500,12 @@ INSERT INTO `yx_user_recharge` VALUES (14, 11, '会敲代码的喵88', '12463832
 INSERT INTO `yx_user_recharge` VALUES (15, 11, '会敲代码的喵88', '1246383225413042176', 10.00, 100.00, 'weixin', 0, NULL, '2020-06-25 18:54:35', NULL, 0.00, 0);
 INSERT INTO `yx_user_recharge` VALUES (16, 21, '15136175234', '1275713928260747264', 100.00, 10.00, 'weixin', 0, NULL, '2020-06-24 16:54:37', NULL, 0.00, 0);
 INSERT INTO `yx_user_recharge` VALUES (17, 25, '会敲代码的喵', '1280045779569868800', 100.00, 10.00, 'weixin', 0, NULL, '2020-07-06 15:47:51', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (18, 27, '会敲代码的喵', '1304012090276577280', 100.00, 10.00, 'weixin', 0, NULL, '2020-09-10 19:01:24', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (19, 27, '会敲代码的喵', '1304012105707421696', 100.00, 10.00, 'weixin', 0, NULL, '2020-09-10 19:01:28', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (20, 27, '会敲代码的喵', '1304012119011753984', 100.00, 10.00, 'weixin', 0, NULL, '2020-09-10 19:01:31', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (21, 33, '阳光正好😃', '1304261723657601024', 1.00, 1.00, 'weixin', 0, NULL, '2020-09-11 11:33:22', NULL, 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (22, 33, '阳光正好😃', '1304261786937065472', 1.00, 1.00, 'weixin', 1, '2020-09-11 11:33:42', '2020-09-11 11:33:37', '2020-09-11 11:33:42', 0.00, 0);
+INSERT INTO `yx_user_recharge` VALUES (23, 25, '会敲代码的喵', '1304332242553667584', 100.00, 10.00, 'weixin', 0, NULL, '2020-09-11 16:13:35', NULL, 0.00, 0);
 
 -- ----------------------------
 -- Table structure for yx_user_sign
@@ -7028,7 +7522,7 @@ CREATE TABLE `yx_user_sign`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`int`) USING BTREE,
   INDEX `uid`(`uid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '签到记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '签到记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_user_sign
@@ -7037,6 +7531,13 @@ INSERT INTO `yx_user_sign` VALUES (6, 21, '签到奖励', 10, 0, '2020-06-20 19:
 INSERT INTO `yx_user_sign` VALUES (7, 21, '签到奖励', 20, 10, '2020-06-21 11:20:20', NULL, 0);
 INSERT INTO `yx_user_sign` VALUES (8, 30, '签到奖励', 10, 0, '2020-09-03 14:12:11', NULL, 0);
 INSERT INTO `yx_user_sign` VALUES (9, 28, '签到奖励', 10, 0, '2020-09-04 18:26:36', NULL, 0);
+INSERT INTO `yx_user_sign` VALUES (10, 28, '签到奖励', 20, 10, '2020-09-05 23:44:29', NULL, 0);
+INSERT INTO `yx_user_sign` VALUES (11, 28, '签到奖励', 30, 30, '2020-09-06 11:44:21', NULL, 0);
+INSERT INTO `yx_user_sign` VALUES (12, 29, '签到奖励', 10, 100000, '2020-09-08 07:53:15', NULL, 0);
+INSERT INTO `yx_user_sign` VALUES (13, 27, '签到奖励', 10, 0, '2020-09-08 16:01:25', NULL, 0);
+INSERT INTO `yx_user_sign` VALUES (14, 28, '签到奖励', 10, 60, '2020-09-08 17:31:57', NULL, 0);
+INSERT INTO `yx_user_sign` VALUES (15, 33, '签到奖励', 10, 0, '2020-09-10 07:23:28', NULL, 0);
+INSERT INTO `yx_user_sign` VALUES (16, 28, '签到奖励', 10, 70, '2020-09-10 21:12:49', NULL, 0);
 
 -- ----------------------------
 -- Table structure for yx_user_task_finish
@@ -7052,7 +7553,7 @@ CREATE TABLE `yx_user_task_finish`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户任务完成记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户任务完成记录表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_user_task_finish
@@ -7063,6 +7564,8 @@ INSERT INTO `yx_user_task_finish` VALUES (3, 1, 21, 0, '2020-06-25 18:54:35', NU
 INSERT INTO `yx_user_task_finish` VALUES (4, 16, 21, 0, '2020-06-25 18:54:35', NULL, 0);
 INSERT INTO `yx_user_task_finish` VALUES (5, 2, 21, 0, '2020-06-24 18:34:54', NULL, 0);
 INSERT INTO `yx_user_task_finish` VALUES (6, 17, 21, 0, '2020-06-24 18:35:45', NULL, 0);
+INSERT INTO `yx_user_task_finish` VALUES (7, 1, 28, 0, '2020-09-08 17:31:02', NULL, 0);
+INSERT INTO `yx_user_task_finish` VALUES (8, 16, 28, 0, '2020-09-08 17:31:02', NULL, 0);
 
 -- ----------------------------
 -- Table structure for yx_wechat_live
@@ -7085,12 +7588,20 @@ CREATE TABLE `yx_wechat_live`  (
   `close_comment` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭评论 【0：开启，1：关闭】',
   `close_goods` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭货架 【0：开启，1：关闭】',
   `product_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品id 多个,分割',
+  `close_replay` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭回放【0：开启，1：关闭】',
+  `close_share` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭分享【0：开启，1：关闭】',
+  `close_kf` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭客服【0：开启，1：关闭】',
   PRIMARY KEY (`room_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_wechat_live
 -- ----------------------------
+INSERT INTO `yx_wechat_live` VALUES (20, '专业打印', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 107, 1599656400, 1599703200, '阳光正好', 'simpleton_boy', 'https://consoleapi.xinxintuan.co/file/pic/20200903171208889668.png', 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `yx_wechat_live` VALUES (21, '广告板定制', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg', 103, 1599730609, 1599730645, 'yshop', 'simpleton_boy', 'https://consoleapi.xinxintuan.co/file/pic/20200903171208889668.png', 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `yx_wechat_live` VALUES (22, '户外写真背胶', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', 102, 1599832800, 1599904800, 'yshop', 'simpleton_boy', 'https://consoleapi.xinxintuan.co/file/pic/20200903171208889668.png', 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `yx_wechat_live` VALUES (23, '彩色复印-量大有优惠', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', 102, 1599865200, 1599926400, 'yshop', 'zimengzhiqiu', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL);
+INSERT INTO `yx_wechat_live` VALUES (26, 'X型展架', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', 102, 1599872400, 1599926400, 'yshop', 'zimengzhiqiu', 'https://consoleapi.xinxintuan.co/file/pic/20200903171208889668.png', 0, 0, 0, 0, 0, '7', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for yx_wechat_live_goods
@@ -7114,7 +7625,9 @@ CREATE TABLE `yx_wechat_live_goods`  (
 -- ----------------------------
 -- Records of yx_wechat_live_goods
 -- ----------------------------
-INSERT INTO `yx_wechat_live_goods` VALUES (4, 30, 'http://127.0.0.1:8001/file/pic/20200811184905881166.png', 'pages/shop/GoodsCon/index.html?id=30', '1', '200', NULL, '测试商品', NULL, 447126638, NULL);
+INSERT INTO `yx_wechat_live_goods` VALUES (7, 6, 'https://image.dayouqiantu.cn/news.png', 'pages/shop/GoodsCon/index.html?id=30', '3', '76', '11', '印刷各种印刷', '2', 447137937, 2);
+INSERT INTO `yx_wechat_live_goods` VALUES (8, 5, 'https://image.dayouqiantu.cn/pink.png', 'pages/shop/GoodsCon/index.html?id=30', '3', '30', '11', '广告版定制', '2', 447137941, 2);
+INSERT INTO `yx_wechat_live_goods` VALUES (9, 4, 'https://image.dayouqiantu.cn/news.png', 'pages/shop/GoodsCon/index.html?id=30', '3', '23', '1', '户外写真背胶', '2', 447137947, 1);
 
 -- ----------------------------
 -- Table structure for yx_wechat_media
