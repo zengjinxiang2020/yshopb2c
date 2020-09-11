@@ -132,14 +132,41 @@ public class StoreCombinationController {
             productDto.setAttrs(productFormatDtos);
             productDto.setItems(result.getObject("attr",ArrayList.class));
         }else{
-
-            productDto.setAttr(productFormatDtos.get(0));
+            productFormat(productDto, result);
         }
 
         map.put("productInfo",productDto);
 
         return new ResponseEntity<>(map,HttpStatus.OK);
     }
+
+    /**
+     * 获取商品属性
+     * @param productDto
+     * @param result
+     */
+    private void productFormat(YxStoreCombinationDto productDto, JSONObject result) {
+        Map<String,Object> mapAttr = (Map<String,Object>) result.getObject("value",ArrayList.class).get(0);
+        ProductFormatDto productFormatDto = ProductFormatDto.builder()
+                .pic(mapAttr.get("pic").toString())
+                .price(Double.valueOf(mapAttr.get("price").toString()))
+                .cost(Double.valueOf(mapAttr.get("cost").toString()))
+                .otPrice(Double.valueOf(mapAttr.get("otPrice").toString()))
+                .stock(Integer.valueOf(mapAttr.get("stock").toString()))
+                .barCode(mapAttr.get("barCode").toString())
+                .weight(Double.valueOf(mapAttr.get("weight").toString()))
+                .volume(Double.valueOf(mapAttr.get("volume").toString()))
+                .value1(mapAttr.get("value1").toString())
+                .brokerage(Double.valueOf(mapAttr.get("brokerage").toString()))
+                .brokerageTwo(Double.valueOf(mapAttr.get("brokerageTwo").toString()))
+                .pinkPrice(Double.valueOf(mapAttr.get("pinkPrice").toString()))
+                .pinkStock(Integer.valueOf(mapAttr.get("pinkStock").toString()))
+                .seckillPrice(Double.valueOf(mapAttr.get("seckillPrice").toString()))
+                .seckillStock(Integer.valueOf(mapAttr.get("seckillStock").toString()))
+                .build();
+        productDto.setAttr(productFormatDto);
+    }
+
     @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @Log("修改拼团")
     @ApiOperation(value = "新增/修改拼团")
