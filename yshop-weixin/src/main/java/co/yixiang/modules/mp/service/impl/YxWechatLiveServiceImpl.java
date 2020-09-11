@@ -21,10 +21,7 @@ import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.mp.domain.YxWechatLiveGoods;
 import co.yixiang.modules.mp.service.YxWechatLiveGoodsService;
 import co.yixiang.modules.mp.service.YxWechatLiveService;
-import co.yixiang.modules.mp.service.dto.WxMaLiveInfo;
-import co.yixiang.modules.mp.service.dto.YxWechatLiveDto;
-import co.yixiang.modules.mp.service.dto.YxWechatLiveGoodsDto;
-import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
+import co.yixiang.modules.mp.service.dto.*;
 import co.yixiang.modules.mp.service.mapper.YxWechatLiveMapper;
 import co.yixiang.modules.mp.vo.WechatLiveVo;
 import co.yixiang.modules.mp.domain.YxWechatLive;
@@ -135,6 +132,30 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
         wechatLiveVo.setPageNumber(page.getPageNum());
         wechatLiveVo.setLastPage(page.getPages());
         return wechatLiveVo;
+    }
+
+    @Override
+    public boolean addGoods(UpdateGoodsDto resources) {
+        YxWechatLive wechatLive = new YxWechatLive();
+
+        WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+        if(StringUtils.isNotBlank(resources.getProductId())){
+            wechatLive.setRoomId(Long.valueOf(resources.getRoomId()));
+            wechatLive.setProductId(resources.getProductId());
+            String[] productIds = resources.getProductId().split(",");
+            List<Integer> pids = new ArrayList<>();
+            for (String productId : productIds) {
+                pids.add(Integer.valueOf(productId));
+            }
+            //添加商品
+            try {
+                wxMaService.getLiveService().addGoodsToRoom(resources.getRoomId().intValue(), pids);
+                this.saveOrUpdate(wechatLive);
+            } catch (WxErrorException e) {
+                e.printStackTrace();
+            }
+        }
+        return true;
     }
     @Override
     public boolean saveLive(YxWechatLive resources){
@@ -259,4 +280,6 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
 
         return generator.convert(pageList.getRecords(),YxWechatLiveDto.class);
     }
+
+
 }

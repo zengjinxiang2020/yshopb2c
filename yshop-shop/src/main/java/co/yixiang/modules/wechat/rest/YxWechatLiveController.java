@@ -12,6 +12,7 @@ import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.mp.domain.YxWechatLive;
 import co.yixiang.modules.mp.service.YxWechatLiveService;
+import co.yixiang.modules.mp.service.dto.UpdateGoodsDto;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveDto;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
 import io.swagger.annotations.Api;
@@ -70,6 +71,15 @@ public class YxWechatLiveController {
     @PreAuthorize("@el.check('admin','yxWechatLive:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody YxWechatLive resources){
         return new ResponseEntity<>(yxWechatLiveService.saveLive(resources),HttpStatus.CREATED);
+    }
+
+
+    @PostMapping("/addGoods")
+    @Log("添加商品")
+    @ApiOperation("添加商品")
+    @PreAuthorize("@el.check('admin','yxWechatLive:add')")
+    public ResponseEntity<Object> addGoods(@Validated @RequestBody UpdateGoodsDto resources){
+        return new ResponseEntity<>(yxWechatLiveService.addGoods(resources),HttpStatus.CREATED);
     }
 
     @PutMapping

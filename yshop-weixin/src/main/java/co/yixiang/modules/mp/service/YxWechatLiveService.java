@@ -10,6 +10,7 @@ package co.yixiang.modules.mp.service;
 
 import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
 import co.yixiang.common.service.BaseService;
+import co.yixiang.modules.mp.service.dto.UpdateGoodsDto;
 import co.yixiang.modules.mp.service.dto.WxMaLiveInfo;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveDto;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
@@ -94,4 +95,6 @@ public interface YxWechatLiveService  extends BaseService<YxWechatLive>{
      * @return List
      */
     List<YxWechatLiveDto> getList(int page, int limit, int order);
+
+    boolean addGoods(UpdateGoodsDto resources);
 }
