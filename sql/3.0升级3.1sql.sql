@@ -4,19 +4,18 @@
 -- 字段修改
 -- ----------------------------
 ALTER TABLE `yx_store_seckill`
-	CHANGE COLUMN `price` `price` DECIMAL(10,2) UNSIGNED NULL DEFAULT '0.00' COMMENT '价格' AFTER `info`,
-	CHANGE COLUMN `cost` `cost` DECIMAL(8,2) UNSIGNED NULL DEFAULT '0.00' COMMENT '成本' AFTER `price`,
-	CHANGE COLUMN `ot_price` `ot_price` DECIMAL(10,2) UNSIGNED NULL DEFAULT '0.00' COMMENT '原价' AFTER `cost`;
-ALTER TABLE yx_store_seckill ADD COLUMN spec_type BIT(1)     COMMENT '规格 0单 1多' AFTER time_id;
+	CHANGE COLUMN `price` `price` DECIMAL(10,2) UNSIGNED COMMENT '价格' AFTER `info`,
+	CHANGE COLUMN `cost` `cost` DECIMAL(8,2) UNSIGNED COMMENT '成本' AFTER `price`,
+	CHANGE COLUMN `ot_price` `ot_price` DECIMAL(10,2) UNSIGNED COMMENT '原价' AFTER `cost`;
+ALTER TABLE yx_store_seckill ADD COLUMN spec_type tinyint(1)     COMMENT '规格 0单 1多' AFTER time_id;
 ALTER TABLE yx_store_seckill ADD COLUMN temp_id INT(10)     COMMENT '运费模板id' AFTER spec_type;
-ALTER TABLE yx_store_seckill ADD COLUMN is_sub INT(10)     COMMENT '规格设置' AFTER temp_id;
+ALTER TABLE yx_store_seckill MODIFY COLUMN give_integral DECIMAL(10,2) UNSIGNED    COMMENT '返多少积分';
 ALTER TABLE `yx_store_combination`
 	CHANGE COLUMN `price` `price` DECIMAL(10,2) UNSIGNED NULL DEFAULT '0.00' COMMENT '价格' AFTER `info`,
 	CHANGE COLUMN `stock` `stock` INT(10) UNSIGNED NULL DEFAULT '0' COMMENT '库存' AFTER `sales`,
 	CHANGE COLUMN `unit_name` `unit_name` VARCHAR(32) NULL DEFAULT '' COMMENT '单位名' AFTER `browse`;
-ALTER TABLE yx_store_combination ADD COLUMN spec_type BIT(1)     COMMENT '规格 0单 1多' AFTER unit_name;
+ALTER TABLE yx_store_combination ADD COLUMN spec_type tinyint(1)     COMMENT '规格 0单 1多' AFTER unit_name;
 ALTER TABLE yx_store_combination ADD COLUMN temp_id INT(10)     COMMENT '运费模板ID' AFTER spec_type;
-ALTER TABLE yx_store_combination ADD COLUMN is_sub INT(10)     COMMENT '规格设置' AFTER temp_id;
 ALTER TABLE yx_store_combination DROP is_postage;
 ALTER TABLE yx_store_combination DROP postage;
 ALTER TABLE yx_store_product_attr_value ADD COLUMN pink_price DECIMAL(8,2) NOT NULL    COMMENT '拼团价' AFTER brokerage_two;
@@ -96,6 +95,9 @@ CREATE TABLE `yx_wechat_live`  (
   `close_comment` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭评论 【0：开启，1：关闭】',
   `close_goods` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭货架 【0：开启，1：关闭】',
   `product_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品id 多个,分割',
+  `close_replay` tinyint(1)  NULL DEFAULT NULL COMMENT '是否关闭回放【0：开启，1：关闭】',
+  `close_share` tinyint(1)  NULL DEFAULT NULL COMMENT '是否关闭分享【0：开启，1：关闭】',
+  `close_kf` tinyint(1)  NULL DEFAULT NULL COMMENT '是否关闭客服【0：开启，1：关闭】',
   PRIMARY KEY (`room_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信直播表' ROW_FORMAT = Dynamic;
 
