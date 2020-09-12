@@ -553,10 +553,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             map.put("规格", "默认");
             productFormatDto.setDetail(map);
             yxStoreProductAttrService.insertYxStoreProductAttr(ListUtil.toList(fromatDetailDto),
-                    ListUtil.toList(productFormatDto), storeProductDto.getId());
+                    ListUtil.toList(productFormatDto), yxStoreProduct.getId());
         } else {
             yxStoreProductAttrService.insertYxStoreProductAttr(storeProductDto.getItems(),
-                    storeProductDto.getAttrs(), storeProductDto.getId());
+                    storeProductDto.getAttrs(), yxStoreProduct.getId());
         }
 
 
