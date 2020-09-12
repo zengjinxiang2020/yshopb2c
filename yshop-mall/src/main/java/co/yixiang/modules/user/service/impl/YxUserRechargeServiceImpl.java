@@ -85,6 +85,7 @@ public class YxUserRechargeServiceImpl extends BaseServiceImpl<UserRechargeMappe
 
         //最终充值金额
         BigDecimal newPrice = NumberUtil.add(userRecharge.getPrice(),user.getNowMoney());
+        newPrice = newPrice.add(userRecharge.getGivePrice());
 
 
         //增加流水
