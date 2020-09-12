@@ -2202,10 +2202,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         if(_status == 3){
 
             String refundTime = DateUtil.formatDateTime(yxStoreOrder.getRefundReasonTime());
-            String str = "<b style='color:#f124c7'>申请退款</b><br/>"+
-                    "<span>退款原因："+yxStoreOrder.getRefundReasonWap()+"</span><br/>" +
-                    "<span>备注说明："+yxStoreOrder.getRefundReasonWapExplain()+"</span><br/>" +
-                    "<span>退款时间："+refundTime+"</span><br/>";
+            String str = "<b style='color:#f124c7'>申请退款</b>"+
+                    "<span>退款原因："+yxStoreOrder.getRefundReasonWap()+"</span>" +
+                    "<span>备注说明："+yxStoreOrder.getRefundReasonWapExplain()+"</span>" +
+                    "<span>退款时间："+refundTime+"</span>";
             orderStatusStr = str;
         }
         yxStoreOrderDto.setStatusName(orderStatusStr);
