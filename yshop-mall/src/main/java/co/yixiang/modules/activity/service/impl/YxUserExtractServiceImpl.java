@@ -198,9 +198,10 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
             throw new BadRequestException("请选择审核状态");
         }
 
-        if(ShopCommonEnum.EXTRACT_0.getValue().equals(resources.getStatus())){
-            throw new BadRequestException("请选择审核状态");
+        if(!ShopCommonEnum.EXTRACT_0.getValue().equals(resources.getStatus())){
+            throw new BadRequestException("该申请已经处理过拉！");
         }
+
         if(ShopCommonEnum.EXTRACT_MINUS_1.getValue().equals(resources.getStatus())){
             if(StrUtil.isEmpty(resources.getFailMsg())){
                 throw new BadRequestException("请填写失败原因");
