@@ -12,6 +12,7 @@ import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.activity.domain.YxStoreCombination;
 import co.yixiang.modules.activity.service.dto.YxStoreCombinationDto;
 import co.yixiang.modules.activity.service.dto.YxStoreCombinationQueryCriteria;
+import co.yixiang.modules.activity.vo.CombinationQueryVo;
 import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +36,7 @@ public interface YxStoreCombinationService  extends BaseService<YxStoreCombinati
      * @param limit limit
      * @return list
      */
-    List<YxStoreCombinationQueryVo> getList(int page, int limit);
+    CombinationQueryVo getList(int page, int limit);
 
     /**
      * 获取拼团详情

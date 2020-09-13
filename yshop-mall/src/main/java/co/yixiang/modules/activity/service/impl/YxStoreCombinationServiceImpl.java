@@ -23,6 +23,7 @@ import co.yixiang.enums.SpecTypeEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.activity.domain.YxStoreCombination;
 import co.yixiang.modules.activity.domain.YxStorePink;
+import co.yixiang.modules.activity.domain.YxStoreSeckill;
 import co.yixiang.modules.activity.domain.YxStoreVisit;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
@@ -32,12 +33,15 @@ import co.yixiang.modules.activity.service.dto.YxStoreCombinationQueryCriteria;
 import co.yixiang.modules.activity.service.mapper.YxStoreCombinationMapper;
 import co.yixiang.modules.activity.service.mapper.YxStorePinkMapper;
 import co.yixiang.modules.activity.service.mapper.YxStoreVisitMapper;
+import co.yixiang.modules.activity.vo.CombinationQueryVo;
 import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
+import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
 import co.yixiang.modules.product.service.YxStoreProductAttrService;
 import co.yixiang.modules.product.service.YxStoreProductAttrValueService;
 import co.yixiang.modules.product.service.YxStoreProductReplyService;
+import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.modules.product.service.dto.FromatDetailDto;
 import co.yixiang.modules.product.service.dto.ProductFormatDto;
 import co.yixiang.modules.product.service.dto.ProductResultDto;
@@ -47,8 +51,10 @@ import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -59,6 +65,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -89,6 +96,9 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
     private YxStoreProductAttrValueService yxStoreProductAttrValueService;
     @Autowired
     private YxShippingTemplatesService shippingTemplatesService;
+
+    @Autowired
+    private YxStoreProductService storeProductService;
 
 
 
@@ -164,9 +174,29 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
      * @return list
      */
     @Override
-    public List<YxStoreCombinationQueryVo> getList(int page, int limit) {
+    public CombinationQueryVo getList(int page, int limit) {
+        CombinationQueryVo combinationQueryVo = new CombinationQueryVo();
+        Date nowTime = new Date();
         Page<YxStoreCombination> pageModel = new Page<>(page, limit);
-        return yxStoreCombinationMapper.getCombList(pageModel);
+        QueryWrapper<YxStoreCombination> wrapper = new QueryWrapper<>();
+        wrapper.lambda()
+                .eq(YxStoreCombination::getIsShow,1)
+                .le(YxStoreCombination::getStartTime,nowTime)
+                .ge(YxStoreCombination::getStopTime,nowTime)
+                .orderByDesc(YxStoreCombination::getSort);
+        IPage<YxStoreCombination> yxStoreCombinationIPage = yxStoreCombinationMapper.selectPage(pageModel, wrapper);
+
+        List<YxStoreCombinationQueryVo> collect = yxStoreCombinationIPage.getRecords().stream().map(i -> {
+            YxStoreCombinationQueryVo yxStoreCombinationQueryVo = new YxStoreCombinationQueryVo();
+            YxStoreProduct product = storeProductService.getById(i.getProductId());
+            BeanUtils.copyProperties(i, yxStoreCombinationQueryVo);
+            yxStoreCombinationQueryVo.setSales(product.getSales());
+            yxStoreCombinationQueryVo.setProductPrice(product.getPrice());
+            return yxStoreCombinationQueryVo;
+        }).collect(Collectors.toList());
+        combinationQueryVo.setStoreCombinationQueryVos(collect);
+        combinationQueryVo.setLastPage(yxStoreCombinationIPage.getPages());
+        return combinationQueryVo;
     }
 
 

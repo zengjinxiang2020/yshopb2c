@@ -20,6 +20,7 @@ import co.yixiang.modules.activity.param.PinkCancelParam;
 import co.yixiang.modules.activity.param.PinkShareParam;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
+import co.yixiang.modules.activity.vo.CombinationQueryVo;
 import co.yixiang.modules.activity.vo.PinkInfoVo;
 import co.yixiang.modules.activity.vo.StoreCombinationVo;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
@@ -80,8 +81,8 @@ public class StoreCombinationController {
             @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
     })
     @ApiOperation(value = "拼团产品列表",notes = "拼团产品列表")
-    public ApiResult<List<YxStoreCombinationQueryVo>> getList(@RequestParam(value = "page",defaultValue = "1") int page,
-                                                              @RequestParam(value = "limit",defaultValue = "10") int limit){
+    public ApiResult<CombinationQueryVo> getList(@RequestParam(value = "page",defaultValue = "1") int page,
+                                                 @RequestParam(value = "limit",defaultValue = "10") int limit){
         return ApiResult.ok(storeCombinationService.getList(page, limit));
     }
 

@@ -12,6 +12,8 @@ import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.activity.domain.YxStoreCombination;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -33,6 +35,8 @@ public interface YxStoreCombinationMapper extends CoreMapper<YxStoreCombination>
             " WHERE c.is_show = 1 AND c.is_del = 0 AND c.start_time < now() " +
             " AND c.stop_time > now() ORDER BY c.sort desc,c.id desc")
     List<YxStoreCombinationQueryVo> getCombList(Page page);
+
+    IPage<YxStoreCombination> selectPage(IPage<YxStoreCombination> page, @Param("ew") Wrapper<YxStoreCombination> queryWrapper);
 
     @Select("SELECT c.id,c.effective_time as effectiveTime,c.image,c.people,c.price,c.browse," +
             "c.description,c.image,c.images,c.info," +
