@@ -187,12 +187,10 @@ public class CreatShareProductService {
             }
         }
         else{//其他
-            String userType = userInfo.getUserType();
-            if(!userType.equals(AppFromEnum.ROUNTINE.getValue())) {
-                userType = AppFromEnum.H5.getValue();
+            if(!from.equals(AppFromEnum.ROUNTINE.getValue())) {
             }
 
-            String name = uid + "_"+userType+"_user_wap.jpg";
+            String name = uid + "_"+from+"_user_wap.jpg";
 
             YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
             String fileDir = path+"qrcode"+File.separator;
@@ -200,8 +198,10 @@ public class CreatShareProductService {
             if(ObjectUtil.isNull(attachment)){
                 //生成二维码
                 //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
-                if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
+                if(from.equals(AppFromEnum.ROUNTINE.getValue())){
                     siteUrl = siteUrl+"/distribution/";
+                }else if(AppFromEnum.UNIAPPH5.getValue().equals(from)){
+                    siteUrl = siteUrl+"/pages/home/index";
                 }
                 File file = FileUtil.mkdir(new File(fileDir));
                 QrCodeUtil.generate(siteUrl+"?spread="+uid, 180, 180,
@@ -215,7 +215,7 @@ public class CreatShareProductService {
                 qrcodeUrl = attachment.getAttDir();
             }
 
-            String spreadPicName = uid + "_"+userType+"_user_spread.jpg";
+            String spreadPicName = uid + "_"+from+"_user_spread.jpg";
             String spreadPicPath = fileDir+spreadPicName;
 
             YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
@@ -274,7 +274,7 @@ public class CreatShareProductService {
      * @return url
      */
     public String getBargainPosterUrl(Long bargainId, YxUser userInfo,String siteUrl,
-                                      String apiUrl,String path){
+                                      String apiUrl,String path,String from){
         Long uid = userInfo.getUid();
         YxStoreBargain storeBargainQueryVo = storeBargainService
                 .getById(bargainId);
@@ -291,11 +291,8 @@ public class CreatShareProductService {
         double surplusPrice = NumberUtil.sub(coverPrice,
                 storeBargainUser.getPrice()).doubleValue();
 
-        String userType = userInfo.getUserType();
-        if(StrUtil.isBlank(userType)) {
-            userType = AppFromEnum.H5.getValue();
-        }
-        String name = bargainId+"_"+uid + "_"+userType+"_bargain_share_wap.jpg";
+
+        String name = bargainId+"_"+uid + "_"+from+"_bargain_share_wap.jpg";
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
         String fileDir = path+"qrcode"+ File.separator;
         String qrcodeUrl = "";
@@ -303,17 +300,20 @@ public class CreatShareProductService {
             //生成二维码
             //判断用户是否小程序,注意小程序二维码生成路径要与H5不一样 不然会导致都跳转到小程序问题
             File file = FileUtil.mkdir(new File(fileDir));
-            if(AppFromEnum.ROUNTINE.getValue().equals(userType)){
+            if(AppFromEnum.ROUNTINE.getValue().equals(from)){
                 siteUrl = siteUrl+"/bargain/";
-                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid+"&pageType=dargain&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
+                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&partake="+uid+"&pageType=dargain&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
             }
-            else if(AppFromEnum.APP.getValue().equals(userType)){
+            else if(AppFromEnum.APP.getValue().equals(from)){
                 siteUrl = siteUrl+"/bargain/";
-                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&spread="+uid+"&pageType=dargain&codeType="+AppFromEnum.APP.getValue(), 180, 180,
+                QrCodeUtil.generate(siteUrl+"?bargainId="+bargainId+"&uid="+uid+"&partake="+uid+"&pageType=dargain&codeType="+AppFromEnum.APP.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
-            }else{
+            }else if(AppFromEnum.H5.getValue().equals(from)){
                 QrCodeUtil.generate(siteUrl+"/activity/dargain_detail/"+bargainId+"/"+uid+"?spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+            }else {
+                QrCodeUtil.generate(siteUrl+"/pages/activity/DargainDetails/index?id=/"+bargainId+"&uid="+uid+"&partake="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
             systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
@@ -323,7 +323,7 @@ public class CreatShareProductService {
             qrcodeUrl = attachment.getAttDir();
         }
 
-        String spreadPicName = bargainId+"_"+uid + "_"+userType+"_bargain_user_spread.jpg";
+        String spreadPicName = bargainId+"_"+uid + "_"+from+"_bargain_user_spread.jpg";
         String spreadPicPath = fileDir+spreadPicName;
 
         YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
@@ -463,7 +463,7 @@ public class CreatShareProductService {
      * @return url
      */
     public String getPinkPosterUrl(Long pinkId, YxUser userInfo,String siteUrl,
-                                      String apiUrl,String path){
+                                      String apiUrl,String path,String from){
         Long uid = userInfo.getUid();
         YxStorePink storePink = storePinkService.getById(pinkId);
         if(ObjectUtil.isNull(storePink)) {
@@ -474,30 +474,29 @@ public class CreatShareProductService {
             throw new YshopException("拼团产品不存在");
         }
 
-        String userType = userInfo.getUserType();
-        if(StrUtil.isBlank(userType)) {
-            userType = AppFromEnum.H5.getValue();
-        }
 
-        String name = pinkId+"_"+uid + "_"+userType+"_pink_share_wap.jpg";
+        String name = pinkId+"_"+uid + "_"+from+"_pink_share_wap.jpg";
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
         String fileDir = path+"qrcode"+ File.separator;
         String qrcodeUrl = "";
         if(ObjectUtil.isNull(attachment)){
             //生成二维码
             File file = FileUtil.mkdir(new File(fileDir));
-            if(userType.equals(AppFromEnum.ROUNTINE.getValue())){
+            if(AppFromEnum.ROUNTINE.getValue().equals(from)){
                 siteUrl = siteUrl+"/pink/";
                 QrCodeUtil.generate(siteUrl+"?pinkId="+pinkId+"&spread="+uid+"&pageType=group&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
             }
-            else if(userType.equals(AppFromEnum.APP.getValue())){
+            else if(AppFromEnum.APP.getValue().equals(from)){
                 siteUrl = siteUrl+"/pink/";
                 QrCodeUtil.generate(siteUrl+"?pinkId="+pinkId+"&spread="+uid+"&pageType=group&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
             }
-            else {
+            else if(AppFromEnum.H5.getValue().equals(from)){
                 QrCodeUtil.generate(siteUrl+"/activity/group_rule/"+pinkId+"?spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+            }else {
+                QrCodeUtil.generate(siteUrl+"/pages/activity/GroupRule/index?id=/"+pinkId+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
 
@@ -510,7 +509,7 @@ public class CreatShareProductService {
             qrcodeUrl = attachment.getAttDir();
         }
 
-        String spreadPicName = pinkId+"_"+uid + "_"+userType+"_pink_user_spread.jpg";
+        String spreadPicName = pinkId+"_"+uid + "_"+from+"_pink_user_spread.jpg";
         String spreadPicPath = fileDir+spreadPicName;
 
         YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);

@@ -138,7 +138,7 @@ public class StoreCombinationController {
         YxUser userInfo = LocalUser.getUser();
         Map<String,Object> map = Maps.newHashMap();
         String spreadUrl = creatShareProductService.getPinkPosterUrl(Long.valueOf(param.getId()),userInfo,
-                siteUrl,apiUrl,path);
+                siteUrl,apiUrl,path,param.getFrom());
         map.put("url",spreadUrl);
         return ApiResult.ok(map);
     }

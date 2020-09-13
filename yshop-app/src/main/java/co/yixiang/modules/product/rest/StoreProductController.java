@@ -138,7 +138,7 @@ public class StoreProductController {
             @ApiImplicitParam(name = "id", value = "商品ID", paramType = "query", dataType = "int")
     })
     @ApiOperation(value = "商品详情海报",notes = "商品详情海报")
-    public ApiResult<String> prodoctPoster(@PathVariable Integer id) throws IOException, FontFormatException {
+    public ApiResult<String> prodoctPoster(@PathVariable Integer id,@RequestParam String from) throws IOException, FontFormatException {
         YxUser userInfo = LocalUser.getUser();
 
         long uid = userInfo.getUid();
@@ -153,11 +153,7 @@ public class StoreProductController {
         if(StrUtil.isEmpty(apiUrl)){
             return ApiResult.fail("未配置api地址");
         }
-        String userType = userInfo.getUserType();
-        if(StrUtil.isBlank(userType)) {
-            userType = AppFromEnum.H5.getValue();
-        }
-        String name = id+"_"+uid + "_"+userType+"_product_detail_wap.jpg";
+        String name = id+"_"+uid + "_"+from+"_product_detail_wap.jpg";
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
         String sepa = File.separator;
         String fileDir = path+"qrcode"+ sepa;
@@ -165,20 +161,24 @@ public class StoreProductController {
         if(ObjectUtil.isNull(attachment)){
             File file = FileUtil.mkdir(new File(fileDir));
             //如果类型是小程序
-            if(AppFromEnum.ROUNTINE.getValue().equals(userType)){
+            if(AppFromEnum.ROUNTINE.getValue().equals(from)){
                 siteUrl = siteUrl+"/product/";
                 //生成二维码
                 QrCodeUtil.generate(siteUrl+"?productId="+id+"&spread="+uid+"&pageType=good&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
             }
-            else if(AppFromEnum.APP.getValue().equals(userType)){
+            else if(AppFromEnum.APP.getValue().equals(from)){
                 siteUrl = siteUrl+"/product/";
                 //生成二维码
                 QrCodeUtil.generate(siteUrl+"?productId="+id+"&spread="+uid+"&pageType=good&codeType="+AppFromEnum.APP.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
-            }else{//如果类型是h5
+            }else if(AppFromEnum.H5.getValue().equals(from)){//如果类型是h5
                 //生成二维码
                 QrCodeUtil.generate(siteUrl+"/detail/"+id+"?spread="+uid, 180, 180,
+                        FileUtil.file(fileDir+name));
+            }else {
+                //生成二维码
+                QrCodeUtil.generate(siteUrl+"/pages/shop/GoodsCon/index?id=/"+id+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
             systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
@@ -188,7 +188,7 @@ public class StoreProductController {
         }else{
             qrcodeUrl = apiUrl + "/api/file/" + attachment.getSattDir();
         }
-        String spreadPicName = id+"_"+uid + "_"+userType+"_product_user_spread.jpg";
+        String spreadPicName = id+"_"+uid + "_"+from+"_product_user_spread.jpg";
         String spreadPicPath = fileDir+spreadPicName;
         String rr =  creatShareProductService.creatProductPic(storeProduct,qrcodeUrl,
                 spreadPicName,spreadPicPath,apiUrl);

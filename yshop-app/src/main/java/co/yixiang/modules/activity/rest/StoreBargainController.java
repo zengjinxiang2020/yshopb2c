@@ -255,7 +255,7 @@ public class StoreBargainController {
         }
         YxUser userInfo = LocalUser.getUser();
         Map<String,Object> map = Maps.newHashMap();
-        String url = creatShareProductService.getBargainPosterUrl(bargainId,userInfo,siteUrl,apiUrl,path);
+        String url = creatShareProductService.getBargainPosterUrl(bargainId,userInfo,siteUrl,apiUrl,path,param.getFrom());
         map.put("url",url);
         return ApiResult.ok(map);
     }
