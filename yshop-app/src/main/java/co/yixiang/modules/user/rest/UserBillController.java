@@ -120,7 +120,7 @@ public class UserBillController {
             @ApiImplicitParam(name = "form", value = "来源", paramType = "query", dataType = "string")
     })
     @ApiOperation(value = "分销二维码海报生成",notes = "分销二维码海报生成")
-    public ApiResult<List<Map<String,Object>>> spreadBanner(@RequestParam(value = "",required=false) String form){
+    public ApiResult<List<Map<String,Object>>> spreadBanner(@RequestParam(value = "",required=false) String from){
         YxUser yxUser = LocalUser.getUser();
         String siteUrl = systemConfigService.getData(SystemConfigConstants.SITE_URL);
         if(StrUtil.isEmpty(siteUrl)){
@@ -131,7 +131,7 @@ public class UserBillController {
             throw new YshopException("未配置api地址!");
         }
 
-        String spreadUrl = creatShareProductService.getSpreadUrl(form,yxUser,siteUrl,apiUrl,path);
+        String spreadUrl = creatShareProductService.getSpreadUrl(from,yxUser,siteUrl,apiUrl,path);
 
         List<Map<String,Object>> list = new ArrayList<>();
 
