@@ -61,9 +61,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
-* @author hupeng
-* @date 2019-10-04
-*/
+ * @author hupeng
+ * @date 2019-10-04
+ */
 @Api(tags = "商城:商品管理")
 @RestController
 @RequestMapping("api")
@@ -165,6 +165,7 @@ public class StoreProductController {
         //商品分类
         List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
                 .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+                .orderByAsc(YxStoreCategory::getPid)
                 .list();
 
         List<Map<String,Object>> cateList = new ArrayList<>();
@@ -265,7 +266,12 @@ public class StoreProductController {
                 data.remove(i);
 
                 i--;
-                this.makeCate(data,cateList,storeCategory.getId(),level + 1);
+                if(storeCategory.getPid() > 0){
+                    this.makeCate(data,cateList,storeCategory.getPid(),level);
+                }else{
+                    this.makeCate(data,cateList,storeCategory.getId(),level + 1);
+                }
+
             }
         }
 
