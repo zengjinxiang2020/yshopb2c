@@ -313,7 +313,7 @@ public class CreatShareProductService {
                 QrCodeUtil.generate(siteUrl+"/activity/dargain_detail/"+bargainId+"/"+uid+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }else {
-                QrCodeUtil.generate(siteUrl+"/pages/activity/DargainDetails/index?id=/"+bargainId+"&uid="+uid+"&partake="+uid, 180, 180,
+                QrCodeUtil.generate(siteUrl+"/pages/activity/DargainDetails/index?id="+bargainId+"&uid="+uid+"&partake="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
             systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
@@ -496,7 +496,7 @@ public class CreatShareProductService {
                 QrCodeUtil.generate(siteUrl+"/activity/group_rule/"+pinkId+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }else {
-                QrCodeUtil.generate(siteUrl+"/pages/activity/GroupRule/index?id=/"+pinkId+"?spread="+uid, 180, 180,
+                QrCodeUtil.generate(siteUrl+"/pages/activity/GroupRule/index?id="+pinkId+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
 

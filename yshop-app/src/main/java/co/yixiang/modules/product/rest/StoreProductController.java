@@ -178,7 +178,7 @@ public class StoreProductController {
                         FileUtil.file(fileDir+name));
             }else {
                 //生成二维码
-                QrCodeUtil.generate(siteUrl+"/pages/shop/GoodsCon/index?id=/"+id+"?spread="+uid, 180, 180,
+                QrCodeUtil.generate(siteUrl+"/pages/shop/GoodsCon/index?id="+id+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
             systemAttachmentService.attachmentAdd(name,String.valueOf(FileUtil.size(file)),
