@@ -504,7 +504,7 @@ public class CreatShareProductService {
                 QrCodeUtil.generate(siteUrl+"/activity/group_rule/"+pinkId+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }else {
-                QrCodeUtil.generate(siteUrl+"/pages/activity/GroupRule/index?id="+pinkId+"?spread="+uid, 180, 180,
+                QrCodeUtil.generate(siteUrl+"/pages/activity/GroupRule/index?id="+pinkId+"&spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
 
