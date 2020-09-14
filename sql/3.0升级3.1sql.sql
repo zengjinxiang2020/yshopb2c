@@ -46,7 +46,7 @@ INSERT INTO `menu` VALUES (252, b'0', '二级菜单2', 'nested/menu2/index', 248
 INSERT INTO `menu` VALUES (253, b'0', '浏览记录', 'monitor/log/mlog', 40, 15, 'log', 'viewlog', b'0', b'0', 'Viewlog', '2020-07-31 09:47:11', 'log:list', 1, '2020-07-31 09:49:39', 0);
 INSERT INTO `menu` VALUES (256, b'0', '商品收藏', 'shop/collect/index', 40, 16, 'menu', 'productRelation', b'0', b'0', 'ProductRelation', '2020-09-03 14:32:49', 'yxStoreProductRelation:list', 1, '2020-09-03 16:21:08', 0);
 INSERT INTO `menu` VALUES (257, b'0', '用户足迹', 'shop/foot/index', 40, 17, 'list', 'footRelation', b'0', b'0', 'FootRelation', '2020-09-03 16:20:21', 'yxStoreProductRelation:list', 1, '2020-09-03 16:21:16', 0);
-
+INSERT INTO `menu` VALUES (258, b'0', '订单详情', 'shop/order/detail', 53, 999, 'sqlMonitor', 'detail/:id', b'0', b'1', 'Detail', '2020-09-10 07:29:34', NULL, 1, '2020-09-10 08:52:09', 0);
 -- ----------------------------
 -- 菜单添加权限
 -- ----------------------------
@@ -68,6 +68,7 @@ INSERT INTO `roles_menus` VALUES (252, 1);
 INSERT INTO `roles_menus` VALUES (253, 1);
 INSERT INTO `roles_menus` VALUES (256, 1);
 INSERT INTO `roles_menus` VALUES (257, 1);
+INSERT INTO `roles_menus` VALUES (258, 1);
 
 
 
