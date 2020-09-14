@@ -9,6 +9,7 @@ ALTER TABLE `yx_store_seckill`
 	CHANGE COLUMN `ot_price` `ot_price` DECIMAL(10,2) UNSIGNED COMMENT '原价' AFTER `cost`;
 ALTER TABLE yx_store_seckill ADD COLUMN spec_type tinyint(1)     COMMENT '规格 0单 1多' AFTER time_id;
 ALTER TABLE yx_store_seckill ADD COLUMN temp_id INT(10)     COMMENT '运费模板id' AFTER spec_type;
+ALTER TABLE yx_store_pink ADD COLUMN unique_id VARCHAR(128)     COMMENT '库存唯一值' AFTER is_del;
 ALTER TABLE yx_store_seckill MODIFY COLUMN give_integral DECIMAL(10,2) UNSIGNED    COMMENT '返多少积分';
 ALTER TABLE `yx_store_combination`
 	CHANGE COLUMN `price` `price` DECIMAL(10,2) UNSIGNED NULL DEFAULT '0.00' COMMENT '价格' AFTER `info`,
