@@ -17,6 +17,7 @@ import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.category.domain.YxStoreCategory;
 import co.yixiang.modules.category.service.YxStoreCategoryService;
+import co.yixiang.modules.category.service.dto.YxStoreCategoryDto;
 import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.domain.YxStoreProductAttrResult;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
@@ -34,6 +35,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.additional.query.impl.LambdaQueryChainWrapper;
+import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -42,6 +45,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,13 +55,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -99,9 +97,9 @@ public class StoreProductController {
         List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
                 .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
                 .list();
-        List<Map<String,Object>> cateList = new ArrayList<>();
+        List<Map<String,Object>> cateList = new LinkedList<>();
         Map<String, Object> queryAll = yxStoreProductService.queryAll(criteria, pageable);
-        queryAll.put("cateList", this.makeCate(storeCategories,cateList,0,1));
+        queryAll.put("cateList", this.makeCate(cateList));
         return new ResponseEntity<>(queryAll,HttpStatus.OK);
     }
 
@@ -162,14 +160,8 @@ public class StoreProductController {
         List<YxShippingTemplates> shippingTemplatesList = yxShippingTemplatesService.list();
         map.put("tempList", shippingTemplatesList);
 
-        //商品分类
-        List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
-                .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
-                .orderByAsc(YxStoreCategory::getPid)
-                .list();
-
-        List<Map<String,Object>> cateList = new ArrayList<>();
-        map.put("cateList", this.makeCate(storeCategories,cateList,0,1));
+        List<Map<String,Object>> cateList = new LinkedList<>();
+        map.put("cateList", this.makeCate(cateList));
 
         //商品规格
         map.put("ruleList",yxStoreProductRuleService.list());
@@ -238,50 +230,34 @@ public class StoreProductController {
 
 
     /**
-     *  分类递归
-     * @param data 分类列表
-     * @param pid 附件id
-     * @param level d等级
+     *  分类
      * @return list
      */
-    private List<Map<String,Object>> makeCate(List<YxStoreCategory> data,List<Map<String,Object>> cateList,int pid, int level)
+    private List<Map<String,Object>> makeCate(List<Map<String,Object>> cateList)
     {
         String html = "|-----";
-        String newHtml = "";
-
-        for (int i = 0; i < data.size(); i++) {
-            YxStoreCategory storeCategory = data.get(i);
-            int catePid =  storeCategory.getPid();
+        List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
+                .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+                .eq(YxStoreCategory::getPid, 0)
+                .list();
+        for (YxStoreCategory storeCategory : storeCategories) {
             Map<String,Object> map = new HashMap<>();
-            if(catePid == pid){
-                newHtml = String.join("", Collections.nCopies(level,html));
-                map.put("value",storeCategory.getId());
-                map.put("label",newHtml + storeCategory.getCateName());
-                if(storeCategory.getPid() == 0){
-                    map.put("disabled",0);
-                }else{
-                    map.put("disabled",1);
-                }
-                cateList.add(map);
-                data.remove(i);
-
-                i--;
-                if(storeCategory.getPid() > 0){
-                    this.makeCate(data,cateList,storeCategory.getPid(),level);
-                }else{
-                    this.makeCate(data,cateList,storeCategory.getId(),level + 1);
-                }
-
+            map.put("value",storeCategory.getId());
+            map.put("label",html + html + storeCategory.getCateName());
+            map.put("disabled",0);
+            cateList.add(map);
+            List<YxStoreCategory> categoriesChild = yxStoreCategoryService.lambdaQuery()
+                    .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+                    .eq(YxStoreCategory::getPid, storeCategory.getId()).list();
+            for (YxStoreCategory categoryChild : categoriesChild) {
+                Map<String,Object> childMap = new HashMap<>();
+                childMap.put("value",categoryChild.getId());
+                childMap.put("label",html  + categoryChild.getCateName());
+                childMap.put("disabled",1);
+                cateList.add(childMap);
             }
         }
-
-
         return cateList;
     }
-
-
-
-
-
 
 }
