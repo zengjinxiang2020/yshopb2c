@@ -96,6 +96,7 @@ public class StoreProductController {
         //商品分类
         List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
                 .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+                .orderByAsc(YxStoreCategory::getPid)
                 .list();
         List<Map<String,Object>> cateList = new ArrayList<>();
         Map<String, Object> queryAll = yxStoreProductService.queryAll(criteria, pageable);
