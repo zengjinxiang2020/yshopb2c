@@ -20,6 +20,7 @@ import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.vo.UserOrderCountVo;
 import co.yixiang.modules.product.service.YxStoreProductRelationService;
 import co.yixiang.modules.product.vo.YxStoreProductRelationQueryVo;
+import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.param.UserEditParam;
@@ -47,6 +48,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static co.yixiang.constant.SystemConfigConstants.YSHOP_SHOW_RECHARGE;
+
 /**
  * <p>
  * 用户控制器
@@ -67,7 +70,7 @@ public class UserController {
     private final YxStoreProductRelationService relationService;
     private final YxUserSignService userSignService;
     private final YxUserBillService userBillService;
-
+    private final YxSystemConfigService systemConfigService;
 
 
     /**
@@ -138,6 +141,7 @@ public class UserController {
         map.put("now_money",yxUser.getNowMoney());
         map.put("orderStatusSum",userMoneys[0]);
         map.put("recharge",userMoneys[1]);
+        map.put("is_hide",systemConfigService.getData(YSHOP_SHOW_RECHARGE));
         return ApiResult.ok(map);
     }
 

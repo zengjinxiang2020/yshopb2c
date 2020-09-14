@@ -22,7 +22,7 @@ public class SystemConfigConstants {
     public final static String STORE_SEFL_MENTION="store_self_mention";
     public final static String STORE_USER_MIN_RECHARGE="store_user_min_recharge";
     public final static String USER_EXTRACT_MIN_PRICE="user_extract_min_price";
-
+    public final static String YSHOP_SHOW_RECHARGE = "yshop_show_recharge";
     //微信相关配置
     public final static String WECHAT_APPID="wechat_appid";
     public final static String WECHAT_APPSECRET="wechat_appsecret";
