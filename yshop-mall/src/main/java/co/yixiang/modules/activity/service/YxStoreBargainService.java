@@ -116,4 +116,10 @@ public interface YxStoreBargainService  extends BaseService<YxStoreBargain>{
     * @throws IOException /
     */
     void download(List<YxStoreBargainDto> all, HttpServletResponse response) throws IOException;
+
+    /**
+     * 删除砍价海报
+     * @param id
+     */
+    void deleteBargainImg(String id);
 }

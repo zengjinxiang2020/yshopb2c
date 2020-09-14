@@ -294,6 +294,10 @@ public class CreatShareProductService {
 
         String name = bargainId+"_"+uid + "_"+from+"_bargain_share_wap.jpg";
         YxSystemAttachment attachment = systemAttachmentService.getInfo(name);
+        //删除已经存在的砍价海报图片
+        if (ObjectUtil.isNotNull(attachment)) {
+            storeBargainService.deleteBargainImg(name);
+        }
         String fileDir = path+"qrcode"+ File.separator;
         String qrcodeUrl = "";
         if(ObjectUtil.isNull(attachment)){
@@ -327,6 +331,10 @@ public class CreatShareProductService {
         String spreadPicPath = fileDir+spreadPicName;
 
         YxSystemAttachment attachmentT = systemAttachmentService.getInfo(spreadPicName);
+        //删除已经存在的砍价海报图片
+        if (ObjectUtil.isNotNull(attachmentT)) {
+            storeBargainService.deleteBargainImg(spreadPicName);
+        }
         String spreadUrl = "";
         File newFile = new File("poster.jpg");
         File newFileT = new File("simsunb.ttf");

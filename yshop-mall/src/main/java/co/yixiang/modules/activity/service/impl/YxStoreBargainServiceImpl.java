@@ -418,4 +418,14 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
         }
         FileUtil.downloadExcel(list, response);
     }
+
+    /**
+     * 删除砍价海报
+     *
+     * @param name
+     */
+    @Override
+    public void deleteBargainImg(String name) {
+        baseMapper.deleteBargainImg(name);
+    }
 }

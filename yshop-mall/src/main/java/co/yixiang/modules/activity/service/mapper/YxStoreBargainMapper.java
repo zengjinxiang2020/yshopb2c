@@ -11,6 +11,7 @@ package co.yixiang.modules.activity.service.mapper;
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.activity.domain.YxStoreBargain;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -53,4 +54,6 @@ public interface YxStoreBargainMapper extends CoreMapper<YxStoreBargain> {
             " where id=#{id}")
     void addBargainLook(@Param("id") Long id);
 
+    @Delete("delete from yx_system_attachment where name = #{name}")
+    void deleteBargainImg(@Param("name") String name);
 }
