@@ -105,6 +105,8 @@ public class YxStorePink extends BaseDomain {
     @ApiModelProperty(value = "状态1进行中2已完成3未完成")
     private Integer status;
 
+    @ApiModelProperty(value = "库存唯一值")
+    private String uniqueId;
 
     public void copy(YxStorePink source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

@@ -48,4 +48,6 @@ public class PinkInfoVo implements Serializable {
     @ApiModelProperty(value = "拼团用户信息")
     private YxUserQueryVo userInfo;
 
+    @ApiModelProperty(value = "库存唯一值")
+    private String uniqueId;
 }

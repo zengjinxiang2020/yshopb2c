@@ -32,6 +32,8 @@ import co.yixiang.modules.activity.service.mapper.YxStorePinkMapper;
 import co.yixiang.modules.activity.vo.PinkInfoVo;
 import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
 import co.yixiang.modules.activity.vo.YxStorePinkQueryVo;
+import co.yixiang.modules.cart.domain.YxStoreCart;
+import co.yixiang.modules.cart.service.YxStoreCartService;
 import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
@@ -86,6 +88,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
     private YxUserService yxUserService;
+
+    @Autowired
+    private YxStoreCartService yxStoreCartService;
 
 
     /**
@@ -237,8 +242,8 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         }
 
         YxUserQueryVo userInfo = userService.getYxUserById(uid);
-
-
+        YxStoreOrder yxStoreOrder = storeOrderService.getById(pink.getOrderIdKey());
+        YxStoreCart yxStoreCart = yxStoreCartService.getById(yxStoreOrder.getCartId());
         return PinkInfoVo.builder()
                 .count(count)
                 .currentPinkOrder(this.getCurrentPinkOrderId(id,uid))
@@ -249,6 +254,7 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
                 .storeCombination(storeCombinationQueryVo)
                 .userBool(userBool)
                 .userInfo(userInfo)
+                .uniqueId(yxStoreCart.getProductAttrUnique())
                 .build();
 
     }
@@ -277,6 +283,7 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
     public void createPink(YxStoreOrderQueryVo order) {
         YxStoreCombination storeCombination = combinationService.getById(order.getCombinationId());
         order = storeOrderService.handleOrder(order);
+        YxStoreCart storeCart = yxStoreCartService.getById(order.getCartId());
         int pinkCount = yxStorePinkMapper.selectCount(Wrappers.<YxStorePink>lambdaQuery()
                 .eq(YxStorePink::getOrderId,order.getOrderId()));
         if(pinkCount > 0) {
@@ -300,6 +307,7 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
             Date stopTime = DateUtil.offsetHour(new Date(), storeCombination.getEffectiveTime());
             storePink.setPeople(storeCombination.getPeople());
             storePink.setStopTime(stopTime);
+            storePink.setUniqueId(storeCart.getProductAttrUnique());
             if(order.getPinkId() > 0){ //其他成员入团
                 if(this.getIsPinkUid(order.getPinkId(),order.getUid())) {
                     return;
