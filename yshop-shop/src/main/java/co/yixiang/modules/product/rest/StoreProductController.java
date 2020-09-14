@@ -97,9 +97,9 @@ public class StoreProductController {
         List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
                 .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
                 .list();
-        List<Map<String,Object>> cateList = new LinkedList<>();
+        List<Map<String,Object>> cateList = new ArrayList<>();
         Map<String, Object> queryAll = yxStoreProductService.queryAll(criteria, pageable);
-        queryAll.put("cateList", this.makeCate(cateList));
+        queryAll.put("cateList", this.makeCate(storeCategories,cateList,0,1));
         return new ResponseEntity<>(queryAll,HttpStatus.OK);
     }
 
@@ -160,8 +160,14 @@ public class StoreProductController {
         List<YxShippingTemplates> shippingTemplatesList = yxShippingTemplatesService.list();
         map.put("tempList", shippingTemplatesList);
 
-        List<Map<String,Object>> cateList = new LinkedList<>();
-        map.put("cateList", this.makeCate(cateList));
+        //商品分类
+        List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
+                .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+                .orderByAsc(YxStoreCategory::getPid)
+                .list();
+
+        List<Map<String,Object>> cateList = new ArrayList<>();
+        map.put("cateList", this.makeCate(storeCategories,cateList,0,1));
 
         //商品规格
         map.put("ruleList",yxStoreProductRuleService.list());
@@ -230,33 +236,45 @@ public class StoreProductController {
 
 
     /**
-     *  分类
+     *  分类递归
+     * @param data 分类列表
+     * @param pid 附件id
+     * @param level d等级
      * @return list
      */
-    private List<Map<String,Object>> makeCate(List<Map<String,Object>> cateList)
+    private List<Map<String,Object>> makeCate(List<YxStoreCategory> data,List<Map<String,Object>> cateList,int pid, int level)
     {
         String html = "|-----";
-        List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery()
-                .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
-                .eq(YxStoreCategory::getPid, 0)
-                .list();
-        for (YxStoreCategory storeCategory : storeCategories) {
+        String newHtml = "";
+        List<YxStoreCategory> storeCategories = yxStoreCategoryService.lambdaQuery().eq(YxStoreCategory::getPid, 0).list();
+
+        for (int i = 0; i < data.size(); i++) {
+            YxStoreCategory storeCategory = data.get(i);
+            int catePid =  storeCategory.getPid();
             Map<String,Object> map = new HashMap<>();
-            map.put("value",storeCategory.getId());
-            map.put("label",html + html + storeCategory.getCateName());
-            map.put("disabled",0);
-            cateList.add(map);
-            List<YxStoreCategory> categoriesChild = yxStoreCategoryService.lambdaQuery()
-                    .eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
-                    .eq(YxStoreCategory::getPid, storeCategory.getId()).list();
-            for (YxStoreCategory categoryChild : categoriesChild) {
-                Map<String,Object> childMap = new HashMap<>();
-                childMap.put("value",categoryChild.getId());
-                childMap.put("label",html  + categoryChild.getCateName());
-                childMap.put("disabled",1);
-                cateList.add(childMap);
+            if(catePid == pid){
+                newHtml = String.join("", Collections.nCopies(level,html));
+                map.put("value",storeCategory.getId());
+                map.put("label",newHtml + storeCategory.getCateName());
+                if(storeCategory.getPid() == 0){
+                    map.put("disabled",0);
+                }else{
+                    map.put("disabled",1);
+                }
+                cateList.add(map);
+                data.remove(i);
+
+                i--;
+                if(storeCategory.getPid() > 0){
+                    this.makeCate(data,cateList,storeCategory.getPid(),level);
+                }else{
+                    this.makeCate(data,cateList,storeCategory.getId(),level + 1);
+                }
+
             }
         }
+
+
         return cateList;
     }
 
