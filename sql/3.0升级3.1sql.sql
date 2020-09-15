@@ -26,6 +26,11 @@ ALTER TABLE yx_store_product_attr_value ADD COLUMN seckill_stock INT(10) NOT NUL
 ALTER TABLE yx_wechat_template ADD COLUMN type VARCHAR(30)     COMMENT '类型：template:模板消息 subscribe:订阅消息' AFTER is_del;
 
 -- ----------------------------
+-- 足迹菜单添加
+-- ----------------------------
+INSERT INTO `yx_system_group_data` VALUES (225, 'yshop_my_menus', '{\"imageArr\":[\"https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png\"],\"uniapp_url\":\"/pages/shop/GoodsFoot/index\",\"name\":\"我的足迹\",\"id\":225,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png\",\"sort\":10,\"url\":\"\",\"wxapp_url\":\"\",\"status\":1}', '2020-09-11 09:39:21', '2020-09-11 09:40:49', 10, 1, 0);
+
+-- ----------------------------
 -- 菜单添加
 -- ----------------------------
 INSERT INTO `menu` VALUES (237, b'0', '规格新增、修改', NULL, 233, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-28 16:35:00', 'yxStoreProductRule:add', 2, '2020-07-16 20:09:03', 0);
