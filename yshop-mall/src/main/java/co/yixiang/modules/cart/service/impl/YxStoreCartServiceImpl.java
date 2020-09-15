@@ -196,7 +196,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
 
             if (ObjectUtil.isNull(storeProduct)) {
                 this.removeById(storeCart.getId());
-            } else if ((ShopCommonEnum.SHOW_0.getValue().equals(storeProduct.getIsShow()) || storeProduct.getStock() == 0) && StrUtil.isEmpty(storeCart.getProductAttrUnique())) {
+            } else if (ShopCommonEnum.SHOW_0.getValue().equals(storeProduct.getIsShow()) || (storeProduct.getStock() == 0 && StrUtil.isEmpty(storeCart.getProductAttrUnique()))) {
                 storeCartQueryVo.setProductInfo(storeProduct);
                 invalid.add(storeCartQueryVo);
             } else {
