@@ -28,6 +28,6 @@ public class RegParam {
     @ApiModelProperty(value = "分销绑定关系的ID")
     private String spread;
 
-    @ApiModelProperty(value = "邀请码(预留字段)")
+    @ApiModelProperty(value = "邀请码")
     private String inviteCode;
 }

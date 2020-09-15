@@ -14,24 +14,25 @@ import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.util.IpUtil;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.AppFromEnum;
 import co.yixiang.modules.auth.param.LoginParam;
 import co.yixiang.modules.auth.param.RegParam;
+import co.yixiang.modules.shop.domain.YxSystemAttachment;
+import co.yixiang.modules.shop.service.YxSystemAttachmentService;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
 import co.yixiang.modules.user.vo.OnlineUser;
 import co.yixiang.modules.mp.config.WxMpConfiguration;
 import co.yixiang.modules.mp.config.WxMaConfiguration;
-import co.yixiang.utils.EncryptUtils;
-import co.yixiang.utils.RedisUtils;
-import co.yixiang.utils.ShopKeyUtils;
-import co.yixiang.utils.StringUtils;
+import co.yixiang.utils.*;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.vdurmont.emoji.EmojiParser;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -42,8 +43,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -62,7 +67,7 @@ public class AuthService {
     private final YxUserService userService;
     private final RedisUtils redisUtils;
     private static Integer expiredTimeIn;
-
+    private final YxSystemAttachmentService systemAttachmentService;
 
     @Value("${yshop.security.token-expired-in}")
     public void setExpiredTimeIn(Integer expiredTimeIn) {
@@ -256,6 +261,7 @@ public class AuthService {
      */
     @Transactional
     public void register(RegParam param){
+
         String account = param.getAccount();
         String ip = IpUtil.getRequestIp();
         YxUser user = YxUser.builder()
@@ -271,7 +277,14 @@ public class AuthService {
 
         userService.save(user);
 
-        userService.setSpread(param.getSpread(),user.getUid());
+        //设置推广关系
+        if (StrUtil.isNotBlank(param.getInviteCode())) {
+            YxSystemAttachment systemAttachment = systemAttachmentService.getByCode(param.getInviteCode());
+            if(systemAttachment != null){
+                userService.setSpread(String.valueOf(systemAttachment.getUid()),
+                        user.getUid());
+            }
+        }
 
     }
 
