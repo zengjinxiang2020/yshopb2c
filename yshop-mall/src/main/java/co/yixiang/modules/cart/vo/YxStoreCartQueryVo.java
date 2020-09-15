@@ -1,6 +1,8 @@
 package co.yixiang.modules.cart.vo;
 
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
+import co.yixiang.serializer.DoubleSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -52,14 +54,17 @@ public class YxStoreCartQueryVo implements Serializable {
     private YxStoreProductQueryVo productInfo;
 
     @ApiModelProperty(value = "成本价")
+    @JsonSerialize(using = DoubleSerializer.class)
     private Double costPrice;
 
     @ApiModelProperty(value = "真实价格")
+    @JsonSerialize(using = DoubleSerializer.class)
     private Double truePrice;
 
     @ApiModelProperty(value = "真实库存")
     private Integer trueStock;
 
+    @JsonSerialize(using = DoubleSerializer.class)
     @ApiModelProperty(value = "vip真实价格")
     private Double vipTruePrice;
 

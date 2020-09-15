@@ -4,6 +4,8 @@ package co.yixiang.modules.product.vo;
 
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
+import co.yixiang.serializer.BigDecimalSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -78,15 +80,19 @@ public class YxStoreProductQueryVo implements Serializable {
     private String cateId;
 
     @ApiModelProperty(value = "商品价格")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal price;
 
     @ApiModelProperty(value = "会员价格")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal vipPrice;
 
     @ApiModelProperty(value = "市场价")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal otPrice;
 
     @ApiModelProperty(value = "邮费")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal postage;
 
     @ApiModelProperty(value = "单位名")
@@ -108,6 +114,7 @@ public class YxStoreProductQueryVo implements Serializable {
     private Integer isPostage;
 
     @ApiModelProperty(value = "成本价")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal cost;
 
     @ApiModelProperty(value = "秒杀状态 0 未开启 1已开启")

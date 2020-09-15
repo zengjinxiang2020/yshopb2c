@@ -1,5 +1,7 @@
 package co.yixiang.modules.order.vo;
 
+import co.yixiang.serializer.DoubleSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 @Data
 public class OrderDataVo implements Serializable {
     private Integer count;
+    @JsonSerialize(using = DoubleSerializer.class)
     private Double price;
     private String time;
 }

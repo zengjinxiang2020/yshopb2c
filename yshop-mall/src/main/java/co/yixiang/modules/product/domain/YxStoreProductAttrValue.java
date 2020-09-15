@@ -7,9 +7,11 @@ package co.yixiang.modules.product.domain;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import co.yixiang.serializer.BigDecimalSerializer;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,14 +68,17 @@ public class YxStoreProductAttrValue implements Serializable {
 
     /** 属性金额 */
     @ApiModelProperty(value = "属性金额")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal price;
 
     /** 拼团属性对应的金额 */
     @ApiModelProperty(value = "拼团属性对应的金额")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal pinkPrice;
 
     /** 秒杀属性对应的金额 */
     @ApiModelProperty(value = "秒杀属性对应的金额")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal seckillPrice;
 
     /** 图片 */
@@ -89,6 +94,7 @@ public class YxStoreProductAttrValue implements Serializable {
 
     /** 成本价 */
     @ApiModelProperty(value = "成本价")
+    @JsonSerialize(using = BigDecimalSerializer.class)
     private BigDecimal cost;
 
     /** 商品条码 */

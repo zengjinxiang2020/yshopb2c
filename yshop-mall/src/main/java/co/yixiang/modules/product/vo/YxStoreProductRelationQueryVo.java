@@ -1,5 +1,7 @@
 package co.yixiang.modules.product.vo;
 
+import co.yixiang.serializer.DoubleSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -44,12 +46,14 @@ public class YxStoreProductRelationQueryVo implements Serializable {
     private Integer isShow;
 
     @ApiModelProperty(value = "原价")
+    @JsonSerialize(using = DoubleSerializer.class)
     private Double otPrice;
 
     @ApiModelProperty(value = "父ID")
     private Integer pid;
 
     @ApiModelProperty(value = "产品价格")
+    @JsonSerialize(using = DoubleSerializer.class)
     private Double price;
 
     @ApiModelProperty(value = "产品销量")
