@@ -25,5 +25,5 @@ public class YxStoreProductRelationQueryParam  {
     private String id;
 
     @ApiModelProperty(value = "某种类型的商品(普通商品、秒杀商品)")
-    private String category;
+    private String category = "root";
 }

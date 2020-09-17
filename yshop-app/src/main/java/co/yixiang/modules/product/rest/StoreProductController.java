@@ -251,7 +251,7 @@ public class StoreProductController {
             throw new YshopException("参数非法");
         }
         productRelationService.delRroductRelation(Long.valueOf(param.getId()),
-                uid);
+                uid,param.getCategory());
         return ApiResult.ok();
     }
 

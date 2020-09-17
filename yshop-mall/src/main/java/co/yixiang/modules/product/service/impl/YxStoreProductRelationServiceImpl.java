@@ -96,11 +96,11 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
      * @param uid 用户id
      */
     @Override
-    public void delRroductRelation(long productId,long uid) {
+    public void delRroductRelation(long productId,long uid,String category) {
         YxStoreProductRelation productRelation = this.lambdaQuery()
                 .eq(YxStoreProductRelation::getProductId,productId)
                 .eq(YxStoreProductRelation::getUid,uid)
-                .eq(YxStoreProductRelation::getType,"collect")
+                .eq(YxStoreProductRelation::getType,category)
                 .one();
         if(productRelation == null) {
             throw new YshopException("已取消");

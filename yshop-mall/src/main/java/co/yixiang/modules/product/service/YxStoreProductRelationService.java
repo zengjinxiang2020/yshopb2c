@@ -50,7 +50,7 @@ public interface YxStoreProductRelationService extends BaseService<YxStoreProduc
      * @param productId 商品id
      * @param uid 用户id
      */
-    void delRroductRelation(long productId,long uid);
+    void delRroductRelation(long productId,long uid,String category);
 
     /**
      * 获取用户收藏列表
