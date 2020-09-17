@@ -1,7 +1,9 @@
 package co.yixiang.modules.activity.vo;
 
 import cn.hutool.core.util.StrUtil;
+import co.yixiang.serializer.BigDecimalSerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -49,12 +51,15 @@ public class YxStoreSeckillQueryVo implements Serializable{
 
     }
 
+    @JsonSerialize(using = BigDecimalSerializer.class)
     @ApiModelProperty(value = "价格")
     private BigDecimal price;
 
+    @JsonSerialize(using = BigDecimalSerializer.class)
     @ApiModelProperty(value = "成本")
     private BigDecimal cost;
 
+    @JsonSerialize(using = BigDecimalSerializer.class)
     @ApiModelProperty(value = "原价")
     private BigDecimal otPrice;
 

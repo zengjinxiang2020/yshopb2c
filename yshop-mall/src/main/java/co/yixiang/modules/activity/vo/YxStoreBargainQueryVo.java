@@ -1,5 +1,7 @@
 package co.yixiang.modules.activity.vo;
 
+import co.yixiang.serializer.BigDecimalSerializer;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -54,18 +56,22 @@ public class YxStoreBargainQueryVo implements Serializable {
     @ApiModelProperty(value = "砍价产品名称")
     private String storeName;
 
+    @JsonSerialize(using = BigDecimalSerializer.class)
     @ApiModelProperty(value = "砍价金额")
     private BigDecimal price;
 
+    @JsonSerialize(using = BigDecimalSerializer.class)
     @ApiModelProperty(value = "砍价商品最低价")
     private BigDecimal minPrice;
 
     @ApiModelProperty(value = "每次购买的砍价产品数量")
     private Integer num;
 
+    @JsonSerialize(using = BigDecimalSerializer.class)
     @ApiModelProperty(value = "用户每次砍价的最大金额")
     private BigDecimal bargainMaxPrice;
 
+    @JsonSerialize(using = BigDecimalSerializer.class)
     @ApiModelProperty(value = "用户每次砍价的最小金额")
     private BigDecimal bargainMinPrice;
 
@@ -84,12 +90,14 @@ public class YxStoreBargainQueryVo implements Serializable {
     @ApiModelProperty(value = "砍价活动简介")
     private String info;
 
+    @JsonSerialize(using = BigDecimalSerializer.class)
     @ApiModelProperty(value = "成本价")
     private BigDecimal cost;
 
     @ApiModelProperty(value = "排序")
     private Integer sort;
 
+    @JsonSerialize(using = BigDecimalSerializer.class)
     @ApiModelProperty(value = "邮费")
     private BigDecimal postage;
 
