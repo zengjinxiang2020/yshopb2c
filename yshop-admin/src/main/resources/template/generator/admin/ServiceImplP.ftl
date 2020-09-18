@@ -52,7 +52,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import co.yixiang.base.PageResult;
+import co.yixiang.domain.PageResult;
 /**
 * @author ${author}
 * @date ${date}
