@@ -70,7 +70,7 @@ public class ${className}ServiceImpl extends BaseServiceImpl<${className}Mapper,
     public PageResult<${className}Dto> queryAll(${className}QueryCriteria criteria, Pageable pageable) {
         getPage(pageable);
         PageInfo<${className}> page = new PageInfo<>(queryAll(criteria));
-        return generator.convertPageInfo(page,${className}VO.class);
+        return generator.convertPageInfo(page,${className}Dto.class);
     }
 
 
