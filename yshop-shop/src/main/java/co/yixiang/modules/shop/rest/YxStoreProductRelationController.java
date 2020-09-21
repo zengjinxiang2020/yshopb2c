@@ -9,6 +9,7 @@
 package co.yixiang.modules.shop.rest;
 import java.util.Arrays;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.modules.aop.ForbidSubmit;
 import lombok.AllArgsConstructor;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.product.domain.YxStoreProductRelation;
@@ -72,6 +73,7 @@ public class YxStoreProductRelationController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除ProductRelation")
     @ApiOperation("删除ProductRelation")
     @PreAuthorize("@el.check('admin','yxStoreProductRelation:del')")
