@@ -91,11 +91,12 @@ public class WechatController {
      */
     @GetMapping("/wechat/config")
     @ApiOperation(value = "jssdk配置",notes = "jssdk配置")
-    public ApiResult<Map<String,Object>> jsConfig(@RequestParam(value = "url") String url) throws WxErrorException {
+    public ApiResult<Map<String,Object>> jsConfig(HttpServletRequest request) throws WxErrorException {
         WxMpService wxService = WxMpConfiguration.getWxMpService();
+        String url = request.getParameter("url");
+        log.info("url:"+url);
         WxJsapiSignature jsapiSignature = wxService.createJsapiSignature(url);
         Map<String,Object> map = new LinkedHashMap<>();
-
         map.put("appId",jsapiSignature.getAppId());
         map.put("jsApiList",new String[]{"updateAppMessageShareData","openLocation","scanQRCode",
                 "chooseWXPay","updateAppMessageShareData","updateTimelineShareData",
