@@ -10,6 +10,7 @@ package co.yixiang.modules.wechat.rest;
 
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.logging.aop.log.Log;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.mp.domain.YxWechatLive;
 import co.yixiang.modules.mp.service.YxWechatLiveService;
 import co.yixiang.modules.mp.service.dto.UpdateGoodsDto;
@@ -65,6 +66,7 @@ public class YxWechatLiveController {
         return new ResponseEntity<>(yxWechatLiveService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @ForbidSubmit
     @PostMapping
     @Log("新增wxlive")
     @ApiOperation("新增wxlive")
@@ -74,6 +76,7 @@ public class YxWechatLiveController {
     }
 
 
+    @ForbidSubmit
     @PostMapping("/addGoods")
     @Log("添加商品")
     @ApiOperation("添加商品")
@@ -82,6 +85,7 @@ public class YxWechatLiveController {
         return new ResponseEntity<>(yxWechatLiveService.addGoods(resources),HttpStatus.CREATED);
     }
 
+    @ForbidSubmit
     @PutMapping
     @Log("修改wxlive")
     @ApiOperation("修改wxlive")
@@ -91,6 +95,7 @@ public class YxWechatLiveController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除wxlive")
     @ApiOperation("删除wxlive")
     @PreAuthorize("@el.check('admin','yxWechatLive:del')")
