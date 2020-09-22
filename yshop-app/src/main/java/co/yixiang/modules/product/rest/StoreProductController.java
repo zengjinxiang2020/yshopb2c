@@ -138,7 +138,7 @@ public class StoreProductController {
             @ApiImplicitParam(name = "id", value = "商品ID", paramType = "query", dataType = "int")
     })
     @ApiOperation(value = "商品详情海报",notes = "商品详情海报")
-    public ApiResult<String> prodoctPoster(@PathVariable Integer id,@RequestParam String from) throws IOException, FontFormatException {
+    public ApiResult<String> prodoctPoster(@PathVariable Integer id,@RequestParam(value = "from",defaultValue = "h5") String from) throws IOException, FontFormatException {
         YxUser userInfo = LocalUser.getUser();
 
         long uid = userInfo.getUid();
