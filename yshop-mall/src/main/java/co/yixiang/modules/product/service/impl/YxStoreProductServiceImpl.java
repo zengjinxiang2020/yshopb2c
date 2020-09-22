@@ -63,6 +63,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
+import com.qiniu.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -260,7 +261,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         }
 
         wrapper.lambda().orderByDesc(YxStoreProduct::getSort);
-
+        //无其他排序条件时,防止因为商品排序导致商品重复
+        if (StringUtils.isNullOrEmpty(productQueryParam.getPriceOrder()) && StringUtils.isNullOrEmpty(productQueryParam.getSalesOrder())) {
+            wrapper.lambda().orderByDesc(YxStoreProduct::getId);
+        }
         Page<YxStoreProduct> pageModel = new Page<>(productQueryParam.getPage(),
                 productQueryParam.getLimit());
 
