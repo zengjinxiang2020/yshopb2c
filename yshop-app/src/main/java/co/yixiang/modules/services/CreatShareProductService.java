@@ -200,7 +200,7 @@ public class CreatShareProductService {
                 if(from.equals(AppFromEnum.ROUNTINE.getValue())){
                     siteUrl = siteUrl+"/distribution/";
                 }else if(AppFromEnum.UNIAPPH5.getValue().equals(from)){
-                    siteUrl = siteUrl+"/pages/home/index";
+                    siteUrl = siteUrl+"/pages/Loading/index";
                 }
                 File file = FileUtil.mkdir(new File(fileDir));
                 QrCodeUtil.generate(siteUrl+"?spread="+uid, 180, 180,
