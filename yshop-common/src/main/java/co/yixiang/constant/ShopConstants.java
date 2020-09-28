@@ -171,5 +171,7 @@ public interface ShopConstants {
 
 	String YSHOP_WECHAT_PUSH_REMARK = "yshop为您服务！";
 
+	String DEFAULT_UNI_H5_URL = "https://h5.yixiang.co";
+
 
 }

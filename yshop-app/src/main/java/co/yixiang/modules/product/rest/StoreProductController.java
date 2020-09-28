@@ -16,6 +16,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
@@ -178,6 +179,8 @@ public class StoreProductController {
                         FileUtil.file(fileDir+name));
             }else {
                 //生成二维码
+                String uniUrl = systemConfigService.getData(SystemConfigConstants.UNI_SITE_URL);
+                siteUrl =  StrUtil.isNotBlank(uniUrl) ? uniUrl :  ShopConstants.DEFAULT_UNI_H5_URL;
                 QrCodeUtil.generate(siteUrl+"/pages/shop/GoodsCon/index?id="+id+"&spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }

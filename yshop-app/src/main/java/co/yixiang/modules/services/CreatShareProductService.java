@@ -16,6 +16,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import cn.hutool.http.HttpUtil;
 import co.yixiang.api.YshopException;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.OrderInfoEnum;
@@ -200,6 +201,8 @@ public class CreatShareProductService {
                 if(from.equals(AppFromEnum.ROUNTINE.getValue())){
                     siteUrl = siteUrl+"/distribution/";
                 }else if(AppFromEnum.UNIAPPH5.getValue().equals(from)){
+                    String uniUrl = systemConfigService.getData(SystemConfigConstants.UNI_SITE_URL);
+                    siteUrl =  StrUtil.isNotBlank(uniUrl) ? uniUrl :  ShopConstants.DEFAULT_UNI_H5_URL;
                     siteUrl = siteUrl+"/pages/Loading/index";
                 }
                 File file = FileUtil.mkdir(new File(fileDir));
@@ -316,6 +319,8 @@ public class CreatShareProductService {
                 QrCodeUtil.generate(siteUrl+"/activity/dargain_detail/"+bargainId+"/"+uid+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }else {
+                String uniUrl = systemConfigService.getData(SystemConfigConstants.UNI_SITE_URL);
+                siteUrl =  StrUtil.isNotBlank(uniUrl) ? uniUrl :  ShopConstants.DEFAULT_UNI_H5_URL;
                 QrCodeUtil.generate(siteUrl+"/pages/activity/DargainDetails/index?id="+bargainId+"&uid="+uid+"&partake="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }
@@ -503,6 +508,8 @@ public class CreatShareProductService {
                 QrCodeUtil.generate(siteUrl+"/activity/group_rule/"+pinkId+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }else {
+                String uniUrl = systemConfigService.getData(SystemConfigConstants.UNI_SITE_URL);
+                siteUrl =  StrUtil.isNotBlank(uniUrl) ? uniUrl :  ShopConstants.DEFAULT_UNI_H5_URL;
                 QrCodeUtil.generate(siteUrl+"/pages/activity/GroupRule/index?id="+pinkId+"&spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));
             }

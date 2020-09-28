@@ -5,6 +5,7 @@ public class SystemConfigConstants {
     public final static String API="api";
     public final static String API_URL="api_url";
     public final static String SITE_URL="site_url";
+    public final static String UNI_SITE_URL="uni_site_url";
     public final static String TENGXUN_MAP_KEY="tengxun_map_key";
 
     //业务相关配置
