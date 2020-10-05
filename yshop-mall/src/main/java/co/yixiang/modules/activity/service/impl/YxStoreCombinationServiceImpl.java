@@ -188,10 +188,7 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
 
         List<YxStoreCombinationQueryVo> collect = yxStoreCombinationIPage.getRecords().stream().map(i -> {
             YxStoreCombinationQueryVo yxStoreCombinationQueryVo = new YxStoreCombinationQueryVo();
-            YxStoreProduct product = storeProductService.getById(i.getProductId());
             BeanUtils.copyProperties(i, yxStoreCombinationQueryVo);
-            yxStoreCombinationQueryVo.setSales(product.getSales());
-            yxStoreCombinationQueryVo.setProductPrice(product.getPrice());
             return yxStoreCombinationQueryVo;
         }).collect(Collectors.toList());
         combinationQueryVo.setStoreCombinationQueryVos(collect);
