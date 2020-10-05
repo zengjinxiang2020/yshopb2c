@@ -5,6 +5,7 @@ import cn.binarywang.wx.miniapp.bean.WxMaSubscribeMessage;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.mp.domain.YxWechatTemplate;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
@@ -50,7 +51,9 @@ public class WeiXinSubscribeService {
         map.put("keyword3",price);
         map.put("remark", ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.RECHARGE_SUCCESS.getValue());
-        this.sendSubscribeMsg( openid, tempId, "/user/account",map);
+        if(StrUtil.isNotBlank(tempId)) {
+            this.sendSubscribeMsg( openid, tempId, "/user/account",map);
+        }
     }
 
 
@@ -74,7 +77,9 @@ public class WeiXinSubscribeService {
         map.put("time4",simpleDateFormat.format(new Date()));
         map.put("thing5","yshop购买商品");
         String tempId = this.getTempId(WechatTempateEnum.PAY_SUCCESS.getValue());
-        this.sendSubscribeMsg( openid,tempId, "/order/detail/"+orderId,map);
+        if(StrUtil.isNotBlank(tempId)) {
+            this.sendSubscribeMsg( openid,tempId, "/order/detail/"+orderId,map);
+        }
     }
 
     /**
@@ -100,7 +105,9 @@ public class WeiXinSubscribeService {
         map.put("keyword3", time);
         map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.REFUND_SUCCESS.getValue());
-        this.sendSubscribeMsg( openid,tempId, "/order/detail/"+orderId,map);
+        if(StrUtil.isNotBlank(tempId)) {
+            this.sendSubscribeMsg( openid,tempId, "/order/detail/"+orderId,map);
+        }
     }
 
     /**
@@ -126,7 +133,9 @@ public class WeiXinSubscribeService {
         map.put("keyword3",deliveryId);
         map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.DELIVERY_SUCCESS.getValue());
-        this.sendSubscribeMsg( openid,tempId, "/order/detail/"+orderId,map);
+        if(StrUtil.isNotBlank(tempId)) {
+            this.sendSubscribeMsg( openid,tempId, "/order/detail/"+orderId,map);
+        }
     }
 
 
@@ -165,6 +174,9 @@ public class WeiXinSubscribeService {
                 .one();
         if (yxWechatTemplate == null) {
             throw new YshopException("请后台配置key:" + key + "订阅消息id");
+        }
+        if(ShopCommonEnum.IS_STATUS_0.getValue().equals(yxWechatTemplate.getStatus())){
+            return "";
         }
         return yxWechatTemplate.getTempid();
     }

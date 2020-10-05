@@ -11,6 +11,7 @@ package co.yixiang.modules.mp.service;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.mp.config.WxMpConfiguration;
 import co.yixiang.modules.mp.domain.YxWechatTemplate;
 import co.yixiang.modules.user.domain.YxUser;
@@ -68,7 +69,9 @@ public class WeixinTemplateService {
         map.put("keyword3",price);
         map.put("remark", ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.RECHARGE_SUCCESS.getValue());
-        this.sendWxMpTemplateMessage( openid, tempId, this.getSiteUrl()+"/user/account",map);
+        if(StrUtil.isNotBlank(tempId)) {
+            this.sendWxMpTemplateMessage( openid, tempId, this.getSiteUrl()+"/user/account",map);
+        }
     }
 
 
@@ -93,7 +96,9 @@ public class WeixinTemplateService {
         map.put("keyword2",price);
         map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.PAY_SUCCESS.getValue());
-        this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+        if(StrUtil.isNotBlank(tempId)) {
+            this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+        }
     }
 
     /**
@@ -119,7 +124,9 @@ public class WeixinTemplateService {
         map.put("keyword3", time);
         map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.REFUND_SUCCESS.getValue());
-        this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+        if(StrUtil.isNotBlank(tempId)) {
+            this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+        }
     }
 
     /**
@@ -145,7 +152,9 @@ public class WeixinTemplateService {
         map.put("keyword3",deliveryId);
         map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
         String tempId = this.getTempId(WechatTempateEnum.DELIVERY_SUCCESS.getValue());
-        this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+        if(StrUtil.isNotBlank(tempId)) {
+            this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+        }
     }
 
 
@@ -186,6 +195,10 @@ public class WeixinTemplateService {
                 .one();
         if (yxWechatTemplate == null) {
             throw new YshopException("请后台配置key:" + key + "模板消息id");
+        }
+
+        if(ShopCommonEnum.IS_STATUS_0.getValue().equals(yxWechatTemplate.getStatus())){
+            return "";
         }
 
         return yxWechatTemplate.getTempid();
