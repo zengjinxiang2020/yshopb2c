@@ -10,6 +10,8 @@ package co.yixiang.modules.system.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -19,7 +21,8 @@ import java.util.List;
 * @author hupeng
 * @date 2020-05-14
 */
-@Data
+@Getter
+@Setter
 public class DeptDto implements Serializable {
 
     /** ID */
