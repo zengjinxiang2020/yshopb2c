@@ -188,7 +188,9 @@ public class CreatShareProductService {
             }
         }
         else{//其他
-            if(StrUtil.isBlank(from)) from = AppFromEnum.H5.getValue();
+            if(StrUtil.isBlank(from)) {
+                from = AppFromEnum.H5.getValue();
+            }
 
             String name = uid + "_"+from+"_user_wap.jpg";
 

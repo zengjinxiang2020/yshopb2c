@@ -58,7 +58,9 @@ public class LocationUtils {
 
     public static GetTencentLocationVO getLocation(String addr) {
         String key = RedisUtil.get(ShopKeyUtils.getTengXunMapKey());
-        if (StrUtil.isBlank(key)) throw new BadRequestException("请先配置腾讯地图key");
+        if (StrUtil.isBlank(key)) {
+            throw new BadRequestException("请先配置腾讯地图key");
+        }
         String url = StrUtil.format("?address={}&key={}", addr, key);
         String json = HttpUtil.get(QQ_MAP_URL + url);
         return JSONObject.parseObject(json, GetTencentLocationVO.class);

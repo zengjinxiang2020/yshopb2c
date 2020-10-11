@@ -36,6 +36,7 @@ public interface YxStoreCombinationMapper extends CoreMapper<YxStoreCombination>
             " AND c.stop_time > now() ORDER BY c.sort desc,c.id desc")
     List<YxStoreCombinationQueryVo> getCombList(Page page);
 
+    @Override
     IPage<YxStoreCombination> selectPage(IPage<YxStoreCombination> page, @Param("ew") Wrapper<YxStoreCombination> queryWrapper);
 
     @Select("SELECT c.id,c.effective_time as effectiveTime,c.image,c.people,c.price,c.browse," +

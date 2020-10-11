@@ -129,7 +129,9 @@ public class YxStoreOrderQueryVo implements Serializable {
     private String deliveryType;
 
     public String getDeliveryType() {
-        if(StrUtil.isBlank(deliveryType)) return "express";
+        if(StrUtil.isBlank(deliveryType)) {
+            return "express";
+        }
         return deliveryType;
     }
 
