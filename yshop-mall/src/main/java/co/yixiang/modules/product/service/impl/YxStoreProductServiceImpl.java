@@ -64,6 +64,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import com.qiniu.util.StringUtils;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static co.yixiang.common.utils.QueryHelpPlus.humpToUnderline;
 
 
 /**
@@ -230,16 +233,23 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(YxStoreProduct::getIsShow, CommonEnum.SHOW_STATUS_1.getValue());
 
-        //分类搜索
+        //多字段模糊查询分类搜索
         if (StrUtil.isNotBlank(productQueryParam.getSid()) &&
                 !ShopConstants.YSHOP_ZERO.equals(productQueryParam.getSid())) {
             wrapper.lambda().eq(YxStoreProduct::getCateId, productQueryParam.getSid());
         }
         //关键字搜索
         if (StrUtil.isNotEmpty(productQueryParam.getKeyword())) {
-            wrapper.lambda().like(YxStoreProduct::getStoreName, productQueryParam.getKeyword());
+            String blurry  = "storeName,storeInfo,keyword";
+            String[] blurrys = blurry.split(",");
+            wrapper.and(wrapper1 -> {
+                for (int i=0;i< blurrys.length;i++) {
+                    String column = humpToUnderline(blurrys[i]);
+                    wrapper1.or();
+                    wrapper1.like(column, productQueryParam.getKeyword());
+                }
+            });
         }
-
         //新品搜索
         if (StrUtil.isNotBlank(productQueryParam.getNews()) &&
                 !ShopConstants.YSHOP_ZERO.equals(productQueryParam.getNews())) {
