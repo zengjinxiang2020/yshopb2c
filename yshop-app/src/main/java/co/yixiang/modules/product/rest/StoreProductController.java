@@ -165,13 +165,13 @@ public class StoreProductController {
             if(AppFromEnum.ROUNTINE.getValue().equals(from)){
                 siteUrl = siteUrl+"/product/";
                 //生成二维码
-                QrCodeUtil.generate(siteUrl+"?productId="+id+"&spread="+uid+"&pageType=good&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
+                QrCodeUtil.generate(siteUrl+"?id="+id+"&spread="+uid+"&pageType=good&codeType="+AppFromEnum.ROUNTINE.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
             }
             else if(AppFromEnum.APP.getValue().equals(from)){
                 siteUrl = siteUrl+"/product/";
                 //生成二维码
-                QrCodeUtil.generate(siteUrl+"?productId="+id+"&spread="+uid+"&pageType=good&codeType="+AppFromEnum.APP.getValue(), 180, 180,
+                QrCodeUtil.generate(siteUrl+"?id="+id+"&spread="+uid+"&pageType=good&codeType="+AppFromEnum.APP.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
             }else if(AppFromEnum.H5.getValue().equals(from)){//如果类型是h5
                 //生成二维码
