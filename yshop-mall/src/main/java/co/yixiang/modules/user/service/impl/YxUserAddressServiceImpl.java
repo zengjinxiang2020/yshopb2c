@@ -88,13 +88,9 @@ public class YxUserAddressServiceImpl extends BaseServiceImpl<YxUserAddressMappe
         if("true".equals(param.getIs_default())){
             userAddress.setIsDefault(ShopCommonEnum.DEFAULT_1.getValue());
             //新增地址如果是默认，把之前的状态改掉
-            List<YxUserAddress> userAddresss = this.list(new LambdaQueryWrapper<YxUserAddress>().eq(YxUserAddress::getIsDefault,ShopCommonEnum.DEFAULT_1.getValue()));
-           if(CollectionUtil.isNotEmpty(userAddresss)){
-               userAddresss.forEach(i ->{
-                   i.setIsDefault(ShopCommonEnum.DEFAULT_0.getValue());
-               });
-               this.saveOrUpdateBatch(userAddresss);
-           }
+            YxUserAddress address = new YxUserAddress();
+            address.setIsDefault(ShopCommonEnum.DEFAULT_0.getValue());
+            baseMapper.update(address,new QueryWrapper<YxUserAddress>().lambda().eq(YxUserAddress::getUid,uid));
         }else{
             userAddress.setIsDefault(ShopCommonEnum.DEFAULT_0.getValue());
         }
