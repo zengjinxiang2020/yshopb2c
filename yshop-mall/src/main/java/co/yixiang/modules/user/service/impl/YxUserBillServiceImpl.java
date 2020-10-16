@@ -213,6 +213,7 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
         for (BillVo billDTO : billDTOList) {
            LambdaQueryWrapper<YxUserBill> wrapperT = new LambdaQueryWrapper<>();
             wrapperT.in(YxUserBill::getId,Arrays.asList(billDTO.getIds().split(",")));
+            wrapperT.orderByDesc(YxUserBill::getCreateTime);
             billDTO.setList(yxUserBillMapper.getUserBillList(wrapperT));
 
         }
