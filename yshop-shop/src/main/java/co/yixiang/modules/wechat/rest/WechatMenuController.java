@@ -15,7 +15,7 @@ import co.yixiang.modules.mp.config.WxMpConfiguration;
 import co.yixiang.utils.OrderUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
@@ -50,7 +50,7 @@ public class WechatMenuController {
     @GetMapping(value = "/YxWechatMenu")
     @PreAuthorize("hasAnyRole('admin','YxWechatMenu_ALL','YxWechatMenu_SELECT')")
     public ResponseEntity getYxWechatMenus(){
-        return new ResponseEntity(YxWechatMenuService.getOne(new QueryWrapper<YxWechatMenu>().lambda()
+        return new ResponseEntity(YxWechatMenuService.getOne(new LambdaQueryWrapper<YxWechatMenu>()
                 .eq(YxWechatMenu::getKey,ShopConstants.WECHAT_MENUS)),HttpStatus.OK);
     }
 

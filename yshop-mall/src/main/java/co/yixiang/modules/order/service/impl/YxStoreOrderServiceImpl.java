@@ -97,7 +97,6 @@ import co.yixiang.utils.RedisUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -1035,49 +1034,49 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      */
     @Override
     public List<YxStoreOrderQueryVo> orderList(Long uid, int type, int page, int limit) {
-        QueryWrapper<YxStoreOrder> wrapper= new QueryWrapper<>();
+       LambdaQueryWrapper<YxStoreOrder> wrapper= new LambdaQueryWrapper<>();
         if(uid != null) {
-            wrapper.lambda().eq(YxStoreOrder::getUid,uid);
+            wrapper.eq(YxStoreOrder::getUid,uid);
         }
-        wrapper.lambda().orderByDesc(YxStoreOrder::getId);
+        wrapper.orderByDesc(YxStoreOrder::getId);
 
         switch (OrderStatusEnum.toType(type)){
             case STATUS_0://未支付
-                wrapper.lambda().eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_0.getValue())
+                wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_0.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_0.getValue());
                 break;
             case STATUS_1://待发货
-                wrapper.lambda().eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
+                wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_0.getValue());
                 break;
             case STATUS_2://待收货
-                wrapper.lambda().eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
+                wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_1.getValue());
                 break;
             case STATUS_3://待评价
-                wrapper.lambda().eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
+                wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_2.getValue());
                 break;
             case STATUS_4://已完成
-                wrapper.lambda().eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
+                wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_3.getValue());
                 break;
             case STATUS_MINUS_1://退款中
-                wrapper.lambda().eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
+                wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_1.getValue());
                 break;
             case STATUS_MINUS_2://已退款
-                wrapper.lambda().eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_0.getValue())
+                wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_0.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_2.getValue());
                 break;
             case STATUS_MINUS_3://退款
                 String[] strs = {"1","2"};
-                wrapper.lambda().eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
+                wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .in(YxStoreOrder::getRefundStatus, Arrays.asList(strs));
                 break;
         }
@@ -1110,7 +1109,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 .beginOfMonth(new Date()));
         double price = 0d;
         List<ChartDataDto> list = null;
-        QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
+       LambdaQueryWrapper<YxStoreOrder> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq("paid",1).eq("refund_status",0).eq("is_del",0);
 
         switch (OrderCountEnum.toType(cate)){
@@ -1157,8 +1156,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         ShoperOrderTimeDataVo orderTimeDataVo = new ShoperOrderTimeDataVo();
 
         //今日成交额
-        QueryWrapper<YxStoreOrder> wrapperOne = new QueryWrapper<>();
-        wrapperOne.lambda()
+       LambdaQueryWrapper<YxStoreOrder> wrapperOne = new LambdaQueryWrapper<>();
+        wrapperOne
                 .ge(YxStoreOrder::getPayTime,today)
                 .eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue());
@@ -1167,8 +1166,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         orderTimeDataVo.setTodayCount(yxStoreOrderMapper.selectCount(wrapperOne));
 
         //昨日成交额
-        QueryWrapper<YxStoreOrder> wrapperTwo = new QueryWrapper<>();
-        wrapperTwo.lambda()
+       LambdaQueryWrapper<YxStoreOrder> wrapperTwo = new LambdaQueryWrapper<>();
+        wrapperTwo
                 .lt(YxStoreOrder::getPayTime,today)
                 .ge(YxStoreOrder::getPayTime,yesterday)
                 .eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
@@ -1178,8 +1177,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         orderTimeDataVo.setProCount(yxStoreOrderMapper.selectCount(wrapperTwo));
 
         //本月成交额
-        QueryWrapper<YxStoreOrder> wrapperThree = new QueryWrapper<>();
-        wrapperThree.lambda()
+       LambdaQueryWrapper<YxStoreOrder> wrapperThree = new LambdaQueryWrapper<>();
+        wrapperThree
                 .ge(YxStoreOrder::getPayTime,nowMonth)
                 .eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue());
@@ -1188,8 +1187,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         orderTimeDataVo.setMonthCount(yxStoreOrderMapper.selectCount(wrapperThree));
 
         //上周成交额
-        QueryWrapper<YxStoreOrder> wrapperLastWeek = new QueryWrapper<>();
-        wrapperLastWeek.lambda()
+       LambdaQueryWrapper<YxStoreOrder> wrapperLastWeek = new LambdaQueryWrapper<>();
+        wrapperLastWeek
                 .lt(YxStoreOrder::getPayTime,today)
                 .ge(YxStoreOrder::getPayTime,lastWeek)
                 .eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
@@ -1223,11 +1222,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     public UserOrderCountVo orderData(Long uid) {
 
         //订单支付没有退款 数量
-        QueryWrapper<YxStoreOrder> wrapperOne = new QueryWrapper<>();
+       LambdaQueryWrapper<YxStoreOrder> wrapperOne = new LambdaQueryWrapper<>();
         if(uid != null) {
-            wrapperOne.lambda().eq(YxStoreOrder::getUid,uid);
+            wrapperOne.eq(YxStoreOrder::getUid,uid);
         }
-        wrapperOne.lambda().eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
+        wrapperOne.eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue());
         Integer orderCount = yxStoreOrderMapper.selectCount(wrapperOne);
 
@@ -1235,62 +1234,62 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         double sumPrice = yxStoreOrderMapper.sumPrice(uid);
 
         //订单待支付 数量
-        QueryWrapper<YxStoreOrder> wrapperTwo = new QueryWrapper<>();
+       LambdaQueryWrapper<YxStoreOrder> wrapperTwo = new LambdaQueryWrapper<>();
         if(uid != null) {
-            wrapperTwo.lambda().eq(YxStoreOrder::getUid,uid);
+            wrapperTwo.eq(YxStoreOrder::getUid,uid);
         }
-        wrapperTwo.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_0.getValue())
+        wrapperTwo.eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_0.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_0.getValue());
         Integer unpaidCount = yxStoreOrderMapper.selectCount(wrapperTwo);
 
         //订单待发货 数量
-        QueryWrapper<YxStoreOrder> wrapperThree = new QueryWrapper<>();
+       LambdaQueryWrapper<YxStoreOrder> wrapperThree = new LambdaQueryWrapper<>();
         if(uid != null) {
-            wrapperThree.lambda().eq(YxStoreOrder::getUid,uid);
+            wrapperThree.eq(YxStoreOrder::getUid,uid);
         }
-        wrapperThree.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
+        wrapperThree.eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_0.getValue());
         Integer unshippedCount = yxStoreOrderMapper.selectCount(wrapperThree);
 
         //订单待收货 数量
-        QueryWrapper<YxStoreOrder> wrapperFour = new QueryWrapper<>();
+       LambdaQueryWrapper<YxStoreOrder> wrapperFour = new LambdaQueryWrapper<>();
         if(uid != null) {
-            wrapperFour.lambda().eq(YxStoreOrder::getUid,uid);
+            wrapperFour.eq(YxStoreOrder::getUid,uid);
         }
-        wrapperFour.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
+        wrapperFour.eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_1.getValue());
         Integer receivedCount = yxStoreOrderMapper.selectCount(wrapperFour);
 
         //订单待评价 数量
-        QueryWrapper<YxStoreOrder> wrapperFive = new QueryWrapper<>();
+       LambdaQueryWrapper<YxStoreOrder> wrapperFive = new LambdaQueryWrapper<>();
         if(uid != null) {
-            wrapperFive.lambda().eq(YxStoreOrder::getUid,uid);
+            wrapperFive.eq(YxStoreOrder::getUid,uid);
         }
-        wrapperFive.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
+        wrapperFive.eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_2.getValue());
         Integer evaluatedCount = yxStoreOrderMapper.selectCount(wrapperFive);
 
         //订单已完成 数量
-        QueryWrapper<YxStoreOrder> wrapperSix= new QueryWrapper<>();
+       LambdaQueryWrapper<YxStoreOrder> wrapperSix= new LambdaQueryWrapper<>();
         if(uid != null) {
-            wrapperSix.lambda().eq(YxStoreOrder::getUid,uid);
+            wrapperSix.eq(YxStoreOrder::getUid,uid);
         }
-        wrapperSix.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
+        wrapperSix.eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                 .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_3.getValue());
         Integer completeCount = yxStoreOrderMapper.selectCount(wrapperSix);
 
         //订单退款
-        QueryWrapper<YxStoreOrder> wrapperSeven= new QueryWrapper<>();
+       LambdaQueryWrapper<YxStoreOrder> wrapperSeven= new LambdaQueryWrapper<>();
         if(uid != null) {
-            wrapperSeven.lambda().eq(YxStoreOrder::getUid,uid);
+            wrapperSeven.eq(YxStoreOrder::getUid,uid);
         }
         String[] strArr = {"1","2"};
-        wrapperSeven.lambda().eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
+        wrapperSeven.eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_1.getValue())
                 .in(YxStoreOrder::getRefundStatus,Arrays.asList(strArr));
         Integer refundCount = yxStoreOrderMapper.selectCount(wrapperSeven);
 
@@ -1314,8 +1313,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      */
     @Override
     public YxStoreOrderQueryVo handleOrder(YxStoreOrderQueryVo order) {
-        QueryWrapper<YxStoreOrderCartInfo> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreOrderCartInfo::getOid,order.getId());
+       LambdaQueryWrapper<YxStoreOrderCartInfo> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreOrderCartInfo::getOid,order.getId());
         List<YxStoreOrderCartInfo> cartInfos = orderCartInfoService.list(wrapper);
 
         List<YxStoreCartQueryVo> cartInfo = cartInfos.stream()
@@ -1414,8 +1413,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,null);
 
         //更新订单状态
-        QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreOrder::getOrderId,orderId);
+       LambdaQueryWrapper<YxStoreOrder> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreOrder::getOrderId,orderId);
         YxStoreOrder storeOrder = new YxStoreOrder();
         storeOrder.setPaid(OrderInfoEnum.PAY_STATUS_1.getValue());
         storeOrder.setPayType(payType);
@@ -1535,12 +1534,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      */
     @Override
     public YxStoreOrderQueryVo getOrderInfo(String unique,Long uid) {
-        QueryWrapper<YxStoreOrder> wrapper = new QueryWrapper<>();
-        wrapper.lambda().and(
+       LambdaQueryWrapper<YxStoreOrder> wrapper = new LambdaQueryWrapper<>();
+        wrapper.and(
                 i->i.eq(YxStoreOrder::getOrderId,unique).or().eq(YxStoreOrder::getUnique,unique).or()
                         .eq(YxStoreOrder::getExtendOrderId,unique));
         if(uid != null) {
-            wrapper.lambda().eq(YxStoreOrder::getUid,uid);
+            wrapper.eq(YxStoreOrder::getUid,uid);
         }
 
         return generator.convert(yxStoreOrderMapper.selectOne(wrapper),YxStoreOrderQueryVo.class);
@@ -1667,8 +1666,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 || OrderStatusEnum.STATUS_MINUS_2.getValue().equals(order.getStatus())){
             return;
         }
-        QueryWrapper<YxStoreOrderCartInfo> wrapper= new QueryWrapper<>();
-        wrapper.lambda().in(YxStoreOrderCartInfo::getCartId, Arrays.asList(order.getCartId().split(",")));
+       LambdaQueryWrapper<YxStoreOrderCartInfo> wrapper= new LambdaQueryWrapper<>();
+        wrapper.in(YxStoreOrderCartInfo::getCartId, Arrays.asList(order.getCartId().split(",")));
 
         List<YxStoreOrderCartInfo> cartInfoList =  orderCartInfoService.list(wrapper);
         for (YxStoreOrderCartInfo cartInfo : cartInfoList) {
@@ -2107,7 +2106,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Transactional(rollbackFor = Exception.class)
     public void update(YxStoreOrder resources) {
         YxStoreOrder yxStoreOrder = this.getById(resources.getId());
-        YxStoreOrder yxStoreOrder1 = this.getOne(new QueryWrapper<YxStoreOrder>().lambda()
+        YxStoreOrder yxStoreOrder1 = this.getOne(new LambdaQueryWrapper<YxStoreOrder>()
                 .eq(YxStoreOrder::getUnique,resources.getUnique()));
         if(yxStoreOrder1 != null && !yxStoreOrder1.getId().equals(yxStoreOrder.getId())){
             throw new EntityExistException(YxStoreOrder.class,"unique",resources.getUnique());
@@ -2228,7 +2227,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         yxStoreOrderDto.setStoreOrderStatusList(orderStatusDtos);
         //添加购物车详情
         List<YxStoreOrderCartInfo> cartInfos = storeOrderCartInfoService.list(
-                new QueryWrapper<YxStoreOrderCartInfo>().eq("oid",yxStoreOrder.getId()));
+                new LambdaQueryWrapper<YxStoreOrderCartInfo>().eq(YxStoreOrderCartInfo::getOid,yxStoreOrder.getId()));
         List<StoreOrderCartInfoDto> cartInfoDTOS = new ArrayList<>();
         for (YxStoreOrderCartInfo cartInfo : cartInfos) {
             StoreOrderCartInfoDto cartInfoDTO = new StoreOrderCartInfoDto();
@@ -2247,7 +2246,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
     @Override
     public Map<String, Object> queryAll(List<String> ids) {
-        List<YxStoreOrder> yxStoreOrders = this.list(new QueryWrapper<YxStoreOrder>().in("order_id",ids));
+        List<YxStoreOrder> yxStoreOrders = this.list(new LambdaQueryWrapper<YxStoreOrder>().in(YxStoreOrder::getOrderId,ids));
         List<YxStoreOrderDto> storeOrderDTOS = new ArrayList<>();
         for (YxStoreOrder yxStoreOrder :yxStoreOrders) {
             this.orderList(storeOrderDTOS, yxStoreOrder);
@@ -2303,7 +2302,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 yxStoreOrder.getShippingType()));
 
         List<YxStoreOrderCartInfo> cartInfos = storeOrderCartInfoService.list(
-                new QueryWrapper<YxStoreOrderCartInfo>().eq("oid",yxStoreOrder.getId()));
+                new LambdaQueryWrapper<YxStoreOrderCartInfo>().eq(YxStoreOrderCartInfo::getOid,yxStoreOrder.getId()));
         List<StoreOrderCartInfoDto> cartInfoDTOS = new ArrayList<>();
         for (YxStoreOrderCartInfo cartInfo : cartInfos) {
             StoreOrderCartInfoDto cartInfoDTO = new StoreOrderCartInfoDto();
@@ -2336,7 +2335,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                              Long bargainId,Integer shippingType) {
         String str = "[普通订单]";
         if(pinkId > 0 || combinationId > 0){
-            YxStorePink storePink = storePinkService.getOne(new QueryWrapper<YxStorePink>().lambda()
+            YxStorePink storePink = storePinkService.getOne(new LambdaQueryWrapper<YxStorePink>()
                     .eq(YxStorePink::getOrderIdKey,id));
             if(ObjectUtil.isNull(storePink)) {
                 str = "[拼团订单]";

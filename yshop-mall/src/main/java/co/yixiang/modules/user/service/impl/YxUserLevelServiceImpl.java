@@ -22,7 +22,7 @@ import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.mapper.SystemUserTaskMapper;
 import co.yixiang.modules.user.service.mapper.YxUserLevelMapper;
 import co.yixiang.utils.OrderUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,13 +92,13 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
      */
     @Override
     public YxUserLevel getUserLevel(Long uid, Integer grade) {
-        QueryWrapper<YxUserLevel> wrapper = new QueryWrapper<>();
-        wrapper.lambda()
+       LambdaQueryWrapper<YxUserLevel> wrapper = new LambdaQueryWrapper<>();
+        wrapper
                 .eq(YxUserLevel::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
                 .eq(YxUserLevel::getUid,uid)
                 .orderByDesc(YxUserLevel::getGrade);
         if(grade != null) {
-            wrapper.lambda().lt(YxUserLevel::getGrade,grade);
+            wrapper.lt(YxUserLevel::getGrade,grade);
         }
         YxUserLevel userLevel = this.getOne(wrapper,false);
         if(ObjectUtil.isNull(userLevel)) {
@@ -133,8 +133,8 @@ public class YxUserLevelServiceImpl extends BaseServiceImpl<YxUserLevelMapper, Y
 
         int validTime = systemUserLevelQueryVo.getValidDate() * 86400;
 
-        QueryWrapper<YxUserLevel> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxUserLevel::getStatus,ShopCommonEnum.IS_STATUS_1.getValue())
+       LambdaQueryWrapper<YxUserLevel> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxUserLevel::getStatus,ShopCommonEnum.IS_STATUS_1.getValue())
                 .eq(YxUserLevel::getUid,uid)
                 .eq(YxUserLevel::getLevelId,levelId)
                 .last("limit 1");

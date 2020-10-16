@@ -229,7 +229,7 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
         /**
          boolean isTest = true;
          if(!isTest){
-         YxWechatUserDto wechatUser =  generator.convert(wechatUserService.getOne(new QueryWrapper<YxWechatUser>().eq("uid",resources.getUid())),YxWechatUserDto.class);
+         YxWechatUserDto wechatUser =  generator.convert(wechatUserService.getOne(new LambdaQueryWrapper<YxWechatUser>().eq("uid",resources.getUid())),YxWechatUserDto.class);
          if(ObjectUtil.isNotNull(wechatUser)){
          try {
          payService.entPay(wechatUser.getOpenid(),resources.getId().toString(),

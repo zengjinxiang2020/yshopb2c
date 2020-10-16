@@ -31,7 +31,7 @@ import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -264,8 +264,8 @@ public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponU
      */
     private void checkInvalidCoupon() {
         Date nowTime = new Date();
-        QueryWrapper<YxStoreCouponUser> wrapper= new QueryWrapper<>();
-        wrapper.lambda().lt(YxStoreCouponUser::getEndTime,nowTime)
+       LambdaQueryWrapper<YxStoreCouponUser> wrapper= new LambdaQueryWrapper<>();
+        wrapper.lt(YxStoreCouponUser::getEndTime,nowTime)
                 .eq(YxStoreCouponUser::getStatus,CouponEnum.STATUS_0.getValue());
         YxStoreCouponUser couponUser = new YxStoreCouponUser();
         couponUser.setStatus(CouponEnum.STATUS_2.getValue());
@@ -284,7 +284,7 @@ public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponU
         PageInfo<YxStoreCouponUser> page = new PageInfo<>(queryAll(criteria));
         List<YxStoreCouponUserDto> storeOrderDTOS = generator.convert(page.getList(),YxStoreCouponUserDto.class);
         for (YxStoreCouponUserDto couponUserDTO : storeOrderDTOS) {
-            couponUserDTO.setNickname(userService.getOne(new QueryWrapper<YxUser>().lambda()
+            couponUserDTO.setNickname(userService.getOne(new LambdaQueryWrapper<YxUser>()
                     .eq(YxUser::getUid,couponUserDTO.getUid())).getNickname());
         }
         Map<String,Object> map = new LinkedHashMap<>(2);

@@ -26,7 +26,7 @@ import co.yixiang.modules.user.vo.YxUserBillQueryVo;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -124,9 +124,9 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
      */
     @Override
     public int cumulativeAttendance(Long uid) {
-        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
-        wrapper.eq("uid",uid).eq("category","integral")
-                .eq("type","sign").eq("pm",1);
+       LambdaQueryWrapper<YxUserBill> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxUserBill::getUid,uid).eq(YxUserBill::getCategory,"integral")
+                .eq(YxUserBill::getType,"sign").eq(YxUserBill::getPm,1);
         return yxUserBillMapper.selectCount(wrapper);
     }
 
@@ -139,11 +139,11 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
      */
     @Override
     public Map<String, Object> spreadOrder(Long uid, int page, int limit) {
-        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
-        wrapper.lambda().in(YxUserBill::getUid, uid)
+       LambdaQueryWrapper<YxUserBill> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(YxUserBill::getUid, uid)
                 .eq(YxUserBill::getType, BillDetailEnum.TYPE_2.getValue())
                 .eq(YxUserBill::getCategory, BillDetailEnum.CATEGORY_1.getValue());
-        wrapper.orderByDesc("time").groupBy("time");
+        wrapper.orderByDesc(YxUserBill::getCreateTime).groupBy(YxUserBill::getCreateTime);
         Page<YxUserBill> pageModel = new Page<>(page, limit);
         List<String> list = yxUserBillMapper.getBillOrderList(wrapper, pageModel);
 
@@ -180,39 +180,39 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
      */
     @Override
     public List<BillVo> getUserBillList(int page, int limit, long uid, int type) {
-        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxUserBill::getUid,uid).orderByDesc(YxUserBill::getId);
-        wrapper.groupBy("time");
+       LambdaQueryWrapper<YxUserBill> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxUserBill::getUid,uid).orderByDesc(YxUserBill::getId);
+        wrapper.groupBy(YxUserBill::getCreateTime);
         switch (BillInfoEnum.toType(type)){
             case PAY_PRODUCT:
-                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
-                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_3.getValue());
+                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_3.getValue());
                 break;
             case RECHAREGE:
-                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
-                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_1.getValue());
+                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_1.getValue());
                 break;
             case BROKERAGE:
-                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
-                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_2.getValue());
+                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_2.getValue());
                 break;
             case EXTRACT:
-                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
-                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_4.getValue());
+                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_4.getValue());
                 break;
             case SIGN_INTEGRAL:
-                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_2.getValue());
-                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_10.getValue());
+                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_2.getValue());
+                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_10.getValue());
                 break;
             default:
-                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
 
         }
         Page<YxUserBill> pageModel = new Page<>(page, limit);
         List<BillVo> billDTOList = yxUserBillMapper.getBillList(wrapper,pageModel);
         for (BillVo billDTO : billDTOList) {
-            QueryWrapper<YxUserBill> wrapperT = new QueryWrapper<>();
-            wrapperT.lambda().in(YxUserBill::getId,Arrays.asList(billDTO.getIds().split(",")));
+           LambdaQueryWrapper<YxUserBill> wrapperT = new LambdaQueryWrapper<>();
+            wrapperT.in(YxUserBill::getId,Arrays.asList(billDTO.getIds().split(",")));
             billDTO.setList(yxUserBillMapper.getUserBillList(wrapperT));
 
         }
@@ -245,8 +245,8 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
      */
     @Override
     public List<YxUserBillQueryVo> userBillList(Long uid,String category,int page,int limit) {
-        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
-        wrapper.lambda()
+       LambdaQueryWrapper<YxUserBill> wrapper = new LambdaQueryWrapper<>();
+        wrapper
                 .eq(YxUserBill::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
                 .eq(YxUserBill::getUid,uid)
                 .eq(YxUserBill::getCategory,category)

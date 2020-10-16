@@ -41,7 +41,7 @@ import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.RedisUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +82,7 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
 
 //    @Override
 //    public YxStoreSeckill getSeckill(int id) {
-//        QueryWrapper<YxStoreSeckill> wrapper = new QueryWrapper<>();
+//       LambdaQueryWrapper<YxStoreSeckill> wrapper = new LambdaQueryWrapper<>();
 //        int nowTime = OrderUtil.getSecondTimestampTwo();
 //        wrapper.eq("id",id).eq("is_del",0).eq("status",1)
 //                .le("start_time",nowTime).ge("stop_time",nowTime);
@@ -145,8 +145,8 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
     public List<YxStoreSeckillQueryVo> getList(int page, int limit, int time) {
         Date nowTime = new Date();
         Page<YxStoreSeckill> pageModel = new Page<>(page, limit);
-        QueryWrapper<YxStoreSeckill> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreSeckill::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
+       LambdaQueryWrapper<YxStoreSeckill> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreSeckill::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
                 .eq(YxStoreSeckill::getTimeId,time)
                 .le(YxStoreSeckill::getStartTime,nowTime)
                 .ge(YxStoreSeckill::getStopTime,nowTime)
@@ -171,8 +171,8 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
     public List<YxStoreSeckillQueryVo> getList(int page, int limit) {
         Date nowTime = new Date();
         Page<YxStoreSeckill> pageModel = new Page<>(page, limit);
-        QueryWrapper<YxStoreSeckill> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreSeckill::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
+       LambdaQueryWrapper<YxStoreSeckill> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreSeckill::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
                 .eq(YxStoreSeckill::getIsHot,1)
                 .le(YxStoreSeckill::getStartTime,nowTime)
                 .ge(YxStoreSeckill::getStopTime,nowTime)

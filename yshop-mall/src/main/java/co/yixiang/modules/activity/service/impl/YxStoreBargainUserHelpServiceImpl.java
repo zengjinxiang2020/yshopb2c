@@ -19,7 +19,7 @@ import co.yixiang.modules.activity.service.mapper.YxStoreBargainUserHelpMapper;
 import co.yixiang.modules.activity.vo.YxStoreBargainUserHelpQueryVo;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +74,8 @@ public class YxStoreBargainUserHelpServiceImpl extends BaseServiceImpl<YxStoreBa
             return Collections.emptyList();
         }
         Page<YxStoreBargainUserHelp> pageModel = new Page<>(page, limit);
-        QueryWrapper<YxStoreBargainUserHelp> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreBargainUserHelp::getBargainUserId,storeBargainUser.getId())
+        LambdaQueryWrapper<YxStoreBargainUserHelp> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreBargainUserHelp::getBargainUserId,storeBargainUser.getId())
                 .orderByDesc(YxStoreBargainUserHelp::getId);
         List<YxStoreBargainUserHelpQueryVo> storeBargainUserHelpQueryVos = generator
                 .convert(yxStoreBargainUserHelpMapper.selectPage(pageModel,wrapper).getRecords(),

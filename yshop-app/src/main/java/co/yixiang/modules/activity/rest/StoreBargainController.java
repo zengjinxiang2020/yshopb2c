@@ -36,7 +36,7 @@ import co.yixiang.modules.services.CreatShareProductService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -203,8 +203,8 @@ public class StoreBargainController {
             return ApiResult.ok(map);
         }
         YxStoreBargainUserHelp storeBargainUserHelp = storeBargainUserHelpService
-                .getOne(new QueryWrapper<YxStoreBargainUserHelp>()
-                .lambda().eq(YxStoreBargainUserHelp::getBargainId,bargainId)
+                .getOne(new LambdaQueryWrapper<YxStoreBargainUserHelp>()
+                .eq(YxStoreBargainUserHelp::getBargainId,bargainId)
                 .eq(YxStoreBargainUserHelp::getBargainUserId,storeBargainUser.getId())
                 .eq(YxStoreBargainUserHelp::getUid,uid).last("limit 1"));
         if(ObjectUtil.isNull(storeBargainUserHelp)){

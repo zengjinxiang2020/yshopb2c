@@ -46,7 +46,7 @@ import co.yixiang.modules.user.service.mapper.UserMapper;
 import co.yixiang.modules.user.vo.YxUserQueryVo;
 import co.yixiang.utils.FileUtil;
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
@@ -356,8 +356,8 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
      */
     @Override
     public double setLevelPrice(double price, long uid) {
-        QueryWrapper<YxUserLevel> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxUserLevel::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
+       LambdaQueryWrapper<YxUserLevel> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxUserLevel::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
                 .eq(YxUserLevel::getUid,uid)
                 .orderByDesc(YxUserLevel::getGrade)
                 .last("limit 1");

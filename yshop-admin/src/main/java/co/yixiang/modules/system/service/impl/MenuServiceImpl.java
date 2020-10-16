@@ -28,7 +28,7 @@ import co.yixiang.modules.system.service.mapper.RoleMapper;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.StringUtils;
 import co.yixiang.utils.ValidationUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
@@ -306,7 +306,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
 
         isExitHttp(resources);
 
-        Menu menu1 = this.getOne(new QueryWrapper<Menu>().lambda()
+        Menu menu1 = this.getOne(new LambdaQueryWrapper<Menu>()
                 .eq(Menu::getName,resources.getName()));
 
         if(menu1 != null && !menu1.getId().equals(menu.getId())){
@@ -318,7 +318,7 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
             if(menuCount > 1) {
                 throw new YshopException("请保持菜单组件名称唯一");
             }
-            menu1 = this.getOne(new QueryWrapper<Menu>().lambda()
+            menu1 = this.getOne(new LambdaQueryWrapper<Menu>()
                     .eq(Menu::getComponentName,resources.getComponentName()));
             if(menu1 != null && !menu1.getId().equals(menu.getId())){
                 throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
@@ -345,11 +345,11 @@ public class MenuServiceImpl extends BaseServiceImpl<MenuMapper, Menu> implement
     @CacheEvict(allEntries = true)
     public MenuDto create(Menu resources) {
         isExitHttp(resources);
-        if(this.getOne(new QueryWrapper<Menu>().eq("name",resources.getName())) != null){
+        if(this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getName,resources.getName())) != null){
             throw new EntityExistException(Menu.class,"name",resources.getName());
         }
         if(StringUtils.isNotBlank(resources.getComponentName())){
-            if(this.getOne(new QueryWrapper<Menu>().eq("component_name",resources.getComponentName())) != null){
+            if(this.getOne(new LambdaQueryWrapper<Menu>().eq(Menu::getComponentName,resources.getComponentName())) != null){
                 throw new EntityExistException(Menu.class,"componentName",resources.getComponentName());
             }
         }

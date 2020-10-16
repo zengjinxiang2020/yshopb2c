@@ -14,7 +14,7 @@ import co.yixiang.modules.mp.service.dto.YxWechatTemplateQueryCriteria;
 import co.yixiang.modules.mp.service.dto.YxWechatTemplateDto;
 import co.yixiang.modules.mp.service.mapper.WechatTemplateMapper;
 import co.yixiang.utils.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -83,7 +83,7 @@ public class YxWechatTemplateServiceImpl extends BaseServiceImpl<WechatTemplateM
 
     @Override
     public YxWechatTemplate findByTempkey(String recharge_success_key) {
-        return this.getOne(new QueryWrapper<YxWechatTemplate>().lambda()
+        return this.getOne(new LambdaQueryWrapper<YxWechatTemplate>()
                 .eq(YxWechatTemplate::getTempkey,recharge_success_key));
     }
 }

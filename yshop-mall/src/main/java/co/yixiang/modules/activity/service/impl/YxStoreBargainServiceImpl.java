@@ -34,7 +34,7 @@ import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.vo.YxUserQueryVo;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.OrderUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -304,9 +304,9 @@ public class YxStoreBargainServiceImpl extends BaseServiceImpl<YxStoreBargainMap
     @Override
     public List<YxStoreBargainQueryVo> getList(int page, int limit) {
         Page<YxStoreBargain> pageModel = new Page<>(page, limit);
-        QueryWrapper<YxStoreBargain> wrapper = new QueryWrapper<>();
+        LambdaQueryWrapper<YxStoreBargain> wrapper = new LambdaQueryWrapper<>();
         Date nowTime = new Date();
-        wrapper.lambda().eq(YxStoreBargain::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
+        wrapper.eq(YxStoreBargain::getStatus, ShopCommonEnum.IS_STATUS_1.getValue())
                 .lt(YxStoreBargain::getStartTime,nowTime)
                 .gt(YxStoreBargain::getStopTime,nowTime);
 

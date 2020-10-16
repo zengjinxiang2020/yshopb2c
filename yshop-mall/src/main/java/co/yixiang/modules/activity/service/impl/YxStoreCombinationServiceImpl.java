@@ -50,7 +50,7 @@ import co.yixiang.modules.template.domain.YxShippingTemplates;
 import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.RedisUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
@@ -178,8 +178,8 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         CombinationQueryVo combinationQueryVo = new CombinationQueryVo();
         Date nowTime = new Date();
         Page<YxStoreCombination> pageModel = new Page<>(page, limit);
-        QueryWrapper<YxStoreCombination> wrapper = new QueryWrapper<>();
-        wrapper.lambda()
+       LambdaQueryWrapper<YxStoreCombination> wrapper = new LambdaQueryWrapper<>();
+        wrapper
                 .eq(YxStoreCombination::getIsShow,1)
                 .le(YxStoreCombination::getStartTime,nowTime)
                 .ge(YxStoreCombination::getStopTime,nowTime)
@@ -208,15 +208,15 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
         List<YxStoreCombinationDto> combinationDTOS = generator.convert(page.getList(),YxStoreCombinationDto.class);
         for (YxStoreCombinationDto combinationDTO : combinationDTOS) {
             //参与人数
-            combinationDTO.setCountPeopleAll(yxStorePinkMapper.selectCount(new QueryWrapper<YxStorePink>().lambda()
+            combinationDTO.setCountPeopleAll(yxStorePinkMapper.selectCount(new LambdaQueryWrapper<YxStorePink>()
                     .eq(YxStorePink::getCid,combinationDTO.getId())));
 
             //成团人数
-            combinationDTO.setCountPeoplePink(yxStorePinkMapper.selectCount(new QueryWrapper<YxStorePink>().lambda()
+            combinationDTO.setCountPeoplePink(yxStorePinkMapper.selectCount(new LambdaQueryWrapper<YxStorePink>()
                     .eq(YxStorePink::getCid,combinationDTO.getId())
                     .eq(YxStorePink::getKId,0)));//团长
             //获取查看拼团产品人数
-            combinationDTO.setCountPeopleBrowse(yxStoreVisitMapper.selectCount(new QueryWrapper<YxStoreVisit>().lambda()
+            combinationDTO.setCountPeopleBrowse(yxStoreVisitMapper.selectCount(new LambdaQueryWrapper<YxStoreVisit>()
                     .eq(YxStoreVisit::getProductId,combinationDTO.getId())
                     .eq(YxStoreVisit::getProductType,"combination")));
         }

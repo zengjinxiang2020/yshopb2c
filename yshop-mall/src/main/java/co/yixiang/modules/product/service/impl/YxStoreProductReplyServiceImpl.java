@@ -27,7 +27,7 @@ import co.yixiang.modules.product.vo.YxStoreProductReplyQueryVo;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.FileUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
@@ -186,8 +186,8 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProduct
 
     @Override
     public int getInfoCount(Integer oid, String unique) {
-        QueryWrapper<YxStoreProductReply> wrapper = new QueryWrapper<>();
-        wrapper.eq("`unique`",unique).eq("oid",oid);
+       LambdaQueryWrapper<YxStoreProductReply> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreProductReply::getUnique,unique).eq(YxStoreProductReply::getOid,oid);
         return this.baseMapper.selectCount(wrapper);
     }
 
@@ -201,8 +201,8 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProduct
 
     @Override
     public int replyCount(String unique) {
-        QueryWrapper<YxStoreProductReply> wrapper = new QueryWrapper<>();
-        wrapper.eq("`unique`",unique);
+       LambdaQueryWrapper<YxStoreProductReply> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreProductReply::getUnique,unique);
         return this.baseMapper.selectCount(wrapper);
     }
 
@@ -213,8 +213,8 @@ public class YxStoreProductReplyServiceImpl extends BaseServiceImpl<StoreProduct
      */
     @Override
     public String replyPer(long productId) {
-        QueryWrapper<YxStoreProductReply> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreProductReply::getProductId,productId)
+       LambdaQueryWrapper<YxStoreProductReply> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreProductReply::getProductId,productId)
                 .eq(YxStoreProductReply::getIsDel,ShopCommonEnum.DELETE_0.getValue())
                 .eq(YxStoreProductReply::getProductScore,5);
         int productScoreCount = this.baseMapper.selectCount(wrapper);

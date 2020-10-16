@@ -43,7 +43,6 @@ import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.vo.YxUserQueryVo;
 import co.yixiang.utils.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,7 +134,7 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
 
         //把团长下个人设置为团长
         if(ObjectUtil.isNotNull(nextPinkT)){
-            QueryWrapper<YxStorePink> wrapperO = new QueryWrapper<>();
+           LambdaQueryWrapper<YxStorePink> wrapperO = new LambdaQueryWrapper<>();
             YxStorePink storePinkO = new YxStorePink();
             storePinkO.setKId(0L); //设置团长
             storePinkO.setStatus(OrderInfoEnum.PINK_STATUS_1.getValue());
@@ -144,7 +143,7 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
             yxStorePinkMapper.updateById(storePinkO);
 
             //原有团长的数据变更成新团长下面
-            wrapperO.lambda().eq(YxStorePink::getKId,pinkT.getId());
+            wrapperO.eq(YxStorePink::getKId,pinkT.getId());
             YxStorePink storePinkT = new YxStorePink();
             storePinkT.setKId(nextPinkT.getId());
             yxStorePinkMapper.update(storePinkT,wrapperO);
@@ -519,8 +518,8 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         int pinkBool = PinkEnum.PINK_BOOL_0.getValue();
         if(pinkStatus){
             //更改状态
-            QueryWrapper<YxStorePink> wrapper = new QueryWrapper<>();
-            wrapper.lambda().in(YxStorePink::getId,idAll);
+           LambdaQueryWrapper<YxStorePink> wrapper = new LambdaQueryWrapper<>();
+            wrapper.in(YxStorePink::getId,idAll);
 
             YxStorePink storePink = new YxStorePink();
             storePink.setStopTime(new Date());
@@ -546,14 +545,14 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
      */
     private void orderPinkFailAfter(Long uid, Long pid) {
         YxStorePink yxStorePink = new YxStorePink();
-        QueryWrapper<YxStorePink> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStorePink::getId,pid);
+       LambdaQueryWrapper<YxStorePink> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStorePink::getId,pid);
         yxStorePink.setStatus(OrderInfoEnum.PINK_STATUS_3.getValue());
         yxStorePink.setStopTime(new Date());
         yxStorePinkMapper.update(yxStorePink,wrapper);
 
-        QueryWrapper<YxStorePink> wrapperT = new QueryWrapper<>();
-        wrapperT.lambda().eq(YxStorePink::getKId,pid);
+       LambdaQueryWrapper<YxStorePink> wrapperT = new LambdaQueryWrapper<>();
+        wrapperT.eq(YxStorePink::getKId,pid);
         yxStorePinkMapper.update(yxStorePink,wrapperT);
         //todo 模板消息
     }
@@ -625,8 +624,8 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
      * @return int
      */
     private int getPinkPeople(Long kid, int people) {
-        QueryWrapper<YxStorePink> wrapper= new QueryWrapper<>();
-        wrapper.lambda().eq(YxStorePink::getKId,kid)
+       LambdaQueryWrapper<YxStorePink> wrapper= new LambdaQueryWrapper<>();
+        wrapper.eq(YxStorePink::getKId,kid)
                 .eq(YxStorePink::getIsRefund, OrderInfoEnum.PINK_REFUND_STATUS_0.getValue());
         //加上团长自己
         int count = yxStorePinkMapper.selectCount(wrapper) + 1;

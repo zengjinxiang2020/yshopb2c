@@ -32,7 +32,6 @@ import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
@@ -268,8 +267,8 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
     @Override
     public List<YxWechatLiveDto> getList(int page, int limit, int order) {
         //todo 添加状态判断
-        QueryWrapper<YxWechatLive> wrapper = new QueryWrapper<>();
-        wrapper.lambda()
+       LambdaQueryWrapper<YxWechatLive> wrapper = new LambdaQueryWrapper<>();
+        wrapper
                 .orderByDesc(YxWechatLive::getStartTime);
 
 

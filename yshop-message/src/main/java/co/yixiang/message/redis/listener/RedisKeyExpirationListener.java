@@ -17,7 +17,7 @@ import co.yixiang.modules.activity.domain.YxStorePink;
 import co.yixiang.modules.activity.service.YxStorePinkService;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -61,7 +61,7 @@ public class RedisKeyExpirationListener implements MessageListener {
 				body = body.replace(ShopConstants.REDIS_ORDER_OUTTIME_UNPAY, "");
 				log.info("body:{}",body);
 				String orderId = body;
-				YxStoreOrder order = storeOrderService.getOne(new QueryWrapper<YxStoreOrder>().lambda()
+				YxStoreOrder order = storeOrderService.getOne(new LambdaQueryWrapper<YxStoreOrder>()
 						.eq(YxStoreOrder::getId, orderId)
                         .eq(YxStoreOrder::getPaid, OrderInfoEnum.PAY_STATUS_0.getValue()));
 				//只有待支付的订单能取消
@@ -75,7 +75,7 @@ public class RedisKeyExpirationListener implements MessageListener {
 				body = body.replace(ShopConstants.REDIS_ORDER_OUTTIME_UNCONFIRM, "");
 				log.info("body:{}",body);
 				String orderId = body;
-				YxStoreOrder order = storeOrderService.getOne(new QueryWrapper<YxStoreOrder>().lambda()
+				YxStoreOrder order = storeOrderService.getOne(new LambdaQueryWrapper<YxStoreOrder>()
                         .eq(YxStoreOrder::getId, orderId)
 						.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_1.getValue()));

@@ -22,7 +22,7 @@ import co.yixiang.modules.activity.service.YxStoreBargainUserHelpService;
 import co.yixiang.modules.activity.service.YxStoreBargainUserService;
 import co.yixiang.modules.activity.service.mapper.YxStoreBargainUserMapper;
 import co.yixiang.modules.activity.vo.YxStoreBargainUserQueryVo;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,8 +188,8 @@ public class YxStoreBargainUserServiceImpl extends BaseServiceImpl<YxStoreBargai
      */
     @Override
     public YxStoreBargainUser getBargainUserInfo(Long bargainId, Long uid) {
-        QueryWrapper<YxStoreBargainUser> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreBargainUser::getBargainId,bargainId)
+       LambdaQueryWrapper<YxStoreBargainUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreBargainUser::getBargainId,bargainId)
                 .eq(YxStoreBargainUser::getUid,uid)
                 .last("limit 1");
         return yxStoreBargainUserMapper.selectOne(wrapper);
@@ -217,7 +217,7 @@ public class YxStoreBargainUserServiceImpl extends BaseServiceImpl<YxStoreBargai
 //     */
 //    @Override
 //    public List<YxStoreBargainUserQueryVo> getBargainUserList(int bargainId, int status) {
-//        QueryWrapper<YxStoreBargainUser> wrapper = new QueryWrapper<>();
+//       LambdaQueryWrapper<YxStoreBargainUser> wrapper = new LambdaQueryWrapper<>();
 //        wrapper.eq("bargain_id",bargainId).eq("status",status);
 //        return generator.convert(yxStoreBargainUserMapper.selectList(wrapper),
 //                YxStoreBargainUserQueryVo.class);

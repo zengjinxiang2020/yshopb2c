@@ -171,8 +171,8 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
     @Override
     public YxStoreProduct getProductInfo(int id) {
-        QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();
-        wrapper.eq("is_del", 0).eq("is_show", 1).eq("id", id);
+       LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreProduct::getIsShow, 1).eq(YxStoreProduct::getId, id);
         YxStoreProduct storeProduct = this.baseMapper.selectOne(wrapper);
         if (ObjectUtil.isNull(storeProduct)) {
             throw new ErrorRequestException("商品不存在或已下架");
@@ -230,7 +230,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     @Override
     public List<YxStoreProductQueryVo> getGoodsList(YxStoreProductQueryParam productQueryParam) {
 
-        QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();
+       QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(YxStoreProduct::getIsShow, CommonEnum.SHOW_STATUS_1.getValue());
 
         //多字段模糊查询分类搜索
@@ -296,8 +296,8 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
      */
     @Override
     public ProductVo goodsDetail(Long id, Long uid, String latitude, String longitude) {
-        QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreProduct::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+       LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreProduct::getIsShow, ShopCommonEnum.SHOW_1.getValue())
                 .eq(YxStoreProduct::getId, id);
         YxStoreProduct storeProduct = storeProductMapper.selectOne(wrapper);
         if (ObjectUtil.isNull(storeProduct)) {
@@ -402,26 +402,26 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     @Override
     public List<YxStoreProductQueryVo> getList(int page, int limit, int order) {
 
-        QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreProduct::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+       LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreProduct::getIsShow, ShopCommonEnum.SHOW_1.getValue())
                 .orderByDesc(YxStoreProduct::getSort);
 
         // order
         switch (ProductEnum.toType(order)) {
             case TYPE_1:
-                wrapper.lambda().eq(YxStoreProduct::getIsBest,
+                wrapper.eq(YxStoreProduct::getIsBest,
                         ShopCommonEnum.IS_STATUS_1.getValue()); //精品推荐
                 break;
             case TYPE_3:
-                wrapper.lambda().eq(YxStoreProduct::getIsNew,
+                wrapper.eq(YxStoreProduct::getIsNew,
                         ShopCommonEnum.IS_STATUS_1.getValue());//// 首发新品
                 break;
             case TYPE_4:
-                wrapper.lambda().eq(YxStoreProduct::getIsBenefit,
+                wrapper.eq(YxStoreProduct::getIsBenefit,
                         ShopCommonEnum.IS_STATUS_1.getValue()); //// 猜你喜欢
                 break;
             case TYPE_2:
-                wrapper.lambda().eq(YxStoreProduct::getIsHot,
+                wrapper.eq(YxStoreProduct::getIsHot,
                         ShopCommonEnum.IS_STATUS_1.getValue());//// 热门榜单
                 break;
         }

@@ -15,7 +15,7 @@ import co.yixiang.modules.mp.service.YxWechatReplyService;
 import co.yixiang.modules.mp.service.dto.YxWechatReplyDto;
 import co.yixiang.modules.mp.service.dto.YxWechatReplyQueryCriteria;
 import co.yixiang.utils.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -83,7 +83,7 @@ public class YxWechatReplyServiceImpl extends BaseServiceImpl<WechatReplyMapper,
 
     @Override
     public YxWechatReply isExist(String key) {
-        YxWechatReply yxWechatReply = this.getOne(new QueryWrapper<YxWechatReply>().lambda()
+        YxWechatReply yxWechatReply = this.getOne(new LambdaQueryWrapper<YxWechatReply>()
                 .eq(YxWechatReply::getKey,key));
         return yxWechatReply;
     }

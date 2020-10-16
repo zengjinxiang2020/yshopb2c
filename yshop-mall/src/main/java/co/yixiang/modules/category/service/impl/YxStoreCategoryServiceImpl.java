@@ -20,7 +20,7 @@ import co.yixiang.modules.category.service.mapper.StoreCategoryMapper;
 import co.yixiang.utils.CateDTO;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.TreeUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Maps;
@@ -59,8 +59,8 @@ public class YxStoreCategoryServiceImpl extends BaseServiceImpl<StoreCategoryMap
      */
     @Override
     public List<CateDTO> getList() {
-        QueryWrapper<YxStoreCategory> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+       LambdaQueryWrapper<YxStoreCategory> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreCategory::getIsShow, ShopCommonEnum.SHOW_1.getValue())
                 .orderByAsc(YxStoreCategory::getSort);
         List<CateDTO> list = generator.convert(baseMapper.selectList(wrapper),CateDTO.class);
         return TreeUtil.list2TreeConverter(list,0);

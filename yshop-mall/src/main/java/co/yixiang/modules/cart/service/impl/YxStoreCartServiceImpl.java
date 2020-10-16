@@ -42,7 +42,7 @@ import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,15 +163,15 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
      */
     @Override
     public Map<String, Object> getUserProductCartList(Long uid, String cartIds, Integer status) {
-        QueryWrapper<YxStoreCart> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreCart::getUid, uid)
+       LambdaQueryWrapper<YxStoreCart> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreCart::getUid, uid)
                 .eq(YxStoreCart::getIsPay, OrderInfoEnum.PAY_STATUS_0.getValue())
                 .orderByDesc(YxStoreCart::getId);
         if (status == null) {
-            wrapper.lambda().eq(YxStoreCart::getIsNew, CartTypeEnum.NEW_0.getValue());
+            wrapper.eq(YxStoreCart::getIsNew, CartTypeEnum.NEW_0.getValue());
         }
         if (StrUtil.isNotEmpty(cartIds)) {
-            wrapper.lambda().in(YxStoreCart::getId, Arrays.asList(cartIds.split(",")));
+            wrapper.in(YxStoreCart::getId, Arrays.asList(cartIds.split(",")));
         }
         List<YxStoreCart> carts = yxStoreCartMapper.selectList(wrapper);
 
@@ -284,8 +284,8 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
                         Integer isNew, Long combinationId, Long seckillId, Long bargainId) {
 
         this.checkProductStock(uid, productId, cartNum, productAttrUnique, combinationId, seckillId, bargainId);
-        QueryWrapper<YxStoreCart> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreCart::getUid, uid)
+       LambdaQueryWrapper<YxStoreCart> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreCart::getUid, uid)
                 .eq(YxStoreCart::getIsPay, OrderInfoEnum.PAY_STATUS_0.getValue())
                 .eq(YxStoreCart::getProductId, productId)
                 .eq(YxStoreCart::getIsNew, isNew)

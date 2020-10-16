@@ -41,7 +41,7 @@ public class VisitsServiceImpl extends BaseServiceImpl<VisitsMapper, Visits> imp
     @Override
     public void save() {
         LocalDate localDate = LocalDate.now();
-        Visits visits = this.getOne(new QueryWrapper<Visits>().lambda()
+        Visits visits = this.getOne(new LambdaQueryWrapper<Visits>()
         .eq(Visits::getDate,localDate.toString()));
         if(visits == null){
             visits = new Visits();
@@ -56,7 +56,7 @@ public class VisitsServiceImpl extends BaseServiceImpl<VisitsMapper, Visits> imp
     @Override
     public void count(HttpServletRequest request) {
         LocalDate localDate = LocalDate.now();
-        Visits visits = this.getOne(new QueryWrapper<Visits>().lambda()
+        Visits visits = this.getOne(new LambdaQueryWrapper<Visits>()
                 .eq(Visits::getDate,localDate.toString()));
         visits.setPvCounts(visits.getPvCounts()+1);
         long ipCounts = logMapper.findIp(localDate.toString(), localDate.plusDays(1).toString());
@@ -68,7 +68,7 @@ public class VisitsServiceImpl extends BaseServiceImpl<VisitsMapper, Visits> imp
     public Object get() {
         Map<String,Object> map = new HashMap<>(4);
         LocalDate localDate = LocalDate.now();
-        Visits visits = this.getOne(new QueryWrapper<Visits>().lambda()
+        Visits visits = this.getOne(new LambdaQueryWrapper<Visits>()
                 .eq(Visits::getDate,localDate.toString()));
         List<Visits> list = visitsMapper.findAllVisits(localDate.minusDays(6).toString(),localDate.plusDays(1).toString());
 

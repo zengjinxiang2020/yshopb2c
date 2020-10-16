@@ -17,7 +17,7 @@ import co.yixiang.modules.order.service.dto.YxStoreOrderCartInfoQueryCriteria;
 import co.yixiang.modules.order.service.mapper.StoreOrderCartInfoMapper;
 import co.yixiang.utils.FileUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -47,8 +47,8 @@ public class YxStoreOrderCartInfoServiceImpl extends BaseServiceImpl<StoreOrderC
 
     @Override
     public YxStoreOrderCartInfo findByUni(String unique) {
-        QueryWrapper<YxStoreOrderCartInfo> wrapper= new QueryWrapper<>();
-        wrapper.eq("`unique`",unique);
+       LambdaQueryWrapper<YxStoreOrderCartInfo> wrapper= new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreOrderCartInfo::getUnique,unique);
         return this.baseMapper.selectOne(wrapper);
     }
 

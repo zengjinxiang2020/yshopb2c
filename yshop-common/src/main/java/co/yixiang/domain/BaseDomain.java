@@ -34,5 +34,6 @@ public class BaseDomain implements Serializable {
 
     @TableLogic
     @JsonIgnore
+    @TableField(fill= FieldFill.INSERT)
     private Integer isDel;
 }

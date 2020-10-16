@@ -13,7 +13,7 @@ import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.modules.shop.domain.YxSystemAttachment;
 import co.yixiang.modules.shop.service.YxSystemAttachmentService;
 import co.yixiang.modules.shop.service.mapper.YxSystemAttachmentMapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,8 +43,8 @@ public class YxSystemAttachmentServiceImpl extends BaseServiceImpl<YxSystemAttac
      */
     @Override
     public YxSystemAttachment getInfo(String name) {
-        QueryWrapper<YxSystemAttachment> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxSystemAttachment::getName,name)
+       LambdaQueryWrapper<YxSystemAttachment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxSystemAttachment::getName,name)
                 .last("limit 1");
         return yxSystemAttachmentMapper.selectOne(wrapper);
     }
@@ -56,8 +56,8 @@ public class YxSystemAttachmentServiceImpl extends BaseServiceImpl<YxSystemAttac
      */
     @Override
     public YxSystemAttachment getByCode(String code) {
-        QueryWrapper<YxSystemAttachment> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxSystemAttachment::getInviteCode,code)
+       LambdaQueryWrapper<YxSystemAttachment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxSystemAttachment::getInviteCode,code)
                 .last("limit 1");
         return yxSystemAttachmentMapper.selectOne(wrapper);
     }

@@ -29,7 +29,7 @@ import co.yixiang.modules.user.service.mapper.UserBillMapper;
 import co.yixiang.modules.user.service.mapper.YxUserTaskFinishMapper;
 import co.yixiang.modules.user.vo.YxSystemUserTaskQueryVo;
 import co.yixiang.utils.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,8 +112,8 @@ public class YxSystemUserTaskServiceImpl extends BaseServiceImpl<SystemUserTaskM
      */
     @Override
     public TaskDto getTaskList(int levelId, Long uid) {
-        QueryWrapper<YxSystemUserTask> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxSystemUserTask::getLevelId,levelId)
+       LambdaQueryWrapper<YxSystemUserTask> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxSystemUserTask::getLevelId,levelId)
                 .eq(YxSystemUserTask::getIsShow, ShopCommonEnum.SHOW_1.getValue())
                 .orderByDesc(YxSystemUserTask::getSort);
         List<YxSystemUserTaskQueryVo> list = generator.convert(yxSystemUserTaskMapper

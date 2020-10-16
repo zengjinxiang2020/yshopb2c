@@ -20,7 +20,6 @@ import co.yixiang.modules.user.service.YxUserAddressService;
 import co.yixiang.modules.user.service.mapper.YxUserAddressMapper;
 import co.yixiang.modules.user.vo.YxUserAddressQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
@@ -58,7 +57,7 @@ public class YxUserAddressServiceImpl extends BaseServiceImpl<YxUserAddressMappe
         YxUserAddress address = new YxUserAddress();
         address.setIsDefault(ShopCommonEnum.DEFAULT_0.getValue());
         yxUserAddressMapper.update(address,
-                new QueryWrapper<YxUserAddress>().lambda().eq(YxUserAddress::getUid,uid));
+                new LambdaQueryWrapper<YxUserAddress>().eq(YxUserAddress::getUid,uid));
 
         YxUserAddress userAddress = new YxUserAddress();
         userAddress.setIsDefault(ShopCommonEnum.DEFAULT_1.getValue());
@@ -90,7 +89,7 @@ public class YxUserAddressServiceImpl extends BaseServiceImpl<YxUserAddressMappe
             //新增地址如果是默认，把之前的状态改掉
             YxUserAddress address = new YxUserAddress();
             address.setIsDefault(ShopCommonEnum.DEFAULT_0.getValue());
-            baseMapper.update(address,new QueryWrapper<YxUserAddress>().lambda().eq(YxUserAddress::getUid,uid));
+            baseMapper.update(address,new LambdaQueryWrapper<YxUserAddress>().eq(YxUserAddress::getUid,uid));
         }else{
             userAddress.setIsDefault(ShopCommonEnum.DEFAULT_0.getValue());
         }
@@ -136,8 +135,8 @@ public class YxUserAddressServiceImpl extends BaseServiceImpl<YxUserAddressMappe
      */
     @Override
     public YxUserAddress getUserDefaultAddress(Long uid) {
-        QueryWrapper<YxUserAddress> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxUserAddress::getIsDefault,1).
+        LambdaQueryWrapper<YxUserAddress> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxUserAddress::getIsDefault,1).
                 eq(YxUserAddress::getUid,uid)
                 .last("limit 1");
         return getOne(wrapper);
