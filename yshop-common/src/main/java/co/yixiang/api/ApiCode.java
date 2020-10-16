@@ -91,6 +91,10 @@ public enum ApiCode {
 
     HTTP_REQUEST_METHOD_NOT_SUPPORTED_EXCEPTION(5108, "METHOD NOT SUPPORTED"),
 
+    /**
+     * 访问次数受限制
+     **/
+    BAD_LIMIT_EXCEPTION(5109, "访问次数受限制"),
     ;
 
     private final int code;

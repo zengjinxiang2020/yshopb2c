@@ -6,6 +6,7 @@
 package co.yixiang.aspect;
 
 import co.yixiang.annotation.Limit;
+import co.yixiang.exception.BadLimitRequestException;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.utils.RequestHolder;
 import co.yixiang.utils.StringUtils;
@@ -68,7 +69,7 @@ public class LimitAspect {
             logger.info("第{}次访问key为 {}，描述为 [{}] 的接口", count, keys, limit.name());
             return joinPoint.proceed();
         } else {
-            throw new BadRequestException("访问次数受限制");
+            throw new BadLimitRequestException("访问次数受限制");
         }
     }
 

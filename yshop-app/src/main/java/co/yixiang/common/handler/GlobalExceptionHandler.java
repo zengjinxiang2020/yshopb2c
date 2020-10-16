@@ -17,6 +17,7 @@ import co.yixiang.api.UnAuthenticatedException;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.bean.RequestDetail;
 import co.yixiang.common.util.RequestDetailThreadLocal;
+import co.yixiang.exception.BadLimitRequestException;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -69,6 +70,18 @@ public class GlobalExceptionHandler {
         return ApiResult.fail(ApiCode.PARAMETER_EXCEPTION.getCode(), msg);
     }
 
+
+
+
+    @ExceptionHandler(value = BadLimitRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResult<Boolean> badLimitRequestException(BadLimitRequestException exception) {
+        printRequestDetail();
+        printApiCodeException(ApiCode.SYSTEM_EXCEPTION, exception);
+        return new ApiResult<Boolean>()
+                .setStatus(ApiCode.BAD_LIMIT_EXCEPTION.getCode())
+                .setMsg(exception.getMessage());
+    }
 
 
 
