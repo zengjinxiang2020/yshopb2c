@@ -230,50 +230,49 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     @Override
     public List<YxStoreProductQueryVo> getGoodsList(YxStoreProductQueryParam productQueryParam) {
 
-       QueryWrapper<YxStoreProduct> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxStoreProduct::getIsShow, CommonEnum.SHOW_STATUS_1.getValue());
+       LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreProduct::getIsShow, CommonEnum.SHOW_STATUS_1.getValue());
 
         //多字段模糊查询分类搜索
         if (StrUtil.isNotBlank(productQueryParam.getSid()) &&
                 !ShopConstants.YSHOP_ZERO.equals(productQueryParam.getSid())) {
-            wrapper.lambda().eq(YxStoreProduct::getCateId, productQueryParam.getSid());
+            wrapper.eq(YxStoreProduct::getCateId, productQueryParam.getSid());
         }
         //关键字搜索
         if (StrUtil.isNotEmpty(productQueryParam.getKeyword())) {
-            String blurry  = "storeName,storeInfo,keyword";
-            String[] blurrys = blurry.split(",");
             wrapper.and(wrapper1 -> {
-                for (int i=0;i< blurrys.length;i++) {
-                    String column = humpToUnderline(blurrys[i]);
-                    wrapper1.or();
-                    wrapper1.like(column, productQueryParam.getKeyword());
-                }
+                wrapper1.or();
+                wrapper1.like(YxStoreProduct::getStoreName, productQueryParam.getKeyword());
+                wrapper1.or();
+                wrapper1.like(YxStoreProduct::getStoreInfo, productQueryParam.getKeyword());
+                wrapper1.or();
+                wrapper1.like(YxStoreProduct::getKeyword, productQueryParam.getKeyword());
             });
         }
         //新品搜索
         if (StrUtil.isNotBlank(productQueryParam.getNews()) &&
                 !ShopConstants.YSHOP_ZERO.equals(productQueryParam.getNews())) {
-            wrapper.lambda().eq(YxStoreProduct::getIsNew, ShopCommonEnum.IS_NEW_1.getValue());
+            wrapper.eq(YxStoreProduct::getIsNew, ShopCommonEnum.IS_NEW_1.getValue());
         }
 
         //销量排序
         if (SortEnum.DESC.getValue().equals(productQueryParam.getSalesOrder())) {
-            wrapper.lambda().orderByDesc(YxStoreProduct::getSales);
+            wrapper.orderByDesc(YxStoreProduct::getSales);
         } else if (SortEnum.ASC.getValue().equals(productQueryParam.getSalesOrder())) {
-            wrapper.lambda().orderByAsc(YxStoreProduct::getSales);
+            wrapper.orderByAsc(YxStoreProduct::getSales);
         }
 
         //价格排序
         if (SortEnum.DESC.getValue().equals(productQueryParam.getPriceOrder())) {
-            wrapper.lambda().orderByDesc(YxStoreProduct::getPrice);
+            wrapper.orderByDesc(YxStoreProduct::getPrice);
         } else if (SortEnum.ASC.getValue().equals(productQueryParam.getPriceOrder())) {
-            wrapper.lambda().orderByAsc(YxStoreProduct::getPrice);
+            wrapper.orderByAsc(YxStoreProduct::getPrice);
         }
 
-        wrapper.lambda().orderByDesc(YxStoreProduct::getSort);
+        wrapper.orderByDesc(YxStoreProduct::getSort);
         //无其他排序条件时,防止因为商品排序导致商品重复
         if (StringUtils.isNullOrEmpty(productQueryParam.getPriceOrder()) && StringUtils.isNullOrEmpty(productQueryParam.getSalesOrder())) {
-            wrapper.lambda().orderByDesc(YxStoreProduct::getId);
+            wrapper.orderByDesc(YxStoreProduct::getId);
         }
         Page<YxStoreProduct> pageModel = new Page<>(productQueryParam.getPage(),
                 productQueryParam.getLimit());

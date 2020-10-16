@@ -268,8 +268,7 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
     public List<YxWechatLiveDto> getList(int page, int limit, int order) {
         //todo 添加状态判断
        LambdaQueryWrapper<YxWechatLive> wrapper = new LambdaQueryWrapper<>();
-        wrapper
-                .orderByDesc(YxWechatLive::getStartTime);
+        wrapper.orderByDesc(YxWechatLive::getStartTime);
 
 
         Page<YxWechatLive> pageModel = new Page<>(page, limit);

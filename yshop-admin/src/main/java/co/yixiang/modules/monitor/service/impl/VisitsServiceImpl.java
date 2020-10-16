@@ -6,7 +6,7 @@ import co.yixiang.modules.monitor.domain.Visits;
 import co.yixiang.modules.monitor.service.VisitsService;
 import co.yixiang.modules.monitor.service.mapper.VisitsMapper;
 import co.yixiang.utils.StringUtils;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
