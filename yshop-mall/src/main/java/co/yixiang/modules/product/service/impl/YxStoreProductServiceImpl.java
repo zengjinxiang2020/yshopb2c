@@ -54,6 +54,7 @@ import co.yixiang.modules.template.service.YxShippingTemplatesService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.RedisUtil;
+import co.yixiang.utils.RegexUtil;
 import co.yixiang.utils.ShopKeyUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -527,7 +528,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
      */
     @Override
     public void insertAndEditYxStoreProduct(StoreProductDto storeProductDto) {
-
+        storeProductDto.setDescription(RegexUtil.converProductDescription(storeProductDto.getDescription()));
         ProductResultDto resultDTO = this.computedProduct(storeProductDto.getAttrs());
 
         //添加商品
