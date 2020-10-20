@@ -618,12 +618,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 .build();
 
         productReplyService.save(storeProductReply);
+        //获取评价商品数量
+        int replyCount = productReplyService.count(new LambdaQueryWrapper<YxStoreProductReply>().eq(YxStoreProductReply::getOid, orderCartInfo.getOid()));
+        //购买商品数量
+        int cartCount = storeOrderCartInfoService.count(new LambdaQueryWrapper<YxStoreOrderCartInfo>().eq(YxStoreOrderCartInfo::getOid, orderCartInfo.getOid()));
+        if(replyCount==cartCount){
+            YxStoreOrder storeOrder = new YxStoreOrder();
+            storeOrder.setStatus(OrderInfoEnum.STATUS_3.getValue());
+            storeOrder.setId(orderCartInfo.getOid());
+            yxStoreOrderMapper.updateById(storeOrder);
 
-        YxStoreOrder storeOrder = new YxStoreOrder();
-        storeOrder.setStatus(OrderInfoEnum.STATUS_3.getValue());
-        storeOrder.setId(orderCartInfo.getOid());
-        yxStoreOrderMapper.updateById(storeOrder);
-
+        }
         //增加状态
         orderStatusService.create(orderCartInfo.getOid(),
                 OrderLogEnum.EVAL_ORDER.getValue(),
@@ -1321,7 +1326,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 .map(cart -> {
                     YxStoreCartQueryVo cartQueryVo = JSON.parseObject(cart.getCartInfo(),YxStoreCartQueryVo.class);
                     cartQueryVo.setUnique(cart.getUnique());
-                    //cartQueryVo.setIsReply(storeProductReplyService.replyCount(cart.getUnique()));
+                    cartQueryVo.setIsReply(productReplyService.replyCount(cart.getUnique()));
                     return cartQueryVo;
                 })
                 .collect(Collectors.toList());

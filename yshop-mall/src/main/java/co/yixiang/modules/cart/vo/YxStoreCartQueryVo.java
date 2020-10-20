@@ -71,7 +71,7 @@ public class YxStoreCartQueryVo implements Serializable {
     @ApiModelProperty(value = "唯一id")
     private String unique;
 
-    @ApiModelProperty(value = "是否回复")
+    @ApiModelProperty(value = "是否评价")
     private Integer isReply;
 
 }
