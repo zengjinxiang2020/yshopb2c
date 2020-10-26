@@ -20,13 +20,13 @@ public class PinkDto implements Serializable {
     @ApiModelProperty(value = "用户ID")
     private Long uid;
 
-    @ApiModelProperty(value = "拼图总人数")
+    @ApiModelProperty(value = "拼团总人数")
     private Integer people;
 
     @ApiModelProperty(value = "拼团产品单价")
     private Double price;
 
-    @ApiModelProperty(value = "拼图结束时间")
+    @ApiModelProperty(value = "拼团结束时间")
     private Date stopTime;
 
     @ApiModelProperty(value = "拼团用户昵称")
@@ -38,13 +38,13 @@ public class PinkDto implements Serializable {
     @ApiModelProperty(value = "参与的拼团的id集合")
     private String count;
 
-    @ApiModelProperty(value = "拼图时效：小时")
+    @ApiModelProperty(value = "拼团时效：小时")
     private String h;
 
-    @ApiModelProperty(value = "拼图时效：分钟")
+    @ApiModelProperty(value = "拼团时效：分钟")
     private String i;
 
-    @ApiModelProperty(value = "拼图时效：秒")
+    @ApiModelProperty(value = "拼团时效：秒")
     private String s;
 
 

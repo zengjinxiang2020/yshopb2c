@@ -41,7 +41,7 @@ public class OrderParam implements Serializable {
     @ApiModelProperty(value = "门店电话")
     private String phone;
 
-    @ApiModelProperty(value = "拼团产品ID")
+    @ApiModelProperty(value = "拼团id 0没有拼团")
     private String pinkId;
 
     @ApiModelProperty(value = "门店联系人")
