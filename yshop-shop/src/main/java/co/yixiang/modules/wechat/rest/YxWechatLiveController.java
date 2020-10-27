@@ -8,6 +8,7 @@
 */
 package co.yixiang.modules.wechat.rest;
 
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.aop.ForbidSubmit;
@@ -19,6 +20,7 @@ import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,6 +68,7 @@ public class YxWechatLiveController {
         return new ResponseEntity<>(yxWechatLiveService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @ForbidSubmit
     @PostMapping
     @Log("新增wxlive")
@@ -85,6 +88,7 @@ public class YxWechatLiveController {
         return new ResponseEntity<>(yxWechatLiveService.addGoods(resources),HttpStatus.CREATED);
     }
 
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @ForbidSubmit
     @PutMapping
     @Log("修改wxlive")
@@ -95,6 +99,7 @@ public class YxWechatLiveController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @ForbidSubmit
     @Log("删除wxlive")
     @ApiOperation("删除wxlive")
@@ -107,7 +112,7 @@ public class YxWechatLiveController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
     @ApiOperation("同步数据")
     @GetMapping("/synchro")
     public ResponseEntity<Object> synchroWxOlLive() {
