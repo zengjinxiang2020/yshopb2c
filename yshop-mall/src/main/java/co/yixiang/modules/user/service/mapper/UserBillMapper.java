@@ -82,7 +82,7 @@ public interface UserBillMapper extends CoreMapper<YxUserBill> {
             "from yx_user_bill b left join yx_user u on u.uid=b.uid  where 1=1  "  +
             "<if test =\"category !=''\">and b.category=#{category}</if> " +
             "<if test =\"type !=''\">and b.type=#{type}</if> " +
-            "<if test =\"title !=null\">and b.title=#{title}</if> " +
+            "<if test =\"title !=''\">and b.title=#{title}</if> " +
             "<if test =\"pm !=null\">and b.pm=#{pm}</if> " +
             "<if test =\"date !=null\">and b.create_time &gt;= STR_TO_DATE(#{date},'%Y-%m-%d %H:%i:%s')</if> " +
             "<if test =\"date1 !=null\">and b.create_time &lt;=STR_TO_DATE(#{date1},'%Y-%m-%d %H:%i:%s')</if> " +
