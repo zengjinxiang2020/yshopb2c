@@ -24,7 +24,6 @@ import co.yixiang.modules.user.service.mapper.UserBillMapper;
 import co.yixiang.modules.user.vo.BillVo;
 import co.yixiang.modules.user.vo.YxUserBillQueryVo;
 import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -41,8 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -144,8 +141,7 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
         wrapper.lambda().in(YxUserBill::getUid, uid)
                 .eq(YxUserBill::getType, BillDetailEnum.TYPE_2.getValue())
                 .eq(YxUserBill::getCategory, BillDetailEnum.CATEGORY_1.getValue());
-        wrapper.lambda().orderByDesc(YxUserBill::getCreateTime);
-        wrapper.groupBy("time");
+        wrapper.orderByDesc("time").groupBy("time");
         Page<YxUserBill> pageModel = new Page<>(page, limit);
         List<String> list = yxUserBillMapper.getBillOrderList(wrapper, pageModel);
 
