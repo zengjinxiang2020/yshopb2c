@@ -27,6 +27,7 @@ import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.OrderUtil;
 import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -139,11 +140,12 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
      */
     @Override
     public Map<String, Object> spreadOrder(Long uid, int page, int limit) {
-       LambdaQueryWrapper<YxUserBill> wrapper = new LambdaQueryWrapper<>();
-        wrapper.in(YxUserBill::getUid, uid)
+       QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
+        wrapper.lambda().in(YxUserBill::getUid, uid)
                 .eq(YxUserBill::getType, BillDetailEnum.TYPE_2.getValue())
                 .eq(YxUserBill::getCategory, BillDetailEnum.CATEGORY_1.getValue());
-        wrapper.orderByDesc(YxUserBill::getCreateTime).groupBy(YxUserBill::getCreateTime);
+        wrapper.lambda().orderByDesc(YxUserBill::getCreateTime);
+        wrapper.groupBy("time");
         Page<YxUserBill> pageModel = new Page<>(page, limit);
         List<String> list = yxUserBillMapper.getBillOrderList(wrapper, pageModel);
 
@@ -180,32 +182,32 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
      */
     @Override
     public List<BillVo> getUserBillList(int page, int limit, long uid, int type) {
-       LambdaQueryWrapper<YxUserBill> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(YxUserBill::getUid,uid).orderByDesc(YxUserBill::getId);
-        wrapper.groupBy(YxUserBill::getCreateTime);
+       QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(YxUserBill::getUid,uid).orderByDesc(YxUserBill::getId);
+        wrapper.groupBy("time");
         switch (BillInfoEnum.toType(type)){
             case PAY_PRODUCT:
-                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
-                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_3.getValue());
+                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_3.getValue());
                 break;
             case RECHAREGE:
-                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
-                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_1.getValue());
+                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_1.getValue());
                 break;
             case BROKERAGE:
-                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
-                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_2.getValue());
+                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_2.getValue());
                 break;
             case EXTRACT:
-                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
-                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_4.getValue());
+                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_4.getValue());
                 break;
             case SIGN_INTEGRAL:
-                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_2.getValue());
-                wrapper.eq(YxUserBill::getType,BillDetailEnum.TYPE_10.getValue());
+                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_2.getValue());
+                wrapper.lambda().eq(YxUserBill::getType,BillDetailEnum.TYPE_10.getValue());
                 break;
             default:
-                wrapper.eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
+                wrapper.lambda().eq(YxUserBill::getCategory,BillDetailEnum.CATEGORY_1.getValue());
 
         }
         Page<YxUserBill> pageModel = new Page<>(page, limit);
