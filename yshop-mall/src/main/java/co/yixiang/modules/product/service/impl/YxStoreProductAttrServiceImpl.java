@@ -16,6 +16,7 @@ import co.yixiang.api.BusinessException;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.enums.ProductTypeEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.product.domain.YxStoreProductAttr;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
@@ -165,9 +166,9 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
     @Override
     public void incProductAttrStock(Integer num, Long productId, String unique, String type ) {
 
-        if("combination".equals(type)){
+        if(ProductTypeEnum.COMBINATION.getValue().equals(type)){
            yxStoreProductAttrValueMapper.incCombinationStockDecSales(num,productId,unique);
-        }else if("seckill".equals(type)){
+        }else if(ProductTypeEnum.SECKILL.getValue().equals(type)){
            yxStoreProductAttrValueMapper.incSeckillStockDecSales(num,productId,unique);
         }else {
             yxStoreProductAttrValueMapper.incStockDecSales(num,productId,unique);
@@ -183,9 +184,9 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
     @Override
     public void decProductAttrStock(int num, Long productId, String unique,String type) {
         int res = 0;
-        if("combination".equals(type)){
+        if(ProductTypeEnum.COMBINATION.getValue().equals(type)){
             res =  yxStoreProductAttrValueMapper.decCombinationStockIncSales(num,productId,unique);
-        }else if("seckill".equals(type)){
+        }else if(ProductTypeEnum.SECKILL.getValue().equals(type)){
             res =  yxStoreProductAttrValueMapper.decSeckillStockIncSales(num,productId,unique);
         }else {
             res =  yxStoreProductAttrValueMapper.decStockIncSales(num,productId,unique);

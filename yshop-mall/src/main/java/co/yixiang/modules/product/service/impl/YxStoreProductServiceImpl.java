@@ -21,6 +21,7 @@ import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.CommonEnum;
 import co.yixiang.enums.ProductEnum;
+import co.yixiang.enums.ProductTypeEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.enums.SortEnum;
 import co.yixiang.enums.SpecTypeEnum;
@@ -127,9 +128,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         //先处理商品库存，活动商品也要处理，因为共享库存
         storeProductMapper.incStockDecSales(num, productId);
         //处理商品外层显示的库存
-        if ("combination".equals(type)) {
+        if (ProductTypeEnum.COMBINATION.getValue().equals(type)) {
             storeProductMapper.incCombinationStockIncSales(num, productId, activityId);
-        } else if ("seckill".equals(type)) {
+        } else if (ProductTypeEnum.SECKILL.getValue().equals(type)) {
             storeProductMapper.incSeckillStockIncSales(num, productId, activityId);
         }
         //todo 处理砍价商品库存
@@ -154,12 +155,12 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             throw new YshopException("共享商品库存不足");
         }
         //处理商品外层显示的库存
-        if ("combination".equals(type)) {
+        if (ProductTypeEnum.COMBINATION.getValue().equals(type)) {
             int combinationRes = storeProductMapper.decCombinationStockIncSales(num, productId, activityId);
             if (combinationRes == 0) {
                 throw new YshopException("拼团商品库存不足");
             }
-        } else if ("seckill".equals(type)) {
+        } else if (ProductTypeEnum.SECKILL.getValue().equals(type)) {
             int seckillRes = storeProductMapper.decSeckillStockIncSales(num, productId, activityId);
             if (seckillRes == 0) {
                 throw new YshopException("秒杀商品库存不足");
@@ -212,9 +213,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         if (storeProductAttrValue == null) {
             return 0;
         }
-        if ("pink".equals(type)) {
+        if (ProductTypeEnum.PINK.getValue().equals(type)) {
             return storeProductAttrValue.getPinkStock();
-        } else if ("seckill".equals(type)) {
+        } else if (ProductTypeEnum.SECKILL.getValue().equals(type)) {
             return storeProductAttrValue.getSeckillStock();
         }
         return storeProductAttrValue.getStock();
@@ -408,26 +409,35 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
         // order
         switch (ProductEnum.toType(order)) {
+            //精品推荐
             case TYPE_1:
                 wrapper.eq(YxStoreProduct::getIsBest,
-                        ShopCommonEnum.IS_STATUS_1.getValue()); //精品推荐
+                        ShopCommonEnum.IS_STATUS_1.getValue());
                 break;
+            //首发新品
             case TYPE_3:
                 wrapper.eq(YxStoreProduct::getIsNew,
-                        ShopCommonEnum.IS_STATUS_1.getValue());//// 首发新品
+                        ShopCommonEnum.IS_STATUS_1.getValue());
                 break;
+            // 猜你喜欢
             case TYPE_4:
                 wrapper.eq(YxStoreProduct::getIsBenefit,
-                        ShopCommonEnum.IS_STATUS_1.getValue()); //// 猜你喜欢
+                        ShopCommonEnum.IS_STATUS_1.getValue());
                 break;
+            // 热门榜单
             case TYPE_2:
                 wrapper.eq(YxStoreProduct::getIsHot,
-                        ShopCommonEnum.IS_STATUS_1.getValue());//// 热门榜单
+                        ShopCommonEnum.IS_STATUS_1.getValue());
                 break;
         }
         Page<YxStoreProduct> pageModel = new Page<>(page, limit);
 
         IPage<YxStoreProduct> pageList = storeProductMapper.selectPage(pageModel, wrapper);
+
+        //处理虚拟销量
+        for (YxStoreProduct vo: pageList.getRecords()) {
+            vo.setSales(vo.getSales()+vo.getFicti());
+        }
 
 
         return generator.convert(pageList.getRecords(), YxStoreProductQueryVo.class);

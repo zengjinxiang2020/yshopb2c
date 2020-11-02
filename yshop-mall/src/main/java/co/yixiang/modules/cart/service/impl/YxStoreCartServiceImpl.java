@@ -16,13 +16,10 @@ import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.CartTypeEnum;
 import co.yixiang.enums.OrderInfoEnum;
+import co.yixiang.enums.ProductTypeEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.activity.domain.YxStoreBargain;
-import co.yixiang.modules.activity.domain.YxStoreCombination;
-import co.yixiang.modules.activity.domain.YxStoreSeckill;
 import co.yixiang.modules.activity.service.YxStoreBargainService;
-import co.yixiang.modules.activity.service.YxStoreCombinationService;
-import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.service.mapper.YxStoreBargainMapper;
 import co.yixiang.modules.activity.service.mapper.YxStoreCombinationMapper;
 import co.yixiang.modules.activity.service.mapper.YxStoreSeckillMapper;
@@ -32,8 +29,6 @@ import co.yixiang.modules.cart.service.dto.YxStoreCartDto;
 import co.yixiang.modules.cart.service.dto.YxStoreCartQueryCriteria;
 import co.yixiang.modules.cart.service.mapper.StoreCartMapper;
 import co.yixiang.modules.cart.vo.YxStoreCartQueryVo;
-import co.yixiang.modules.order.domain.YxStoreOrder;
-import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.service.dto.CountDto;
 import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
@@ -81,19 +76,12 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
     private YxStoreBargainMapper yxStoreBargainMapper;
     @Autowired
     private YxStoreCombinationMapper storeCombinationMapper;
-
     @Autowired
     private YxStoreProductService productService;
     @Autowired
     private YxStoreProductAttrService productAttrService;
     @Autowired
-    private YxStoreCombinationService storeCombinationService;
-    @Autowired
-    private YxStoreSeckillService storeSeckillService;
-    @Autowired
     private YxStoreBargainService storeBargainService;
-    @Autowired
-    private YxStoreOrderService storeOrderService;
     @Autowired
     private YxUserService userService;
 
@@ -362,7 +350,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
                 throw new YshopException("该产品已下架或删除");
             }
 
-            int stock = productService.getProductStock(productId, productAttrUnique, "pink");
+            int stock = productService.getProductStock(productId, productAttrUnique, ProductTypeEnum.PINK.getValue());
             if (stock < cartNum) {
                 throw new YshopException(product.getStoreName() + "库存不足" + cartNum);
             }
@@ -376,7 +364,7 @@ public class YxStoreCartServiceImpl extends BaseServiceImpl<StoreCartMapper, YxS
                 throw new YshopException("该产品已下架或删除");
             }
 
-            int stock = productService.getProductStock(productId, productAttrUnique, "seckill");
+            int stock = productService.getProductStock(productId, productAttrUnique, ProductTypeEnum.SECKILL.getValue());
             if (stock < cartNum) {
                 throw new YshopException(product.getStoreName() + "库存不足" + cartNum);
             }

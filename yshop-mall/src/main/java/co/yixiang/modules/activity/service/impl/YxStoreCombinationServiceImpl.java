@@ -18,6 +18,7 @@ import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.enums.ProductTypeEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.enums.SpecTypeEnum;
 import co.yixiang.exception.BadRequestException;
@@ -218,7 +219,7 @@ public class YxStoreCombinationServiceImpl extends BaseServiceImpl<YxStoreCombin
             //获取查看拼团产品人数
             combinationDTO.setCountPeopleBrowse(yxStoreVisitMapper.selectCount(new LambdaQueryWrapper<YxStoreVisit>()
                     .eq(YxStoreVisit::getProductId,combinationDTO.getId())
-                    .eq(YxStoreVisit::getProductType,"combination")));
+                    .eq(YxStoreVisit::getProductType, ProductTypeEnum.COMBINATION.getValue())));
         }
         Map<String, Object> map = new LinkedHashMap<>(2);
         map.put("content",combinationDTOS);

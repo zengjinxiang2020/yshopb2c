@@ -28,6 +28,7 @@ import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.OrderLogEnum;
 import co.yixiang.enums.OrderStatusEnum;
 import co.yixiang.enums.PayTypeEnum;
+import co.yixiang.enums.ProductTypeEnum;
 import co.yixiang.enums.ShippingTempEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.event.TemplateBean;
@@ -901,7 +902,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         yxStoreOrderMapper.updateById(storeOrder);
 
         //增加状态
-        orderStatusService.create(order.getId(),"user_take_delivery","用户已收货");
+        orderStatusService.create(order.getId(),OrderLogEnum.TAKE_ORDER_DELIVERY.getValue(),OrderLogEnum.TAKE_ORDER_DELIVERY.getDesc());
 
         //奖励积分
         this.gainUserIntegral(order);
@@ -963,7 +964,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         yxStoreOrderMapper.updateById(storeOrder);
 
         //增加状态
-        orderStatusService.create(order.getId(),"user_take_delivery","已核销");
+        orderStatusService.create(order.getId(),OrderLogEnum.TAKE_ORDER_DELIVERY.getValue(),"已核销");
 
         //奖励积分
         this.gainUserIntegral(orderQueryVo);
@@ -1584,10 +1585,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             Long bargainId = storeCartVO.getBargainId();
             if(combinationId != null && combinationId > 0){
                 productService.decProductStock(storeCartVO.getCartNum(),storeCartVO.getProductId(),
-                        storeCartVO.getProductAttrUnique(),combinationId,"combination");
+                        storeCartVO.getProductAttrUnique(),combinationId,ProductTypeEnum.COMBINATION.getValue());
             }else if(seckillId != null && seckillId > 0){
                 productService.decProductStock(storeCartVO.getCartNum(),storeCartVO.getProductId(),
-                        storeCartVO.getProductAttrUnique(),seckillId,"seckill");
+                        storeCartVO.getProductAttrUnique(),seckillId, ProductTypeEnum.SECKILL.getValue());
             }else if(bargainId != null && bargainId > 0){
                 storeBargainService.decStockIncSales(storeCartVO.getCartNum(),bargainId);
             } else {
@@ -1679,9 +1680,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             YxStoreCartQueryVo cart = JSONObject.parseObject(cartInfo.getCartInfo()
                     ,YxStoreCartQueryVo.class);
             if(order.getCombinationId() != null && order.getCombinationId() > 0){//拼团
-                productService.incProductStock(cart.getCartNum(),cart.getProductId(),cart.getProductAttrUnique(),order.getCombinationId(),"combination");
+                productService.incProductStock(cart.getCartNum(),cart.getProductId(),cart.getProductAttrUnique(),order.getCombinationId(),ProductTypeEnum.COMBINATION.getValue());
             }else if(order.getSeckillId() != null && order.getSeckillId() > 0){//秒杀
-                productService.incProductStock(cart.getCartNum(),cart.getProductId(),cart.getProductAttrUnique(),order.getSeckillId(),"seckill");
+                productService.incProductStock(cart.getCartNum(),cart.getProductId(),cart.getProductAttrUnique(),order.getSeckillId(),ProductTypeEnum.SECKILL.getValue());
             }else if(order.getBargainId() != null && order.getBargainId() > 0){//砍价
                 storeBargainService.incStockDecSales(cart.getCartNum(),order.getBargainId());
             }else{
