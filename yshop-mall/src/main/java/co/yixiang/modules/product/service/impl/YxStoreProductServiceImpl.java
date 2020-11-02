@@ -281,6 +281,11 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
         IPage<YxStoreProduct> pageList = storeProductMapper.selectPage(pageModel, wrapper);
 
+        //处理虚拟销量
+        for (YxStoreProduct vo: pageList.getRecords()) {
+            vo.setSales(vo.getSales()+vo.getFicti());
+        }
+
         List<YxStoreProductQueryVo> list = generator.convert(pageList.getRecords(), YxStoreProductQueryVo.class);
 
         return list;
