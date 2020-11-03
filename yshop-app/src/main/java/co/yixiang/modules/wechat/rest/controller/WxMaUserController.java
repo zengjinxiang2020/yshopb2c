@@ -14,6 +14,7 @@ import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
@@ -22,7 +23,9 @@ import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.wechat.rest.param.BindPhoneParam;
 import co.yixiang.modules.wechat.rest.param.WxPhoneParam;
 import co.yixiang.modules.mp.config.WxMaConfiguration;
+import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
+import co.yixiang.utils.SecurityUtils;
 import co.yixiang.utils.ShopKeyUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -94,17 +97,13 @@ public class WxMaUserController {
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
         String phone = "";
         try {
-            WxMaJscode2SessionResult session = wxMaService.getUserService()
-                    .getSessionInfo(param.getCode());
-
-            // 解密
-            WxMaPhoneNumberInfo phoneNoInfo = wxMaService.getUserService()
-                    .getPhoneNoInfo(session.getSessionKey(), param.getEncryptedData(), param.getIv());
-
+            String sessionKey = RedisUtil.get(ShopConstants.YSHOP_MINI_SESSION_KET+ user.getUid()).toString();
+            WxMaPhoneNumberInfo  phoneNoInfo = wxMaService.getUserService()
+                    .getPhoneNoInfo(sessionKey, param.getEncryptedData(), param.getIv());
             phone = phoneNoInfo.getPhoneNumber();
             user.setPhone(phone);
             userService.updateById(user);
-        } catch (WxErrorException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             throw new YshopException("绑定失败");
         }

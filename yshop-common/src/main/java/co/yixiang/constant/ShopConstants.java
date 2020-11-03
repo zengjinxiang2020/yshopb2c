@@ -173,5 +173,5 @@ public interface ShopConstants {
 
 	String DEFAULT_UNI_H5_URL = "https://h5.yixiang.co";
 
-
+	String YSHOP_MINI_SESSION_KET = "yshop:session_key:";
 }

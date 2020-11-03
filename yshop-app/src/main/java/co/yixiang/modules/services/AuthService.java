@@ -97,6 +97,7 @@ public class AuthService {
             }
             WxMaService wxMaService = WxMaConfiguration.getWxMaService();
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
+
             WxMaUserInfo wxMpUser = wxMaService.getUserService()
                     .getUserInfo(session.getSessionKey(), encryptedData, iv);
             String openid = wxMpUser.getOpenId();
@@ -157,6 +158,7 @@ public class AuthService {
                 userService.updateById(yxUser);
             }
             userService.setSpread(spread, returnUser.getUid());
+            redisUtils.set(ShopConstants.YSHOP_MINI_SESSION_KET + yxUser.getUid(), session.getSessionKey());
             return returnUser;
         } catch (WxErrorException e) {
             e.printStackTrace();
