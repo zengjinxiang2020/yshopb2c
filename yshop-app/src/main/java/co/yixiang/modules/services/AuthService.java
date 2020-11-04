@@ -101,7 +101,6 @@ public class AuthService {
             WxMaUserInfo wxMpUser = wxMaService.getUserService()
                     .getUserInfo(session.getSessionKey(), encryptedData, iv);
             String openid = wxMpUser.getOpenId();
-            YxUser returnUser = null;
             //如果开启了UnionId
             if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
                 openid = wxMpUser.getUnionId();
@@ -115,7 +114,7 @@ public class AuthService {
 
                 //过滤掉表情
                 String ip = IpUtil.getRequestIp();
-                YxUser user = YxUser.builder()
+                yxUser = YxUser.builder()
                         .username(openid)
                         .nickname(wxMpUser.getNickName())
                         .avatar(wxMpUser.getAvatarUrl())
@@ -137,14 +136,11 @@ public class AuthService {
                         .headimgurl(wxMpUser.getAvatarUrl())
                         .build();
 
-                user.setWxProfile(wechatUserDTO);
+                yxUser.setWxProfile(wechatUserDTO);
 
-                userService.save(user);
-
-                returnUser = user;
+                userService.save(yxUser);
 
             } else {
-                returnUser = yxUser;
                 WechatUserDto wechatUser =yxUser.getWxProfile();
                 if ((StrUtil.isBlank(wechatUser.getRoutineOpenid()) && StrUtil.isNotBlank(wxMpUser.getOpenId()))
                         || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(wxMpUser.getUnionId()))) {
@@ -157,9 +153,9 @@ public class AuthService {
                 yxUser.setUserType(AppFromEnum.ROUNTINE.getValue());
                 userService.updateById(yxUser);
             }
-            userService.setSpread(spread, returnUser.getUid());
+            userService.setSpread(spread, yxUser.getUid());
             redisUtils.set(ShopConstants.YSHOP_MINI_SESSION_KET + yxUser.getUid(), session.getSessionKey());
-            return returnUser;
+            return yxUser;
         } catch (WxErrorException e) {
             e.printStackTrace();
             log.error(e.getMessage());
