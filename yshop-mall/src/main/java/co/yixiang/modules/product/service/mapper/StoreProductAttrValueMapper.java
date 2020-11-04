@@ -11,7 +11,6 @@ package co.yixiang.modules.product.service.mapper;
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.product.domain.YxStoreProductAttrValue;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
@@ -45,7 +44,7 @@ public interface StoreProductAttrValueMapper extends CoreMapper<YxStoreProductAt
      */
 
     @Update("update yx_store_product_attr_value set stock=stock+#{num}, pink_stock=pink_stock+#{num}, sales=sales-#{num}" +
-            " where product_id=#{productId} and  and `unique`=#{unique}")
+            " where product_id=#{productId} and `unique`=#{unique}")
     int incCombinationStockDecSales(@Param("num") int num,@Param("productId") Long productId,
                          @Param("unique")  String unique);
 
