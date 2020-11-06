@@ -129,3 +129,8 @@ CREATE TABLE `yx_wechat_live_goods`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信直播商品表' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+
+drop index uid on yx_store_product_relation;

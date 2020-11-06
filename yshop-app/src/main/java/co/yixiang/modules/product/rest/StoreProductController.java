@@ -236,7 +236,7 @@ public class StoreProductController {
         if(!NumberUtil.isNumber(param.getId())) {
             throw new YshopException("参数非法");
         }
-        productRelationService.addRroductRelation(Long.valueOf(param.getId()),uid);
+        productRelationService.addRroductRelation(Long.valueOf(param.getId()),uid,param.getCategory());
         return ApiResult.ok();
     }
 

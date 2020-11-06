@@ -43,7 +43,7 @@ public interface YxStoreProductRelationService extends BaseService<YxStoreProduc
      * @param productId 商品id
      * @param uid 用户id
      */
-    void addRroductRelation(long productId,long uid);
+    void addRroductRelation(long productId,long uid,String category);
 
     /**
      * 取消收藏

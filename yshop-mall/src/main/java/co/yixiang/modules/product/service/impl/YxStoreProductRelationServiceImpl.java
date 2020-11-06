@@ -78,12 +78,13 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
      * @param uid 用户id
      */
     @Override
-    public void addRroductRelation(long productId,long uid) {
+    public void addRroductRelation(long productId,long uid,String category) {
         if(isProductRelation(productId,uid)) {
             throw new YshopException("已收藏");
         }
         YxStoreProductRelation storeProductRelation = YxStoreProductRelation.builder()
                 .productId(productId)
+                .category(category)
                 .uid(uid)
                 .type("collect")
                 .build();
@@ -100,7 +101,7 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
         YxStoreProductRelation productRelation = this.lambdaQuery()
                 .eq(YxStoreProductRelation::getProductId,productId)
                 .eq(YxStoreProductRelation::getUid,uid)
-                .eq(YxStoreProductRelation::getType,category)
+                .eq(YxStoreProductRelation::getCategory,category)
                 .one();
         if(productRelation == null) {
             throw new YshopException("已取消");
