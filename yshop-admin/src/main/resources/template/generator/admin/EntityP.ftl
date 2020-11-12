@@ -17,13 +17,13 @@ import javax.validation.constraints.*;
 </#if>
 <#if hasDateAnnotation>
 </#if>
-<#if hasTimestamp>
-import java.sql.Timestamp;
+<#if hasDateTime>
+import java.util.Date;
 </#if>
 <#if hasBigDecimal>
 import java.math.BigDecimal;
 </#if>
-import java.io.Serializable;
+import co.yixiang.domain.BaseDomain;
 
 /**
 * @author ${author}
@@ -31,10 +31,10 @@ import java.io.Serializable;
 */
 @Data
 @TableName("${tableName}")
-public class ${className} implements Serializable {
+public class ${className} extends BaseDomain {
 <#if columns??>
     <#list columns as column>
-
+    <#if column.changeColumnName != 'isDel' && column.changeColumnName != 'createTime' && column.changeColumnName != 'updateTime' >
     <#if column.remark != ''>
     /** ${column.remark} */
     </#if>
@@ -48,24 +48,6 @@ public class ${className} implements Serializable {
     @NotNull
         </#if>
     </#if>
-    <#if column.dateAnnotation??>
-    <#if column.dateAnnotation = 'CreationTimestamp'>
-    @CreationTimestamp
-    <#else>
-    @UpdateTimestamp
-    </#if>
-    </#if>
-    <#if column.changeColumnName = 'updateTime'|| column.changeColumnName = 'updateDate'>
-    @TableField(fill= FieldFill.INSERT_UPDATE)
-    </#if>
-    <#if column.changeColumnName = 'createTime' || column.changeColumnName = 'createDate'>
-    @TableField(fill= FieldFill.INSERT)
-    </#if>
-    <#if column.changeColumnName = 'delFlag'>
-    @TableLogic
-    @TableField(fill=FieldFill.INSERT_UPDATE)
-    private Boolean ${column.changeColumnName};
-    <#else>
     private ${column.columnType} ${column.changeColumnName};
     </#if>
 

@@ -20,8 +20,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import org.hibernate.annotations.*;
 </#if>
-<#if hasTimestamp>
-import java.sql.Timestamp;
+<#if hasDateTime>
+import java.util.Date;
 </#if>
 <#if hasBigDecimal>
 import java.math.BigDecimal;

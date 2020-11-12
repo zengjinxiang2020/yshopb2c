@@ -37,7 +37,7 @@ import java.util.Map;
 @SuppressWarnings("all")
 public class GenUtil {
 
-    private static final String TIMESTAMP = "Timestamp";
+    private static final String DATE = "Date";
 
     private static final String BIGDECIMAL = "BigDecimal";
 
@@ -213,11 +213,11 @@ public class GenUtil {
         // 保存小写开头的类名
         genMap.put("changeClassName", changeClassName);
         // 存在 Timestamp 字段
-        genMap.put("hasTimestamp",false);
+        genMap.put("hasDateTime",false);
         // 存在 Images 字段
         genMap.put("hasImages",false);
         // 查询类中存在 Timestamp 字段
-        genMap.put("queryHasTimestamp",false);
+        genMap.put("queryHasDateTime",false);
         // 存在 BigDecimal 字段
         genMap.put("hasBigDecimal",false);
         // 查询类中存在 BigDecimal 字段
@@ -266,8 +266,8 @@ public class GenUtil {
                 genMap.put("hasImages",true);
             }
             // 是否存在 Timestamp 类型的字段
-            if(TIMESTAMP.equals(colType)){
-                genMap.put("hasTimestamp",true);
+            if(DATE.equals(colType)){
+                genMap.put("hasDateTime",true);
             }
             // 是否存在 BigDecimal 类型的字段
             if(BIGDECIMAL.equals(colType)){
@@ -316,9 +316,9 @@ public class GenUtil {
                 listMap.put("queryType",column.getQueryType());
                 // 是否存在查询
                 genMap.put("hasQuery",true);
-                if(TIMESTAMP.equals(colType)){
+                if(DATE.equals(colType)){
                     // 查询中存储 Timestamp 类型
-                    genMap.put("queryHasTimestamp",true);
+                    genMap.put("queryHasDateTime",true);
                 }
                 if(BIGDECIMAL.equals(colType)){
                     // 查询中存储 BigDecimal 类型

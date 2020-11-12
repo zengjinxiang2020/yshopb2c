@@ -9,8 +9,8 @@
 package ${package}.service.dto;
 
 import lombok.Data;
-<#if hasTimestamp>
-import java.sql.Timestamp;
+<#if hasDateTime>
+import java.util.Date;
 </#if>
 <#if hasBigDecimal>
 import java.math.BigDecimal;
