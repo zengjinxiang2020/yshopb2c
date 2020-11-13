@@ -167,7 +167,7 @@ public interface ShopConstants {
 
 	String YSHOP_REDIS_CITY_KEY = "yshop:city";
 
-	String YSHOP_APP_LOGIN_USER = "app-online-token";
+	String YSHOP_APP_LOGIN_USER = "app-online-token:";
 
 	String YSHOP_WECHAT_PUSH_REMARK = "yshop为您服务！";
 
