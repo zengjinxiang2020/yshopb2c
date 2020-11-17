@@ -179,7 +179,7 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
     @Override
     public List<BillVo> getUserBillList(int page, int limit, long uid, int type) {
        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(YxUserBill::getUid,uid).orderByDesc(YxUserBill::getId);
+        wrapper.lambda().eq(YxUserBill::getUid,uid).orderByAsc(YxUserBill::getId);
         wrapper.groupBy("time");
         switch (BillInfoEnum.toType(type)){
             case PAY_PRODUCT:
