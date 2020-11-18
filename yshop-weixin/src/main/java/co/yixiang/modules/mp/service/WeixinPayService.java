@@ -8,6 +8,7 @@
  */
 package co.yixiang.modules.mp.service;
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.BusinessException;
@@ -156,9 +157,9 @@ public class WeixinPayService {
     /**
      * 退款
      * @param orderId orderId
-     * @param totalFee totalFee 单位分
+     * @param refundFee totalFee 单位分
      */
-    public void refundOrder(String orderId, Integer totalFee) {
+    public void refundOrder(String orderId, Integer refundFee) {
 
         YxStoreOrderQueryVo orderInfo = storeOrderService.getOrderInfo(orderId,null);
         if(PayTypeEnum.YUE.getValue().equals(orderInfo.getPayType())) {
@@ -167,16 +168,20 @@ public class WeixinPayService {
 
         WxPayService wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WECHAT);
         WxPayRefundRequest wxPayRefundRequest = new WxPayRefundRequest();
+        BigDecimal bigDecimal = new BigDecimal("100");
+        int totalFee = bigDecimal.multiply(orderInfo.getPayPrice()).intValue();
         //订单总金额
         wxPayRefundRequest.setTotalFee(totalFee);
         wxPayRefundRequest.setOutTradeNo(orderId);
-        wxPayRefundRequest.setOutRefundNo(orderId);
+        //生成退款单号
+        String orderSn = IdUtil.getSnowflake(0,0).nextIdStr();
+        wxPayRefundRequest.setOutRefundNo(orderSn);
         //退款金额
-        wxPayRefundRequest.setRefundFee(totalFee);
+        wxPayRefundRequest.setRefundFee(refundFee);
         wxPayRefundRequest.setNotifyUrl(this.getApiUrl() + "/api/notify/refund");
 
         try {
-            wxPayService.refund(wxPayRefundRequest);
+            wxPayService.refundV2(wxPayRefundRequest);
         } catch (WxPayException e) {
             log.info("退款错误信息：{}",e.getMessage());
             throw new BusinessException(e.getMessage());
