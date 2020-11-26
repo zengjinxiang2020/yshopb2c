@@ -146,7 +146,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      * @param uid uid
      * @return YxStoreOrderQueryVo
      */
-    YxStoreOrderQueryVo verificOrder(String verifyCode,Integer isConfirm ,Long uid);
+    YxStoreOrderQueryVo verifyOrder(String verifyCode, Integer isConfirm , Long uid);
 
     /**
      * 订单列表

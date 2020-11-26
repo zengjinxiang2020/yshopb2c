@@ -401,7 +401,7 @@ public class StoreOrderController {
     @ApiOperation(value = "订单核销",notes = "订单核销")
     public ApiResult<Object> orderVerify( @RequestBody OrderVerifyParam param){
         Long uid = LocalUser.getUser().getUid();
-        YxStoreOrderQueryVo orderQueryVo = storeOrderService.verificOrder(param.getVerifyCode(),
+        YxStoreOrderQueryVo orderQueryVo = storeOrderService.verifyOrder(param.getVerifyCode(),
                 param.getIsConfirm(),uid);
         if(orderQueryVo != null) {
             return ApiResult.ok(orderQueryVo);

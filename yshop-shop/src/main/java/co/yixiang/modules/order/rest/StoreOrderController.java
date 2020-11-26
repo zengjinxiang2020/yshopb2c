@@ -165,7 +165,7 @@ public class StoreOrderController {
             throw new BadRequestException("订单未支付");
         }
 
-        yxStoreOrderService.verificOrder(resources.getVerifyCode(),
+        yxStoreOrderService.verifyOrder(resources.getVerifyCode(),
                 OrderInfoEnum.CONFIRM_STATUS_1.getValue(),null);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);

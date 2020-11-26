@@ -923,7 +923,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * @return YxStoreOrderQueryVo
      */
     @Override
-    public YxStoreOrderQueryVo verificOrder(String verifyCode,Integer isConfirm ,Long uid) {
+    public YxStoreOrderQueryVo verifyOrder(String verifyCode,Integer isConfirm ,Long uid) {
 
         YxStoreOrder order = this.getOne(Wrappers.<YxStoreOrder>lambdaQuery()
                 .eq(YxStoreOrder::getVerifyCode,verifyCode)
