@@ -82,7 +82,7 @@ public class AuthService {
      * @param loginParam loginParam
      * @return long
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public YxUser wxappLogin(LoginParam loginParam) {
         String code = loginParam.getCode();
         String encryptedData = loginParam.getEncryptedData();
@@ -171,7 +171,7 @@ public class AuthService {
      * @param spread 上级用户
      * @return uid
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public YxUser wechatLogin(String code,String spread){
         try {
             WxMpService wxService = WxMpConfiguration.getWxMpService();
@@ -257,7 +257,7 @@ public class AuthService {
      * 注册
      * @param param RegDTO
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void register(RegParam param){
 
         String account = param.getAccount();

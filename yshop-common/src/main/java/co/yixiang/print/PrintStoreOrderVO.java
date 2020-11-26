@@ -33,8 +33,8 @@ public class PrintStoreOrderVO implements Serializable {
     private String driverNo;
     @ApiModelProperty(value = "门店列表")
     private Integer storeId;
-@ApiModelProperty(hidden = true)
-    long startSecond;
     @ApiModelProperty(hidden = true)
-    long endSecond;
+    Long startSecond;
+    @ApiModelProperty(hidden = true)
+    Long endSecond;
 }

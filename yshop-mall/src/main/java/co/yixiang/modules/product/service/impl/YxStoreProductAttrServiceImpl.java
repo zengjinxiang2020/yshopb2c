@@ -73,7 +73,7 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
      * @param productId 商品id
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void insertYxStoreProductAttr(List<FromatDetailDto> items, List<ProductFormatDto> attrs,
                                          Long productId)
     {

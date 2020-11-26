@@ -13,6 +13,7 @@ import java.io.Serializable;
  * @modified By：
  * @version:
  */
+@SuppressWarnings("ALL")
 @Data
 @ApiModel(value="腾讯地图返回对象")
 public class GetTencentLocationVO implements Serializable {
@@ -27,7 +28,7 @@ public class GetTencentLocationVO implements Serializable {
     @ApiModelProperty(value = "状态说明")
     private String message;
     @ApiModelProperty(value = "状态码，0为正常")
-    private int status;
+    private Integer status;
 
     @Data
     @ApiModel(value="地址解析结果")
