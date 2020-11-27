@@ -101,7 +101,7 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
         YxStoreProductRelation productRelation = this.lambdaQuery()
                 .eq(YxStoreProductRelation::getProductId,productId)
                 .eq(YxStoreProductRelation::getUid,uid)
-                .eq(YxStoreProductRelation::getType,"collect")
+                .eq(YxStoreProductRelation::getType,category)
                 .one();
         if(productRelation == null) {
             throw new YshopException("已取消");
