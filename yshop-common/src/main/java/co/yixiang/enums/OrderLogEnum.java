@@ -15,7 +15,8 @@ public enum OrderLogEnum {
 
 	PINK_ORDER_FAIL_1("ORDER_EXIST","订单生成失败，你已经参加该团了，请先支付订单"),
 	PINK_ORDER_FAIL_2("ORDER_EXIST","订单生成失败，你已经在该团内不能再参加了"),
-	REFUND_ORDER_SUCCESS("refund_price","退款成功"),
+	REFUND_ORDER_SUCCESS("refund_price_success","退款成功"),
+	ORDER_EDIT("order_edit","订单改价"),
 	REMOVE_ORDER("remove_order","删除订单"),
 	EVAL_ORDER("order_eval","用户评价"),
 	REFUND_ORDER_APPLY("apply_refund","用户申请退款"),

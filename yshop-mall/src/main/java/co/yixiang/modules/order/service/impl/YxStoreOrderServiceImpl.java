@@ -687,10 +687,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                     price.doubleValue(),
                     NumberUtil.add(price,userQueryVo.getNowMoney()).doubleValue(),
                     "订单退款到余额"+price+"元",orderQueryVo.getId().toString());
-
-
-            orderStatusService.create(orderQueryVo.getId(),"order_edit","退款给用户："+price +"元");
         }
+
+        orderStatusService.create(orderQueryVo.getId(),OrderLogEnum.REFUND_ORDER_SUCCESS.getValue(),"退款给用户："+price +"元");
 
         TemplateBean templateBean = TemplateBean.builder()
                 .orderId(orderQueryVo.getOrderId())
@@ -750,7 +749,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         yxStoreOrderMapper.updateById(storeOrder);
 
         //增加状态
-        orderStatusService.create(orderQueryVo.getId(),"delivery_goods",
+        orderStatusService.create(orderQueryVo.getId(),OrderLogEnum.DELIVERY_GOODS.getValue(),
                 "已发货 快递公司："+expressQueryVo.getName()+"快递单号：" +deliveryId);
 
         //模板消息发布事件
@@ -810,7 +809,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         yxStoreOrderMapper.updateById(storeOrder);
 
         //增加状态
-        orderStatusService.create(storeOrder.getId(),"order_edit","修改实际支付金额");
+        orderStatusService.create(storeOrder.getId(),OrderLogEnum.ORDER_EDIT.getValue(),"修改实际支付金额");
 
     }
 

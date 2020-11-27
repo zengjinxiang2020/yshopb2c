@@ -151,22 +151,39 @@ public class StoreOrderController {
         yxOrderNowOrderStatusDto.setSize(dtoList.size());
         dtoList.forEach(dto -> {
             if (OrderLogEnum.CREATE_ORDER.getDesc().equals(dto.getChangeType())) {
-                yxOrderNowOrderStatusDto.setCache_key_create_order(dto.getChangeTime());
+                yxOrderNowOrderStatusDto.setCacheKeyCreateOrder(dto.getChangeTime());
             }
             if (OrderLogEnum.PAY_ORDER_SUCCESS.getDesc().equals(dto.getChangeType())) {
-                yxOrderNowOrderStatusDto.setPay_success(dto.getChangeTime());
+                yxOrderNowOrderStatusDto.setPaySuccess(dto.getChangeTime());
             }
             if (OrderLogEnum.DELIVERY_GOODS.getDesc().equals(dto.getChangeType())) {
-                yxOrderNowOrderStatusDto.setDelivery_goods(dto.getChangeTime());
+                yxOrderNowOrderStatusDto.setDeliveryGoods(dto.getChangeTime());
             }
             if (OrderLogEnum.TAKE_ORDER_DELIVERY.getDesc().equals(dto.getChangeType())) {
-                yxOrderNowOrderStatusDto.setUser_take_delivery(dto.getChangeTime());
-                yxOrderNowOrderStatusDto.setOrder_verific(dto.getChangeTime());
+                yxOrderNowOrderStatusDto.setUserTakeDelivery(dto.getChangeTime());
+                yxOrderNowOrderStatusDto.setOrderVerific(dto.getChangeTime());
             }
             if (OrderLogEnum.EVAL_ORDER.getDesc().equals(dto.getChangeType())) {
-                yxOrderNowOrderStatusDto.setCheck_order_over(dto.getChangeTime());
+                yxOrderNowOrderStatusDto.setCheckOrderOver(dto.getChangeTime());
             }
         });
+
+
+   statusList = new ArrayList<>();
+        statusList.add(OrderLogEnum.REFUND_ORDER_APPLY.getValue());
+        statusList.add(OrderLogEnum.REFUND_ORDER_SUCCESS.getValue());
+        orderStatusLogList = yxStoreOrderStatusService.list(new LambdaQueryWrapper<YxStoreOrderStatus>().eq(YxStoreOrderStatus::getOid, id).in(YxStoreOrderStatus::getChangeType, statusList).orderByDesc(YxStoreOrderStatus::getChangeTime));
+        dtoList = getOrderStatusDto(orderStatusLogList);
+        dtoList.forEach(dto -> {
+            if (OrderLogEnum.REFUND_ORDER_APPLY.getDesc().equals(dto.getChangeType())) {
+                yxOrderNowOrderStatusDto.setApplyRefund(dto.getChangeTime());
+            }
+            if (OrderLogEnum.REFUND_ORDER_SUCCESS.getDesc().equals(dto.getChangeType())) {
+                yxOrderNowOrderStatusDto.setRefundOrderSuccess(dto.getChangeTime());
+            }
+
+        });
+
         return new ResponseEntity(yxOrderNowOrderStatusDto, HttpStatus.OK);
     }
     public List<YxStoreOrderStatusDto> getOrderStatusDto(List<YxStoreOrderStatus> orderStatusLogList) {
@@ -258,7 +275,7 @@ public class StoreOrderController {
 
         yxStoreOrderService.saveOrUpdate(resources);
 
-        yxStoreOrderStatusService.create(resources.getId(),"order_edit",
+        yxStoreOrderStatusService.create(resources.getId(),OrderLogEnum.ORDER_EDIT.getValue(),
                 "修改订单价格为：" + resources.getPayPrice());
         return new ResponseEntity(HttpStatus.OK);
     }
