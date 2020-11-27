@@ -15,21 +15,23 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.OrderInfoEnum;
+import co.yixiang.enums.OrderLogEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.order.domain.YxStoreOrder;
+import co.yixiang.modules.order.domain.YxStoreOrderStatus;
 import co.yixiang.modules.order.param.ExpressParam;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.service.YxStoreOrderStatusService;
-import co.yixiang.modules.order.service.dto.OrderCountDto;
-import co.yixiang.modules.order.service.dto.YxStoreOrderDto;
-import co.yixiang.modules.order.service.dto.YxStoreOrderQueryCriteria;
+import co.yixiang.modules.order.service.dto.*;
 import co.yixiang.tools.express.ExpressService;
 import co.yixiang.tools.express.config.ExpressAutoConfiguration;
 import co.yixiang.tools.express.dao.ExpressInfo;
+import co.yixiang.utils.DateUtils;
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -53,8 +55,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author hupeng
@@ -132,8 +136,48 @@ public class StoreOrderController {
     public ResponseEntity getYxStoreOrders(@PathVariable Long id) {
         return new ResponseEntity<>(yxStoreOrderService.getOrderDetail(id), HttpStatus.OK);
     }
-
-
+    @ApiOperation(value = "查询订单当前状态流程")
+    @GetMapping(value = "/getNowOrderStatus/{id}")
+    public ResponseEntity getNowOrderStatus(@PathVariable Long id) {
+        List<String> statusList = new ArrayList<>();
+        statusList.add(OrderLogEnum.CREATE_ORDER.getValue());
+        statusList.add(OrderLogEnum.PAY_ORDER_SUCCESS.getValue());
+        statusList.add(OrderLogEnum.DELIVERY_GOODS.getValue());
+        statusList.add(OrderLogEnum.TAKE_ORDER_DELIVERY.getValue());
+        statusList.add(OrderLogEnum.EVAL_ORDER.getValue());
+        List<YxStoreOrderStatus> orderStatusLogList = yxStoreOrderStatusService.list(new LambdaQueryWrapper<YxStoreOrderStatus>().eq(YxStoreOrderStatus::getOid, id).in(YxStoreOrderStatus::getChangeType, statusList).orderByDesc(YxStoreOrderStatus::getChangeTime));
+        List<YxStoreOrderStatusDto> dtoList = getOrderStatusDto(orderStatusLogList);
+        YxOrderNowOrderStatusDto yxOrderNowOrderStatusDto = new YxOrderNowOrderStatusDto();
+        yxOrderNowOrderStatusDto.setSize(dtoList.size());
+        dtoList.forEach(dto -> {
+            if (OrderLogEnum.CREATE_ORDER.getDesc().equals(dto.getChangeType())) {
+                yxOrderNowOrderStatusDto.setCache_key_create_order(dto.getChangeTime());
+            }
+            if (OrderLogEnum.PAY_ORDER_SUCCESS.getDesc().equals(dto.getChangeType())) {
+                yxOrderNowOrderStatusDto.setPay_success(dto.getChangeTime());
+            }
+            if (OrderLogEnum.DELIVERY_GOODS.getDesc().equals(dto.getChangeType())) {
+                yxOrderNowOrderStatusDto.setDelivery_goods(dto.getChangeTime());
+            }
+            if (OrderLogEnum.TAKE_ORDER_DELIVERY.getDesc().equals(dto.getChangeType())) {
+                yxOrderNowOrderStatusDto.setUser_take_delivery(dto.getChangeTime());
+                yxOrderNowOrderStatusDto.setOrder_verific(dto.getChangeTime());
+            }
+            if (OrderLogEnum.EVAL_ORDER.getDesc().equals(dto.getChangeType())) {
+                yxOrderNowOrderStatusDto.setCheck_order_over(dto.getChangeTime());
+            }
+        });
+        return new ResponseEntity(yxOrderNowOrderStatusDto, HttpStatus.OK);
+    }
+    public List<YxStoreOrderStatusDto> getOrderStatusDto(List<YxStoreOrderStatus> orderStatusLogList) {
+        List<YxStoreOrderStatusDto> dtoList = orderStatusLogList.stream().map(log -> {
+            YxStoreOrderStatusDto dto = generator.convert(log, YxStoreOrderStatusDto.class);
+            dto.setChangeType(OrderLogEnum.getDesc(dto.getChangeType()));
+            dto.setChangeTime(log.getChangeTime());
+            return dto;
+        }).collect(Collectors.toList());
+        return dtoList;
+    }
     @ApiOperation(value = "发货")
     @PutMapping(value = "/yxStoreOrder")
     @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")

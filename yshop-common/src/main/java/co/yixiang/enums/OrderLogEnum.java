@@ -3,6 +3,8 @@ package co.yixiang.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.stream.Stream;
+
 /**
  * @author hupeng
  * 订单操作相关枚举
@@ -23,6 +25,7 @@ public enum OrderLogEnum {
 	CREATE_ORDER_SUCCESS("SUCCESS","订单创建成功"),
 	CREATE_ORDER("yshop_create_order","订单生成"),
 	NONE_ORDER("NONE","订单OK"),
+	DELIVERY_GOODS("delivery_goods", "订单发货"),
 	EXTEND_ORDER("EXTEND_ORDER","订单已生成");
 
 
@@ -31,5 +34,15 @@ public enum OrderLogEnum {
 
 
 
+	public static OrderLogEnum toType(String value) {
+		return Stream.of(OrderLogEnum.values())
+				.filter(p -> p.value.equals(value))
+				.findAny()
+				.orElse(null);
+	}
+
+	public static String getDesc(String value) {
+		return toType(value) == null ? null : toType(value).desc;
+	}
 
 }
