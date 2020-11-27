@@ -84,9 +84,8 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
         }
         YxStoreProductRelation storeProductRelation = YxStoreProductRelation.builder()
                 .productId(productId)
-                .category(category)
                 .uid(uid)
-                .type("collect")
+                .type(category)
                 .build();
         yxStoreProductRelationMapper.insert(storeProductRelation);
     }
