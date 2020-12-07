@@ -379,6 +379,7 @@ public class StoreOrderController {
     /**
      * 获取物流信息
      */
+    @AuthCheck
     @PostMapping("/order/express")
     @ApiOperation(value = "获取物流信息",notes = "获取物流信息")
     public ApiResult<ExpressInfo> express( @RequestBody ExpressParam expressInfoDo){

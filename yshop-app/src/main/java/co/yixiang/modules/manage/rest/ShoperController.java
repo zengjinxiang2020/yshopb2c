@@ -61,6 +61,7 @@ public class ShoperController {
     /**
      * 订单数据统计
      */
+    @AuthCheck
     @GetMapping("/admin/order/statistics")
     @ApiOperation(value = "订单数据统计",notes = "订单数据统计")
     public ApiResult<Map<String,Object>> statistics(){

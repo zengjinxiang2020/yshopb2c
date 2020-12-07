@@ -117,6 +117,7 @@ public class UserAddressController {
     /**
     * 删除用户地址
     */
+    @AuthCheck
     @PostMapping("/address/del")
     @ApiOperation(value = "删除用户地址",notes = "删除用户地址")
     public ApiResult<Boolean> deleteYxUserAddress(@Valid @RequestBody IdParam idParam){
@@ -141,6 +142,7 @@ public class UserAddressController {
     /**
      * 地址详情
      */
+    @AuthCheck
     @GetMapping("/address/detail/{id}")
     @ApiOperation(value = "地址详情",notes = "地址详情")
     public ApiResult<YxUserAddressQueryVo> addressDetail(@PathVariable String id){
