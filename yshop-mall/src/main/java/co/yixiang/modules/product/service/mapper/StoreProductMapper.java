@@ -10,8 +10,12 @@ package co.yixiang.modules.product.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.product.domain.YxStoreProduct;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
@@ -100,4 +104,9 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
 
     @Delete("DELETE from yx_system_attachment where name like CONCAT(#{id},'_%',#{name}, '%')")
     void deleteForwardImg(@Param("id") Long id,@Param("name") String name);
+
+
+    @Override
+    @Select("SELECT id,spec_type,ot_price,mer_use,description,is_postage,is_sub,is_best,(sales+ficti) as sales,price,is_bargain,vip_price,store_name,stock,keyword,image,cost,is_good,unit_name,is_benefit,update_time,give_integral,is_new,sort,slider_image,is_show,bar_code,postage,code_path,create_time,cate_id,is_seckill,mer_id,temp_id,ficti,store_info,is_del,is_hot,browse FROM yx_store_product ${ew.customSqlSegment}")
+    IPage<YxStoreProduct> selectPage(IPage<YxStoreProduct> page, @Param(Constants.WRAPPER) Wrapper<YxStoreProduct> queryWrapper);
 }
