@@ -18,6 +18,19 @@
             <artifactId>yshop-mall</artifactId>
             <version>3.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>co.yixiang</groupId>
+            <artifactId>yshop-message</artifactId>
+            <version>3.1</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>co.yixiang</groupId>
+                    <artifactId>yshop-mall</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
 

@@ -13,6 +13,7 @@ import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.event.TemplateBean;
 import co.yixiang.event.TemplateEvent;
 import co.yixiang.event.TemplateListenEnum;
+import co.yixiang.message.rocketmq.MqProducer;
 import co.yixiang.modules.mp.service.WeiXinSubscribeService;
 import co.yixiang.modules.mp.service.WeixinPayService;
 import co.yixiang.modules.mp.service.WeixinTemplateService;
@@ -39,6 +40,8 @@ public class TemplateListener implements SmartApplicationListener {
 	private WeixinPayService weixinPayService;
 	@Autowired
 	private WeiXinSubscribeService weiXinSubscribeService;
+    //@Autowired
+    //private MqProducer mqProducer;
 
 	@Override
 	public boolean supportsEventType(Class<? extends ApplicationEvent> aClass) {
@@ -79,9 +82,14 @@ public class TemplateListener implements SmartApplicationListener {
 				weixinTemplateService.rechargeSuccessNotice(templateBean.getTime(),templateBean.getPrice(),
 						templateBean.getUid());
 				break;
-			default:
-				//todo
-		}
+            case TYPE_7:
+                //使用MQ延时消息
+                //mqProducer.sendMsg("yshop-topic", templateBean.getOrderId());
+                log.info("投递延时订单id： [{}]：", templateBean.getOrderId());
+                break;
+            default:
+                //todo
+        }
 
 
 	}

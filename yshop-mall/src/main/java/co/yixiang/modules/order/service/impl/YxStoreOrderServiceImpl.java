@@ -202,8 +202,6 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Autowired
     private RedisUtils redisUtils;
 
-    //@Autowired
-    //private MqProducer mqProducer;
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -565,15 +563,22 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 OrderLogEnum.CREATE_ORDER.getDesc());
 
 
-        //使用MQ延时消息
-        //mqProducer.sendMsg("yshop-topic",storeOrder.getId().toString());
-        //log.info("投递延时订单id： [{}]：", storeOrder.getId());
 
         //加入redis，30分钟自动取消
         String redisKey = String.valueOf(StrUtil.format("{}{}",
                 ShopConstants.REDIS_ORDER_OUTTIME_UNPAY, storeOrder.getId()));
         redisTemplate.opsForValue().set(redisKey, storeOrder.getOrderId() ,
                 ShopConstants.ORDER_OUTTIME_UNPAY, TimeUnit.MINUTES);
+
+        //使用MQ延时消息
+//        TemplateBean templateBean = TemplateBean.builder()
+//                .orderId(storeOrder.getId()+"")
+//                .uid(storeOrder.getUid())
+//                .templateType(TemplateListenEnum.TYPE_7.getValue())
+//                .time(DateUtil.formatTime(new Date()))
+//                .build();
+//        publisher.publishEvent(new TemplateEvent(this,templateBean));
+
 
         return storeOrder;
     }

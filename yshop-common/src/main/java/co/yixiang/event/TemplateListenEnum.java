@@ -19,8 +19,8 @@ public enum TemplateListenEnum {
     TYPE_3("3","发货成功通知"),
     TYPE_4("4","充值成功通知"),
     TYPE_5("5","在线买单/收款成功通知"),
-    TYPE_6("6","商家收款通知");
-
+    TYPE_6("6","商家收款通知"),
+    TYPE_7("7","用户下单未支付通知");
     private String value;
     private String desc;
 
