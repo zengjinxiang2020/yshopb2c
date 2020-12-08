@@ -724,7 +724,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             throw new YshopException("订单状态错误");
         }
 
-        YxExpress expressQueryVo = expressService.getById(Integer.valueOf(deliveryName));
+        YxExpress expressQueryVo = expressService.getOne(new LambdaQueryWrapper<YxExpress>().eq(YxExpress::getName,deliveryName));
         if(ObjectUtil.isNull(expressQueryVo)) {
             throw new YshopException("请后台先添加快递公司");
         }
@@ -770,6 +770,42 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         redisTemplate.opsForValue().set(redisKey, orderQueryVo.getOrderId(),
                 ShopConstants.ORDER_OUTTIME_UNCONFIRM, TimeUnit.DAYS);
 
+    }
+
+    /**
+     * 修改快递单号
+     * @param orderId 单号
+     * @param deliveryId 快递单号
+     * @param deliveryName 快递公司code
+     * @param deliveryType 快递方式
+     */
+    @Override
+    public void updateDelivery(String orderId,String deliveryId,String deliveryName,String deliveryType) {
+        YxStoreOrderQueryVo orderQueryVo = this.getOrderInfo(orderId,null);
+        if(ObjectUtil.isNull(orderQueryVo)) {
+            throw new YshopException("订单不存在");
+        }
+
+        if(!OrderInfoEnum.STATUS_1.getValue().equals(orderQueryVo.getStatus()) ||
+                OrderInfoEnum.PAY_STATUS_0.getValue().equals( orderQueryVo.getPaid())){
+            throw new YshopException("订单状态错误");
+        }
+
+        YxExpress expressQueryVo = expressService.getOne(new LambdaQueryWrapper<YxExpress>().eq(YxExpress::getName,deliveryName));
+        if(ObjectUtil.isNull(expressQueryVo)) {
+            throw new YshopException("请后台先添加快递公司");
+        }
+
+
+        YxStoreOrder storeOrder = YxStoreOrder.builder()
+                .id(orderQueryVo.getId())
+                .deliveryId(deliveryId)
+                .deliveryName(expressQueryVo.getName())
+                .deliveryType(deliveryType)
+                .deliverySn(expressQueryVo.getCode())
+                .build();
+
+        yxStoreOrderMapper.updateById(storeOrder);
     }
 
 

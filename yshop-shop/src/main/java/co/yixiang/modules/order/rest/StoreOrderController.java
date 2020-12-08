@@ -211,6 +211,24 @@ public class StoreOrderController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @ApiOperation(value = "修改快递单号")
+    @PutMapping(value = "/yxStoreOrder/updateDelivery")
+    @PreAuthorize("hasAnyAuthority('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")
+    public ResponseEntity updateDelivery(@Validated @RequestBody YxStoreOrder resources) {
+        if (StrUtil.isBlank(resources.getDeliveryName())) {
+            throw new BadRequestException("请选择快递公司");
+        }
+        if (StrUtil.isBlank(resources.getDeliveryId())) {
+            throw new BadRequestException("快递单号不能为空");
+        }
+
+        yxStoreOrderService.updateDelivery(resources.getOrderId(),resources.getDeliveryId(),
+                resources.getDeliveryName(),resources.getDeliveryType());
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+
+
     @ApiOperation(value = "订单核销")
     @PutMapping(value = "/yxStoreOrder/check")
     @PreAuthorize("hasAnyRole('admin','YXSTOREORDER_ALL','YXSTOREORDER_EDIT')")

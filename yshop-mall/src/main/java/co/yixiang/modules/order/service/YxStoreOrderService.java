@@ -76,6 +76,14 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
     void orderDelivery(String orderId,String deliveryId,String deliveryName,String deliveryType);
 
     /**
+     * 修改快递单号
+     * @param orderId 单号
+     * @param deliveryId 快递单号
+     * @param deliveryName 快递公司code
+     * @param deliveryType 快递方式
+     */
+    void updateDelivery(String orderId,String deliveryId,String deliveryName,String deliveryType);
+    /**
      * 修改订单价格
      * @param orderId 单号
      * @param price 价格
