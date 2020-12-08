@@ -8,6 +8,7 @@ package co.yixiang.modules.system.rest;
 import cn.hutool.crypto.asymmetric.KeyType;
 import cn.hutool.crypto.asymmetric.RSA;
 import co.yixiang.config.DataScope;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.logging.aop.log.Log;
@@ -133,7 +134,7 @@ public class SysUserController {
     public ResponseEntity<Object> create(@Validated @RequestBody User resources){
         checkLevel(resources);
         // 默认密码 123456
-        resources.setPassword(passwordEncoder.encode("123456"));
+        resources.setPassword(passwordEncoder.encode(ShopConstants.YSHOP_DEFAULT_PWD));
         return new ResponseEntity<>(userService.create(resources),HttpStatus.CREATED);
     }
 
