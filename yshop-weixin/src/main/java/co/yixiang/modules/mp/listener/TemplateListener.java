@@ -9,14 +9,26 @@
 package co.yixiang.modules.mp.listener;
 
 
+import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
+import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.event.TemplateBean;
 import co.yixiang.event.TemplateEvent;
 import co.yixiang.event.TemplateListenEnum;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.message.rocketmq.MqProducer;
+import co.yixiang.modules.activity.domain.YxUserExtract;
+import co.yixiang.modules.activity.service.YxUserExtractService;
 import co.yixiang.modules.mp.service.WeiXinSubscribeService;
 import co.yixiang.modules.mp.service.WeixinPayService;
 import co.yixiang.modules.mp.service.WeixinTemplateService;
+import co.yixiang.modules.user.domain.YxUser;
+import co.yixiang.modules.user.service.YxUserBillService;
+import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.modules.user.service.dto.WechatUserDto;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.binarywang.wxpay.exception.WxPayException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
@@ -25,6 +37,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author hupeng
@@ -33,64 +47,106 @@ import java.math.BigDecimal;
 @Slf4j
 @Component
 public class TemplateListener implements SmartApplicationListener {
-
-	@Autowired
-	private WeixinTemplateService weixinTemplateService;
-	@Autowired
-	private WeixinPayService weixinPayService;
-	@Autowired
-	private WeiXinSubscribeService weiXinSubscribeService;
+    @Autowired
+    private YxUserService userService;
+    @Autowired
+    private WeixinTemplateService weixinTemplateService;
+    @Autowired
+    private WeixinPayService weixinPayService;
+    @Autowired
+    private WeiXinSubscribeService weiXinSubscribeService;
+    @Autowired
+    private YxUserExtractService yxUserExtractService;
+    @Autowired
+    private WeixinPayService payService;
+    @Autowired
+    private YxUserBillService billService;
     //@Autowired
     //private MqProducer mqProducer;
 
-	@Override
-	public boolean supportsEventType(Class<? extends ApplicationEvent> aClass) {
-		return aClass == TemplateEvent.class;
-	}
+    @Override
+    public boolean supportsEventType(Class<? extends ApplicationEvent> aClass) {
+        return aClass == TemplateEvent.class;
+    }
 
-	@Async
-	@Override
-	public void onApplicationEvent(ApplicationEvent applicationEvent) {
-		//转换事件类型
-		TemplateEvent templateEvent = (TemplateEvent) applicationEvent;
-		//获取注册用户对象信息
-		TemplateBean templateBean = templateEvent.getTemplateBean();
-		log.info("模板事件类型：{}",templateBean.getTemplateType());
-		switch (TemplateListenEnum.toType(templateBean.getTemplateType())){
-			case TYPE_1:
-				weixinTemplateService.paySuccessNotice(templateBean.getOrderId()
-						,templateBean.getPrice(),templateBean.getUid());
-				weiXinSubscribeService.paySuccessNotice(templateBean.getOrderId()
-						,templateBean.getPrice(),templateBean.getUid());
-				break;
-			case TYPE_2:
-				//处理退款与消息
-				if(PayTypeEnum.WEIXIN.getValue().equals(templateBean.getPayType())){
-					BigDecimal bigDecimal = new BigDecimal("100");
-					int payPrice = bigDecimal.multiply(new BigDecimal(templateBean.getPrice())).intValue();
-					weixinPayService.refundOrder(templateBean.getOrderId(),payPrice);
-				}
+    @Async
+    @Override
+    public void onApplicationEvent(ApplicationEvent applicationEvent) {
+        //转换事件类型
+        TemplateEvent templateEvent = (TemplateEvent) applicationEvent;
+        //获取注册用户对象信息
+        TemplateBean templateBean = templateEvent.getTemplateBean();
+        log.info("模板事件类型：{}", templateBean.getTemplateType());
+        switch (TemplateListenEnum.toType(templateBean.getTemplateType())) {
+            case TYPE_1:
+                weixinTemplateService.paySuccessNotice(templateBean.getOrderId()
+                        , templateBean.getPrice(), templateBean.getUid());
+                weiXinSubscribeService.paySuccessNotice(templateBean.getOrderId()
+                        , templateBean.getPrice(), templateBean.getUid());
+                break;
+            case TYPE_2:
+                //处理退款与消息
+                if (PayTypeEnum.WEIXIN.getValue().equals(templateBean.getPayType())) {
+                    BigDecimal bigDecimal = new BigDecimal("100");
+                    int payPrice = bigDecimal.multiply(new BigDecimal(templateBean.getPrice())).intValue();
+                    weixinPayService.refundOrder(templateBean.getOrderId(), payPrice);
+                }
 
-				weixinTemplateService.refundSuccessNotice(templateBean.getOrderId(),templateBean.getPrice(),
-						templateBean.getUid(),templateBean.getTime());
-				break;
-			case TYPE_3:
-				weixinTemplateService.deliverySuccessNotice(templateBean.getOrderId(),templateBean.getDeliveryName(),
-						templateBean.getDeliveryId(),templateBean.getUid());
-				break;
-			case TYPE_4:
-				weixinTemplateService.rechargeSuccessNotice(templateBean.getTime(),templateBean.getPrice(),
-						templateBean.getUid());
-				break;
+                weixinTemplateService.refundSuccessNotice(templateBean.getOrderId(), templateBean.getPrice(),
+                        templateBean.getUid(), templateBean.getTime());
+                break;
+            case TYPE_3:
+                weixinTemplateService.deliverySuccessNotice(templateBean.getOrderId(), templateBean.getDeliveryName(),
+                        templateBean.getDeliveryId(), templateBean.getUid());
+                break;
+            case TYPE_4:
+                weixinTemplateService.rechargeSuccessNotice(templateBean.getTime(), templateBean.getPrice(),
+                        templateBean.getUid());
+                break;
             case TYPE_7:
                 //使用MQ延时消息
                 //mqProducer.sendMsg("yshop-topic", templateBean.getOrderId());
                 log.info("投递延时订单id： [{}]：", templateBean.getOrderId());
+                break;
+            case TYPE_8:
+                YxUserExtract resources = yxUserExtractService.getById(templateBean.getExtractId());
+                Boolean success = false;
+                YxUser user = userService.getById(resources.getUid());
+                if (user != null) {
+                    WechatUserDto wechatUser = user.getWxProfile();
+                    if (ObjectUtil.isNotNull(wechatUser)) {
+                        try {
+                            String nonce_str = UUID.randomUUID().toString().replace("-", "");
+                            payService.entPay(wechatUser.getOpenid(), nonce_str,
+                                    resources.getRealName(),
+                                    resources.getExtractPrice().multiply(new BigDecimal(100)).intValue());
+                            success = true;
+                        } catch (WxPayException e) {
+                           log.error("退款失败,原因:{}",e.getMessage());
+                        }
+                    }
+                }
+                if (!success) {
+                    String mark = "提现失败,退回佣金" + resources.getExtractPrice() + "元";
+                    double balance = NumberUtil.add(user.getBrokeragePrice(), resources.getExtractPrice()).doubleValue();
+                    //插入流水
+                    billService.income(resources.getUid(), "提现失败", BillDetailEnum.CATEGORY_1.getValue(),
+                            BillDetailEnum.TYPE_4.getValue(), resources.getExtractPrice().doubleValue(), balance,
+                            mark, resources.getId().toString());
+                    //返回提现金额
+                    userService.incBrokeragePrice(resources.getExtractPrice(), resources.getUid());
+                    resources.setFailTime(new Date());
+                    yxUserExtractService.updateById(resources);
+                }
+
+
+
+
                 break;
             default:
                 //todo
         }
 
 
-	}
+    }
 }

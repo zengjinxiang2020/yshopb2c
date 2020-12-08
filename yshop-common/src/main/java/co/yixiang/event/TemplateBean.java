@@ -25,5 +25,9 @@ public class TemplateBean {
     private String deliveryId;
     private String payType;
     private Long uid;
+    /**
+     * 提现申请ID
+     */
+    private Long extractId;
 
 }

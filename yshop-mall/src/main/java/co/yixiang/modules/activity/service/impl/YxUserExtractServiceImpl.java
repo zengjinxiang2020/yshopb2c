@@ -9,6 +9,7 @@
 package co.yixiang.modules.activity.service.impl;
 
 import cn.hutool.core.util.NumberUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
@@ -17,6 +18,9 @@ import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.enums.ShopCommonEnum;
+import co.yixiang.event.TemplateBean;
+import co.yixiang.event.TemplateEvent;
+import co.yixiang.event.TemplateListenEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.activity.domain.YxUserExtract;
 import co.yixiang.modules.activity.param.UserExtParam;
@@ -27,9 +31,14 @@ import co.yixiang.modules.activity.service.mapper.YxUserExtractMapper;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.modules.user.service.dto.WechatUserDto;
+import co.yixiang.modules.user.service.dto.YxWechatUserDto;
 import co.yixiang.utils.FileUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -58,7 +67,7 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
     private final YxUserExtractMapper yxUserExtractMapper;
     private final YxUserService userService;
     private final YxUserBillService billService;
-
+    private final ApplicationEventPublisher publisher;
 
     /**
      * 开始提现
@@ -222,29 +231,14 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
             userService.incBrokeragePrice(resources.getExtractPrice(),resources.getUid());
 
             resources.setFailTime(new Date());
-
+        }else{
+            //模板消息支付成功发布事件
+            TemplateBean templateBean = TemplateBean.builder()
+                    .extractId( resources.getId())
+                    .templateType(TemplateListenEnum.TYPE_8.getValue())
+                    .build();
+            publisher.publishEvent(new TemplateEvent(this,templateBean));
         }
-
-        //todo 此处为企业付款，没经过测试
-        /**
-         boolean isTest = true;
-         if(!isTest){
-         YxWechatUserDto wechatUser =  generator.convert(wechatUserService.getOne(new LambdaQueryWrapper<YxWechatUser>().eq("uid",resources.getUid())),YxWechatUserDto.class);
-         if(ObjectUtil.isNotNull(wechatUser)){
-         try {
-         payService.entPay(wechatUser.getOpenid(),resources.getId().toString(),
-         resources.getRealName(),
-         resources.getExtractPrice().multiply(new BigDecimal(100)).intValue());
-         } catch (WxPayException e) {
-         throw new BadRequestException(e.getMessage());
-         }
-         }else{
-         throw new BadRequestException("不是微信用户无法退款");
-         }
-
-         }
-         **/
-
         this.saveOrUpdate(resources);
     }
 }
