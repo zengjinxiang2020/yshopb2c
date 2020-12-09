@@ -114,10 +114,10 @@ public class TemplateListener implements SmartApplicationListener {
                 YxUser user = userService.getById(resources.getUid());
                 if (user != null) {
                     WechatUserDto wechatUser = user.getWxProfile();
-                    if (ObjectUtil.isNotNull(wechatUser)) {
+                    if (ObjectUtil.isNotNull(wechatUser)&&ObjectUtil.isNotNull(wechatUser.getRoutineOpenid())) {
                         try {
                             String nonce_str = UUID.randomUUID().toString().replace("-", "");
-                            payService.entPay(wechatUser.getOpenid(), nonce_str,
+                            payService.entPay(wechatUser.getRoutineOpenid(), nonce_str,
                                     resources.getRealName(),
                                     resources.getExtractPrice().multiply(new BigDecimal(100)).intValue());
                             success = true;
