@@ -20,15 +20,20 @@ import co.yixiang.modules.activity.vo.YxStoreSeckillQueryVo;
 import co.yixiang.modules.mp.service.YxWechatLiveService;
 import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.modules.product.vo.YxSystemStoreQueryVo;
+import co.yixiang.modules.shop.domain.YxAppVersion;
 import co.yixiang.modules.shop.param.YxSystemStoreQueryParam;
+import co.yixiang.modules.shop.service.YxAppVersionService;
 import co.yixiang.modules.shop.service.YxSystemGroupDataService;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
+import co.yixiang.modules.shop.vo.AppCheckVersion;
 import co.yixiang.modules.shop.vo.IndexVo;
+import co.yixiang.modules.shop.vo.YxAppVersionVo;
 import co.yixiang.utils.FileUtil;
 import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.ShopKeyUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import io.netty.handler.codec.http.multipart.HttpData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +60,7 @@ import java.util.Map;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @Api(value = "首页模块", tags = "商城:首页模块", description = "首页模块")
 public class IndexController {
-
+    private final YxAppVersionService appVersionService;
     private final YxSystemGroupDataService systemGroupDataService;
     private final YxStoreProductService storeProductService;
     private final YxSystemStoreService systemStoreService;
@@ -136,6 +141,20 @@ public class IndexController {
     }
 
 
-
+    @GetMapping("/version")
+    @ApiOperation(value = "获取app版本信息",notes = "获取app版本信息")
+    public ApiResult<YxAppVersionVo> storeList(AppCheckVersion param){
+        YxAppVersion appVersion= appVersionService.lambdaQuery().orderByDesc(YxAppVersion::getCreateTime).one();
+        YxAppVersionVo appVersionVo=new  YxAppVersionVo();
+        appVersionVo.setVersionCode(appVersion.getVersionCode());
+        appVersionVo.setVersionInfo(appVersion.getVersionInfo());
+        appVersionVo.setVersionName(appVersion.getVersionName());
+        appVersionVo.setDownloadUrl(param.getType().equals("1101")?appVersion.getAndroidUrl():appVersion.getIosUrl());
+        appVersionVo.setForceUpdate(appVersion.getForceUpdate()==0);
+        if (!param.getVersionName().equals(appVersion.getVersionName())){
+            return ApiResult.ok(appVersionVo);
+        }
+        return ApiResult.ok(new YxAppVersionVo());
+    }
 
 }

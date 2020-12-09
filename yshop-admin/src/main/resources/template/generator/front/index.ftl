@@ -103,7 +103,7 @@
               </a>
             </template>
           </el-table-column>
-        <#elseif column.columnType != 'Timestamp'>
+        <#elseif column.columnType != 'Date'>
         <el-table-column v-if="columns.visible('${column.changeColumnName}')" prop="${column.changeColumnName}" label="<#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if>" />
         <#else>
         <el-table-column v-if="columns.visible('${column.changeColumnName}')" prop="${column.changeColumnName}" label="<#if column.remark != ''>${column.remark}<#else>${column.changeColumnName}</#if>">
