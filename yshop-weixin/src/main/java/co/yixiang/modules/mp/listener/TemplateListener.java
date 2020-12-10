@@ -11,6 +11,8 @@ package co.yixiang.modules.mp.listener;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.event.TemplateBean;
@@ -20,13 +22,17 @@ import co.yixiang.exception.BadRequestException;
 import co.yixiang.message.rocketmq.MqProducer;
 import co.yixiang.modules.activity.domain.YxUserExtract;
 import co.yixiang.modules.activity.service.YxUserExtractService;
+import co.yixiang.modules.customer.domain.YxStoreCustomer;
+import co.yixiang.modules.customer.service.YxStoreCustomerService;
 import co.yixiang.modules.mp.service.WeiXinSubscribeService;
 import co.yixiang.modules.mp.service.WeixinPayService;
 import co.yixiang.modules.mp.service.WeixinTemplateService;
+import co.yixiang.modules.order.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
+import co.yixiang.utils.DateUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +43,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -61,6 +69,8 @@ public class TemplateListener implements SmartApplicationListener {
     private WeixinPayService payService;
     @Autowired
     private YxUserBillService billService;
+    @Autowired
+    private YxStoreCustomerService yxStoreCustomerService;
     //@Autowired
     //private MqProducer mqProducer;
 
@@ -83,6 +93,18 @@ public class TemplateListener implements SmartApplicationListener {
                         , templateBean.getPrice(), templateBean.getUid());
                 weiXinSubscribeService.paySuccessNotice(templateBean.getOrderId()
                         , templateBean.getPrice(), templateBean.getUid());
+                /**************给客服发送消息**************/
+                try {
+                    List<YxStoreCustomer> yxStoreCustomers = yxStoreCustomerService.list(new LambdaQueryWrapper<YxStoreCustomer>().eq(YxStoreCustomer::getIsEnable, ShopConstants.YSHOP_ONE_NUM));
+                    yxStoreCustomers.forEach(msg -> {
+                        if (StrUtil.isNotBlank(msg.getOpenId())) {
+                         weixinTemplateService.paySuccessNoticeToKefu(templateBean.getOrderId()
+                                 , templateBean.getPrice(), templateBean.getUid());
+                        }
+                    });
+                } catch (Exception e) {
+                    log.error("消息发送失败:{}", e);
+                }
                 break;
             case TYPE_2:
                 //处理退款与消息
@@ -114,7 +136,7 @@ public class TemplateListener implements SmartApplicationListener {
                 YxUser user = userService.getById(resources.getUid());
                 if (user != null) {
                     WechatUserDto wechatUser = user.getWxProfile();
-                    if (ObjectUtil.isNotNull(wechatUser)&&ObjectUtil.isNotNull(wechatUser.getRoutineOpenid())) {
+                    if (ObjectUtil.isNotNull(wechatUser) && ObjectUtil.isNotNull(wechatUser.getRoutineOpenid())) {
                         try {
                             String nonce_str = UUID.randomUUID().toString().replace("-", "");
                             payService.entPay(wechatUser.getRoutineOpenid(), nonce_str,
@@ -122,7 +144,7 @@ public class TemplateListener implements SmartApplicationListener {
                                     resources.getExtractPrice().multiply(new BigDecimal(100)).intValue());
                             success = true;
                         } catch (WxPayException e) {
-                           log.error("退款失败,原因:{}",e.getMessage());
+                            log.error("退款失败,原因:{}", e.getMessage());
                         }
                     }
                 }
@@ -138,8 +160,6 @@ public class TemplateListener implements SmartApplicationListener {
                     resources.setFailTime(new Date());
                     yxUserExtractService.updateById(resources);
                 }
-
-
 
 
                 break;

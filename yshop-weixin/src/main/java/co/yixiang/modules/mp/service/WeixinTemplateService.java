@@ -12,14 +12,17 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.ShopCommonEnum;
+import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.mp.config.WxMpConfiguration;
 import co.yixiang.modules.mp.domain.YxWechatTemplate;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
 import co.yixiang.modules.mp.enums.WechatTempateEnum;
+import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
 import co.yixiang.utils.ShopKeyUtils;
+import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
@@ -35,6 +38,7 @@ import java.util.Map;
  * @Author hupeng <610796224@qq.com>
  * @Date 2020/6/27
  **/
+@Slf4j
 @Service
 public class WeixinTemplateService {
 
@@ -100,6 +104,42 @@ public class WeixinTemplateService {
             this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
         }
     }
+
+
+    /**
+     * 支付成功通知给客服
+     *
+     * @param orderId
+     * @param price
+     * @param uid
+     */
+    public void paySuccessNoticeToKefu(String orderId,String price,Long uid) {
+        Map<String, String> map = new HashMap<>();
+        map.put("first", "尊敬的客服,您有新订单了");
+        map.put("keyword1",orderId);
+        map.put("keyword2",price);
+        map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
+        String tempId = this.getTempId(WechatTempateEnum.PAY_SUCCESS.getValue());
+        String appId=RedisUtil.get(ShopKeyUtils.getWxAppAppId());
+        if(StrUtil.isNotBlank(tempId)) {
+            String openid = this.getUserOpenid(uid);
+            if(StrUtil.isBlank(openid)) {
+                return;
+            }
+            if(StrUtil.isBlank(appId)){
+                this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+            }else{
+                WxMpTemplateMessage.MiniProgram miniProgram = new WxMpTemplateMessage.MiniProgram();
+                miniProgram.setAppid(RedisUtil.get(ShopKeyUtils.getWxAppAppId()));
+                miniProgram.setPagePath("pages/orderAdmin/AdminOrder/index?oid=" + orderId);
+                this.sendWxMpTemplateMessageToWx(openid, tempId, miniProgram, map);
+            }
+        }
+
+
+
+    }
+
 
     /**
      * 退款成功通知
@@ -182,6 +222,29 @@ public class WeixinTemplateService {
         }
         return msgId;
     }
+
+
+
+
+    public String sendWxMpTemplateMessageToWx(String openId, String templateId, WxMpTemplateMessage.MiniProgram miniProgram, Map<String, String> map) {
+        WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder()
+                .toUser(openId)
+                .templateId(templateId)
+                .miniProgram(miniProgram)
+                .build();
+        map.forEach((k, v) -> {
+            templateMessage.addData(new WxMpTemplateData(k, v, "#000000"));
+        });
+        String msgId = null;
+        WxMpService wxService = WxMpConfiguration.getWxMpService();
+        try {
+            msgId = wxService.getTemplateMsgService().sendTemplateMsg(templateMessage);
+        } catch (WxErrorException e) {
+            log.error(e.getMessage(), e);
+        }
+        return msgId;
+    }
+
 
     /**
      * 获取模板消息id

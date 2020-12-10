@@ -174,4 +174,9 @@ public interface ShopConstants {
 	String DEFAULT_UNI_H5_URL = "https://h5.yixiang.co";
 
 	String YSHOP_MINI_SESSION_KET = "yshop:session_key:";
+
+	/**公众号二维码*/
+	String WECHAT_FOLLOW_IMG="wechat_follow_img";
+	/**后台api地址*/
+	String ADMIN_API_URL="admin_api_url";
 }

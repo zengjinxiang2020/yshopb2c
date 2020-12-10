@@ -8,6 +8,7 @@ package co.yixiang.tools.rest;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
+import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.tools.domain.QiniuContent;
 import co.yixiang.tools.service.LocalStorageService;
@@ -56,7 +57,8 @@ public class UploadController {
     public ResponseEntity<Object> create(@RequestParam(defaultValue = "") String name,
                                          @RequestParam(defaultValue = "") String type,
                                          @RequestParam("file") MultipartFile[] files) {
-        String localUrl = redisUtils.getY("admin_api_url");
+
+        String localUrl = redisUtils.getY(ShopConstants.ADMIN_API_URL);
         if(StrUtil.isBlank(type)){
             localUrl = redisUtils.getY("api_url") + "/api";
         }
