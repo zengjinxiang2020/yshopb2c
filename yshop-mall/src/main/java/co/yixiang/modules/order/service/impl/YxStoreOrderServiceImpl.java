@@ -1063,7 +1063,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 .orderId(order.getOrderId())
                 .price(order.getPayPrice().toString())
                 .uid(order.getUid())
-                .templateType(TemplateListenEnum.TYPE_2.getValue())
+                .templateType(TemplateListenEnum.TYPE_9.getValue())
                 .time(DateUtil.formatTime(new Date()))
                 .build();
         publisher.publishEvent(new TemplateEvent(this,templateBean));

@@ -99,7 +99,7 @@ public class TemplateListener implements SmartApplicationListener {
                     yxStoreCustomers.forEach(msg -> {
                         if (StrUtil.isNotBlank(msg.getOpenId())) {
                          weixinTemplateService.paySuccessNoticeToKefu(templateBean.getOrderId()
-                                 , templateBean.getPrice(), templateBean.getUid());
+                                 , templateBean.getPrice(), msg.getOpenId());
                         }
                     });
                 } catch (Exception e) {
@@ -114,7 +114,7 @@ public class TemplateListener implements SmartApplicationListener {
                     weixinPayService.refundOrder(templateBean.getOrderId(), payPrice);
                 }
 
-                weixinTemplateService.refundSuccessNotice(templateBean.getOrderId(), templateBean.getPrice(),
+                weixinTemplateService.refundSuccessNotice("您的订单退款申请被通过，钱款将很快还至您的支付账户。",templateBean.getOrderId(), templateBean.getPrice(),
                         templateBean.getUid(), templateBean.getTime());
                 break;
             case TYPE_3:
@@ -162,6 +162,22 @@ public class TemplateListener implements SmartApplicationListener {
                 }
 
 
+                break;
+            case TYPE_9:
+                weixinTemplateService.refundSuccessNotice("您的订单退款申请已提交,等待审核。",templateBean.getOrderId(), templateBean.getPrice(),
+                        templateBean.getUid(), templateBean.getTime());
+                /**************给客服发送消息**************/
+                try {
+                    List<YxStoreCustomer> yxStoreCustomers = yxStoreCustomerService.list(new LambdaQueryWrapper<YxStoreCustomer>().eq(YxStoreCustomer::getIsEnable, ShopConstants.YSHOP_ONE_NUM));
+                    yxStoreCustomers.forEach(msg -> {
+                        if (StrUtil.isNotBlank(msg.getOpenId())) {
+                            weixinTemplateService.refundSuccessNoticeToKefu("尊敬的客服,您有新的退款申请待处理!",templateBean.getOrderId()
+                                    , templateBean.getPrice(), msg.getOpenId(), templateBean.getTime());
+                        }
+                    });
+                } catch (Exception e) {
+                    log.error("消息发送失败:{}", e);
+                }
                 break;
             default:
                 //todo

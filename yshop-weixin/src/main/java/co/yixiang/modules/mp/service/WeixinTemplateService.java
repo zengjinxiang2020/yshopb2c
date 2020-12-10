@@ -111,9 +111,9 @@ public class WeixinTemplateService {
      *
      * @param orderId
      * @param price
-     * @param uid
+     * @param openId
      */
-    public void paySuccessNoticeToKefu(String orderId,String price,Long uid) {
+    public void paySuccessNoticeToKefu(String orderId,String price,String openId) {
         Map<String, String> map = new HashMap<>();
         map.put("first", "尊敬的客服,您有新订单了");
         map.put("keyword1",orderId);
@@ -122,17 +122,13 @@ public class WeixinTemplateService {
         String tempId = this.getTempId(WechatTempateEnum.PAY_SUCCESS.getValue());
         String appId=RedisUtil.get(ShopKeyUtils.getWxAppAppId());
         if(StrUtil.isNotBlank(tempId)) {
-            String openid = this.getUserOpenid(uid);
-            if(StrUtil.isBlank(openid)) {
-                return;
-            }
             if(StrUtil.isBlank(appId)){
-                this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+                this.sendWxMpTemplateMessage( openId,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
             }else{
                 WxMpTemplateMessage.MiniProgram miniProgram = new WxMpTemplateMessage.MiniProgram();
                 miniProgram.setAppid(RedisUtil.get(ShopKeyUtils.getWxAppAppId()));
                 miniProgram.setPagePath("pages/orderAdmin/AdminOrder/index?oid=" + orderId);
-                this.sendWxMpTemplateMessageToWx(openid, tempId, miniProgram, map);
+                this.sendWxMpTemplateMessageToWx(openId, tempId, miniProgram, map);
             }
         }
 
@@ -148,7 +144,7 @@ public class WeixinTemplateService {
      * @param uid uid
      * @param time 时间
      */
-    public void refundSuccessNotice(String orderId,String price,Long uid,String time){
+    public void refundSuccessNotice(String title,String orderId,String price,Long uid,String time){
 
         String openid = this.getUserOpenid(uid);
 
@@ -157,7 +153,7 @@ public class WeixinTemplateService {
         }
 
         Map<String,String> map = new HashMap<>();
-        map.put("first","您的订单退款申请被通过，钱款将很快还至您的支付账户。");
+        map.put("first",title);
         //订单号
         map.put("keyword1",orderId);
         map.put("keyword2",price);
@@ -166,6 +162,36 @@ public class WeixinTemplateService {
         String tempId = this.getTempId(WechatTempateEnum.REFUND_SUCCESS.getValue());
         if(StrUtil.isNotBlank(tempId)) {
             this.sendWxMpTemplateMessage( openid,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+        }
+    }
+
+    /**
+     * 发送退款申请给客服
+     * @param orderId 订单号
+     * @param price 金额
+     * @param openId openId
+     * @param time 时间
+     */
+    public void refundSuccessNoticeToKefu(String title,String orderId,String price,String openId,String time){
+
+        Map<String,String> map = new HashMap<>();
+        map.put("first",title);
+        //订单号
+        map.put("keyword1",orderId);
+        map.put("keyword2",price);
+        map.put("keyword3", time);
+        map.put("remark",ShopConstants.YSHOP_WECHAT_PUSH_REMARK);
+        String tempId = this.getTempId(WechatTempateEnum.REFUND_SUCCESS.getValue());
+        String appId=RedisUtil.get(ShopKeyUtils.getWxAppAppId());
+        if(StrUtil.isNotBlank(tempId)) {
+            if(StrUtil.isBlank(appId)){
+                this.sendWxMpTemplateMessage( openId,tempId, this.getSiteUrl()+"/order/detail/"+orderId,map);
+            }else{
+                WxMpTemplateMessage.MiniProgram miniProgram = new WxMpTemplateMessage.MiniProgram();
+                miniProgram.setAppid(RedisUtil.get(ShopKeyUtils.getWxAppAppId()));
+                miniProgram.setPagePath("pages/orderAdmin/AdminOrder/index?oid=" + orderId);
+                this.sendWxMpTemplateMessageToWx(openId, tempId, miniProgram, map);
+            }
         }
     }
 
