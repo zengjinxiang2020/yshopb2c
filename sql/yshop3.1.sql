@@ -812,7 +812,7 @@ INSERT INTO `menu` VALUES (233, b'0', '商品规格', 'shop/storeProductRule/ind
 INSERT INTO `menu` VALUES (234, b'0', '运费模板', 'shop/shippingTemplates/index', 40, 14, 'exit-fullscreen', 'shippingTemplates', b'0', b'0', 'ShippingTemplates', '2020-06-29 17:16:06', 'yxShippingTemplates:list', 1, '2020-07-10 16:57:13', 0);
 INSERT INTO `menu` VALUES (235, b'0', '图文添加', 'wechat/article/form', 48, 36, 'article', 'artadd', b'0', b'1', 'Artadd', '2020-07-01 18:50:35', NULL, 1, '2020-07-02 11:24:45', 0);
 INSERT INTO `menu` VALUES (236, b'0', '图文编辑', 'wechat/article/form', 48, 37, 'alipay', 'artadd/:id', b'0', b'1', 'Editadd', '2020-07-02 11:24:39', NULL, 1, NULL, 0);
-INSERT INTO `menu` VALUES (237, b'0', '规格新增、修改', NULL, 233, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-28 16:35:00', 'yxStoreProductRule:add', 2, '2020-07-16 20:09:03', 0);
+INSERT INTO `menu` VALUES (237, b'0', '规格新增、修改', NULL, 233, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-28 16:35:00', 'yxStoreProductRule:add,yxStoreProductRule:edit', 2, '2020-07-16 20:09:03', 0);
 INSERT INTO `menu` VALUES (238, b'0', '规格删除', NULL, 233, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-28 16:35:00', 'yxStoreProductRule:del', 2, '2020-07-16 20:08:57', 0);
 INSERT INTO `menu` VALUES (240, b'0', '新增、修改模板', NULL, 234, 1, NULL, NULL, b'0', b'0', NULL, '2020-06-29 17:16:06', 'yxShippingTemplates:add', 2, '2020-07-16 20:09:11', 0);
 INSERT INTO `menu` VALUES (241, b'0', '删除模板', NULL, 234, 2, NULL, NULL, b'0', b'0', NULL, '2020-06-29 17:16:06', 'yxShippingTemplates:del', 2, '2020-07-16 20:09:16', 0);
