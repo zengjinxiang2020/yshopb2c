@@ -95,7 +95,7 @@ public class TemplateListener implements SmartApplicationListener {
                         , templateBean.getPrice(), templateBean.getUid());
                 /**************给客服发送消息**************/
                 try {
-                    List<YxStoreCustomer> yxStoreCustomers = yxStoreCustomerService.list(new LambdaQueryWrapper<YxStoreCustomer>().eq(YxStoreCustomer::getIsEnable, ShopConstants.YSHOP_ONE_NUM));
+                    List<YxStoreCustomer> yxStoreCustomers = yxStoreCustomerService.lambdaQuery().eq(YxStoreCustomer::getIsEnable, ShopConstants.YSHOP_ONE_NUM).list();
                     yxStoreCustomers.forEach(msg -> {
                         if (StrUtil.isNotBlank(msg.getOpenId())) {
                          weixinTemplateService.paySuccessNoticeToKefu(templateBean.getOrderId()
