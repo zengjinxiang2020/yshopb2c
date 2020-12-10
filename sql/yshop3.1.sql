@@ -365,6 +365,7 @@ INSERT INTO `dict` VALUES (1, 'user_status', '用户状态', '2019-10-27 20:31:3
 INSERT INTO `dict` VALUES (4, 'dept_status', '部门状态', '2019-10-27 20:31:36', NULL, 0);
 INSERT INTO `dict` VALUES (5, 'job_status', '岗位状态', '2019-10-27 20:31:36', NULL, 0);
 INSERT INTO `dict` VALUES (6, '33', '3', '2020-05-18 19:55:49', NULL, 0);
+INSERT INTO `dict`(`id`, `name`, `remark`, `create_time`, `update_time`, `is_del`) VALUES (16, 'force_update', '强制升级', '2020-12-09 11:13:21', NULL, 0);
 INSERT INTO `dict` VALUES (17, 'is_enable', '是否启用', '2020-12-10 12:02:57', NULL, 0);
 -- ----------------------------
 -- Table structure for dict_detail
@@ -395,6 +396,8 @@ INSERT INTO `dict_detail` VALUES (5, '启用2', 'true', '1', 5, NULL, NULL, 0);
 INSERT INTO `dict_detail` VALUES (6, '停用', 'false', '2', 5, '2019-10-27 20:31:36', NULL, 0);
 INSERT INTO `dict_detail` VALUES (7, '8', '8', '999', NULL, '2020-05-18 19:44:05', NULL, 0);
 INSERT INTO `dict_detail` VALUES (8, '99', '999', '999', NULL, '2020-05-18 19:44:31', NULL, 0);
+INSERT INTO `dict_detail`(`id`, `label`, `value`, `sort`, `dict_id`, `create_time`, `update_time`, `is_del`) VALUES (20, '是', '1', '999', 16, '2020-12-09 11:41:30', NULL, 0);
+INSERT INTO `dict_detail`(`id`, `label`, `value`, `sort`, `dict_id`, `create_time`, `update_time`, `is_del`) VALUES (21, '否', '0', '999', 16, '2020-12-09 11:41:36', NULL, 0);
 INSERT INTO `dict_detail` VALUES (22, '是', '1', '999', 17, '2020-12-10 12:03:09', NULL, 0);
 INSERT INTO `dict_detail` VALUES (23, '否', '0', '999', 17, '2020-12-10 12:03:16', NULL, 0);
 
@@ -833,6 +836,7 @@ INSERT INTO `menu` VALUES (253, b'0', '浏览记录', 'monitor/log/mlog', 40, 15
 INSERT INTO `menu` VALUES (256, b'0', '商品收藏', 'shop/collect/index', 40, 16, 'menu', 'productRelation', b'0', b'0', 'ProductRelation', '2020-09-03 14:32:49', 'yxStoreProductRelation:list', 1, '2020-09-03 16:21:08', 0);
 INSERT INTO `menu` VALUES (257, b'0', '用户足迹', 'shop/foot/index', 40, 17, 'list', 'footRelation', b'0', b'0', 'FootRelation', '2020-09-03 16:20:21', 'yxStoreProductRelation:list', 1, '2020-09-03 16:21:16', 0);
 INSERT INTO `menu` VALUES (258, b'0', '订单详情', 'shop/order/detail', 53, 999, 'sqlMonitor', 'detail/:id', b'0', b'1', 'Detail', '2020-09-10 07:29:34', NULL, 1, '2020-09-10 08:52:09', 0);
+INSERT INTO `menu`(`id`, `i_frame`, `name`, `component`, `pid`, `sort`, `icon`, `path`, `cache`, `hidden`, `component_name`, `create_time`, `permission`, `type`, `update_time`, `is_del`) VALUES (259, b'0', 'App版本', 'shop/appVersion/index', 55, 999, 'app', 'appVersion', b'0', b'0', '', '2020-12-09 11:04:33', 'yxAppVersion:list', 1, '2020-12-09 11:07:13', 0);
 INSERT INTO `menu` VALUES (260, b'0', '订单消息管理', 'shop/customer/index', 55, 4, 'peoples', 'storeCustomer', b'0', b'0', 'msgInfo', '2020-04-02 14:16:43', 'yxStoreCustomer:list', 1, '2020-12-10 11:44:49', 0);
 INSERT INTO `menu` VALUES (261, b'0', '添加人员', NULL, 260, 1, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:18:30', 'yxStoreCustomer:add', 2, NULL, 0);
 INSERT INTO `menu` VALUES (262, b'0', '编辑人员', NULL, 260, 2, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:18:47', 'yxStoreCustomer:edit', 2, NULL, 0);
@@ -7257,6 +7261,26 @@ CREATE TABLE `yx_store_customer`  (
   `is_enable` tinyint(1) NULL DEFAULT 1 COMMENT '是否启用',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 88 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单通知用户表 接收订单通知的用户' ROW_FORMAT = Dynamic;
+
+
+-- ----------------------------
+-- Table structure for yx_app_version
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_app_version`;
+CREATE TABLE `yx_app_version`  (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `version_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '版本code',
+   `version_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '版本名称',
+   `version_info` varchar(600) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '版本描述',
+   `ios_url` varchar(10000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'ios store应用商店链接',
+   `android_url` varchar(10000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '安卓下载链接',
+   `force_update` tinyint(4) NULL DEFAULT NULL COMMENT '是否强制升级',
+   `create_time` datetime(0) NULL DEFAULT NULL,
+   `update_time` datetime(0) NULL DEFAULT NULL,
+   `is_del` tinyint(1) NULL DEFAULT 0,
+   PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'app版本' ROW_FORMAT = Dynamic;
+
 
 -- ----------------------------
 -- Records of yx_wechat_template
