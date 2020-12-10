@@ -365,7 +365,7 @@ INSERT INTO `dict` VALUES (1, 'user_status', '用户状态', '2019-10-27 20:31:3
 INSERT INTO `dict` VALUES (4, 'dept_status', '部门状态', '2019-10-27 20:31:36', NULL, 0);
 INSERT INTO `dict` VALUES (5, 'job_status', '岗位状态', '2019-10-27 20:31:36', NULL, 0);
 INSERT INTO `dict` VALUES (6, '33', '3', '2020-05-18 19:55:49', NULL, 0);
-
+INSERT INTO `dict` VALUES (17, 'is_enable', '是否启用', '2020-12-10 12:02:57', NULL, 0);
 -- ----------------------------
 -- Table structure for dict_detail
 -- ----------------------------
@@ -395,6 +395,8 @@ INSERT INTO `dict_detail` VALUES (5, '启用2', 'true', '1', 5, NULL, NULL, 0);
 INSERT INTO `dict_detail` VALUES (6, '停用', 'false', '2', 5, '2019-10-27 20:31:36', NULL, 0);
 INSERT INTO `dict_detail` VALUES (7, '8', '8', '999', NULL, '2020-05-18 19:44:05', NULL, 0);
 INSERT INTO `dict_detail` VALUES (8, '99', '999', '999', NULL, '2020-05-18 19:44:31', NULL, 0);
+INSERT INTO `dict_detail` VALUES (22, '是', '1', '999', 17, '2020-12-10 12:03:09', NULL, 0);
+INSERT INTO `dict_detail` VALUES (23, '否', '0', '999', 17, '2020-12-10 12:03:16', NULL, 0);
 
 -- ----------------------------
 -- Table structure for email_config
@@ -831,6 +833,11 @@ INSERT INTO `menu` VALUES (253, b'0', '浏览记录', 'monitor/log/mlog', 40, 15
 INSERT INTO `menu` VALUES (256, b'0', '商品收藏', 'shop/collect/index', 40, 16, 'menu', 'productRelation', b'0', b'0', 'ProductRelation', '2020-09-03 14:32:49', 'yxStoreProductRelation:list', 1, '2020-09-03 16:21:08', 0);
 INSERT INTO `menu` VALUES (257, b'0', '用户足迹', 'shop/foot/index', 40, 17, 'list', 'footRelation', b'0', b'0', 'FootRelation', '2020-09-03 16:20:21', 'yxStoreProductRelation:list', 1, '2020-09-03 16:21:16', 0);
 INSERT INTO `menu` VALUES (258, b'0', '订单详情', 'shop/order/detail', 53, 999, 'sqlMonitor', 'detail/:id', b'0', b'1', 'Detail', '2020-09-10 07:29:34', NULL, 1, '2020-09-10 08:52:09', 0);
+INSERT INTO `menu` VALUES (260, b'0', '订单消息管理', 'shop/customer/index', 55, 4, 'peoples', 'storeCustomer', b'0', b'0', 'msgInfo', '2020-04-02 14:16:43', 'yxStoreCustomer:list', 1, '2020-12-10 11:44:49', 0);
+INSERT INTO `menu` VALUES (261, b'0', '添加人员', NULL, 260, 1, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:18:30', 'yxStoreCustomer:add', 2, NULL, 0);
+INSERT INTO `menu` VALUES (262, b'0', '编辑人员', NULL, 260, 2, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:18:47', 'yxStoreCustomer:edit', 2, NULL, 0);
+INSERT INTO `menu` VALUES (263, b'0', '删除人员', NULL, 260, 3, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:19:07', 'yxStoreCustomer:del', 2, NULL, 0);
+
 
 -- ----------------------------
 -- Table structure for monitor_server
@@ -1266,6 +1273,10 @@ INSERT INTO `roles_menus` VALUES (253, 1);
 INSERT INTO `roles_menus` VALUES (256, 1);
 INSERT INTO `roles_menus` VALUES (257, 1);
 INSERT INTO `roles_menus` VALUES (258, 1);
+INSERT INTO `roles_menus` VALUES (260, 1);
+INSERT INTO `roles_menus` VALUES (261, 1);
+INSERT INTO `roles_menus` VALUES (262, 1);
+INSERT INTO `roles_menus` VALUES (263, 1);
 
 -- ----------------------------
 -- Table structure for user
@@ -7230,6 +7241,22 @@ CREATE TABLE `yx_wechat_template`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `tempkey`(`tempkey`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信模板' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for yx_store_customer
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_store_customer`;
+CREATE TABLE `yx_store_customer`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `nick_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
+  `open_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'openId',
+  `remark` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '添加时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `is_del` tinyint(1) NULL DEFAULT 0,
+  `is_enable` tinyint(1) NULL DEFAULT 1 COMMENT '是否启用',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 88 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单通知用户表 接收订单通知的用户' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of yx_wechat_template
