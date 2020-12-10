@@ -50,6 +50,12 @@ yshop:
   version: 3.1
   apiUrl: http://127.0.0.1:8009/api
 
+logging:
+  level:
+    co.yixiang: DEBUG
+    org.springframework.web: DEBUG
+    me.chanjar.weixin: DEBUG
+
 mybatis-plus:
   check-config-location: true
   configuration:
