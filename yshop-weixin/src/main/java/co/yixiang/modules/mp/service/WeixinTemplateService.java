@@ -12,7 +12,6 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.ShopCommonEnum;
-import co.yixiang.exception.BadRequestException;
 import co.yixiang.modules.mp.config.WxMpConfiguration;
 import co.yixiang.modules.mp.domain.YxWechatTemplate;
 import co.yixiang.modules.user.domain.YxUser;
