@@ -93,7 +93,4 @@ file:
   maxSize: 100
   avatarMaxSize: 5
 
-yshop:
-  hApi: https://127.0.0.1:8000
-  wechatCode: http://127.0.0.1:8000/upload/qrcode_for_gh_2ac8f422a79f_258.jpg
-  miniAppID:
+
