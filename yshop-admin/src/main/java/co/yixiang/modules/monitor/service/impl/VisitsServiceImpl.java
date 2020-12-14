@@ -58,7 +58,12 @@ public class VisitsServiceImpl extends BaseServiceImpl<VisitsMapper, Visits> imp
         LocalDate localDate = LocalDate.now();
         Visits visits = this.getOne(new LambdaQueryWrapper<Visits>()
                 .eq(Visits::getDate,localDate.toString()));
-        visits.setPvCounts(visits.getPvCounts()+1);
+        if (visits == null) {
+            visits = new Visits();
+            visits.setPvCounts(1L);
+        } else {
+            visits.setPvCounts(visits.getPvCounts()+1);
+        }
         long ipCounts = logMapper.findIp(localDate.toString(), localDate.plusDays(1).toString());
         visits.setIpCounts(ipCounts);
         this.saveOrUpdate(visits);
