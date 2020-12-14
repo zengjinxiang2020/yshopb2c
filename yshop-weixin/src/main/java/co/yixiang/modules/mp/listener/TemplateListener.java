@@ -18,7 +18,6 @@ import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.event.TemplateBean;
 import co.yixiang.event.TemplateEvent;
 import co.yixiang.event.TemplateListenEnum;
-import co.yixiang.message.rocketmq.MqProducer;
 import co.yixiang.modules.activity.domain.YxUserExtract;
 import co.yixiang.modules.activity.service.YxUserExtractService;
 import co.yixiang.modules.customer.domain.YxStoreCustomer;

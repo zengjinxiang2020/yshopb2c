@@ -56,7 +56,6 @@ yshop3.0项目采用分模块开发方式
     * 1.15 Hutool
     * 1.16 Mapstruct
 	* 1.17 Redisson
-	* 1.18 Rocketmq
         
 * 前端使用技术
     * 2.1 Vue 全家桶
