@@ -165,7 +165,9 @@ public class WeixinPayService {
         if(PayTypeEnum.YUE.getValue().equals(orderInfo.getPayType())) {
             return;
         }
-
+        if(orderInfo.getExtendOrderId()!=null){
+            orderId=orderInfo.getExtendOrderId();
+        }
         WxPayService wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WECHAT);
         WxPayRefundRequest wxPayRefundRequest = new WxPayRefundRequest();
         BigDecimal bigDecimal = new BigDecimal("100");
