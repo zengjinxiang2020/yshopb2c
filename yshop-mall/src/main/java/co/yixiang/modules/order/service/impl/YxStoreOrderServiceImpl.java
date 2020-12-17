@@ -502,6 +502,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         storeOrder.setPaid(OrderInfoEnum.PAY_STATUS_0.getValue());
         storeOrder.setPayType(param.getPayType());
         storeOrder.setUseIntegral(BigDecimal.valueOf(computeVo.getUsedIntegral()));
+        storeOrder.setBackIntegral(BigDecimal.ZERO);
         storeOrder.setGainIntegral(gainIntegral);
         storeOrder.setMark(param.getMark());
         storeOrder.setCombinationId(combinationId);
