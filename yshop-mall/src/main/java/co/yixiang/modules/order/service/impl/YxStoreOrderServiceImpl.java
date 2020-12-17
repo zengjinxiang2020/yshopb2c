@@ -67,6 +67,7 @@ import co.yixiang.modules.order.vo.OrderDataVo;
 import co.yixiang.modules.order.vo.ShoperOrderTimeDataVo;
 import co.yixiang.modules.order.vo.UserOrderCountVo;
 import co.yixiang.modules.order.vo.YxStoreOrderQueryVo;
+import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.domain.YxStoreProductReply;
 import co.yixiang.modules.product.service.YxStoreProductReplyService;
 import co.yixiang.modules.product.service.YxStoreProductService;
@@ -692,6 +693,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                     price.doubleValue(),
                     NumberUtil.add(price,userQueryVo.getNowMoney()).doubleValue(),
                     "订单退款到余额"+price+"元",orderQueryVo.getId().toString());
+            this.retrunStock(orderQueryVo.getOrderId());
         }
 
         orderStatusService.create(orderQueryVo.getId(),OrderLogEnum.REFUND_ORDER_SUCCESS.getValue(),"退款给用户："+price +"元");
@@ -2122,6 +2124,14 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         map.put("chartT",yxStoreOrderMapper.chartListT(nowMonth));
 
         return map;
+    }
+
+    @Override
+    public void retrunStock(String orderId) {
+        YxStoreOrderQueryVo order = this.getOrderInfo(orderId,null);
+        this.regressionIntegral(order);
+        this.regressionStock(order);
+        this.regressionCoupon(order);
     }
 
     @Override
