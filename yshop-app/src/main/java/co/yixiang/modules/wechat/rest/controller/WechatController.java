@@ -201,6 +201,7 @@ public class WechatController {
             storeOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_2.getValue());
             storeOrder.setRefundPrice(refundFee);
             orderService.updateById(storeOrder);
+            orderService.retrunStock(orderId);
             return WxPayNotifyResponse.success("处理成功!");
         } catch (WxPayException | IllegalAccessException e) {
             log.error(e.getMessage());

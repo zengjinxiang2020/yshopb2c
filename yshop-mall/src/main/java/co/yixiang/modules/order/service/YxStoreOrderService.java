@@ -288,4 +288,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      * @return map
      */
     Map<String,Object> chartCount();
+
+
+   void retrunStock(String orderId);
 }
