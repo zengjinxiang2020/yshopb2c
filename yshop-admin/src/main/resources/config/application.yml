@@ -52,9 +52,9 @@ yshop:
 
 logging:
   level:
-    co.yixiang: DEBUG
-    org.springframework.web: DEBUG
-    me.chanjar.weixin: DEBUG
+    co.yixiang: ERROR
+    org.springframework.web: ERROR
+    me.chanjar.weixin: ERROR
 
 mybatis-plus:
   check-config-location: true

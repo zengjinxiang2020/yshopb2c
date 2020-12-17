@@ -18,8 +18,6 @@ import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.event.TemplateBean;
 import co.yixiang.event.TemplateEvent;
 import co.yixiang.event.TemplateListenEnum;
-import co.yixiang.exception.BadRequestException;
-import co.yixiang.message.rocketmq.MqProducer;
 import co.yixiang.modules.activity.domain.YxUserExtract;
 import co.yixiang.modules.activity.service.YxUserExtractService;
 import co.yixiang.modules.customer.domain.YxStoreCustomer;
@@ -27,13 +25,10 @@ import co.yixiang.modules.customer.service.YxStoreCustomerService;
 import co.yixiang.modules.mp.service.WeiXinSubscribeService;
 import co.yixiang.modules.mp.service.WeixinPayService;
 import co.yixiang.modules.mp.service.WeixinTemplateService;
-import co.yixiang.modules.order.vo.YxStoreOrderQueryVo;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
-import co.yixiang.utils.DateUtils;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +38,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -168,7 +162,7 @@ public class TemplateListener implements SmartApplicationListener {
                         templateBean.getUid(), templateBean.getTime());
                 /**************给客服发送消息**************/
                 try {
-                    List<YxStoreCustomer> yxStoreCustomers = yxStoreCustomerService.list(new LambdaQueryWrapper<YxStoreCustomer>().eq(YxStoreCustomer::getIsEnable, ShopConstants.YSHOP_ONE_NUM));
+                    List<YxStoreCustomer> yxStoreCustomers = yxStoreCustomerService.lambdaQuery().eq(YxStoreCustomer::getIsEnable, ShopConstants.YSHOP_ONE_NUM).list();
                     yxStoreCustomers.forEach(msg -> {
                         if (StrUtil.isNotBlank(msg.getOpenId())) {
                             weixinTemplateService.refundSuccessNoticeToKefu("尊敬的客服,您有新的退款申请待处理!",templateBean.getOrderId()

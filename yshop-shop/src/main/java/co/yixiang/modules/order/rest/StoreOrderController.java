@@ -16,6 +16,7 @@ import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.OrderLogEnum;
+import co.yixiang.enums.ShipperCodeEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.exception.BadRequestException;
 import co.yixiang.logging.aop.log.Log;
@@ -317,9 +318,21 @@ public class StoreOrderController {
     @PostMapping("/yxStoreOrder/express")
     @ApiOperation(value = "获取物流信息",notes = "获取物流信息",response = ExpressParam.class)
     public ResponseEntity express( @RequestBody ExpressParam expressInfoDo){
+
+        //顺丰轨迹查询处理
+        String lastFourNumber = "";
+        if (expressInfoDo.getShipperCode().equals(ShipperCodeEnum.SF.getValue())) {
+            YxStoreOrderDto yxStoreOrderDto;
+            yxStoreOrderDto = yxStoreOrderService.getOrderDetail(Long.valueOf(expressInfoDo.getOrderCode()));
+            lastFourNumber = yxStoreOrderDto.getUserPhone();
+            if (lastFourNumber.length()==11) {
+                lastFourNumber = StrUtil.sub(lastFourNumber,lastFourNumber.length(),-4);
+            }
+        }
+
         ExpressService expressService = ExpressAutoConfiguration.expressService();
         ExpressInfo expressInfo = expressService.getExpressInfo(expressInfoDo.getOrderCode(),
-                expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode());
+                expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode(),lastFourNumber);
         if(!expressInfo.isSuccess()) {
             throw new BadRequestException(expressInfo.getReason());
         }
