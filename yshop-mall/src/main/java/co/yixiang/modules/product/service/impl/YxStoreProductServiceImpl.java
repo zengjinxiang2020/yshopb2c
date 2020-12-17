@@ -232,8 +232,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     @Override
     public List<YxStoreProductQueryVo> getGoodsList(YxStoreProductQueryParam productQueryParam) {
 
-       LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(YxStoreProduct::getIsShow, CommonEnum.SHOW_STATUS_1.getValue());
+        wrapper.eq(YxStoreProduct::getIsDel, CommonEnum.DEL_STATUS_0.getValue());
 
         //多字段模糊查询分类搜索
         if (StrUtil.isNotBlank(productQueryParam.getSid()) &&

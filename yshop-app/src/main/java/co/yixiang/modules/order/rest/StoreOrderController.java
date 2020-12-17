@@ -13,6 +13,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.enums.ShipperCodeEnum;
 import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
@@ -33,6 +34,7 @@ import co.yixiang.modules.order.param.ProductOrderParam;
 import co.yixiang.modules.order.param.ProductReplyParam;
 import co.yixiang.modules.order.param.RefundParam;
 import co.yixiang.modules.order.service.YxStoreOrderService;
+import co.yixiang.modules.order.service.dto.YxStoreOrderDto;
 import co.yixiang.modules.order.vo.ComputeVo;
 import co.yixiang.modules.order.vo.ConfirmOrderVo;
 import co.yixiang.modules.order.vo.OrderCartInfoVo;
@@ -384,9 +386,21 @@ public class StoreOrderController {
     @PostMapping("/order/express")
     @ApiOperation(value = "获取物流信息",notes = "获取物流信息")
     public ApiResult<ExpressInfo> express( @RequestBody ExpressParam expressInfoDo){
+
+        //顺丰轨迹查询处理
+        String lastFourNumber = "";
+        if (expressInfoDo.getShipperCode().equals(ShipperCodeEnum.SF.getValue())) {
+            YxStoreOrderDto yxStoreOrderDto;
+            yxStoreOrderDto = storeOrderService.getOrderDetail(Long.valueOf(expressInfoDo.getOrderCode()));
+            lastFourNumber = yxStoreOrderDto.getUserPhone();
+            if (lastFourNumber.length()==11) {
+                lastFourNumber = StrUtil.sub(lastFourNumber,lastFourNumber.length(),-4);
+            }
+        }
+
         ExpressService expressService = ExpressAutoConfiguration.expressService();
         ExpressInfo expressInfo = expressService.getExpressInfo(expressInfoDo.getOrderCode(),
-                expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode());
+                expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode(),lastFourNumber);
         if(!expressInfo.isSuccess()) {
             throw new YshopException(expressInfo.getReason());
         }

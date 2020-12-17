@@ -6,6 +6,7 @@
 package co.yixiang.tools.express;
 
 import cn.hutool.http.HttpUtil;
+import co.yixiang.enums.ShipperCodeEnum;
 import co.yixiang.tools.express.config.ExpressProperties;
 import co.yixiang.tools.express.dao.ExpressInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -62,9 +63,9 @@ public class ExpressService implements Serializable {
      * @param ShipperCode
      * @return
      */
-    public ExpressInfo getExpressInfo(String OrderCode,String ShipperCode, String LogisticCode) {
+    public ExpressInfo getExpressInfo(String OrderCode,String ShipperCode, String LogisticCode,String lastFourNumber) {
         try {
-            String result = getOrderTracesByJson(OrderCode,ShipperCode, LogisticCode);
+            String result = getOrderTracesByJson(OrderCode,ShipperCode, LogisticCode,lastFourNumber);
             ObjectMapper objMap = new ObjectMapper();
             ExpressInfo ei = objMap.readValue(result, ExpressInfo.class);
             ei.setShipperName(getVendorName(ShipperCode));
@@ -81,12 +82,18 @@ public class ExpressService implements Serializable {
      *
      * @throws Exception
      */
-    private String getOrderTracesByJson(String OrderCode,String ShipperCode, String LogisticCode) throws Exception {
+    private String getOrderTracesByJson(String OrderCode,String ShipperCode, String LogisticCode,String lastFourNumber) throws Exception {
         if (!properties.isEnable()) {
             return null;
         }
 
-        String requestData = "{'OrderCode':'"+OrderCode+"','ShipperCode':'" + ShipperCode + "','LogisticCode':'" + LogisticCode + "'}";
+        //处理顺丰查询轨迹需手机号码后4位
+        String requestData;
+        if (ShipperCode.equals(ShipperCodeEnum.SF.getValue())) {
+            requestData = "{'OrderCode':'" + OrderCode + "','ShipperCode':'" + ShipperCode + "','LogisticCode':'" + LogisticCode + "','CustomerName':'" + lastFourNumber + "'}";
+        } else {
+            requestData = "{'OrderCode':'" + OrderCode + "','ShipperCode':'" + ShipperCode + "','LogisticCode':'" + LogisticCode + "'}";
+        }
 
         Map<String, Object> params = new HashMap<>();
         params.put("RequestData", URLEncoder.encode(requestData, "UTF-8"));
