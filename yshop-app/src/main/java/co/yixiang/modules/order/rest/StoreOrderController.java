@@ -173,6 +173,7 @@ public class StoreOrderController {
         //处理金额为0的情况
         if(order.getPayPrice().compareTo(BigDecimal.ZERO) <= 0){
             storeOrderService.yuePay(orderId,yxUser.getUid());
+            map.put("payMsg","支付成功");
             return ApiResult.ok(map,"支付成功");
         }
 
