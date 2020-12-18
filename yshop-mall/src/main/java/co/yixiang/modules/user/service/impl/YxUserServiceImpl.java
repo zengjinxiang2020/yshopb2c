@@ -281,7 +281,9 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
      */
     @Override
     public void incMoney(Long uid, BigDecimal price) {
-        yxUserMapper.incMoney(uid,price);
+        if(price!=null&&price.doubleValue()>0){
+            yxUserMapper.incMoney(uid,price);
+        }
     }
 
     /**
