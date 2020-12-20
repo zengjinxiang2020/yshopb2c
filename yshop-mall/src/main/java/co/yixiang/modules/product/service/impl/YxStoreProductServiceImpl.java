@@ -235,6 +235,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(YxStoreProduct::getIsShow, CommonEnum.SHOW_STATUS_1.getValue());
         wrapper.eq(YxStoreProduct::getIsDel, CommonEnum.DEL_STATUS_0.getValue());
+//        wrapper.eq(YxStoreProduct::getIsIntegral, CommonEnum.SHOW_STATUS_1.getValue());
 
         //多字段模糊查询分类搜索
         if (StrUtil.isNotBlank(productQueryParam.getSid()) &&
@@ -411,6 +412,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
        LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(YxStoreProduct::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+//                .eq(YxStoreProduct::getIsIntegral,CommonEnum.SHOW_STATUS_1.getValue())
                 .orderByDesc(YxStoreProduct::getSort);
 
         // order
@@ -679,6 +681,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             valueMap.put("seckill_price", 0);
             valueMap.put("pink_stock", 0);
             valueMap.put("seckill_stock", 0);
+            valueMap.put("integral", 0);
             if (id > 0) {
                 YxStoreProductAttrValue storeProductAttrValue = yxStoreProductAttrValueService
                         .getOne(Wrappers.<YxStoreProductAttrValue>lambdaQuery()
@@ -699,6 +702,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                     valueMap.put("seckill_price", storeProductAttrValue.getSeckillPrice());
                     valueMap.put("pink_stock", storeProductAttrValue.getPinkStock());
                     valueMap.put("seckill_stock", storeProductAttrValue.getSeckillStock());
+                    valueMap.put("integral", storeProductAttrValue.getIntegral());
                 }
             }
 
@@ -830,6 +834,13 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         headerMap.put("slot", "volume");
         headerMap.put("align", align);
         headerMap.put("minWidth", 140);
+        headerMapList.add(ObjectUtil.clone(headerMap));
+
+        headerMap.put("title", "所需兑换积分");
+        headerMap.put("slot", "integral");
+        headerMap.put("align", align);
+        headerMap.put("minWidth", 140);
+        headerMapList.add(ObjectUtil.clone(headerMap));
 
         if (isActivity) {
             headerMap.put("title", "拼团价");
