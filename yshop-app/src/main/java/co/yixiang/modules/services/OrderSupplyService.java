@@ -240,6 +240,10 @@ public class OrderSupplyService {
                 storeOrderService.yuePay(orderId,uid);
                 map.put("payMsg","余额支付成功");
                 return map;
+            case INTEGRAL:
+                storeOrderService.integralPay(orderId,uid);
+                map.put("payMsg","积分兑换成功");
+                return map;
         }
 
         map.put("payMsg","订单生成失败");

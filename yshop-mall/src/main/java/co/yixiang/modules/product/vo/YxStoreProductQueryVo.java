@@ -149,5 +149,8 @@ public class YxStoreProductQueryVo implements Serializable {
     @ApiModelProperty(value = "规格 0单 1多 ")
     private Integer specType;
 
+    /** 是否开启积分兑换*/
+    @ApiModelProperty(value = "是否开启积分兑换")
+    private Integer isIntegral;
 
 }

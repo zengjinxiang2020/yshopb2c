@@ -20,7 +20,8 @@ public enum PayTypeEnum {
 
 	ALI("alipay","支付宝支付"),
 	WEIXIN("weixin","微信支付"),
-	YUE("yue","余额支付");
+	YUE("yue","余额支付"),
+	INTEGRAL("integral","积分兑换");
 
 
 	private String value;

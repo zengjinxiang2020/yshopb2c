@@ -250,6 +250,9 @@ public class OrderUtil {
                 case "yue":
                     payTypeName = "余额支付";
                     break;
+                case "integral":
+                    payTypeName = "积分兑换";
+                    break;
                 case "offline":
                     payTypeName = "线下支付";
                     break;

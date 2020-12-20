@@ -44,6 +44,8 @@ public class ProductFormatDto {
 
     private Integer stock = 0;
 
+    private Integer integral = 0;
+
     private String pic = "";
 
     private String value1 = "";
