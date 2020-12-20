@@ -112,6 +112,7 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
                     .brokerage(BigDecimal.valueOf(productFormatDto.getBrokerage()))
                     .brokerageTwo(BigDecimal.valueOf(productFormatDto.getBrokerageTwo()))
                     .stock(productFormatDto.getStock())
+                    .integral(productFormatDto.getIntegral())
                     .pinkPrice(BigDecimal.valueOf(productFormatDto.getPinkPrice()==null?0:productFormatDto.getPinkPrice()))
                     .seckillPrice(BigDecimal.valueOf(productFormatDto.getSeckillPrice()==null?0:productFormatDto.getSeckillPrice()))
                     .pinkStock(productFormatDto.getPinkStock()==null?0:productFormatDto.getPinkStock())

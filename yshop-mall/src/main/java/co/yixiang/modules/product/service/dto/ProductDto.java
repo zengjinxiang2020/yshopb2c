@@ -122,6 +122,10 @@ public class ProductDto
     @JsonProperty("is_sub")
     private Integer isSub;
 
+    /** 是否开启啊积分兑换 */
+    @JsonProperty("is_integral")
+    private Integer isIntegral;
+
     /** 虚拟销量 */
     private Long ficti;
 

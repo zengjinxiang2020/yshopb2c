@@ -232,6 +232,9 @@ public class YxStoreProduct extends BaseDomain {
     @ApiModelProperty(value = "是否单独分佣")
     private Integer isSub;
 
+    @ApiModelProperty(value = "是否开启积分兑换")
+    private Integer isIntegral;
+
     @TableField(exist = false)
     private YxStoreCategory storeCategory;
 

@@ -1572,7 +1572,34 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     }
 
 
+    /**
+     * 积分兑换
+     * @param orderId 订单号
+     * @param uid 用户id
+     */
+    @Override
+    public void integralPay(String orderId, Long uid) {
+        YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,uid);
+        if(ObjectUtil.isNull(orderInfo)) {
+            throw new YshopException("订单不存在");
+        }
 
+        if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(orderInfo.getPaid())) {
+            throw new YshopException("该订单已支付");
+        }
+
+        YxUserQueryVo userInfo = userService.getYxUserById(uid);
+
+        if(userInfo.getIntegral().compareTo(orderInfo.getPayIntegral()) < 0){
+            throw new YshopException("积分不足");
+        }
+
+        //扣除积分
+        userService.decIntegral(uid,orderInfo.getPayIntegral().doubleValue());
+
+        //支付成功后处理
+        this.paySuccess(orderInfo.getOrderId(),PayTypeEnum.YUE.getValue());
+    }
 
 
     /**

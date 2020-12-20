@@ -194,6 +194,12 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      */
     void yuePay(String orderId,Long uid);
 
+    /**
+     * 积分兑换
+     * @param orderId 订单号
+     * @param uid 用户id
+     */
+    void integralPay(String orderId,Long uid);
 
 
     String aliPay(String orderId) throws Exception;

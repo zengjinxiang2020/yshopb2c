@@ -122,6 +122,10 @@ public class YxStoreProductAttrValue implements Serializable {
     @ApiModelProperty(value = "二级返佣")
     private BigDecimal brokerageTwo;
 
+    /** 所需多少积分兑换商品 */
+    @ApiModelProperty(value = "所需多少积分兑换商品")
+    private Integer integral;
+
 
     public void copy(YxStoreProductAttrValue source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
