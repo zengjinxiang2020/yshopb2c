@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : xinxin
+ Source Server         : 本地
  Source Server Type    : MySQL
  Source Server Version : 50729
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50729
  File Encoding         : 65001
 
- Date: 15/09/2020 09:41:56
+ Date: 21/12/2020 13:37:30
 */
 
 SET NAMES utf8mb4;
@@ -34,7 +34,7 @@ CREATE TABLE `alipay_config`  (
   `sign_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '签名方式',
   `sys_service_provider_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商户号',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '支付宝配置类' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '支付宝配置类' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of alipay_config
@@ -61,7 +61,7 @@ CREATE TABLE `column_config`  (
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `date_annotation` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 386 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成字段信息存储' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 386 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成字段信息存储' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of column_config
@@ -330,7 +330,7 @@ CREATE TABLE `dept`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of dept
@@ -356,7 +356,7 @@ CREATE TABLE `dict`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '数据字典' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '数据字典' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of dict
@@ -367,6 +367,7 @@ INSERT INTO `dict` VALUES (5, 'job_status', '岗位状态', '2019-10-27 20:31:36
 INSERT INTO `dict` VALUES (6, '33', '3', '2020-05-18 19:55:49', NULL, 0);
 INSERT INTO `dict` VALUES (16, 'force_update', '强制升级', '2020-12-09 11:13:21', NULL, 0);
 INSERT INTO `dict` VALUES (17, 'is_enable', '是否启用', '2020-12-10 12:02:57', NULL, 0);
+
 -- ----------------------------
 -- Table structure for dict_detail
 -- ----------------------------
@@ -383,7 +384,7 @@ CREATE TABLE `dict_detail`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FK5tpkputc6d9nboxojdbgnpmyb`(`dict_id`) USING BTREE,
   CONSTRAINT `FK5tpkputc6d9nboxojdbgnpmyb` FOREIGN KEY (`dict_id`) REFERENCES `dict` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '数据字典详情' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '数据字典详情' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of dict_detail
@@ -413,7 +414,7 @@ CREATE TABLE `email_config`  (
   `port` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '端口',
   `user` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发件者用户名',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '邮箱配置' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '邮箱配置' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of email_config
@@ -436,7 +437,7 @@ CREATE TABLE `gen_config`  (
   `prefix` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表前缀',
   `api_alias` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '接口名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成器配置' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成器配置' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of gen_config
@@ -466,7 +467,7 @@ CREATE TABLE `gen_test`  (
   `sex` int(255) NULL DEFAULT NULL COMMENT '性别',
   `create_time` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成测试' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成测试' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of gen_test
@@ -488,7 +489,7 @@ CREATE TABLE `job`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FKmvhj0rogastlctflsxf1d6k3i`(`dept_id`) USING BTREE,
   CONSTRAINT `FKmvhj0rogastlctflsxf1d6k3i` FOREIGN KEY (`dept_id`) REFERENCES `dept` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '岗位' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '岗位' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of job
@@ -513,7 +514,7 @@ CREATE TABLE `local_storage`  (
   `operate` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作人',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 64 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '本地存储' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 64 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '本地存储' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of local_storage
@@ -604,11 +605,55 @@ CREATE TABLE `log`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of log
 -- ----------------------------
+INSERT INTO `log` VALUES (1, '2020-12-20 12:20:56', '用户登录', NULL, 'INFO', 'co.yixiang.modules.security.rest.AuthController.login()', '{ authUser: {username=admin, password= ******} request: SecurityContextHolderAwareRequestWrapper[ FirewalledRequest[ org.apache.catalina.connector.RequestFacade@4ee2d4e7]] }', '192.168.31.223', 1725, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (2, '2020-12-20 12:21:07', '查询', NULL, 'INFO', 'co.yixiang.modules.shop.rest.SystemConfigController.getYxSystemConfigs()', '{ criteria: YxSystemConfigQueryCriteria() pageable: Page request [number: 0, size 50, sort: UNSORTED] }', '192.168.31.223', 45, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (3, '2020-12-20 12:21:14', '查询', NULL, 'INFO', 'co.yixiang.modules.shop.rest.SystemConfigController.getYxSystemConfigs()', '{ criteria: YxSystemConfigQueryCriteria() pageable: Page request [number: 0, size 50, sort: UNSORTED] }', '192.168.31.223', 4, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (4, '2020-12-20 12:21:16', '查询wxlive', NULL, 'INFO', 'co.yixiang.modules.wechat.rest.YxWechatLiveController.getYxWechatLives()', '{ criteria: YxWechatLiveQueryCriteria(liveStatus=null) pageable: Page request [number: 0, size 10, sort: room_id: DESC] }', '192.168.31.223', 45, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (5, '2020-12-20 12:21:19', '查询yxWechatLiveGoods', NULL, 'INFO', 'co.yixiang.modules.wechat.rest.YxWechatLiveGoodsController.getYxWechatLiveGoodss()', '{ criteria: YxWechatLiveGoodsQueryCriteria(name=null) pageable: Page request [number: 0, size 10, sort: goods_id: DESC] }', '192.168.31.223', 8, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (6, '2020-12-20 12:21:22', '查询商品分类', NULL, 'INFO', 'co.yixiang.modules.category.rest.StoreCategoryController.getYxStoreCategorys()', '{ criteria: YxStoreCategoryQueryCriteria(cateName=null) pageable: Page request [number: 0, size 10, sort: sort: DESC] }', '192.168.31.223', 19, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (7, '2020-12-20 12:21:23', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 47, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (8, '2020-12-20 12:21:23', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=0, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 13, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (9, '2020-12-20 12:25:02', '查询素材分组', NULL, 'INFO', 'co.yixiang.modules.shop.rest.MaterialGroupController.getYxMaterialGroups()', '{ criteria: YxMaterialGroupQueryCriteria() pageable: Page request [number: 1, size 100, sort: create_time: DESC] }', '192.168.31.223', 22, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (10, '2020-12-20 12:25:02', '查询素材管理', NULL, 'INFO', 'co.yixiang.modules.shop.rest.MaterialController.getYxMaterials()', '{ criteria: YxMaterialQueryCriteria(groupId=null) pageable: Page request [number: 0, size 12, sort: create_time: DESC] }', '192.168.31.223', 21, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (11, '2020-12-20 12:30:06', '查询拼团', NULL, 'INFO', 'co.yixiang.modules.activity.rest.StoreCombinationController.getYxStoreCombinations()', '{ criteria: YxStoreCombinationQueryCriteria(title=null, isDel=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 13, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (12, '2020-12-20 12:30:08', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 37, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (13, '2020-12-20 12:30:25', '查询拼团', NULL, 'INFO', 'co.yixiang.modules.activity.rest.StoreCombinationController.getYxStoreCombinations()', '{ criteria: YxStoreCombinationQueryCriteria(title=null, isDel=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 3, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (14, '2020-12-20 12:30:29', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 28, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (15, '2020-12-20 12:31:43', '列表', NULL, 'INFO', 'co.yixiang.modules.activity.rest.StoreSeckillController.getYxStoreSeckills()', '{ criteria: YxStoreSeckillQueryCriteria(title=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 23, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (16, '2020-12-20 12:31:46', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 20, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (17, '2020-12-20 12:31:46', '查询数据配置', NULL, 'INFO', 'co.yixiang.modules.shop.rest.SystemGroupDataController.getYxSystemGroupDatas()', '{ criteria: YxSystemGroupDataQueryCriteria(groupName=yshop_seckill_time) pageable: Page request [number: 0, size 20, sort: UNSORTED] }', '192.168.31.223', 21, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (18, '2020-12-20 12:31:55', '查询砍价', NULL, 'INFO', 'co.yixiang.modules.activity.rest.StoreBargainController.getYxStoreBargains()', '{ criteria: YxStoreBargainQueryCriteria() pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 233, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (19, '2020-12-20 12:31:56', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 17, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (20, '2020-12-20 12:32:15', '查询拼团', NULL, 'INFO', 'co.yixiang.modules.activity.rest.StoreCombinationController.getYxStoreCombinations()', '{ criteria: YxStoreCombinationQueryCriteria(title=null, isDel=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 3, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (21, '2020-12-20 12:32:18', '查询yxWechatLiveGoods', NULL, 'INFO', 'co.yixiang.modules.wechat.rest.YxWechatLiveGoodsController.getYxWechatLiveGoodss()', '{ criteria: YxWechatLiveGoodsQueryCriteria(name=null) pageable: Page request [number: 0, size 10, sort: goods_id: DESC] }', '192.168.31.223', 4, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (22, '2020-12-20 12:32:21', '查询商品分类', NULL, 'INFO', 'co.yixiang.modules.category.rest.StoreCategoryController.getYxStoreCategorys()', '{ criteria: YxStoreCategoryQueryCriteria(cateName=null) pageable: Page request [number: 0, size 10, sort: sort: DESC] }', '192.168.31.223', 3, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (23, '2020-12-20 12:32:21', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=0, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 8, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (24, '2020-12-20 12:32:21', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 15, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (25, '2020-12-20 20:56:56', '用户登录', NULL, 'INFO', 'co.yixiang.modules.security.rest.AuthController.login()', '{ authUser: {username=admin, password= ******} request: SecurityContextHolderAwareRequestWrapper[ FirewalledRequest[ org.apache.catalina.connector.RequestFacade@4aab466d]] }', '192.168.31.223', 980, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (26, '2020-12-20 20:57:18', '查询商品分类', NULL, 'INFO', 'co.yixiang.modules.category.rest.StoreCategoryController.getYxStoreCategorys()', '{ criteria: YxStoreCategoryQueryCriteria(cateName=null) pageable: Page request [number: 0, size 10, sort: sort: DESC] }', '192.168.31.223', 16, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (27, '2020-12-20 20:57:18', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 79, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (28, '2020-12-20 20:57:18', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=0, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 11, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (29, '2020-12-20 20:57:22', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=0, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 17, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (30, '2020-12-20 20:57:22', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 41, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (31, '2020-12-20 20:58:32', '新增/修改商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.create()', '{ storeProductDto: StoreProductDto(id=6, image=https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg, sliderImage=[https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg], storeName=印刷各种印刷, storeInfo=印刷各种印刷, keyword=印刷各种印刷, barCode=, cateId=3, price=11.0, otPrice=null, postage=0.0, unitName=张, sort=1, sales=35, stock=9965, isShow=1, isHot=1, isBenefit=1, isBest=0, isNew=0, description=<p>印刷各种印刷</p>, isPostage=0, giveIntegral=1.0, cost=22.0, isGood=0, isSub=0, ficti=1, tempId=34, specType=0, items=[], attrs=[co.yixiang.modules.product.service.dto.ProductFormatDto@e1b7fc1]) }', '192.168.31.223', 71, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (32, '2020-12-20 20:58:33', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 20, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (33, '2020-12-20 20:58:34', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=0, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 9, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (34, '2020-12-20 20:59:11', '新增/修改商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.create()', '{ storeProductDto: StoreProductDto(id=8, image=https://image.dayouqiantu.cn/5ca081af6183f.jpg, sliderImage=[https://image.dayouqiantu.cn/5ca081af6183f.jpg, https://image.dayouqiantu.cn/5ca081af6183f.jpg, https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg], storeName=多规格商品测试, storeInfo=多规格商品测试, keyword=多规格商品测试, barCode=, cateId=5, price=4.0, otPrice=null, postage=0.0, unitName=张, sort=0, sales=5, stock=501, isShow=1, isHot=1, isBenefit=1, isBest=1, isNew=1, description=<p><br/></p><p><img style=\"max-width: 100%;\" src=\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\"/></p>, isPostage=0, giveIntegral=0.0, cost=1.0, isGood=0, isSub=1, ficti=0, tempId=34, specType=1, items=[co.yixiang.modules.product.service.dto.FromatDetailDto@3a1b9d03, co.yixiang.modules.product.service.dto.FromatDetailDto@5fb12695], attrs=[co.yixiang.modules.product.service.dto.ProductFormatDto@1796c183, co.yixiang.modules.product.service.dto.ProductFormatDto@3a45a7cd, co.yixiang.modules.product.service.dto.ProductFormatDto@2d318da6, co.yixiang.modules.product.service.dto.ProductFormatDto@55342aab, co.yixiang.modules.product.service.dto.ProductFormatDto@2ee2163f, co.yixiang.modules.product.service.dto.ProductFormatDto@5c1e7c4f]) }', '192.168.31.223', 33, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (35, '2020-12-20 20:59:13', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=0, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 10, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (36, '2020-12-20 20:59:13', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 22, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (37, '2020-12-20 21:16:55', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=0, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 14, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (38, '2020-12-20 21:16:55', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 21, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (39, '2020-12-20 21:17:50', '新增/修改商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.create()', '{ storeProductDto: StoreProductDto(id=8, image=https://image.dayouqiantu.cn/5ca081af6183f.jpg, sliderImage=[https://image.dayouqiantu.cn/5ca081af6183f.jpg, https://image.dayouqiantu.cn/5ca081af6183f.jpg, https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg], storeName=多规格商品测试, storeInfo=多规格商品测试, keyword=多规格商品测试, barCode=, cateId=5, price=4.0, otPrice=null, postage=0.0, unitName=张, sort=0, sales=5, stock=501, isShow=1, isHot=1, isBenefit=1, isBest=1, isNew=1, description=<p><br/></p><p><img style=\"max-width: 100%;\" src=\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\"/></p>, isPostage=0, giveIntegral=0.0, cost=1.0, isGood=0, isSub=1, isIntegral=1, ficti=0, tempId=34, specType=1, items=[co.yixiang.modules.product.service.dto.FromatDetailDto@36bccf62, co.yixiang.modules.product.service.dto.FromatDetailDto@7b1f6e6c], attrs=[co.yixiang.modules.product.service.dto.ProductFormatDto@30145eea, co.yixiang.modules.product.service.dto.ProductFormatDto@5527d9d7, co.yixiang.modules.product.service.dto.ProductFormatDto@4a8b9843, co.yixiang.modules.product.service.dto.ProductFormatDto@2d753c48, co.yixiang.modules.product.service.dto.ProductFormatDto@6829cf6a, co.yixiang.modules.product.service.dto.ProductFormatDto@1757112f]) }', '192.168.31.223', 139, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (40, '2020-12-20 21:17:52', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=0, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 56, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (41, '2020-12-20 21:17:52', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 91, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (42, '2020-12-20 21:18:17', '新增/修改商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.create()', '{ storeProductDto: StoreProductDto(id=8, image=https://image.dayouqiantu.cn/5ca081af6183f.jpg, sliderImage=[https://image.dayouqiantu.cn/5ca081af6183f.jpg, https://image.dayouqiantu.cn/5ca081af6183f.jpg, https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg], storeName=多规格商品测试, storeInfo=多规格商品测试, keyword=多规格商品测试, barCode=, cateId=5, price=4.0, otPrice=null, postage=0.0, unitName=张, sort=0, sales=5, stock=501, isShow=1, isHot=1, isBenefit=1, isBest=1, isNew=1, description=<p><br/></p><p><img style=\"max-width: 100%;\" src=\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\"/></p>, isPostage=0, giveIntegral=0.0, cost=1.0, isGood=0, isSub=1, isIntegral=1, ficti=0, tempId=34, specType=1, items=[co.yixiang.modules.product.service.dto.FromatDetailDto@6166fb7a, co.yixiang.modules.product.service.dto.FromatDetailDto@57f40cb6], attrs=[co.yixiang.modules.product.service.dto.ProductFormatDto@314d446d, co.yixiang.modules.product.service.dto.ProductFormatDto@329a3a74, co.yixiang.modules.product.service.dto.ProductFormatDto@17886021, co.yixiang.modules.product.service.dto.ProductFormatDto@69eefe37, co.yixiang.modules.product.service.dto.ProductFormatDto@18f4fa22, co.yixiang.modules.product.service.dto.ProductFormatDto@2dfea217]) }', '192.168.31.223', 26, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (43, '2020-12-20 21:18:18', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=0, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 12, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
+INSERT INTO `log` VALUES (44, '2020-12-20 21:18:18', '查询商品', NULL, 'INFO', 'co.yixiang.modules.product.rest.StoreProductController.getYxStoreProducts()', '{ criteria: YxStoreProductQueryCriteria(storeName=null, isDel=0, isShow=1, cateId=null) pageable: Page request [number: 0, size 10, sort: id: DESC] }', '192.168.31.223', 37, 'admin', ' 局域网', NULL, 0, 1, NULL, 0);
 
 -- ----------------------------
 -- Table structure for menu
@@ -633,7 +678,7 @@ CREATE TABLE `menu`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FKqcf9gem97gqa5qjm4d3elcqt5`(`pid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 259 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 264 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of menu
@@ -842,7 +887,6 @@ INSERT INTO `menu` VALUES (261, b'0', '添加人员', NULL, 260, 1, NULL, NULL, 
 INSERT INTO `menu` VALUES (262, b'0', '编辑人员', NULL, 260, 2, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:18:47', 'yxStoreCustomer:edit', 2, NULL, 0);
 INSERT INTO `menu` VALUES (263, b'0', '删除人员', NULL, 260, 3, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:19:07', 'yxStoreCustomer:del', 2, NULL, 0);
 
-
 -- ----------------------------
 -- Table structure for monitor_server
 -- ----------------------------
@@ -863,7 +907,7 @@ CREATE TABLE `monitor_server`  (
   `swap_used` double NULL DEFAULT NULL COMMENT '交换区使用量',
   `address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '服务地址',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '服务监控' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '服务监控' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of monitor_server
@@ -886,7 +930,7 @@ CREATE TABLE `picture`  (
   `width` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片宽度',
   `md5code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件的MD5值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Sm.Ms图床' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Sm.Ms图床' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of picture
@@ -905,7 +949,7 @@ CREATE TABLE `qiniu_config`  (
   `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '空间类型',
   `zone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '机房',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '七牛云配置' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '七牛云配置' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of qiniu_config
@@ -926,7 +970,7 @@ CREATE TABLE `qiniu_content`  (
   `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件url',
   `suffix` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '七牛云文件存储' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '七牛云文件存储' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of qiniu_content
@@ -976,7 +1020,7 @@ CREATE TABLE `quartz_job`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of quartz_job
@@ -1003,7 +1047,7 @@ CREATE TABLE `quartz_log`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务日志' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务日志' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of quartz_log
@@ -1042,7 +1086,7 @@ CREATE TABLE `role`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of role
@@ -1062,7 +1106,7 @@ CREATE TABLE `roles_depts`  (
   INDEX `FK7qg6itn5ajdoa9h9o78v9ksur`(`dept_id`) USING BTREE,
   CONSTRAINT `FK7qg6itn5ajdoa9h9o78v9ksur` FOREIGN KEY (`dept_id`) REFERENCES `dept` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FKrg1ci4cxxfbja0sb0pddju7k` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色部门关联' ROW_FORMAT = Compact;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色部门关联' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of roles_depts
@@ -1079,7 +1123,7 @@ CREATE TABLE `roles_menus`  (
   INDEX `FKcngg2qadojhi3a651a5adkvbq`(`role_id`) USING BTREE,
   CONSTRAINT `FKo7wsmlrrxb2osfaoavp46rv2r` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FKtag324maketmxffly3pdyh193` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单关联' ROW_FORMAT = Compact;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单关联' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of roles_menus
@@ -1284,6 +1328,21 @@ INSERT INTO `roles_menus` VALUES (262, 1);
 INSERT INTO `roles_menus` VALUES (263, 1);
 
 -- ----------------------------
+-- Table structure for student
+-- ----------------------------
+DROP TABLE IF EXISTS `student`;
+CREATE TABLE `student`  (
+  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '学生id',
+  `student_sex` tinyint(1) NOT NULL DEFAULT 1 COMMENT '学生性别',
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态 1正常 0禁用',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '学生表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of student
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for user
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
@@ -1312,7 +1371,7 @@ CREATE TABLE `user`  (
   CONSTRAINT `FK5rwmryny6jthaaxkogownknqp` FOREIGN KEY (`dept_id`) REFERENCES `dept` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FKfftoc2abhot8f2wu6cl9a5iky` FOREIGN KEY (`job_id`) REFERENCES `job` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FKpq2dhypk2qgt68nauh2by22jb` FOREIGN KEY (`avatar_id`) REFERENCES `user_avatar` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of user
@@ -1334,7 +1393,7 @@ CREATE TABLE `user_avatar`  (
   `size` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '大小',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户头像' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统用户头像' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of user_avatar
@@ -1352,7 +1411,7 @@ CREATE TABLE `users_roles`  (
   INDEX `FKq4eq273l04bpu4efj0jd0jb98`(`role_id`) USING BTREE,
   CONSTRAINT `FKgd3iendaoyh04b95ykqise6qh` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `FKt4v0rrweyk393bdgt107vdx0x` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色关联' ROW_FORMAT = Compact;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色关联' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of users_roles
@@ -1376,7 +1435,7 @@ CREATE TABLE `verification_code`  (
   `value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '接收邮箱或者手机号码',
   `scenes` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '业务名称：如重置邮箱、重置密码等',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '验证码' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '验证码' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of verification_code
@@ -1395,7 +1454,7 @@ CREATE TABLE `visits`  (
   `week_day` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `UK_11aksgq87euk9bcyeesfs4vtp`(`date`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1266934639347150881 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '访客记录' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 1266934639347150881 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '访客记录' ROW_FORMAT = COMPACT;
 
 -- ----------------------------
 -- Records of visits
@@ -1437,6 +1496,28 @@ INSERT INTO `visits` VALUES (1266934639347150879, '2020-09-14 00:00:00', '2020-0
 INSERT INTO `visits` VALUES (1266934639347150880, '2020-09-15 00:00:00', '2020-09-15', 1, 1, 'Tue');
 
 -- ----------------------------
+-- Table structure for yx_app_version
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_app_version`;
+CREATE TABLE `yx_app_version`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `version_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '版本code',
+  `version_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '版本名称',
+  `version_info` varchar(600) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '版本描述',
+  `ios_url` varchar(10000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'ios store应用商店链接',
+  `android_url` varchar(10000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '安卓下载链接',
+  `force_update` tinyint(4) NULL DEFAULT NULL COMMENT '是否强制升级',
+  `create_time` datetime(0) NULL DEFAULT NULL,
+  `update_time` datetime(0) NULL DEFAULT NULL,
+  `is_del` tinyint(1) NULL DEFAULT 0,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'app版本' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_app_version
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for yx_article
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_article`;
@@ -1464,7 +1545,7 @@ CREATE TABLE `yx_article`  (
   `is_hot` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否热门(小程序)',
   `is_banner` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否轮播图(小程序)',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文章管理表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '文章管理表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_article
@@ -1488,7 +1569,7 @@ CREATE TABLE `yx_express`  (
   `is_del` tinyint(255) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `is_show`(`is_show`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 433 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '快递公司表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 433 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '快递公司表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_express
@@ -1516,7 +1597,7 @@ CREATE TABLE `yx_material`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '素材库' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '素材库' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_material
@@ -1563,7 +1644,7 @@ CREATE TABLE `yx_material_group`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '素材分组' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '素材分组' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_material_group
@@ -1589,7 +1670,7 @@ CREATE TABLE `yx_shipping_templates`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '运费模板表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '运费模板表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_shipping_templates
@@ -1614,7 +1695,7 @@ CREATE TABLE `yx_shipping_templates_free`  (
   `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '计费方式',
   `uniqid` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '分组唯一值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 198 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 198 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_shipping_templates_free
@@ -1662,7 +1743,7 @@ CREATE TABLE `yx_shipping_templates_region`  (
   `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '计费方式',
   `uniqid` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '分组唯一值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 250 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 250 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_shipping_templates_region
@@ -1729,7 +1810,7 @@ CREATE TABLE `yx_store_bargain`  (
   `look` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '砍价产品浏览量',
   `share` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '砍价产品分享量',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_bargain
@@ -1752,7 +1833,7 @@ CREATE TABLE `yx_store_bargain_user`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否取消',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户参与砍价表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户参与砍价表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_bargain_user
@@ -1772,7 +1853,7 @@ CREATE TABLE `yx_store_bargain_user_help`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价用户帮助表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '砍价用户帮助表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_bargain_user_help
@@ -1804,7 +1885,7 @@ CREATE TABLE `yx_store_cart`  (
   INDEX `uid_2`(`uid`, `is_del`) USING BTREE,
   INDEX `uid_3`(`uid`, `is_new`) USING BTREE,
   INDEX `type`(`type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 150 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 150 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '购物车表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_cart
@@ -1893,7 +1974,7 @@ CREATE TABLE `yx_store_category`  (
   INDEX `is_base`(`is_show`) USING BTREE,
   INDEX `sort`(`sort`) USING BTREE,
   INDEX `add_time`(`create_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_category
@@ -1943,7 +2024,7 @@ CREATE TABLE `yx_store_combination`  (
   `spec_type` tinyint(1) NULL DEFAULT NULL COMMENT '规格 0单 1多',
   `temp_id` int(10) NULL DEFAULT NULL COMMENT '运费模板ID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团产品表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团产品表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_combination
@@ -1972,7 +2053,7 @@ CREATE TABLE `yx_store_coupon`  (
   INDEX `add_time`(`create_time`) USING BTREE,
   INDEX `coupon_time`(`coupon_time`) USING BTREE,
   INDEX `is_del`(`is_del`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_coupon
@@ -2004,7 +2085,7 @@ CREATE TABLE `yx_store_coupon_issue`  (
   INDEX `remain_count`(`remain_count`) USING BTREE,
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_del`(`is_del`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券前台领取表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券前台领取表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_coupon_issue
@@ -2025,7 +2106,7 @@ CREATE TABLE `yx_store_coupon_issue_user`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `uid`(`uid`, `issue_coupon_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券前台用户领取记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券前台用户领取记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_coupon_issue_user
@@ -2058,12 +2139,32 @@ CREATE TABLE `yx_store_coupon_user`  (
   INDEX `end_time`(`end_time`) USING BTREE,
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_fail`(`is_fail`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券发放记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '优惠券发放记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_coupon_user
 -- ----------------------------
 INSERT INTO `yx_store_coupon_user` VALUES (5, 7, 43, '多规格商品券', 1.00, 5.00, '2020-09-12 18:08:26', '2020-09-12 18:11:05', '2020-12-21 18:08:26', '2020-09-12 18:11:05', 'get', 1, 0, 0);
+
+-- ----------------------------
+-- Table structure for yx_store_customer
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_store_customer`;
+CREATE TABLE `yx_store_customer`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `nick_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
+  `open_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'openId',
+  `remark` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '添加时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `is_del` tinyint(1) NULL DEFAULT 0,
+  `is_enable` tinyint(1) NULL DEFAULT 1 COMMENT '是否启用',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 88 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单通知用户表 接收订单通知的用户' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_store_customer
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for yx_store_order
@@ -2136,7 +2237,7 @@ CREATE TABLE `yx_store_order`  (
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_del`(`is_del`) USING BTREE,
   INDEX `coupon_id`(`coupon_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_order
@@ -2157,7 +2258,7 @@ CREATE TABLE `yx_store_order_cart_info`  (
   UNIQUE INDEX `oid`(`oid`, `unique`) USING BTREE,
   INDEX `cart_id`(`cart_id`) USING BTREE,
   INDEX `product_id`(`product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单购物详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单购物详情表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_order_cart_info
@@ -2176,7 +2277,7 @@ CREATE TABLE `yx_store_order_status`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `oid`(`oid`) USING BTREE,
   INDEX `change_type`(`change_type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单操作记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单操作记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_order_status
@@ -2207,7 +2308,7 @@ CREATE TABLE `yx_store_pink`  (
   `is_del` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除1删除 0否',
   `unique_id` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '库存唯一值',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '拼团表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_pink
@@ -2257,6 +2358,7 @@ CREATE TABLE `yx_store_product`  (
   `is_sub` tinyint(1) NULL DEFAULT 0 COMMENT '是否单独分佣',
   `temp_id` int(10) NULL DEFAULT NULL COMMENT '运费模板ID',
   `spec_type` tinyint(1) NULL DEFAULT 0 COMMENT '规格 0单 1多',
+  `is_integral` tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT NULL COMMENT '是开启积分兑换',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `is_hot`(`is_hot`) USING BTREE,
   INDEX `is_benefit`(`is_benefit`) USING BTREE,
@@ -2269,19 +2371,19 @@ CREATE TABLE `yx_store_product`  (
   INDEX `sales`(`sales`) USING BTREE,
   INDEX `add_time`(`create_time`) USING BTREE,
   INDEX `is_postage`(`is_postage`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_product
 -- ----------------------------
-INSERT INTO `yx_store_product` VALUES (1, 0, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '照片打印', '照片打印', '照片打印', '', '5', 2.00, 0.00, 1.00, 0.00, '张', 0, 8, 992, 1, 0, 0, 0, 0, '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\"/></p>', '2020-09-04 17:41:30', '2020-09-05 20:57:49', 0, 0, 0, 0.00, 3.00, 0, NULL, 0, 0, 3, '', 0, 34, 0);
-INSERT INTO `yx_store_product` VALUES (2, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'X型展架', 'X型展架', 'X型展架', '', '3', 10.00, 0.00, 12.00, 0.00, '张', 0, 20, 3310, 1, 1, 1, 0, 0, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"/></p>', '2020-09-04 17:55:16', '2020-09-05 20:57:41', 0, 0, 0, 0.00, 11.00, 0, NULL, 0, 69, 25, '', 0, 34, 1);
-INSERT INTO `yx_store_product` VALUES (3, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', '彩色复印-量大有优惠', '彩色复印', '彩色复印', '', '3', 2.00, 0.00, 1.00, 0.00, '张', 0, 8, 9996, 1, 1, 1, 0, 0, '<p>1111</p>', '2020-09-07 13:14:50', '2020-09-13 22:18:46', 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 43, '', 0, 34, 0);
-INSERT INTO `yx_store_product` VALUES (4, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', '户外写真背胶', '户外写真背胶', '户外写真背胶', '', '3', 2.00, 0.00, 1.00, 0.00, '米', 0, 24, 87, 1, 1, 1, 0, 0, '<p>户外写真背胶</p>', '2020-09-07 13:16:02', NULL, 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 32, '', 0, 34, 0);
-INSERT INTO `yx_store_product` VALUES (5, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg', '广告版定制', '广告版定制', '广告版定制', '', '3', 2.00, 0.00, 11.00, 0.00, '米', 0, 16, 2, 1, 1, 1, 1, 1, '<p>广告版定制</p>', '2020-09-07 13:17:49', '2020-09-12 00:14:32', 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 26, '', 0, 34, 0);
-INSERT INTO `yx_store_product` VALUES (6, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', '印刷各种印刷', '印刷各种印刷', '印刷各种印刷', '', '3', 11.00, 0.00, 33.00, 0.00, '张', 1, 35, 9965, 1, 1, 1, 0, 0, '<p>印刷各种印刷</p>', '2020-09-07 13:18:45', '2020-09-11 17:18:18', 0, 0, 0, 1.00, 22.00, 0, NULL, 0, 1, 139, '', 0, 34, 0);
-INSERT INTO `yx_store_product` VALUES (7, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171208889668.png', 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg,https://image.dayouqiantu.cn/5ca081af6183f.jpg', '专属测试商品', '', '专属测试商品', '', '3', 100.00, 0.00, 120.00, 0.00, '张', 0, 3, 7, 1, 0, 0, 0, 0, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\"/></p>', '2020-09-12 16:11:05', '2020-09-12 17:03:58', 0, 0, 0, 10.00, 110.00, 0, NULL, 0, 9, 9, '', 0, 34, 0);
-INSERT INTO `yx_store_product` VALUES (8, 0, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '多规格商品测试', '多规格商品测试', '多规格商品测试', '', '5', 4.00, 0.00, 9.00, 0.00, '张', 0, 5, 501, 1, 1, 1, 1, 1, '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\"/></p>', '2020-09-12 17:24:51', NULL, 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 19, '', 1, 34, 1);
+INSERT INTO `yx_store_product` VALUES (1, 0, 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '照片打印', '照片打印', '照片打印', '', '5', 2.00, 0.00, 1.00, 0.00, '张', 0, 8, 992, 1, 0, 0, 0, 0, '<p><br/></p><p><img src=\"https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg\"/></p>', '2020-09-04 17:41:30', '2020-09-05 20:57:49', 0, 0, 0, 0.00, 3.00, 0, NULL, 0, 0, 3, '', 0, 34, 0, 0);
+INSERT INTO `yx_store_product` VALUES (2, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg,https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'X型展架', 'X型展架', 'X型展架', '', '3', 10.00, 0.00, 12.00, 0.00, '张', 0, 20, 3310, 1, 1, 1, 0, 0, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\"/></p>', '2020-09-04 17:55:16', '2020-09-05 20:57:41', 0, 0, 0, 0.00, 11.00, 0, NULL, 0, 69, 25, '', 0, 34, 1, 0);
+INSERT INTO `yx_store_product` VALUES (3, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', '彩色复印-量大有优惠', '彩色复印', '彩色复印', '', '3', 2.00, 0.00, 1.00, 0.00, '张', 0, 8, 9996, 1, 1, 1, 0, 0, '<p>1111</p>', '2020-09-07 13:14:50', '2020-09-13 22:18:46', 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 43, '', 0, 34, 0, 0);
+INSERT INTO `yx_store_product` VALUES (4, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807625149.jpg', '户外写真背胶', '户外写真背胶', '户外写真背胶', '', '3', 2.00, 0.00, 1.00, 0.00, '米', 0, 24, 87, 1, 1, 1, 0, 0, '<p>户外写真背胶</p>', '2020-09-07 13:16:02', NULL, 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 32, '', 0, 34, 0, 0);
+INSERT INTO `yx_store_product` VALUES (5, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807568739.jpg', '广告版定制', '广告版定制', '广告版定制', '', '3', 2.00, 0.00, 11.00, 0.00, '米', 0, 16, 2, 1, 1, 1, 1, 1, '<p>广告版定制</p>', '2020-09-07 13:17:49', '2020-09-12 00:14:32', 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 26, '', 0, 34, 0, 0);
+INSERT INTO `yx_store_product` VALUES (6, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', '印刷各种印刷', '印刷各种印刷', '印刷各种印刷', '', '3', 11.00, 0.00, 33.00, 0.00, '张', 1, 35, 9989, 1, 1, 1, 0, 0, '<p>印刷各种印刷</p>', '2020-09-07 13:18:45', '2020-12-20 20:58:32', 0, 0, 0, 1.00, 22.00, 0, NULL, 0, 1, 139, '', 0, 34, 0, 0);
+INSERT INTO `yx_store_product` VALUES (7, 0, 'https://consoleapi.xinxintuan.co/file/pic/20200903171208889668.png', 'https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg,https://image.dayouqiantu.cn/5ca081af6183f.jpg', '专属测试商品', '', '专属测试商品', '', '3', 100.00, 0.00, 120.00, 0.00, '张', 0, 3, 7, 1, 0, 0, 0, 0, '<p><br/></p><p><img src=\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\"/></p>', '2020-09-12 16:11:05', '2020-09-12 17:03:58', 0, 0, 0, 10.00, 110.00, 0, NULL, 0, 9, 9, '', 0, 34, 0, 0);
+INSERT INTO `yx_store_product` VALUES (8, 0, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', 'https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca081af6183f.jpg,https://image.dayouqiantu.cn/5ca04fa9c08ef.jpg', '多规格商品测试', '多规格商品测试', '多规格商品测试', '', '5', 4.00, 0.00, 9.00, 0.00, '张', 0, 5, 501, 1, 1, 1, 1, 1, '<p><br/></p><p><img style=\"max-width: 100%;\" src=\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\"/></p>', '2020-09-12 17:24:51', '2020-12-20 21:18:16', 0, 0, 0, 0.00, 1.00, 0, NULL, 0, 0, 19, '', 1, 34, 1, 1);
 
 -- ----------------------------
 -- Table structure for yx_store_product_attr
@@ -2294,7 +2396,7 @@ CREATE TABLE `yx_store_product_attr`  (
   `attr_values` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '属性值',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `store_id`(`product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 71 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 78 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_product_attr
@@ -2304,12 +2406,12 @@ INSERT INTO `yx_store_product_attr` VALUES (55, 4, '规格', '默认');
 INSERT INTO `yx_store_product_attr` VALUES (57, 2, '纸张', 'A4,A3');
 INSERT INTO `yx_store_product_attr` VALUES (58, 2, '颜色', '白色,红色');
 INSERT INTO `yx_store_product_attr` VALUES (59, 0, '规格', '默认');
-INSERT INTO `yx_store_product_attr` VALUES (60, 6, '规格', '默认');
 INSERT INTO `yx_store_product_attr` VALUES (62, 7, '规格', '默认');
-INSERT INTO `yx_store_product_attr` VALUES (67, 8, '纸张', 'A4,A3,A5');
-INSERT INTO `yx_store_product_attr` VALUES (68, 8, '颜色', '白色,红色');
 INSERT INTO `yx_store_product_attr` VALUES (69, 5, '规格', '默认');
 INSERT INTO `yx_store_product_attr` VALUES (70, 3, '规格', '默认');
+INSERT INTO `yx_store_product_attr` VALUES (71, 6, '规格', '默认');
+INSERT INTO `yx_store_product_attr` VALUES (76, 8, '纸张', 'A4,A3,A5');
+INSERT INTO `yx_store_product_attr` VALUES (77, 8, '颜色', '白色,红色');
 
 -- ----------------------------
 -- Table structure for yx_store_product_attr_result
@@ -2322,7 +2424,7 @@ CREATE TABLE `yx_store_product_attr_result`  (
   `change_time` datetime(0) NOT NULL COMMENT '上次修改时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `product_id`(`product_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 56 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 60 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性详情表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_product_attr_result
@@ -2330,11 +2432,11 @@ CREATE TABLE `yx_store_product_attr_result`  (
 INSERT INTO `yx_store_product_attr_result` VALUES (26, 1, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"00005\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":3.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":1.0,\"pic\":\"\",\"pinkPrice\":0.1,\"pinkStock\":100,\"price\":2.0,\"seckillPrice\":0.2,\"seckillStock\":100,\"stock\":999,\"value1\":\"规格\",\"value2\":\"\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-08 21:18:03');
 INSERT INTO `yx_store_product_attr_result` VALUES (44, 4, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":0.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":0.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":22.0,\"pinkStock\":18,\"price\":0.0,\"seckillPrice\":0.0,\"seckillStock\":0,\"stock\":93,\"value1\":\"规格\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-12 15:55:17');
 INSERT INTO `yx_store_product_attr_result` VALUES (46, 2, '{\"attr\":[{\"detail\":[\"A4\",\"A3\"],\"value\":\"纸张\"},{\"detail\":[\"白色\",\"红色\"],\"value\":\"颜色\"}],\"value\":[{\"barCode\":\"00001\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":11.0,\"detail\":{\"纸张\":\"A4\",\"颜色\":\"白色\"},\"otPrice\":12.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":11.09,\"pinkStock\":100,\"price\":10.0,\"seckillPrice\":1.0,\"seckillStock\":100,\"stock\":991,\"value1\":\"A4\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"00002\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":11.0,\"detail\":{\"纸张\":\"A4\",\"颜色\":\"红色\"},\"otPrice\":12.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":22.88,\"pinkStock\":99,\"price\":11.0,\"seckillPrice\":2.0,\"seckillStock\":100,\"stock\":661,\"value1\":\"A4\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"00003\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":11.0,\"detail\":{\"纸张\":\"A3\",\"颜色\":\"白色\"},\"otPrice\":12.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":33.89,\"pinkStock\":99,\"price\":12.0,\"seckillPrice\":3.0,\"seckillStock\":100,\"stock\":995,\"value1\":\"A3\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"00004\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":11.0,\"detail\":{\"纸张\":\"A3\",\"颜色\":\"红色\"},\"otPrice\":12.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":45.66,\"pinkStock\":100,\"price\":13.0,\"seckillPrice\":4.0,\"seckillStock\":100,\"stock\":665,\"value1\":\"A3\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-12 16:10:09');
-INSERT INTO `yx_store_product_attr_result` VALUES (48, 6, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"00002\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":22.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":33.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg\",\"pinkPrice\":19.9,\"pinkStock\":99,\"price\":11.0,\"seckillPrice\":22.98,\"seckillStock\":2000,\"stock\":9989,\"value1\":\"规格\",\"volume\":1.0,\"weight\":1.0}]}', '2020-09-12 16:11:31');
 INSERT INTO `yx_store_product_attr_result` VALUES (50, 7, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":110.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":120.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png\",\"pinkPrice\":0.0,\"pinkStock\":0,\"price\":100.0,\"seckillPrice\":0.0,\"seckillStock\":0,\"stock\":10,\"value1\":\"规格\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-12 17:03:58');
-INSERT INTO `yx_store_product_attr_result` VALUES (53, 8, '{\"attr\":[{\"detail\":[\"A4\",\"A3\",\"A5\"],\"value\":\"纸张\"},{\"detail\":[\"白色\",\"红色\"],\"value\":\"颜色\"}],\"value\":[{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A4\",\"颜色\":\"白色\"},\"otPrice\":12.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":1.0,\"pinkStock\":9,\"price\":9.0,\"seckillPrice\":1.0,\"seckillStock\":10,\"stock\":96,\"value1\":\"A4\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A4\",\"颜色\":\"红色\"},\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":2.0,\"pinkStock\":10,\"price\":8.0,\"seckillPrice\":1.0,\"seckillStock\":10,\"stock\":99,\"value1\":\"A4\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A3\",\"颜色\":\"白色\"},\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":0.5,\"pinkStock\":10,\"price\":7.0,\"seckillPrice\":0.1,\"seckillStock\":10,\"stock\":88,\"value1\":\"A3\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A3\",\"颜色\":\"红色\"},\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":1.0,\"pinkStock\":9,\"price\":6.0,\"seckillPrice\":0.1,\"seckillStock\":9,\"stock\":88,\"value1\":\"A3\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A5\",\"颜色\":\"白色\"},\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":2.0,\"pinkStock\":9,\"price\":5.0,\"seckillPrice\":0.1,\"seckillStock\":9,\"stock\":65,\"value1\":\"A5\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A5\",\"颜色\":\"红色\"},\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":3.0,\"pinkStock\":9,\"price\":4.0,\"seckillPrice\":0.1,\"seckillStock\":9,\"stock\":66,\"value1\":\"A5\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-12 18:23:33');
 INSERT INTO `yx_store_product_attr_result` VALUES (54, 5, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"1231321\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":1.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":11.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"pinkPrice\":29.0,\"pinkStock\":10,\"price\":2.0,\"seckillPrice\":11.99,\"seckillStock\":10,\"stock\":11,\"value1\":\"规格\",\"volume\":1.0,\"weight\":1.0}]}', '2020-09-13 10:15:24');
 INSERT INTO `yx_store_product_attr_result` VALUES (55, 3, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":1.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":1.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg\",\"pinkPrice\":119.99,\"pinkStock\":10,\"price\":2.0,\"seckillPrice\":0.0,\"seckillStock\":0,\"stock\":9999,\"value1\":\"规格\",\"volume\":0.0,\"weight\":0.0}]}', '2020-09-13 22:18:46');
+INSERT INTO `yx_store_product_attr_result` VALUES (56, 6, '{\"attr\":[{\"attrHidden\":\"\",\"detail\":[\"默认\"],\"detailValue\":\"\",\"value\":\"规格\"}],\"value\":[{\"barCode\":\"00002\",\"brokerage\":0.0,\"brokerageTwo\":0.0,\"cost\":22.0,\"detail\":{\"规格\":\"默认\"},\"otPrice\":33.0,\"pic\":\"https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg\",\"pinkPrice\":19.9,\"pinkStock\":99,\"price\":11.0,\"seckillPrice\":22.98,\"seckillStock\":2000,\"stock\":9989,\"value1\":\"规格\",\"volume\":1.0,\"weight\":1.0}]}', '2020-12-20 20:58:32');
+INSERT INTO `yx_store_product_attr_result` VALUES (59, 8, '{\"attr\":[{\"detail\":[\"A4\",\"A3\",\"A5\"],\"value\":\"纸张\"},{\"detail\":[\"白色\",\"红色\"],\"value\":\"颜色\"}],\"value\":[{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A4\",\"颜色\":\"白色\"},\"integral\":100,\"otPrice\":12.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":1.0,\"pinkStock\":9,\"price\":9.0,\"seckillPrice\":1.0,\"seckillStock\":10,\"stock\":95,\"value1\":\"A4\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A4\",\"颜色\":\"红色\"},\"integral\":200,\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":2.0,\"pinkStock\":10,\"price\":8.0,\"seckillPrice\":1.0,\"seckillStock\":10,\"stock\":99,\"value1\":\"A4\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A3\",\"颜色\":\"白色\"},\"integral\":300,\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":0.5,\"pinkStock\":10,\"price\":7.0,\"seckillPrice\":0.1,\"seckillStock\":10,\"stock\":88,\"value1\":\"A3\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A3\",\"颜色\":\"红色\"},\"integral\":400,\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":1.0,\"pinkStock\":9,\"price\":6.0,\"seckillPrice\":0.1,\"seckillStock\":9,\"stock\":88,\"value1\":\"A3\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A5\",\"颜色\":\"白色\"},\"integral\":500,\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":2.0,\"pinkStock\":9,\"price\":5.0,\"seckillPrice\":0.1,\"seckillStock\":9,\"stock\":65,\"value1\":\"A5\",\"value2\":\"白色\",\"volume\":0.0,\"weight\":0.0},{\"barCode\":\"\",\"brokerage\":1.0,\"brokerageTwo\":1.0,\"cost\":1.0,\"detail\":{\"纸张\":\"A5\",\"颜色\":\"红色\"},\"integral\":69090,\"otPrice\":9.0,\"pic\":\"https://image.dayouqiantu.cn/5ca081af6183f.jpg\",\"pinkPrice\":3.0,\"pinkStock\":9,\"price\":4.0,\"seckillPrice\":0.1,\"seckillStock\":9,\"stock\":66,\"value1\":\"A5\",\"value2\":\"红色\",\"volume\":0.0,\"weight\":0.0}]}', '2020-12-20 21:18:16');
 
 -- ----------------------------
 -- Table structure for yx_store_product_attr_value
@@ -2360,31 +2462,32 @@ CREATE TABLE `yx_store_product_attr_value`  (
   `pink_stock` int(10) NOT NULL DEFAULT 0 COMMENT '拼团库存',
   `seckill_price` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '秒杀价',
   `seckill_stock` int(10) NOT NULL DEFAULT 0 COMMENT '秒杀库存',
+  `integral` int(10) UNSIGNED ZEROFILL NULL DEFAULT 0000000000 COMMENT '需要多少积分兑换',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `unique`(`unique`, `sku`) USING BTREE,
   INDEX `store_id`(`product_id`, `sku`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 107 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性值表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 126 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品属性值表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_product_attr_value
 -- ----------------------------
-INSERT INTO `yx_store_product_attr_value` VALUES (44, 1, '默认', 993, 6, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'd4ce8cd4bda84d479c11348e060afb8e', 3.00, '00005', 1.00, 0.00, 0.00, 0.00, 0.00, 0.10, 100, 0.20, 97);
-INSERT INTO `yx_store_product_attr_value` VALUES (77, 4, '默认', 91, 2, 0.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '6a1919d9178b48f3a75fe4640e51693e', 0.00, '', 0.00, 0.00, 0.00, 0.00, 0.00, 22.00, 17, 0.00, 0);
-INSERT INTO `yx_store_product_attr_value` VALUES (79, 2, 'A4,白色', 987, 4, 10.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '04e9d586cef8464aaee0a45439f12520', 11.00, '00001', 12.00, 0.00, 0.00, 0.00, 0.00, 11.09, 99, 1.00, 100);
-INSERT INTO `yx_store_product_attr_value` VALUES (80, 2, 'A4,红色', 661, 0, 11.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '3d1ffa92e6064c36b614d3046c268968', 11.00, '00002', 12.00, 0.00, 0.00, 0.00, 0.00, 22.88, 99, 2.00, 100);
-INSERT INTO `yx_store_product_attr_value` VALUES (81, 2, 'A3,白色', 995, 0, 12.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '344f3a0e9d644845ae483c8b9a84a112', 11.00, '00003', 12.00, 0.00, 0.00, 0.00, 0.00, 33.89, 99, 3.00, 100);
-INSERT INTO `yx_store_product_attr_value` VALUES (82, 2, 'A3,红色', 665, 0, 13.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '4a9ca8587855412ea7be9ba53f829052', 11.00, '00004', 12.00, 0.00, 0.00, 0.00, 0.00, 45.66, 100, 4.00, 100);
-INSERT INTO `yx_store_product_attr_value` VALUES (83, 0, '默认', 10, 0, 100.00, 'https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png', 'bbdc071ff67c4892839eac9f62e7eb18', 110.00, '', 120.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0.00, 0);
-INSERT INTO `yx_store_product_attr_value` VALUES (84, 6, '默认', 9966, 23, 11.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '90babee9cea24645870c6027fc420d42', 22.00, '00002', 33.00, 1.00, 1.00, 0.00, 0.00, 19.90, 95, 22.98, 2000);
-INSERT INTO `yx_store_product_attr_value` VALUES (86, 7, '默认', 7, 3, 100.00, 'https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png', '789984b858bb489bb6313107e11fdc15', 110.00, '', 120.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0.00, 0);
-INSERT INTO `yx_store_product_attr_value` VALUES (99, 8, 'A4,白色', 95, 1, 9.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', '013f89ec740f478d8144f052909c0807', 1.00, '', 12.00, 0.00, 0.00, 1.00, 1.00, 1.00, 9, 1.00, 10);
-INSERT INTO `yx_store_product_attr_value` VALUES (100, 8, 'A4,红色', 99, 0, 8.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', '4e1d7c450a8e48f6ae4ec7788f0cfd90', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 2.00, 10, 1.00, 10);
-INSERT INTO `yx_store_product_attr_value` VALUES (101, 8, 'A3,白色', 88, 0, 7.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', '3ce61e5e6f4b46a7a210862af85212bc', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 0.50, 10, 0.10, 10);
-INSERT INTO `yx_store_product_attr_value` VALUES (102, 8, 'A3,红色', 88, 0, 6.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', 'b1e48ae88299479899d95b86dd1be700', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 1.00, 9, 0.10, 9);
-INSERT INTO `yx_store_product_attr_value` VALUES (103, 8, 'A5,白色', 65, 0, 5.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', '81b7a068f84a498ca8ad4e1916011e00', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 2.00, 9, 0.10, 9);
-INSERT INTO `yx_store_product_attr_value` VALUES (104, 8, 'A5,红色', 66, 0, 4.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', '8112da382da7420f961203372f7c1d31', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 3.00, 9, 0.10, 9);
-INSERT INTO `yx_store_product_attr_value` VALUES (105, 5, '默认', 3, 8, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', '040fb7ab2a8b4ff3b6c9d1c78ea3e889', 1.00, '1231321', 11.00, 1.00, 1.00, 0.00, 0.00, 29.00, 5, 11.99, 8);
-INSERT INTO `yx_store_product_attr_value` VALUES (106, 3, '默认', 9996, 3, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', '43cdbd1043474b4e97a1cffffa18071c', 1.00, '', 1.00, 0.00, 0.00, 0.00, 0.00, 119.99, 10, 0.00, 0);
+INSERT INTO `yx_store_product_attr_value` VALUES (44, 1, '默认', 993, 6, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', 'd4ce8cd4bda84d479c11348e060afb8e', 3.00, '00005', 1.00, 0.00, 0.00, 0.00, 0.00, 0.10, 100, 0.20, 97, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (77, 4, '默认', 91, 2, 0.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '6a1919d9178b48f3a75fe4640e51693e', 0.00, '', 0.00, 0.00, 0.00, 0.00, 0.00, 22.00, 17, 0.00, 0, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (79, 2, 'A4,白色', 987, 4, 10.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '04e9d586cef8464aaee0a45439f12520', 11.00, '00001', 12.00, 0.00, 0.00, 0.00, 0.00, 11.09, 99, 1.00, 100, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (80, 2, 'A4,红色', 661, 0, 11.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '3d1ffa92e6064c36b614d3046c268968', 11.00, '00002', 12.00, 0.00, 0.00, 0.00, 0.00, 22.88, 99, 2.00, 100, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (81, 2, 'A3,白色', 995, 0, 12.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '344f3a0e9d644845ae483c8b9a84a112', 11.00, '00003', 12.00, 0.00, 0.00, 0.00, 0.00, 33.89, 99, 3.00, 100, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (82, 2, 'A3,红色', 665, 0, 13.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807584910.jpg', '4a9ca8587855412ea7be9ba53f829052', 11.00, '00004', 12.00, 0.00, 0.00, 0.00, 0.00, 45.66, 100, 4.00, 100, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (83, 0, '默认', 10, 0, 100.00, 'https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png', 'bbdc071ff67c4892839eac9f62e7eb18', 110.00, '', 120.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0.00, 0, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (86, 7, '默认', 7, 3, 100.00, 'https://consoleapi.xinxintuan.co/file/pic/20200911093912577832.png', '789984b858bb489bb6313107e11fdc15', 110.00, '', 120.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0, 0.00, 0, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (105, 5, '默认', 3, 8, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', '040fb7ab2a8b4ff3b6c9d1c78ea3e889', 1.00, '1231321', 11.00, 1.00, 1.00, 0.00, 0.00, 29.00, 5, 11.99, 8, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (106, 3, '默认', 9996, 3, 2.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807647067.jpg', '43cdbd1043474b4e97a1cffffa18071c', 1.00, '', 1.00, 0.00, 0.00, 0.00, 0.00, 119.99, 10, 0.00, 0, NULL);
+INSERT INTO `yx_store_product_attr_value` VALUES (107, 6, '默认', 9989, 0, 11.00, 'https://consoleapi.xinxintuan.co/file/pic/20200903171807641535.jpg', '4dcb457a13924be7b246f72f03ea7931', 22.00, '00002', 33.00, 1.00, 1.00, 0.00, 0.00, 19.90, 99, 22.98, 2000, 0000000000);
+INSERT INTO `yx_store_product_attr_value` VALUES (120, 8, 'A4,白色', 95, 0, 9.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', '9306b671348a41d2966392578a31e00b', 1.00, '', 12.00, 0.00, 0.00, 1.00, 1.00, 1.00, 9, 1.00, 10, 0000000100);
+INSERT INTO `yx_store_product_attr_value` VALUES (121, 8, 'A4,红色', 99, 0, 8.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', 'e3fc8496d4a0484a9946d84b03a78eee', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 2.00, 10, 1.00, 10, 0000000200);
+INSERT INTO `yx_store_product_attr_value` VALUES (122, 8, 'A3,白色', 88, 0, 7.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', 'a05ff262758548edbef5fda9e6dc26de', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 0.50, 10, 0.10, 10, 0000000300);
+INSERT INTO `yx_store_product_attr_value` VALUES (123, 8, 'A3,红色', 88, 0, 6.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', 'dc866a081e2b4a72b2ee9468ad7ba171', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 1.00, 9, 0.10, 9, 0000000400);
+INSERT INTO `yx_store_product_attr_value` VALUES (124, 8, 'A5,白色', 65, 0, 5.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', '094a42db903648acb275c868af2bd6ba', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 2.00, 9, 0.10, 9, 0000000500);
+INSERT INTO `yx_store_product_attr_value` VALUES (125, 8, 'A5,红色', 66, 0, 4.00, 'https://image.dayouqiantu.cn/5ca081af6183f.jpg', 'c35190bdfb5248ba9a219481adef9b1b', 1.00, '', 9.00, 0.00, 0.00, 1.00, 1.00, 3.00, 9, 0.10, 9, 0000069090);
 
 -- ----------------------------
 -- Table structure for yx_store_product_relation
@@ -2403,7 +2506,11 @@ CREATE TABLE `yx_store_product_relation`  (
   UNIQUE INDEX `uid`(`uid`, `product_id`, `type`, `category`) USING BTREE,
   INDEX `type`(`type`) USING BTREE,
   INDEX `category`(`category`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品点赞和收藏表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品点赞和收藏表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of yx_store_product_relation
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for yx_store_product_reply
@@ -2432,7 +2539,7 @@ CREATE TABLE `yx_store_product_reply`  (
   INDEX `is_del`(`is_del`) USING BTREE,
   INDEX `product_score`(`product_score`) USING BTREE,
   INDEX `service_score`(`service_score`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '评论表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '评论表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_product_reply
@@ -2451,7 +2558,7 @@ CREATE TABLE `yx_store_product_rule`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品规则值(规格)表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品规则值(规格)表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_product_rule
@@ -2502,7 +2609,7 @@ CREATE TABLE `yx_store_seckill`  (
   INDEX `add_time`(`create_time`) USING BTREE,
   INDEX `sort`(`sort`) USING BTREE,
   INDEX `is_postage`(`is_postage`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品秒杀产品表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品秒杀产品表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_seckill
@@ -2526,7 +2633,7 @@ CREATE TABLE `yx_store_visit`  (
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注描述',
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '产品浏览分析表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '产品浏览分析表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_store_visit
@@ -2552,7 +2659,7 @@ CREATE TABLE `yx_system_attachment`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`att_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 121 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '附件管理表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 121 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '附件管理表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_attachment
@@ -2582,7 +2689,7 @@ CREATE TABLE `yx_system_city`  (
   `lat` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '纬度',
   `is_show` tinyint(1) NOT NULL DEFAULT 1 COMMENT '是否展示',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3971 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '城市表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3971 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '城市表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_city
@@ -6537,7 +6644,7 @@ CREATE TABLE `yx_system_config`  (
   `sort` int(10) UNSIGNED NULL DEFAULT 0 COMMENT '排序',
   `status` tinyint(1) UNSIGNED NULL DEFAULT 0 COMMENT '是否隐藏',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 227 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配置表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 227 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '配置表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_config
@@ -6609,7 +6716,7 @@ CREATE TABLE `yx_system_group_data`  (
   `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（1：开启；2：关闭；）',
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 227 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '组合数据详情表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 227 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '组合数据详情表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_group_data
@@ -6684,7 +6791,7 @@ CREATE TABLE `yx_system_store`  (
   `valid_time_start` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `phone`(`phone`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '门店自提' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '门店自提' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_store
@@ -6712,7 +6819,7 @@ CREATE TABLE `yx_system_store_staff`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '门店店员表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '门店店员表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_store_staff
@@ -6745,7 +6852,7 @@ CREATE TABLE `yx_system_user_level`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '是否删除.1=删除,0=未删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '设置用户等级表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '设置用户等级表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_user_level
@@ -6776,7 +6883,7 @@ CREATE TABLE `yx_system_user_task`  (
   `update_time` datetime(0) NULL DEFAULT NULL,
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '等级任务设置' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '等级任务设置' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_system_user_task
@@ -6844,7 +6951,7 @@ CREATE TABLE `yx_user`  (
   INDEX `level`(`level`) USING BTREE,
   INDEX `status`(`status`) USING BTREE,
   INDEX `is_promoter`(`is_promoter`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user
@@ -6875,7 +6982,7 @@ CREATE TABLE `yx_user_address`  (
   INDEX `uid`(`uid`) USING BTREE,
   INDEX `is_default`(`is_default`) USING BTREE,
   INDEX `is_del`(`is_del`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户地址表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户地址表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user_address
@@ -6918,7 +7025,7 @@ CREATE TABLE `yx_user_bill`  (
   INDEX `add_time`(`create_time`) USING BTREE,
   INDEX `pm`(`pm`) USING BTREE,
   INDEX `type`(`category`, `type`, `link_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户账单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户账单表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user_bill
@@ -6953,7 +7060,7 @@ CREATE TABLE `yx_user_enter`  (
   INDEX `is_lock`(`is_lock`) USING BTREE,
   INDEX `is_del`(`is_del`) USING BTREE,
   INDEX `status`(`status`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商户申请表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商户申请表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user_enter
@@ -6987,7 +7094,7 @@ CREATE TABLE `yx_user_extract`  (
   INDEX `add_time`(`create_time`) USING BTREE,
   INDEX `openid`(`uid`) USING BTREE,
   INDEX `fail_time`(`fail_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户提现表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户提现表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user_extract
@@ -7001,7 +7108,7 @@ CREATE TABLE `yx_user_group`  (
   `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
   `group_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户分组名称',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户分组表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户分组表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user_group
@@ -7028,7 +7135,7 @@ CREATE TABLE `yx_user_level`  (
   `discount` int(11) NOT NULL DEFAULT 0 COMMENT '享受折扣',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户等级记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户等级记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user_level
@@ -7057,7 +7164,7 @@ CREATE TABLE `yx_user_recharge`  (
   INDEX `uid`(`uid`) USING BTREE,
   INDEX `recharge_type`(`recharge_type`) USING BTREE,
   INDEX `paid`(`paid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户充值表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户充值表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user_recharge
@@ -7078,7 +7185,7 @@ CREATE TABLE `yx_user_sign`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`int`) USING BTREE,
   INDEX `uid`(`uid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '签到记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '签到记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user_sign
@@ -7100,7 +7207,7 @@ CREATE TABLE `yx_user_task_finish`  (
   `is_del` tinyint(1) NULL DEFAULT 0,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `id`(`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户任务完成记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户任务完成记录表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_user_task_finish
@@ -7131,7 +7238,7 @@ CREATE TABLE `yx_wechat_live`  (
   `close_share` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭分享【0：开启，1：关闭】',
   `close_kf` tinyint(1) NULL DEFAULT NULL COMMENT '是否关闭客服【0：开启，1：关闭】',
   PRIMARY KEY (`room_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信小程序直播表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信小程序直播表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_wechat_live
@@ -7159,7 +7266,7 @@ CREATE TABLE `yx_wechat_live_goods`  (
   `audit_id` bigint(20) NULL DEFAULT NULL COMMENT '审核单id',
   `audit_status` int(1) UNSIGNED ZEROFILL NULL DEFAULT NULL COMMENT '审核状态 0：未审核，1：审核中，2:审核通过，3审核失败',
   PRIMARY KEY (`goods_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信小程序直播商品表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '微信小程序直播商品表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_wechat_live_goods
@@ -7183,7 +7290,7 @@ CREATE TABLE `yx_wechat_media`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `type`(`type`, `media_id`) USING BTREE,
   INDEX `type_2`(`type`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信回复表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信回复表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_wechat_media
@@ -7198,7 +7305,7 @@ CREATE TABLE `yx_wechat_menu`  (
   `result` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '缓存数据',
   `add_time` int(10) NULL DEFAULT NULL COMMENT '缓存时间',
   PRIMARY KEY (`key`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信缓存表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信缓存表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_wechat_menu
@@ -7221,7 +7328,7 @@ CREATE TABLE `yx_wechat_reply`  (
   INDEX `type`(`type`) USING BTREE,
   INDEX `status`(`status`) USING BTREE,
   INDEX `hide`(`hide`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信关键字回复表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信关键字回复表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_wechat_reply
@@ -7245,43 +7352,7 @@ CREATE TABLE `yx_wechat_template`  (
   `type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '类型：template:模板消息 subscribe:订阅消息',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `tempkey`(`tempkey`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信模板' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for yx_store_customer
--- ----------------------------
-DROP TABLE IF EXISTS `yx_store_customer`;
-CREATE TABLE `yx_store_customer`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `nick_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户昵称',
-  `open_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'openId',
-  `remark` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '添加时间',
-  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `is_del` tinyint(1) NULL DEFAULT 0,
-  `is_enable` tinyint(1) NULL DEFAULT 1 COMMENT '是否启用',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 88 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '订单通知用户表 接收订单通知的用户' ROW_FORMAT = Dynamic;
-
-
--- ----------------------------
--- Table structure for yx_app_version
--- ----------------------------
-DROP TABLE IF EXISTS `yx_app_version`;
-CREATE TABLE `yx_app_version`  (
-   `id` int(11) NOT NULL AUTO_INCREMENT,
-   `version_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '版本code',
-   `version_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '版本名称',
-   `version_info` varchar(600) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '版本描述',
-   `ios_url` varchar(10000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'ios store应用商店链接',
-   `android_url` varchar(10000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '安卓下载链接',
-   `force_update` tinyint(4) NULL DEFAULT NULL COMMENT '是否强制升级',
-   `create_time` datetime(0) NULL DEFAULT NULL,
-   `update_time` datetime(0) NULL DEFAULT NULL,
-   `is_del` tinyint(1) NULL DEFAULT 0,
-   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'app版本' ROW_FORMAT = Dynamic;
-
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '微信模板' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of yx_wechat_template
