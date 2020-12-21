@@ -15,6 +15,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 /**
  * WebMvcConfigurer
  *
@@ -31,17 +34,19 @@ public class ConfigurerAdapter implements WebMvcConfigurer {
     @Value("${file.avatar}")
     private String avatar;
 
-    @Bean
-    public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-        source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
-    }
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowCredentials(true);
+//        // 设置允许跨域请求的域名
+//        config.setAllowedOriginPatterns(Arrays.asList("*"));
+//        config.addAllowedOrigin("*");
+//        config.addAllowedHeader("*");
+//        config.addAllowedMethod("*");
+//        source.registerCorsConfiguration("/**", config);
+//        return new CorsFilter(source);
+//    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
