@@ -1327,20 +1327,6 @@ INSERT INTO `roles_menus` VALUES (261, 1);
 INSERT INTO `roles_menus` VALUES (262, 1);
 INSERT INTO `roles_menus` VALUES (263, 1);
 
--- ----------------------------
--- Table structure for student
--- ----------------------------
-DROP TABLE IF EXISTS `student`;
-CREATE TABLE `student`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '学生id',
-  `student_sex` tinyint(1) NOT NULL DEFAULT 1 COMMENT '学生性别',
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态 1正常 0禁用',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '学生表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of student
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for user
