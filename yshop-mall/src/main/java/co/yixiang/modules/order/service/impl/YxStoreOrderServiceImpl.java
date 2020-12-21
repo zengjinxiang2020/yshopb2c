@@ -408,6 +408,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 .couponPrice(couponPrice)
                 .deductionPrice(deductionPrice)
                 .usedIntegral(usedIntegral)
+                .payIntegral(cacheDTO.getPriceGroup().getPayIntegral())
                 .build();
     }
 
@@ -459,6 +460,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         Long seckillId = 0L;
         Long bargainId = 0L;
 
+        Boolean isIntegral=false;
+        BigDecimal integral=BigDecimal.ZERO;
+
         CacheDto cacheDTO = this.getCacheOrderInfo(uid,key);
         List<YxStoreCartQueryVo> cartInfo = cacheDTO.getCartInfo();
 
@@ -474,12 +478,19 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
             cartIds.add(cart.getId().toString());
             totalNum += cart.getCartNum();
+            if(cart.getProductInfo().getIsIntegral()==1){
+                integral = NumberUtil.add(integral,
+                        NumberUtil.mul(cart.getCartNum(),cart.getProductInfo().getAttrInfo().getIntegral()));
+            }
         }
 
 
         //计算奖励积分
         BigDecimal gainIntegral = this.getGainIntegral(cartInfo);
-
+        if(PayTypeEnum.INTEGRAL.getValue().equals(param.getPayType())){
+            gainIntegral=BigDecimal.ZERO;
+            isIntegral=true;
+        }
         //生成分布式唯一值
         String orderSn = IdUtil.getSnowflake(0,0).nextIdStr();
         //组合数据
@@ -501,6 +512,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         storeOrder.setDeductionPrice(computeVo.getDeductionPrice());
         storeOrder.setPaid(OrderInfoEnum.PAY_STATUS_0.getValue());
         storeOrder.setPayType(param.getPayType());
+        if(isIntegral){
+            storeOrder.setPayIntegral(integral);
+        }
         storeOrder.setUseIntegral(BigDecimal.valueOf(computeVo.getUsedIntegral()));
         storeOrder.setBackIntegral(BigDecimal.ZERO);
         storeOrder.setGainIntegral(gainIntegral);
@@ -694,6 +708,13 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                     price.doubleValue(),
                     NumberUtil.add(price,userQueryVo.getNowMoney()).doubleValue(),
                     "订单退款到余额"+price+"元",orderQueryVo.getId().toString());
+            this.retrunStock(orderQueryVo.getOrderId());
+        }else if(PayTypeEnum.INTEGRAL.getValue().equals(orderQueryVo.getPayType())){
+            storeOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_2.getValue());
+            storeOrder.setRefundPrice(price);
+            yxStoreOrderMapper.updateById(storeOrder);
+
+            orderStatusService.create(orderQueryVo.getId(),"order_edit","退款给用户："+orderQueryVo.getPayIntegral() +"分");
             this.retrunStock(orderQueryVo.getOrderId());
         }
 
@@ -1445,7 +1466,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         }else if(PayTypeEnum.YUE.getValue().equals(order.getPayType())){
             statusDTO.set_payType("余额支付");
         }else{
-            statusDTO.set_payType("积分兑换");
+            statusDTO.set_payType("积分支付");
         }
 
         order.set_status(statusDTO);
@@ -1774,7 +1795,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 || OrderStatusEnum.STATUS_MINUS_2.getValue().equals(order.getStatus())){
             return;
         }
-
+        if(order.getPayIntegral().compareTo(BigDecimal.ZERO)>0){
+            order.setUseIntegral(order.getPayIntegral());
+        }
         if(order.getUseIntegral().compareTo(BigDecimal.ZERO) <= 0) {
             return;
         }
@@ -1870,13 +1893,15 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         BigDecimal totalPrice = this.getOrderSumPrice(cartInfo, "truePrice");//获取订单总金额
         BigDecimal costPrice = this.getOrderSumPrice(cartInfo, "costPrice");//获取订单成本价
         BigDecimal vipPrice = this.getOrderSumPrice(cartInfo, "vipTruePrice");//获取订单会员优惠金额
-
+        BigDecimal payIntegral =  this.getOrderSumPrice(cartInfo, "payIntegral");//获取订单需要的积分
 
         //如果设置满包邮0 表示全局包邮，如果设置大于0表示满这价格包邮，否则走运费模板算法
         if(storeFreePostage.compareTo(BigDecimal.ZERO) != 0 && totalPrice.compareTo(storeFreePostage) <= 0){
             storePostage =  this.handlePostage(cartInfo,userAddress);
         }
-
+        if(cartInfo.size()==1&&cartInfo.get(0).getProductInfo().getIsIntegral()==1){
+            totalPrice=BigDecimal.ZERO;
+        }
 
         PriceGroupDto priceGroupDTO = new PriceGroupDto();
         priceGroupDTO.setStorePostage(storePostage);
@@ -1884,7 +1909,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         priceGroupDTO.setTotalPrice(totalPrice);
         priceGroupDTO.setCostPrice(costPrice);
         priceGroupDTO.setVipPrice(vipPrice);
-
+        priceGroupDTO.setPayIntegral(payIntegral);
         return priceGroupDTO;
     }
 
@@ -2076,6 +2101,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             for (YxStoreCartQueryVo storeCart : cartInfo) {
                 sumPrice = NumberUtil.add(sumPrice,
                         NumberUtil.mul(storeCart.getCartNum(),storeCart.getVipTruePrice()));
+            }
+        }else if("payIntegral".equals(key)){
+            for (YxStoreCartQueryVo storeCart : cartInfo) {
+                sumPrice = NumberUtil.add(sumPrice,
+                        NumberUtil.mul(storeCart.getCartNum(), storeCart.getProductInfo().getAttrInfo().getIntegral()));
             }
         }
 

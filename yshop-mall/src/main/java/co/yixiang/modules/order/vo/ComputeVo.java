@@ -37,4 +37,7 @@ public class ComputeVo implements Serializable {
     private BigDecimal totalPrice;
 
     private Double usedIntegral; //使用了多少积分
+
+    @JsonSerialize(using = BigDecimalSerializer.class)
+    private BigDecimal payIntegral;
 }
