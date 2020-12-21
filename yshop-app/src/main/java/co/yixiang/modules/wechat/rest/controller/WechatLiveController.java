@@ -8,7 +8,7 @@
 */
 package co.yixiang.modules.wechat.rest.controller;
 
-import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
+import cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult;
 import co.yixiang.api.ApiResult;
 import co.yixiang.modules.mp.service.YxWechatLiveService;
 import co.yixiang.modules.mp.service.dto.YxWechatLiveQueryCriteria;
