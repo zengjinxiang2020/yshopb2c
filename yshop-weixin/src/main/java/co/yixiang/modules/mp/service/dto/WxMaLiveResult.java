@@ -1,6 +1,6 @@
 package co.yixiang.modules.mp.service.dto;
 
-import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
+import cn.binarywang.wx.miniapp.json.WxMaGsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
@@ -23,22 +23,22 @@ public class WxMaLiveResult implements Serializable {
     private Integer total;
     private Integer auditId;
     private Integer goodsId;
-    private List<cn.binarywang.wx.miniapp.bean.WxMaLiveResult.Goods> goods;
+    private List<cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult.Goods> goods;
 
     /**
      * 直播间列表
      */
     @SerializedName("room_info")
-    private List<cn.binarywang.wx.miniapp.bean.WxMaLiveResult.RoomInfo> roomInfos;
+    private List<cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult.RoomInfo> roomInfos;
 
     /**
      * 获取回放源视频列表
      */
     @SerializedName("live_replay")
-    private List<cn.binarywang.wx.miniapp.bean.WxMaLiveResult.LiveReplay> liveReplay;
+    private List<cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult.LiveReplay> liveReplay;
 
-    public static cn.binarywang.wx.miniapp.bean.WxMaLiveResult fromJson(String json) {
-        return WxMaGsonBuilder.create().fromJson(json, cn.binarywang.wx.miniapp.bean.WxMaLiveResult.class);
+    public static cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult fromJson(String json) {
+        return WxMaGsonBuilder.create().fromJson(json, cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult.class);
     }
 
     /**
@@ -111,7 +111,7 @@ public class WxMaLiveResult implements Serializable {
         private Integer closeGoods;
         @SerializedName("close_comment")
         private Integer closeComment;
-        private List<cn.binarywang.wx.miniapp.bean.WxMaLiveResult.Goods> goods;
+        private List<cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult.Goods> goods;
     }
 
     /**

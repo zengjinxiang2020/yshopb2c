@@ -8,7 +8,7 @@
 */
 package co.yixiang.modules.mp.service;
 
-import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
+import cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult;
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.mp.service.dto.UpdateGoodsDto;
 import co.yixiang.modules.mp.service.dto.WxMaLiveInfo;

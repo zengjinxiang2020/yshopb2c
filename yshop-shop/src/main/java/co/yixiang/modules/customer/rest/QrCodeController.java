@@ -13,11 +13,10 @@ import io.swagger.annotations.Api;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
+import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
-import me.chanjar.weixin.mp.bean.result.WxMpUser;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -91,10 +90,10 @@ public class QrCodeController {
             throw new IllegalArgumentException("未找到对应配置的服务，请核实！");
         }
         try {
-            WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.getOAuth2Service().getAccessToken(code);
-            WxMpUser wxMpUser = wxService.getOAuth2Service().getUserInfo(wxMpOAuth2AccessToken, "zh_CN");
-            RedisUtil.set("qrCode:" + key, wxMpOAuth2AccessToken.getOpenId() + ":" + wxMpUser.getNickname());
-            log.info("【微信网页授权】wxMpUser={}", wxMpUser);
+            WxOAuth2AccessToken wxOAuth2AccessToken = wxService.getOAuth2Service().getAccessToken(code);
+            WxOAuth2UserInfo wxOAuth2UserInfo = wxService.getOAuth2Service().getUserInfo(wxOAuth2AccessToken, "zh_CN");
+            RedisUtil.set("qrCode:" + key, wxOAuth2UserInfo.getOpenid() + ":" + wxOAuth2UserInfo.getNickname());
+            log.info("【微信网页授权】wxMpUser={}", wxOAuth2UserInfo);
         } catch (WxErrorException e) {
             log.info("【微信网页授权】{}", e);
             throw new Exception(e.getError().getErrorMsg());

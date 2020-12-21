@@ -9,8 +9,8 @@
 package co.yixiang.modules.mp.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
-import cn.binarywang.wx.miniapp.util.json.WxMaGsonBuilder;
+import cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult;
+import cn.binarywang.wx.miniapp.json.WxMaGsonBuilder;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;

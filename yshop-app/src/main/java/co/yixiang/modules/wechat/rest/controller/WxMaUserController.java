@@ -9,7 +9,6 @@
 package co.yixiang.modules.wechat.rest.controller;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
@@ -98,7 +97,7 @@ public class WxMaUserController {
         String phone = "";
         try {
             String sessionKey = RedisUtil.get(ShopConstants.YSHOP_MINI_SESSION_KET+ user.getUid()).toString();
-            WxMaPhoneNumberInfo  phoneNoInfo = wxMaService.getUserService()
+            WxMaPhoneNumberInfo phoneNoInfo = wxMaService.getUserService()
                     .getPhoneNoInfo(sessionKey, param.getEncryptedData(), param.getIv());
             phone = phoneNoInfo.getPhoneNumber();
             user.setPhone(phone);

@@ -14,7 +14,6 @@ import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
-import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.util.IpUtil;
 import co.yixiang.constant.ShopConstants;
@@ -31,24 +30,19 @@ import co.yixiang.modules.mp.config.WxMpConfiguration;
 import co.yixiang.modules.mp.config.WxMaConfiguration;
 import co.yixiang.utils.*;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.vdurmont.emoji.EmojiParser;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
+import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
-import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -175,8 +169,9 @@ public class AuthService {
     public YxUser wechatLogin(String code,String spread){
         try {
             WxMpService wxService = WxMpConfiguration.getWxMpService();
-            WxMpOAuth2AccessToken wxMpOAuth2AccessToken = wxService.getOAuth2Service().getAccessToken(code);
-            WxMpUser wxMpUser = wxService.getOAuth2Service().getUserInfo(wxMpOAuth2AccessToken, null);
+            WxOAuth2AccessToken wxOAuth2AccessToken = wxService.getOAuth2Service().getAccessToken(code);
+            WxOAuth2UserInfo wxOAuth2UserInfo = wxService.getOAuth2Service().getUserInfo(wxOAuth2AccessToken, null);
+            WxMpUser wxMpUser = wxService.getUserService().userInfo(wxOAuth2UserInfo.getOpenid());
             String openid = wxMpUser.getOpenId();
 
             //如果开启了UnionId

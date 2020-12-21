@@ -9,8 +9,8 @@
 package co.yixiang.modules.mp.service.impl;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.bean.WxMaLiveInfo;
-import cn.binarywang.wx.miniapp.bean.WxMaLiveResult;
+import cn.binarywang.wx.miniapp.bean.live.WxMaLiveGoodInfo;
+import cn.binarywang.wx.miniapp.bean.live.WxMaLiveResult;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
@@ -19,6 +19,7 @@ import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.LiveGoodsEnum;
 import co.yixiang.exception.BadRequestException;
+import co.yixiang.modules.mp.service.dto.WxMaLiveInfo;
 import co.yixiang.modules.mp.service.mapper.YxWechatLiveGoodsMapper;
 import co.yixiang.modules.mp.domain.YxWechatLiveGoods;
 import co.yixiang.modules.mp.service.YxWechatLiveGoodsService;
@@ -102,7 +103,7 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         YxWechatLiveGoods wechatLiveGoods = this.getById(resources.getGoodsId());
         try {
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
-            WxMaLiveInfo.Goods goods = generator.convert(resources, WxMaLiveInfo.Goods.class);
+            WxMaLiveGoodInfo goods = generator.convert(resources, WxMaLiveGoodInfo.class);
             if(ObjectUtil.isNotEmpty(wechatLiveGoods)){
                 /** 审核状态 0：未审核，1：审核中，2:审核通过，3审核失败 */
                 if(LiveGoodsEnum.IS_Audit_2.getValue().equals(wechatLiveGoods.getAuditStatus())){
@@ -193,7 +194,7 @@ public class YxWechatLiveGoodsServiceImpl extends BaseServiceImpl<YxWechatLiveGo
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
         try {
             resources.setCoverImgUrl(uploadPhotoToWx(wxMaService,resources.getCoverImgeUrl()).getMediaId());
-            WxMaLiveInfo.Goods goods = generator.convert(resources, WxMaLiveInfo.Goods.class);
+            WxMaLiveGoodInfo goods = generator.convert(resources, WxMaLiveGoodInfo.class);
             WxMaLiveResult wxMaLiveResult = wxMaService.getLiveGoodsService().addGoods(goods);
             resources.setGoodsId(Long.valueOf(wxMaLiveResult.getGoodsId()));
             resources.setAuditId(Long.valueOf(wxMaLiveResult.getAuditId()));
