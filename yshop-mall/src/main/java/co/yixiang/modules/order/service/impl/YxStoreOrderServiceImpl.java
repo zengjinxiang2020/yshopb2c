@@ -1442,8 +1442,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         if(PayTypeEnum.WEIXIN.getValue().equals(order.getPayType())){
             statusDTO.set_payType("微信支付");
-        }else{
+        }else if(PayTypeEnum.YUE.getValue().equals(order.getPayType())){
             statusDTO.set_payType("余额支付");
+        }else{
+            statusDTO.set_payType("积分兑换");
         }
 
         order.set_status(statusDTO);
@@ -1598,7 +1600,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         userService.decIntegral(uid,orderInfo.getPayIntegral().doubleValue());
 
         //支付成功后处理
-        this.paySuccess(orderInfo.getOrderId(),PayTypeEnum.YUE.getValue());
+        this.paySuccess(orderInfo.getOrderId(),PayTypeEnum.INTEGRAL.getValue());
     }
 
 
