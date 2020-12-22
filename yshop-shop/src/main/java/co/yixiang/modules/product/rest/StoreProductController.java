@@ -225,7 +225,7 @@ public class StoreProductController {
                 .weight(Double.valueOf(mapAttr.get("weight").toString()))
                 .volume(Double.valueOf(mapAttr.get("volume").toString()))
                 .value1(mapAttr.get("value1").toString())
-                .integral(Integer.valueOf(mapAttr.get("integral").toString()))
+                .integral(mapAttr.get("integral") !=null ? Integer.valueOf(mapAttr.get("integral").toString()) : 0)
                 .brokerage(Double.valueOf(mapAttr.get("brokerage").toString()))
                 .brokerageTwo(Double.valueOf(mapAttr.get("brokerageTwo").toString()))
                 .pinkPrice(Double.valueOf(mapAttr.get("pinkPrice").toString()))
