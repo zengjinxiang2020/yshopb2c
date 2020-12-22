@@ -714,7 +714,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             storeOrder.setRefundPrice(price);
             yxStoreOrderMapper.updateById(storeOrder);
 
-            orderStatusService.create(orderQueryVo.getId(),"order_edit","退款给用户："+orderQueryVo.getPayIntegral() +"分");
+            orderStatusService.create(orderQueryVo.getId(),OrderLogEnum.ORDER_EDIT.getValue(),"退款给用户："+orderQueryVo.getPayIntegral() +"分");
             this.retrunStock(orderQueryVo.getOrderId());
         }
 
