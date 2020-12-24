@@ -167,11 +167,7 @@ public class YxStoreCategoryServiceImpl extends BaseServiceImpl<StoreCategoryMap
         }
         YxStoreCategory yxStoreCategory =  this.getOne(Wrappers.<YxStoreCategory>lambdaQuery()
                         .eq(YxStoreCategory::getId,pid));
-        if(yxStoreCategory.getPid() > 0) {
-            return false;
-        }
-
-        return true;
+        return yxStoreCategory.getPid() < 0;
     }
 
     /**
@@ -183,12 +179,7 @@ public class YxStoreCategoryServiceImpl extends BaseServiceImpl<StoreCategoryMap
     public boolean checkProductCategory(int id){
         YxStoreCategory yxStoreCategory =  this.getOne(Wrappers.<YxStoreCategory>lambdaQuery()
                 .eq(YxStoreCategory::getId,id));
-
-        if(yxStoreCategory.getPid() == 0) {
-            return false;
-        }
-
-        return true;
+        return yxStoreCategory.getPid() != 0;
     }
 
 }
