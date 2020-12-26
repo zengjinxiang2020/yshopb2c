@@ -14,12 +14,15 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
 import co.yixiang.enums.ShipperCodeEnum;
+import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.OrderLogEnum;
+import co.yixiang.modules.mp.domain.YxWechatTemplate;
+import co.yixiang.modules.mp.service.YxWechatTemplateService;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.dto.OrderExtendDto;
 import co.yixiang.modules.order.param.ComputeOrderParam;
@@ -68,6 +71,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -86,7 +90,7 @@ public class StoreOrderController {
     private final YxStoreOrderService storeOrderService;
     private final OrderSupplyService orderSupplyService;
     private final CreatShareProductService creatShareProductService;
-
+    private final YxWechatTemplateService yxWechatTemplateService;
 
     @Value("${file.path}")
     private String path;
@@ -429,6 +433,16 @@ public class StoreOrderController {
 
 
 
+    @AuthCheck
+    @GetMapping("/order/getSubscribeTemplate")
+    @ApiOperation(value = "获取订阅消息模板ID",notes = "获取订阅消息模板ID")
+    public ApiResult<List<String>> getSubscribeTemplate(){
+        List<YxWechatTemplate> yxWechatTemplate = yxWechatTemplateService.lambdaQuery()
+                .eq(YxWechatTemplate::getType,"subscribe")
+                .eq(YxWechatTemplate::getStatus, ShopCommonEnum.IS_STATUS_1.getValue()).list();
+        List<String> temId = yxWechatTemplate.stream().map(tem-> tem.getTempid()).collect(Collectors.toList());
+        return ApiResult.ok(temId);
+    }
 
 }
 
