@@ -31,17 +31,6 @@
         </dependency>
         <dependency>
             <groupId>co.yixiang</groupId>
-            <artifactId>yshop-message</artifactId>
-            <version>3.1</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>co.yixiang</groupId>
-                    <artifactId>yshop-mall</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>co.yixiang</groupId>
             <artifactId>yshop-shop</artifactId>
             <version>3.1</version>
         </dependency>
