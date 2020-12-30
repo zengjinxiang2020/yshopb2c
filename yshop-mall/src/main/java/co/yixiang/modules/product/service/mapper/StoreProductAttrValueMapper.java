@@ -31,7 +31,7 @@ public interface StoreProductAttrValueMapper extends CoreMapper<YxStoreProductAt
      */
     @Update("update yx_store_product_attr_value set stock=stock+#{num}, sales=sales-#{num}" +
             " where product_id=#{productId} and `unique`=#{unique}")
-    int incStockDecSales(@Param("num") int num,@Param("productId") Long productId,
+    int incStockDecSales(@Param("num") Integer num,@Param("productId") Long productId,
                                     @Param("unique")  String unique);
 
 
@@ -45,7 +45,7 @@ public interface StoreProductAttrValueMapper extends CoreMapper<YxStoreProductAt
 
     @Update("update yx_store_product_attr_value set stock=stock+#{num}, pink_stock=pink_stock+#{num}, sales=sales-#{num}" +
             " where product_id=#{productId} and `unique`=#{unique}")
-    int incCombinationStockDecSales(@Param("num") int num,@Param("productId") Long productId,
+    int incCombinationStockDecSales(@Param("num") Integer num,@Param("productId") Long productId,
                          @Param("unique")  String unique);
 
 
@@ -58,7 +58,7 @@ public interface StoreProductAttrValueMapper extends CoreMapper<YxStoreProductAt
      */
     @Update("update yx_store_product_attr_value set stock=stock+#{num},seckill_stock=seckill_stock+#{num}, sales=sales-#{num}" +
             " where product_id=#{productId} and `unique`=#{unique}")
-    int incSeckillStockDecSales(@Param("num") int num,@Param("productId") Long productId,
+    int incSeckillStockDecSales(@Param("num") Integer num,@Param("productId") Long productId,
                                     @Param("unique")  String unique);
 
 
@@ -71,7 +71,7 @@ public interface StoreProductAttrValueMapper extends CoreMapper<YxStoreProductAt
      */
     @Update("update yx_store_product_attr_value set stock=stock-#{num}, sales=sales+#{num}" +
             " where product_id=#{productId} and `unique`=#{unique} and stock >= #{num}")
-    int decStockIncSales(@Param("num") int num, @Param("productId") Long productId,
+    int decStockIncSales(@Param("num") Integer num, @Param("productId") Long productId,
                          @Param("unique")  String unique);
 
     /**
@@ -83,7 +83,8 @@ public interface StoreProductAttrValueMapper extends CoreMapper<YxStoreProductAt
      */
     @Update("update yx_store_product_attr_value set stock=stock-#{num}, pink_stock=pink_stock-#{num} ,sales=sales+#{num}" +
             " where product_id=#{productId} and `unique`=#{unique} and stock >= #{num} and pink_stock>=#{num}")
-    int decCombinationStockIncSales(int num, Long productId, String unique);
+    int decCombinationStockIncSales(@Param("num") Integer num, @Param("productId") Long productId,
+                                    @Param("unique") String unique);
 
     /**
      * 秒杀产品 减库存 加销量
@@ -94,5 +95,6 @@ public interface StoreProductAttrValueMapper extends CoreMapper<YxStoreProductAt
      */
     @Update("update yx_store_product_attr_value set stock=stock-#{num}, seckill_stock=seckill_stock-#{num},sales=sales+#{num}" +
             " where product_id=#{productId} and `unique`=#{unique} and stock >= #{num} and seckill_stock>=#{num}")
-    int decSeckillStockIncSales(int num, Long productId, String unique);
+    int decSeckillStockIncSales(@Param("num") Integer num, @Param("productId") Long productId,
+                                @Param("unique") String unique);
 }
