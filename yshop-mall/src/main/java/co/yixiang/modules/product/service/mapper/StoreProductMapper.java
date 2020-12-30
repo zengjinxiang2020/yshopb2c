@@ -34,7 +34,7 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
      */
     @Update("update yx_store_product set stock=stock-#{num}, sales=sales+#{num}" +
             " where id=#{productId} and stock >= #{num}")
-    int decStockIncSales(@Param("num") int num,@Param("productId") Long productId);
+    int decStockIncSales(@Param("num") Integer num,@Param("productId") Long productId);
 
     /**
      * 正常商品库存 加库存 减销量
@@ -44,7 +44,7 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
      */
     @Update("update yx_store_product set stock=stock+#{num}, sales=sales-#{num}" +
             " where id=#{productId}")
-    int incStockDecSales(@Param("num") int num,@Param("productId") Long productId);
+    int incStockDecSales(@Param("num") Integer num,@Param("productId") Long productId);
 
 
     @Update("update yx_store_product set is_show = #{status} where id = #{id}")
@@ -59,7 +59,7 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
      */
     @Update("update yx_store_combination set stock=stock-#{num}, sales=sales+#{num}" +
             " where id=#{activityId} and stock >= #{num}")
-    int decCombinationStockIncSales(int num, Long productId,Long activityId);
+    int decCombinationStockIncSales(@Param("num") Integer num, @Param("productId") Long productId,@Param("activityId") Long activityId);
 
     /**
      * 秒杀产品库存 减库存，加销量
@@ -70,7 +70,7 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
      */
     @Update("update yx_store_seckill set stock=stock-#{num}, sales=sales+#{num}" +
             " where id=#{activityId} and stock >= #{num}")
-    int decSeckillStockIncSales(int num, Long productId,Long activityId);
+    int decSeckillStockIncSales(@Param("num") Integer num, @Param("productId") Long productId,@Param("activityId") Long activityId);
 
     /**
      * 拼团商品库存，加库存 减销量
@@ -80,7 +80,7 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
      */
     @Update("update yx_store_combination set stock=stock+#{num}, sales=sales-#{num}" +
             " where id=#{activityId} and stock >= #{num}")
-    void incCombinationStockIncSales(Integer num, Long productId, Long activityId);
+    void incCombinationStockIncSales(@Param("num") Integer num, @Param("productId") Long productId,@Param("activityId") Long activityId);
 
     /**
      * 秒杀产品库存 加库存，减销量
@@ -91,7 +91,7 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
      */
     @Update("update yx_store_seckill set stock=stock+#{num}, sales=sales-#{num}" +
             " where id=#{activityId} and stock >= #{num}")
-    void incSeckillStockIncSales(Integer num, Long productId, Long activityId);
+    void incSeckillStockIncSales(@Param("num") Integer num, @Param("productId") Long productId,@Param("activityId") Long activityId);
 
     /**
      * 商品浏览量
