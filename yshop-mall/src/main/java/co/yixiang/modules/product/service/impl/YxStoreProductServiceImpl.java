@@ -60,13 +60,11 @@ import co.yixiang.utils.ShopKeyUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import com.qiniu.util.StringUtils;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -78,8 +76,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static co.yixiang.common.utils.QueryHelpPlus.humpToUnderline;
 
 
 /**
@@ -237,6 +233,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         wrapper.eq(YxStoreProduct::getIsDel, CommonEnum.DEL_STATUS_0.getValue());
 //        wrapper.eq(YxStoreProduct::getIsIntegral, CommonEnum.SHOW_STATUS_1.getValue());
 
+        if(productQueryParam.getIsIntegral()!=null){
+            wrapper.eq(YxStoreProduct::getIsIntegral, productQueryParam.getIsIntegral());
+        }
         //多字段模糊查询分类搜索
         if (StrUtil.isNotBlank(productQueryParam.getSid()) &&
                 !ShopConstants.YSHOP_ZERO.equals(productQueryParam.getSid())) {
@@ -735,6 +734,13 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                 .min(Comparator.naturalOrder())
                 .orElse(0d);
 
+        //取最小积分
+        Integer minIntegral = attrs
+                .stream()
+                .map(ProductFormatDto::getIntegral)
+                .min(Comparator.naturalOrder())
+                .orElse(0);
+
         Double minOtPrice = attrs
                 .stream()
                 .map(ProductFormatDto::getOtPrice)
@@ -762,6 +768,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                 .minOtPrice(minOtPrice)
                 .minCost(minCost)
                 .stock(stock)
+                .minIntegral(minIntegral)
                 .build();
     }
 
