@@ -29,6 +29,9 @@ public class YxStoreProductQueryParam extends QueryParam {
     @ApiModelProperty(value = "是否新品")
     private String news;
 
+    @ApiModelProperty(value = "是否积分兑换商品")
+    private Integer isIntegral;
+
     @ApiModelProperty(value = "价格排序")
     private String priceOrder;
 

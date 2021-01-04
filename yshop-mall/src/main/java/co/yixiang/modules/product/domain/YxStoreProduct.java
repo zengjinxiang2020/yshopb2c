@@ -138,6 +138,11 @@ public class YxStoreProduct extends BaseDomain {
     private Integer stock;
 
 
+    /** 需要多少积分兑换 */
+    @ApiModelProperty(value = "需要多少积分兑换 只在开启积分兑换时生效")
+    private Integer integral;
+
+
     /** 状态（0：未上架，1：上架） */
     @ApiModelProperty(value = "状态（0：未上架，1：上架）")
     private Integer isShow;
