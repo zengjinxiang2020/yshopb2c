@@ -5,9 +5,9 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://localhost:3306/yshopb2c?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
-        username: root
-        password: xxcs@!2019
+        url: jdbc:mysql://localhost:3366/yshopb2c?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+        username: yshopb2c
+        password: bkfGfAimifjPZtNE
       # 从库数据源
       slave:
         # 从数据源开关/默认关闭
@@ -47,10 +47,10 @@ spring:
           config:
             multi-statement-allow: true
   redis:
-    host: 127.0.0.1 # Redis服务器地址
-    database: 2 # Redis数据库索引（默认为0）
-    port: 6379 # Redis服务器连接端口
-    password:  # Redis服务器连接密码（默认为空）
+    host: localhost # Redis服务器地址
+    database: 5 # Redis数据库索引（默认为0）
+    port: 6399 # Redis服务器连接端口
+    password: 6379@@6379 # Redis服务器连接密码（默认为空）
     jedis:
       pool:
         max-active: 8 # 连接池最大连接数（使用负值表示没有限制）
@@ -90,8 +90,8 @@ swagger:
 
 # 文件存储路径
 file:
-  path: /home/yshop/file/
-  avatar: /home/yshop/avatar/
+  path: /www/wwwroot/thapi.xinxintuan.co/upload/file/
+  avatar: /www/wwwroot/thapi.xinxintuan.co/upload/avatar/
   # 文件大小 /M
   maxSize: 100
   avatarMaxSize: 5

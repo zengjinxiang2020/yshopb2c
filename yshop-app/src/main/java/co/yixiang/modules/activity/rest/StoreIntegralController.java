@@ -31,7 +31,7 @@ public class StoreIntegralController {
     /**
      * 获取积分产品列表
      */
-    @GetMapping("/products")
+    @GetMapping("/products/integral")
     @ApiOperation(value = "获取积分产品列表",notes = "获取积分产品列表")
     public ApiResult<List<YxStoreProductQueryVo>> goodsList(YxStoreProductQueryParam productQueryParam){
         return ApiResult.ok(storeProductService.getGoodsList(productQueryParam));

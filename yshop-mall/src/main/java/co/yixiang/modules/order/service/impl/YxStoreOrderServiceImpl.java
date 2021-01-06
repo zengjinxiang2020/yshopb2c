@@ -906,11 +906,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             throw new YshopException("订单不存在");
         }
 
-        this.regressionIntegral(order);
+        this.regressionIntegral(order,0);
 
-        this.regressionStock(order);
+        this.regressionStock(order,0);
 
-        this.regressionCoupon(order);
+        this.regressionCoupon(order,0);
 
         yxStoreOrderMapper.deleteById(order.getId());
     }
@@ -1610,16 +1610,29 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(orderInfo.getPaid())) {
             throw new YshopException("该订单已支付");
         }
-
-        YxUserQueryVo userInfo = userService.getYxUserById(uid);
+        orderInfo=handleOrder(orderInfo);
+        orderInfo.getCartInfo().forEach(cart->{
+            if(cart.getProductInfo().getIsIntegral()==0){
+                throw new YshopException("该商品不为积分商品");
+            }
+        });
+        YxUser userInfo = userService.getById(uid);
 
         if(userInfo.getIntegral().compareTo(orderInfo.getPayIntegral()) < 0){
             throw new YshopException("积分不足");
         }
 
         //扣除积分
-        userService.decIntegral(uid,orderInfo.getPayIntegral().doubleValue());
-
+        //userService.decIntegral(uid,orderInfo.getPayIntegral().doubleValue());
+        BigDecimal newIntegral = NumberUtil.sub(userInfo.getIntegral(), orderInfo.getPayIntegral());
+        userInfo.setIntegral(newIntegral);
+        userService.updateById(userInfo);
+        //增加流水
+        billService.expend(userInfo.getUid(), "兑换商品", BillDetailEnum.CATEGORY_2.getValue(),
+                BillDetailEnum.TYPE_8.getValue(),
+                orderInfo.getPayIntegral().doubleValue(),
+                newIntegral.doubleValue(),
+                "兑换商品扣除" +  orderInfo.getPayIntegral().doubleValue() + "积分");
         //支付成功后处理
         this.paySuccess(orderInfo.getOrderId(),PayTypeEnum.INTEGRAL.getValue());
     }
@@ -1731,10 +1744,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * 退回优惠券
      * @param order 订单
      */
-    private void regressionCoupon(YxStoreOrderQueryVo order) {
-        if(OrderInfoEnum.PAY_STATUS_1.equals(order.getPaid())
-                || OrderStatusEnum.STATUS_MINUS_2.getValue().equals(order.getStatus())){
-            return;
+    private void regressionCoupon(YxStoreOrderQueryVo order,Integer type) {
+        if(type==0){
+            if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(order.getPaid())
+                    || OrderStatusEnum.STATUS_MINUS_2.getValue().equals(order.getStatus())){
+                return;
+            }
+        }else{
+            if(!(OrderInfoEnum.PAY_STATUS_1.getValue().equals(order.getPaid())
+                    && OrderInfoEnum.REFUND_STATUS_2.getValue().equals(order.getRefundStatus()))){
+                return;
+            }
         }
 
         if(order.getCouponId() != null && order.getCouponId() > 0){
@@ -1760,10 +1780,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * 退回库存
      * @param order 订单
      */
-    private void regressionStock(YxStoreOrderQueryVo order) {
-        if(OrderInfoEnum.PAY_STATUS_1.equals(order.getPaid())
-                || OrderStatusEnum.STATUS_MINUS_2.getValue().equals(order.getStatus())){
-            return;
+    private void regressionStock(YxStoreOrderQueryVo order,Integer type) {
+        if(type==0){
+            if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(order.getPaid())
+                    || OrderStatusEnum.STATUS_MINUS_2.getValue().equals(order.getStatus())){
+                return;
+            }
+        }else{
+            if(!(OrderInfoEnum.PAY_STATUS_1.getValue().equals(order.getPaid())
+                    && OrderInfoEnum.REFUND_STATUS_2.getValue().equals(order.getRefundStatus()))){
+                return;
+            }
         }
        LambdaQueryWrapper<YxStoreOrderCartInfo> wrapper= new LambdaQueryWrapper<>();
         wrapper.in(YxStoreOrderCartInfo::getCartId, Arrays.asList(order.getCartId().split(",")));
@@ -1790,11 +1817,19 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * 退回积分
      * @param order 订单
      */
-    private void regressionIntegral(YxStoreOrderQueryVo order) {
-        if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(order.getPaid())
-                || OrderStatusEnum.STATUS_MINUS_2.getValue().equals(order.getStatus())){
-            return;
+    private void regressionIntegral(YxStoreOrderQueryVo order,Integer type) {
+        if(type==0){
+            if(OrderInfoEnum.PAY_STATUS_1.getValue().equals(order.getPaid())
+                    || OrderStatusEnum.STATUS_MINUS_2.getValue().equals(order.getStatus())){
+                return;
+            }
+        }else{
+            if(!(OrderInfoEnum.PAY_STATUS_1.getValue().equals(order.getPaid())
+                    && OrderInfoEnum.REFUND_STATUS_2.getValue().equals(order.getRefundStatus()))){
+                return;
+            }
         }
+
         if(order.getPayIntegral().compareTo(BigDecimal.ZERO)>0){
             order.setUseIntegral(order.getPayIntegral());
         }
@@ -2189,9 +2224,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Override
     public void retrunStock(String orderId) {
         YxStoreOrderQueryVo order = this.getOrderInfo(orderId,null);
-        this.regressionIntegral(order);
-        this.regressionStock(order);
-        this.regressionCoupon(order);
+        this.regressionIntegral(order,1);
+        this.regressionStock(order,1);
+        this.regressionCoupon(order,1);
     }
 
     @Override
