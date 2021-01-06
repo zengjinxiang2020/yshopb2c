@@ -6,7 +6,6 @@
 package co.yixiang.modules.security.config;
 
 import co.yixiang.annotation.AnonymousAccess;
-import co.yixiang.config.CorsFilter;
 import co.yixiang.modules.security.security.JwtAccessDeniedHandler;
 import co.yixiang.modules.security.security.JwtAuthenticationEntryPoint;
 import co.yixiang.modules.security.security.TokenConfigurer;
@@ -24,6 +23,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;

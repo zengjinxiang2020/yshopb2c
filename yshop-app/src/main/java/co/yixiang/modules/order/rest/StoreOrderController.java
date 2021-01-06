@@ -13,14 +13,11 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
-import co.yixiang.enums.ShipperCodeEnum;
-import co.yixiang.enums.ShopCommonEnum;
+import co.yixiang.enums.*;
 import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
-import co.yixiang.enums.OrderInfoEnum;
-import co.yixiang.enums.OrderLogEnum;
 import co.yixiang.modules.mp.domain.YxWechatTemplate;
 import co.yixiang.modules.mp.service.YxWechatTemplateService;
 import co.yixiang.modules.order.domain.YxStoreOrder;
@@ -177,7 +174,7 @@ public class StoreOrderController {
 
         //开始处理支付
         //处理金额为0的情况
-        if(order.getPayPrice().compareTo(BigDecimal.ZERO) <= 0){
+        if(order.getPayPrice().compareTo(BigDecimal.ZERO) <= 0&&!param.getPayType().equals(PayTypeEnum.INTEGRAL.getValue())){
             storeOrderService.yuePay(orderId,yxUser.getUid());
             map.put("payMsg","支付成功");
             return ApiResult.ok(map,"支付成功");
@@ -218,7 +215,7 @@ public class StoreOrderController {
         map.put("result",orderDTO);
 
 
-        if(storeOrder.getPayPrice().compareTo(BigDecimal.ZERO) <= 0){
+        if(storeOrder.getPayPrice().compareTo(BigDecimal.ZERO) <= 0&&!param.getPaytype().equals(PayTypeEnum.INTEGRAL.getValue())){
             storeOrderService.yuePay(orderId,uid);
             return ApiResult.ok(map,"支付成功");
         }
