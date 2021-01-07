@@ -10,12 +10,15 @@
         <option name="portBindings">
           <list>
             <DockerPortBindingImpl>
+              <!--映射端口-->
               <option name="containerPort" value="8001" />
               <option name="hostIp" value="0.0.0.0" />
+              <!--容器内部端口-->
               <option name="hostPort" value="8001" />
             </DockerPortBindingImpl>
           </list>
         </option>
+        <!--目录挂载 -v 宿主机:容器 -->
         <option name="commandLineOptions" value="-v /home/yshop:/home/yshop -v /home/yshop/logs:/yshop-admin/logs" />
         <option name="sourceFilePath" value="yshop-admin/Dockerfile" />
       </settings>
