@@ -13,6 +13,6 @@ WORKDIR /yshop-app
 
 EXPOSE 8008
 
-ADD ./target/yshop-app-3.1.jar ./
+ADD ./target/yshop-app-3.2.jar ./
 
-CMD java $JAVA_OPTS -jar yshop-app-3.1.jar --spring.profiles.active=docker
+CMD java $JAVA_OPTS -jar yshop-app-3.2.jar --spring.profiles.active=docker
