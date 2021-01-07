@@ -5,7 +5,7 @@ spring:
     druid:
       # 主库数据源
       master:
-        url: jdbc:mysql://localhost:3366/yshopb2c?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
+        url: jdbc:mysql://172.30.0.10:3366/yshopb2c?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false&zeroDateTimeBehavior=convertToNull
         username: yshopb2c
         password: bkfGfAimifjPZtNE
       # 从库数据源

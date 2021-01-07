@@ -7,12 +7,12 @@ ENV JAVA_OPTS="-Xms128m -Xmx256m -Djava.security.egd=file:/dev/./urandom"
 
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN mkdir -p /yshop-app
+RUN mkdir -p /yshop-admin
 
-WORKDIR /yshop-app
+WORKDIR /yshop-admin
 
-EXPOSE 8008
+EXPOSE 8001
 
-ADD ./target/yshop-app-3.1.jar ./
+ADD ./target/yshop-admin-3.1.jar ./
 
-CMD java $JAVA_OPTS -jar yshop-app-3.1.jar --spring.profiles.active=docker
+CMD java $JAVA_OPTS -jar yshop-admin-3.1.jar --spring.profiles.active=docker
