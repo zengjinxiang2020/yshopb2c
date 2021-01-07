@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2019年11月28日
  */
 @Data
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConfigurationProperties(prefix = "jwt")
 public class SecurityProperties {
 

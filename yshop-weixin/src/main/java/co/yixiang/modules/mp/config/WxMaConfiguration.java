@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * @author <a href="https://github.com/binarywang">Binary Wang</a>
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class WxMaConfiguration {
     private static Map<String, WxMaService> maServices = Maps.newHashMap();
     private static Map<String, WxMaMessageRouter> routers = Maps.newHashMap();

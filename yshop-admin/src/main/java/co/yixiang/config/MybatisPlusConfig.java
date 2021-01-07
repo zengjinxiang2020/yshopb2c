@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * MybatisPlus配置
  *
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class MybatisPlusConfig {
 
     /**

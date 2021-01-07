@@ -25,7 +25,7 @@ import java.util.Map;
  * @date 2020/03/01
  */
 @Slf4j
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class WxPayConfiguration {
 
 	private static Map<String, WxPayService> payServices = Maps.newHashMap();

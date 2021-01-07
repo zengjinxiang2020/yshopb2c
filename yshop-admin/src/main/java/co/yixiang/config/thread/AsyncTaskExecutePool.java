@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @date 2019年10月31日15:06:18
  */
 @Slf4j
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class AsyncTaskExecutePool implements AsyncConfigurer {
 
     /** 注入配置类 */

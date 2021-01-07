@@ -16,7 +16,7 @@ import co.yixiang.utils.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class ExpressAutoConfiguration {
 
 

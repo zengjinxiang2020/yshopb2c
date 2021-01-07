@@ -38,7 +38,7 @@ import static me.chanjar.weixin.common.api.WxConsts.XmlMsgType;
  * @author hupeng
  * @date 2020/01/20
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class WxMpConfiguration {
 
     private static Map<String, WxMpService> mpServices = Maps.newHashMap();
