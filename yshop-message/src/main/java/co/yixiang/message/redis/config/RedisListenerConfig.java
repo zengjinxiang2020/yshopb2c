@@ -27,7 +27,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
  * @since 2020-02-27
  */
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @AllArgsConstructor
 public class RedisListenerConfig {
 

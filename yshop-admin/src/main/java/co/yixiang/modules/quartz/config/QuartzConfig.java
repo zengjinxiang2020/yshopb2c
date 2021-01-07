@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  * @author /
  * @date 2019-01-07
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class QuartzConfig {
 
 	/**

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @Author hupeng <610796224@qq.com>
  * @Date 2020/4/30
  **/
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class DruidProperties
 {
     @Value("${spring.datasource.druid.initialSize}")

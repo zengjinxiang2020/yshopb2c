@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2020-02-27
  */
 @Data
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @ConfigurationProperties(prefix = "spring.redis")
 public class RedisConfigProperties {
 

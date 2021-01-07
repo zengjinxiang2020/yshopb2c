@@ -27,7 +27,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @Author hupeng <610796224@qq.com>
  * @Date 2020/4/30
  **/
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class InterceptorConfig implements WebMvcConfigurer {
 
     @Value("${file.path}")

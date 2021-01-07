@@ -45,7 +45,7 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
  * @Date 2019/1/9
  **/
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableSwagger2
 public class SwaggerConfig {
 
@@ -104,7 +104,7 @@ public class SwaggerConfig {
 /**
  *  将Pageable转换展示在swagger中
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableSwagger2
 @EnableKnife4j
 @Import(BeanValidatorPluginsConfiguration.class)

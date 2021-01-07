@@ -18,7 +18,7 @@ import org.springframework.core.io.Resource;
  * @modified By：
  * @version: 1.0
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class DozerMapperConfig {
     @Bean
     public DozerBeanMapperFactoryBean dozerBeanMapperFactoryBean(@Value("classpath*:dozer/*.xml" ) Resource[] resources) throws Exception {

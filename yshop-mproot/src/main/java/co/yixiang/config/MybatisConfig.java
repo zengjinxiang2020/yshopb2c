@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class MybatisConfig {
     /**
      * 配置mybatis的分页插件pageHelper
