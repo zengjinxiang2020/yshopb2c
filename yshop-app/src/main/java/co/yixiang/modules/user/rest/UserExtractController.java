@@ -43,7 +43,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "用户提现", tags = "用户:用户提现", description = "用户提现")
+@Api(value = "用户提现", tags = "用户:用户提现")
 public class UserExtractController {
 
     private final YxUserExtractService userExtractService;

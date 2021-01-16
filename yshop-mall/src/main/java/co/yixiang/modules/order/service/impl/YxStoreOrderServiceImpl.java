@@ -1149,6 +1149,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .in(YxStoreOrder::getRefundStatus, Arrays.asList(strs));
                 break;
+            default:
         }
 
         Page<YxStoreOrder> pageModel = new Page<>(page, limit);

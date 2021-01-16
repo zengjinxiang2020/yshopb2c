@@ -57,7 +57,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @RestController
 @RequestMapping
-@Api(value = "商品秒杀", tags = "营销:商品秒杀", description = "商品秒杀")
+@Api(value = "商品秒杀", tags = "营销:商品秒杀")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StoreSeckillController {
 

@@ -388,8 +388,8 @@ public class StoreOrderController {
     private YxStoreOrderQueryCriteria handleQuery(YxStoreOrderQueryCriteria criteria,String orderStatus,
                                                   String orderType){
 
-
-        criteria.setShippingType(OrderInfoEnum.SHIPPIING_TYPE_1.getValue());//默认查询所有快递订单
+        //默认查询所有快递订单
+        criteria.setShippingType(OrderInfoEnum.SHIPPIING_TYPE_1.getValue());
         //订单状态查询
         if (StrUtil.isNotEmpty(orderStatus)) {
             switch (orderStatus) {
@@ -426,6 +426,7 @@ public class StoreOrderController {
                     criteria.setPaid(OrderInfoEnum.PAY_STATUS_1.getValue());
                     criteria.setRefundStatus(OrderInfoEnum.REFUND_STATUS_2.getValue());
                     break;
+                default:
             }
         }
         //订单类型查询
@@ -448,6 +449,7 @@ public class StoreOrderController {
                 case "5":
                     criteria.setShippingType(2);
                     break;
+                default:
             }
         }
 

@@ -48,7 +48,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@Api(value = "优惠券", tags = "营销:优惠券", description = "优惠券")
+@Api(value = "优惠券", tags = "营销:优惠券")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CouponController {
 

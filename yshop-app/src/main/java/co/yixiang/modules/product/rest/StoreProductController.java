@@ -73,7 +73,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@Api(value = "产品模块", tags = "商城:产品模块", description = "产品模块")
+@Api(value = "产品模块", tags = "商城:产品模块")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StoreProductController {
 
@@ -97,13 +97,17 @@ public class StoreProductController {
     @ApiOperation(value = "获取首页更多产品",notes = "获取首页更多产品")
     public ApiResult<Map<String,Object>> moreGoodsList(@PathVariable Integer type){
         Map<String,Object> map = new LinkedHashMap<>();
-        if(ProductEnum.TYPE_1.getValue().equals(type)){// 精品推荐
+        // 精品推荐
+        if(ProductEnum.TYPE_1.getValue().equals(type)){
             map.put("list",storeProductService.getList(1,20,ProductEnum.TYPE_1.getValue()));
-        }else if(type.equals(ProductEnum.TYPE_2.getValue())){// 热门榜单
+        // 热门榜单
+        }else if(type.equals(ProductEnum.TYPE_2.getValue())){
             map.put("list",storeProductService.getList(1,20,ProductEnum.TYPE_2.getValue()));
-        }else if(type.equals(ProductEnum.TYPE_3.getValue())){// 首发新品
+        // 首发新品
+        }else if(type.equals(ProductEnum.TYPE_3.getValue())){
             map.put("list",storeProductService.getList(1,20,ProductEnum.TYPE_3.getValue()));
-        }else if(type.equals(ProductEnum.TYPE_4.getValue())){// 促销单品
+        // 促销单品
+        }else if(type.equals(ProductEnum.TYPE_4.getValue())){
             map.put("list",storeProductService.getList(1,20,ProductEnum.TYPE_4.getValue()));
         }
 
@@ -173,7 +177,8 @@ public class StoreProductController {
                 //生成二维码
                 QrCodeUtil.generate(siteUrl+"?id="+id+"&spread="+uid+"&pageType=good&codeType="+AppFromEnum.APP.getValue(), 180, 180,
                         FileUtil.file(fileDir+name));
-            }else if(AppFromEnum.H5.getValue().equals(from)){//如果类型是h5
+            //如果类型是h5
+            }else if(AppFromEnum.H5.getValue().equals(from)){
                 //生成二维码
                 QrCodeUtil.generate(siteUrl+"/detail/"+id+"?spread="+uid, 180, 180,
                         FileUtil.file(fileDir+name));

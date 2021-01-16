@@ -63,7 +63,9 @@ public class YxStoreCustomerController {
     @PreAuthorize("@el.check('admin','yxStoreCustomer:add')")
     public ResponseEntity<Object> create(@Validated @RequestBody YxStoreCustomer resources){
         int count = yxStoreCustomerService.count(new LambdaQueryWrapper<YxStoreCustomer>().eq(YxStoreCustomer::getOpenId, resources.getOpenId()));
-        if (count > 0) throw new BadRequestException("当前用户已存在，请勿重复提交");
+        if (count > 0) {
+            throw new BadRequestException("当前用户已存在，请勿重复提交");
+        }
         return new ResponseEntity<>(yxStoreCustomerService.save(resources),HttpStatus.CREATED);
     }
 

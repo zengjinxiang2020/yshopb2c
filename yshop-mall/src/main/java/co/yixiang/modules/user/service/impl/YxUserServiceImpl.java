@@ -541,6 +541,7 @@ public class YxUserServiceImpl extends BaseServiceImpl<UserMapper, YxUser> imple
                         .round(NumberUtil.mul(order.getTotalPrice(),storeBrokerageTwo),2);
                 //固定返佣 + 比例返佣 = 总返佣金额
                 return NumberUtil.add(twoBrokerage,storeBrokerageTwoPrice);
+            default:
         }
 
 

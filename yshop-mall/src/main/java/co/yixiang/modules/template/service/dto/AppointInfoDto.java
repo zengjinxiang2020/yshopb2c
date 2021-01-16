@@ -14,9 +14,15 @@ import java.util.List;
 @Setter
 public class AppointInfoDto {
 
-    private String a_num;  //包邮件数
-    private String a_price; //包邮费用
-    private List<RegionDto> place; //包邮地区
+    /** 包邮件数 */
+    private String a_num;
+
+    /** 包邮费用 */
+    private String a_price;
+
+    /** 包邮地区 */
+    private List<RegionDto> place;
+
     private String placeName;
 
 }

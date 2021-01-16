@@ -45,7 +45,7 @@ import java.util.Map;
  */
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "微信其他", tags = "微信:微信其他", description = "微信其他")
+@Api(value = "微信其他", tags = "微信:微信其他")
 public class WxMaUserController {
 
     private final YxUserService userService;

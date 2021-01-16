@@ -63,7 +63,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "微信模块", tags = "微信:微信模块", description = "微信模块")
+@Api(value = "微信模块", tags = "微信:微信模块")
 public class WechatController {
 
     private final YxStoreOrderService orderService;

@@ -58,6 +58,11 @@ import java.net.URL;
 
 import static co.yixiang.utils.FileUtil.transformStyle;
 
+/**
+ * @ClassName 二维码相关服务
+ * @Author hupeng <610796224@qq.com>
+ * @Date 2020/6/22
+ **/
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -780,7 +785,7 @@ public class CreatShareProductService {
 
             //价格背景
             //读取互联网图片
-            BufferedImage bground  = null;//
+            BufferedImage bground  = null;
             InputStream redStream =  getClass().getClassLoader().getResourceAsStream("red.jpg");
             try {
                 ImageInputStream red = ImageIO.createImageInputStream(redStream);

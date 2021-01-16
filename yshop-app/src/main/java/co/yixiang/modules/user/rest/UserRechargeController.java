@@ -58,7 +58,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "用户充值", tags = "用户:用户充值", description = "用户充值")
+@Api(value = "用户充值", tags = "用户:用户充值")
 public class UserRechargeController {
 
     private final YxUserRechargeService userRechargeService;

@@ -55,6 +55,7 @@ public class WxPayConfiguration {
 				case APP:
 					payConfig.setAppId(RedisUtil.get(ShopKeyUtils.getWxNativeAppAppId()));
 					break;
+				default:
 			}
 
 			payConfig.setMchId(redisUtils.getY(ShopKeyUtils.getWxPayMchId()));

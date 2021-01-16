@@ -161,6 +161,7 @@ public class YxSystemUserTaskServiceImpl extends BaseServiceImpl<SystemUserTaskM
                         sumNumber = userBillService.cumulativeAttendance(uid);
                         title = "还需签到{0}天";
                         break;
+                    default:
                 }
 
                 if(sumNumber >= taskQueryVo.getNumber()){

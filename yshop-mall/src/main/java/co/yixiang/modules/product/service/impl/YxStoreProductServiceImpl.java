@@ -436,6 +436,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                 wrapper.eq(YxStoreProduct::getIsHot,
                         ShopCommonEnum.IS_STATUS_1.getValue());
                 break;
+            default:
         }
         Page<YxStoreProduct> pageModel = new Page<>(page, limit);
 
