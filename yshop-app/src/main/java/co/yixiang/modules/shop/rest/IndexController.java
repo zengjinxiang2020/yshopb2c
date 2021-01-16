@@ -57,7 +57,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "首页模块", tags = "商城:首页模块", description = "首页模块")
+@Api(value = "首页模块", tags = "商城:首页模块")
 public class IndexController {
     private final YxAppVersionService appVersionService;
     private final YxSystemGroupDataService systemGroupDataService;
@@ -148,7 +148,7 @@ public class IndexController {
         appVersionVo.setVersionCode(appVersion.getVersionCode());
         appVersionVo.setVersionInfo(appVersion.getVersionInfo());
         appVersionVo.setVersionName(appVersion.getVersionName());
-        appVersionVo.setDownloadUrl(param.getType().equals("1101")?appVersion.getAndroidUrl():appVersion.getIosUrl());
+        appVersionVo.setDownloadUrl("1101".equals(param.getType())?appVersion.getAndroidUrl():appVersion.getIosUrl());
         appVersionVo.setForceUpdate(appVersion.getForceUpdate()==0);
         if (!param.getVersionName().equals(appVersion.getVersionName())){
             return ApiResult.ok(appVersionVo);

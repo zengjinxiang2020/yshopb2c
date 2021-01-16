@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping
-@Api(value = "积分兑换", tags = "营销:积分兑换", description = "积分兑换")
+@Api(value = "积分兑换", tags = "营销:积分兑换")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class StoreIntegralController {
 

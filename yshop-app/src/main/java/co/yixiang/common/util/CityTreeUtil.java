@@ -30,7 +30,8 @@ public class CityTreeUtil {
             if (res.getPid() == parentId) {
                 //该节点为根节点,开始递归
 
-                recursionFn(list, res); //通过递归为节点设置childList
+                //通过递归为节点设置childList
+                recursionFn(list, res);
 
                 returnList.add(res);
             }
@@ -54,7 +55,9 @@ public class CityTreeUtil {
         t.setC(childsList);
 
         //迭代子集对象集
-        for (CityVo nextChild : childsList) { //遍历完,则退出递归
+
+        //遍历完,则退出递归
+        for (CityVo nextChild : childsList) {
 
             //判断子集对象是否还有子节点
             if (!CollectionUtils.isEmpty(childsList)) {

@@ -81,7 +81,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "订单模块", tags = "商城:订单模块", description = "订单模块")
+@Api(value = "订单模块", tags = "商城:订单模块")
 public class StoreOrderController {
 
     private final YxStoreOrderService storeOrderService;

@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "用户等级", tags = "用户:用户等级", description = "用户等级")
+@Api(value = "用户等级", tags = "用户:用户等级")
 public class UserLevelController {
 
     private final YxUserLevelService userLevelService;

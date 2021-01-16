@@ -61,7 +61,7 @@ import static co.yixiang.constant.SystemConfigConstants.YSHOP_SHOW_RECHARGE;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "用户中心", tags = "用户:用户中心", description = "用户中心")
+@Api(value = "用户中心", tags = "用户:用户中心")
 public class UserController {
 
     private final YxUserService yxUserService;

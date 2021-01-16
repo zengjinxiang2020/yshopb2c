@@ -58,7 +58,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-@Api(value = "认证模块", tags = "商城:认证", description = "认证")
+@Api(value = "认证模块", tags = "商城:认证")
 public class AuthController {
 
     private final YxUserService userService;

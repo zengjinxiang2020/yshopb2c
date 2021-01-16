@@ -244,6 +244,7 @@ public class OrderSupplyService {
                 storeOrderService.integralPay(orderId,uid);
                 map.put("payMsg","积分兑换成功");
                 return map;
+            default:
         }
 
         map.put("payMsg","订单生成失败");
