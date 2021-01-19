@@ -52,6 +52,15 @@ public class MaterialGroupController {
         return new ResponseEntity<>(yxMaterialGroupService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+
+    @GetMapping(value = "/list")
+    @Log("查询所有素材分组")
+    @ApiOperation("查询所有素材分组")
+    public ResponseEntity<Object> getYxMaterialGroupsList(YxMaterialGroupQueryCriteria criteria){
+        return new ResponseEntity<>(yxMaterialGroupService.queryAll(criteria),HttpStatus.OK);
+    }
+
+
     @PostMapping
     @Log("新增素材分组")
     @ApiOperation("新增素材分组")
