@@ -9,6 +9,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.constant.ShopConstants;
+import co.yixiang.constant.SystemConfigConstants;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.tools.domain.QiniuContent;
 import co.yixiang.tools.service.LocalStorageService;
@@ -60,9 +61,9 @@ public class UploadController {
 
         String localUrl = redisUtils.getY(ShopConstants.ADMIN_API_URL);
         if(StrUtil.isBlank(type)){
-            localUrl = redisUtils.getY("api_url") + "/api";
+            localUrl = redisUtils.getY(SystemConfigConstants.API_URL) + "/api";
         }
-        String mode = redisUtils.getY("file_store_mode");
+        String mode = redisUtils.getY(SystemConfigConstants.FILE_STORE_MODE);
         StringBuilder url = new StringBuilder();
         if (ShopCommonEnum.STORE_MODE_1.getValue().toString().equals(mode)) { //存在走本地
             if(StrUtil.isBlank(localUrl)){
