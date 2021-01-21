@@ -10,6 +10,7 @@ package co.yixiang.modules.customer.rest;
 import java.util.Arrays;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.exception.BadRequestException;
+import co.yixiang.modules.aop.ForbidSubmit;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.AllArgsConstructor;
 import co.yixiang.logging.aop.log.Log;
@@ -57,6 +58,7 @@ public class YxStoreCustomerController {
         return new ResponseEntity<>(yxStoreCustomerService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @ForbidSubmit
     @PostMapping
     @Log("新增customer")
     @ApiOperation("新增customer")
@@ -69,6 +71,7 @@ public class YxStoreCustomerController {
         return new ResponseEntity<>(yxStoreCustomerService.save(resources),HttpStatus.CREATED);
     }
 
+    @ForbidSubmit
     @PutMapping
     @Log("修改customer")
     @ApiOperation("修改customer")
@@ -78,6 +81,7 @@ public class YxStoreCustomerController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除customer")
     @ApiOperation("删除customer")
     @PreAuthorize("@el.check('admin','yxStoreCustomer:del')")

@@ -11,6 +11,7 @@ package co.yixiang.modules.shop.rest;
 import co.yixiang.domain.PageResult;
 import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.logging.aop.log.Log;
+import co.yixiang.modules.aop.ForbidSubmit;
 import co.yixiang.modules.shop.domain.YxAppVersion;
 import co.yixiang.modules.shop.service.YxAppVersionService;
 import co.yixiang.modules.shop.service.dto.YxAppVersionDto;
@@ -59,6 +60,7 @@ public class YxAppVersionController {
         return new ResponseEntity<>(yxAppVersionService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @ForbidSubmit
     @PostMapping
     @Log("新增app版本控制")
     @ApiOperation("新增app版本控制")
@@ -67,6 +69,7 @@ public class YxAppVersionController {
         return new ResponseEntity<>(yxAppVersionService.save(resources),HttpStatus.CREATED);
     }
 
+    @ForbidSubmit
     @PutMapping
     @Log("修改app版本控制")
     @ApiOperation("修改app版本控制")
@@ -76,6 +79,7 @@ public class YxAppVersionController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ForbidSubmit
     @Log("删除app版本控制")
     @ApiOperation("删除app版本控制")
     @PreAuthorize("@el.check('admin','yxAppVersion:del')")
