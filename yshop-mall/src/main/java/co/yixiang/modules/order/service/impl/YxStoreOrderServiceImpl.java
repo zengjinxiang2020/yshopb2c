@@ -1486,7 +1486,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         YxStoreOrderQueryVo orderInfo = getOrderInfo(orderId,null);
 
         //更新订单状态
-       LambdaQueryWrapper<YxStoreOrder> wrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<YxStoreOrder> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(YxStoreOrder::getOrderId,orderId);
         YxStoreOrder storeOrder = new YxStoreOrder();
         storeOrder.setPaid(OrderInfoEnum.PAY_STATUS_1.getValue());
@@ -1508,8 +1508,12 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         if(orderInfo.getBargainId() > 0) {
             storeBargainUserService.setBargainUserStatus(orderInfo.getBargainId(), orderInfo.getUid());
         }
-
         YxUser userInfo = userService.getById(orderInfo.getUid());
+        //使用了积分扣积分
+        /*if(orderInfo.getUseIntegral().compareTo(BigDecimal.ZERO) > 0){
+            this.decIntegral(userInfo,orderInfo.getUseIntegral().doubleValue(),orderInfo.getDeductionPrice().doubleValue());
+        }*/
+
         //增加流水
         String payTypeMsg = PayTypeEnum.WEIXIN.getDesc();
         if(PayTypeEnum.YUE.getValue().equals(payType)) {

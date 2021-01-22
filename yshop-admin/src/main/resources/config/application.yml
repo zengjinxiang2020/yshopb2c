@@ -47,7 +47,7 @@ smms:
 
 yshop:
   # 配置
-  version: 3.1
+  version: 3.2
   apiUrl: http://127.0.0.1:8009/api
 
 logging:
