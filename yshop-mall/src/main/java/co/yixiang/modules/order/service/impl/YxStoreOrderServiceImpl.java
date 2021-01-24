@@ -67,7 +67,6 @@ import co.yixiang.modules.order.vo.OrderDataVo;
 import co.yixiang.modules.order.vo.ShoperOrderTimeDataVo;
 import co.yixiang.modules.order.vo.UserOrderCountVo;
 import co.yixiang.modules.order.vo.YxStoreOrderQueryVo;
-import co.yixiang.modules.product.domain.YxStoreProduct;
 import co.yixiang.modules.product.domain.YxStoreProductReply;
 import co.yixiang.modules.product.service.YxStoreProductReplyService;
 import co.yixiang.modules.product.service.YxStoreProductService;
@@ -157,13 +156,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
     @Autowired
     private YxStoreCouponUserService couponUserService;
     @Autowired
-    private YxStoreSeckillService storeSeckillService;
-    @Autowired
     private YxUserService userService;
     @Autowired
     private YxStoreProductService productService;
-    @Autowired
-    private YxStoreCombinationService combinationService;
     @Autowired
     private YxStorePinkService pinkService;
     @Autowired
@@ -1508,12 +1503,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         if(orderInfo.getBargainId() > 0) {
             storeBargainUserService.setBargainUserStatus(orderInfo.getBargainId(), orderInfo.getUid());
         }
-        YxUser userInfo = userService.getById(orderInfo.getUid());
-        //使用了积分扣积分
-        /*if(orderInfo.getUseIntegral().compareTo(BigDecimal.ZERO) > 0){
-            this.decIntegral(userInfo,orderInfo.getUseIntegral().doubleValue(),orderInfo.getDeductionPrice().doubleValue());
-        }*/
 
+        YxUser userInfo = userService.getById(orderInfo.getUid());
         //增加流水
         String payTypeMsg = PayTypeEnum.WEIXIN.getDesc();
         if(PayTypeEnum.YUE.getValue().equals(payType)) {
