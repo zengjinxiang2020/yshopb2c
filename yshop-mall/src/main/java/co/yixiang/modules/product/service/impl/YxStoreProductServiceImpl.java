@@ -280,6 +280,9 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         Page<YxStoreProduct> pageModel = new Page<>(productQueryParam.getPage(),
                 productQueryParam.getLimit());
 
+        //分页处理
+        wrapper.last("limit "+(productQueryParam.getPage()-1)*productQueryParam.getLimit()+","+productQueryParam.getLimit());
+
         IPage<YxStoreProduct> pageList = storeProductMapper.selectPage(pageModel, wrapper);
 
         //处理虚拟销量
