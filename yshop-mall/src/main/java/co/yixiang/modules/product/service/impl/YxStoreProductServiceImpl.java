@@ -413,8 +413,8 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
     public List<YxStoreProductQueryVo> getList(int page, int limit, int order) {
 
        LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(YxStoreProduct::getIsShow, ShopCommonEnum.SHOW_1.getValue())
-//                .eq(YxStoreProduct::getIsIntegral,CommonEnum.SHOW_STATUS_1.getValue())
+       wrapper.eq(YxStoreProduct::getIsShow, ShopCommonEnum.SHOW_1.getValue())
+                .eq(YxStoreProduct::getIsDel,ShopCommonEnum.DELETE_0.getValue())
                 .orderByDesc(YxStoreProduct::getSort);
 
         // order
