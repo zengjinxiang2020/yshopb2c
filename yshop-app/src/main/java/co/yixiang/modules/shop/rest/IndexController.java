@@ -76,7 +76,7 @@ public class IndexController {
     @GetMapping("/getCanvas")
     @ApiOperation(value = "读取画布数据")
     public ResponseEntity<StoreCanvas> getCanvas(StoreCanvas storeCanvas){
-        StoreCanvas canvas = storeCanvasService.lambdaQuery().eq(StoreCanvas::getTerminal, storeCanvas.getCanvasId()).one();
+        StoreCanvas canvas = storeCanvasService.lambdaQuery().eq(StoreCanvas::getTerminal, storeCanvas.getTerminal()).one();
         return new ResponseEntity<>(canvas, HttpStatus.OK);
     }
 
