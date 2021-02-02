@@ -34,7 +34,6 @@ public class StoreCanvas extends BaseDomain {
     private String json;
 
     /** 类型 1-系统画布 2-自定义页面 3-商家店铺装修 */
-    @NotNull
     private Integer type;
 
     /** 名称 */
@@ -42,7 +41,6 @@ public class StoreCanvas extends BaseDomain {
     private String name;
 
     /** 店铺id，当type=3的时候，值为具体的店铺id，其它情况为0 */
-    @NotNull
     private Long shopId;
 
 
