@@ -7346,4 +7346,23 @@ INSERT INTO `yx_wechat_template` VALUES (13, 'pay_success', '订单支付成功�
 INSERT INTO `yx_wechat_template` VALUES (14, 'recharge_success', '帐户资金变动提醒', '{{first.DATA}}\n变动类型：{{keyword1.DATA}}\n变动时间：{{keyword2.DATA}}\n变动金额：{{keyword3.DATA}}\n{{remark.DATA}}', 'ePF4RS3ONCEuS9AuPyqZ2Th_B-HZ6E1CIpnJRt7ACwI', '2020-06-25 18:54:35', '2020-07-06 15:51:54', 1, 0, NULL);
 INSERT INTO `yx_wechat_template` VALUES (15, 'refund_success', '退款进度通知', '', 'jaDVkOdbbk01WcWSxp1_liEQen44-euhj7shxjDvLIc', '2020-07-06 15:53:10', NULL, 0, 0, NULL);
 
+
+
+-- ----------------------------
+-- Table structure for yx_store_canvas
+-- ----------------------------
+DROP TABLE IF EXISTS `yx_store_canvas`;
+CREATE TABLE `yx_store_canvas`  (
+                                    `canvas_id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '画布id',
+                                    `terminal` tinyint(1) NOT NULL COMMENT '终端 1-小程序 2-H5 3-APP 4-PC',
+                                    `json` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '画布json数据',
+                                    `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '类型 1-系统画布 2-自定义页面 3-商家店铺装修',
+                                    `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '名称',
+                                    `shop_id` bigint(20) NOT NULL DEFAULT 0 COMMENT '店铺id，当type=3的时候，值为具体的店铺id，其它情况为0',
+                                    `create_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '创建时间',
+                                    `update_time` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '修改时间',
+                                    `is_del` tinyint(1) NULL DEFAULT NULL COMMENT '删除标识',
+                                    PRIMARY KEY (`canvas_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '画布信息表' ROW_FORMAT = DYNAMIC;
+
 SET FOREIGN_KEY_CHECKS = 1;
