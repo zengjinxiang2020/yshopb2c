@@ -17,6 +17,8 @@ import co.yixiang.enums.ProductEnum;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
 import co.yixiang.modules.activity.vo.YxStoreSeckillQueryVo;
+import co.yixiang.modules.canvas.domain.StoreCanvas;
+import co.yixiang.modules.canvas.service.StoreCanvasService;
 import co.yixiang.modules.mp.service.YxWechatLiveService;
 import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.modules.product.vo.YxSystemStoreQueryVo;
@@ -39,6 +41,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,6 +70,15 @@ public class IndexController {
     private final YxStoreCombinationService storeCombinationService;
     private final YxStoreSeckillService storeSeckillService;
     private final YxWechatLiveService wechatLiveService;
+
+    private final StoreCanvasService storeCanvasService;
+
+    @GetMapping("/getCanvas")
+    @ApiOperation(value = "读取画布数据")
+    public ResponseEntity<StoreCanvas> getCanvas(StoreCanvas storeCanvas){
+        StoreCanvas canvas = storeCanvasService.lambdaQuery().eq(StoreCanvas::getTerminal, storeCanvas.getCanvasId()).one();
+        return new ResponseEntity<>(canvas, HttpStatus.OK);
+    }
 
     @Cacheable(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY)
     @GetMapping("/index")
