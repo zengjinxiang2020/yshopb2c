@@ -280,15 +280,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         Page<YxStoreProduct> pageModel = new Page<>(productQueryParam.getPage(),
                 productQueryParam.getLimit());
 
-        //分页处理
-        //wrapper.last("limit "+(productQueryParam.getPage()-1)*productQueryParam.getLimit()+","+productQueryParam.getLimit());
-
         IPage<YxStoreProduct> pageList = storeProductMapper.selectPage(pageModel, wrapper);
-
-        //处理虚拟销量
-//        for (YxStoreProduct vo: pageList.getRecords()) {
-//            vo.setSales(vo.getSales()+vo.getFicti());
-//        }
 
         List<YxStoreProductQueryVo> list = generator.convert(pageList.getRecords(), YxStoreProductQueryVo.class);
 
@@ -444,12 +436,6 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         Page<YxStoreProduct> pageModel = new Page<>(page, limit);
 
         IPage<YxStoreProduct> pageList = storeProductMapper.selectPage(pageModel, wrapper);
-
-        //处理虚拟销量(sql已处理,去掉代码处理)
-//        for (YxStoreProduct vo: pageList.getRecords()) {
-//            vo.setSales(vo.getSales()+vo.getFicti());
-//        }
-
 
         return generator.convert(pageList.getRecords(), YxStoreProductQueryVo.class);
     }
