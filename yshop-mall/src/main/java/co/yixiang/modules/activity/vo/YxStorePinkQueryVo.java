@@ -50,7 +50,7 @@ public class YxStorePinkQueryVo implements Serializable {
     @ApiModelProperty(value = "产品id")
     private Long pid;
 
-    @ApiModelProperty(value = "拼图总人数")
+    @ApiModelProperty(value = "拼团总人数")
     private Integer people;
 
     @ApiModelProperty(value = "拼团产品单价")
