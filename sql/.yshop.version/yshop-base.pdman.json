@@ -3561,7 +3561,7 @@
             {
               "name": "people",
               "type": "INT UNSIGNED_10",
-              "chnname": "拼图总人数",
+              "chnname": "拼团总人数",
               "remark": "",
               "pk": false,
               "notNull": true,
@@ -4421,7 +4421,7 @@
             {
               "name": "cost",
               "type": "INT UNSIGNED_10",
-              "chnname": "拼图产品成本",
+              "chnname": "拼团产品成本",
               "remark": "",
               "pk": false,
               "notNull": true,

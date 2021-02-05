@@ -72,8 +72,8 @@ public class YxStorePink extends BaseDomain {
     private Long pid;
 
 
-    /** 拼图总人数 */
-    @ApiModelProperty(value = "拼图总人数")
+    /** 拼团总人数 */
+    @ApiModelProperty(value = "拼团总人数")
     private Integer people;
 
 
