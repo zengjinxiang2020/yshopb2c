@@ -77,7 +77,7 @@ public class QiNiuServiceImpl implements QiNiuService {
     @Override
 //    @Cacheable(key = "'1'")
     public QiniuConfig find() {
-        QiniuConfig qiniuConfig = qiniuConfigService.getById(1L);
+        QiniuConfig qiniuConfig = qiniuConfigService.getOne(new LambdaQueryWrapper<QiniuConfig>().orderByAsc(QiniuConfig::getId).last("limit 1"));
         return qiniuConfig;
     }
 
