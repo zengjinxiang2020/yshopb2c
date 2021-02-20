@@ -27,6 +27,8 @@ import java.util.Map;
 @Setter
 public class ProductFormatDto {
 
+    private String sku = "";
+
     @JsonProperty("bar_code")
     private String barCode = "";
 

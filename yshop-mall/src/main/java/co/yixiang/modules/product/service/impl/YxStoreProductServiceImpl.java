@@ -656,6 +656,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 //
 //            private Integer seckillStock;
             valueMap.put("detail", detail);
+            valueMap.put("sku", "");
             valueMap.put("pic", "");
             valueMap.put("price", 0);
             valueMap.put("cost", 0);
@@ -677,6 +678,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
                                 .eq(YxStoreProductAttrValue::getProductId, id)
                                 .eq(YxStoreProductAttrValue::getSku, sku));
                 if (storeProductAttrValue != null) {
+                    valueMap.put("sku",storeProductAttrValue.getSku());
                     valueMap.put("pic", storeProductAttrValue.getImage());
                     valueMap.put("price", storeProductAttrValue.getPrice());
                     valueMap.put("cost", storeProductAttrValue.getCost());
