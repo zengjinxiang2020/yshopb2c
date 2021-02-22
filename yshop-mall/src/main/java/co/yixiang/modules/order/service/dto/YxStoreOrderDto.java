@@ -6,6 +6,7 @@
 package co.yixiang.modules.order.service.dto;
 
 import co.yixiang.modules.user.service.dto.YxUserDto;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -188,5 +189,9 @@ public class YxStoreOrderDto implements Serializable {
     private Integer isChannel;
 
     private Integer isRemind;
+
+    @ApiModelProperty(value = "实际支付积分")
+    private BigDecimal payIntegral;
+
 
 }
