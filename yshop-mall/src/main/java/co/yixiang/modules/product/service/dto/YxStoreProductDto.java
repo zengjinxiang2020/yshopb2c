@@ -6,6 +6,7 @@
 package co.yixiang.modules.product.service.dto;
 
 import co.yixiang.modules.category.service.dto.YxStoreCategorySmallDto;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -125,6 +126,9 @@ public class YxStoreProductDto implements Serializable {
 
     /** 淘宝京东1688类型 */
     private String soureLink;
+
+    @ApiModelProperty(value = "是否开启积分兑换")
+    private Integer isIntegral;
 
     private YxStoreCategorySmallDto storeCategory;
 }
