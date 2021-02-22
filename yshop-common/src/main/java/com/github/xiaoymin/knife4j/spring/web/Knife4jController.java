@@ -94,16 +94,11 @@ public class Knife4jController {
         this.jsonSerializer = jsonSerializer;
         this.hostNameOverride = environment.getProperty("springfox.documentation.swagger.v2.host", "DEFAULT");
         this.handlerProviders = handlerProviders;
-        this.markdownFiles = (MarkdownFiles)markdownFilesObjectProvider.getIfAvailable();
+        this.markdownFiles = markdownFilesObjectProvider.getIfAvailable();
     }
 
     private Function<RequestHandlerProvider, ? extends Iterable<RequestHandler>> handlers() {
-        return new Function<RequestHandlerProvider, Iterable<RequestHandler>>() {
-            @Override
-            public Iterable<RequestHandler> apply(RequestHandlerProvider input) {
-                return input.requestHandlers();
-            }
-        };
+        return (Function<RequestHandlerProvider, Iterable<RequestHandler>>) input -> input.requestHandlers();
     }
 
     @RequestMapping(value = DEFAULT_SORT_URL,
