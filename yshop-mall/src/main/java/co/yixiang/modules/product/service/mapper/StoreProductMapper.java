@@ -107,6 +107,6 @@ public interface StoreProductMapper extends CoreMapper<YxStoreProduct> {
 
 
     @Override
-    @Select("SELECT id,spec_type,ot_price,mer_use,description,is_postage,is_sub,is_best,(sales+ficti) as sales,price,is_bargain,vip_price,store_name,stock,keyword,image,cost,is_good,unit_name,is_benefit,update_time,give_integral,is_new,sort,slider_image,is_show,bar_code,postage,code_path,create_time,cate_id,is_seckill,mer_id,temp_id,ficti,store_info,is_del,is_hot,browse FROM yx_store_product ${ew.customSqlSegment}")
+    @Select("SELECT id,spec_type,ot_price,mer_use,description,is_postage,is_sub,is_best,(sales+ficti) as sales,price,is_bargain,vip_price,store_name,stock,keyword,image,cost,is_good,unit_name,is_benefit,update_time,give_integral,is_new,sort,slider_image,is_show,bar_code,postage,code_path,create_time,cate_id,is_seckill,mer_id,temp_id,ficti,store_info,is_del,is_hot,is_integral,integral,browse FROM yx_store_product ${ew.customSqlSegment}")
     IPage<YxStoreProduct> selectPage(IPage<YxStoreProduct> page, @Param(Constants.WRAPPER) Wrapper<YxStoreProduct> queryWrapper);
 }
