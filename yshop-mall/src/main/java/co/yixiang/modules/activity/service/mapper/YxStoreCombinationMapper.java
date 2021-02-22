@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018-2020
+ * Copyright (C) 2018-2021
  * All rights reserved, Designed By www.yixiang.co
  * 注意：
  * 本软件为www.yixiang.co开发研制，未经购买不得使用
@@ -14,10 +14,10 @@ import co.yixiang.modules.activity.vo.YxStoreCombinationQueryVo;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public interface YxStoreCombinationMapper extends CoreMapper<YxStoreCombination>
     List<YxStoreCombinationQueryVo> getCombList(Page page);
 
     @Override
-    IPage<YxStoreCombination> selectPage(IPage<YxStoreCombination> page, @Param("ew") Wrapper<YxStoreCombination> queryWrapper);
+    <E extends IPage<YxStoreCombination>> E selectPage(E page, @Param(Constants.WRAPPER) Wrapper<YxStoreCombination> queryWrapper);
 
     @Select("SELECT c.id,c.effective_time as effectiveTime,c.image,c.people,c.price,c.browse," +
             "c.description,c.image,c.images,c.info," +
