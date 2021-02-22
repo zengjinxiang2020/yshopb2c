@@ -13,7 +13,6 @@ import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.constant.SystemConfigConstants;
-import co.yixiang.dozer.service.IGenerator;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.tools.domain.QiniuContent;
 import co.yixiang.tools.service.LocalStorageService;
@@ -24,20 +23,13 @@ import lombok.AllArgsConstructor;
 import co.yixiang.logging.aop.log.Log;
 import co.yixiang.modules.canvas.domain.StoreCanvas;
 import co.yixiang.modules.canvas.service.StoreCanvasService;
-import co.yixiang.modules.canvas.service.dto.StoreCanvasQueryCriteria;
-import co.yixiang.modules.canvas.service.dto.StoreCanvasDto;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServletResponse;
-import co.yixiang.domain.PageResult;
 import org.springframework.web.multipart.MultipartFile;
 
 /**

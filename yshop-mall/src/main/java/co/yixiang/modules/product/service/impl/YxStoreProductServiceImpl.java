@@ -548,6 +548,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         yxStoreProduct.setPrice(BigDecimal.valueOf(resultDTO.getMinPrice()));
         yxStoreProduct.setOtPrice(BigDecimal.valueOf(resultDTO.getMinOtPrice()));
         yxStoreProduct.setCost(BigDecimal.valueOf(resultDTO.getMinCost()));
+        yxStoreProduct.setIntegral(resultDTO.getMinIntegral());
         yxStoreProduct.setStock(resultDTO.getStock());
         yxStoreProduct.setSliderImage(String.join(",", storeProductDto.getSliderImage()));
 
