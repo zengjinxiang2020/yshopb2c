@@ -72,6 +72,9 @@ public class QueryHelpPlus {
                         case GREATER_THAN:
                            queryWrapper.ge(finalAttributeName, val);
                             break;
+                        case GREATER_THAN_NQ:
+                            queryWrapper.gt(finalAttributeName, val);
+                            break;
                         case LESS_THAN:
                             queryWrapper.le(finalAttributeName, val);
                             break;

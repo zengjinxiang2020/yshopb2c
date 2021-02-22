@@ -8,6 +8,7 @@ package co.yixiang.modules.order.service.dto;
 import co.yixiang.annotation.Query;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -66,6 +67,9 @@ public class YxStoreOrderQueryCriteria{
 
     @Query
     private Integer shippingType;
+
+    @Query(type = Query.Type.GREATER_THAN_NQ)
+    private BigDecimal payIntegral;
 
     @Query
     private Integer storeId;

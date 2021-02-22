@@ -2361,11 +2361,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         String payTypeName = OrderUtil.payTypeName(yxStoreOrder.getPayType()
                 ,yxStoreOrder.getPaid());
         yxStoreOrderDto.setPayTypeName(payTypeName);
-
+        //订单类型处理
         yxStoreOrderDto.setPinkName(this.orderType(yxStoreOrder.getId()
                 ,yxStoreOrder.getPinkId(),yxStoreOrder.getCombinationId()
                 ,yxStoreOrder.getSeckillId(),yxStoreOrder.getBargainId(),
-                yxStoreOrder.getShippingType()));
+                yxStoreOrder.getShippingType(),yxStoreOrder.getPayIntegral()));
 
         //添加订单状态
         List<YxStoreOrderStatus> storeOrderStatuses = orderStatusService.list(new LambdaQueryWrapper<YxStoreOrderStatus>()
@@ -2442,11 +2442,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         String payTypeName = OrderUtil.payTypeName(yxStoreOrder.getPayType()
                 ,yxStoreOrder.getPaid());
         yxStoreOrderDto.setPayTypeName(payTypeName);
-
+        //订单类型处理
         yxStoreOrderDto.setPinkName(this.orderType(yxStoreOrder.getId()
                 ,yxStoreOrder.getPinkId(),yxStoreOrder.getCombinationId()
                 ,yxStoreOrder.getSeckillId(),yxStoreOrder.getBargainId(),
-                yxStoreOrder.getShippingType()));
+                yxStoreOrder.getShippingType(),yxStoreOrder.getPayIntegral()));
 
         List<YxStoreOrderCartInfo> cartInfos = storeOrderCartInfoService.list(
                 new LambdaQueryWrapper<YxStoreOrderCartInfo>().eq(YxStoreOrderCartInfo::getOid,yxStoreOrder.getId()));
@@ -2479,7 +2479,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * @return string
      */
     private String orderType(Long id,Long pinkId, Long combinationId,Long seckillId,
-                             Long bargainId,Integer shippingType) {
+                             Long bargainId,Integer shippingType,BigDecimal payIntegral) {
         String str = "[普通订单]";
         if(pinkId > 0 || combinationId > 0){
             YxStorePink storePink = storePinkService.getOne(new LambdaQueryWrapper<YxStorePink>()
@@ -2507,6 +2507,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
         if(OrderInfoEnum.SHIPPIING_TYPE_2.getValue().equals(shippingType)) {
             str = "[核销订单]";
+        }
+        if(payIntegral.compareTo(new BigDecimal("0.00")) == 1) {
+            str = "[积分兑换]";
         }
         return str;
     }

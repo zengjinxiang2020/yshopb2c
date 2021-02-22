@@ -33,6 +33,8 @@ public @interface Query {
         EQUAL
         // Dong ZhaoYang 2017/8/7 大于等于
         , GREATER_THAN
+        //大于
+        , GREATER_THAN_NQ
         // Dong ZhaoYang 2017/8/7 小于等于
         , LESS_THAN
         // Dong ZhaoYang 2017/8/7 中模糊查询

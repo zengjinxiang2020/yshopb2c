@@ -54,6 +54,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -448,6 +449,9 @@ public class StoreOrderController {
                     break;
                 case "5":
                     criteria.setShippingType(2);
+                    break;
+                case "6":
+                    criteria.setPayIntegral(new BigDecimal("0.00"));
                     break;
                 default:
             }
