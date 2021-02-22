@@ -28,4 +28,7 @@ public class YxStoreProductQueryCriteria{
 
     @Query
     private Integer cateId;
+
+    @Query
+    private Integer isIntegral;
 }
