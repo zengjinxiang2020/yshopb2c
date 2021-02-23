@@ -2345,6 +2345,7 @@ CREATE TABLE `yx_store_product`  (
   `temp_id` int(10) NULL DEFAULT NULL COMMENT '运费模板ID',
   `spec_type` tinyint(1) NULL DEFAULT 0 COMMENT '规格 0单 1多',
   `is_integral` tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT NULL COMMENT '是开启积分兑换',
+  `integral` int(11) NULL DEFAULT 0 COMMENT '需要多少积分兑换 只在开启积分兑换时生效',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `is_hot`(`is_hot`) USING BTREE,
   INDEX `is_benefit`(`is_benefit`) USING BTREE,
