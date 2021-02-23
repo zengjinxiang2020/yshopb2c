@@ -5,7 +5,7 @@
 -- ----------------------------
 ALTER TABLE yx_store_product ADD COLUMN is_integral  tinyint(1)   ZEROFILL NULL DEFAULT 0 COMMENT '是开启积分兑换' AFTER is_del;
 
-ALTER TABLE yx_store_product ADD COLUMN integral  tinyint(1)   ZEROFILL NULL DEFAULT 0 COMMENT '需要多少积分兑换' AFTER is_integral;
+ALTER TABLE yx_store_product ADD COLUMN integral  int(11) NULL DEFAULT 0 COMMENT '需要多少积分兑换 只在开启积分兑换时生效' AFTER is_integral;
 
 ALTER TABLE yx_store_product_attr_value ADD COLUMN integral INT(10)  DEFAULT 0 COMMENT '需要多少积分兑换' AFTER seckill_price;
 
