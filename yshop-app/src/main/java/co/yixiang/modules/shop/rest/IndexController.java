@@ -16,7 +16,6 @@ import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.ProductEnum;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStoreSeckillService;
-import co.yixiang.modules.activity.vo.YxStoreSeckillQueryVo;
 import co.yixiang.modules.canvas.domain.StoreCanvas;
 import co.yixiang.modules.canvas.service.StoreCanvasService;
 import co.yixiang.modules.mp.service.YxWechatLiveService;
@@ -35,6 +34,7 @@ import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.ShopKeyUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +76,9 @@ public class IndexController {
     @GetMapping("/getCanvas")
     @ApiOperation(value = "读取画布数据")
     public ResponseEntity<StoreCanvas> getCanvas(StoreCanvas storeCanvas){
-        StoreCanvas canvas = storeCanvasService.lambdaQuery().eq(StoreCanvas::getTerminal, storeCanvas.getTerminal()).one();
+        StoreCanvas canvas = storeCanvasService.getOne(new LambdaQueryWrapper<StoreCanvas>()
+                .eq(StoreCanvas::getTerminal, storeCanvas.getTerminal())
+                .orderByDesc(StoreCanvas::getCanvasId).last("limit 1"));
         return new ResponseEntity<>(canvas, HttpStatus.OK);
     }
 
@@ -129,7 +131,6 @@ public class IndexController {
             File file = FileUtil.inputStreamToFile(new ClassPathResource(path).getStream(), name);
             FileReader fileReader = new FileReader(file,"UTF-8");
             String string = fileReader.readString();
-            System.out.println(string);
             JSONObject jsonObject = JSON.parseObject(string);
             return ApiResult.ok(jsonObject);
         } catch (Exception e) {
