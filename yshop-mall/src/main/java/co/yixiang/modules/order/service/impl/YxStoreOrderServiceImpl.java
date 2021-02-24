@@ -473,7 +473,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
             cartIds.add(cart.getId().toString());
             totalNum += cart.getCartNum();
-            if(cart.getProductInfo().getIsIntegral()==1){
+            if(cart.getProductInfo().getIsIntegral() != null
+                    && cart.getProductInfo().getIsIntegral()==1){
                 integral = NumberUtil.add(integral,
                         NumberUtil.mul(cart.getCartNum(),cart.getProductInfo().getAttrInfo().getIntegral()));
             }
@@ -1106,40 +1107,48 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         wrapper.orderByDesc(YxStoreOrder::getId);
 
         switch (OrderStatusEnum.toType(type)){
-            case STATUS_0://未支付
+            //未支付
+            case STATUS_0:
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_0.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_0.getValue());
                 break;
-            case STATUS_1://待发货
+            //待发货
+            case STATUS_1:
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_0.getValue());
                 break;
-            case STATUS_2://待收货
+            //待收货
+            case STATUS_2:
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_1.getValue());
                 break;
-            case STATUS_3://待评价
+            //待评价
+            case STATUS_3:
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_2.getValue());
                 break;
-            case STATUS_4://已完成
+            //已完成
+            case STATUS_4:
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_0.getValue())
                         .eq(YxStoreOrder::getStatus,OrderInfoEnum.STATUS_3.getValue());
                 break;
-            case STATUS_MINUS_1://退款中
+            //退款中
+            case STATUS_MINUS_1:
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_1.getValue());
                 break;
-            case STATUS_MINUS_2://已退款
+            //已退款
+            case STATUS_MINUS_2:
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_0.getValue())
                         .eq(YxStoreOrder::getRefundStatus,OrderInfoEnum.REFUND_STATUS_2.getValue());
                 break;
-            case STATUS_MINUS_3://退款
+            //退款
+            case STATUS_MINUS_3:
                 String[] strs = {"1","2"};
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_1.getValue())
                         .in(YxStoreOrder::getRefundStatus, Arrays.asList(strs));
@@ -1930,7 +1939,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         if(storeFreePostage.compareTo(BigDecimal.ZERO) != 0 && totalPrice.compareTo(storeFreePostage) <= 0){
             storePostage =  this.handlePostage(cartInfo,userAddress);
         }
-        if(cartInfo.size()==1&&cartInfo.get(0).getProductInfo().getIsIntegral()==1){
+        if(cartInfo.size()==1 && cartInfo.get(0).getProductInfo().getIsIntegral() != null
+                && cartInfo.get(0).getProductInfo().getIsIntegral()==1){
             totalPrice=BigDecimal.ZERO;
         }
 
