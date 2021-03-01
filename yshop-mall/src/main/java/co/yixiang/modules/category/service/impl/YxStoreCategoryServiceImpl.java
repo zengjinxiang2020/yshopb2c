@@ -167,7 +167,7 @@ public class YxStoreCategoryServiceImpl extends BaseServiceImpl<StoreCategoryMap
         }
         YxStoreCategory yxStoreCategory =  this.getOne(Wrappers.<YxStoreCategory>lambdaQuery()
                         .eq(YxStoreCategory::getId,pid));
-        return yxStoreCategory.getPid() < 0;
+        return yxStoreCategory.getPid() <= 0;
     }
 
     /**
