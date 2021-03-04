@@ -67,16 +67,16 @@ public class PermissionInterceptor extends HandlerInterceptorAdapter {
         }
         String token = tokens[1];
 
-        //检测用户是否被踢出
-        if(redisUtils.get(ShopConstants.YSHOP_APP_LOGIN_USER + token) == null){
-            throw new UnAuthenticatedException(ApiCode.UNAUTHORIZED);
-        }
-
         Optional<Map<String, Claim>> optionalMap = JwtToken.getClaims(token);
         Map<String, Claim> map = optionalMap
                 .orElseThrow(() -> new UnAuthenticatedException(ApiCode.UNAUTHORIZED));
 
+        String uName = map.get("uName").asString();
 
+        //检测用户是否被踢出
+        if (redisUtils.get(ShopConstants.YSHOP_APP_LOGIN_USER + uName + ":" + token) == null) {
+            throw new UnAuthenticatedException(ApiCode.UNAUTHORIZED);
+        }
         boolean valid = this.hasPermission(authCheck.get(), map);
         if(valid){
             this.setToThreadLocal(map);
