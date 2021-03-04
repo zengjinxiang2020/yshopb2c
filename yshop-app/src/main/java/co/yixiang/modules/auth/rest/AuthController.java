@@ -14,6 +14,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.enums.SmsTypeEnum;
 import co.yixiang.common.util.JwtToken;
 import co.yixiang.common.util.SmsUtils;
@@ -79,7 +80,7 @@ public class AuthController {
                                                 HttpServletRequest request) {
 
             YxUser yxUser = authService.wxappLogin(loginParam);
-            String token =  JwtToken.makeToken(yxUser.getUid());
+            String token =  JwtToken.makeToken(yxUser.getUid(),yxUser.getUsername());
             String expiresTimeStr = JwtToken.getExpireTime(token);
 
             // 返回 token
@@ -113,7 +114,7 @@ public class AuthController {
                                                     HttpServletRequest request) {
 
             YxUser yxUser = authService.wechatLogin(code,spread);
-            String token =  JwtToken.makeToken(yxUser.getUid());
+            String token =  JwtToken.makeToken(yxUser.getUid(),yxUser.getUsername());
             String expiresTimeStr = JwtToken.getExpireTime(token);
 
 
@@ -147,7 +148,7 @@ public class AuthController {
             throw new YshopException("账号或者密码不正确");
         }
 
-        String token =  JwtToken.makeToken(yxUser.getUid());
+        String token =  JwtToken.makeToken(yxUser.getUid(),yxUser.getUsername());
         String expiresTimeStr = JwtToken.getExpireTime(token);
 
         // 保存在线信息
@@ -237,7 +238,7 @@ public class AuthController {
         String bearerToken = request.getHeader("Authorization");
         String[] tokens = bearerToken.split(" ");
         String token = tokens[1];
-        authService.logout(token);
+        authService.logout(LocalUser.getUser().getUsername(), token);
         return ApiResult.ok("退出成功");
     }
 

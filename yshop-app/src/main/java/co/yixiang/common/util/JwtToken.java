@@ -74,21 +74,22 @@ public class JwtToken {
     }
 
 
-    public static String makeToken(Long uid, Integer scope) {
-        return JwtToken.getToken(uid, scope);
+    public static String makeToken(Long uid,String uName, Integer scope) {
+        return JwtToken.getToken(uid,uName, scope);
     }
 
-    public static String makeToken(Long uid) {
-        return JwtToken.getToken(uid, JwtToken.defaultScope);
+    public static String makeToken(Long uid,String uName) {
+        return JwtToken.getToken(uid,uName, JwtToken.defaultScope);
     }
 
-    private static String getToken(Long uid, Integer scope) {
+    private static String getToken(Long uid,String uName, Integer scope) {
         Algorithm algorithm = Algorithm.HMAC256(JwtToken.jwtKey);
         Map<String,Date> map = JwtToken.calculateExpiredIssues();
 
         return JWT.create()
                 .withClaim("uid", uid)
                 .withClaim("scope", scope)
+                .withClaim("uName", uName)
                 .withExpiresAt(map.get("expiredTime"))
                 .withIssuedAt(map.get("now"))
                 .sign(algorithm);

@@ -300,74 +300,67 @@ public class AuthService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        redisUtils.set(ShopConstants.YSHOP_APP_LOGIN_USER + token, onlineUser, AuthService.expiredTimeIn);
+        redisUtils.set(ShopConstants.YSHOP_APP_LOGIN_USER +onlineUser.getUserName() + ":" + token, onlineUser, AuthService.expiredTimeIn);
     }
 
     /**
      * 检测用户是否在之前已经登录，已经登录踢下线
+     *
      * @param userName 用户名
      */
-    public void checkLoginOnUser(String userName, String igoreToken){
+    public void checkLoginOnUser(String userName, String igoreToken) {
         List<OnlineUser> onlineUsers = this.getAll(userName);
-        if(onlineUsers ==null || onlineUsers.isEmpty()){
+        if (onlineUsers == null || onlineUsers.isEmpty()) {
             return;
         }
-        System.out.println("onlineUsers:"+onlineUsers);
-        for(OnlineUser onlineUser:onlineUsers){
-            if(onlineUser.getUserName().equals(userName)){
-                try {
-                    String token = EncryptUtils.desDecrypt(onlineUser.getKey());
-                    if(StringUtils.isNotBlank(igoreToken)&&!igoreToken.equals(token)){
-                        this.kickOut(onlineUser.getKey());
-                    }else if(StringUtils.isBlank(igoreToken)){
-                        this.kickOut(onlineUser.getKey());
-                    }
-                } catch (Exception e) {
-                    log.error("checkUser is error",e);
+        for (OnlineUser onlineUser : onlineUsers) {
+            try {
+                String token = EncryptUtils.desDecrypt(onlineUser.getKey());
+                if (StringUtils.isNotBlank(igoreToken) && !igoreToken.equals(token)) {
+                    this.kickOut(userName, onlineUser.getKey());
+                } else if (StringUtils.isBlank(igoreToken)) {
+                    this.kickOut(userName, onlineUser.getKey());
                 }
+            } catch (Exception e) {
+                log.error("checkUser is error", e);
             }
         }
     }
 
     /**
      * 踢出用户
+     *
      * @param key /
      */
-    public void kickOut(String key) throws Exception {
-        key = ShopConstants.YSHOP_APP_LOGIN_USER + EncryptUtils.desDecrypt(key);
+    public void kickOut(String userName, String key) throws Exception {
+        key = ShopConstants.YSHOP_APP_LOGIN_USER + userName + ":" + EncryptUtils.desDecrypt(key);
         redisUtils.del(key);
-
     }
 
     /**
      * 退出登录
      * @param token /
      */
-    public void logout(String token) {
-        String key = ShopConstants.YSHOP_APP_LOGIN_USER + token;
+    public void logout(String userName,String token) {
+        String key = ShopConstants.YSHOP_APP_LOGIN_USER+ userName + ":" + token;
         redisUtils.del(key);
     }
 
     /**
      * 查询全部数据，不分页
-     * @param filter /
+     *
+     * @param uName /
      * @return /
      */
-    private List<OnlineUser> getAll(String filter){
+    private List<OnlineUser> getAll(String uName) {
         List<String> keys = null;
-        keys = redisUtils.scan(ShopConstants.YSHOP_APP_LOGIN_USER + "*");
+        keys = redisUtils.scan(ShopConstants.YSHOP_APP_LOGIN_USER + uName + ":" + "*");
 
         Collections.reverse(keys);
         List<OnlineUser> onlineUsers = new ArrayList<>();
         for (String key : keys) {
             OnlineUser onlineUser = (OnlineUser) redisUtils.get(key);
-            if(StringUtils.isNotBlank(filter)){
-                if(onlineUser.toString().contains(filter)){
-                    onlineUsers.add(onlineUser);
-                }
-            } else {
-                onlineUsers.add(onlineUser);
-            }
+            onlineUsers.add(onlineUser);
         }
         onlineUsers.sort((o1, o2) -> o2.getLoginTime().compareTo(o1.getLoginTime()));
         return onlineUsers;
