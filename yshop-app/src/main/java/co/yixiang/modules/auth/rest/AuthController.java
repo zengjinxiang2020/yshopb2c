@@ -16,6 +16,7 @@ import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.enums.SmsTypeEnum;
+import co.yixiang.common.interceptor.AuthCheck;
 import co.yixiang.common.util.JwtToken;
 import co.yixiang.common.util.SmsUtils;
 import co.yixiang.constant.ShopConstants;
@@ -232,6 +233,7 @@ public class AuthController {
 
     }
 
+    @AuthCheck
     @ApiOperation(value = "退出登录", notes = "退出登录")
     @PostMapping(value = "/auth/logout")
     public ApiResult<String> logout(HttpServletRequest request) {
@@ -241,7 +243,5 @@ public class AuthController {
         authService.logout(LocalUser.getUser().getUsername(), token);
         return ApiResult.ok("退出成功");
     }
-
-
 
 }
