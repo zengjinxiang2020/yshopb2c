@@ -11,6 +11,10 @@ ALTER TABLE yx_store_product_attr_value ADD COLUMN integral INT(10)  DEFAULT 0 C
 
 ALTER TABLE  yx_store_order ADD COLUMN `pay_integral` decimal(8, 2) UNSIGNED NOT NULL DEFAULT 0.00 COMMENT '实际支付积分';
 
+ALTER TABLE yx_user modify column add_ip varchar(100) NULL DEFAULT '' COMMENT '添加ip';
+
+ALTER TABLE yx_user modify column last_ip varchar(100) NULL DEFAULT '' COMMENT '最后一次登录ip';
+
 INSERT INTO `menu` VALUES (264, b'0', '终端装修', NULL, 0, 0, 'theme', 'theme', b'0', b'0', '--', '2021-02-25 19:33:17', '', 1, '2021-02-25 19:33:32', 0);
 INSERT INTO `menu` VALUES (265, b'1', '商城装修', NULL, 264, 999, 'theme', 'https://demo2.yixiang.co/container', b'0', b'0', '-', '2021-02-25 19:35:13', NULL, 1, NULL, 0);
 INSERT INTO `roles_menus` VALUES (264, 1);
