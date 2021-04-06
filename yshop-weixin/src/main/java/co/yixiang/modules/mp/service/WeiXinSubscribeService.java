@@ -153,7 +153,7 @@ public class WeiXinSubscribeService {
                 .templateId(templateId)
                 .page(page)
                 .build();
-        map.forEach( (k,v)-> { wxMaSubscribeMessage.addData(new WxMaSubscribeMessage.Data(k, v));} );
+        map.forEach( (k,v)-> { wxMaSubscribeMessage.addData(new WxMaSubscribeMessage.MsgData(k, v));} );
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
         try {
             wxMaService.getMsgService().sendSubscribeMsg(wxMaSubscribeMessage);
