@@ -58,7 +58,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static cn.binarywang.wx.miniapp.api.WxMaLiveService.CREATE_ROOM;
+import static cn.binarywang.wx.miniapp.constant.WxMaApiUrlConstants.Broadcast.Room.CREATE_ROOM;
+
 
 /**
 * @author hupeng
