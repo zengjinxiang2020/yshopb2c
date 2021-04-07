@@ -120,8 +120,8 @@ public class AuthService {
                 //构建微信用户
                 WechatUserDto wechatUserDTO = WechatUserDto.builder()
                         .nickname(wxMpUser.getNickName())
-                        .routineOpenid(wxMpUser.getOpenId())
-                        .unionId(wxMpUser.getUnionId())
+                        .routineOpenid(session.getOpenid())
+                        .unionId(session.getUnionid())
                         .sex(Integer.valueOf(wxMpUser.getGender()))
                         .language(wxMpUser.getLanguage())
                         .city(wxMpUser.getCity())
