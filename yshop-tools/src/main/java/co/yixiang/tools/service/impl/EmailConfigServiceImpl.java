@@ -49,7 +49,7 @@ public class EmailConfigServiceImpl extends BaseServiceImpl<EmailConfigMapper, E
         } catch (Exception e) {
             e.printStackTrace();
         }
-         this.save(emailConfig);
+         this.saveOrUpdate(emailConfig);
     }
 
     @Override
