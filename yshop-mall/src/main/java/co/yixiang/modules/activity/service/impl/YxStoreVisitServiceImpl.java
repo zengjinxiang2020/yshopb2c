@@ -108,7 +108,7 @@ public class YxStoreVisitServiceImpl extends BaseServiceImpl<YxStoreVisitMapper,
                     .uid(uid)
                     .count(1)
                     .build();
-            this.saveOrUpdate(yxStoreVisit);
+            this.save(yxStoreVisit);
         }
 
     }
