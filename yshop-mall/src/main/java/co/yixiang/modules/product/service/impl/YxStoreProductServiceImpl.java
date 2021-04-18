@@ -168,7 +168,7 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
 
 
     @Override
-    public YxStoreProduct getProductInfo(int id) {
+    public YxStoreProduct getProductInfo(Long id) {
        LambdaQueryWrapper<YxStoreProduct> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(YxStoreProduct::getIsShow, 1).eq(YxStoreProduct::getId, id);
         YxStoreProduct storeProduct = this.baseMapper.selectOne(wrapper);
@@ -314,15 +314,16 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         //设置销量
         storeProductQueryVo.setSales(storeProductQueryVo.getSales() + storeProductQueryVo.getFicti());
 
-        //设置VIP价格
-        double vipPrice = userService.setLevelPrice(
-                storeProductQueryVo.getPrice().doubleValue(), uid);
-        storeProductQueryVo.setVipPrice(BigDecimal.valueOf(vipPrice));
+        if (uid.longValue() > 0) {
+            //设置VIP价格
+            double vipPrice = userService.setLevelPrice(
+                    storeProductQueryVo.getPrice().doubleValue(), uid);
+            storeProductQueryVo.setVipPrice(BigDecimal.valueOf(vipPrice));
 
-        //收藏
-        boolean isCollect = relationService.isProductRelation(id, uid);
-        storeProductQueryVo.setUserCollect(isCollect);
-
+            //收藏
+            boolean isCollect = relationService.isProductRelation(id, uid);
+            storeProductQueryVo.setUserCollect(isCollect);
+        }
         //总条数
         int totalCount = replyService.productReplyCount(id);
         productVo.setReplyCount(totalCount);
@@ -362,21 +363,24 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
         //门店
         productVo.setSystemStore(systemStoreService.getStoreInfo(latitude, longitude));
         productVo.setMapKey(RedisUtil.get(ShopKeyUtils.getTengXunMapKey()));
-        //添加足迹
-        YxStoreProductRelation foot = relationService.getOne(new LambdaQueryWrapper<YxStoreProductRelation>()
-                .eq(YxStoreProductRelation::getUid, uid)
-                .eq(YxStoreProductRelation::getProductId, storeProductQueryVo.getId())
-                .eq(YxStoreProductRelation::getType, "foot"));
-        if (ObjectUtil.isNotNull(foot)) {
-            foot.setCreateTime(new Date());
-            relationService.saveOrUpdate(foot);
-        } else {
-            YxStoreProductRelation storeProductRelation = new YxStoreProductRelation();
-            storeProductRelation.setProductId(storeProductQueryVo.getId());
-            storeProductRelation.setUid(uid);
-            storeProductRelation.setCreateTime(new Date());
-            storeProductRelation.setType("foot");
-            relationService.save(storeProductRelation);
+        if (uid.longValue() > 0) {
+            //添加足迹
+            YxStoreProductRelation foot = relationService.getOne(new LambdaQueryWrapper<YxStoreProductRelation>()
+                    .eq(YxStoreProductRelation::getUid, uid)
+                    .eq(YxStoreProductRelation::getProductId, storeProductQueryVo.getId())
+                    .eq(YxStoreProductRelation::getType, "foot"));
+
+            if (ObjectUtil.isNotNull(foot)) {
+                foot.setCreateTime(new Date());
+                relationService.saveOrUpdate(foot);
+            } else {
+                YxStoreProductRelation storeProductRelation = new YxStoreProductRelation();
+                storeProductRelation.setProductId(storeProductQueryVo.getId());
+                storeProductRelation.setUid(uid);
+                storeProductRelation.setCreateTime(new Date());
+                storeProductRelation.setType("foot");
+                relationService.save(storeProductRelation);
+            }
         }
 
         return productVo;

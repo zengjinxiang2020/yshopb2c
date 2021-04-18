@@ -22,6 +22,7 @@ import co.yixiang.modules.activity.domain.YxStoreCombination;
 import co.yixiang.modules.activity.domain.YxStorePink;
 import co.yixiang.modules.activity.service.YxStoreCombinationService;
 import co.yixiang.modules.activity.service.YxStorePinkService;
+import co.yixiang.modules.activity.service.YxStoreVisitService;
 import co.yixiang.modules.activity.service.dto.PinkAllDto;
 import co.yixiang.modules.activity.service.dto.PinkDto;
 import co.yixiang.modules.activity.service.dto.PinkUserDto;
@@ -90,6 +91,9 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
 
     @Autowired
     private YxStoreCartService yxStoreCartService;
+
+    @Autowired
+    private YxStoreVisitService yxStoreVisitService;
 
 
     /**
@@ -243,6 +247,10 @@ public class YxStorePinkServiceImpl extends BaseServiceImpl<YxStorePinkMapper, Y
         YxUserQueryVo userInfo = userService.getYxUserById(uid);
         YxStoreOrder yxStoreOrder = storeOrderService.getById(pink.getOrderIdKey());
         YxStoreCart yxStoreCart = yxStoreCartService.getById(yxStoreOrder.getCartId());
+        //拼团访问量
+        yxStoreCombinationMapper.incBrowseNum(pink.getPid());
+        //拼团访客人数
+        yxStoreVisitService.addStoreVisit(uid, pink.getPid());
         return PinkInfoVo.builder()
                 .count(count)
                 .currentPinkOrder(this.getCurrentPinkOrderId(id,uid))

@@ -208,8 +208,8 @@ public class StoreProductController {
     /**
      * 普通商品详情
      */
-    @AppLog(value = "普通商品详情", type = 1)
-    @AuthCheck
+    //@AppLog(value = "普通商品详情", type = 1)
+    //@AuthCheck
     @GetMapping("/product/detail/{id}")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "商品ID", paramType = "query", dataType = "long",required = true),
@@ -222,7 +222,7 @@ public class StoreProductController {
                                        @RequestParam(value = "",required=false) String latitude,
                                        @RequestParam(value = "",required=false) String longitude,
                                        @RequestParam(value = "",required=false) String from)  {
-        long uid = LocalUser.getUser().getUid();
+        long uid = LocalUser.getUidByToken();
         storeProductService.incBrowseNum(id);
         ProductVo productDTO = storeProductService.goodsDetail(id,uid,latitude,longitude);
         return ApiResult.ok(productDTO);

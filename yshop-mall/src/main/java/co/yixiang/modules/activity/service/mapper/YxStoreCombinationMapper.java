@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -53,4 +54,13 @@ public interface YxStoreCombinationMapper extends CoreMapper<YxStoreCombination>
             " FROM yx_store_combination c " +
             " WHERE c.id = #{id} and c.is_del = 0 ")
     YxStoreProductQueryVo combinatiionInfo(Long id);
+
+    /**
+     * 商品浏览量
+     * @param productId
+     * @return
+     */
+    @Update("update yx_store_combination set browse=browse+1 " +
+            "where id=#{productId}")
+    int incBrowseNum(@Param("productId") Long productId);
 }

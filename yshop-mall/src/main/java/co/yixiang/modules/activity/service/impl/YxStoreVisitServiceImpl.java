@@ -5,15 +5,20 @@
  */
 package co.yixiang.modules.activity.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.enums.ProductTypeEnum;
 import co.yixiang.modules.activity.domain.YxStoreVisit;
 import co.yixiang.modules.activity.service.YxStoreVisitService;
 import co.yixiang.modules.activity.service.dto.YxStoreVisitDto;
 import co.yixiang.modules.activity.service.dto.YxStoreVisitQueryCriteria;
 import co.yixiang.modules.activity.service.mapper.YxStoreVisitMapper;
+import co.yixiang.modules.product.domain.YxStoreProduct;
+import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.utils.FileUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +45,8 @@ import java.util.Map;
 public class YxStoreVisitServiceImpl extends BaseServiceImpl<YxStoreVisitMapper, YxStoreVisit> implements YxStoreVisitService {
 
     private final IGenerator generator;
+    private final YxStoreProductService yxStoreProductService;
+    private final YxStoreVisitMapper yxStoreVisitMapper;
 
     @Override
     //@Cacheable
@@ -59,7 +66,6 @@ public class YxStoreVisitServiceImpl extends BaseServiceImpl<YxStoreVisitMapper,
         return baseMapper.selectList(QueryHelpPlus.getPredicate(YxStoreVisit.class, criteria));
     }
 
-
     @Override
     public void download(List<YxStoreVisitDto> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
@@ -76,5 +82,34 @@ public class YxStoreVisitServiceImpl extends BaseServiceImpl<YxStoreVisitMapper,
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    /**
+     * 添加用户访问拼团记录
+     * @param uid 用户id
+     * @param productId 产品id
+     */
+    @Override
+    public void addStoreVisit(Long uid, Long productId) {
+
+        LambdaQueryWrapper<YxStoreVisit> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(YxStoreVisit::getUid, uid).eq(YxStoreVisit::getProductId, productId);
+        YxStoreVisit storeVisit = this.baseMapper.selectOne(wrapper);
+
+        if (ObjectUtil.isNull(storeVisit)) {
+            //查询产品分类
+            YxStoreProduct yxStoreProduct = yxStoreProductService.getProductInfo(productId);
+
+            YxStoreVisit yxStoreVisit = YxStoreVisit.builder()
+                    .productId(productId)
+                    .productType(ProductTypeEnum.COMBINATION.getValue())
+                    .cateId(Integer.valueOf(yxStoreProduct.getCateId()))
+                    .type(ProductTypeEnum.COMBINATION.getValue())
+                    .uid(uid)
+                    .count(1)
+                    .build();
+            this.saveOrUpdate(yxStoreVisit);
+        }
+
     }
 }

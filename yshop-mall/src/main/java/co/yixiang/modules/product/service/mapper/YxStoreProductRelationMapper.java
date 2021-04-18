@@ -30,7 +30,7 @@ import java.util.List;
 @Repository
 public interface YxStoreProductRelationMapper extends CoreMapper<YxStoreProductRelation> {
 
-    @Select("select B.id pid,A.type as category,B.store_name as storeName,B.price," +
+    @Select("select B.id pid,A.type as category,B.store_name as storeName,B.price,B.is_integral as isIntegral," +
             "B.ot_price as otPrice,B.sales,B.image,B.is_show as isShow" +
             " from yx_store_product_relation A left join yx_store_product B " +
             "on A.product_id = B.id where A.type=#{type} and A.uid=#{uid} and A.is_del = 0 and B.is_del = 0 order by A.create_time desc")

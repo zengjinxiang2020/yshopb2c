@@ -45,7 +45,7 @@ public interface YxStoreProductService  extends BaseService<YxStoreProduct>{
      */
     void decProductStock(int num, Long productId, String unique,Long activityId,String type);
 
-    YxStoreProduct getProductInfo(int id);
+    YxStoreProduct getProductInfo(Long id);
 
     /**
      * 获取单个商品

@@ -10,6 +10,8 @@ package co.yixiang.modules.activity.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
 import co.yixiang.modules.activity.domain.YxStoreVisit;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,4 +21,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface YxStoreVisitMapper extends CoreMapper<YxStoreVisit> {
 
+    /**
+     * 拼团浏览量
+     * @param productId
+     * @return
+     */
+    @Update("update yx_store_visit set count=count+1 " +
+            "where uid=#{uid} AND id=#{productId}")
+    int incBrowseNum(@Param("uid") Long uid,@Param("productId") Long productId);
 }

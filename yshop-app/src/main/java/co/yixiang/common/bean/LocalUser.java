@@ -9,10 +9,17 @@
 package co.yixiang.common.bean;
 
 
+import co.yixiang.api.ApiCode;
+import co.yixiang.api.UnAuthenticatedException;
+import co.yixiang.common.util.JwtToken;
+import co.yixiang.common.util.RequestUtils;
 import co.yixiang.modules.user.domain.YxUser;
+import com.auth0.jwt.interfaces.Claim;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 全局user
@@ -43,5 +50,27 @@ public class LocalUser {
         Map<String, Object> map = LocalUser.threadLocal.get();
         Integer scope = (Integer)map.get("scope");
         return scope;
+    }
+
+    public static Long getUidByToken(){
+        String bearerToken =  RequestUtils.getRequest().getHeader("Authorization");
+        if (StringUtils.isEmpty(bearerToken)) {
+            return 0L;
+        }
+
+        if (!bearerToken.startsWith("Bearer")) {
+            return 0L;
+        }
+        String[] tokens = bearerToken.split(" ");
+        if (!(tokens.length == 2)) {
+            return 0L;
+        }
+        String token = tokens[1];
+
+        Optional<Map<String, Claim>> optionalMap = JwtToken.getClaims(token);
+        Map<String, Claim> map = optionalMap
+                .orElseThrow(() -> new UnAuthenticatedException(ApiCode.UNAUTHORIZED));
+
+        return  map.get("uid").asLong();
     }
 }

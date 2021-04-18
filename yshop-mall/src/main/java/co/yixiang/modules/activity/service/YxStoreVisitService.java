@@ -41,6 +41,13 @@ public interface YxStoreVisitService  extends BaseService<YxStoreVisit>{
     List<YxStoreVisit> queryAll(YxStoreVisitQueryCriteria criteria);
 
     /**
+     * 添加用户访问拼团记录
+     * @param uid 用户id
+     * @param productId 产品id
+     */
+    void addStoreVisit(Long uid,Long productId);
+
+    /**
     * 导出数据
     * @param all 待导出的数据
     * @param response /

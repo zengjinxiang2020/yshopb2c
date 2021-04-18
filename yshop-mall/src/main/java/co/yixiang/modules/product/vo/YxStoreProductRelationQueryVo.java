@@ -62,4 +62,7 @@ public class YxStoreProductRelationQueryVo implements Serializable {
     @ApiModelProperty(value = "商品名称")
     private String storeName;
 
+    @ApiModelProperty(value = "是否开启积分兑换")
+    private Integer isIntegral;
+
 }

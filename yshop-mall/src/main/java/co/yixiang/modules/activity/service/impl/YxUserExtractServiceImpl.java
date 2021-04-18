@@ -75,6 +75,7 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
      * @param param UserExtParam
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void userExtract(YxUser userInfo, UserExtParam param) {
         BigDecimal extractPrice = userInfo.getBrokeragePrice();
         if(extractPrice.compareTo(BigDecimal.ZERO) <= 0) {
@@ -202,6 +203,7 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
      * @param resources YxUserExtract
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void doExtract(YxUserExtract resources){
         if(resources.getStatus() == null){
             throw new BadRequestException("请选择审核状态");
