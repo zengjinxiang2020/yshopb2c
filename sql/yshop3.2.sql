@@ -2612,12 +2612,12 @@ INSERT INTO `yx_store_seckill` VALUES (7, 8, 'https://image.dayouqiantu.cn/5ca08
 -- ----------------------------
 DROP TABLE IF EXISTS `yx_store_visit`;
 CREATE TABLE `yx_store_visit`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NULL DEFAULT NULL COMMENT '产品ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `product_id` bigint(20) NULL DEFAULT NULL COMMENT '产品ID',
   `product_type` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '产品类型',
   `cate_id` int(11) NULL DEFAULT NULL COMMENT '产品分类ID',
   `type` char(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '产品类型',
-  `uid` int(11) NULL DEFAULT NULL COMMENT '用户ID',
+  `uid` bigint(20) NULL DEFAULT NULL COMMENT '用户ID',
   `count` int(11) NULL DEFAULT NULL COMMENT '访问次数',
   `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注描述',
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
