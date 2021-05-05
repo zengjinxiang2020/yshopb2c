@@ -55,6 +55,18 @@ public class ApiResult<T> implements Serializable {
     private String msg;
 
     /**
+     * 总条数
+     */
+    @ApiModelProperty(value = "总条数")
+    private Integer total;
+
+    /**
+     * 总页数
+     */
+    @ApiModelProperty(value = "总页数")
+    private Integer totalPage;
+
+    /**
      * 响应数据
      */
     @ApiModelProperty(value = "响应数据")
@@ -86,6 +98,19 @@ public class ApiResult<T> implements Serializable {
     public static <T> ApiResult<T> result(ApiCode apiCode, T data){
         return result(apiCode,null,data);
     }
+
+    public static <T> ApiResult<T> resultPage(Integer total, Integer totalPage, T data){
+        return (ApiResult<T>) ApiResult.builder()
+                .total(total)
+                .totalPage(totalPage)
+                .status(200)
+                .msg(null)
+                .data(data)
+                .success(true)
+                .time(new Date())
+                .build();
+    }
+
 
     public static <T> ApiResult<T> result(ApiCode apiCode, String message, T data){
         boolean success = false;
