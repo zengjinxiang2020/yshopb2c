@@ -20,6 +20,7 @@ public enum AppFromEnum {
 	H5("h5","H5"),
 	WECHAT("wechat","公众号"),
 	APP("app","APP"),
+	PC("pc","PC"),
 	ROUNTINE("routine","小程序"),
 	UNIAPPH5("uniappH5","uniappH5");
 

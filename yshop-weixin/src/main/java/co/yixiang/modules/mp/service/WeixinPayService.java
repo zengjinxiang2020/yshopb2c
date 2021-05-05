@@ -116,7 +116,7 @@ public class WeixinPayService {
         WxPayService wxPayService = null;
         if(AppFromEnum.ROUNTINE.getValue().equals(from)){
             wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WXAPP);
-        }else if(AppFromEnum.APP.getValue().equals(from)){
+        }else if(AppFromEnum.APP.getValue().equals(from) || AppFromEnum.PC.getValue().equals(from)){
             wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.APP);
         }else{
             wxPayService = WxPayConfiguration.getPayService(PayMethodEnum.WECHAT);
@@ -133,6 +133,8 @@ public class WeixinPayService {
             orderRequest.setTradeType("MWEB");
         }else if(AppFromEnum.APP.getValue().equals(from)){
             orderRequest.setTradeType("APP");
+        }else if(AppFromEnum.PC.getValue().equals(from)){
+            orderRequest.setTradeType("NATIVE");
         } else{
             orderRequest.setTradeType("JSAPI");
             if(AppFromEnum.ROUNTINE.getValue().equals(from)){

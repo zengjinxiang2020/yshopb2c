@@ -36,6 +36,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.binarywang.wxpay.bean.order.WxPayAppOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMpOrderResult;
 import com.github.binarywang.wxpay.bean.order.WxPayMwebOrderResult;
+import com.github.binarywang.wxpay.bean.order.WxPayNativeOrderResult;
 import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -217,7 +218,16 @@ public class OrderSupplyService {
                     map.put("result",orderDTO);
                     map.put("payMsg","订单创建成功");
                     return map;
-                }else{//公众号
+                }else if(AppFromEnum.PC.getValue().equals(from)){ //扫码支付
+                    map.put("status","WECHAT_PC_PAY");
+                    WxPayNativeOrderResult wxPayNativeOrderResult = (WxPayNativeOrderResult)weixinPayService
+                            .unifyPay(orderId,from, BillDetailEnum.TYPE_3.getValue(),"APP商品购买");
+                    jsConfig.put("codeUrl",wxPayNativeOrderResult.getCodeUrl());
+                    orderDTO.setJsConfig(jsConfig);
+                    map.put("result",orderDTO);
+                    map.put("payMsg","订单创建成功");
+                }
+                else{//公众号
                     map.put("status","WECHAT_PAY");
                     WxPayMpOrderResult wxPayMpOrderResult = (WxPayMpOrderResult)weixinPayService
                             .unifyPay(orderId,from, BillDetailEnum.TYPE_3.getValue(),"公众号商品购买");
