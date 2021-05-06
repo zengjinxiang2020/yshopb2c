@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -175,6 +176,52 @@ public class ApiResult<T> implements Serializable {
         Map<String,Object> map = new HashMap<>(1);
         map.put(key,value);
         return result(ApiCode.FAIL,map);
+    }
+
+    public static <T> ApiResult<T> resultPage(List<T> list, int limit){
+        int count = list.size() / limit;
+        if (list.size() == 0) {
+            return (ApiResult<T>) ApiResult.builder()
+                    .total(0)
+                    .totalPage(0)
+                    .status(200)
+                    .msg(null)
+                    .data(list)
+                    .success(true)
+                    .time(new Date())
+                    .build();
+        }
+        if (list.size() <= limit) {
+            return (ApiResult<T>) ApiResult.builder()
+                    .total(list.size())
+                    .totalPage(1)
+                    .status(200)
+                    .msg(null)
+                    .data(list)
+                    .success(true)
+                    .time(new Date())
+                    .build();
+        } else if (count % limit == 0) {
+            return (ApiResult<T>) ApiResult.builder()
+                    .total(list.size())
+                    .totalPage(count)
+                    .status(200)
+                    .msg(null)
+                    .data(list)
+                    .success(true)
+                    .time(new Date())
+                    .build();
+        } else {
+             return (ApiResult<T>) ApiResult.builder()
+                    .total(list.size())
+                    .totalPage(count+1)
+                    .status(200)
+                    .msg(null)
+                    .data(list)
+                    .success(true)
+                    .time(new Date())
+                    .build();
+        }
     }
 
     public static ApiResult<Boolean> fail() {

@@ -54,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -97,7 +98,8 @@ public class StoreBargainController {
     @ApiOperation(value = "砍价产品列表",notes = "砍价产品列表")
     public ApiResult<Object> getYxStoreBargainPageList(@RequestParam(value = "page",defaultValue = "1") int page,
                                                        @RequestParam(value = "limit",defaultValue = "10") int limit){
-        return ApiResult.ok(storeBargainService.getList(page, limit));
+
+        return ApiResult.resultPage(Collections.singletonList(storeBargainService.getList(page, limit)),limit);
     }
 
     /**
