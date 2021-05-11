@@ -247,7 +247,9 @@ public class StoreOrderController {
                                                           @RequestParam(value = "limit",defaultValue = "10") int limit){
         Long uid = LocalUser.getUser().getUid();
         Map<String, Object> map = storeOrderService.orderList(uid, type, page, limit);
-        return ApiResult.resultPage((Integer) map.get("total"),(Integer) map.get("totalPage"),map.get("list"));
+        Long total = (Long)map.get("total");
+        Long totalPage = (Long)map.get("totalPage");
+        return ApiResult.resultPage(total.intValue(),totalPage.intValue(),map.get("list"));
     }
 
 
