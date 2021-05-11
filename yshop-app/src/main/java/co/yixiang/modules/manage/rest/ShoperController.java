@@ -97,9 +97,10 @@ public class ShoperController {
     @AuthCheck
     @GetMapping("/admin/order/list")
     @ApiOperation(value = "订单列表",notes = "订单列表")
-    public ApiResult<List<YxStoreOrderQueryVo>> orderList(ShoperQueryParam queryParam) {
-        return ApiResult.ok(storeOrderService.orderList(null, queryParam.getStatus(),
-                queryParam.getPage(), queryParam.getLimit()));
+    public ApiResult<Object> orderList(ShoperQueryParam queryParam) {
+        Map<String, Object> map = storeOrderService.orderList(null, queryParam.getStatus(),
+                queryParam.getPage(), queryParam.getLimit());
+        return ApiResult.ok(map.get("list"));
     }
 
     /**

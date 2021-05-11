@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -60,7 +61,7 @@ public class ArticleController {
     @ApiOperation(value = "文章列表",notes = "文章列表")
     public ApiResult<List<YxArticleQueryVo>> getYxArticlePageList(@RequestParam(value = "page",defaultValue = "1") int page,
                                                                   @RequestParam(value = "limit",defaultValue = "10") int limit){
-        return ApiResult.ok(articleService.getList(page,limit));
+        return ApiResult.resultPage(articleService.getList(page,limit),limit);
     }
 
 }

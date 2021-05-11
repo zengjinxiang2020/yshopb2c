@@ -1099,7 +1099,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
      * @return list
      */
     @Override
-    public List<YxStoreOrderQueryVo> orderList(Long uid, int type, int page, int limit) {
+    public Map<String,Object> orderList(Long uid, int type, int page, int limit) {
        LambdaQueryWrapper<YxStoreOrder> wrapper= new LambdaQueryWrapper<>();
         if(uid != null) {
             wrapper.eq(YxStoreOrder::getUid,uid);
@@ -1107,6 +1107,8 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         wrapper.orderByDesc(YxStoreOrder::getId);
 
         switch (OrderStatusEnum.toType(type)){
+            case STATUS__1:
+                break;
             //未支付
             case STATUS_0:
                 wrapper.eq(YxStoreOrder::getPaid,OrderInfoEnum.PAY_STATUS_0.getValue())
@@ -1159,10 +1161,13 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         Page<YxStoreOrder> pageModel = new Page<>(page, limit);
         IPage<YxStoreOrder> pageList = yxStoreOrderMapper.selectPage(pageModel,wrapper);
         List<YxStoreOrderQueryVo> list = generator.convert(pageList.getRecords(),YxStoreOrderQueryVo.class);
-
-        return list.stream()
+        Map<String,Object> map = new HashMap<>();
+        map.put("list",list.stream()
                 .map(this::handleOrder)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+        map.put("total",pageList.getTotal());
+        map.put("totalPage",pageList.getPages());
+        return map;
 
     }
 

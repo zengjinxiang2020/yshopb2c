@@ -221,11 +221,12 @@ public class OrderSupplyService {
                 }else if(AppFromEnum.PC.getValue().equals(from)){ //扫码支付
                     map.put("status","WECHAT_PC_PAY");
                     WxPayNativeOrderResult wxPayNativeOrderResult = (WxPayNativeOrderResult)weixinPayService
-                            .unifyPay(orderId,from, BillDetailEnum.TYPE_3.getValue(),"APP商品购买");
+                            .unifyPay(orderId,from, BillDetailEnum.TYPE_3.getValue(),"pc商品购买");
                     jsConfig.put("codeUrl",wxPayNativeOrderResult.getCodeUrl());
                     orderDTO.setJsConfig(jsConfig);
                     map.put("result",orderDTO);
                     map.put("payMsg","订单创建成功");
+                    return map;
                 }
                 else{//公众号
                     map.put("status","WECHAT_PAY");

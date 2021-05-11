@@ -42,6 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -76,7 +77,8 @@ public class StoreSeckillController {
         if (StrUtil.isBlank(time) || !NumberUtil.isNumber(time)){
             throw new YshopException("参数错误");
         }
-        return ApiResult.ok(yxStoreSeckillService.getList(page, limit, Integer.valueOf(time)));
+        return ApiResult.resultPage(yxStoreSeckillService.getList(page, limit, Integer.valueOf(time)),limit);
+
     }
 
 

@@ -7,7 +7,7 @@
  * 一经发现盗用、分享等行为，将追究法律责任，后果自负
  */
 package co.yixiang.modules.mp.service;
-
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -135,6 +135,7 @@ public class WeixinPayService {
             orderRequest.setTradeType("APP");
         }else if(AppFromEnum.PC.getValue().equals(from)){
             orderRequest.setTradeType("NATIVE");
+            orderRequest.setProductId( UUID.fastUUID().toString());
         } else{
             orderRequest.setTradeType("JSAPI");
             if(AppFromEnum.ROUNTINE.getValue().equals(from)){

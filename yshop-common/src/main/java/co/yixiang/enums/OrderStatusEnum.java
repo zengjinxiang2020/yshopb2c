@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum OrderStatusEnum {
 
+	STATUS__1(-1,"全部订单"),
 	STATUS_0(0,"未支付"),
 	STATUS_1(1,"待发货"),
 	STATUS_2(2,"待收货"),

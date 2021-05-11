@@ -178,7 +178,8 @@ public class ApiResult<T> implements Serializable {
         return result(ApiCode.FAIL,map);
     }
 
-    public static <T> ApiResult<T> resultPage(List<T> list, int limit){
+    public static <T> ApiResult<T> resultPage(T t, int limit){
+        List<Object> list = (List<Object>) t;
         int count = list.size() / limit;
         if (list.size() == 0) {
             return (ApiResult<T>) ApiResult.builder()

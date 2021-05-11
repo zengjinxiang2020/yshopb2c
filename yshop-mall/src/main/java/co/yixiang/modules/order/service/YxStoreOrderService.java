@@ -164,7 +164,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      * @param limit limit
      * @return list
      */
-    List<YxStoreOrderQueryVo> orderList(Long uid,int type,int page,int limit);
+    Map<String,Object> orderList(Long uid,int type,int page,int limit);
 
     /**
      * 获取某个用户的订单统计数据

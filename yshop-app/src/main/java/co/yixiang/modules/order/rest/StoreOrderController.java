@@ -64,10 +64,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -171,6 +168,7 @@ public class StoreOrderController {
         orderDTO.setOrderId(orderId);
         map.put("status",OrderLogEnum.CREATE_ORDER_SUCCESS.getValue());
         map.put("result",orderDTO);
+        map.put("createTime",order.getCreateTime());
 
         //开始处理支付
         //处理金额为0的情况
@@ -239,16 +237,17 @@ public class StoreOrderController {
     @AuthCheck
     @GetMapping("/order/list")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "type", value = "商品状态,默认为0未支付 1待发货 2待收货 3待评价 4已完成 5退款中 6已退款 7退款", paramType = "query", dataType = "int"),
+            @ApiImplicitParam(name = "type", value = "商品状态,-1全部 默认为0未支付 1待发货 2待收货 3待评价 4已完成 5退款中 6已退款 7退款", paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
     })
     @ApiOperation(value = "订单列表",notes = "订单列表")
-    public ApiResult<List<YxStoreOrderQueryVo>> orderList(@RequestParam(value = "type",defaultValue = "0") int type,
+    public ApiResult<Object> orderList(@RequestParam(value = "type",defaultValue = "0") int type,
                                                           @RequestParam(value = "page",defaultValue = "1") int page,
                                                           @RequestParam(value = "limit",defaultValue = "10") int limit){
         Long uid = LocalUser.getUser().getUid();
-        return ApiResult.ok(storeOrderService.orderList(uid,type, page,limit));
+        Map<String, Object> map = storeOrderService.orderList(uid, type, page, limit);
+        return ApiResult.resultPage((Integer) map.get("total"),(Integer) map.get("totalPage"),map.get("list"));
     }
 
 
