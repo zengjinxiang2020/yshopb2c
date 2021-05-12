@@ -99,7 +99,7 @@ public class StoreBargainController {
     public ApiResult<Object> getYxStoreBargainPageList(@RequestParam(value = "page",defaultValue = "1") int page,
                                                        @RequestParam(value = "limit",defaultValue = "10") int limit){
 
-        return ApiResult.resultPage(Collections.singletonList(storeBargainService.getList(page, limit)),limit);
+        return ApiResult.resultPage(storeBargainService.getList(page, limit),limit);
     }
 
     /**

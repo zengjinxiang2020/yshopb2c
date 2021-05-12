@@ -84,7 +84,7 @@ public class StoreCombinationController {
     @ApiOperation(value = "拼团产品列表",notes = "拼团产品列表")
     public ApiResult<CombinationQueryVo> getList(@RequestParam(value = "page",defaultValue = "1") int page,
                                                  @RequestParam(value = "limit",defaultValue = "10") int limit){
-        return ApiResult.resultPage(storeCombinationService.getList(page, limit),limit);
+        return  ApiResult.ok(storeCombinationService.getList(page, limit));
     }
 
     /**
