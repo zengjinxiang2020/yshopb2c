@@ -2150,8 +2150,11 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             }
         }else if("payIntegral".equals(key)){
             for (YxStoreCartQueryVo storeCart : cartInfo) {
-                sumPrice = NumberUtil.add(sumPrice,
-                        NumberUtil.mul(storeCart.getCartNum(), storeCart.getProductInfo().getAttrInfo().getIntegral()));
+                if(storeCart.getProductInfo().getAttrInfo() != null && storeCart.getProductInfo().getAttrInfo().getIntegral() != null){
+                    sumPrice = NumberUtil.add(sumPrice,
+                            NumberUtil.mul(storeCart.getCartNum(), storeCart.getProductInfo().getAttrInfo().getIntegral()));
+                }
+
             }
         }
 
