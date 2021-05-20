@@ -20,6 +20,7 @@ public class WxMaLiveInfo {
         private Integer roomid;
         private String coverImg;
         private String shareImg;
+        private String feedsImg;
         private Integer liveStatus;
         private Long startTime;
         private Long endTime;

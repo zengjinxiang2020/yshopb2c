@@ -131,6 +131,12 @@ public class YxWechatLive implements Serializable {
 
     private String productId;
 
+    /**
+     * 购物直播封面图 ，建议尺寸800*800
+     */
+    @TableField(exist = false)
+    private String feedsImg;
+
     public void copy(YxWechatLive source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

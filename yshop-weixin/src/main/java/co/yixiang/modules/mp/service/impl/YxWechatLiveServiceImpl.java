@@ -161,6 +161,7 @@ public class YxWechatLiveServiceImpl extends BaseServiceImpl<YxWechatLiveMapper,
     public boolean saveLive(YxWechatLive resources){
         WxMaService wxMaService = WxMaConfiguration.getWxMaService();
         try {
+            resources.setFeedsImg(uploadPhotoToWx(wxMaService,resources.getFeedsImg()).getMediaId());
             resources.setStartTime(Long.valueOf(OrderUtil.dateToTimestamp(resources.getStartDate())));
             resources.setEndTime(Long.valueOf(OrderUtil.dateToTimestamp(resources.getEndDate())));
             resources.setAnchorImg(uploadPhotoToWx(wxMaService,resources.getAnchorImge()).getMediaId());
