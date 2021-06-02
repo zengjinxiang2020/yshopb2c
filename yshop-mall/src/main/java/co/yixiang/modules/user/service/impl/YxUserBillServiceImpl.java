@@ -40,11 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -174,10 +171,10 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
      * @param limit limit
      * @param uid uid
      * @param type BillDetailEnum
-     * @return list
+     * @return map
      */
     @Override
-    public List<BillVo> getUserBillList(int page, int limit, long uid, int type) {
+    public Map<String,Object> getUserBillList(int page, int limit, long uid, int type) {
        QueryWrapper<YxUserBill> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(YxUserBill::getUid,uid).orderByDesc(YxUserBill::getCreateTime)
                 .orderByAsc(YxUserBill::getId);
@@ -216,8 +213,12 @@ public class YxUserBillServiceImpl extends BaseServiceImpl<UserBillMapper, YxUse
             billDTO.setList(yxUserBillMapper.getUserBillList(wrapperT));
 
         }
-
-        return billDTOList;
+        Map<String,Object> map = new HashMap<>();
+        map.put("list",billDTOList);
+        map.put("total",pageModel.getTotal());
+        map.put("totalPage",pageModel.getPages());
+        return map;
+       // return billDTOList;
     }
 
     @Override

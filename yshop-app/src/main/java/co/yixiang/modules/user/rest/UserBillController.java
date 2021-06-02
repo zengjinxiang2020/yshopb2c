@@ -183,7 +183,11 @@ public class UserBillController {
             newType = Integer.valueOf(type);
         }
         Long uid = LocalUser.getUser().getUid();
-        return ApiResult.resultPage(Collections.singletonList(userBillService.getUserBillList(page,limit,uid,newType)),limit);
+        Map<String, Object> map = userBillService.getUserBillList(page,limit,uid,newType);
+        Long total = (Long)map.get("total");
+        Long totalPage = (Long)map.get("totalPage");
+        return ApiResult.resultPage(total.intValue(),totalPage.intValue(),map.get("list"));
+      //  return ApiResult.resultPage(Collections.singletonList(userBillService.getUserBillList(page,limit,uid,newType)),limit);
     }
 
 

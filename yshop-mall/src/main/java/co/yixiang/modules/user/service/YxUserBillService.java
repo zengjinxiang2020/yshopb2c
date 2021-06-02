@@ -70,9 +70,10 @@ public interface YxUserBillService  extends BaseService<YxUserBill>{
      * @param limit limit
      * @param uid uid
      * @param type BillDetailEnum
-     * @return list
+     * @return map
      */
-    List<BillVo> getUserBillList(int page, int limit, long uid, int type);
+    Map<String,Object> getUserBillList(int page, int limit, long uid, int type);
+
 
     double getBrokerage(int uid);
 
