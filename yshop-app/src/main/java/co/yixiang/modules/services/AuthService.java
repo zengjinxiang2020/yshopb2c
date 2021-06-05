@@ -136,10 +136,10 @@ public class AuthService {
 
             } else {
                 WechatUserDto wechatUser =yxUser.getWxProfile();
-                if ((StrUtil.isBlank(wechatUser.getRoutineOpenid()) && StrUtil.isNotBlank(wxMpUser.getOpenId()))
-                        || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(wxMpUser.getUnionId()))) {
-                    wechatUser.setRoutineOpenid(wxMpUser.getOpenId());
-                    wechatUser.setUnionId(wxMpUser.getUnionId());
+                if ((StrUtil.isBlank(wechatUser.getRoutineOpenid()) && StrUtil.isNotBlank(session.getOpenid()))
+                        || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(session.getUnionid()))) {
+                    wechatUser.setRoutineOpenid(session.getOpenid());
+                    wechatUser.setUnionId(session.getUnionid());
 
                     yxUser.setWxProfile(wechatUser);
 

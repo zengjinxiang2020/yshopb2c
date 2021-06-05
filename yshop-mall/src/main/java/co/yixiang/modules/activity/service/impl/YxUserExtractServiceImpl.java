@@ -35,7 +35,6 @@ import co.yixiang.modules.user.service.dto.WechatUserDto;
 import co.yixiang.modules.user.service.dto.YxWechatUserDto;
 import co.yixiang.utils.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
