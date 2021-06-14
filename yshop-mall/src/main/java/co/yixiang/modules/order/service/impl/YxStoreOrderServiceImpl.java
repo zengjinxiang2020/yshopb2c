@@ -749,6 +749,10 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             throw new YshopException("订单状态错误");
         }
 
+        if(!OrderInfoEnum.REFUND_STATUS_0.getValue().equals(orderQueryVo.getRefundStatus())){
+            throw new YshopException("订单退款中或已退款");
+        }
+
         YxExpress expressQueryVo = expressService.getOne(new LambdaQueryWrapper<YxExpress>().eq(YxExpress::getName,deliveryName));
         if(ObjectUtil.isNull(expressQueryVo)) {
             throw new YshopException("请后台先添加快递公司");
