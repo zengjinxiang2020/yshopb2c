@@ -11,6 +11,7 @@ package co.yixiang.modules.user.rest;
 import cn.hutool.core.bean.BeanUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
+import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
@@ -73,6 +74,7 @@ public class UserRechargeController {
     public ApiResult<Object> getWays(){
         YxSystemGroupDataQueryCriteria queryCriteria = new YxSystemGroupDataQueryCriteria();
         queryCriteria.setGroupName(ShopConstants.YSHOP_RECHARGE_PRICE_WAYS);
+        queryCriteria.setStatus(ShopCommonEnum.IS_STATUS_1.getValue());
         List<YxSystemGroupData> yxSystemGroupDataList = systemGroupDataService.queryAll(queryCriteria);
 
         List<YxSystemGroupDataVo> systemGroupDataVoList = yxSystemGroupDataList.stream().map(s->{
