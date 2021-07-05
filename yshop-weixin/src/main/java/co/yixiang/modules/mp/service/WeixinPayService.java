@@ -125,8 +125,7 @@ public class WeixinPayService {
         orderRequest.setOutTradeNo(orderId);
         orderRequest.setTotalFee(payPrice);
         orderRequest.setSpbillCreateIp(IpUtil.getLocalIP());
-//        orderRequest.setNotifyUrl(this.getApiUrl() + "/api/wechat/notify");
-        orderRequest.setNotifyUrl("http://www.itxzz.top/api/wechat/notify");
+        orderRequest.setNotifyUrl(this.getApiUrl() + "/api/wechat/notify");
         orderRequest.setBody(body);
         orderRequest.setAttach(attach);
 
