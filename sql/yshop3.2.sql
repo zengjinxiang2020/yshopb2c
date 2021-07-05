@@ -20,6 +20,50 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for alipay_config
 -- ----------------------------
+
+CREATE TABLE `yx_store_after_sales_status` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `store_after_sales_id` bigint(20) DEFAULT NULL COMMENT '售后id',
+  `change_type` tinyint(1) DEFAULT NULL COMMENT '操作类型',
+  `change_message` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT '操作备注',
+  `change_time` datetime DEFAULT NULL COMMENT '操作时间',
+  `operator` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '操作人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='售后订单操作详情表';
+
+CREATE TABLE `yx_store_after_sales_item` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `store_after_sales_id` bigint(20) DEFAULT NULL COMMENT '售后id',
+  `product_id` bigint(20) DEFAULT NULL COMMENT '商品id',
+  `cart_info` text COLLATE utf8_bin NOT NULL COMMENT '退货东西的详情信息',
+  `is_del` bit(1) DEFAULT NULL COMMENT '逻辑删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='售后子表';
+
+
+CREATE TABLE `yx_store_after_sales` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `order_code` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '订单号',
+  `refund_amount` decimal(32,8) DEFAULT NULL COMMENT '退款金额',
+  `service_type` tinyint(1) DEFAULT NULL COMMENT '服务类型0仅退款1退货退款',
+  `reasons` text COLLATE utf8_bin COMMENT '申请原因',
+  `explains` text COLLATE utf8_bin COMMENT '说明',
+  `explain_img` text COLLATE utf8_bin COMMENT '说明图片->多个用逗号分割',
+  `shipper_code` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '物流公司编码',
+  `delivery_sn` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '物流单号',
+  `delivery_name` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '物流名称',
+  `state` tinyint(1) DEFAULT NULL COMMENT '状态 0已提交等待平台审核 1平台已审核 等待用户发货/退款 2 用户已发货 3退款成功',
+  `sales_state` tinyint(1) DEFAULT NULL COMMENT '售后状态-0正常1用户取消2商家拒绝',
+  `create_time` datetime DEFAULT NULL COMMENT '添加时间',
+  `is_del` tinyint(1) DEFAULT NULL COMMENT '逻辑删除',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户id',
+  `consignee` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '商家收货人',
+  `phone_number` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '商家手机号',
+  `address` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '商家地址',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='售后记录表';
+
+
 DROP TABLE IF EXISTS `alipay_config`;
 CREATE TABLE `alipay_config`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -888,7 +932,10 @@ INSERT INTO `menu` VALUES (262, b'0', '编辑人员', NULL, 260, 2, NULL, NULL, 
 INSERT INTO `menu` VALUES (263, b'0', '删除人员', NULL, 260, 3, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:19:07', 'yxStoreCustomer:del', 2, NULL, 0);
 INSERT INTO `menu` VALUES (264, b'0', '终端装修', NULL, 0, 0, 'theme', 'theme', b'0', b'0', '--', '2021-02-25 19:33:17', '', 1, '2021-02-25 19:33:32', 0);
 INSERT INTO `menu` VALUES (265, b'1', '商城装修', NULL, 264, 999, 'theme', 'https://demo2.yixiang.co/container', b'0', b'0', '-', '2021-02-25 19:35:13', NULL, 1, NULL, 0);
-
+INSERT INTO `menu` VALUES (266, b'0', '售后', 'shop/afterSeals/index', 53, 44, 'order', 'afterSeals', b'0', b'0', 'AfterSeals', '2021-06-30 15:23:38', 'yxStoreAfterSales:list', 1, '2021-06-30 15:33:14', 0);
+INSERT INTO `menu` VALUES (267, b'0', '新增', NULL, 266, 999, NULL, NULL, b'0', b'0', '-', '2021-06-30 15:34:17', 'yxStoreAfterSales:add', 2, NULL, 0);
+INSERT INTO `menu` VALUES (268, b'0', '修改', NULL, 266, 999, NULL, NULL, b'0', b'0', '-', '2021-06-30 15:34:39', 'yxStoreAfterSales:edit', 2, NULL, 0);
+INSERT INTO `menu` VALUES (269, b'0', '删除', NULL, 266, 999, NULL, NULL, b'0', b'0', '-', '2021-06-30 15:34:55', 'yxStoreAfterSales:del', 2, NULL, 0);
 -- ----------------------------
 -- Table structure for monitor_server
 -- ----------------------------
@@ -2245,6 +2292,7 @@ CREATE TABLE `yx_store_order_cart_info`  (
   `product_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品ID',
   `cart_info` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '购买东西的详细信息',
   `unique` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '唯一id',
+  `is_after_sales` tinyint(1) DEFAULT '0' COMMENT '是否能售后0不能1能',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `oid`(`oid`, `unique`) USING BTREE,
   INDEX `cart_id`(`cart_id`) USING BTREE,
