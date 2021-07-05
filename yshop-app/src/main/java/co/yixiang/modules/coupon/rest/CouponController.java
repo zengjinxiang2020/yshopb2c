@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -104,6 +105,23 @@ public class CouponController {
         Long uid = LocalUser.getUser().getUid();
         List<YxStoreCouponUserQueryVo> list = storeCouponUserService.getUserCoupon(uid);
         return ApiResult.ok(list);
+    }
+
+    /**
+     * 用户已领取优惠券pc
+     */
+    @AppLog(value = "用户已领取优惠券pc", type = 1)
+    @AuthCheck
+    @GetMapping("/coupons/user/pc/{type}")
+    @ApiOperation(value = "用户已领取优惠券pc",notes = "用户已领取优惠券pc")
+    public ApiResult<Object> getUserPCList(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "limit", defaultValue = "10") int limit, @PathVariable(value = "type") Integer type){
+        Long uid = LocalUser.getUser().getUid();
+        Map<String, Object> map = storeCouponUserService.getUserPCCoupon(uid,page,limit,type);
+        Long total = (Long) map.get("total");
+        Long totalPage = (Long) map.get("totalPage");
+        return ApiResult.resultPage(total.intValue(), totalPage.intValue(), map.get("list"));
     }
 
     /**

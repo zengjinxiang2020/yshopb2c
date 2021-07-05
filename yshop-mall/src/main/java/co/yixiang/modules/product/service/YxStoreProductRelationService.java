@@ -85,4 +85,9 @@ public interface YxStoreProductRelationService extends BaseService<YxStoreProduc
     void download(List<YxStoreProductRelationDto> all, HttpServletResponse response) throws IOException;
 
 
+    /**
+     * 批量删除
+     * @param ids /
+     */
+    void collectDelFoot(List<Long> ids);
 }

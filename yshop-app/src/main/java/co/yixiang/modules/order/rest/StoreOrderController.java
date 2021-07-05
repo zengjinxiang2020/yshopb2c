@@ -13,27 +13,21 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import co.yixiang.api.ApiResult;
 import co.yixiang.api.YshopException;
-import co.yixiang.enums.*;
-import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.common.aop.NoRepeatSubmit;
 import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.interceptor.AuthCheck;
+import co.yixiang.enums.*;
+import co.yixiang.logging.aop.log.AppLog;
 import co.yixiang.modules.mp.domain.YxWechatTemplate;
+import co.yixiang.modules.mp.service.WeixinPayService;
 import co.yixiang.modules.mp.service.YxWechatTemplateService;
 import co.yixiang.modules.order.domain.YxStoreOrder;
+import co.yixiang.modules.order.domain.YxStoreOrderCartInfo;
 import co.yixiang.modules.order.dto.OrderExtendDto;
-import co.yixiang.modules.order.param.ComputeOrderParam;
-import co.yixiang.modules.order.param.ConfirmOrderParam;
-import co.yixiang.modules.order.param.DoOrderParam;
-import co.yixiang.modules.order.param.ExpressParam;
-import co.yixiang.modules.order.param.HandleOrderParam;
-import co.yixiang.modules.order.param.OrderParam;
-import co.yixiang.modules.order.param.OrderVerifyParam;
-import co.yixiang.modules.order.param.PayParam;
-import co.yixiang.modules.order.param.ProductOrderParam;
-import co.yixiang.modules.order.param.ProductReplyParam;
-import co.yixiang.modules.order.param.RefundParam;
+import co.yixiang.modules.order.param.*;
+import co.yixiang.modules.order.service.YxStoreOrderCartInfoService;
 import co.yixiang.modules.order.service.YxStoreOrderService;
+import co.yixiang.modules.order.service.YxStoreOrderStatusService;
 import co.yixiang.modules.order.service.dto.YxStoreOrderDto;
 import co.yixiang.modules.order.vo.ComputeVo;
 import co.yixiang.modules.order.vo.ConfirmOrderVo;
@@ -45,6 +39,7 @@ import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.tools.express.ExpressService;
 import co.yixiang.tools.express.config.ExpressAutoConfiguration;
 import co.yixiang.tools.express.dao.ExpressInfo;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.vdurmont.emoji.EmojiParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -55,16 +50,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -85,6 +78,10 @@ public class StoreOrderController {
     private final OrderSupplyService orderSupplyService;
     private final CreatShareProductService creatShareProductService;
     private final YxWechatTemplateService yxWechatTemplateService;
+    private final YxStoreOrderStatusService orderStatusService;
+
+    private final YxStoreOrderCartInfoService storeOrderCartInfoService;
+    private final WeixinPayService weixinPayService;
 
     @Value("${file.path}")
     private String path;
@@ -96,10 +93,10 @@ public class StoreOrderController {
     @AppLog(value = "订单确认", type = 1)
     @AuthCheck
     @PostMapping("/order/confirm")
-    @ApiOperation(value = "订单确认",notes = "订单确认")
-    public ApiResult<ConfirmOrderVo> confirm(@Validated @RequestBody ConfirmOrderParam param){
+    @ApiOperation(value = "订单确认", notes = "订单确认")
+    public ApiResult<ConfirmOrderVo> confirm(@Validated @RequestBody ConfirmOrderParam param) {
         YxUser yxUser = LocalUser.getUser();
-        return ApiResult.ok(storeOrderService.confirmOrder(yxUser,param.getCartId()));
+        return ApiResult.ok(storeOrderService.confirmOrder(yxUser, param.getCartId()));
 
     }
 
@@ -111,25 +108,25 @@ public class StoreOrderController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "key", value = "唯一的key", paramType = "query", dataType = "string")
     })
-    @ApiOperation(value = "计算订单金额",notes = "计算订单金额")
-    public ApiResult<Map<String,Object>> computedOrder(@Validated @RequestBody ComputeOrderParam param,
-                                                       @PathVariable String key){
+    @ApiOperation(value = "计算订单金额", notes = "计算订单金额")
+    public ApiResult<Map<String, Object>> computedOrder(@Validated @RequestBody ComputeOrderParam param,
+                                                        @PathVariable String key) {
         YxUser yxUser = LocalUser.getUser();
-        Map<String,Object> map = orderSupplyService.check(yxUser.getUid(),key,param);
-        if(OrderLogEnum.EXTEND_ORDER.getValue().equals(map.get("status"))
+        Map<String, Object> map = orderSupplyService.check(yxUser.getUid(), key, param);
+        if (OrderLogEnum.EXTEND_ORDER.getValue().equals(map.get("status"))
                 || OrderLogEnum.PINK_ORDER_FAIL_1.getValue().equals(map.get("status"))
-                || OrderLogEnum.PINK_ORDER_FAIL_2.getValue().equals(map.get("status")) ){
-            return ApiResult.ok(map,map.get("msg").toString());
+                || OrderLogEnum.PINK_ORDER_FAIL_2.getValue().equals(map.get("status"))) {
+            return ApiResult.ok(map, map.get("msg").toString());
         }
 
-        ComputeVo computeVo = storeOrderService.computedOrder(yxUser,key,
+        ComputeVo computeVo = storeOrderService.computedOrder(yxUser, key,
                 param.getCouponId(),
                 param.getUseIntegral(),
                 param.getShippingType(),
                 param.getAddressId());
 
-        map.put("result",computeVo);
-        map.put("status",OrderLogEnum.NONE_ORDER.getValue());
+        map.put("result", computeVo);
+        map.put("status", OrderLogEnum.NONE_ORDER.getValue());
         return ApiResult.ok(map);
     }
 
@@ -140,24 +137,24 @@ public class StoreOrderController {
     @AuthCheck
     @NoRepeatSubmit
     @PostMapping("/order/create/{key}")
-    @ApiOperation(value = "订单创建",notes = "订单创建")
-    public ApiResult<Map<String,Object>> create(@Valid @RequestBody OrderParam param,
-                                             @PathVariable String key){
+    @ApiOperation(value = "订单创建", notes = "订单创建")
+    public ApiResult<Map<String, Object>> create(@Valid @RequestBody OrderParam param,
+                                                 @PathVariable String key) {
         YxUser yxUser = LocalUser.getUser();
         ComputeOrderParam computeOrderParam = new ComputeOrderParam();
-        BeanUtil.copyProperties(param,computeOrderParam);
-        Map<String,Object> map = orderSupplyService.check(yxUser.getUid(),key,computeOrderParam);
-        if(OrderLogEnum.EXTEND_ORDER.getValue().equals(map.get("status"))
+        BeanUtil.copyProperties(param, computeOrderParam);
+        Map<String, Object> map = orderSupplyService.check(yxUser.getUid(), key, computeOrderParam);
+        if (OrderLogEnum.EXTEND_ORDER.getValue().equals(map.get("status"))
                 || OrderLogEnum.PINK_ORDER_FAIL_2.getValue().equals(map.get("status"))
-                || OrderLogEnum.PINK_ORDER_FAIL_1.getValue().equals(map.get("status")) ){
-            return ApiResult.ok(map,map.get("msg").toString());
+                || OrderLogEnum.PINK_ORDER_FAIL_1.getValue().equals(map.get("status"))) {
+            return ApiResult.ok(map, map.get("msg").toString());
         }
 
 
         //创建订单
-        YxStoreOrder order = storeOrderService.createOrder(yxUser,key,param);
+        YxStoreOrder order = storeOrderService.createOrder(yxUser, key, param);
 
-        if(ObjectUtil.isNull(order)) {
+        if (ObjectUtil.isNull(order)) {
             throw new YshopException("订单生成失败");
         }
 
@@ -166,9 +163,9 @@ public class StoreOrderController {
         OrderExtendDto orderDTO = new OrderExtendDto();
         orderDTO.setKey(key);
         orderDTO.setOrderId(orderId);
-        map.put("status",OrderLogEnum.CREATE_ORDER_SUCCESS.getValue());
-        map.put("result",orderDTO);
-        map.put("createTime",order.getCreateTime());
+        map.put("status", OrderLogEnum.CREATE_ORDER_SUCCESS.getValue());
+        map.put("result", orderDTO);
+        map.put("createTime", order.getCreateTime());
 
         //开始处理支付
         //处理金额为0的情况
@@ -180,28 +177,27 @@ public class StoreOrderController {
 
         orderSupplyService.goPay(map,orderId,yxUser.getUid(),
                 param.getPayType(),param.getFrom(),orderDTO);
-
-        return ApiResult.ok(map,map.get("payMsg").toString());
+        return ApiResult.ok(map, map.get("payMsg").toString());
     }
 
 
     /**
-     *  订单支付
+     * 订单支付
      */
     @AppLog(value = "订单支付", type = 1)
     @AuthCheck
     @PostMapping("/order/pay")
-    @ApiOperation(value = "订单支付",notes = "订单支付")
-    public ApiResult<Map<String,Object>> pay(@Valid @RequestBody PayParam param){
-        Map<String,Object> map = new LinkedHashMap<>();
+    @ApiOperation(value = "订单支付", notes = "订单支付")
+    public ApiResult<Map<String, Object>> pay(@Valid @RequestBody PayParam param) {
+        Map<String, Object> map = new LinkedHashMap<>();
         Long uid = LocalUser.getUser().getUid();
         YxStoreOrderQueryVo storeOrder = storeOrderService
-                .getOrderInfo(param.getUni(),uid);
-        if(ObjectUtil.isNull(storeOrder)) {
+                .getOrderInfo(param.getUni(), uid);
+        if (ObjectUtil.isNull(storeOrder)) {
             throw new YshopException("订单不存在");
         }
 
-        if(OrderInfoEnum.REFUND_STATUS_1.getValue().equals(storeOrder.getPaid())) {
+        if (OrderInfoEnum.REFUND_STATUS_1.getValue().equals(storeOrder.getPaid())) {
             throw new YshopException("该订单已支付");
         }
 
@@ -209,22 +205,22 @@ public class StoreOrderController {
 
         OrderExtendDto orderDTO = new OrderExtendDto();
         orderDTO.setOrderId(orderId);
-        map.put("status","SUCCESS");
-        map.put("result",orderDTO);
+        map.put("status", "SUCCESS");
+        map.put("result", orderDTO);
 
 
-        if(storeOrder.getPayPrice().compareTo(BigDecimal.ZERO) <= 0&&!param.getPaytype().equals(PayTypeEnum.INTEGRAL.getValue())){
-            storeOrderService.yuePay(orderId,uid);
-            return ApiResult.ok(map,"支付成功");
+        if (storeOrder.getPayPrice().compareTo(BigDecimal.ZERO) <= 0 && !param.getPaytype().equals(PayTypeEnum.INTEGRAL.getValue())) {
+            storeOrderService.yuePay(orderId, uid);
+            return ApiResult.ok(map, "支付成功");
         }
 
         //处理是否已经修改过订单价格，如果修改用新的单号去拉起支付
-        if(StrUtil.isNotBlank(storeOrder.getExtendOrderId())) {
+        if (StrUtil.isNotBlank(storeOrder.getExtendOrderId())) {
             orderId = storeOrder.getExtendOrderId();
         }
 
 
-        orderSupplyService.goPay(map,orderId,uid, param.getPaytype(),param.getFrom(),orderDTO);
+        orderSupplyService.goPay(map, orderId, uid, param.getPaytype(), param.getFrom(), orderDTO);
 
         return ApiResult.ok(map);
     }
@@ -241,15 +237,15 @@ public class StoreOrderController {
             @ApiImplicitParam(name = "page", value = "页码,默认为1", paramType = "query", dataType = "int"),
             @ApiImplicitParam(name = "limit", value = "页大小,默认为10", paramType = "query", dataType = "int")
     })
-    @ApiOperation(value = "订单列表",notes = "订单列表")
-    public ApiResult<Object> orderList(@RequestParam(value = "type",defaultValue = "0") int type,
-                                                          @RequestParam(value = "page",defaultValue = "1") int page,
-                                                          @RequestParam(value = "limit",defaultValue = "10") int limit){
+    @ApiOperation(value = "订单列表", notes = "订单列表")
+    public ApiResult<Object> orderList(@RequestParam(value = "type", defaultValue = "0") int type,
+                                       @RequestParam(value = "page", defaultValue = "1") int page,
+                                       @RequestParam(value = "limit", defaultValue = "10") int limit) {
         Long uid = LocalUser.getUser().getUid();
         Map<String, Object> map = storeOrderService.orderList(uid, type, page, limit);
-        Long total = (Long)map.get("total");
-        Long totalPage = (Long)map.get("totalPage");
-        return ApiResult.resultPage(total.intValue(),totalPage.intValue(),map.get("list"));
+        Long total = (Long) map.get("total");
+        Long totalPage = (Long) map.get("totalPage");
+        return ApiResult.resultPage(total.intValue(), totalPage.intValue(), map.get("list"));
     }
 
 
@@ -262,22 +258,20 @@ public class StoreOrderController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "key", value = "唯一的key", paramType = "query", dataType = "string")
     })
-    @ApiOperation(value = "订单详情",notes = "订单详情")
-    public ApiResult<YxStoreOrderQueryVo> detail(@PathVariable String key){
+    @ApiOperation(value = "订单详情", notes = "订单详情")
+    public ApiResult<YxStoreOrderQueryVo> detail(@PathVariable String key) {
         Long uid = LocalUser.getUser().getUid();
-        if(StrUtil.isEmpty(key)) {
+        if (StrUtil.isEmpty(key)) {
             throw new YshopException("参数错误");
         }
-        YxStoreOrderQueryVo storeOrder = storeOrderService.getOrderInfo(key,uid);
-        if(ObjectUtil.isNull(storeOrder)){
+        YxStoreOrderQueryVo storeOrder = storeOrderService.getOrderInfo(key, uid);
+        if (ObjectUtil.isNull(storeOrder)) {
             throw new YshopException("订单不存在");
         }
-        storeOrder = creatShareProductService.handleQrcode(storeOrder,path);
+        storeOrder = creatShareProductService.handleQrcode(storeOrder, path);
 
         return ApiResult.ok(storeOrderService.handleOrder(storeOrder));
     }
-
-
 
 
     /**
@@ -286,10 +280,10 @@ public class StoreOrderController {
     @AppLog(value = "订单收货", type = 1)
     @AuthCheck
     @PostMapping("/order/take")
-    @ApiOperation(value = "订单收货",notes = "订单收货")
-    public ApiResult<Boolean> orderTake(@Validated @RequestBody DoOrderParam param){
+    @ApiOperation(value = "订单收货", notes = "订单收货")
+    public ApiResult<Boolean> orderTake(@Validated @RequestBody DoOrderParam param) {
         Long uid = LocalUser.getUser().getUid();
-        storeOrderService.takeOrder(param.getUni(),uid);
+        storeOrderService.takeOrder(param.getUni(), uid);
         return ApiResult.ok();
     }
 
@@ -297,8 +291,8 @@ public class StoreOrderController {
      * 订单产品信息
      */
     @PostMapping("/order/product")
-    @ApiOperation(value = "订单产品信息",notes = "订单产品信息")
-    public ApiResult<OrderCartInfoVo> product(@Validated @RequestBody ProductOrderParam param){
+    @ApiOperation(value = "订单产品信息", notes = "订单产品信息")
+    public ApiResult<OrderCartInfoVo> product(@Validated @RequestBody ProductOrderParam param) {
         return ApiResult.ok(orderSupplyService.getProductOrder(param.getUnique()));
     }
 
@@ -309,12 +303,49 @@ public class StoreOrderController {
     @AuthCheck
     @NoRepeatSubmit
     @PostMapping("/order/comment")
-    @ApiOperation(value = "订单评价",notes = "订单评价")
-    public ApiResult<Boolean> comment(@Valid @RequestBody ProductReplyParam param){
+    @ApiOperation(value = "订单评价", notes = "订单评价")
+    public ApiResult<Boolean> comment(@Valid @RequestBody ProductReplyParam param) {
         YxUser user = LocalUser.getUser();
-        storeOrderService.orderComment(user,param.getUnique(),
+        YxStoreOrderCartInfo orderCartInfo = storeOrderCartInfoService
+                .getOne(Wrappers.<YxStoreOrderCartInfo>lambdaQuery()
+                        .eq(YxStoreOrderCartInfo::getUnique,param.getUnique()));
+        storeOrderService.orderComment(orderCartInfo, user, param.getUnique(),
                 param.getComment(),
-                param.getPics(),param.getProductScore(),param.getServiceScore());
+                param.getPics(), param.getProductScore(), param.getServiceScore());
+
+        //增加状态
+        orderStatusService.create(orderCartInfo.getOid(),
+                OrderLogEnum.EVAL_ORDER.getValue(),
+                OrderLogEnum.EVAL_ORDER.getDesc());
+        return ApiResult.ok();
+    }
+
+    /**
+     * 订单评价
+     */
+    @AppLog(value = "订单评价", type = 1)
+    @AuthCheck
+    @NoRepeatSubmit
+    @PostMapping("/order/comments")
+    @ApiOperation(value = "订单评价", notes = "订单评价")
+    public ApiResult<Boolean> comments(@Valid @RequestBody List<ProductReplyParam> param) {
+        YxUser user = LocalUser.getUser();
+        if (param.size() > 0) {
+            YxStoreOrderCartInfo orderCartInfo = storeOrderCartInfoService
+                    .getOne(Wrappers.<YxStoreOrderCartInfo>lambdaQuery()
+                            .eq(YxStoreOrderCartInfo::getUnique,param.get(0).getUnique()));
+
+            for (ProductReplyParam productReplyParam : param) {
+                storeOrderService.orderComment(orderCartInfo , user, productReplyParam.getUnique(),
+                        productReplyParam.getComment(),
+                        productReplyParam.getPics(), productReplyParam.getProductScore(), productReplyParam.getServiceScore());
+            }
+
+            //增加状态
+            orderStatusService.create(orderCartInfo.getOid(),
+                    OrderLogEnum.EVAL_ORDER.getValue(),
+                    OrderLogEnum.EVAL_ORDER.getDesc());
+        }
         return ApiResult.ok();
     }
 
@@ -325,10 +356,10 @@ public class StoreOrderController {
     @AppLog(value = "订单删除", type = 1)
     @AuthCheck
     @PostMapping("/order/del")
-    @ApiOperation(value = "订单删除",notes = "订单删除")
-    public ApiResult<Boolean> orderDel(@Validated @RequestBody DoOrderParam param){
+    @ApiOperation(value = "订单删除", notes = "订单删除")
+    public ApiResult<Boolean> orderDel(@Validated @RequestBody DoOrderParam param) {
         Long uid = LocalUser.getUser().getUid();
-        storeOrderService.removeOrder(param.getUni(),uid);
+        storeOrderService.removeOrder(param.getUni(), uid);
         return ApiResult.ok();
     }
 
@@ -336,8 +367,8 @@ public class StoreOrderController {
      * 订单退款理由
      */
     @GetMapping("/order/refund/reason")
-    @ApiOperation(value = "订单退款理由",notes = "订单退款理由")
-    public ApiResult<Object> refundReason(){
+    @ApiOperation(value = "订单退款理由", notes = "订单退款理由")
+    public ApiResult<Object> refundReason() {
         ArrayList<String> list = new ArrayList<>();
         list.add("收货地址填错了");
         list.add("与描述不符");
@@ -356,13 +387,13 @@ public class StoreOrderController {
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/order/refund/verify")
-    @ApiOperation(value = "订单退款审核",notes = "订单退款审核")
-    public ApiResult<Boolean> refundVerify(@RequestBody RefundParam param){
+    @ApiOperation(value = "订单退款审核", notes = "订单退款审核")
+    public ApiResult<Boolean> refundVerify(@RequestBody RefundParam param) {
         Long uid = LocalUser.getUser().getUid();
         storeOrderService.orderApplyRefund(param.getRefundReasonWapExplain(),
                 param.getRefundReasonWapImg(),
                 EmojiParser.removeAllEmojis(param.getText()),
-                param.getUni(),uid);
+                param.getUni(), uid);
         return ApiResult.ok();
     }
 
@@ -373,10 +404,22 @@ public class StoreOrderController {
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/order/cancel")
-    @ApiOperation(value = "订单取消",notes = "订单取消")
-    public ApiResult<Boolean> cancelOrder(@Validated @RequestBody HandleOrderParam param){
+    @ApiOperation(value = "订单取消", notes = "订单取消")
+    public ApiResult<Boolean> cancelOrder(@Validated @RequestBody HandleOrderParam param) {
         Long uid = LocalUser.getUser().getUid();
-        storeOrderService.cancelOrder(param.getId(),uid);
+        YxStoreOrderQueryVo orderInfo = storeOrderService.getOrderInfo(param.getId(), uid);
+        if (ObjectUtil.isNull(orderInfo)) {
+            throw new YshopException("订单不存在");
+        }
+        if (orderInfo.getStatus() != 0) {
+            throw new YshopException("订单不能取消");
+        }
+        if (orderInfo.getPaid() == 1) {
+            BigDecimal bigDecimal = new BigDecimal("100");
+            int payPrice = bigDecimal.multiply(orderInfo.getPayPrice()).intValue();
+            weixinPayService.refundOrder(param.getId(),payPrice);
+        }
+        storeOrderService.cancelOrder(param.getId(), uid);
         return ApiResult.ok();
     }
 
@@ -386,8 +429,8 @@ public class StoreOrderController {
      */
     @AuthCheck
     @PostMapping("/order/express")
-    @ApiOperation(value = "获取物流信息",notes = "获取物流信息")
-    public ApiResult<ExpressInfo> express( @RequestBody ExpressParam expressInfoDo){
+    @ApiOperation(value = "获取物流信息", notes = "获取物流信息")
+    public ApiResult<ExpressInfo> express(@RequestBody ExpressParam expressInfoDo) {
 
         //顺丰轨迹查询处理
         String lastFourNumber = "";
@@ -395,15 +438,15 @@ public class StoreOrderController {
             YxStoreOrderDto yxStoreOrderDto;
             yxStoreOrderDto = storeOrderService.getOrderDetail(Long.valueOf(expressInfoDo.getOrderCode()));
             lastFourNumber = yxStoreOrderDto.getUserPhone();
-            if (lastFourNumber.length()==11) {
-                lastFourNumber = StrUtil.sub(lastFourNumber,lastFourNumber.length(),-4);
+            if (lastFourNumber.length() == 11) {
+                lastFourNumber = StrUtil.sub(lastFourNumber, lastFourNumber.length(), -4);
             }
         }
 
         ExpressService expressService = ExpressAutoConfiguration.expressService();
         ExpressInfo expressInfo = expressService.getExpressInfo(expressInfoDo.getOrderCode(),
-                expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode(),lastFourNumber);
-        if(!expressInfo.isSuccess()) {
+                expressInfoDo.getShipperCode(), expressInfoDo.getLogisticCode(), lastFourNumber);
+        if (!expressInfo.isSuccess()) {
             throw new YshopException(expressInfo.getReason());
         }
         return ApiResult.ok(expressInfo);
@@ -416,12 +459,12 @@ public class StoreOrderController {
     @NoRepeatSubmit
     @AuthCheck
     @PostMapping("/order/order_verific")
-    @ApiOperation(value = "订单核销",notes = "订单核销")
-    public ApiResult<Object> orderVerify( @RequestBody OrderVerifyParam param){
+    @ApiOperation(value = "订单核销", notes = "订单核销")
+    public ApiResult<Object> orderVerify(@RequestBody OrderVerifyParam param) {
         Long uid = LocalUser.getUser().getUid();
         YxStoreOrderQueryVo orderQueryVo = storeOrderService.verifyOrder(param.getVerifyCode(),
-                param.getIsConfirm(),uid);
-        if(orderQueryVo != null) {
+                param.getIsConfirm(), uid);
+        if (orderQueryVo != null) {
             return ApiResult.ok(orderQueryVo);
         }
 
@@ -429,16 +472,14 @@ public class StoreOrderController {
     }
 
 
-
-
     @AuthCheck
     @GetMapping("/order/getSubscribeTemplate")
-    @ApiOperation(value = "获取订阅消息模板ID",notes = "获取订阅消息模板ID")
-    public ApiResult<List<String>> getSubscribeTemplate(){
+    @ApiOperation(value = "获取订阅消息模板ID", notes = "获取订阅消息模板ID")
+    public ApiResult<List<String>> getSubscribeTemplate() {
         List<YxWechatTemplate> yxWechatTemplate = yxWechatTemplateService.lambdaQuery()
-                .eq(YxWechatTemplate::getType,"subscribe")
+                .eq(YxWechatTemplate::getType, "subscribe")
                 .eq(YxWechatTemplate::getStatus, ShopCommonEnum.IS_STATUS_1.getValue()).list();
-        List<String> temId = yxWechatTemplate.stream().map(tem-> tem.getTempid()).collect(Collectors.toList());
+        List<String> temId = yxWechatTemplate.stream().map(tem -> tem.getTempid()).collect(Collectors.toList());
         return ApiResult.ok(temId);
     }
 

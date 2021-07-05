@@ -166,4 +166,9 @@ public class YxStoreProductRelationServiceImpl extends BaseServiceImpl<YxStorePr
         }
         FileUtil.downloadExcel(list, response);
     }
+
+    @Override
+    public void collectDelFoot(List<Long> ids) {
+        yxStoreProductRelationMapper.deleteBatchIds(ids);
+    }
 }

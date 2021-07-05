@@ -125,7 +125,8 @@ public class WeixinPayService {
         orderRequest.setOutTradeNo(orderId);
         orderRequest.setTotalFee(payPrice);
         orderRequest.setSpbillCreateIp(IpUtil.getLocalIP());
-        orderRequest.setNotifyUrl(this.getApiUrl() + "/api/wechat/notify");
+//        orderRequest.setNotifyUrl(this.getApiUrl() + "/api/wechat/notify");
+        orderRequest.setNotifyUrl("http://www.itxzz.top/api/wechat/notify");
         orderRequest.setBody(body);
         orderRequest.setAttach(attach);
 
@@ -183,8 +184,8 @@ public class WeixinPayService {
         wxPayRefundRequest.setOutRefundNo(orderSn);
         //退款金额
         wxPayRefundRequest.setRefundFee(refundFee);
-        wxPayRefundRequest.setNotifyUrl(this.getApiUrl() + "/api/notify/refund");
-
+//        wxPayRefundRequest.setNotifyUrl(this.getApiUrl() + "/api/notify/refund");
+        wxPayRefundRequest.setNotifyUrl("http://www.itxzz.top/api/wechat/notify");
         try {
             wxPayService.refundV2(wxPayRefundRequest);
         } catch (WxPayException e) {

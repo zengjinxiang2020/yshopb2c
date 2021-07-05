@@ -68,6 +68,7 @@ public class YxStoreOrderCartInfoServiceImpl extends BaseServiceImpl<StoreOrderC
             info.setProductId(cart.getProductId());
             info.setCartInfo(JSONObject.toJSON(cart).toString());
             info.setUnique(IdUtil.simpleUUID());
+            info.setIsAfterSales(1);
             list.add(info);
         }
 

@@ -33,6 +33,7 @@ import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.utils.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -43,13 +44,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -318,5 +313,41 @@ public class YxStoreCouponUserServiceImpl extends BaseServiceImpl<YxStoreCouponU
             list.add(map);
         }
         FileUtil.downloadExcel(list, response);
+    }
+
+    @Override
+    public Map<String, Object> getUserPCCoupon(Long uid, int page, int limit, Integer type) {
+        Page<YxStoreCouponUser> yxStoreCouponUserPage = new Page<>(page, limit);
+        yxStoreCouponUserMapper.selectPage(yxStoreCouponUserPage,Wrappers.<YxStoreCouponUser>lambdaQuery()
+                        .eq(YxStoreCouponUser::getUid,uid).eq(YxStoreCouponUser::getStatus,type));
+
+        List<YxStoreCouponUserQueryVo> storeCouponUserQueryVoList = new ArrayList<>();
+        long nowTime = System.currentTimeMillis();
+        for (YxStoreCouponUser couponUser : yxStoreCouponUserPage.getRecords()) {
+            YxStoreCouponUserQueryVo queryVo = generator.convert(couponUser,YxStoreCouponUserQueryVo.class);
+            if(couponUser.getIsFail() == 1){
+                queryVo.set_type(CouponEnum.USE_0.getValue());
+                queryVo.set_msg("已失效");
+            }else if (couponUser.getStatus() == 1){
+                queryVo.set_type(CouponEnum.USE_0.getValue());
+                queryVo.set_msg("已使用");
+            }else if (couponUser.getStatus() == 2){
+                queryVo.set_type(CouponEnum.USE_0.getValue());
+                queryVo.set_msg("已过期");
+            }else if(couponUser.getCreateTime().getTime() > nowTime || couponUser.getEndTime().getTime() < nowTime){
+                queryVo.set_type(CouponEnum.USE_0.getValue());
+                queryVo.set_msg("已过期");
+            }else{
+                queryVo.set_type(CouponEnum.USE_1.getValue());
+                queryVo.set_msg("可使用");
+            }
+
+            storeCouponUserQueryVoList.add(queryVo);
+        }
+        Map<String,Object> map = new HashMap<>();
+        map.put("list",storeCouponUserQueryVoList);
+        map.put("total",yxStoreCouponUserPage.getTotal());
+        map.put("totalPage",yxStoreCouponUserPage.getPages());
+        return map;
     }
 }

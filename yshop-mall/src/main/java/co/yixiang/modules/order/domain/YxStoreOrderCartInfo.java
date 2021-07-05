@@ -47,6 +47,9 @@ public class YxStoreOrderCartInfo implements Serializable {
     @TableField(value = "`unique`")
     private String unique;
 
+    /** 是否能售后0不能1能 */
+    private Integer isAfterSales;
+
 
     public void copy(YxStoreOrderCartInfo source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

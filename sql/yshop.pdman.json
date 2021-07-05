@@ -5883,6 +5883,53 @@
               "autoIncrement": false,
               "defaultValue": ""
             }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
           ]
         },
         {
@@ -6210,17 +6257,6 @@
           },
           "to": {
             "entity": "yx_store_order",
-            "field": "id"
-          }
-        },
-        {
-          "relation": "0,n:1",
-          "from": {
-            "entity": "yx_store_order_cart_info",
-            "field": "cart_id"
-          },
-          "to": {
-            "entity": "yx_store_cart",
             "field": "id"
           }
         },
@@ -11332,6 +11368,347 @@
               "defaultValue": ""
             }
           ]
+        }
+      ],
+      "graphCanvas": {
+        "nodes": [],
+        "edges": []
+      },
+      "associations": []
+    },
+    {
+      "name": "after_sales",
+      "chnname": "售后",
+      "entities": [
+        {
+          "title": "yx_store_after_sales",
+          "fields": [
+            {
+              "name": "id",
+              "type": "BIGINT UNSIGNED_20",
+              "remark": "",
+              "chnname": "",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "order_code",
+              "type": "BIGINT UNSIGNED_20",
+              "remark": "",
+              "chnname": "订单号"
+            },
+            {
+              "name": "refund_amount",
+              "type": "Money",
+              "remark": "",
+              "chnname": "退款金额"
+            },
+            {
+              "name": "service_type",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "服务类型0仅退款1退货退款"
+            },
+            {
+              "name": "reasons",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "申请原因"
+            },
+            {
+              "name": "explain",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "说明"
+            },
+            {
+              "name": "explain_img",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "说明图片->多个用逗号分割"
+            },
+            {
+              "name": "delivery_sn",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "物流单号"
+            },
+            {
+              "name": "delivery_name",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "物流名称"
+            },
+            {
+              "name": "state",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "状态"
+            },
+            {
+              "name": "create_time",
+              "type": "DATETIME",
+              "chnname": "添加时间",
+              "remark": "",
+              "pk": false,
+              "notNull": false,
+              "autoIncrement": false,
+              "defaultValue": ""
+            },
+            {
+              "name": "is_del",
+              "type": "BIT_1",
+              "chnname": "逻辑删除",
+              "remark": "",
+              "pk": false,
+              "notNull": false,
+              "autoIncrement": false,
+              "defaultValue": ""
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "售后记录表"
+        },
+        {
+          "title": "yx_store_after_sales_item",
+          "fields": [
+            {
+              "name": "id",
+              "type": "BIGINT UNSIGNED_20",
+              "remark": "",
+              "chnname": "主键id",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "store_after_sales_id",
+              "type": "BIGINT UNSIGNED_20",
+              "remark": "",
+              "chnname": "售后id"
+            },
+            {
+              "name": "product_id",
+              "type": "BIGINT UNSIGNED_20",
+              "remark": "",
+              "chnname": "商品id"
+            },
+            {
+              "name": "cart_info",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "退货东西的详情信息"
+            },
+            {
+              "name": "is_del",
+              "type": "BIT_1",
+              "chnname": "逻辑删除",
+              "remark": "",
+              "pk": false,
+              "notNull": false,
+              "autoIncrement": false,
+              "defaultValue": ""
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "售后子表"
+        },
+        {
+          "title": "yx_store_after_sales_status",
+          "fields": [
+            {
+              "name": "id",
+              "type": "BIGINT UNSIGNED_20",
+              "remark": "",
+              "chnname": "",
+              "pk": true,
+              "notNull": true,
+              "autoIncrement": true
+            },
+            {
+              "name": "store_after_sales_id",
+              "type": "BIGINT UNSIGNED_20",
+              "chnname": "售后id",
+              "remark": "",
+              "pk": false,
+              "notNull": false,
+              "autoIncrement": false,
+              "defaultValue": ""
+            },
+            {
+              "name": "change_type",
+              "type": "DefaultString",
+              "chnname": "操作类型",
+              "remark": "",
+              "pk": false,
+              "notNull": false,
+              "autoIncrement": false,
+              "defaultValue": ""
+            },
+            {
+              "name": "change_message",
+              "type": "ShortString",
+              "chnname": "操作备注",
+              "remark": "",
+              "pk": false,
+              "notNull": false,
+              "autoIncrement": false,
+              "defaultValue": ""
+            },
+            {
+              "name": "change_time",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "操作时间"
+            },
+            {
+              "name": "operator",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "操作人"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "售后订单操作详情表"
         }
       ],
       "graphCanvas": {

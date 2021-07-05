@@ -52,9 +52,10 @@ yshop:
 
 logging:
   level:
-    co.yixiang: ERROR
-    org.springframework.web: ERROR
-    me.chanjar.weixin: ERROR
+    co.yixiang: DEBUG
+    org.springframework.web: DEBUG
+    com.github.binarywang.demo.wx.mp: DEBUG
+    me.chanjar.weixin: DEBUG
 
 mybatis-plus:
   check-config-location: true

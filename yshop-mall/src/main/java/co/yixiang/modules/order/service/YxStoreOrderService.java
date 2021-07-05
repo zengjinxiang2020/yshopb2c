@@ -10,6 +10,7 @@ package co.yixiang.modules.order.service;
 
 import co.yixiang.common.service.BaseService;
 import co.yixiang.modules.order.domain.YxStoreOrder;
+import co.yixiang.modules.order.domain.YxStoreOrderCartInfo;
 import co.yixiang.modules.order.param.OrderParam;
 import co.yixiang.modules.order.service.dto.OrderCountDto;
 import co.yixiang.modules.order.service.dto.OrderTimeDataDto;
@@ -38,6 +39,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
 
     /**
      * 订单评价
+     * @param orderCartInfo
      * @param user user
      * @param unique 订单orderCart唯一值
      * @param comment 评论内容
@@ -45,7 +47,7 @@ public interface YxStoreOrderService  extends BaseService<YxStoreOrder>{
      * @param productScore 评分
      * @param serviceScore 评分
      */
-    void orderComment(YxUser user, String unique, String comment, String pics, String productScore,
+    void orderComment(YxStoreOrderCartInfo orderCartInfo, YxUser user, String unique, String comment, String pics, String productScore,
                       String serviceScore);
 
     /**

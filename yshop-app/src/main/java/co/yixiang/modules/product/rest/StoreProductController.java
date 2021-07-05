@@ -9,6 +9,7 @@
 package co.yixiang.modules.product.rest;
 
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -26,6 +27,7 @@ import co.yixiang.enums.AppFromEnum;
 import co.yixiang.enums.ProductEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.modules.product.domain.YxStoreProduct;
+import co.yixiang.modules.product.param.CollectDelFootParam;
 import co.yixiang.modules.product.param.YxStoreProductQueryParam;
 import co.yixiang.modules.product.param.YxStoreProductRelationQueryParam;
 import co.yixiang.modules.product.service.YxStoreProductRelationService;
@@ -49,12 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.FontFormatException;
 import java.io.File;
@@ -260,6 +257,22 @@ public class StoreProductController {
         }
         productRelationService.delRroductRelation(Long.valueOf(param.getId()),
                 uid,param.getCategory());
+        return ApiResult.ok();
+    }
+
+    /**
+     * 取消收藏/足跡
+     */
+    @AppLog(value = "删除足跡", type = 1)
+    @NoRepeatSubmit
+    @AuthCheck
+    @DeleteMapping("/collect/delFoot")
+    @ApiOperation(value = "删除足跡",notes = "删除足跡")
+    public ApiResult<Boolean> collectDelFoot(@Validated @RequestBody CollectDelFootParam param){
+        if (CollectionUtil.isEmpty(param.getIds())){
+            throw new YshopException("参数非法");
+        }
+        productRelationService.collectDelFoot(param.getIds());
         return ApiResult.ok();
     }
 
