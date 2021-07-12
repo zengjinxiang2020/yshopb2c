@@ -110,6 +110,7 @@ public class StoreSeckillController {
 
         YxSystemGroupDataQueryCriteria queryCriteria = new YxSystemGroupDataQueryCriteria();
         queryCriteria.setGroupName(ShopConstants.YSHOP_SECKILL_TIME);
+        queryCriteria.setStatus(1);
         List<YxSystemGroupData> yxSystemGroupDataList = yxSystemGroupDataService.queryAll(queryCriteria);
 
         List<SeckillTimeDto> list = new ArrayList<>();
