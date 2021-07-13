@@ -22,14 +22,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* @author hupeng
-* @date 2020-05-13
-*/
-public interface YxStoreSeckillService  extends BaseService<YxStoreSeckill>{
+ * @author hupeng
+ * @date 2020-05-13
+ */
+public interface YxStoreSeckillService extends BaseService<YxStoreSeckill> {
 
 
     /**
      * 产品详情
+     *
      * @param id 秒杀商品id
      * @return StoreSeckillVo
      */
@@ -37,7 +38,8 @@ public interface YxStoreSeckillService  extends BaseService<YxStoreSeckill>{
 
     /**
      * 秒杀产品列表
-     * @param page page
+     *
+     * @param page  page
      * @param limit limit
      * @return list
      */
@@ -45,33 +47,37 @@ public interface YxStoreSeckillService  extends BaseService<YxStoreSeckill>{
 
     /**
      * 秒杀产品列表(首页用)
-     * @param page page
+     *
+     * @param page  page
      * @param limit limit
      * @return list
      */
     List<YxStoreSeckillQueryVo> getList(int page, int limit);
 
     /**
-    * 查询数据分页
-    * @param criteria 条件
-    * @param pageable 分页参数
-    * @return Map<String,Object>
-    */
-    Map<String,Object> queryAll(YxStoreSeckillQueryCriteria criteria, Pageable pageable);
+     * 查询数据分页
+     *
+     * @param criteria 条件
+     * @param pageable 分页参数
+     * @return Map<String, Object>
+     */
+    Map<String, Object> queryAll(YxStoreSeckillQueryCriteria criteria, Pageable pageable);
 
     /**
-    * 查询所有数据不分页
-    * @param criteria 条件参数
-    * @return List<YxStoreSeckillDto>
-    */
+     * 查询所有数据不分页
+     *
+     * @param criteria 条件参数
+     * @return List<YxStoreSeckillDto>
+     */
     List<YxStoreSeckill> queryAll(YxStoreSeckillQueryCriteria criteria);
 
     /**
-    * 导出数据
-    * @param all 待导出的数据
-    * @param response /
-    * @throws IOException /
-    */
+     * 导出数据
+     *
+     * @param all      待导出的数据
+     * @param response /
+     * @throws IOException /
+     */
     void download(List<YxStoreSeckillDto> all, HttpServletResponse response) throws IOException;
 
     boolean saveSeckill(YxStoreSeckillDto resources);

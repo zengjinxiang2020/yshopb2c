@@ -64,9 +64,9 @@ public class YxStoreProductRuleServiceImpl extends BaseServiceImpl<YxStoreProduc
 
 
     @Override
-    public void download(List<YxStoreProductRuleDto> all, HttpServletResponse response) throws IOException {
+    public void download(List<YxStoreProductRule> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
-        for (YxStoreProductRuleDto yxStoreProductRule : all) {
+        for (YxStoreProductRule yxStoreProductRule : all) {
             Map<String,Object> map = new LinkedHashMap<>();
             map.put("规格名称", yxStoreProductRule.getRuleName());
             map.put("规格值", yxStoreProductRule.getRuleValue());

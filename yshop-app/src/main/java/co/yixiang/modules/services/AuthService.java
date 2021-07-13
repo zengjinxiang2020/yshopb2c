@@ -20,15 +20,18 @@ import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.AppFromEnum;
 import co.yixiang.modules.auth.param.LoginParam;
 import co.yixiang.modules.auth.param.RegParam;
+import co.yixiang.modules.mp.config.WxMaConfiguration;
+import co.yixiang.modules.mp.config.WxMpConfiguration;
 import co.yixiang.modules.shop.domain.YxSystemAttachment;
 import co.yixiang.modules.shop.service.YxSystemAttachmentService;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
 import co.yixiang.modules.user.vo.OnlineUser;
-import co.yixiang.modules.mp.config.WxMpConfiguration;
-import co.yixiang.modules.mp.config.WxMaConfiguration;
-import co.yixiang.utils.*;
+import co.yixiang.utils.EncryptUtils;
+import co.yixiang.utils.RedisUtils;
+import co.yixiang.utils.ShopKeyUtils;
+import co.yixiang.utils.StringUtils;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,10 +72,9 @@ public class AuthService {
     }
 
 
-
-
     /**
      * 小程序登陆
+     *
      * @param loginParam loginParam
      * @return long
      */
@@ -101,7 +103,7 @@ public class AuthService {
             }
 
             YxUser yxUser = userService.getOne(Wrappers.<YxUser>lambdaQuery()
-                    .eq(YxUser::getUsername, openid),false);
+                    .eq(YxUser::getUsername, openid), false);
 
             if (ObjectUtil.isNull(yxUser)) {
 
@@ -135,7 +137,7 @@ public class AuthService {
                 userService.save(yxUser);
 
             } else {
-                WechatUserDto wechatUser =yxUser.getWxProfile();
+                WechatUserDto wechatUser = yxUser.getWxProfile();
                 if ((StrUtil.isBlank(wechatUser.getRoutineOpenid()) && StrUtil.isNotBlank(session.getOpenid()))
                         || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(session.getUnionid()))) {
                     wechatUser.setRoutineOpenid(session.getOpenid());
@@ -161,12 +163,13 @@ public class AuthService {
 
     /**
      * 公众号登陆
-     * @param code code码
+     *
+     * @param code   code码
      * @param spread 上级用户
      * @return uid
      */
     @Transactional(rollbackFor = Exception.class)
-    public YxUser wechatLogin(String code,String spread){
+    public YxUser wechatLogin(String code, String spread) {
         try {
             WxMpService wxService = WxMpConfiguration.getWxMpService();
             WxOAuth2AccessToken wxOAuth2AccessToken = wxService.getOAuth2Service().getAccessToken(code);
@@ -180,11 +183,11 @@ public class AuthService {
             }
 
             YxUser yxUser = userService.getOne(Wrappers.<YxUser>lambdaQuery()
-                    .eq(YxUser::getUsername,openid),false);
+                    .eq(YxUser::getUsername, openid), false);
 
             //long uid = 0;
             YxUser returnUser = null;
-            if(yxUser == null){
+            if (yxUser == null) {
                 //过滤掉表情
                 String nickname = wxMpUser.getNickname();
                 log.info("昵称：{}", nickname);
@@ -218,11 +221,11 @@ public class AuthService {
                 userService.save(user);
 
                 returnUser = user;
-            }else{
+            } else {
                 returnUser = yxUser;
                 WechatUserDto wechatUser = yxUser.getWxProfile();
-                if((StrUtil.isBlank(wechatUser.getOpenid()) && StrUtil.isNotBlank(wxMpUser.getOpenId()))
-                        || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(wxMpUser.getUnionId()))){
+                if ((StrUtil.isBlank(wechatUser.getOpenid()) && StrUtil.isNotBlank(wxMpUser.getOpenId()))
+                        || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(wxMpUser.getUnionId()))) {
                     wechatUser.setOpenid(wxMpUser.getOpenId());
                     wechatUser.setUnionId(wxMpUser.getUnionId());
 
@@ -234,9 +237,9 @@ public class AuthService {
 
             }
 
-            userService.setSpread(spread,returnUser.getUid());
+            userService.setSpread(spread, returnUser.getUid());
 
-            log.error("spread:{}",spread);
+            log.error("spread:{}", spread);
 
             return returnUser;
 
@@ -250,10 +253,11 @@ public class AuthService {
 
     /**
      * 注册
+     *
      * @param param RegDTO
      */
     @Transactional(rollbackFor = Exception.class)
-    public void register(RegParam param){
+    public void register(RegParam param) {
 
         String account = param.getAccount();
         String ip = IpUtil.getRequestIp();
@@ -273,7 +277,7 @@ public class AuthService {
         //设置推广关系
         if (StrUtil.isNotBlank(param.getInviteCode())) {
             YxSystemAttachment systemAttachment = systemAttachmentService.getByCode(param.getInviteCode());
-            if(systemAttachment != null){
+            if (systemAttachment != null) {
                 userService.setSpread(String.valueOf(systemAttachment.getUid()),
                         user.getUid());
             }
@@ -284,18 +288,19 @@ public class AuthService {
 
     /**
      * 保存在线用户信息
-     * @param yxUser /
-     * @param token /
+     *
+     * @param yxUser  /
+     * @param token   /
      * @param request /
      */
-    public void save(YxUser yxUser, String token, HttpServletRequest request){
+    public void save(YxUser yxUser, String token, HttpServletRequest request) {
         String job = "yshop开发工程师";
         String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
         String address = StringUtils.getCityInfo(ip);
         OnlineUser onlineUser = null;
         try {
-            onlineUser = new OnlineUser(yxUser.getUsername(), yxUser.getNickname(), job, browser ,
+            onlineUser = new OnlineUser(yxUser.getUsername(), yxUser.getNickname(), job, browser,
                     ip, address, EncryptUtils.desEncrypt(token), new Date());
         } catch (Exception e) {
             e.printStackTrace();
@@ -339,10 +344,11 @@ public class AuthService {
 
     /**
      * 退出登录
+     *
      * @param token /
      */
-    public void logout(String userName,String token) {
-        String key = ShopConstants.YSHOP_APP_LOGIN_USER+ userName + ":" + token;
+    public void logout(String userName, String token) {
+        String key = ShopConstants.YSHOP_APP_LOGIN_USER + userName + ":" + token;
         redisUtils.del(key);
     }
 
@@ -365,7 +371,6 @@ public class AuthService {
         onlineUsers.sort((o1, o2) -> o2.getLoginTime().compareTo(o1.getLoginTime()));
         return onlineUsers;
     }
-
 
 
 }

@@ -46,5 +46,5 @@ public interface YxStoreProductRuleService  extends BaseService<YxStoreProductRu
     * @param response /
     * @throws IOException /
     */
-    void download(List<YxStoreProductRuleDto> all, HttpServletResponse response) throws IOException;
+    void download(List<YxStoreProductRule> all, HttpServletResponse response) throws IOException;
 }

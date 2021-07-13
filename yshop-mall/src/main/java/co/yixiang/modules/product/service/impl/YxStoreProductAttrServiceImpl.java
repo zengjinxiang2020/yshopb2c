@@ -88,6 +88,10 @@ public class YxStoreProductAttrServiceImpl extends BaseServiceImpl<StoreProductA
             attrGroup.add(yxStoreProductAttr);
         }
 
+        /*int count = storeProductAttrValueService.count(Wrappers.<YxStoreProductAttrValue>lambdaQuery().eq(YxStoreProductAttrValue::getProductId, productId));
+        if (count > 0 ) {
+            throw new BadRequestException("该产品已被添加到其他活动,禁止操作!");
+        }*/
 
         List<YxStoreProductAttrValue> valueGroup = new ArrayList<>();
         for (ProductFormatDto productFormatDto : attrs) {

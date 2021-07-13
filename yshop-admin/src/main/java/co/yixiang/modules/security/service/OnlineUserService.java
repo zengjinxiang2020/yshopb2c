@@ -1,19 +1,15 @@
 /**
  * Copyright (C) 2018-2021
  * All rights reserved, Designed By www.yixiang.co
-
  */
 package co.yixiang.modules.security.service;
 
+import cn.hutool.core.util.StrUtil;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.modules.security.config.SecurityProperties;
 import co.yixiang.modules.security.security.vo.JwtUser;
 import co.yixiang.modules.user.vo.OnlineUser;
-import co.yixiang.utils.EncryptUtils;
-import co.yixiang.utils.FileUtil;
-import co.yixiang.utils.PageUtil;
-import co.yixiang.utils.RedisUtils;
-import co.yixiang.utils.StringUtils;
+import co.yixiang.utils.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,12 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author hupeng
@@ -50,18 +41,18 @@ public class OnlineUserService {
      * @param token /
      * @param request /
      */
-    public void save(JwtUser jwtUser, String token, HttpServletRequest request){
+    public void save(JwtUser jwtUser, String token, HttpServletRequest request) {
         String job = jwtUser.getDept() + "/" + jwtUser.getJob();
         String ip = StringUtils.getIp(request);
         String browser = StringUtils.getBrowser(request);
         String address = StringUtils.getCityInfo(ip);
         OnlineUser onlineUser = null;
         try {
-            onlineUser = new OnlineUser(jwtUser.getUsername(), jwtUser.getNickName(), job, browser , ip, address, EncryptUtils.desEncrypt(token), new Date());
+            onlineUser = new OnlineUser(jwtUser.getUsername(), jwtUser.getNickName(), job, browser, ip, address, EncryptUtils.desEncrypt(token), new Date());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        redisUtils.set(properties.getOnlineKey() + token, onlineUser, properties.getTokenValidityInSeconds()/1000);
+        redisUtils.set(properties.getOnlineKey() + token, onlineUser, properties.getTokenValidityInSeconds() / 1000);
     }
 
     /**
@@ -70,10 +61,10 @@ public class OnlineUserService {
      * @param pageable /
      * @return /
      */
-    public Map<String,Object> getAll(String filter, int type, Pageable pageable){
-        List<OnlineUser> onlineUsers = getAll(filter,type);
+    public Map<String, Object> getAll(String filter, int type, Pageable pageable) {
+        List<OnlineUser> onlineUsers = getAll(filter, type);
         return PageUtil.toPage(
-                PageUtil.toPage(pageable.getPageNumber(),pageable.getPageSize(),onlineUsers),
+                PageUtil.toPage(pageable.getPageNumber(), pageable.getPageSize(), onlineUsers),
                 onlineUsers.size()
         );
     }
@@ -83,11 +74,11 @@ public class OnlineUserService {
      * @param filter /
      * @return /
      */
-    public List<OnlineUser> getAll(String filter,int type){
+    public List<OnlineUser> getAll(String filter, int type) {
         List<String> keys = null;
-        if(type == 1){
+        if (type == 1) {
             keys = redisUtils.scan(ShopConstants.YSHOP_APP_LOGIN_USER + "*");
-        }else{
+        } else {
             keys = redisUtils.scan(properties.getOnlineKey() + "*");
         }
 
@@ -96,8 +87,8 @@ public class OnlineUserService {
         List<OnlineUser> onlineUsers = new ArrayList<>();
         for (String key : keys) {
             OnlineUser onlineUser = (OnlineUser) redisUtils.get(key);
-            if(StringUtils.isNotBlank(filter)){
-                if(onlineUser.toString().contains(filter)){
+            if (StringUtils.isNotBlank(filter)) {
+                if (onlineUser.toString().contains(filter)) {
                     onlineUsers.add(onlineUser);
                 }
             } else {
@@ -125,8 +116,8 @@ public class OnlineUserService {
      * @throws Exception /
      */
     public void kickOutT(String key) throws Exception {
-
-        String keyt = ShopConstants.YSHOP_APP_LOGIN_USER + EncryptUtils.desDecrypt(key);
+        String[] split = StrUtil.split(key, ":");
+        String keyt = ShopConstants.YSHOP_APP_LOGIN_USER + split[0] + ":" + EncryptUtils.desDecrypt(split[1]);
         redisUtils.del(keyt);
 
     }
@@ -149,7 +140,7 @@ public class OnlineUserService {
     public void download(List<OnlineUser> all, HttpServletResponse response) throws IOException {
         List<Map<String, Object>> list = new ArrayList<>();
         for (OnlineUser user : all) {
-            Map<String,Object> map = new LinkedHashMap<>();
+            Map<String, Object> map = new LinkedHashMap<>();
             map.put("用户名", user.getUserName());
             map.put("用户昵称", user.getNickName());
             map.put("登录IP", user.getIp());
@@ -167,29 +158,29 @@ public class OnlineUserService {
      * @return /
      */
     public OnlineUser getOne(String key) {
-        return (OnlineUser)redisUtils.get(key);
+        return (OnlineUser) redisUtils.get(key);
     }
 
     /**
      * 检测用户是否在之前已经登录，已经登录踢下线
      * @param userName 用户名
      */
-    public void checkLoginOnUser(String userName, String igoreToken){
-        List<OnlineUser> onlineUsers = getAll(userName,0);
-        if(onlineUsers ==null || onlineUsers.isEmpty()){
+    public void checkLoginOnUser(String userName, String igoreToken) {
+        List<OnlineUser> onlineUsers = getAll(userName, 0);
+        if (onlineUsers == null || onlineUsers.isEmpty()) {
             return;
         }
-        for(OnlineUser onlineUser:onlineUsers){
-            if(onlineUser.getUserName().equals(userName)){
+        for (OnlineUser onlineUser : onlineUsers) {
+            if (onlineUser.getUserName().equals(userName)) {
                 try {
-                    String token =EncryptUtils.desDecrypt(onlineUser.getKey());
-                    if(StringUtils.isNotBlank(igoreToken)&&!igoreToken.equals(token)){
+                    String token = EncryptUtils.desDecrypt(onlineUser.getKey());
+                    if (StringUtils.isNotBlank(igoreToken) && !igoreToken.equals(token)) {
                         this.kickOut(onlineUser.getKey());
-                    }else if(StringUtils.isBlank(igoreToken)){
+                    } else if (StringUtils.isBlank(igoreToken)) {
                         this.kickOut(onlineUser.getKey());
                     }
                 } catch (Exception e) {
-                    log.error("checkUser is error",e);
+                    log.error("checkUser is error", e);
                 }
             }
         }

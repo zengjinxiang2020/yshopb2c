@@ -55,7 +55,7 @@ public class StoreProductRuleController {
     @GetMapping(value = "/download")
     @PreAuthorize("@el.check('admin','yxStoreProductRule:list')")
     public void download(HttpServletResponse response, YxStoreProductRuleQueryCriteria criteria) throws IOException {
-        yxStoreProductRuleService.download(generator.convert(yxStoreProductRuleService.queryAll(criteria), YxStoreProductRuleDto.class), response);
+        yxStoreProductRuleService.download(yxStoreProductRuleService.queryAll(criteria) , response);
     }
 
     @GetMapping

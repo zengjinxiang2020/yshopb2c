@@ -79,16 +79,6 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
     @Autowired
     private YxShippingTemplatesService shippingTemplatesService;
 
-
-//    @Override
-//    public YxStoreSeckill getSeckill(int id) {
-//       LambdaQueryWrapper<YxStoreSeckill> wrapper = new LambdaQueryWrapper<>();
-//        int nowTime = OrderUtil.getSecondTimestampTwo();
-//        wrapper.eq("id",id).eq("is_del",0).eq("status",1)
-//                .le("start_time",nowTime).ge("stop_time",nowTime);
-//        return yxStoreSeckillMapper.selectOne(wrapper);
-//    }
-
     /**
      * 产品详情
      * @param id 砍价商品id
@@ -114,7 +104,7 @@ public class YxStoreSeckillServiceImpl extends BaseServiceImpl<YxStoreSeckillMap
         String tempName = "";
         if(StrUtil.isBlank(storeFreePostage)
                 || !NumberUtil.isNumber(storeFreePostage)
-                || Integer.valueOf(storeFreePostage) == 0){
+                || Integer.parseInt(storeFreePostage) == 0){
             tempName = "全国包邮";
         }else{
             YxShippingTemplates shippingTemplates = shippingTemplatesService.getById(storeSeckill.getTempId());

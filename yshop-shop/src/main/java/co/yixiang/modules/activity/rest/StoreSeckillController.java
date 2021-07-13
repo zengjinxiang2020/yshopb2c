@@ -1,7 +1,6 @@
 /**
  * Copyright (C) 2018-2021
  * All rights reserved, Designed By www.yixiang.co
-
  */
 package co.yixiang.modules.activity.rest;
 
@@ -43,9 +42,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
-* @author hupeng
-* @date 2019-12-14
-*/
+ * @author hupeng
+ * @date 2019-12-14
+ */
 @Api(tags = "商城:秒杀管理")
 @RestController
 @RequestMapping("api")
@@ -57,6 +56,7 @@ public class StoreSeckillController {
     private final YxStoreProductRuleService yxStoreProductRuleService;
     private final YxStoreProductAttrValueService storeProductAttrValueService;
     private final YxStoreProductAttrResultService yxStoreProductAttrResultService;
+
     public StoreSeckillController(IGenerator generator, YxStoreSeckillService yxStoreSeckillService, YxShippingTemplatesService yxShippingTemplatesService,
                                   YxStoreProductRuleService yxStoreProductRuleService, YxStoreProductAttrValueService storeProductAttrValueService,
                                   YxStoreProductAttrResultService yxStoreProductAttrResultService) {
@@ -72,12 +72,12 @@ public class StoreSeckillController {
     @ApiOperation(value = "列表")
     @GetMapping(value = "/yxStoreSeckill")
     @PreAuthorize("hasAnyRole('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_SELECT')")
-    public ResponseEntity getYxStoreSeckills(YxStoreSeckillQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity<>(yxStoreSeckillService.queryAll(criteria,pageable),HttpStatus.OK);
+    public ResponseEntity getYxStoreSeckills(YxStoreSeckillQueryCriteria criteria, Pageable pageable) {
+        return new ResponseEntity<>(yxStoreSeckillService.queryAll(criteria, pageable), HttpStatus.OK);
     }
 
 
-    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY, allEntries = true)
     @Log("发布")
     @ApiOperation(value = "发布")
     @PutMapping(value = "/yxStoreSeckill")
@@ -90,71 +90,73 @@ public class StoreSeckillController {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
     }
-    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
+
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY, allEntries = true)
     @ForbidSubmit
     @Log("删除")
     @ApiOperation(value = "删除")
     @DeleteMapping(value = "/yxStoreSeckill/{id}")
     @PreAuthorize("hasAnyRole('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_DELETE')")
-    public ResponseEntity delete(@PathVariable Integer id){
+    public ResponseEntity delete(@PathVariable Integer id) {
         yxStoreSeckillService.removeById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
-    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY,allEntries = true)
+
+    @CacheEvict(cacheNames = ShopConstants.YSHOP_REDIS_INDEX_KEY, allEntries = true)
     @Log("新增秒杀")
     @ApiOperation(value = "新增秒杀")
     @PostMapping(value = "/yxStoreSeckill")
     @PreAuthorize("hasAnyRole('admin','YXSTORESECKILL_ALL','YXSTORESECKILL_EDIT')")
-    public ResponseEntity add(@Validated @RequestBody YxStoreSeckillDto resources){
-        return new ResponseEntity<>(yxStoreSeckillService.saveSeckill(resources),HttpStatus.CREATED);
+    public ResponseEntity add(@Validated @RequestBody YxStoreSeckillDto resources) {
+        return new ResponseEntity<>(yxStoreSeckillService.saveSeckill(resources), HttpStatus.CREATED);
     }
 
     @ApiOperation(value = "获取商品信息")
     @GetMapping(value = "/yxStoreSecKill/info/{id}")
-    public ResponseEntity info(@PathVariable Long id){
-        Map<String,Object> map = new LinkedHashMap<>(3);
+    public ResponseEntity info(@PathVariable Long id) {
+        Map<String, Object> map = new LinkedHashMap<>(3);
 
         //运费模板
         List<YxShippingTemplates> shippingTemplatesList = yxShippingTemplatesService.list();
         map.put("tempList", shippingTemplatesList);
 
         //商品规格
-        map.put("ruleList",yxStoreProductRuleService.list());
+        map.put("ruleList", yxStoreProductRuleService.list());
 
 
-        if(id == 0){
-            return new ResponseEntity<>(map,HttpStatus.OK);
+        if (id == 0) {
+            return new ResponseEntity<>(map, HttpStatus.OK);
         }
 
         //处理商品详情
         YxStoreSeckill yxStoreSeckill = yxStoreSeckillService.getById(id);
         YxStoreSeckillDto productDto = new YxStoreSeckillDto();
-        BeanUtil.copyProperties(yxStoreSeckill,productDto,"images");
+        BeanUtil.copyProperties(yxStoreSeckill, productDto, "images");
         productDto.setSliderImage(Arrays.asList(yxStoreSeckill.getImages().split(",")));
         YxStoreProductAttrResult storeProductAttrResult = yxStoreProductAttrResultService
                 .getOne(Wrappers.<YxStoreProductAttrResult>lambdaQuery()
-                        .eq(YxStoreProductAttrResult::getProductId,yxStoreSeckill.getProductId()).last("limit 1"));
+                        .eq(YxStoreProductAttrResult::getProductId, yxStoreSeckill.getProductId()).last("limit 1"));
         JSONObject result = JSON.parseObject(storeProductAttrResult.getResult());
 
         List<YxStoreProductAttrValue> attrValues = storeProductAttrValueService.list(new LambdaQueryWrapper<YxStoreProductAttrValue>().eq(YxStoreProductAttrValue::getProductId, yxStoreSeckill.getProductId()));
-        List<ProductFormatDto> productFormatDtos =attrValues.stream().map(i ->{
+        List<ProductFormatDto> productFormatDtos = attrValues.stream().map(i -> {
             ProductFormatDto productFormatDto = new ProductFormatDto();
-            BeanUtils.copyProperties(i,productFormatDto);
+            BeanUtils.copyProperties(i, productFormatDto);
             productFormatDto.setPic(i.getImage());
             return productFormatDto;
         }).collect(Collectors.toList());
-        if(SpecTypeEnum.TYPE_1.getValue().equals(yxStoreSeckill.getSpecType())){
+        if (SpecTypeEnum.TYPE_1.getValue().equals(yxStoreSeckill.getSpecType())) {
             productDto.setAttr(new ProductFormatDto());
             productDto.setAttrs(productFormatDtos);
-            productDto.setItems(result.getObject("attr",ArrayList.class));
-        }else{
+            productDto.setItems(result.getObject("attr", ArrayList.class));
+        } else {
             productFormat(productDto, result);
         }
 
 
-        map.put("productInfo",productDto);
+        map.put("productInfo", productDto);
 
-        return new ResponseEntity<>(map,HttpStatus.OK);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     /**
@@ -163,7 +165,7 @@ public class StoreSeckillController {
      * @param result
      */
     private void productFormat(YxStoreSeckillDto productDto, JSONObject result) {
-        Map<String,Object> mapAttr = (Map<String,Object>) result.getObject("value",ArrayList.class).get(0);
+        Map<String, Object> mapAttr = (Map<String, Object>) result.getObject("value", ArrayList.class).get(0);
         ProductFormatDto productFormatDto = ProductFormatDto.builder()
                 .pic(mapAttr.get("pic").toString())
                 .price(Double.valueOf(mapAttr.get("price").toString()))
