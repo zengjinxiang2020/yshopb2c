@@ -101,6 +101,14 @@ public class AuthController {
 
     }
 
+    @PostMapping("/wxapp/loginAuth")
+    @ApiOperation(value = "小程序获取用户信息", notes = "小程序获取用户信息")
+    public ApiResult<YxUser> loginAuth(@Validated @RequestBody LoginParam loginParam,
+                                                HttpServletRequest request) {
+        YxUser yxUser = authService.loginAuth(loginParam);
+        return ApiResult.ok(yxUser).setMsg("获取成功");
+
+    }
     /**
      * 微信公众号授权
      */

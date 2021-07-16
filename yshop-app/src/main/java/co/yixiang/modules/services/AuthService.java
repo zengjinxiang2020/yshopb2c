@@ -9,7 +9,9 @@
 package co.yixiang.modules.services;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.api.WxMaUserService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
@@ -28,10 +30,7 @@ import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
 import co.yixiang.modules.user.service.dto.WechatUserDto;
 import co.yixiang.modules.user.vo.OnlineUser;
-import co.yixiang.utils.EncryptUtils;
-import co.yixiang.utils.RedisUtils;
-import co.yixiang.utils.ShopKeyUtils;
-import co.yixiang.utils.StringUtils;
+import co.yixiang.utils.*;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,7 +78,7 @@ public class AuthService {
      * @return long
      */
     @Transactional(rollbackFor = Exception.class)
-    public YxUser wxappLogin(LoginParam loginParam) {
+    public YxUser loginAuth(LoginParam loginParam) {
         String code = loginParam.getCode();
         String encryptedData = loginParam.getEncryptedData();
         String iv = loginParam.getIv();
@@ -102,10 +101,10 @@ public class AuthService {
                 openid = session.getUnionid();
             }
 
-            YxUser yxUser = userService.getOne(Wrappers.<YxUser>lambdaQuery()
-                    .eq(YxUser::getUsername, openid), false);
+            YxUser yxUser = this.userService.getOne(Wrappers.<YxUser>lambdaQuery()
+                    .eq(YxUser::getUid, SecurityUtils.getUserId()), false);
 
-            if (ObjectUtil.isNull(yxUser)) {
+            if (ObjectUtil.isNotEmpty(yxUser)) {
 
 
                 //过滤掉表情
@@ -116,7 +115,6 @@ public class AuthService {
                         .avatar(wxMpUser.getAvatarUrl())
                         .addIp(ip)
                         .lastIp(ip)
-                        .userType(AppFromEnum.ROUNTINE.getValue())
                         .build();
 
                 //构建微信用户
@@ -134,7 +132,75 @@ public class AuthService {
 
                 yxUser.setWxProfile(wechatUserDTO);
 
-                userService.save(yxUser);
+                this.userService.update(yxUser,Wrappers.<YxUser>lambdaQuery()
+                        .eq(YxUser::getUid, SecurityUtils.getUserId()));
+
+            }
+            return yxUser;
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+            log.error(e.getMessage());
+            throw new YshopException(e.toString());
+        }
+    }
+
+
+    /**
+     * 小程序登陆
+     *
+     * @param loginParam loginParam
+     * @return long
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public YxUser wxappLogin(LoginParam loginParam) {
+        String code = loginParam.getCode();
+        String encryptedData = loginParam.getEncryptedData();
+        String iv = loginParam.getIv();
+        String spread = loginParam.getSpread();
+        try {
+            //读取redis配置
+            String appId = redisUtils.getY(ShopKeyUtils.getWxAppAppId());
+            String secret = redisUtils.getY(ShopKeyUtils.getWxAppSecret());
+            if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
+                throw new YshopException("请先配置小程序");
+            }
+            WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+            WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
+
+            WxMaPhoneNumberInfo phoneNoInfo = wxMaService.getUserService()
+                    .getPhoneNoInfo(session.getSessionKey(), encryptedData, iv);
+
+            String openid = session.getOpenid();
+            //如果开启了UnionId
+            if (StrUtil.isNotBlank(session.getUnionid())) {
+                openid = session.getUnionid();
+            }
+
+            YxUser yxUser = this.userService.getOne(Wrappers.<YxUser>lambdaQuery()
+                    .eq(YxUser::getPhone, phoneNoInfo.getPhoneNumber()), false);
+
+            if (ObjectUtil.isNull(yxUser)) {
+
+
+                //过滤掉表情
+                String ip = IpUtil.getRequestIp();
+                yxUser = YxUser.builder()
+                        .username(phoneNoInfo.getPhoneNumber())
+                        .phone(phoneNoInfo.getPhoneNumber())
+                        .addIp(ip)
+                        .lastIp(ip)
+                        .userType(AppFromEnum.ROUNTINE.getValue())
+                        .build();
+
+                //构建微信用户
+                WechatUserDto wechatUserDTO = WechatUserDto.builder()
+                        .routineOpenid(session.getOpenid())
+                        .unionId(session.getUnionid())
+                        .build();
+
+                yxUser.setWxProfile(wechatUserDTO);
+
+                this.userService.save(yxUser);
 
             } else {
                 WechatUserDto wechatUser = yxUser.getWxProfile();
@@ -147,9 +213,9 @@ public class AuthService {
 
                 }
                 yxUser.setUserType(AppFromEnum.ROUNTINE.getValue());
-                userService.updateById(yxUser);
+                this.userService.updateById(yxUser);
             }
-            userService.setSpread(spread, yxUser.getUid());
+            this.userService.setSpread(spread, yxUser.getUid());
             redisUtils.set(ShopConstants.YSHOP_MINI_SESSION_KET + yxUser.getUid(), session.getSessionKey());
             return yxUser;
         } catch (WxErrorException e) {
@@ -157,8 +223,6 @@ public class AuthService {
             log.error(e.getMessage());
             throw new YshopException(e.toString());
         }
-
-
     }
 
     /**
@@ -371,6 +435,5 @@ public class AuthService {
         onlineUsers.sort((o1, o2) -> o2.getLoginTime().compareTo(o1.getLoginTime()));
         return onlineUsers;
     }
-
 
 }

@@ -272,10 +272,10 @@ public class YxStoreProductServiceImpl extends BaseServiceImpl<StoreProductMappe
             wrapper.orderByAsc(YxStoreProduct::getPrice);
         }
 
-        wrapper.orderByDesc(YxStoreProduct::getSort);
         //无其他排序条件时,防止因为商品排序导致商品重复
         if (StringUtils.isNullOrEmpty(productQueryParam.getPriceOrder()) && StringUtils.isNullOrEmpty(productQueryParam.getSalesOrder())) {
             wrapper.orderByDesc(YxStoreProduct::getId);
+            wrapper.orderByDesc(YxStoreProduct::getSort);
         }
         Page<YxStoreProduct> pageModel = new Page<>(productQueryParam.getPage(),
                 productQueryParam.getLimit());
