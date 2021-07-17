@@ -132,8 +132,7 @@ public class StoreCombinationController {
         if(StrUtil.isEmpty(siteUrl)){
             throw new YshopException("未配置h5地址");
         }
-//        String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
-        String apiUrl = "http://itxzz.top";
+        String apiUrl = systemConfigService.getData(SystemConfigConstants.API_URL);
         if(StrUtil.isEmpty(apiUrl)){
             throw new YshopException("未配置api地址");
         }
