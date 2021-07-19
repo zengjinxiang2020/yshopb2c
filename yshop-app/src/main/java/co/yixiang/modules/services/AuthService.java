@@ -17,6 +17,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import co.yixiang.api.YshopException;
+import co.yixiang.common.bean.LocalUser;
 import co.yixiang.common.util.IpUtil;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.AppFromEnum;
@@ -93,16 +94,10 @@ public class AuthService {
             WxMaService wxMaService = WxMaConfiguration.getWxMaService();
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
 
-            WxMaUserInfo wxMpUser = wxMaService.getUserService()
-                    .getUserInfo(session.getSessionKey(), encryptedData, iv);
-            String openid = session.getOpenid();
-            //如果开启了UnionId
-            if (StrUtil.isNotBlank(session.getUnionid())) {
-                openid = session.getUnionid();
-            }
+            WxMaUserInfo wxMpUser = wxMaService.getUserService().getUserInfo(session.getSessionKey(), encryptedData, iv);
 
             YxUser yxUser = this.userService.getOne(Wrappers.<YxUser>lambdaQuery()
-                    .eq(YxUser::getUid, SecurityUtils.getUserId()), false);
+                    .eq(YxUser::getUid, LocalUser.getUser().getUid()), false);
 
             if (ObjectUtil.isNotEmpty(yxUser)) {
 
@@ -110,7 +105,7 @@ public class AuthService {
                 //过滤掉表情
                 String ip = IpUtil.getRequestIp();
                 yxUser = YxUser.builder()
-                        .username(openid)
+                        .username(wxMpUser.getNickName())
                         .nickname(wxMpUser.getNickName())
                         .avatar(wxMpUser.getAvatarUrl())
                         .addIp(ip)
@@ -133,7 +128,7 @@ public class AuthService {
                 yxUser.setWxProfile(wechatUserDTO);
 
                 this.userService.update(yxUser,Wrappers.<YxUser>lambdaQuery()
-                        .eq(YxUser::getUid, SecurityUtils.getUserId()));
+                        .eq(YxUser::getUid, LocalUser.getUser().getUid()));
 
             }
             return yxUser;
@@ -170,12 +165,6 @@ public class AuthService {
             WxMaPhoneNumberInfo phoneNoInfo = wxMaService.getUserService()
                     .getPhoneNoInfo(session.getSessionKey(), encryptedData, iv);
 
-            String openid = session.getOpenid();
-            //如果开启了UnionId
-            if (StrUtil.isNotBlank(session.getUnionid())) {
-                openid = session.getUnionid();
-            }
-
             YxUser yxUser = this.userService.getOne(Wrappers.<YxUser>lambdaQuery()
                     .eq(YxUser::getPhone, phoneNoInfo.getPhoneNumber()), false);
 
@@ -204,13 +193,9 @@ public class AuthService {
 
             } else {
                 WechatUserDto wechatUser = yxUser.getWxProfile();
-                if ((StrUtil.isBlank(wechatUser.getRoutineOpenid()) && StrUtil.isNotBlank(session.getOpenid()))
-                        || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(session.getUnionid()))) {
+                if (null != wechatUser &&(StrUtil.isBlank(wechatUser.getRoutineOpenid()) && StrUtil.isNotBlank(session.getOpenid()))) {
                     wechatUser.setRoutineOpenid(session.getOpenid());
-                    wechatUser.setUnionId(session.getUnionid());
-
                     yxUser.setWxProfile(wechatUser);
-
                 }
                 yxUser.setUserType(AppFromEnum.ROUNTINE.getValue());
                 this.userService.updateById(yxUser);
@@ -436,4 +421,12 @@ public class AuthService {
         return onlineUsers;
     }
 
+    /**
+     * 根据手机号查询用户注册状态
+     * @param phone 手机号
+     * @return /
+     */
+    public YxUser authPhone(String phone) {
+        return userService.getOne(Wrappers.<YxUser>lambdaQuery().eq(YxUser::getPhone, phone));
+    }
 }

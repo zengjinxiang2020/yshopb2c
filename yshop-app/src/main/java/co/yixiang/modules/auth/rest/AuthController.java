@@ -41,11 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -101,6 +97,16 @@ public class AuthController {
 
     }
 
+    /**
+     * 根据手机号查询用户状态
+     */
+    @GetMapping("/wxapp/authPhone/{phone}")
+    @ApiOperation(value = "根据手机号查询用户状态", notes = "根据手机号查询用户状态")
+    public ApiResult<YxUser> authPhone(@PathVariable String phone) {
+        return ApiResult.ok(authService.authPhone(phone)).setMsg("获取成功");
+    }
+
+    @AuthCheck
     @PostMapping("/wxapp/loginAuth")
     @ApiOperation(value = "小程序获取用户信息", notes = "小程序获取用户信息")
     public ApiResult<YxUser> loginAuth(@Validated @RequestBody LoginParam loginParam,
@@ -125,8 +131,6 @@ public class AuthController {
             YxUser yxUser = authService.wechatLogin(code,spread);
             String token =  JwtToken.makeToken(yxUser.getUid(),yxUser.getUsername());
             String expiresTimeStr = JwtToken.getExpireTime(token);
-
-
 
             // 返回 token
             Map<String, Object> map = new HashMap<String, Object>(2) {{
