@@ -218,6 +218,37 @@ public class AuthController {
         return ApiResult.ok(map).setMsg("登陆成功");
     }
 
+    @AuthCheck
+    @ApiOperation("修改密码")
+    @PostMapping(value = "/register/reset")
+    public ApiResult<Boolean> updatePassword(@Validated @RequestBody UpdatePasswordParam updatePasswordParam,HttpServletRequest request) {
+        Object codeObj = redisUtil.get("code_" + updatePasswordParam.getAccount());
+        if(codeObj == null){
+            throw new YshopException("请先获取验证码");
+        }
+        String code = codeObj.toString();
+        if (!StrUtil.equals(code, updatePasswordParam.getCaptcha())) {
+            throw new YshopException("验证码错误");
+        }
+        YxUser yxUser = userService.getOne(Wrappers.<YxUser>lambdaQuery()
+                .eq(YxUser::getUsername,updatePasswordParam.getAccount()));
+
+        if(yxUser == null) {
+            throw new YshopException("账号不存在,数据错误");
+        }
+        yxUser.setPassword(SecureUtil.md5(updatePasswordParam.getPassword()));
+        boolean b = userService.updateById(yxUser);
+        if (!b) {
+            throw new YshopException("修改失败");
+        }
+        String bearerToken = request.getHeader("Authorization");
+        String[] tokens = bearerToken.split(" ");
+        String token = tokens[1];
+        authService.logout(LocalUser.getUser().getUsername(), token);
+
+        return ApiResult.ok(true).setMsg("修改成功");
+    }
+
 
     @PostMapping("/register")
     @ApiOperation(value = "H5/APP注册新用户", notes = "H5/APP注册新用户")
