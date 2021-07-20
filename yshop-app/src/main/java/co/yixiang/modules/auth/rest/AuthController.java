@@ -21,10 +21,7 @@ import co.yixiang.common.util.JwtToken;
 import co.yixiang.common.util.SmsUtils;
 import co.yixiang.constant.ShopConstants;
 import co.yixiang.enums.ShopCommonEnum;
-import co.yixiang.modules.auth.param.HLoginParam;
-import co.yixiang.modules.auth.param.LoginParam;
-import co.yixiang.modules.auth.param.RegParam;
-import co.yixiang.modules.auth.param.VerityParam;
+import co.yixiang.modules.auth.param.*;
 import co.yixiang.modules.services.AuthService;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
@@ -173,6 +170,45 @@ public class AuthController {
         }};
 
         userService.setSpread(loginDTO.getSpread(),yxUser.getUid());
+
+        if(singleLogin){
+            //踢掉之前已经登录的token
+            authService.checkLoginOnUser(yxUser.getUsername(),token);
+        }
+
+        return ApiResult.ok(map).setMsg("登陆成功");
+    }
+
+    @ApiOperation("H5验证码登录授权")
+    @PostMapping(value = "/login/mobile")
+    public ApiResult<Map<String, Object>> loginVerify(@Validated @RequestBody LoginVerifyParam loginVerifyParam,HttpServletRequest request) {
+        Object codeObj = redisUtil.get("code_" + loginVerifyParam.getAccount());
+        if(codeObj == null){
+            throw new YshopException("请先获取验证码");
+        }
+        String code = codeObj.toString();
+        if (!StrUtil.equals(code, loginVerifyParam.getCaptcha())) {
+            throw new YshopException("验证码错误");
+        }
+        YxUser yxUser = userService.getOne(Wrappers.<YxUser>lambdaQuery()
+                .eq(YxUser::getUsername,loginVerifyParam.getAccount()));
+
+        if(yxUser == null) {
+            throw new YshopException("账号不存在");
+        }
+
+        String token =  JwtToken.makeToken(yxUser.getUid(),yxUser.getUsername());
+        String expiresTimeStr = JwtToken.getExpireTime(token);
+
+        // 保存在线信息
+        authService.save(yxUser, token, request);
+        // 返回 token
+        Map<String, Object> map = new HashMap<String, Object>(2) {{
+            put("token", token);
+            put("expires_time", expiresTimeStr);
+        }};
+
+        userService.setSpread(loginVerifyParam.getSpread(),yxUser.getUid());
 
         if(singleLogin){
             //踢掉之前已经登录的token
