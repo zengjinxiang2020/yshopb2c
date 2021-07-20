@@ -109,7 +109,7 @@ public class SystemGroupDataController {
 
         List<YxSystemGroupData> yshop_seckill_time = yxSystemGroupDataService.list(Wrappers.<YxSystemGroupData>lambdaQuery()
                 .eq(YxSystemGroupData::getGroupName, "yshop_seckill_time"));
-        if (yxSystemGroupData.getStatus() == 1) {
+        if (yxSystemGroupData.getStatus() == 1 && ObjectUtil.isNotEmpty(jsonObject.getInteger("time"))) {
             yshop_seckill_time.forEach(item -> {
                 Map map = JSONUtil.toBean(item.getValue(), Map.class);
                 if (jsonObject.getInteger("time").equals(map.get("time"))) {
