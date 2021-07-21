@@ -582,7 +582,7 @@ public class CreatShareProductService {
                         Color.RED,
                         f2, //字体
                         -160, //x坐标修正值。 默认在中间，偏移量相对于中间偏移
-                        -380, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
+                        -350, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
                         0.8f//透明度：alpha 必须是范围 [0.0, 1.0] 之内（包含边界值）的一个浮点数字
                 );
 
@@ -595,7 +595,7 @@ public class CreatShareProductService {
                         Color.WHITE,
                         f3, //字体
                         90, //x坐标修正值。 默认在中间，偏移量相对于中间偏移
-                        -385, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
+                        -370, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
                         0.8f//透明度：alpha 必须是范围 [0.0, 1.0] 之内（包含边界值）的一个浮点数字
                 );
 
@@ -639,7 +639,7 @@ public class CreatShareProductService {
                         FileUtil.file(spreadPicPath),
                         ImgUtil.read(FileUtil.file(picImage)), //水印图片
                         0, //x坐标修正值。 默认在中间，偏移量相对于中间偏移
-                        -80, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
+                        0, //y坐标修正值。 默认在中间，偏移量相对于中间偏移
                         0.8f
                 );
 
