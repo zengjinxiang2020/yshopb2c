@@ -183,8 +183,7 @@ public class WeixinPayService {
         wxPayRefundRequest.setOutRefundNo(orderSn);
         //退款金额
         wxPayRefundRequest.setRefundFee(refundFee);
-//        wxPayRefundRequest.setNotifyUrl(this.getApiUrl() + "/api/notify/refund");
-        wxPayRefundRequest.setNotifyUrl("http://www.itxzz.top/api/wechat/notify");
+        wxPayRefundRequest.setNotifyUrl(this.getApiUrl() + "/api/notify/refund");
         try {
             wxPayService.refundV2(wxPayRefundRequest);
         } catch (WxPayException e) {
