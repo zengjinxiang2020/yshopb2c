@@ -105,7 +105,6 @@ public class AuthService {
                 //过滤掉表情
                 String ip = IpUtil.getRequestIp();
                 yxUser = YxUser.builder()
-                        .username(wxMpUser.getNickName())
                         .nickname(wxMpUser.getNickName())
                         .avatar(wxMpUser.getAvatarUrl())
                         .addIp(ip)
@@ -170,26 +169,35 @@ public class AuthService {
 
             if (ObjectUtil.isNull(yxUser)) {
 
+                //兼容旧系统
+                yxUser = this.userService.getOne(Wrappers.<YxUser>lambdaQuery()
+                        .eq(YxUser::getUsername, session.getOpenid()), false);
 
-                //过滤掉表情
-                String ip = IpUtil.getRequestIp();
-                yxUser = YxUser.builder()
-                        .username(phoneNoInfo.getPhoneNumber())
-                        .phone(phoneNoInfo.getPhoneNumber())
-                        .addIp(ip)
-                        .lastIp(ip)
-                        .userType(AppFromEnum.ROUNTINE.getValue())
-                        .build();
+                if (ObjectUtil.isNull(yxUser)) {
+                    //过滤掉表情
+                    String ip = IpUtil.getRequestIp();
+                    yxUser = YxUser.builder()
+                            .username(phoneNoInfo.getPhoneNumber())
+                            .phone(phoneNoInfo.getPhoneNumber())
+                            .addIp(ip)
+                            .lastIp(ip)
+                            .userType(AppFromEnum.ROUNTINE.getValue())
+                            .build();
 
-                //构建微信用户
-                WechatUserDto wechatUserDTO = WechatUserDto.builder()
-                        .routineOpenid(session.getOpenid())
-                        .unionId(session.getUnionid())
-                        .build();
+                    //构建微信用户
+                    WechatUserDto wechatUserDTO = WechatUserDto.builder()
+                            .routineOpenid(session.getOpenid())
+                            .unionId(session.getUnionid())
+                            .build();
 
-                yxUser.setWxProfile(wechatUserDTO);
+                    yxUser.setWxProfile(wechatUserDTO);
 
-                this.userService.save(yxUser);
+                    this.userService.save(yxUser);
+                }else {
+                    yxUser.setUsername(phoneNoInfo.getPhoneNumber());
+                    yxUser.setPhone(phoneNoInfo.getPhoneNumber());
+                    this.userService.updateById(yxUser);
+                }
 
             } else {
                 WechatUserDto wechatUser = yxUser.getWxProfile();
