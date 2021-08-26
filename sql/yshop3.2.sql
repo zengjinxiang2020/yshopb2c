@@ -20,7 +20,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for alipay_config
 -- ----------------------------
-
+DROP TABLE IF EXISTS `yx_store_after_sales_status`;
 CREATE TABLE `yx_store_after_sales_status` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `store_after_sales_id` bigint(20) DEFAULT NULL COMMENT '售后id',
@@ -31,6 +31,7 @@ CREATE TABLE `yx_store_after_sales_status` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='售后订单操作详情表';
 
+DROP TABLE IF EXISTS `yx_store_after_sales_item`;
 CREATE TABLE `yx_store_after_sales_item` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
   `store_after_sales_id` bigint(20) DEFAULT NULL COMMENT '售后id',
@@ -40,7 +41,7 @@ CREATE TABLE `yx_store_after_sales_item` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='售后子表';
 
-
+DROP TABLE IF EXISTS `yx_store_after_sales`;
 CREATE TABLE `yx_store_after_sales` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `order_code` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '订单号',
@@ -757,9 +758,6 @@ INSERT INTO `menu` VALUES (52, b'0', '公众号配置', 'wechat/config/index', 4
 INSERT INTO `menu` VALUES (53, b'0', '订单管理', '', 0, 4, 'lock', 'order', b'0', b'0', '', '2019-10-14 14:35:18', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (54, b'0', '订单', 'shop/order/index', 53, 41, 'order', 'order', b'0', b'0', 'Order', '2019-10-14 14:36:28', 'YXSTOREORDER_SELECT,YXEXPRESS_SELECT', 1, NULL, 0);
 INSERT INTO `menu` VALUES (55, b'0', '商城配置', '', 0, 15, 'configure', 'set', b'0', b'0', '', '2019-10-18 15:21:26', NULL, 1, '2020-06-26 15:18:20', 0);
-INSERT INTO `menu` VALUES (56, b'0', '首页幻灯片', 'shop/set/index', 55, 51, 'banner', 'homeBanner', b'0', b'0', 'HomeBanner', '2019-10-18 15:24:30', 'YXSYSTEMGROUPDATA_ALL,YXSYSTEMGROUPDATA_SELECT', 1, NULL, 0);
-INSERT INTO `menu` VALUES (57, b'0', '首页导航按钮', 'shop/set/menu', 55, 52, 'button', 'homeMenus', b'0', b'0', 'HomeMenus', '2019-10-18 17:23:35', 'YXSYSTEMGROUPDATA_ALL,YXSYSTEMGROUPDATA_SELECT', 1, NULL, 0);
-INSERT INTO `menu` VALUES (59, b'0', '首页滚动新闻', 'shop/set/roll', 55, 54, 'news', 'roll', b'0', b'0', 'Roll', '2019-10-21 16:41:30', 'YXSYSTEMGROUPDATA_ALL,YXSYSTEMGROUPDATA_SELECT', 1, NULL, 0);
 INSERT INTO `menu` VALUES (60, b'0', '热门搜索', 'shop/set/hot', 55, 55, 'search', 'hot', b'0', b'0', 'Hot', '2019-10-26 18:21:54', 'YXSYSTEMGROUPDATA_ALL,YXSYSTEMGROUPDATA_SELECT', 1, NULL, 0);
 INSERT INTO `menu` VALUES (61, b'0', '个人中心菜单', 'shop/set/usermenu', 55, 56, 'menu', 'userMenu', b'0', b'0', 'UserMenu', '2019-10-26 18:42:18', 'YXSYSTEMGROUPDATA_ALL,YXSYSTEMGROUPDATA_SELECT', 1, NULL, 0);
 INSERT INTO `menu` VALUES (62, b'0', '评论管理', 'shop/reply/index', 53, 42, 'comment', 'reply', b'0', b'0', 'Reply', '2019-11-03 14:39:09', 'YXSTOREPRODUCTREPLY_SELECT', 1, NULL, 0);
@@ -931,7 +929,7 @@ INSERT INTO `menu` VALUES (261, b'0', '添加人员', NULL, 260, 1, NULL, NULL, 
 INSERT INTO `menu` VALUES (262, b'0', '编辑人员', NULL, 260, 2, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:18:47', 'yxStoreCustomer:edit', 2, NULL, 0);
 INSERT INTO `menu` VALUES (263, b'0', '删除人员', NULL, 260, 3, NULL, NULL, b'0', b'0', NULL, '2020-04-02 14:19:07', 'yxStoreCustomer:del', 2, NULL, 0);
 INSERT INTO `menu` VALUES (264, b'0', '终端装修', NULL, 0, 0, 'theme', 'theme', b'0', b'0', '--', '2021-02-25 19:33:17', '', 1, '2021-02-25 19:33:32', 0);
-INSERT INTO `menu` VALUES (265, b'1', '商城装修', NULL, 264, 999, 'theme', 'https://demo2.yixiang.co/container', b'0', b'0', '-', '2021-02-25 19:35:13', NULL, 1, NULL, 0);
+INSERT INTO `menu` VALUES (265, b'0', '商城装修', 'theme/container/index', 264, 999, 'theme', 'container', b'0', b'0', 'Container', '2021-02-25 19:35:13', NULL, 1, NULL, 0);
 INSERT INTO `menu` VALUES (266, b'0', '售后', 'shop/afterSeals/index', 53, 44, 'order', 'afterSeals', b'0', b'0', 'AfterSeals', '2021-06-30 15:23:38', 'yxStoreAfterSales:list', 1, '2021-06-30 15:33:14', 0);
 INSERT INTO `menu` VALUES (267, b'0', '新增', NULL, 266, 999, NULL, NULL, b'0', b'0', '-', '2021-06-30 15:34:17', 'yxStoreAfterSales:add', 2, NULL, 0);
 INSERT INTO `menu` VALUES (268, b'0', '修改', NULL, 266, 999, NULL, NULL, b'0', b'0', '-', '2021-06-30 15:34:39', 'yxStoreAfterSales:edit', 2, NULL, 0);
