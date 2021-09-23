@@ -126,7 +126,7 @@ public class StoreAfterSalesController {
         if (StrUtil.isEmpty(key)) {
             throw new YshopException("参数错误");
         }
-        Boolean revoke = storeAfterSalesService.revoke(key, id, uid);
+        Boolean revoke = storeAfterSalesService.revoke(key, uid, id);
         return ApiResult.ok(revoke);
     }
 
