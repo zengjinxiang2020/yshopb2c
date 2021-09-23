@@ -30,6 +30,11 @@ public class YxStoreOrderCartInfo implements Serializable {
     /** 订单id */
     private Long oid;
 
+    /**
+     * 订单号
+     */
+    private String orderId;
+
 
     /** 购物车id */
     private Long cartId;

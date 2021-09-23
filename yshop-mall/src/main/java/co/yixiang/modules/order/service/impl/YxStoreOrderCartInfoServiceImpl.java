@@ -55,15 +55,17 @@ public class YxStoreOrderCartInfoServiceImpl extends BaseServiceImpl<StoreOrderC
     /**
      * 添加购物车商品信息
      * @param oid 订单id
+     * @param orderId
      * @param cartInfo 购物车信息
      */
     @Override
-    public void saveCartInfo(Long oid, List<YxStoreCartQueryVo> cartInfo) {
+    public void saveCartInfo(Long oid, String orderId, List<YxStoreCartQueryVo> cartInfo) {
 
         List<YxStoreOrderCartInfo> list = new ArrayList<>();
         for (YxStoreCartQueryVo cart : cartInfo) {
             YxStoreOrderCartInfo info = new YxStoreOrderCartInfo();
             info.setOid(oid);
+            info.setOrderId(orderId);
             info.setCartId(cart.getId());
             info.setProductId(cart.getProductId());
             info.setCartInfo(JSONObject.toJSON(cart).toString());

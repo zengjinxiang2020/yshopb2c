@@ -86,10 +86,12 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
                 yxStoreOrderCartInfo.setIsAfterSales(0);
                 storeOrderCartInfoMapper.updateById(yxStoreOrderCartInfo);
 
-                yxStoreOrder.setStatus(-1);
-                storeOrderMapper.updateById(yxStoreOrder);
             }
         }
+        //更新订单状态
+        yxStoreOrder.setStatus(-1);
+        yxStoreOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_1.getValue());
+        storeOrderMapper.updateById(yxStoreOrder);
         //生成售后订单
         StoreAfterSales storeAfterSales = new StoreAfterSales();
         storeAfterSales.setOrderCode(storeAfterSalesParam.getOrderCode());
@@ -170,7 +172,7 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
         }
         baseMapper.selectPage(storeAfterSalesPage, Wrappers.<StoreAfterSales>lambdaQuery()
                 .eq(uid != null, StoreAfterSales::getUserId, uid).in(status == 1, StoreAfterSales::getState, integers)
-                .in(status == 2, StoreAfterSales::getState, integers)
+                .in(status != 0, StoreAfterSales::getState, integers)
                 .eq(StringUtils.isNotBlank(orderCode), StoreAfterSales::getOrderCode, orderCode)
                 .orderByDesc(StoreAfterSales::getCreateTime)
                 .eq(StoreAfterSales::getIsDel, ShopCommonEnum.DELETE_0.getValue()));
@@ -346,7 +348,9 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
             throw new YshopException("未查询到订单信息");
         }
 
-        if (!yxStoreOrder.getPaid().equals(OrderInfoEnum.PAY_STATUS_1.getValue()) || !yxStoreOrder.getRefundStatus().equals(OrderInfoEnum.REFUND_STATUS_0.getValue()) || !yxStoreOrder.getStatus().equals(OrderInfoEnum.STATUS_2.getValue())) {
+        if (!yxStoreOrder.getPaid().equals(OrderInfoEnum.PAY_STATUS_1.getValue())
+                || !yxStoreOrder.getRefundStatus().equals(OrderInfoEnum.REFUND_STATUS_0.getValue())
+                || yxStoreOrder.getStatus() < OrderInfoEnum.STATUS_0.getValue()) {
             throw new YshopException("订单状态不能售后");
         }
     }

@@ -18,6 +18,8 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 public enum OrderInfoEnum {
 
+	STATUS_ne1(-1,"申请退款"),
+	STATUS_ne2(-2,"退款成功"),
 	STATUS_0(0,"默认"),
 	STATUS_1(1,"待收货"),
 	STATUS_2(2,"已收货"),

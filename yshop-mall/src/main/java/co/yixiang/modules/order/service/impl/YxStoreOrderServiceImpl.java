@@ -536,7 +536,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
 
         //保存购物车商品信息
-        orderCartInfoService.saveCartInfo(storeOrder.getId(), cartInfo);
+        orderCartInfoService.saveCartInfo(storeOrder.getId(), storeOrder.getOrderId(),cartInfo);
 
 
         //购物车状态修改

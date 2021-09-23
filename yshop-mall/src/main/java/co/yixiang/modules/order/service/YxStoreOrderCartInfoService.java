@@ -26,9 +26,10 @@ public interface YxStoreOrderCartInfoService  extends BaseService<YxStoreOrderCa
     /**
      * 添加购物车商品信息
      * @param oid 订单id
+     * @param orderId 订单号
      * @param cartInfo 购物车信息
      */
-    void saveCartInfo(Long oid, List<YxStoreCartQueryVo> cartInfo);
+    void saveCartInfo(Long oid, String orderId,List<YxStoreCartQueryVo> cartInfo);
 
     YxStoreOrderCartInfo findByUni(String unique);
 

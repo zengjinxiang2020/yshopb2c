@@ -21,6 +21,11 @@ public class YxStoreOrderCartInfoDto implements Serializable {
     /** 订单id */
     private Integer oid;
 
+    /**
+     * 订单号
+     */
+    private String orderId;
+
     /** 购物车id */
     private Integer cartId;
 
