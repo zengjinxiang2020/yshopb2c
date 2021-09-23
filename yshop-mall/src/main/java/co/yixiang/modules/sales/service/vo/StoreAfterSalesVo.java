@@ -119,4 +119,9 @@ public class StoreAfterSalesVo {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp revocationTime;
 
+    /**
+     * 关闭售后时间
+     */
+    private Timestamp closeAfterSaleTime;
+
 }

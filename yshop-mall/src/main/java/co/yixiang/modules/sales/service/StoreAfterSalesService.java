@@ -31,6 +31,7 @@ public interface StoreAfterSalesService extends BaseService<StoreAfterSales> {
     /**
      * 查询订单详情
      * @param key 订单号
+     * @return
      */
     List<YxStoreOrderCartInfoVo> checkOrderDetails(String key);
 
@@ -48,10 +49,17 @@ public interface StoreAfterSalesService extends BaseService<StoreAfterSales> {
     /**
      * 查询详情
      * @param key 订单号
-     * @param id
+     * @param id 售后单id
      * @param uid 用户id
      */
-    List<StoreAfterSalesVo> getStoreInfo(String key, Long id, Long uid);
+    StoreAfterSalesVo getStoreInfoByOrderCodeAndAfterIdAndUid(String key, Long id, Long uid);
+
+    /**
+     * 查询详情
+     * @param key 订单号
+     * @param uid 用户id
+     */
+    List<StoreAfterSalesVo> getStoreInfoByOrderCodeAndUid(String key, Long uid);
 
     /**
      *

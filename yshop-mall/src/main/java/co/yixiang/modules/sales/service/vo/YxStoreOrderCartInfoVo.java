@@ -43,4 +43,7 @@ public class YxStoreOrderCartInfoVo {
     /** 可退價格 */
     private BigDecimal refundablePrice;
 
+    /** 申请原因 */
+    private String reasons;
+
 }

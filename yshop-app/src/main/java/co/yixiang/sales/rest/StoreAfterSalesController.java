@@ -87,12 +87,9 @@ public class StoreAfterSalesController {
         if (StrUtil.isEmpty(key)) {
             throw new YshopException("参数错误");
         }
-        List<StoreAfterSalesVo> storeInfo = storeAfterSalesService.getStoreInfo(key, id, uid);
-        if (storeInfo.size() < 1) {
-            throw new YshopException("售后订单不存在");
-        }
-        storeAfterSalesService.handleSales(storeInfo.get(0));
-        return ApiResult.ok(storeInfo.get(0));
+        StoreAfterSalesVo storeInfo = storeAfterSalesService.getStoreInfoByOrderCodeAndAfterIdAndUid(key, id, uid);
+        storeAfterSalesService.handleSales(storeInfo);
+        return ApiResult.ok(storeInfo);
     }
 
     @AppLog(value = "通过订单号搜索", type = 1)
@@ -107,10 +104,10 @@ public class StoreAfterSalesController {
         if (StrUtil.isEmpty(key)) {
             throw new YshopException("参数错误");
         }
-        List<StoreAfterSalesVo> storeInfo = storeAfterSalesService.getStoreInfo(key, null, uid);
-        for (StoreAfterSalesVo storeAfterSalesVo : storeInfo) {
-            storeAfterSalesService.handleSales(storeAfterSalesVo);
-        }
+        List<StoreAfterSalesVo> storeInfo = storeAfterSalesService.getStoreInfoByOrderCodeAndUid(key, uid);
+            storeInfo.forEach(item ->
+                    storeAfterSalesService.handleSales(item)
+            );
         if (ObjectUtil.isNull(storeInfo)) {
             throw new YshopException("售后订单不存在");
         }

@@ -1,5 +1,6 @@
 package co.yixiang.modules.sales.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
@@ -132,6 +133,8 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
     public List<YxStoreOrderCartInfoVo> checkOrderDetails(String key) {
         List<YxStoreOrderCartInfo> yxStoreOrderCartInfos = storeOrderCartInfoMapper.selectList(Wrappers.<YxStoreOrderCartInfo>lambdaQuery().eq(YxStoreOrderCartInfo::getOid, key));
         YxStoreOrder yxStoreOrder = storeOrderMapper.selectById(key);
+        //查询 售后信息
+        StoreAfterSales storeAfterSales = baseMapper.selectOne(Wrappers.<StoreAfterSales>lambdaQuery().eq(StoreAfterSales::getOrderCode, yxStoreOrder.getOrderId()));
         List<YxStoreOrderCartInfoVo> yxStoreOrderCartInfoVos = new ArrayList<>();
         for (YxStoreOrderCartInfo yxStoreOrderCartInfo : yxStoreOrderCartInfos) {
 
@@ -151,6 +154,8 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
             BigDecimal commodityDiscountAmount = NumberUtil.mul(NumberUtil.div(totalAmountOfGoods, NumberUtil.sub(yxStoreOrder.getTotalPrice(), yxStoreOrder.getPayPostage())), yxStoreOrder.getCouponPrice());
 
             yxStoreOrderCartInfoVo.setRefundablePrice(NumberUtil.sub(totalAmountOfGoods, commodityDiscountAmount));
+
+            yxStoreOrderCartInfoVo.setReasons(storeAfterSales.getReasons());
             yxStoreOrderCartInfoVos.add(yxStoreOrderCartInfoVo);
         }
 
@@ -190,8 +195,16 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
     }
 
     @Override
-    public List<StoreAfterSalesVo> getStoreInfo(String key, Long id, Long uid) {
-        List<StoreAfterSales> storeAfterSales = baseMapper.selectList(Wrappers.<StoreAfterSales>lambdaQuery().eq(id != null, StoreAfterSales::getId, id).eq(StoreAfterSales::getUserId, uid).eq(StoreAfterSales::getOrderCode, key));
+    public StoreAfterSalesVo getStoreInfoByOrderCodeAndAfterIdAndUid(String key, Long id, Long uid) {
+        StoreAfterSales storeAfterSales = baseMapper.selectOne(Wrappers.<StoreAfterSales>lambdaQuery().eq(id != null, StoreAfterSales::getId, id).eq(StoreAfterSales::getUserId, uid).eq(StoreAfterSales::getOrderCode, key));
+        StoreAfterSalesVo salesVo = generator.convert(storeAfterSales, StoreAfterSalesVo.class);
+//        salesVo.setCloseAfterSaleTime(DateUtil.tomorrow().toTimestamp());
+        return salesVo;
+    }
+
+    @Override
+    public List<StoreAfterSalesVo> getStoreInfoByOrderCodeAndUid(String key, Long uid) {
+        List<StoreAfterSales> storeAfterSales = baseMapper.selectList(Wrappers.<StoreAfterSales>lambdaQuery().eq(StoreAfterSales::getUserId, uid).eq(StoreAfterSales::getOrderCode, key));
         return generator.convert(storeAfterSales, StoreAfterSalesVo.class);
     }
 
