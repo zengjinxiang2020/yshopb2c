@@ -21,6 +21,8 @@ ALTER TABLE yx_store_visit modify column product_id bigint(20) NULL DEFAULT NULL
 
 ALTER TABLE yx_store_visit modify column uid bigint(20) NULL DEFAULT NULL COMMENT '用户ID';
 
+ALTER TABLE yx_store_order_cart_info ADD COLUMN order_id  varchar(32) NULL DEFAULT NULL COMMENT '订单号' AFTER oid;
+
 INSERT INTO `menu` VALUES (264, b'0', '终端装修', NULL, 0, 0, 'theme', 'theme', b'0', b'0', '--', '2021-02-25 19:33:17', '', 1, '2021-02-25 19:33:32', 0);
 INSERT INTO `menu` VALUES (265, b'1', '商城装修', NULL, 264, 999, 'theme', 'https://demo2.yixiang.co/container', b'0', b'0', '-', '2021-02-25 19:35:13', NULL, 1, NULL, 0);
 INSERT INTO `roles_menus` VALUES (264, 1);

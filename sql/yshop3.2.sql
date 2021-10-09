@@ -2284,6 +2284,7 @@ DROP TABLE IF EXISTS `yx_store_order_cart_info`;
 CREATE TABLE `yx_store_order_cart_info`  (
   `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
   `oid` bigint(20) UNSIGNED NOT NULL COMMENT '订单id',
+  `order_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单号',
   `cart_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '购物车id',
   `product_id` bigint(20) UNSIGNED NOT NULL DEFAULT 0 COMMENT '商品ID',
   `cart_info` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '购买东西的详细信息',
