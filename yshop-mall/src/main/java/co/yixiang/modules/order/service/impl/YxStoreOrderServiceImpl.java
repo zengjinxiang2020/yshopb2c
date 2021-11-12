@@ -2055,7 +2055,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
             }
 
             //处理包邮情况
-            for (Map.Entry<Integer, TemplateDto> entry : templateDTOMap.entrySet()) {
+            jj: for (Map.Entry<Integer, TemplateDto> entry : templateDTOMap.entrySet()) {
                 Integer mapKey = entry.getKey();
                 TemplateDto mapValue = entry.getValue();
 
@@ -2067,6 +2067,7 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                 //满足包邮条件剔除
                 if (count > 0) {
                     templateDTOMap.remove(mapKey);
+                    break jj;
                 }
             }
 
@@ -2079,17 +2080,17 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                         storePostage = NumberUtil.round(NumberUtil.add(storePostage,
                                 templateDTO.getFirstPrice()), 2);
                     } else {
-                        BigDecimal fristPrice = NumberUtil.add(storePostage, templateDTO.getFirstPrice());
+                        BigDecimal firstPrice = NumberUtil.add(storePostage, templateDTO.getFirstPrice());
 
                         if (templateDTO.get_continue() <= 0) {
-                            storePostage = fristPrice;
+                            storePostage = firstPrice;
                         } else {
                             //续件平均值且向上取整数
                             double average = Math.ceil(NumberUtil.div(NumberUtil.sub(templateDTO.getNumber(),
                                     templateDTO.getFirst()),
                                     templateDTO.get_continue().doubleValue()));
                             //最终邮费
-                            storePostage = NumberUtil.add(fristPrice, NumberUtil.mul(average,
+                            storePostage = NumberUtil.add(firstPrice, NumberUtil.mul(average,
                                     templateDTO.getContinuePrice()));
                         }
 

@@ -116,8 +116,8 @@ public class OnlineUserService {
      * @throws Exception /
      */
     public void kickOutT(String key) throws Exception {
-        String[] split = StrUtil.split(key, ":");
-        String keyt = ShopConstants.YSHOP_APP_LOGIN_USER + split[0] + ":" + EncryptUtils.desDecrypt(split[1]);
+        String[] split = StrUtil.split(key, StrUtil.COLON);
+        String keyt = ShopConstants.YSHOP_APP_LOGIN_USER + split[0] + StrUtil.COLON + EncryptUtils.desDecrypt(split[1]);
         redisUtils.del(keyt);
 
     }
