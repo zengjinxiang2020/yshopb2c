@@ -76,66 +76,50 @@ public class AuthService {
      * 小程序登陆
      *
      * @param loginParam loginParam
+     * @param uid
+     * @param sessionKey
      * @return long
      */
     @Transactional(rollbackFor = Exception.class)
-    public YxUser loginAuth(LoginParam loginParam) {
-        String code = loginParam.getCode();
+    public YxUser loginAuth(LoginParam loginParam,Long uid,String sessionKey) {
+//        String code = loginParam.getCode();
         String encryptedData = loginParam.getEncryptedData();
         String iv = loginParam.getIv();
         String spread = loginParam.getSpread();
-        try {
-            //读取redis配置
-            String appId = redisUtils.getY(ShopKeyUtils.getWxAppAppId());
-            String secret = redisUtils.getY(ShopKeyUtils.getWxAppSecret());
-            if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
-                throw new YshopException("请先配置小程序");
-            }
-            WxMaService wxMaService = WxMaConfiguration.getWxMaService();
-            WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-
-            WxMaUserInfo wxMpUser = wxMaService.getUserService().getUserInfo(session.getSessionKey(), encryptedData, iv);
-
-            YxUser yxUser = this.userService.getOne(Wrappers.<YxUser>lambdaQuery()
-                    .eq(YxUser::getUid, LocalUser.getUser().getUid()), false);
-
-            if (ObjectUtil.isNotEmpty(yxUser)) {
-
-
-                //过滤掉表情
-                String ip = IpUtil.getRequestIp();
-                yxUser = YxUser.builder()
-                        .nickname(wxMpUser.getNickName())
-                        .avatar(wxMpUser.getAvatarUrl())
-                        .addIp(ip)
-                        .lastIp(ip)
-                        .build();
-
-                //构建微信用户
-                WechatUserDto wechatUserDTO = WechatUserDto.builder()
-                        .nickname(wxMpUser.getNickName())
-                        .routineOpenid(session.getOpenid())
-                        .unionId(session.getUnionid())
-                        .sex(Integer.valueOf(wxMpUser.getGender()))
-                        .language(wxMpUser.getLanguage())
-                        .city(wxMpUser.getCity())
-                        .province(wxMpUser.getProvince())
-                        .country(wxMpUser.getCountry())
-                        .headimgurl(wxMpUser.getAvatarUrl())
-                        .build();
-
-                yxUser.setWxProfile(wechatUserDTO);
-
-                this.userService.update(yxUser,Wrappers.<YxUser>lambdaQuery()
-                        .eq(YxUser::getUid, LocalUser.getUser().getUid()));
-
-            }
-            return yxUser;
-        } catch (WxErrorException e) {
-            e.printStackTrace();
-            log.error(e.getMessage());
-            throw new YshopException(e.toString());
+        //读取redis配置
+        String appId = redisUtils.getY(ShopKeyUtils.getWxAppAppId());
+        String secret = redisUtils.getY(ShopKeyUtils.getWxAppSecret());
+        if (StrUtil.isBlank(appId) || StrUtil.isBlank(secret)) {
+            throw new YshopException("请先配置小程序");
         }
+        WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+        //WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
+
+        WxMaUserInfo wxMpUser = wxMaService.getUserService()
+                .getUserInfo(sessionKey, encryptedData, iv);
+
+        YxUser yxUser = userService.getById(uid);
+        //过滤掉表情
+        String ip = IpUtil.getRequestIp();
+
+        if(!StringUtils.isNotBlank(yxUser.getNickname())){
+            yxUser.setNickname(wxMpUser.getNickName());
+            yxUser.setAvatar(wxMpUser.getAvatarUrl());
+        }
+        yxUser.setLastIp(ip);
+        //构建微信用户
+        WechatUserDto wechatUserDTO = yxUser.getWxProfile();
+        wechatUserDTO.setNickname(wxMpUser.getNickName());
+        wechatUserDTO.setSex(Integer.valueOf(wxMpUser.getGender()));
+        wechatUserDTO.setLanguage(wxMpUser.getLanguage());
+        wechatUserDTO.setCity(wxMpUser.getCity());
+        wechatUserDTO.setProvince(wxMpUser.getProvince());
+        wechatUserDTO.setCountry(wxMpUser.getCountry());
+        wechatUserDTO.setHeadimgurl(wxMpUser.getAvatarUrl());
+        yxUser.setWxProfile(wechatUserDTO);
+        userService.updateById(yxUser);
+        userService.setSpread(spread, yxUser.getUid());
+        return yxUser;
     }
 
 

@@ -25,6 +25,7 @@ import co.yixiang.modules.auth.param.*;
 import co.yixiang.modules.services.AuthService;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserService;
+import co.yixiang.utils.RedisUtil;
 import co.yixiang.utils.RedisUtils;
 import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.exceptions.ClientException;
@@ -73,24 +74,24 @@ public class AuthController {
     public ApiResult<Map<String, Object>> login(@Validated @RequestBody LoginParam loginParam,
                                                 HttpServletRequest request) {
 
-            YxUser yxUser = authService.wxappLogin(loginParam);
-            String token =  JwtToken.makeToken(yxUser.getUid(),yxUser.getUsername());
-            String expiresTimeStr = JwtToken.getExpireTime(token);
+        YxUser yxUser = authService.wxappLogin(loginParam);
+        String token = JwtToken.makeToken(yxUser.getUid(), yxUser.getUsername());
+        String expiresTimeStr = JwtToken.getExpireTime(token);
 
-            // 返回 token
-            Map<String, Object> map = new LinkedHashMap<>(2);
+        // 返回 token
+        Map<String, Object> map = new LinkedHashMap<>(2);
 
-            map.put("token", token);
-            map.put("expires_time", expiresTimeStr);
+        map.put("token", token);
+        map.put("expires_time", expiresTimeStr);
 
-            // 保存在线信息
-            authService.save(yxUser, token, request);
-            if(singleLogin){
-                authService.checkLoginOnUser(yxUser.getUsername(),token);
-            }
+        // 保存在线信息
+        authService.save(yxUser, token, request);
+        if (singleLogin) {
+            authService.checkLoginOnUser(yxUser.getUsername(), token);
+        }
 
 
-            return ApiResult.ok(map).setMsg("登陆成功");
+        return ApiResult.ok(map).setMsg("登陆成功");
 
     }
 
@@ -106,9 +107,10 @@ public class AuthController {
     @AuthCheck
     @PostMapping("/wxapp/loginAuth")
     @ApiOperation(value = "小程序获取用户信息", notes = "小程序获取用户信息")
-    public ApiResult<YxUser> loginAuth(@Validated @RequestBody LoginParam loginParam,
-                                                HttpServletRequest request) {
-        YxUser yxUser = authService.loginAuth(loginParam);
+    public ApiResult<YxUser> loginAuth(@Validated @RequestBody LoginParam loginParam) {
+        Long uid = LocalUser.getUidByToken();
+        String sessionKey = RedisUtil.get(ShopConstants.YSHOP_MINI_SESSION_KET+ uid).toString();
+        YxUser yxUser = authService.loginAuth(loginParam, uid, sessionKey);
         return ApiResult.ok(yxUser).setMsg("获取成功");
 
     }
