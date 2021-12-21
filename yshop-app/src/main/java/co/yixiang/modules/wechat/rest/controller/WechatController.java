@@ -12,6 +12,7 @@ import cn.binarywang.wx.miniapp.api.WxMaService;
 import co.yixiang.annotation.AnonymousAccess;
 import co.yixiang.api.ApiResult;
 import co.yixiang.constant.SystemConfigConstants;
+import co.yixiang.enums.AfterSalesStatusEnum;
 import co.yixiang.enums.BillDetailEnum;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.PayMethodEnum;
@@ -19,6 +20,8 @@ import co.yixiang.enums.PayTypeEnum;
 import co.yixiang.modules.order.domain.YxStoreOrder;
 import co.yixiang.modules.order.service.YxStoreOrderService;
 import co.yixiang.modules.order.vo.YxStoreOrderQueryVo;
+import co.yixiang.modules.sales.domain.StoreAfterSales;
+import co.yixiang.modules.sales.service.StoreAfterSalesService;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.user.domain.YxUserRecharge;
 import co.yixiang.modules.user.service.YxUserRechargeService;
@@ -26,6 +29,7 @@ import co.yixiang.modules.mp.config.WxMpConfiguration;
 import co.yixiang.modules.mp.config.WxPayConfiguration;
 import co.yixiang.modules.mp.config.WxMaConfiguration;
 import co.yixiang.utils.BigNum;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.binarywang.wxpay.bean.notify.WxPayNotifyResponse;
 import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.github.binarywang.wxpay.bean.notify.WxPayRefundNotifyResult;
@@ -54,6 +58,7 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @ClassName WechatController
@@ -69,6 +74,7 @@ public class WechatController {
     private final YxStoreOrderService orderService;
     private final YxSystemConfigService systemConfigService;
     private final YxUserRechargeService userRechargeService;
+    private final StoreAfterSalesService storeAfterSalesService;
 
 
     /**
@@ -202,6 +208,14 @@ public class WechatController {
             storeOrder.setRefundPrice(refundFee);
             orderService.updateById(storeOrder);
             orderService.retrunStock(orderId);
+            //售后状态修改
+            LambdaQueryWrapper<StoreAfterSales> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(StoreAfterSales::getOrderCode, orderId);
+            StoreAfterSales storeAfterSales = storeAfterSalesService.getOne(wrapper);
+            if (Objects.nonNull(storeAfterSales)) {
+                storeAfterSales.setState(AfterSalesStatusEnum.STATUS_3.getValue());
+                storeAfterSalesService.updateById(storeAfterSales);
+            }
             return WxPayNotifyResponse.success("处理成功!");
         } catch (WxPayException | IllegalAccessException e) {
             log.error(e.getMessage());

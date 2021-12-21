@@ -1,11 +1,11 @@
 package co.yixiang.modules.sales.service.impl;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.NumberUtil;
 import co.yixiang.api.YshopException;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
+import co.yixiang.enums.AfterSalesStatusEnum;
 import co.yixiang.enums.OrderInfoEnum;
 import co.yixiang.enums.ShopCommonEnum;
 import co.yixiang.exception.ErrorRequestException;
@@ -101,7 +101,7 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
         storeAfterSales.setReasons(storeAfterSalesParam.getReasonForApplication());
         storeAfterSales.setExplains(storeAfterSalesParam.getApplicationInstructions());
         storeAfterSales.setExplainImg(storeAfterSalesParam.getApplicationDescriptionPicture());
-        storeAfterSales.setState(0);
+        storeAfterSales.setState(AfterSalesStatusEnum.STATUS_0.getValue());
         storeAfterSales.setSalesState(0);
         storeAfterSales.setCreateTime(Timestamp.valueOf(LocalDateTime.now()));
         storeAfterSales.setIsDel(0);
@@ -176,8 +176,8 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
             integers.add(3);
         }
         baseMapper.selectPage(storeAfterSalesPage, Wrappers.<StoreAfterSales>lambdaQuery()
-                .eq(uid != null, StoreAfterSales::getUserId, uid).in(status == 1, StoreAfterSales::getState, integers)
-                .in(status != 0, StoreAfterSales::getState, integers)
+                .eq(uid != null, StoreAfterSales::getUserId, uid).in(status.equals(AfterSalesStatusEnum.STATUS_1.getValue()), StoreAfterSales::getState, integers)
+                .in(!status.equals(AfterSalesStatusEnum.STATUS_0.getValue()), StoreAfterSales::getState, integers)
                 .eq(StringUtils.isNotBlank(orderCode), StoreAfterSales::getOrderCode, orderCode)
                 .orderByDesc(StoreAfterSales::getCreateTime)
                 .eq(StoreAfterSales::getIsDel, ShopCommonEnum.DELETE_0.getValue()));
@@ -237,7 +237,7 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
         if (storeAfterSales == null) {
             throw new YshopException("未查询到售后订单信息");
         }
-        if (storeAfterSales.getState() == 2 || storeAfterSales.getState() == 3) {
+        if (storeAfterSales.getState().equals(AfterSalesStatusEnum.STATUS_2.getValue()) || storeAfterSales.getState().equals(AfterSalesStatusEnum.STATUS_3.getValue())) {
             throw new YshopException("订单不能撤销");
         }
         storeAfterSales.setSalesState(1);
@@ -267,13 +267,13 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
     @Override
     public Boolean addLogisticsInformation(String code, String name, String postalCode, String orderCode) {
         StoreAfterSales storeAfterSales = baseMapper.selectOne(Wrappers.<StoreAfterSales>lambdaQuery().eq(StoreAfterSales::getOrderCode, orderCode));
-        if (storeAfterSales.getState() != 1) {
+        if (!storeAfterSales.getState().equals(AfterSalesStatusEnum.STATUS_1.getValue())) {
             throw new YshopException("当前状态不能添加物流信息!");
         }
         storeAfterSales.setShipperCode(code);
         storeAfterSales.setDeliverySn(postalCode);
         storeAfterSales.setDeliveryName(name);
-        storeAfterSales.setState(2);
+        storeAfterSales.setState(AfterSalesStatusEnum.STATUS_2.getValue());
 
         //操作记录
         StoreAfterSalesStatus storeAfterSalesStatus = new StoreAfterSalesStatus();
@@ -297,7 +297,7 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
     public Object salesCheck(Long salesId, String orderCode, Integer approvalStatus, String consignee, String phoneNumber, String address) {
         StoreAfterSales storeAfterSales = baseMapper.selectOne(Wrappers.<StoreAfterSales>lambdaQuery().eq(StoreAfterSales::getOrderCode, orderCode).eq(StoreAfterSales::getId, salesId));
         if (approvalStatus == 0) {
-            storeAfterSales.setState(1);
+            storeAfterSales.setState(AfterSalesStatusEnum.STATUS_1.getValue());
             if (storeAfterSales.getServiceType() == 1) {
                 if (StringUtils.isEmpty(consignee) || StringUtils.isEmpty(phoneNumber) || StringUtils.isEmpty(address)) {
                     throw new ErrorRequestException("请输入收货人信息");
@@ -315,7 +315,7 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
             storeAfterSalesStatus.setOperator("admin");
             storeAfterSalesStatusMapper.insert(storeAfterSalesStatus);
         } else {
-            storeAfterSales.setState(1);
+            storeAfterSales.setState(AfterSalesStatusEnum.STATUS_1.getValue());
             storeAfterSales.setSalesState(2);
             //操作记录
             StoreAfterSalesStatus storeAfterSalesStatus = new StoreAfterSalesStatus();
@@ -334,7 +334,7 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
     @Override
     public StoreAfterSales makeMoney(Long salesId, String orderCode) {
         StoreAfterSales storeAfterSales = baseMapper.selectOne(Wrappers.<StoreAfterSales>lambdaQuery().eq(StoreAfterSales::getOrderCode, orderCode).eq(StoreAfterSales::getId, salesId));
-        storeAfterSales.setState(3);
+        storeAfterSales.setState(AfterSalesStatusEnum.STATUS_3.getValue());
         baseMapper.updateById(storeAfterSales);
         //操作记录
         StoreAfterSalesStatus storeAfterSalesStatus = new StoreAfterSalesStatus();
