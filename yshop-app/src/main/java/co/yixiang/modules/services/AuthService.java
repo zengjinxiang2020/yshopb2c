@@ -213,10 +213,9 @@ public class AuthService {
     public YxUser wechatLogin(String code, String spread) {
         try {
             WxMpService wxService = WxMpConfiguration.getWxMpService();
-            WxOAuth2AccessToken wxOAuth2AccessToken = wxService.getOAuth2Service().getAccessToken(code);
-            WxOAuth2UserInfo wxOAuth2UserInfo = wxService.getOAuth2Service().getUserInfo(wxOAuth2AccessToken, null);
-            WxMpUser wxMpUser = wxService.getUserService().userInfo(wxOAuth2UserInfo.getOpenid());
-            String openid = wxMpUser.getOpenId();
+            WxOAuth2AccessToken wxMpOAuth2AccessToken = wxService.getOAuth2Service().getAccessToken(code);
+            WxOAuth2UserInfo wxMpUser = wxService.getOAuth2Service().getUserInfo(wxMpOAuth2AccessToken, null);
+            String openid = wxMpUser.getOpenid();
 
             //如果开启了UnionId
             if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
@@ -246,12 +245,12 @@ public class AuthService {
                 //构建微信用户
                 WechatUserDto wechatUserDTO = WechatUserDto.builder()
                         .nickname(nickname)
-                        .openid(wxMpUser.getOpenId())
+                        .openid(wxMpUser.getOpenid())
                         .unionId(wxMpUser.getUnionId())
-                        .language(wxMpUser.getLanguage())
+                        .language("")
                         .headimgurl(wxMpUser.getHeadImgUrl())
-                        .subscribe(wxMpUser.getSubscribe())
-                        .subscribeTime(wxMpUser.getSubscribeTime())
+                        .subscribe(false)
+                        .subscribeTime(0L)
                         .build();
 
                 user.setWxProfile(wechatUserDTO);
@@ -261,9 +260,9 @@ public class AuthService {
             } else {
                 returnUser = yxUser;
                 WechatUserDto wechatUser = yxUser.getWxProfile();
-                if ((StrUtil.isBlank(wechatUser.getOpenid()) && StrUtil.isNotBlank(wxMpUser.getOpenId()))
+                if ((StrUtil.isBlank(wechatUser.getOpenid()) && StrUtil.isNotBlank(wxMpUser.getOpenid()))
                         || (StrUtil.isBlank(wechatUser.getUnionId()) && StrUtil.isNotBlank(wxMpUser.getUnionId()))) {
-                    wechatUser.setOpenid(wxMpUser.getOpenId());
+                    wechatUser.setOpenid(wxMpUser.getOpenid());
                     wechatUser.setUnionId(wxMpUser.getUnionId());
 
                     yxUser.setWxProfile(wechatUser);
