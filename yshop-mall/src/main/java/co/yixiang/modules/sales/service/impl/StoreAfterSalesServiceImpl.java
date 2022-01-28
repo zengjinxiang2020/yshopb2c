@@ -92,6 +92,9 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
         //更新订单状态
         yxStoreOrder.setStatus(-1);
         yxStoreOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_1.getValue());
+        yxStoreOrder.setRefundReasonWap(storeAfterSalesParam.getReasonForApplication());
+        yxStoreOrder.setRefundReasonWapExplain(storeAfterSalesParam.getApplicationInstructions());
+        yxStoreOrder.setRefundReasonTime(new Date());
         storeOrderMapper.updateById(yxStoreOrder);
         //生成售后订单
         StoreAfterSales storeAfterSales = new StoreAfterSales();
