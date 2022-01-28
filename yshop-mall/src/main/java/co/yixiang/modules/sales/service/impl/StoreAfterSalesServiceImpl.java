@@ -90,7 +90,7 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
             }
         }
         //更新订单状态
-        yxStoreOrder.setStatus(-1);
+        yxStoreOrder.setStatus(OrderInfoEnum.STATUS_NE1.getValue());
         yxStoreOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_1.getValue());
         yxStoreOrder.setRefundReasonWap(storeAfterSalesParam.getReasonForApplication());
         yxStoreOrder.setRefundReasonWapExplain(storeAfterSalesParam.getApplicationInstructions());
