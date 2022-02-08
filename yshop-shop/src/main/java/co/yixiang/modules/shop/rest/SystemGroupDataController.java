@@ -30,6 +30,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static co.yixiang.constant.ShopConstants.YSHOP_SECKILL_TIME;
 
 /**
  * @author hupeng
@@ -76,12 +79,12 @@ public class SystemGroupDataController {
         yxSystemGroupData.setStatus(jsonObject.getInteger("status"));
         yxSystemGroupData.setSort(jsonObject.getInteger("sort"));
 
-        List<YxSystemGroupData> yshop_seckill_time = yxSystemGroupDataService.list(Wrappers.<YxSystemGroupData>lambdaQuery()
-                .eq(YxSystemGroupData::getGroupName, "yshop_seckill_time"));
+        List<YxSystemGroupData> yxSeckillTime = yxSystemGroupDataService.list(Wrappers.<YxSystemGroupData>lambdaQuery()
+                .eq(YxSystemGroupData::getGroupName, YSHOP_SECKILL_TIME));
         if (yxSystemGroupData.getStatus() == 1) {
-            yshop_seckill_time.forEach(item -> {
+            yxSeckillTime.forEach(item -> {
                 Map map = JSONUtil.toBean(item.getValue(), Map.class);
-                if (jsonObject.getInteger("time").equals(map.get("time"))) {
+                if (Objects.nonNull(jsonObject.getInteger("time")) && jsonObject.getInteger("time").equals(map.get("time"))) {
                     throw new BadRequestException("不能同时开启同一时间点");
                 }
             });
