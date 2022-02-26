@@ -31,10 +31,7 @@ import co.yixiang.modules.activity.service.mapper.YxUserExtractMapper;
 import co.yixiang.modules.user.domain.YxUser;
 import co.yixiang.modules.user.service.YxUserBillService;
 import co.yixiang.modules.user.service.YxUserService;
-import co.yixiang.modules.user.service.dto.WechatUserDto;
-import co.yixiang.modules.user.service.dto.YxWechatUserDto;
 import co.yixiang.utils.FileUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
@@ -219,19 +216,23 @@ public class YxUserExtractServiceImpl extends BaseServiceImpl<YxUserExtractMappe
             if(StrUtil.isEmpty(resources.getFailMsg())){
                 throw new BadRequestException("请填写失败原因");
             }
-            String mark = "提现失败,退回佣金"+resources.getExtractPrice()+"元";
-            YxUser yxUser = userService.getById(resources.getUid());
+            //防止无限添加佣金
+            if (ObjectUtil.isNull(userExtract.getFailTime())) {
+                String mark = "提现失败,退回佣金"+resources.getExtractPrice()+"元";
+                YxUser yxUser = userService.getById(resources.getUid());
 
-            double balance = NumberUtil.add(yxUser.getBrokeragePrice(),resources.getExtractPrice()).doubleValue();
-            //插入流水
-            billService.income(resources.getUid(),"提现失败", BillDetailEnum.CATEGORY_1.getValue(),
-                    BillDetailEnum.TYPE_4.getValue(),resources.getExtractPrice().doubleValue(),balance,
-                    mark,resources.getId().toString());
+                double balance = NumberUtil.add(yxUser.getBrokeragePrice(),resources.getExtractPrice()).doubleValue();
+                //插入流水
+                billService.income(resources.getUid(),"提现失败", BillDetailEnum.CATEGORY_1.getValue(),
+                        BillDetailEnum.TYPE_4.getValue(),resources.getExtractPrice().doubleValue(),balance,
+                        mark,resources.getId().toString());
 
-            //返回提现金额
-            userService.incBrokeragePrice(resources.getExtractPrice(),resources.getUid());
+                //返回提现金额
+                userService.incBrokeragePrice(resources.getExtractPrice(),resources.getUid());
 
-            resources.setFailTime(new Date());
+                resources.setFailTime(new Date());
+            }
+
         }else{
             //模板消息支付成功发布事件
             TemplateBean templateBean = TemplateBean.builder()

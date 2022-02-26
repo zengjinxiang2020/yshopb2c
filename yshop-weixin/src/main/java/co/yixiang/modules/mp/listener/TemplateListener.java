@@ -143,15 +143,19 @@ public class TemplateListener implements SmartApplicationListener {
                     }
                 }
                 if (!success) {
-                    String mark = "提现失败,退回佣金" + resources.getExtractPrice() + "元";
-                    double balance = NumberUtil.add(user.getBrokeragePrice(), resources.getExtractPrice()).doubleValue();
-                    //插入流水
-                    billService.income(resources.getUid(), "提现失败", BillDetailEnum.CATEGORY_1.getValue(),
-                            BillDetailEnum.TYPE_4.getValue(), resources.getExtractPrice().doubleValue(), balance,
-                            mark, resources.getId().toString());
-                    //返回提现金额
-                    userService.incBrokeragePrice(resources.getExtractPrice(), resources.getUid());
-                    resources.setFailTime(new Date());
+                    //防止无限添加佣金
+                    if (ObjectUtil.isNull(resources.getFailTime())) {
+                        String mark = "提现失败,退回佣金" + resources.getExtractPrice() + "元";
+                        double balance = NumberUtil.add(user.getBrokeragePrice(), resources.getExtractPrice()).doubleValue();
+                        //插入流水
+                        billService.income(resources.getUid(), "提现失败", BillDetailEnum.CATEGORY_1.getValue(),
+                                BillDetailEnum.TYPE_4.getValue(), resources.getExtractPrice().doubleValue(), balance,
+                                mark, resources.getId().toString());
+                        //返回提现金额
+                        userService.incBrokeragePrice(resources.getExtractPrice(), resources.getUid());
+                        resources.setFailMsg("提现失败");
+                        resources.setFailTime(new Date());
+                    }
                     yxUserExtractService.updateById(resources);
                 }
 
