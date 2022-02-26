@@ -55,6 +55,8 @@ import co.yixiang.modules.product.domain.YxStoreProductReply;
 import co.yixiang.modules.product.service.YxStoreProductReplyService;
 import co.yixiang.modules.product.service.YxStoreProductService;
 import co.yixiang.modules.product.vo.YxStoreProductQueryVo;
+import co.yixiang.modules.sales.domain.StoreAfterSales;
+import co.yixiang.modules.sales.service.StoreAfterSalesService;
 import co.yixiang.modules.shop.domain.YxSystemStore;
 import co.yixiang.modules.shop.service.YxSystemConfigService;
 import co.yixiang.modules.shop.service.YxSystemStoreService;
@@ -182,6 +184,9 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
 
     @Autowired
     private ApplicationEventPublisher publisher;
+
+    @Autowired
+    private StoreAfterSalesService storeAfterSalesService;
 
 
     /**
@@ -659,6 +664,15 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
         if (ShopCommonEnum.AGREE_2.getValue().equals(type)) {
             storeOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_0.getValue());
             yxStoreOrderMapper.updateById(storeOrder);
+            StoreAfterSales storeAfterSales = storeAfterSalesService.lambdaQuery()
+                    .eq(StoreAfterSales::getUserId, orderQueryVo.getUid())
+                    .eq(StoreAfterSales::getOrderCode, orderQueryVo.getOrderId()).one();
+            if (ObjectUtil.isNotNull(storeAfterSales)) {
+                storeAfterSalesService.lambdaUpdate()
+                        .eq(StoreAfterSales::getId, storeAfterSales.getId())
+                        .set(StoreAfterSales::getSalesState, ShopCommonEnum.AGREE_2.getValue())
+                        .update();
+            }
             return;
         }
 
@@ -677,6 +691,16 @@ public class YxStoreOrderServiceImpl extends BaseServiceImpl<StoreOrderMapper, Y
                     NumberUtil.add(price, userQueryVo.getNowMoney()).doubleValue(),
                     "订单退款到余额" + price + "元", orderQueryVo.getId().toString());
             this.retrunStock(orderQueryVo.getOrderId());
+            StoreAfterSales storeAfterSales = storeAfterSalesService.lambdaQuery()
+                    .eq(StoreAfterSales::getUserId, orderQueryVo.getUid())
+                    .eq(StoreAfterSales::getOrderCode, orderQueryVo.getOrderId()).one();
+            if (ObjectUtil.isNotNull(storeAfterSales)) {
+                storeAfterSalesService.lambdaUpdate()
+                        .eq(StoreAfterSales::getId, storeAfterSales.getId())
+                        .set(StoreAfterSales::getState, AfterSalesStatusEnum.STATUS_3.getValue())
+                        .update();
+            }
+
         } else if (PayTypeEnum.INTEGRAL.getValue().equals(orderQueryVo.getPayType())) {
             storeOrder.setRefundStatus(OrderInfoEnum.REFUND_STATUS_2.getValue());
             storeOrder.setRefundPrice(price);
