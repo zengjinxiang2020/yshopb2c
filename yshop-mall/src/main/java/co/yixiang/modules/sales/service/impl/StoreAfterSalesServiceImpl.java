@@ -246,7 +246,8 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
         storeAfterSales.setSalesState(1);
 
         YxStoreOrder yxStoreOrder = storeOrderMapper.selectOne(Wrappers.<YxStoreOrder>lambdaQuery().eq(YxStoreOrder::getOrderId, key));
-        yxStoreOrder.setStatus(-2);
+        yxStoreOrder.setStatus(OrderInfoEnum.STATUS_0.getValue());
+        yxStoreOrder.setRefundStatus(OrderInfoEnum.STATUS_0.getValue());
         storeOrderMapper.updateById(yxStoreOrder);
 
         List<YxStoreOrderCartInfo> yxStoreOrderCartInfos = storeOrderCartInfoMapper.selectList(Wrappers.<YxStoreOrderCartInfo>lambdaQuery().eq(YxStoreOrderCartInfo::getOid, yxStoreOrder.getId()));
