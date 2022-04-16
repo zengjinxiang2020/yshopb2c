@@ -6,15 +6,15 @@
 * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
-package co.yixiang.modules.system.service.impl;
+package co.yixiang.modules.dict.service.impl;
 
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.dozer.service.IGenerator;
-import co.yixiang.modules.system.domain.DictDetail;
-import co.yixiang.modules.system.service.DictDetailService;
-import co.yixiang.modules.system.service.dto.DictDetailDto;
-import co.yixiang.modules.system.service.dto.DictDetailQueryCriteria;
-import co.yixiang.modules.system.service.mapper.DictDetailMapper;
+import co.yixiang.modules.dict.domain.DictDetail;
+import co.yixiang.modules.dict.service.DictDetailService;
+import co.yixiang.modules.dict.service.dto.DictDetailDto;
+import co.yixiang.modules.dict.service.dto.DictDetailQueryCriteria;
+import co.yixiang.modules.dict.service.mapper.DictDetailMapper;
 import co.yixiang.utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;
@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 // 默认不使用缓存
 //import org.springframework.cache.annotation.CacheConfig;
@@ -81,4 +82,30 @@ public class DictDetailServiceImpl extends BaseServiceImpl<DictDetailMapper, Dic
         }
         FileUtil.downloadExcel(list, response);
     }
+
+    @Override
+    public Map<String, String> queryDetailsByName(String dictName) {
+        List<DictDetailDto> dtoList = getDictDetailDtos(dictName);
+        return  dtoList.stream().collect(Collectors.toMap(DictDetailDto::getValue, DictDetailDto::getLabel));
+    }
+
+    @Override
+    public Map<String, String> queryDetailsByKey(String dictName) {
+        List<DictDetailDto> dtoList = getDictDetailDtos(dictName);
+        return  dtoList.stream().collect(Collectors.toMap(DictDetailDto::getLabel, DictDetailDto::getValue));
+    }
+
+    /**
+     * 获取dictDetailDto列表
+     *
+     * @param dictName dict类型名称
+     * @return {@link List}<{@link DictDetailDto}>
+     */
+    private List<DictDetailDto> getDictDetailDtos(String dictName) {
+        DictDetailQueryCriteria criteria =new DictDetailQueryCriteria();
+        criteria.setDictName(dictName);
+        List<DictDetail> list =  baseMapper.selectDictDetailList(criteria.getLabel(),criteria.getDictName());
+        return generator.convert(list, DictDetailDto.class);
+    }
+
 }

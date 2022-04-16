@@ -6,18 +6,18 @@
 * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
-package co.yixiang.modules.system.service.impl;
+package co.yixiang.modules.dict.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
 import co.yixiang.common.service.impl.BaseServiceImpl;
 import co.yixiang.common.utils.QueryHelpPlus;
 import co.yixiang.dozer.service.IGenerator;
-import co.yixiang.modules.system.domain.Dict;
-import co.yixiang.modules.system.service.DictService;
-import co.yixiang.modules.system.service.dto.DictDetailDto;
-import co.yixiang.modules.system.service.dto.DictDto;
-import co.yixiang.modules.system.service.dto.DictQueryCriteria;
-import co.yixiang.modules.system.service.mapper.DictMapper;
+import co.yixiang.modules.dict.domain.Dict;
+import co.yixiang.modules.dict.service.DictService;
+import co.yixiang.modules.dict.service.dto.DictDetailDto;
+import co.yixiang.modules.dict.service.dto.DictDto;
+import co.yixiang.modules.dict.service.dto.DictQueryCriteria;
+import co.yixiang.modules.dict.service.mapper.DictMapper;
 import co.yixiang.utils.FileUtil;
 import com.github.pagehelper.PageInfo;
 import lombok.AllArgsConstructor;

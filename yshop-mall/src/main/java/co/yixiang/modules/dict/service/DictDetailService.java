@@ -6,12 +6,12 @@
 * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
-package co.yixiang.modules.system.service;
+package co.yixiang.modules.dict.service;
 
 import co.yixiang.common.service.BaseService;
-import co.yixiang.modules.system.domain.DictDetail;
-import co.yixiang.modules.system.service.dto.DictDetailDto;
-import co.yixiang.modules.system.service.dto.DictDetailQueryCriteria;
+import co.yixiang.modules.dict.domain.DictDetail;
+import co.yixiang.modules.dict.service.dto.DictDetailDto;
+import co.yixiang.modules.dict.service.dto.DictDetailQueryCriteria;
 import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletResponse;
@@ -47,4 +47,22 @@ public interface DictDetailService  extends BaseService<DictDetail>{
     * @throws IOException /
     */
     void download(List<DictDetailDto> all, HttpServletResponse response) throws IOException;
+
+
+    /**
+     * 按名称查询字典值返回label
+     *
+     * @param dictName dict类型名称
+     * @return {@link Map}<{@link String}, {@link String}>
+     */
+    Map<String, String> queryDetailsByName(String dictName);
+
+    /**
+     * 按名称查询字典值返回key
+     *
+     * @param dictName dict类型名称
+     * @return {@link Map}<{@link String}, {@link String}>
+     */
+    Map<String, String> queryDetailsByKey(String dictName);
+
 }

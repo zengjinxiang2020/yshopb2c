@@ -6,20 +6,35 @@
 * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
-package co.yixiang.modules.system.service.dto;
+package co.yixiang.modules.dict.service.dto;
 
-import co.yixiang.annotation.Query;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
 * @author hupeng
 * @date 2020-05-14
 */
 @Data
-public class DictDetailQueryCriteria{
+public class DictDetailDto implements Serializable {
 
-    @Query(type = Query.Type.INNER_LIKE)
+    /** 字典详细 */
+    private Long id;
+
+    /** 字典标签 */
     private String label;
 
-    private String dictName;
+    /** 字典值 */
+    private String value;
+
+    /** 排序 */
+    private String sort;
+
+    /** 字典id */
+    private Long dictId;
+
+    /** 创建日期 */
+    private Timestamp createTime;
 }

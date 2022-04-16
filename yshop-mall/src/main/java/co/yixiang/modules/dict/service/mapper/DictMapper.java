@@ -6,10 +6,10 @@
 * 购买后可获得全部源代码（禁止转卖、分享、上传到码云、github等开源平台）
 * 一经发现盗用、分享等行为，将追究法律责任，后果自负
 */
-package co.yixiang.modules.system.service.mapper;
+package co.yixiang.modules.dict.service.mapper;
 
 import co.yixiang.common.mapper.CoreMapper;
-import co.yixiang.modules.system.domain.Dict;
+import co.yixiang.modules.dict.domain.Dict;
 import org.springframework.stereotype.Repository;
 
 /**
