@@ -86,13 +86,13 @@ public class DictDetailServiceImpl extends BaseServiceImpl<DictDetailMapper, Dic
     @Override
     public Map<String, String> queryDetailsByName(String dictName) {
         List<DictDetailDto> dtoList = getDictDetailDtos(dictName);
-        return  dtoList.stream().collect(Collectors.toMap(DictDetailDto::getValue, DictDetailDto::getLabel));
+        return dtoList.stream().collect(Collectors.toMap(DictDetailDto::getValue, DictDetailDto::getLabel));
     }
 
     @Override
     public Map<String, String> queryDetailsByKey(String dictName) {
         List<DictDetailDto> dtoList = getDictDetailDtos(dictName);
-        return  dtoList.stream().collect(Collectors.toMap(DictDetailDto::getLabel, DictDetailDto::getValue));
+        return dtoList.stream().collect(Collectors.toMap(DictDetailDto::getLabel, DictDetailDto::getValue));
     }
 
     /**
