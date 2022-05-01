@@ -42,10 +42,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * <p>
@@ -144,8 +147,8 @@ public class StoreSeckillController {
                     seckillTimeDto.setState("即将开始");
                     seckillTimeDto.setTime(jsonObject.get("time").toString().length() > 1 ? jsonObject.get("time").toString() + ":00" : "0" + jsonObject.get("time").toString() + ":00");
                     seckillTimeDto.setStatus(2);
-                    seckillTimeDto.setStop(OrderUtil.dateToTimestamp(new Date()) + activityEndHour * 3600);
-                } else if (currentHour >= activityEndHour) {
+                    seckillTimeDto.setStop(today + time * 3600);
+                } else {
                     seckillTimeDto.setState("已结束");
                     seckillTimeDto.setTime(jsonObject.get("time").toString().length() > 1 ? jsonObject.get("time").toString() + ":00" : "0" + jsonObject.get("time").toString() + ":00");
                     seckillTimeDto.setStatus(0);
@@ -154,8 +157,14 @@ public class StoreSeckillController {
             }
             list.add(seckillTimeDto);
         });
-        seckillConfigVo.setSeckillTimeIndex(seckillTimeIndex.get());
-        seckillConfigVo.setSeckillTime(list);
+        List<SeckillTimeDto> seckillTimeDtoList = list.stream()
+                .sorted(Comparator.comparing(SeckillTimeDto::getTime))
+                .collect(Collectors.toList());
+        OptionalInt optionalInt = IntStream.range(0, seckillTimeDtoList.size())
+                .filter(i -> seckillTimeDtoList.get(i).getStatus().equals(1))
+                .findFirst();
+        seckillConfigVo.setSeckillTimeIndex(optionalInt.isPresent() ? optionalInt.getAsInt() : 0);
+        seckillConfigVo.setSeckillTime(seckillTimeDtoList);
         return ApiResult.ok(seckillConfigVo);
     }
 }
