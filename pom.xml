@@ -39,7 +39,7 @@
         <jedis.version>3.3.0</jedis.version>
         <swagger.version>3.0.0</swagger.version>
         <fastjson.version>1.2.80</fastjson.version>
-        <druid.version>1.2.8</druid.version>
+        <druid.version>1.2.9</druid.version>
         <hutool.version>5.5.7</hutool.version>
         <poi.version>4.1.2</poi.version>
         <commons-pool2.version>2.5.0</commons-pool2.version>
