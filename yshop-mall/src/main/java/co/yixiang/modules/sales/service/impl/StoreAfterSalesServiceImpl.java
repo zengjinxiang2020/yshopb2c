@@ -28,6 +28,7 @@ import co.yixiang.modules.sales.service.mapper.StoreAfterSalesStatusMapper;
 import co.yixiang.modules.sales.service.vo.StoreAfterSalesVo;
 import co.yixiang.modules.sales.service.vo.YxStoreOrderCartInfoVo;
 import co.yixiang.utils.FileUtil;
+import co.yixiang.utils.SecurityUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -309,6 +310,8 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
                 storeAfterSales.setConsignee(consignee);
                 storeAfterSales.setPhoneNumber(phoneNumber);
                 storeAfterSales.setAddress(address);
+            } else {
+                this.makeMoney(storeAfterSales.getId(),storeAfterSales.getOrderCode());
             }
             //操作记录
             StoreAfterSalesStatus storeAfterSalesStatus = new StoreAfterSalesStatus();
@@ -316,8 +319,9 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
             storeAfterSalesStatus.setChangeType(1);
             storeAfterSalesStatus.setChangeMessage("平台审核成功");
             storeAfterSalesStatus.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
-            storeAfterSalesStatus.setOperator("admin");
+            storeAfterSalesStatus.setOperator(SecurityUtils.getUsername());
             storeAfterSalesStatusMapper.insert(storeAfterSalesStatus);
+
         } else {
             storeAfterSales.setState(AfterSalesStatusEnum.STATUS_1.getValue());
             storeAfterSales.setSalesState(2);
@@ -327,10 +331,8 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
             storeAfterSalesStatus.setChangeType(4);
             storeAfterSalesStatus.setChangeMessage("平台审核失败");
             storeAfterSalesStatus.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
-            storeAfterSalesStatus.setOperator("admin");
+            storeAfterSalesStatus.setOperator(SecurityUtils.getUsername());
             storeAfterSalesStatusMapper.insert(storeAfterSalesStatus);
-
-            this.makeMoney(storeAfterSales.getId(),storeAfterSales.getOrderCode());
         }
         return baseMapper.updateById(storeAfterSales) > 0;
     }
@@ -346,7 +348,7 @@ public class StoreAfterSalesServiceImpl extends BaseServiceImpl<StoreAfterSalesM
         storeAfterSalesStatus.setChangeType(3);
         storeAfterSalesStatus.setChangeMessage("平台打款成功");
         storeAfterSalesStatus.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
-        storeAfterSalesStatus.setOperator("admin");
+        storeAfterSalesStatus.setOperator(SecurityUtils.getUsername());
         storeAfterSalesStatusMapper.insert(storeAfterSalesStatus);
 
         YxStoreOrder yxStoreOrder = storeOrderMapper.selectOne(Wrappers.<YxStoreOrder>lambdaQuery().eq(YxStoreOrder::getOrderId, storeAfterSales.getOrderCode()));
