@@ -217,13 +217,16 @@ public class AuthService {
             WxOAuth2UserInfo wxMpUser = wxService.getOAuth2Service().getUserInfo(wxMpOAuth2AccessToken, null);
             String openid = wxMpUser.getOpenid();
 
+            WxMaService wxMaService = WxMaConfiguration.getWxMaService();
+            WxMaPhoneNumberInfo phoneNoInfo = wxMaService.getUserService()
+                    .getNewPhoneNoInfo(code);
             //如果开启了UnionId
             if (StrUtil.isNotBlank(wxMpUser.getUnionId())) {
                 openid = wxMpUser.getUnionId();
             }
 
             YxUser yxUser = userService.getOne(Wrappers.<YxUser>lambdaQuery()
-                    .eq(YxUser::getUsername, openid), false);
+                    .eq(YxUser::getPhone, phoneNoInfo.getPhoneNumber()), false);
 
             //long uid = 0;
             YxUser returnUser = null;
@@ -234,7 +237,8 @@ public class AuthService {
                 //用户保存
                 String ip = IpUtil.getRequestIp();
                 YxUser user = YxUser.builder()
-                        .username(openid)
+                        .username(phoneNoInfo.getPhoneNumber())
+                        .phone(phoneNoInfo.getPhoneNumber())
                         .nickname(nickname)
                         .avatar(wxMpUser.getHeadImgUrl())
                         .addIp(ip)
@@ -245,8 +249,8 @@ public class AuthService {
                 //构建微信用户
                 WechatUserDto wechatUserDTO = WechatUserDto.builder()
                         .nickname(nickname)
-                        .openid(wxMpUser.getOpenid())
-                        .unionId(wxMpUser.getUnionId())
+                        .openid(openid)
+                        .unionId(openid)
                         .language("")
                         .headimgurl(wxMpUser.getHeadImgUrl())
                         .subscribe(false)
